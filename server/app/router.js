@@ -9,11 +9,12 @@ router.get('/consumption', (req, res) => {
     res.send(String(test));
 })
 
+router.get('/players', playerController.allPlayers);
+router.get('/playersBis', playerController.allPlayersBis);
+
 router.get('/', (req, res) => {
     res.send('Hello world');
 })
-
-router.get('/players', playerController.allPlayers);
 
 // par défaut si aucune route ne correspond, renvoie une erreur 404 à l'utilisateur
 router.use((_, response) => {

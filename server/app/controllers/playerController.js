@@ -1,27 +1,26 @@
-// const { response } = require('express');
-// const playerMapper = require('../dataMappers/playerMapper');
-// const Player = require('../models/player');
+const playerMapper = require('../dataMappers/playerMapper');
+const PersonaOgre = require('../models/PersonaOgre');
 
 const playerController = {}
 
-playerController.allPlayers = async (request, response, next) => {
-    console.log('enter playerController.allPlayers');
-    // try {
-    //     // const players = await playerMapper.findAll();
-    //     const players = [
-    //         {id: 1, name:'Maeva'},
-    //         {id: 2, name:'Luc'},
-    //         {id: 3, name:'Sarah'},
-    //     ]
-    //     response.json(players);
-    // } catch(error) {
-    //     next(error);
-    // }
+// Soit on intègre les requêtes à la BDD directement dans la classe avec des méthodes dédiées, 
+//soit on répertorie toutes les interactions en lien avec la BDD dans un dossier "dataMappers" à part
 
-    const db = require('../database');
+playerController.allPlayers = async (_, response, next) => {
+    console.log('enter playerController.allPlayers');
     try {
-        const result = await db.query('SELECT * FROM player;');
-        response.json(result.rows);
+        const players = await playerMapper.findAll();
+        response.json(players);
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+playerController.allPlayersBis = async (_, response, next) => {
+    console.log('enter playerController.allPlayersBis');
+    try {
+        const players = await PersonaOgre.findAll();
+        response.json(players);
     } catch(error) {
         throw new Error(error);
     }
