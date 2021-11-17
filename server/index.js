@@ -1,15 +1,15 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env'});
 const express = require('express');
 const app = express();
 
-// const bodyParser = require('body-parser');
 // Parse URL-encoded bodies (as sent by HTML forms)
+// const bodyParser = require('body-parser');
 // app.use(bodyParser.urlencoded({ extended: false }));
 // Parse JSON bodies (as sent by API clients)
 // app.use(bodyParser.json());
 
-// const cookieParser = require('cookie-parser');
 //parse cookies sent via http requests
+// const cookieParser = require('cookie-parser');
 // app.use(cookieParser()) 
 
 //use cors to accept other non domain websites to access api

@@ -14,7 +14,7 @@ motorType = OGREConstant.MOTOR_TYPE.DIESEL;
 
 let carConfig1 = new CarConfiguration(isCar, numberOfAdult, numberOfChildren, carshareDistance, aloneDistance,
     withHouseholdDistance, literPer100km, motorType);
-player1 = new PersonaOgre('Camus', 'Equipe1', carConfig1)
+player1 = new PersonaOgre({name : 'Camus', team: 'Equipe1', carConfig : carConfig1})
 
 // second mock
 isCar = true;
@@ -29,7 +29,7 @@ motorType = OGREConstant.MOTOR_TYPE.DIESEL;
 
 let carConfig2 = new CarConfiguration(isCar, numberOfAdult, numberOfChildren, carshareDistance, aloneDistance,
     withHouseholdDistance, literPer100km, motorType);
-player2 = new PersonaOgre('Proust', 'Equipe2', carConfig2)
+player2 = new PersonaOgre({name : 'Proust', team : 'Equipe2', carConfig : carConfig2})
 
 
 const players = {
