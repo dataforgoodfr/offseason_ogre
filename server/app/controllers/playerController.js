@@ -1,5 +1,6 @@
 const playerMapper = require('../dataMappers/playerMapper');
 const PersonaOgre = require('../models/PersonaOgre');
+const PlaneConfiguration = require('../models/PlaneConfiguration');
 
 const playerController = {}
 
@@ -21,6 +22,16 @@ playerController.allPlayersBis = async (_, response, next) => {
     try {
         const players = await PersonaOgre.findAll();
         response.json(players);
+    } catch(error) {
+        throw new Error(error);
+    }
+}
+
+playerController.getPlaneConfig = async (planeId, response, next) => {
+    console.log('enter playerController.getPlaneConfig');
+    try {
+        const planeConfig = await PlaneConfiguration.findOne(planeId);
+        response.json(planeConfig);
     } catch(error) {
         throw new Error(error);
     }
