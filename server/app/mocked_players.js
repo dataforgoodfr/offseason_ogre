@@ -1,6 +1,7 @@
+const OGREConstant = require('./OGREConstants');
 const PersonaOgre = require('./models/PersonaOgre')
 const CarConfiguration = require('./models/CarConfiguration')
-const OGREConstant = require('./OGREConstants')
+const PlaneConfiguration = require('./models/PlaneConfiguration');
 
 // first mock
 isCar = false;
@@ -36,4 +37,17 @@ const players = {
     player1,
     player2
 }
+
+let planeData1 = {
+    id : 1,
+    distancePerYear : 5000
+}
+
+let planeConfig1 = new PlaneConfiguration(planeData1);
+planeConfig1.computeEnergyConsumptionPerYear();
+// planeConfig1.computeEnergyConsumptionPerDay();
+
+console.log(planeConfig1);
+
+
 module.exports = players;

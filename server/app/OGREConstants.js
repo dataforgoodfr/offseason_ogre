@@ -4,7 +4,9 @@ const planeConstants = {
     DISTANCE_1_RIDE : 14200,
     PASSENGERS_BY_PLANE : 416,
     CALORIFIC_VALUE : 10,
-    CONSUMPTION_BY_PASSENGER : (this.CONSUMPTION_1_RIDE * this.CALORIFIC_VALUE / this.PASSENGERS_BY_PLANE) * 2
+    get CONSUMPTION_BY_PASSENGER() {
+        return (this.CONSUMPTION_1_RIDE * this.CALORIFIC_VALUE / this.PASSENGERS_BY_PLANE) * 2
+    } 
 }
 
 const OGREConstants = {
@@ -19,7 +21,7 @@ const OGREConstants = {
     daysPerYear : 365
 }
 
-
+console.log(OGREConstants.planeConstants.CONSUMPTION_BY_PASSENGER * 2);
 // const CarConstants = {
 //     CONSUMPTION100KM: 7,
 //     CALORIFIC_VALUE: 10,

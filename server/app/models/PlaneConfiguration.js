@@ -1,4 +1,5 @@
 const OGREConstants = require("../OGREConstants");
+
 class PlaneConfiguration {
     id;
     distancePerYear;
@@ -10,11 +11,11 @@ class PlaneConfiguration {
         this.distancePerYear = data.distancePerYear;
     }
 
-    set energyConsumptionPerYear() {
-        this.energyConsumptionPerYear = OGREConstants.PlaneConstants.CONSUMPTION_BY_PASSENGER * this.distancePerYear / (OGREConstants.PlaneConstants.DISTANCE_1_RIDE * 2);
+    computeEnergyConsumptionPerYear() {
+        this.energyConsumptionPerYear = OGREConstants.planeConstants.CONSUMPTION_BY_PASSENGER * this.distancePerYear / (OGREConstants.planeConstants.DISTANCE_1_RIDE * 2);
     }
 
-    set energyConsumptionPerDay() {
+    computeEnergyConsumptionPerDay() {
         this.energyConsumptionPerDay = this.energyConsumptionPerYear / OGREConstants.daysPerYear;
     }
 
