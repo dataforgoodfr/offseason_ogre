@@ -45,7 +45,7 @@ let planeData1 = {
 
 let planeConfig1 = new PlaneConfiguration(planeData1);
 planeConfig1.computeEnergyConsumptionPerYear();
-// planeConfig1.computeEnergyConsumptionPerDay();
+planeConfig1.computeEnergyConsumptionPerDay();
 
 console.log(planeConfig1);
 

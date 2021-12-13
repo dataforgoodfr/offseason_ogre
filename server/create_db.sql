@@ -29,13 +29,27 @@ CREATE TABLE car_config (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE plane_config (
+    id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    distance_per_year int,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE player (
     id int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" text NOT NULL,
     team text,
-    car_config_id int NOT NULL REFERENCES car_config(id),
+    car_config_id int REFERENCES car_config(id),
+    plane_config_id int REFERENCES plane_config(id),
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO plane_config 
+    ("distance_per_year") 
+VALUES
+    (5000),
+    (1000),
+    (400);
 
 INSERT INTO car_config 
     ("is_car",
@@ -50,9 +64,9 @@ VALUES
     (FALSE, 1, 0, 100, NULL, NULL, 7, 'Diesel'),
     (TRUE, 2, 2, NULL, 12000, 5000, 7, 'Diesel');
 
-INSERT INTO player ("name", "team", "car_config_id") VALUES
-    ('Flo', 'Equipe1', 1),
-    ('Isa', 'Equipe1', 1),
-    ('Gégé', 'Equipe2', 2);
+INSERT INTO player ("name", "team", "car_config_id","plane_config_id") VALUES
+    ('Flo', 'Equipe1', 1, 1),
+    ('Isa', 'Equipe1', 1, 2),
+    ('Gégé', 'Equipe2', 2, 3);
 
 COMMIT;

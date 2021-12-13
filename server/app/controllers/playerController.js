@@ -27,11 +27,11 @@ playerController.allPlayersBis = async (_, response, next) => {
     }
 }
 
-playerController.getPlaneConfig = async (planeId, response, next) => {
-    console.log('enter playerController.getPlaneConfig');
+playerController.getPlaneConfigs = async (_, response, next) => {
+    console.log('enter playerController.getPlaneConfigs');
     try {
-        const planeConfig = await PlaneConfiguration.findOne(planeId);
-        response.json(planeConfig);
+        const planeConfigs = await PlaneConfiguration.findAll();
+        response.json(planeConfigs);
     } catch(error) {
         throw new Error(error);
     }

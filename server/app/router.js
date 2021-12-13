@@ -11,6 +11,7 @@ router.get('/consumption', (req, res) => {
 
 router.get('/players', playerController.allPlayers);
 router.get('/playersBis', playerController.allPlayersBis);
+router.get('/planes', playerController.getPlaneConfigs);
 
 router.get('/', (req, res) => {
     res.send('Hello world');
