@@ -9,7 +9,7 @@ class PlaneConfiguration {
 
     constructor(data) {
         this.id = data.id;
-        this.distancePerYear = data.distancePerYear;
+        this.distancePerYear = data.distance_per_year;
     }
 
     computeEnergyConsumptionPerYear() {
@@ -30,9 +30,22 @@ class PlaneConfiguration {
             const result = await db.query(query);
             let plane_configs = [];
             for (const row of result.rows) {
-                // on transforme la donnée brute de la query sql en instance de PlaneConfiguration
                 const plane_config = new PlaneConfiguration(row);
                 plane_configs.push(plane_config);
+            }
+            return plane_configs;
+        }
+        catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    static async findAllandAddAllConsumptionInfos() {
+        try {
+            const plane_configs = await PlaneConfiguration.findAll();
+            for (const config of plane_configs) {
+                config.computeEnergyConsumptionPerYear();
+                config.computeEnergyConsumptionPerDay();
             }
             return plane_configs;
         }

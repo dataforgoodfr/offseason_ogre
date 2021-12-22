@@ -21,7 +21,6 @@ const OGREConstants = {
     daysPerYear : 365
 }
 
-console.log(OGREConstants.planeConstants.CONSUMPTION_BY_PASSENGER * 2);
 // const CarConstants = {
 //     CONSUMPTION100KM: 7,
 //     CALORIFIC_VALUE: 10,

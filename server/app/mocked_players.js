@@ -47,7 +47,4 @@ let planeConfig1 = new PlaneConfiguration(planeData1);
 planeConfig1.computeEnergyConsumptionPerYear();
 planeConfig1.computeEnergyConsumptionPerDay();
 
-console.log(planeConfig1);
-
-
 module.exports = players;
