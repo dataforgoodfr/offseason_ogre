@@ -1,5 +1,5 @@
 const PersonaOgre = require('../models/PersonaOgre');
-const db = require('../database');
+const db = require('../config/database');
 
 const playerMapper = {};
 
