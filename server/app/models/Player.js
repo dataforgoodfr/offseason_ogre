@@ -1,4 +1,4 @@
-const sequelize = require('../config/databasebis');
+const sequelize = require('../config/database');
 const { Model, DataTypes } = require('sequelize');
 const OGREConstants = require("../OGREConstants");
 

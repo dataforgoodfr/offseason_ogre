@@ -1,4 +1,3 @@
-require('dotenv').config({ path: __dirname + '/.env'});
 const sequelize = require('./app/config/database');
 const { CarConsumption } = require('./app/models');
 const { Player } = require('./app/models');
@@ -17,22 +16,13 @@ carData = {
     litresPer100km:10
 }
 
-test_sequelize = async () => {
+module.exports = async () => {
     try {
         await sequelize.authenticate(); //check sequelize connexion with DB
         await sequelize.sync({ force: true }); //create tables in database (tables are created from models)
         const car = await CarConsumption.create(carData); //add new carCons in DB
         const player = await Player.create(playerData); //add new player in DB
-        
-        const allPlayers = await Player.findAll({ //perform sql query to find all players in DB
-            include: CarConsumption
-        })
-        // console.log(car.toJSON());
-        // console.log("allPlayers:", JSON.stringify(allPlayers, null, 2));
-        console.log('player 1',allPlayers[0].toJSON());
       } catch (error) {
         console.error('Unable to connect to the database:', error);
     }
 }
-
-test_sequelize();
