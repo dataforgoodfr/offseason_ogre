@@ -1,5 +1,5 @@
-const CarConfiguration = require('../models/CarConfiguration')
-const OGREConstant = require('../OGREConstants')
+const CarConfiguration = require('../../models/CarConfiguration')
+const OGREConstant = require('../../OGREConstants')
 const assert = require("assert").strict;
 
 describe("test consumption calculation", function() {
