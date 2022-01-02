@@ -27,8 +27,6 @@ test_sequelize = async () => {
         const allPlayers = await Player.findAll({ //perform sql query to find all players in DB
             include: CarConsumption
         })
-        // console.log(car.toJSON());
-        // console.log("allPlayers:", JSON.stringify(allPlayers, null, 2));
         console.log('player 1',allPlayers[0].toJSON());
       } catch (error) {
         console.error('Unable to connect to the database:', error);

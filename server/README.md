@@ -9,11 +9,12 @@ modules npm à installer
 - installation du package npm : `npm init y`
 - modules express (framework), pg (interagir avec une bdd postgres), dotenv (gestion variables d'environnement) : `npm i express pg dotenv`
 
-Interagir avec la BDD Postgresql
+Interagir avec la BDD Postgresql => passage à l'utilisation de l'ORM sequelize
 - Installer postgres sur son ordinateur (sous windows/wsl, mac ou linux)
 - Confirmez l’installation et récupérez le numéro de version : `psql --version`
 - Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
-- Créer la BDD : exécuter le fichier create_db.sql avec le super utilisateur postgres : `sudo -u postgres psql -f server/create_db.sql`
+- pour l'instant création de la BDD automatiquement avec sequelize au lancement du server node
+- [OLD] Créer la BDD : exécuter le fichier create_db.sql avec le super utilisateur postgres : `sudo -u postgres psql -f server/create_db.sql`
 
 Interagir / tester le serveur
 - Créer un fichier .env en copiant le fichier .env.example

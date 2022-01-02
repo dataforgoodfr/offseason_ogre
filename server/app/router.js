@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     res.send('Hello world');
 })
 
-// par défaut si aucune route ne correspond, renvoie une erreur 404 à l'utilisateur
+// default: if no other path is corresponding, returns 404 error to user
 router.use((_, response) => {
     response.status(404).json('404 error : endpoint not found');
 });
