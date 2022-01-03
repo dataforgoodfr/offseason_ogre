@@ -1,14 +1,9 @@
+const { Sequelize } = require('sequelize');
 
-const { Pool } = require('pg');
+const sequelize = new Sequelize(process.env.PG_URL, {
+    define: {
+        underscored: true, //camelCase fields in javascript are translated to snace_case fields in database tables
+    }
+});
 
-// db est un pool de connecteurs de base de données
-const db = new Pool(
-{
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    database: process.env.PGDATABASE
-    // connectionString: process.env.PGUSER,
-    // ssl: {rejectUnauthorized: false}
-}
-);
-module.exports = db;
+module.exports = sequelize;
