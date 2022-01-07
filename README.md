@@ -43,9 +43,17 @@ docker-compose exec -T database psql -U postgres ogre < server/create_db.sql
 To test if it's work
 
 ```sh
-docker-compose exec server cat /etc/hosts // get the ip address
-curl http://IP:3000/players
+cd server/
+yarn test
 ```
+
+When you have finish to implement your feature, run:
+```sh
+yarn test --coverage  --collectCoverageFrom="./app/**"
+```
+
+To check if tests pass and have at least 90%
+
 
 ## License
 
