@@ -16,11 +16,20 @@ carData = {
     litresPer100km:10
 }
 
+carDataWithNoPersonalCar = {
+    hasCar:false,
+    carShareDistance: 1000,
+    aloneDistance: 0,
+    withHouseholdDistance: 2000,
+    litresPer100km:10
+}
+
 module.exports = async () => {
     try {
         await sequelize.authenticate(); //check sequelize connexion with DB
         await sequelize.sync({ force: true }); //create tables in database (tables are created from models)
         const car = await CarConsumption.create(carData); //add new carCons in DB
+        await CarConsumption.create(carDataWithNoPersonalCar); //add new carCons in DB
         const player = await Player.create(playerData); //add new player in DB
       } catch (error) {
         console.error('Unable to connect to the database:', error);
