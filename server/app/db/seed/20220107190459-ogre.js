@@ -11,7 +11,7 @@ module.exports = {
             with_household_distance: 2000,
             litres_per100km: 10,
             created_at: Sequelize.fn('NOW'),
-            update_at: Sequelize.fn('NOW')
+            updated_at: Sequelize.fn('NOW')
         }], {});
 
         await queryInterface.bulkInsert('car_consumption', [{
@@ -21,13 +21,13 @@ module.exports = {
             with_household_distance: 2000,
             litres_per100km: 10,
             created_at: Sequelize.fn('NOW'),
-            update_at: Sequelize.fn('NOW')
+            updated_at: Sequelize.fn('NOW')
         }], {});
 
         await queryInterface.bulkInsert('plane_consumption', [{
             distance_per_year: 2000,
             created_at: Sequelize.fn('NOW'),
-            update_at: Sequelize.fn('NOW')
+            updated_at: Sequelize.fn('NOW')
         }], {});
 
         await queryInterface.bulkInsert('player', [{
@@ -36,7 +36,7 @@ module.exports = {
             car_consumption_id: 1,
             plane_consumption_id: 1,
             created_at: Sequelize.fn('NOW'),
-            update_at: Sequelize.fn('NOW')
+            updated_at: Sequelize.fn('NOW')
         }], {});
     },
 
