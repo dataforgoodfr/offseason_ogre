@@ -1,7 +1,6 @@
 require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const app = express();
-const create_db = require('./migrate_seed_db_with_sequelize');
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 // const bodyParser = require('body-parser');
@@ -22,10 +21,6 @@ const port = process.env.PORT || 3000;
 const router = require('./app/router');
 
 app.use(router);
-
-async() => {
-    create_db();
-}
 
 async() => {
     app.listen(port, () => {
