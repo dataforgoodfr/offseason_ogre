@@ -3,7 +3,7 @@ const ressourceController = {}
 ressourceController.index = async(_, response, next, Model, arrayIncludedModels = []) => {
     try {
         const ressources = arrayIncludedModels != [] ? await Model.findAll({ include: arrayIncludedModels }) : await Model.findAll();
-        response.json(ressources);
+        ressources ? response.json({ status: 200, data: ressources }) : response.json({ status: 404, data: 'data not found' });
     } catch (error) {
         throw new Error(error);
     }
@@ -12,7 +12,7 @@ ressourceController.index = async(_, response, next, Model, arrayIncludedModels 
 ressourceController.show = async(request, response, next, Model, arrayIncludedModels = []) => {
     try {
         const ressource = arrayIncludedModels != [] ? await Model.findByPk(request.params.id, { include: arrayIncludedModels }) : await Model.findByPk({ where: { id: request.params.id } });
-        response.json(ressource);
+        ressource ? response.json({ status: 200, data: ressource }) : response.json({ status: 404, data: 'data not found' });
     } catch (error) {
         throw new Error(error);
     }
@@ -23,7 +23,7 @@ ressourceController.create = async(request, response, next, Model) => {
 
         console.log('request.body', request.body);
         const ressource = await Model.create(request.body);
-        response.json(ressource);
+        ressource ? response.json({ status: 201, data: ressource }) : response.json({ status: 404, data: 'data not found' });
     } catch (error) {
         throw new Error(error);
     }
@@ -32,7 +32,7 @@ ressourceController.create = async(request, response, next, Model) => {
 ressourceController.update = async(request, response, next, Model) => {
     try {
         const ressource = await Model.update(request.body, { where: { id: request.params.id } })
-        response.json(ressource);
+        ressource ? response.json({ status: 200, data: ressource }) : response.json({ status: 404, data: 'data not found' });
     } catch (error) {
         throw new Error(error);
     }
@@ -41,7 +41,7 @@ ressourceController.update = async(request, response, next, Model) => {
 ressourceController.destroy = async(request, response, next, Model) => {
     try {
         const ressource = await Model.destroy({ where: { id: request.params.id } });
-        response.json(ressource);
+        ressource ? response.json({ status: 204, data: ressource }) : response.json({ status: 404, data: 'data not found' });
     } catch (error) {
         throw new Error(error);
     }
