@@ -129,3 +129,48 @@ describe("Test carConsumption Routes", () => {
         expect(result.body.status).toEqual(204);
     });
 });
+
+describe("Test planeConsumption Routes", () => {
+
+    it("Should compute in case: Show all planeconsumptions", async() => {
+        const result = await request(app).get("/planeconsumptions");
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(200);
+    });
+
+    it("Should compute in case: Show one planeConsumption", async() => {
+        const result = await request(app).get("/planeconsumptions/1");
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(200);
+    });
+
+    it("Should compute in case: Create one planeConsumption", async() => {
+        planeConsumptionData = {
+            distance_per_year: 2000,
+            created_at: Date.now(),
+            updated_at: Date.now()
+        }
+
+        const result = await request(app).put("/planeconsumptions").send(planeConsumptionData);
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(201);
+    });
+
+    it("Should compute in case: Update one planeConsumption", async() => {
+        planeConsumptionData = {
+            distance_per_year: 2000,
+            created_at: Date.now(),
+            updated_at: Date.now()
+        }
+
+        const result = await request(app).post("/planeconsumptions/2").send(planeConsumptionData);
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(200);
+    });
+
+    it("Should compute in case: Delete one planeConsumption", async() => {
+        const result = await request(app).delete("/planeconsumptions/2");
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(204);
+    });
+});

@@ -4,6 +4,7 @@ const ressource = require('./utils/autoresources');
 
 ressource.map(router, 'playerController');
 ressource.map(router, 'carConsumptionController');
+ressource.map(router, 'planeConsumptionController');
 
 router.get('/', (req, res) => {
     res.send('Hello world');
