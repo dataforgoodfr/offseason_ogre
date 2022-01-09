@@ -1,5 +1,5 @@
 const router = require('../../../app/router');
-// const playerController = require('../../../app/controllers/playerController');
+const playerController = require('../../../app/controllers/playerController');
 const request = require('supertest');
 
 app = require('../../../index');
@@ -72,6 +72,59 @@ describe("Test player Routes", () => {
 
     it("Should compute in case: Delete one player", async() => {
         const result = await request(app).delete("/players/2");
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(204);
+    });
+});
+
+describe("Test carConsumption Routes", () => {
+
+    it("Should compute in case: Show all carconsumptions", async() => {
+        const result = await request(app).get("/carconsumptions");
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(200);
+    });
+
+    it("Should compute in case: Show one carConsumption", async() => {
+        const result = await request(app).get("/carconsumptions/1");
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(200);
+    });
+
+    it("Should compute in case: Create one carConsumption", async() => {
+        carConsumptionData = {
+            has_car: true,
+            car_share_distance: 2000,
+            alone_distance: 5000,
+            with_household_distance: 2000,
+            litres_per100km: 10,
+            created_at: Date.now(),
+            updated_at: Date.now()
+        }
+
+        const result = await request(app).put("/carconsumptions").send(carConsumptionData);
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(201);
+    });
+
+    it("Should compute in case: Update one carConsumption", async() => {
+        carConsumptionData = {
+            has_car: true,
+            car_share_distance: 2000,
+            alone_distance: 5000,
+            with_household_distance: 2000,
+            litres_per100km: 10,
+            created_at: Date.now(),
+            updated_at: Date.now()
+        }
+
+        const result = await request(app).post("/carconsumptions/2").send(carConsumptionData);
+        expect(result.status).toEqual(200);
+        expect(result.body.status).toEqual(200);
+    });
+
+    it("Should compute in case: Delete one carConsumption", async() => {
+        const result = await request(app).delete("/carconsumptions/2");
         expect(result.status).toEqual(200);
         expect(result.body.status).toEqual(204);
     });
