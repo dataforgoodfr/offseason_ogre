@@ -1,8 +1,9 @@
 const { Router } = require('express');
 const router = Router();
 const playerController = require('./controllers/playerController');
+const ressource = require('./utils/autoresources');
 
-router.get('/players', playerController.allPlayers);
+ressource.map(router, 'playerController');
 
 router.get('/', (req, res) => {
     res.send('Hello world');

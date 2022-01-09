@@ -1,15 +1,15 @@
 const ressourceController = {}
 
-ressourceController.allRessources = async(_, response, next, Model, arrayIncludedModels = []) => {
+ressourceController.index = async(_, response, next, Model, arrayIncludedModels = []) => {
     try {
-        const ressource = arrayIncludedModels != [] ? await Model.findAll({ include: arrayIncludedModels }) : await Model.findAll();
-        response.json(ressource);
+        const ressources = arrayIncludedModels != [] ? await Model.findAll({ include: arrayIncludedModels }) : await Model.findAll();
+        response.json(ressources);
     } catch (error) {
         throw new Error(error);
     }
 }
 
-ressourceController.getRessource = async(request, response, next, Model) => {
+ressourceController.show = async(request, response, next, Model, arrayIncludedModels = []) => {
     try {
         const ressource = arrayIncludedModels != [] ? await Model.findByPk(request.params.id, { include: arrayIncludedModels }) : await Model.findByPk({ where: { id: request.params.id } });
         response.json(ressource);
@@ -18,7 +18,7 @@ ressourceController.getRessource = async(request, response, next, Model) => {
     }
 }
 
-ressourceController.createRessource = async(request, response, next, Model) => {
+ressourceController.create = async(request, response, next, Model) => {
     try {
 
         console.log('request.body', request.body);
@@ -29,7 +29,7 @@ ressourceController.createRessource = async(request, response, next, Model) => {
     }
 }
 
-ressourceController.editRessource = async(request, response, next, Model) => {
+ressourceController.update = async(request, response, next, Model) => {
     try {
         const ressource = await Model.update(request.body, { where: { id: request.params.id } })
         response.json(ressource);
@@ -38,7 +38,7 @@ ressourceController.editRessource = async(request, response, next, Model) => {
     }
 }
 
-ressourceController.deleteRessource = async(request, response, next, Model) => {
+ressourceController.destroy = async(request, response, next, Model) => {
     try {
         const ressource = await Model.destroy({ where: { id: request.params.id } });
         response.json(ressource);
