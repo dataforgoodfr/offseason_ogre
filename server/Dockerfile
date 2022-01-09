@@ -21,4 +21,4 @@ COPY . /app/
 COPY .env /app/
 
 # RUN yarn run seed
-CMD ["node", "index.js"]
+CMD ["sh", "run.sh"]
