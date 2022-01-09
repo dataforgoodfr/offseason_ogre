@@ -1,6 +1,5 @@
 const { Router } = require('express');
 const router = Router();
-const playerController = require('./controllers/playerController');
 const ressource = require('./utils/autoresources');
 
 ressource.map(router, 'playerController');
