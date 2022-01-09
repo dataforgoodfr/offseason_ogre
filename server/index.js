@@ -22,10 +22,6 @@ const router = require('./app/router');
 
 app.use(router);
 
-async() => {
-    app.listen(port, () => {
-        console.log(`app listening on port ${port}!`);
-    });
-}
-
-module.exports = app
+app.listen(port, () => {
+    console.log(`app listening on port ${port}!`);
+});
