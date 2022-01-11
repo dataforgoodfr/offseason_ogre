@@ -1,6 +1,6 @@
-const sequelize = require('../config/database');
+const sequelize = require('../../config/database');
 const { Model, DataTypes } = require('sequelize');
-const OGREConstants = require("../OGREConstants");
+const OGREConstants = require("../../OGREConstants");
 
 class WindTurbineOnshoreProduction extends Model {}
 
