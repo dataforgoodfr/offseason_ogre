@@ -1,4 +1,4 @@
-require('dotenv').config({ path: __dirname + '/.env'});
+require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const app = express();
 
@@ -23,5 +23,7 @@ const router = require('./app/router');
 app.use(router);
 
 app.listen(port, () => {
-    console.log(`app listening on port ${port}!` );
+    console.log(`app listening on port ${port}!`);
 });
+
+module.exports = app

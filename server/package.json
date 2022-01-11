@@ -1,7 +1,18 @@
 {
-  "dependencies": {
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "pg": "^8.7.1"
-  }
+    "dependencies": {
+        "dotenv": "^10.0.0",
+        "express": "^4.17.1",
+        "pg": "^8.7.1",
+        "sequelize": "^7.0.0-alpha.4",
+        "sequelize-cli": "^6.3.0",
+        "sequelize-pg-utilities": "^2.0.1"
+    },
+    "scripts": {
+        "test": "jest"
+    },
+    "devDependencies": {
+        "jest": "^27.4.5",
+        "jest-plugin-context": "^2.9.0",
+        "supertest": "^6.1.6"
+    }
 }

@@ -1,27 +1,15 @@
-const playerMapper = require('../dataMappers/playerMapper');
-const PersonaOgre = require('../models/PersonaOgre');
-
+const { Player, PlaneConsumption } = require('../db/models');
+const { CarConsumption } = require('../db/models');
 const playerController = {}
 
-// Soit on intègre les requêtes à la BDD directement dans la classe avec des méthodes dédiées, 
-//soit on répertorie toutes les interactions en lien avec la BDD dans un dossier "dataMappers" à part
-
-playerController.allPlayers = async (_, response, next) => {
+playerController.allPlayers = async(_, response, next) => {
     console.log('enter playerController.allPlayers');
     try {
-        const players = await playerMapper.findAll();
+        const players = await Player.findAll({
+            include: [CarConsumption, PlaneConsumption]
+        });
         response.json(players);
-    } catch(error) {
-        throw new Error(error);
-    }
-}
-
-playerController.allPlayersBis = async (_, response, next) => {
-    console.log('enter playerController.allPlayersBis');
-    try {
-        const players = await PersonaOgre.findAll();
-        response.json(players);
-    } catch(error) {
+    } catch (error) {
         throw new Error(error);
     }
 }
