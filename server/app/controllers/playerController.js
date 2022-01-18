@@ -1,17 +1,31 @@
 const { Player, PlaneConsumption } = require('../db/models');
 const { CarConsumption } = require('../db/models');
+const ressourceController = require('./ressourceController');
 const playerController = {}
 
-playerController.allPlayers = async(_, response, next) => {
-    console.log('enter playerController.allPlayers');
-    try {
-        const players = await Player.findAll({
-            include: [CarConsumption, PlaneConsumption]
-        });
-        response.json(players);
-    } catch (error) {
-        throw new Error(error);
-    }
+playerController.index = async(_, response, next) => {
+    console.log('enter playerController.index');
+    ressourceController.index(_, response, next, Player, [PlaneConsumption, CarConsumption]);
+}
+
+playerController.show = async(_, response, next) => {
+    console.log('enter playerController.show');
+    ressourceController.show(_, response, next, Player, [PlaneConsumption, CarConsumption]);
+}
+
+playerController.create = async(_, response, next) => {
+    console.log('enter playerController.create');
+    ressourceController.create(_, response, next, Player);
+}
+
+playerController.update = async(_, response, next) => {
+    console.log('enter playerController.update');
+    ressourceController.update(_, response, next, Player);
+}
+
+playerController.destroy = async(_, response, next) => {
+    console.log('enter playerController.destroy');
+    ressourceController.destroy(_, response, next, Player);
 }
 
 module.exports = playerController;
