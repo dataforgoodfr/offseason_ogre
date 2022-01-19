@@ -15,7 +15,7 @@ CarConsumption.init({ // Model attributes are defined here
     carShareDistance: DataTypes.INTEGER,
     aloneDistance: DataTypes.INTEGER,
     withHouseholdDistance: DataTypes.INTEGER,
-    litresPer100km: DataTypes.INTEGER,
+    litresPer100km: DataTypes.FLOAT,
     motorType: DataTypes.INTEGER,
 
     //virtual attributes which are not stored in DB
