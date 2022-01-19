@@ -46,13 +46,13 @@ CarConsumption.init({ // Model attributes are defined here
     aloneConsumption: {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.dailyAloneDistance * OGREConstants.CALORIFIC_VALUE / this.distancePerLiter;
+            return this.dailyAloneDistance * OGREConstants.carConstants.CALORIFIC_VALUE / this.distancePerLiter;
         }
     },
     withHouseholdConsumption: {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.dailyWithHouseholdDistance * OGREConstants.CALORIFIC_VALUE / this.distancePerLiter / this.personsPerHousehold;
+            return this.dailyWithHouseholdDistance * OGREConstants.carConstants.CALORIFIC_VALUE / this.distancePerLiter / this.personsPerHousehold;
         }
     },
     dailycarShareDistance: {
@@ -64,7 +64,7 @@ CarConsumption.init({ // Model attributes are defined here
     carShareConsumption: {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.dailycarShareDistance * OGREConstants.CALORIFIC_VALUE / this.distancePerLiter;
+            return this.dailycarShareDistance * OGREConstants.carConstants.CALORIFIC_VALUE / this.distancePerLiter;
         }
     },
     carConsumption: {

@@ -9,7 +9,7 @@ const planeConstants = {
     }
 }
 
-const OGREConstants = {
+const carConstants = {
     CONSUMPTION100KM: 7,
     CALORIFIC_VALUE: 10,
     MOTOR_TYPE: {
@@ -17,7 +17,11 @@ const OGREConstants = {
         ELECTRIQUE: 'Electrique',
         HYBRIDE: 'Hybride'
     },
+}
+
+const OGREConstants = {
     planeConstants : planeConstants,
+    carConstants : carConstants,
     daysPerYear : 365
 }
 module.exports = OGREConstants
