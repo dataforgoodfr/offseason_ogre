@@ -10,13 +10,7 @@ const planeConstants = {
 }
 
 const carConstants = {
-    CONSUMPTION100KM: 7,
-    CALORIFIC_VALUE: 10,
-    MOTOR_TYPE: {
-        DIESEL: 'Diesel',
-        ELECTRIQUE: 'Electrique',
-        HYBRIDE: 'Hybride'
-    },
+    calorificValue: 10
 }
 
 const OGREConstants = {
