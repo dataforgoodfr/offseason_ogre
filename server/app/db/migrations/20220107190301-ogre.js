@@ -15,6 +15,7 @@ module.exports = {
             with_household_distance: Sequelize.INTEGER,
             litres_per100km: Sequelize.INTEGER,
             motor_type: Sequelize.INTEGER,
+            player_id: Sequelize.INTEGER,
             created_at: Sequelize.DATE,
             updated_at: Sequelize.DATE
         });
@@ -25,6 +26,7 @@ module.exports = {
                 primaryKey: true
             },
             distance_per_year: Sequelize.INTEGER,
+            player_id: Sequelize.INTEGER,
             created_at: Sequelize.DATE,
             updated_at: Sequelize.DATE
         });
@@ -36,8 +38,6 @@ module.exports = {
             },
             adults_per_household: Sequelize.INTEGER,
             children_per_household: Sequelize.INTEGER,
-            car_consumption_id: Sequelize.INTEGER,
-            plane_consumption_id: Sequelize.INTEGER,
             created_at: Sequelize.DATE,
             updated_at: Sequelize.DATE
         });

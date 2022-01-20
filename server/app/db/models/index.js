@@ -4,10 +4,10 @@ const PlaneConsumption = require('./PlaneConsumption');
 
 //Associations between models are defined here
 
-CarConsumption.hasOne(Player);
-Player.belongsTo(CarConsumption);
+Player.hasOne(CarConsumption);
+CarConsumption.belongsTo(Player);
 
-PlaneConsumption.hasOne(Player);
-Player.belongsTo(PlaneConsumption);
+Player.hasOne(PlaneConsumption);
+PlaneConsumption.belongsTo(Player);
 
 module.exports = { Player, CarConsumption, PlaneConsumption};
