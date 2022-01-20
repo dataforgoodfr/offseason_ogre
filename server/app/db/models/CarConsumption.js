@@ -15,7 +15,20 @@ CarConsumption.init({ // Model attributes are defined here
     carShareDistance: DataTypes.INTEGER,
     aloneDistance: DataTypes.INTEGER,
     withHouseholdDistance: DataTypes.INTEGER,
-    litresPer100km: DataTypes.FLOAT,
+    litresPer100km: {
+        type: DataTypes.FLOAT,
+        get() { //getter to adapt value with motortype if no initial value was provided
+            const rawValue = this.getDataValue('litresPer100km');
+            if (!rawValue){
+                if (this.motorType != 3 ) { //motorType : 3 => electricity
+                    return 7;
+                } else {
+                    return 4.5;
+                }
+            }
+            return rawValue;
+        }
+    },
     motorType: DataTypes.INTEGER,
 
     //virtual attributes which are not stored in DB
