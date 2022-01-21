@@ -21,12 +21,12 @@ describe("test CarConsumption ", () => {
 
     it('Should compute in case: check aloneConsumption', async() => {
         const carConsumption = await CarConsumption.findByPk(1)
-        assert.equal(carConsumption.aloneConsumption, carConsumption.dailyAloneDistance * OGREConstants.CALORIFIC_VALUE / carConsumption.distancePerLiter)
+        assert.equal(carConsumption.aloneConsumption, carConsumption.dailyAloneDistance * OGREConstants.calorificValue / carConsumption.distancePerLiter)
     });
 
     it('Should compute in case: check withHouseholdConsumption', async() => {
         const carConsumption = await CarConsumption.findByPk(1)
-        assert.equal(carConsumption.withHouseholdConsumption, carConsumption.dailyWithHouseholdDistance * OGREConstants.CALORIFIC_VALUE / carConsumption.distancePerLiter / carConsumption.personsPerHousehold)
+        assert.equal(carConsumption.withHouseholdConsumption, carConsumption.dailyWithHouseholdDistance * OGREConstants.calorificValue / carConsumption.distancePerLiter / carConsumption.personsPerHousehold)
     });
 
     it('Should compute in case: check dailycarShareDistance', async() => {
@@ -36,7 +36,7 @@ describe("test CarConsumption ", () => {
 
     it('Should compute in case: check carShareConsumption', async() => {
         const carConsumption = await CarConsumption.findByPk(1)
-        expect(carConsumption.carShareConsumption).toBeCloseTo((carConsumption.dailycarShareDistance * OGREConstants.CALORIFIC_VALUE / carConsumption.distancePerLiter), 15);
+        expect(carConsumption.carShareConsumption).toBeCloseTo((carConsumption.dailycarShareDistance * OGREConstants.calorificValue / carConsumption.distancePerLiter), 15);
     });
 
     it('Should compute in case: check carConsumption if has car', async() => {

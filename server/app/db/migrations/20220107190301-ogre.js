@@ -13,7 +13,7 @@ module.exports = {
             car_share_distance: Sequelize.INTEGER,
             alone_distance: Sequelize.INTEGER,
             with_household_distance: Sequelize.INTEGER,
-            litres_per100km: Sequelize.INTEGER,
+            litres_per100km: Sequelize.FLOAT,
             motor_type: Sequelize.INTEGER,
             player_id: Sequelize.INTEGER,
             created_at: Sequelize.DATE,

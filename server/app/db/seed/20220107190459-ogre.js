@@ -23,7 +23,8 @@ module.exports = {
             car_share_distance: 1000,
             alone_distance: 5000,
             with_household_distance: 2000,
-            litres_per100km: 10,
+            litres_per100km: 8.5,
+            motor_type: 1,
             player_id: 1,
             created_at: Sequelize.fn('NOW'),
             updated_at: Sequelize.fn('NOW')
@@ -34,7 +35,7 @@ module.exports = {
             car_share_distance: 1000,
             alone_distance: 0,
             with_household_distance: 0,
-            litres_per100km: 10,
+            litres_per100km: 0,
             player_id: 2,
             created_at: Sequelize.fn('NOW'),
             updated_at: Sequelize.fn('NOW')
