@@ -15,7 +15,20 @@ CarConsumption.init({ // Model attributes are defined here
     carShareDistance: DataTypes.INTEGER,
     aloneDistance: DataTypes.INTEGER,
     withHouseholdDistance: DataTypes.INTEGER,
-    litresPer100km: DataTypes.INTEGER,
+    litresPer100km: {
+        type: DataTypes.FLOAT,
+        get() { //getter to adapt value with motortype if no initial value was provided
+            const rawValue = this.getDataValue('litresPer100km');
+            if (!rawValue){
+                if (this.motorType != 3 ) { //motorType : 3 => electricity
+                    return 7;
+                } else {
+                    return 4.5;
+                }
+            }
+            return rawValue;
+        }
+    },
     motorType: DataTypes.INTEGER,
 
     //virtual attributes which are not stored in DB
@@ -46,13 +59,13 @@ CarConsumption.init({ // Model attributes are defined here
     aloneConsumption: {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.dailyAloneDistance * OGREConstants.CALORIFIC_VALUE / this.distancePerLiter;
+            return this.dailyAloneDistance * OGREConstants.carConstants.calorificValue / this.distancePerLiter;
         }
     },
     withHouseholdConsumption: {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.dailyWithHouseholdDistance * OGREConstants.CALORIFIC_VALUE / this.distancePerLiter / this.personsPerHousehold;
+            return this.dailyWithHouseholdDistance * OGREConstants.carConstants.calorificValue / this.distancePerLiter / this.personsPerHousehold;
         }
     },
     dailycarShareDistance: {
@@ -64,7 +77,7 @@ CarConsumption.init({ // Model attributes are defined here
     carShareConsumption: {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.dailycarShareDistance * OGREConstants.CALORIFIC_VALUE / this.distancePerLiter;
+            return this.dailycarShareDistance * OGREConstants.carConstants.calorificValue / this.distancePerLiter;
         }
     },
     carConsumption: {
