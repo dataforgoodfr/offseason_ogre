@@ -1,7 +1,5 @@
 SERVER SIDE README.md
 
-# En local
-
 - langage utilisé : javascript avec node.js https://nodejs.org/en/
 - framework de l'application utilisé : express https://expressjs.com/fr
     - structure de l'application
@@ -10,7 +8,6 @@ SERVER SIDE README.md
 modules npm à installer
 - installation du package npm : `npm init y`
 - modules express (framework), pg (interagir avec une bdd postgres), dotenv (gestion variables d'environnement) : `npm i express pg dotenv`
-
 
 Interagir avec la BDD Postgresql => passage à l'utilisation de l'ORM sequelize
 - Installer postgres sur son ordinateur (sous windows/wsl, mac ou linux)
@@ -28,69 +25,9 @@ Interagir / tester le serveur
     - soit utiliser un logiciel pouvant faire des requêtes à une api (insomnia  https://docs.insomnia.rest/, postman ou équivalent)
 
 
+
 Doc :
 - Variables d'environnement : https://www.npmjs.com/package/dotenv
 - Base de données
     - doc psql (interaction DB avec la ligne de commande): https://www.postgresql.org/docs/14/app-psql.html
     - doc connexion node - postgresql : https://node-postgres.com/features/connecting
-
-# With docker
-
-- Install docker on you computer (https://www.docker.com/)
-
-- Check if the docker service is running 
-
-```sh
-sudo service docker status
-```
-
-- Copy .env.example file into .env file
-```sh
-cp server/.env.example server/.env
-```
-
-- Edit .env file
-
-    ```PG_URL=postgresql://default_user:default_user@localhost:5432/ogre%```
-
-    into :
-
-    ````PG_URL=postgresql://postgres:postgres@database:5432/ogre%````
-
-- Then you run docker-compose 
-```sh
-docker-compose up --build
-```
-You can add -d at the end to run docker-compose as detached then to stop it you just need to do
-
-```sh
-docker-compose --down
-```
-
-## Run migrations and seed
-
-```sh
-docker exec -it server yarn sequelize db:migrate && yarn sequelize db:seed:all
-```
-
-## Run tests
-
-Start docker-compose
-
-```sh
-docker-compose up --build
-```
-
-then run tests
-
-```sh
-yarn test --coverage  --collectCoverageFrom="./app/**"
-```
-
-Args
-
-|                                  |                                                           |
-|--------------------------------- |:---------------------------------------------------------:|
-| --coverage                       |   tells to jest to run test coverage                      |
-| --collectCoverageFrom="./app/**" | tells to jest where he need to look at for tests coverage |
-

@@ -24,7 +24,7 @@ OGRE requires [Docker](https://www.docker.com/) v20+ to run.
 
 Want to contribute ? Great!
 
-Open your favorite Terminal and run these commands.
+For the server please read [server](https://github.com/dataforgoodfr/offseason_ogre/blob/develop/server/README.md) documentation
 
 First Tab:
 
@@ -57,6 +57,6 @@ To check if tests pass and have at least 90%
 
 ## License
 
-The project is under MIT licence. For more informations please read [LICENCE](https://github.com/dataforgoodfr/offseason_ogre/blob/master/LICENSE) file
+The project is under MIT licence. For more informations please read [LICENCE](https://github.com/dataforgoodfr/offseason_ogre/blob/develop/LICENSE) file
 
 **Free Software, Hell Yeah!**
