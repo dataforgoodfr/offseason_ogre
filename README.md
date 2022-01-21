@@ -24,31 +24,11 @@ OGRE requires [Docker](https://www.docker.com/) v20+ to run.
 
 Want to contribute ? Great!
 
-Open your favorite Terminal and run these commands.
+For the server please read [server](https://github.com/dataforgoodfr/offseason_ogre/blob/develop/server/README.md) documentation
 
-First Tab:
-
-```sh
-docker-compose up --build
-```
-
-Second Tab:
-
-```sh
-docker-compose exec -T database psql -U postgres ogre < server/create_db.sql
-```
-
-(optional) Third:
-
-To test if it's work
-
-```sh
-docker-compose exec server cat /etc/hosts // get the ip address
-curl http://IP:3000/players
-```
 
 ## License
 
-The project is under MIT licence. For more informations please read [LICENCE](https://github.com/dataforgoodfr/offseason_ogre/blob/master/LICENSE) file
+The project is under MIT licence. For more informations please read [LICENCE](https://github.com/dataforgoodfr/offseason_ogre/blob/develop/LICENSE) file
 
 **Free Software, Hell Yeah!**
