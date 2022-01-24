@@ -38,6 +38,17 @@ module.exports = {
             children_per_household: Sequelize.INTEGER,
             car_consumption_id: Sequelize.INTEGER,
             plane_consumption_id: Sequelize.INTEGER,
+            windturbineonshore_production_id: Sequelize.INTEGER,
+            created_at: Sequelize.DATE,
+            updated_at: Sequelize.DATE
+        });
+        await queryInterface.createTable('windturbineonshore_production', {
+            id: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            ratioTerritory : Sequelize.FLOAT,
             created_at: Sequelize.DATE,
             updated_at: Sequelize.DATE
         });
@@ -47,5 +58,6 @@ module.exports = {
         await queryInterface.dropTable('car_consumption');
         await queryInterface.dropTable('plane_consumption');
         await queryInterface.dropTable('player');
+        await queryInterface.dropTable('windturbineonshore_production');
     }
 };
