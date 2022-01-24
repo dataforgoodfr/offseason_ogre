@@ -60,5 +60,6 @@ module.exports = {
         await queryInterface.bulkDelete('car_consumption', null, {});
         await queryInterface.bulkDelete('plane_consumption', null, {});
         await queryInterface.bulkDelete('player', null, {});
+        await queryInterface.bulkDelete('windturbineonshore_production', null, {});
     }
 };
