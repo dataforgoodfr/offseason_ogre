@@ -56,7 +56,7 @@ module.exports = {
         }], {});
 
         await queryInterface.bulkInsert('wind_turbine_onshore_production', [{
-            ratioTerritory: 0.01,
+            ratio_territory: 0.01,
             created_at: Sequelize.fn('NOW'),
             updated_at: Sequelize.fn('NOW')
         }], {});

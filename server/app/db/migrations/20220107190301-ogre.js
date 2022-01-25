@@ -36,7 +36,7 @@ module.exports = {
                 autoIncrement: true,
                 primaryKey: true
             },
-            ratioTerritory : Sequelize.FLOAT,
+            ratio_territory : Sequelize.FLOAT,
             created_at: Sequelize.DATE,
             updated_at: Sequelize.DATE
         });

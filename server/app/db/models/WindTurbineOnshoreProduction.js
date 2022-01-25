@@ -47,7 +47,7 @@ WindTurbineOnshoreProduction.init({// Model attributes are defined here
     costPerDay : {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.energyProductionPerDay * OGREConstants.windTurbineOnshoreConstants.LCOEaverage ;
+            return this.energyProductionPerDay * OGREConstants.windTurbineOnshoreConstants.averageLCOE ;
         }
     },
 }, {// Other model options go here
