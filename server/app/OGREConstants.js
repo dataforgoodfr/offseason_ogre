@@ -1,3 +1,9 @@
+const globalConstants = {
+    populationFrance : 64810000,
+    areaFrance : 551695,
+    daysPerYear : 365
+}
+
 // Base calcul conso carburant par passager (Boeing 747-400) pour 1 A/R
 const planeConstants = {
     consumptionOneRide : 24000,
@@ -9,37 +15,21 @@ const planeConstants = {
     }
 }
 
-const windTurbineOnshoreConstants = {
-    LoadFactor : 0.33,
-    CO2EmissionsPerkWh : 10,
-    LCOEaverage : 0.0605,
-    PowerM2 : 2
-}
-
-const GlobalConstants = {
-    PopulationFrance : 64810000,
-    AreaFrance : 551695
-}
-
-const OGREConstants = {
-    CONSUMPTION100KM: 7,
-    CALORIFIC_VALUE: 10,
-    MOTOR_TYPE: {
-        DIESEL: 'Diesel',
-        ELECTRIQUE: 'Electrique',
-        HYBRIDE: 'Hybride'
-    },
-    planeConstants : planeConstants,
-    daysPerYear : 365
-}
-
 const carConstants = {
     calorificValue: 10
 }
 
-const OGREConstants = {
-    planeConstants : planeConstants,
-    carConstants : carConstants,
-    daysPerYear : 365
+const windTurbineOnshoreConstants = {
+    loadFactor : 0.33,
+    CO2EmissionsPerkWh : 10,
+    averageLCOE : 0.0605,
+    powerPerM2 : 2
 }
+
+const OGREConstants = {
+    globalConstants : globalConstants,
+    planeConstants : planeConstants,
+    carConstants : carConstants
+}
+
 module.exports = OGREConstants
