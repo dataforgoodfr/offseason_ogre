@@ -58,5 +58,6 @@ module.exports = {
         await queryInterface.dropTable('plane_consumption');
 		await queryInterface.dropTable('wind_turbine_onshore_production');
         await queryInterface.dropTable('player');
+        await queryInterface.dropTable('windturbineonshore_production');
     }
 };
