@@ -54,12 +54,18 @@ module.exports = {
             created_at: Sequelize.fn('NOW'),
             updated_at: Sequelize.fn('NOW')
         }], {});
+
+        await queryInterface.bulkInsert('wind_turbine_onshore_production', [{
+            ratioTerritory: 0.01,
+            created_at: Sequelize.fn('NOW'),
+            updated_at: Sequelize.fn('NOW')
+        }], {});
     },
 
     down: async(queryInterface, Sequelize) => {
         await queryInterface.bulkDelete('car_consumption', null, {});
         await queryInterface.bulkDelete('plane_consumption', null, {});
+        await queryInterface.bulkDelete('wind_turbine_onshore_production', null, {});
         await queryInterface.bulkDelete('player', null, {});
-        await queryInterface.bulkDelete('windturbineonshore_production', null, {});
     }
 };
