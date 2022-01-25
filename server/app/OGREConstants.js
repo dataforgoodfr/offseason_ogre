@@ -29,7 +29,8 @@ const windTurbineOnshoreConstants = {
 const OGREConstants = {
     globalConstants : globalConstants,
     planeConstants : planeConstants,
-    carConstants : carConstants
+    carConstants : carConstants,
+    windTurbineOnshoreConstants : windTurbineOnshoreConstants
 }
 
 module.exports = OGREConstants

@@ -14,26 +14,26 @@ WindTurbineOnshoreProduction.init({// Model attributes are defined here
     ratioTerritory : DataTypes.FLOAT,
 
     //virtual attributes which are not stored in DB
-    availablePowerDay : {
+    availablePowerPerDay : {
         type: DataTypes.VIRTUAL,
         get() {
-            return OGREConstants.windTurbineOnshoreConstants.PowerM2 / 1000 * 24 *
-            OGREConstants.GlobalConstants.AreaFrance * 10**6 / OGREConstants.GlobalConstants.PopulationFrance ; 
+            return OGREConstants.windTurbineOnshoreConstants.powerPerM2 / 1000 * 24 *
+            OGREConstants.globalConstants.areaFrance * 10**6 / OGREConstants.globalConstants.populationFrance ;
         }
     },
 
     energyProductionPerDay : {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.ratioTerritory * this.availablePowerDay ; 
+            return this.ratioTerritory * this.availablePowerPerDay ;
         }
     },
 
     energyInstalledPower : {
         type: DataTypes.VIRTUAL,
         get() {
-            return this.energyProductionPerDay / 24 / 10**6 / OGREConstants.windTurbineOnshoreConstants.LoadFactor * 
-            OGREConstants.GlobalConstants.PopulationFrance ;
+            return this.energyProductionPerDay / 24 / 10**6 / OGREConstants.windTurbineOnshoreConstants.loadFactor *
+            OGREConstants.globalConstants.populationFrance ;
         }
     },
 
@@ -53,7 +53,7 @@ WindTurbineOnshoreProduction.init({// Model attributes are defined here
 }, {// Other model options go here
     sequelize, //connection instance
     modelName: 'WindTurbineOnshoreProduction',
-    tableName: 'windturbine-onshore_production'
+    tableName: 'wind_turbine_onshore_production'
 })
 
 module.exports = WindTurbineOnshoreProduction;
