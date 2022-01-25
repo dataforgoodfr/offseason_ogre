@@ -1,56 +1,59 @@
+const sequelize = require('../config/database');
+const { Model, DataTypes } = require('sequelize');
 const OGREConstants = require("../OGREConstants");
 
-class WindTurbineOnshoreConfiguration {
-    id;
-    ratioTerritory;
-    energyProductionPerDay;
-    energyInstalledPower
-    CO2EmissionsPerDay;
-    costPerDay;
-    availablePowerDay;
+class WindTurbineOnshoreProduction extends Model {}
 
-    constructor(data) {
-        this.id = data.id;
-        this.ratioTerritory = data.ratioTerritory;
-    }
+WindTurbineOnshoreProduction.init({// Model attributes are defined here
+    //attributes stored in DB
+    id : {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true
+    },
+    ratioTerritory : DataTypes.FLOAT,
 
-    computeAvailablePowerDay() {
-        this.availablePowerDay = OGREConstants.windTurbineOnshoreConstants.PowerM2 / 1000 * 24 *
-                                    OGREConstants.GlobalConstants.AreaFrance * 10**6 / OGREConstants.GlobalConstants.PopulationFrance ;
-    }
+    //virtual attributes which are not stored in DB
+    availablePowerDay : {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return OGREConstants.windTurbineOnshoreConstants.PowerM2 / 1000 * 24 *
+            OGREConstants.GlobalConstants.AreaFrance * 10**6 / OGREConstants.GlobalConstants.PopulationFrance ; 
+        }
+    },
 
-    computeEnergyProductionPerDay() {
-        this.energyProductionPerDay = this.ratioTerritory * this.availablePowerDay;
-    }
+    energyProductionPerDay : {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.ratioTerritory * this.availablePowerDay ; 
+        }
+    },
 
-    computeEnergyInstalledPower() {
-        this.energyInstalledPower = this.energyProductionPerDay / 24 / 10**6 / OGREConstants.windTurbineOnshoreConstants.ChargeFactor * 
-                                        OGREConstants.GlobalConstants.PopulationFrance ;
-    }
+    energyInstalledPower : {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.energyProductionPerDay / 24 / 10**6 / OGREConstants.windTurbineOnshoreConstants.LoadFactor * 
+            OGREConstants.GlobalConstants.PopulationFrance ;
+        }
+    },
 
-    computeCO2EmissionsPerDay() {
-        this.CO2EmissionsPerDay = this.energyProductionPerDay * OGREConstants.windTurbineOnshoreConstants.CO2EmissionsPerkWh;
-    }
+    CO2EmissionsPerDay : {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.energyProductionPerDay * OGREConstants.windTurbineOnshoreConstants.CO2EmissionsPerkWh ;
+        }
+    },
 
-    computeCostPerDay() {
-        this.costPerDay = this.energyProductionPerDay * OGREConstants.windTurbineOnshoreConstants.LCOEaverage ;
-    }
+    costPerDay : {
+        type: DataTypes.VIRTUAL,
+        get() {
+            return this.energyProductionPerDay * OGREConstants.windTurbineOnshoreConstants.LCOEaverage ;
+        }
+    },
+}, {// Other model options go here
+    sequelize, //connection instance
+    modelName: 'WindTurbineOnshoreProduction',
+    tableName: 'windturbine-onshore_production'
+})
 
-    get energyProductionPerDay() {
-        return this.energyProductionPerDay;
-    }
-
-    get energyInstalledPower() {
-        return this.energyInstalledPower;
-    }
-
-    get CO2EmissionsPerDay() {
-        return this.CO2EmissionsPerDay;
-    }
-
-    get costPerDay() {
-        return this.costPerDay;
-    }
-}
-
-module.exports = WindTurbineOnshoreConfiguration;
+module.exports = WindTurbineOnshoreProduction;
