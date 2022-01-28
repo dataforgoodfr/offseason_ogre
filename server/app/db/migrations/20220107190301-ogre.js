@@ -30,6 +30,16 @@ module.exports = {
             created_at: Sequelize.DATE,
             updated_at: Sequelize.DATE
         });
+		await queryInterface.createTable('wind_turbine_onshore_production', {
+            id: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+                primaryKey: true
+            },
+            ratio_territory : Sequelize.FLOAT,
+            created_at: Sequelize.DATE,
+            updated_at: Sequelize.DATE
+        });
         await queryInterface.createTable('player', {
             id: {
                 type: Sequelize.INTEGER,
@@ -46,6 +56,8 @@ module.exports = {
     down: async(queryInterface, Sequelize) => {
         await queryInterface.dropTable('car_consumption');
         await queryInterface.dropTable('plane_consumption');
+		await queryInterface.dropTable('wind_turbine_onshore_production');
         await queryInterface.dropTable('player');
+        await queryInterface.dropTable('windturbineonshore_production');
     }
 };
