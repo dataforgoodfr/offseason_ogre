@@ -9,14 +9,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //parse cookies sent via http requests
-// const cookieParser = require('cookie-parser');
-// app.use(cookieParser())
+//const cookieParser = require('cookie-parser');
+//app.use(cookieParser())
 
 //use cors to accept other non domain websites to access api
-// const cors = require('cors');
-// app.use(cors());
+const cors = require('cors');
+app.use(cors());
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 const router = require('./app/router');
 

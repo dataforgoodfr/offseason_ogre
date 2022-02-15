@@ -13,11 +13,11 @@ class PlayerDataService
   }
 
   create(data : IPlayerData) {
-    return http.post<IPlayerData>("players", data)
+    return http.put<IPlayerData>("players", data)
   }
 
   update(data : IPlayerData, id : number) {
-    return http.put<any>(`players/${id}`, data)
+    return http.post<any>(`players/${id}`, data)
   }
 
   delete(id : number) {

@@ -2,6 +2,16 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Prerequisites
+
+- npm
+- install all dependecies with command line `npm i`
+
+## Getting started
+
+- While the backend app is not deployed, make sure to start it (see README.md in server folder to start it)
+- In another terminal start the client server (check below the scripts available to run & play with the front app)
+
 ## Available Scripts
 
 In the project directory, you can run:
