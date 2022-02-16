@@ -27,7 +27,6 @@ Interagir / tester le serveur
     - soit utiliser un navigateur internet : http://localhost:3000/
     - soit utiliser un logiciel pouvant faire des requêtes à une api (insomnia  https://docs.insomnia.rest/, postman ou équivalent)
 
-
 Doc :
 - Variables d'environnement : https://www.npmjs.com/package/dotenv
 - Base de données
@@ -36,9 +35,9 @@ Doc :
 
 # With docker
 
-- Install docker on you computer (https://www.docker.com/)
+- Install docker on you computer (https://docs.docker.com/get-docker/)
 
-- Check if the docker service is running 
+- Check if the docker service is running
 
 ```sh
 sudo service docker status
@@ -51,11 +50,11 @@ cp server/.env.example server/.env
 
 - Edit .env file
 
-    ```PG_URL=postgresql://default_user:default_user@localhost:5432/ogre%```
+    ```PG_URL=postgresql://default_user:default_user@localhost:5432/ogre```
 
     into :
 
-    ````PG_URL=postgresql://postgres:postgres@database:5432/ogre%````
+    ````PG_URL=postgresql://postgres:postgres@database:5432/ogre```
 
 - Then you run docker-compose 
 ```sh
@@ -65,12 +64,6 @@ You can add -d at the end to run docker-compose as detached then to stop it you 
 
 ```sh
 docker-compose --down
-```
-
-## Run migrations and seed
-
-```sh
-docker exec -it server yarn sequelize db:migrate && yarn sequelize db:seed:all
 ```
 
 ## Run tests
