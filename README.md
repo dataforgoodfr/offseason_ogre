@@ -32,13 +32,7 @@ First Tab:
 docker-compose up --build
 ```
 
-Second Tab:
-
-```sh
-docker-compose exec -T database psql -U postgres ogre < server/create_db.sql
-```
-
-(optional) Third:
+Second Tab (optional):
 
 To test if it's work
 
