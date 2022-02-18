@@ -1,41 +1,29 @@
-SERVER SIDE README.md
+# SERVER SIDE GUIDELINES
 
-# En local
+# Tech information
 
 - langage utilisé : javascript avec node.js https://nodejs.org/en/
 - framework de l'application utilisé : express https://expressjs.com/fr
     - structure de l'application
     - module de routage
 
-modules npm à installer
-- installation du package npm : `npm init y`
-- modules express (framework), pg (interagir avec une bdd postgres), dotenv (gestion variables d'environnement) : `npm i express pg dotenv`
 
+# Run & play with application
 
-Interagir avec la BDD Postgresql => passage à l'utilisation de l'ORM sequelize
-- Installer postgres sur son ordinateur (sous windows/wsl, mac ou linux)
-- Confirmez l’installation et récupérez le numéro de version : `psql --version`
-- Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
-- pour l'instant création de la BDD automatiquement avec sequelize au lancement du server node
-- [OLD] Créer la BDD : exécuter le fichier create_db.sql avec le super utilisateur postgres : `sudo -u postgres psql -f server/create_db.sql`
+1) Copy the content of file `.env.example` into a new `.env` file
 
-Interagir / tester le serveur
-- Créer un fichier .env en copiant le fichier .env.example
-- S'assurer d'avoir exécuté postgresql et d'avoir créé la DB
-- lancer un serveur : `node server/index.js`. le serveur sera accessible sur le port 3000
-- interaction : 
-    - soit utiliser un navigateur internet : http://localhost:3000/
-    - soit utiliser un logiciel pouvant faire des requêtes à une api (insomnia  https://docs.insomnia.rest/, postman ou équivalent)
+```sh
+cp server/.env.example server/.env
+```
 
-Doc :
-- Variables d'environnement : https://www.npmjs.com/package/dotenv
-- Base de données
-    - doc psql (interaction DB avec la ligne de commande): https://www.postgresql.org/docs/14/app-psql.html
-    - doc connexion node - postgresql : https://node-postgres.com/features/connecting
+2) You can chose either to run the application using docker (easiest way, no dependencies to install on your computer) or by launching yourself the application in local and taking care of the dependencies and DB creation
 
-# With docker
+## Run app with docker
 
 - Install docker on you computer (https://docs.docker.com/get-docker/)
+
+Requirement : [Docker](https://www.docker.com/) v20+
+
 
 - Check if the docker service is running
 
@@ -43,47 +31,48 @@ Doc :
 sudo service docker status
 ```
 
-- Copy .env.example file into .env file
-```sh
-cp server/.env.example server/.env
-```
-
-- Edit .env file
-
-    ```PG_URL=postgresql://default_user:default_user@localhost:5432/ogre```
-
-    into :
-
-    ````PG_URL=postgresql://postgres:postgres@database:5432/ogre```
-
-- Then you run docker-compose 
-```sh
-docker-compose up --build
-```
-You can add -d at the end to run docker-compose as detached then to stop it you just need to do
-
-```sh
-docker-compose --down
-```
-
-## Run tests
-
-Start docker-compose
-
+- Then you may run docker-compose to launch the app
 ```sh
 docker-compose up --build
 ```
 
-then run tests
+- To stop the app : `Ctrl + c`
 
-```sh
-yarn test --coverage  --collectCoverageFrom="./app/**"
-```
+## Run app manualy
 
-Args
+1) Edit .env file
 
-|                                  |                                                           |
-|--------------------------------- |:---------------------------------------------------------:|
-| --coverage                       |   tells to jest to run test coverage                      |
-| --collectCoverageFrom="./app/**" | tells to jest where he need to look at for tests coverage |
+```PG_URL=postgresql://postgres:postgres@localhost:5432/ogre```
 
+into :
+
+```PG_URL=postgresql://default_user:default_user@database:5432/ogre```
+
+2) Install dependencies using yarn or npm : `npm i`
+
+3) Setup database
+
+- Installer `postgresql` sur son ordinateur
+- Confirmez l’installation et récupérez le numéro de version : `psql --version`
+- Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
+- Création de la BDD automatiquement avec l'ORM sequelize au lancement du server node
+
+4) Interagir / tester le serveur
+- S'assurer d'avoir lancer postgresql et d'avoir créé la DB
+- lancer un serveur : `node server/index.js`. le serveur sera accessible sur le port 8080
+
+# Play with app
+
+Once the app is launched it is accessible on port 8080 : http://localhost:8080/
+
+# Run tests
+
+Work In Progress (updates soon !)
+
+# Useful documentation
+- Docker : https://www.docker.com/
+- Variables d'environnement : https://www.npmjs.com/package/dotenv
+- Base de données
+    - ORM Sequelize : https://sequelize.org/
+    - doc psql (interaction DB avec la ligne de commande): https://www.postgresql.org/docs/14/app-psql.html
+    - doc connexion node - postgresql : https://node-postgres.com/features/connecting
