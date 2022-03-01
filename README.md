@@ -1,56 +1,46 @@
-# offseason_ogre
+# OGRE
 
-Présentation workshop OGRE : https://laconsciencedesetudiants.fr/atelier-ogre/
+## Présentation workshop OGRE
 
-Goal : Develop a plateform for digitalize OGRE's workshop (sensitization of energy orders of magnitude)
+Ogre is a recreational workshop to help understand orders of magnitude of energies and what it implies for the ecological transition.
+
+https://laconsciencedesetudiants.fr/atelier-ogre/
+
+
+## Goal of this project
+
+Our goal is to develop a web application to digitalize OGRE's workshop. It will improve the user experience and allow to scale up the reach of the workshop.
 
 ## Features
 
-- List all players
+Work In Progress
 
 ## Tech
 
 OGRE uses a number of open source projects to work properly:
 
-- [node.js] - evented I/O for the backend
-- [Express] - fast node.js network app framework
-- [Docker] - dockerize the app in  dev environment
+- Backend
+	- **node.js** - evented I/O for the backend
+	- **Express** - fast node.js network app framework
+	- **Docker** - dockerize the app in  dev environment
+- Frontend
+	- **React** : Framework/library for front-end dev
 
-## Installation
-
-OGRE requires [Docker](https://www.docker.com/) v20+ to run.
 
 ## Development
 
 Want to contribute ? Great!
 
-Open your favorite Terminal and run these commands.
+### Running frontend and backend apps
+Please refer to README.md in `/server` and `/client` folders.
 
-First Tab:
+### Tickets and issues
+If you don't have access yet to this [board](https://trello.com/b/pymIamFD/dev-web) please request access to admin.
 
-```sh
-docker-compose up --build
-```
-
-Second Tab (optional):
-
-To test if it's work
-
-```sh
-cd server/
-yarn test
-```
-
-When you have finish to implement your feature, run:
-```sh
-yarn test --coverage  --collectCoverageFrom="./app/**"
-```
-
-To check if tests pass and have at least 90%
-
+Then chose an issue and there you go!
 
 ## License
 
 The project is under MIT licence. For more informations please read [LICENCE](https://github.com/dataforgoodfr/offseason_ogre/blob/master/LICENSE) file
 
-**Free Software, Hell Yeah!**
+**Open source software, Hell Yeah!**

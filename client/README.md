@@ -9,7 +9,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Getting started
 
-- While the backend app is not deployed, make sure to start it (see README.md in server folder to start it)
+- While the backend app is not deployed on Heroku, make sure to launch the backend app on your computer first (see README.md in `/server` directory to launch it)
 - In another terminal start the client server (check below the scripts available to run & play with the front app)
 
 ## Available Scripts
