@@ -9,8 +9,12 @@
         "sequelize-pg-utilities": "^2.0.1"
     },
     "scripts": {
+        "start": "node index.js",
         "test": "jest"
     },
+    "engines": {
+        "node": "16.10.0"
+      },
     "devDependencies": {
         "jest": "^27.4.5",
         "jest-plugin-context": "^2.9.0",
