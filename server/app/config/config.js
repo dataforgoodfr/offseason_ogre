@@ -9,6 +9,10 @@ module.exports = {
         "url": process.env.DATABASE_URL,
         "dialect": "postgres"
     },
+    "staging": {
+        "url": process.env.DATABASE_URL,
+        "dialect": "postgres"
+    },
     "test": {
         "url": process.env.PG_URL_TEST,
         "dialect": "postgres"
