@@ -6,7 +6,7 @@ dotenv.config(path.resolve('./', '.env'));
 
 module.exports = {
     "development": {
-        "url": process.env.PG_URL,
+        "url": process.env.DATABASE_URL,
         "dialect": "postgres"
     },
     "test": {
