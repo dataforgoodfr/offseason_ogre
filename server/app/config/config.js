@@ -11,10 +11,6 @@ module.exports = {
     },
     "staging": {
         "url": process.env.DATABASE_URL,
-        "ssl": true,
-        "dialectOptions": {
-            "ssl": true
-        },
         "dialect": "postgres"
     },
     "test": {
