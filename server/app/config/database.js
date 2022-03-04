@@ -7,13 +7,13 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
     },
     // ssl:true,
     // native: true,
-    // dialectOptions: {
-    //     ssl: true,
-    //     ssl: {
-    //       //require: true,
-    //       rejectUnauthorized: false // <<<<<<< YOU NEED THIS
-    //     }
-    // },
+    dialectOptions: {
+        ssl: true,
+        // ssl: {
+        //   //require: true,
+        //   rejectUnauthorized: false // <<<<<<< YOU NEED THIS
+        // }
+    },
 });
 
 module.exports = sequelize;
