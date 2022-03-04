@@ -9,7 +9,7 @@
         "sequelize-pg-utilities": "^2.0.1"
     },
     "scripts": {
-        "start": "node index.js; yarn run sequelize db:migrate",
+        "start": "yarn run sequelize db:migrate && node index.js",
         "test": "jest"
     },
     "engines": {
