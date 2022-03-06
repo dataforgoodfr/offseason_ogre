@@ -12,11 +12,11 @@ module.exports = {
     "staging": {
         "url": `${process.env.DATABASE_URL}?sslmode=require`,
         "dialect": "postgres",
-        // "dialectOptions": {
-        //     "ssl": {
-        //       "rejectUnauthorized": "false" // <<<<<<< YOU NEED THIS
-        //     }
-        // },
+        "dialectOptions": {
+            "ssl": {
+              "rejectUnauthorized": "false" // <<<<<<< YOU NEED THIS
+            }
+        },
     },
     "test": {
         "url": process.env.PG_URL_TEST,
