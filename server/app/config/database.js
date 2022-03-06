@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
     // ssl:true,
     // native: true,
     dialectOptions: {
-        ssl: true,
+        // ssl: true,
         // ssl: {
         //   //require: true,
         //   rejectUnauthorized: false // <<<<<<< YOU NEED THIS
