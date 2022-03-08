@@ -1,4 +1,4 @@
-/* istanbul ignore file */
+/* sequelize configuration file to manage migrations and seeding without running the app */
 
 var path = require('path')
 const dotenv = require("dotenv");
