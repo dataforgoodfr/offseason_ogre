@@ -9,7 +9,7 @@
         "sequelize-pg-utilities": "^2.0.1"
     },
     "scripts": {
-        "test": "jest"
+        "test": "./node_modules/.bin/mocha"
     },
     "devDependencies": {
         "jest": "^27.4.5",
