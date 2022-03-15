@@ -6,7 +6,11 @@ Tests POST / UPDATE / DELETE: WIP.
 Installation
 
 > cd server
-npm i mocha —save-dev && npm i chai—save-dev
+npm i mocha --save-dev && npm i chai --save-dev
+
+De plus, il sera nécessaire d'installer les modules suivants:
+
+> npm i should --save-dev && npm i request --save-dev
 
 Execution
 

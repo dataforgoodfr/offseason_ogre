@@ -1,14 +1,12 @@
 const should = require("should");
 const request = require("request");
 const expect = require("chai").expect;
-const baseUrl = "http://localhost:8080/";
+// const baseUrl = "http://localhost:8080/";
+const baseUrl = "https://atelierogre-staging.herokuapp.com/";
 const util = require("util");
 const id = 1;
 const maxChildren = 10;
 const distancePerYear = 200000;
-
-// console.log(process.env);
-// console.log(process.env.PG_URL);
 
 /*********************** tests player ***********************************/
 
