@@ -8,7 +8,7 @@
     - module de routage
 
 
-# Run & play with application
+# Run & play with application localy
 
 1) Copy the content of file `.env.example` into a new `.env` file
 
@@ -69,6 +69,9 @@ Once the app is launched it is accessible on port 8080 : http://localhost:8080/
 
 Work In Progress (updates soon !)
 
+# Deployment of the app on staging (and soon production!)
+The backend application is hosted for testing on Heroku. Please refer to `server/HEROKU.md` to see how to interact with heroku and deployment.
+
 # Useful documentation
 - Docker : https://www.docker.com/
 - Variables d'environnement : https://www.npmjs.com/package/dotenv
@@ -76,3 +79,4 @@ Work In Progress (updates soon !)
     - ORM Sequelize : https://sequelize.org/
     - doc psql (interaction DB avec la ligne de commande): https://www.postgresql.org/docs/14/app-psql.html
     - doc connexion node - postgresql : https://node-postgres.com/features/connecting
+- The backend app is live and hosted on Heroku. see Heroku documentation : https://devcenter.heroku.com/categories/nodejs-support
