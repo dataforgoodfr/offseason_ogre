@@ -6,11 +6,11 @@ Tests POST / UPDATE / DELETE: WIP.
 Installation
 
 > cd server
-npm i mocha --save-dev && npm i chai --save-dev
+yarn add mocha --dev && yarn add chai --dev
 
 De plus, il sera nécessaire d'installer les modules suivants:
 
-> npm i should --save-dev && npm i request --save-dev
+> yarn add should --dev && yarn add request --dev
 
 Execution
 
@@ -18,7 +18,7 @@ Execution
 
 ou
 
-> ./node_modules/.bin/mocha action
+> ./node_modules/.bin/mocha
 
 Pour executer les tests il est nécessaire d'utiliser l'IP du container dans le .env
 
