@@ -9,8 +9,8 @@
         "sequelize-pg-utilities": "^2.0.1"
     },
     "scripts": {
-        "start": "node index.js",
-        "test": "jest"
+        "test": "./node_modules/.bin/mocha",
+        "start": "node index.js"
     },
     "engines": {
         "node": "16.13.1"
