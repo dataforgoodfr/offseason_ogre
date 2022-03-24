@@ -16,7 +16,7 @@ const style = {
   p: 4,
 };
 
-const TestModal = () => {
+function TestModal() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,6 +41,6 @@ const TestModal = () => {
       </Modal>
     </div>
   );
-};
+}
 
 export default TestModal;
