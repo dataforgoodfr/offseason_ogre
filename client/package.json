@@ -38,7 +38,7 @@
       "eslint --quiet --fix"
     ],
     "*.{json,md,html,js,jsx,ts,tsx}": [
-      "prettier --write"
+      "prettier --write ./src/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
     ]
   },
   "eslintConfig": {
