@@ -16,6 +16,8 @@
     "@types/react-dom": "^17.0.11",
     "antd": "^4.18.4",
     "axios": "^0.25.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.7",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.2.2",
@@ -31,7 +33,17 @@
     "eject": "craco eject",
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
-    "format": "prettier --write ./src/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc"
+    "format": "prettier --write ./src/*.{js,jsx,ts,tsx,css,md,json} --config ./.prettierrc",
+    "prepare": "cd .. && husky install client/.husky",
+    "lint-client": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx, jsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json,md,html,js,jsx,ts,tsx}": [
+      "prettier --write"
+    ]
   },
   "eslintConfig": {
     "extends": [
