@@ -5,7 +5,7 @@ import Signup from "./modules/signup";
 
 function App() {
   return (
-    <div className="App">
+    <div className="min-h-screen" style={{ backgroundColor: "#1B1B3B" }}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signin" element={<Signin />} />
