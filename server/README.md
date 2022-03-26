@@ -16,7 +16,30 @@
 cp server/.env.example server/.env
 ```
 
-2) You can chose either to run the application using docker (easiest way, no dependencies to install on your computer) or by launching yourself the application in local and taking care of the dependencies and DB creation
+2) You can chose either to run the application using docker or by launching yourself the application in local and taking care of the dependencies and DB creation
+
+## Run app manually
+
+1) Install dependencies using yarn : `yarn install`
+
+2) Setup database
+
+2.a - database as container
+- launch postgre container
+`cd server`
+`docker-compose up -d`
+
+OR 2.b - local database
+- Installer `postgresql` sur son ordinateur
+- Confirmez l’installation et récupérez le numéro de version : `psql --version`
+- Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
+- Création de la BDD automatiquement avec l'ORM sequelize au lancement du server node
+
+3) Seed the database: `yarn seed` (Optional)
+
+4) Interagir / tester le serveur
+- S'assurer d'avoir lancer postgresql et d'avoir créé la DB
+- lancer un serveur : `yarn dev`. le serveur sera accessible sur le port 8080
 
 ## Run app with docker
 
@@ -38,28 +61,9 @@ docker-compose up --build
 
 - To stop the app : `Ctrl + c`
 
-## Run app manualy
-
-1) Install dependencies using yarn : `yarn install`
-
-2) Setup database
-
-2.a
-- launch postgre container
-`cd server`
-`docker-compose up -d`
-
-OR 2.b
-- Installer `postgresql` sur son ordinateur
-- Confirmez l’installation et récupérez le numéro de version : `psql --version`
-- Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
-- Création de la BDD automatiquement avec l'ORM sequelize au lancement du server node
-
-3) Seed the database: `yarn seed` (Optionnal)
-
-4) Interagir / tester le serveur
-- S'assurer d'avoir lancer postgresql et d'avoir créé la DB
-- lancer un serveur : `yarn start`. le serveur sera accessible sur le port 8080
+## Run app from build
+`yarn build` to transpile ts into js (will be emitted in ./built)
+`yarn start`
 
 # Play with app
 
