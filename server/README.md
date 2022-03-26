@@ -48,7 +48,7 @@ into :
 
 ```PG_URL=postgresql://default_user:default_user@database:5432/ogre```
 
-2) Install dependencies using yarn or npm : `npm i`
+2) Install dependencies using yarn : `yarn install`
 
 3) Setup database
 
