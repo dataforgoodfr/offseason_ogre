@@ -30,6 +30,10 @@ const router = require('./router');
 app.use('/api', apiRouter);
 app.use(router);
 
+app.use((err, req, res) => {
+    handleError(err, res)
+})
+
 app.listen(port, () => {
     console.log(`app listening on port ${port}!`);
 });
