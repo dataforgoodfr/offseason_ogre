@@ -2,8 +2,9 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const app = express();
 
+require('dotenv-flow').config();
 
-const database = require('./app/config/database');
+const database = require('./config/database');
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 const bodyParser = require('body-parser');
@@ -23,7 +24,7 @@ const port = process.env.PORT || 8080;
 
 createTablesIfNotExist();
 
-const router = require('./app/router');
+const router = require('./router');
 
 app.use(router);
 

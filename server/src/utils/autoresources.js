@@ -23,7 +23,7 @@ var maproute = function(app, name, route) {
 }
 
 exports.map = function(app, routeName) {
-    var routeFile = process.cwd() + '/app/controllers/' + routeName + '.js';
+    var routeFile = process.cwd() + '/src/controllers/' + routeName + '.js';
     var route = require(routeFile);
     routeName = routeName.toLocaleLowerCase().split('controller').join("") + 's';
     maproute(app, routeName, route);

@@ -2,6 +2,7 @@
     "dependencies": {
         "cors": "^2.8.5",
         "dotenv": "^16.0.0",
+        "dotenv-flow": "^3.2.0",
         "express": "^4.17.1",
         "express-async-errors": "^3.1.1",
         "pg": "^8.7.1",
@@ -9,10 +10,12 @@
         "sequelize-cli": "^6.3.0",
         "sequelize-pg-utilities": "^2.0.1"
     },
-    "licence": "MIT",
+    "license": "MIT",
     "scripts": {
+        "start": "node built/index.js",
+        "build": "tsc",
+        "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.js",
         "test": "./node_modules/.bin/mocha",
-        "start": "node index.js",
         "seed": "sequelize db:seed:all"
     },
     "engines": {
@@ -25,6 +28,8 @@
         "mocha": "^9.2.1",
         "request": "^2.88.2",
         "should": "^13.2.3",
-        "supertest": "^6.1.6"
+        "supertest": "^6.1.6",
+        "ts-node-dev": "^1.1.8",
+        "typescript": "^4.6.3"
     }
 }
