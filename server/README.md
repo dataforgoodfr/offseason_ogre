@@ -52,6 +52,12 @@ into :
 
 3) Setup database
 
+3.a
+- launch postgre container
+`cd server`
+`docker-compose up -d`
+
+OR 3.b
 - Installer `postgresql` sur son ordinateur
 - Confirmez l’installation et récupérez le numéro de version : `psql --version`
 - Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
