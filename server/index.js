@@ -2,6 +2,9 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const app = express();
 
+
+const database = require('./app/config/database');
+
 // Parse URL-encoded bodies (as sent by HTML forms)
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -18,6 +21,8 @@ app.use(cors());
 
 const port = process.env.PORT || 8080;
 
+createTablesIfNotExist();
+
 const router = require('./app/router');
 
 app.use(router);
@@ -27,3 +32,11 @@ app.listen(port, () => {
 });
 
 module.exports = app
+
+function createTablesIfNotExist() {
+    database.sync();
+}
+
+function handleError(err, res) {
+    res.status(err.statusCode || 500).send(err.message || "Unkown error"); // TODO: remove stack when on PROD.
+}

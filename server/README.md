@@ -40,32 +40,26 @@ docker-compose up --build
 
 ## Run app manualy
 
-1) Edit .env file
+1) Install dependencies using yarn : `yarn install`
 
-```PG_URL=postgresql://postgres:postgres@localhost:5432/ogre```
+2) Setup database
 
-into :
-
-```PG_URL=postgresql://default_user:default_user@database:5432/ogre```
-
-2) Install dependencies using yarn : `yarn install`
-
-3) Setup database
-
-3.a
+2.a
 - launch postgre container
 `cd server`
 `docker-compose up -d`
 
-OR 3.b
+OR 2.b
 - Installer `postgresql` sur son ordinateur
 - Confirmez l’installation et récupérez le numéro de version : `psql --version`
 - Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
 - Création de la BDD automatiquement avec l'ORM sequelize au lancement du server node
 
+3) Seed the database: `yarn seed` (Optionnal)
+
 4) Interagir / tester le serveur
 - S'assurer d'avoir lancer postgresql et d'avoir créé la DB
-- lancer un serveur : `node server/index.js`. le serveur sera accessible sur le port 8080
+- lancer un serveur : `yarn start`. le serveur sera accessible sur le port 8080
 
 # Play with app
 
