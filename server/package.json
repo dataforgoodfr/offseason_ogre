@@ -8,7 +8,8 @@
         "pg": "^8.7.1",
         "sequelize": "^7.0.0-alpha.4",
         "sequelize-cli": "^6.3.0",
-        "sequelize-pg-utilities": "^2.0.1"
+        "sequelize-pg-utilities": "^2.0.1",
+        "zod": "^3.14.2"
     },
     "license": "MIT",
     "scripts": {

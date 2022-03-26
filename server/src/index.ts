@@ -5,8 +5,6 @@ require('dotenv-flow').config();
 const database = require('./config/database');
 import { apiRouter } from './modules/apiRouter'
 
-console.log("apiRouter", apiRouter);
-
 // Parse URL-encoded bodies (as sent by HTML forms)
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,6 +29,7 @@ app.use('/api', apiRouter);
 app.use(router);
 
 app.use((err, req, res) => {
+    console.log("handleError", err.message)
     handleError(err, res)
 })
 
