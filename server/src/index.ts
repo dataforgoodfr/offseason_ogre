@@ -1,10 +1,11 @@
-require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const app = express();
 
 require('dotenv-flow').config();
-
 const database = require('./config/database');
+import { apiRouter } from './modules/apiRouter'
+
+console.log("apiRouter", apiRouter);
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 const bodyParser = require('body-parser');
@@ -26,6 +27,7 @@ createTablesIfNotExist();
 
 const router = require('./router');
 
+app.use('/api', apiRouter);
 app.use(router);
 
 app.listen(port, () => {
