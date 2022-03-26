@@ -1,8 +1,8 @@
 // const should = require("should");
 const request = require("request");
 const expect = require("chai").expect;
-// const baseUrl = "http://localhost:8080/";
-const baseUrl = "https://atelierogre-staging.herokuapp.com/";
+const baseUrl = "http://localhost:8080/";
+// const baseUrl = "https://atelierogre-staging.herokuapp.com/";
 const util = require("util");
 
 const maxChildren = 10;
