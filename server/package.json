@@ -15,6 +15,7 @@
         "start": "node built/index.js",
         "build": "tsc",
         "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.ts",
+        "migrate": "sequelize db:migrate",
         "test": "./node_modules/.bin/mocha",
         "seed": "sequelize db:seed:all"
     },
