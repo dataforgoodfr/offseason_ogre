@@ -1,41 +1,20 @@
-import React, { useReducer } from "react";
+import { useContext } from "react";
 import Input from "../../common/components/Input";
 import OgreHeader from "../../common/components/OgreHeader";
-
-const initialState = {
-  name: "",
-  firstName: "",
-  country: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
-};
-
-const signupReducer = (state: typeof initialState, action: { type: string; payload: string }) => {
-  switch (action.type) {
-    case "change_name":
-      return { ...state, name: action.payload };
-    case "change_firstname":
-      return { ...state, firstName: action.payload };
-    case "change_country":
-      return { ...state, country: action.payload };
-    case "change_email":
-      return { ...state, email: action.payload };
-    case "change_password":
-      return { ...state, password: action.payload };
-    case "change_password_confirm":
-      return { ...state, confirmPassword: action.payload };
-    default:
-      return state;
-  }
-};
+import { Context } from "../../../context/AuthContext";
 
 function Signup() {
-  const [{ name, firstName, country, email, password, confirmPassword }, dispatch] = useReducer(
-    signupReducer,
-    initialState
-  );
+  const {
+    state,
+    changeName,
+    changeFirstName,
+    changeCountry,
+    changeEmail,
+    changePassword,
+    changePasswordConfirm,
+  } = useContext(Context);
 
+  const { name, firstName, country, email, password, confirmPassword } = state;
   return (
     <form
       className="flex flex-col items-center  min-h-screen"
@@ -48,55 +27,49 @@ function Signup() {
       <Input
         text="Nom*"
         type="text"
-        id="name"
         name="name"
         value={name}
-        setValue={(e: string) => dispatch({ type: "change_name", payload: e })}
+        setValue={changeName}
         placeholder="Entrer votre nom"
       />
       <Input
         text="Prénom*"
         type="text"
-        id="firstname"
         name="firstname"
         value={firstName}
-        setValue={(e: string) => dispatch({ type: "change_firstname", payload: e })}
+        setValue={changeFirstName}
         placeholder="Entrer votre prénom"
       />
       <Input
         text="Pays*"
         type="text"
-        id="country"
         name="country"
         value={country}
-        setValue={(e: string) => dispatch({ type: "change_country", payload: e })}
+        setValue={changeCountry}
         placeholder="Entrer votre pays"
       />
       <Input
         text="Email*"
         type="email"
-        id="email"
         name="email"
         value={email}
-        setValue={(e: string) => dispatch({ type: "change_email", payload: e })}
+        setValue={changeEmail}
         placeholder="Entrer votre email"
       />
       <Input
         text="Mot de passe*"
         type="password"
-        id="password"
         name="password"
         value={password}
-        setValue={(e: string) => dispatch({ type: "change_password", payload: e })}
+        setValue={changePassword}
         placeholder="Entrer votre mot de passe"
       />
       <Input
         text="Confirmation du mot de passe*"
         type="password"
-        id="password-confirmation"
         name="password-confirmation"
         value={confirmPassword}
-        setValue={(e: string) => dispatch({ type: "change_password_confirm", payload: e })}
+        setValue={changePasswordConfirm}
         placeholder="Confirmer votre mot de passe"
       />
       <button

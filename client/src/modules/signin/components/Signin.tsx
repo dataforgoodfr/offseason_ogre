@@ -18,7 +18,6 @@ function Signin() {
       <Input
         text="Nom d'utilisateur"
         type="text"
-        id="username"
         name="username"
         value={username}
         setValue={setUsername}
@@ -27,7 +26,6 @@ function Signin() {
       <Input
         text="Entrer votre mot de passe"
         type="password"
-        id="password"
         name="password"
         value={password}
         setValue={setPassword}

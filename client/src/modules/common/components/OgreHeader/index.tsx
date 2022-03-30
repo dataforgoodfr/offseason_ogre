@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import drop from "../../../assets/images/drop.png";
+import drop from "../../../../assets/images/drop.png";
 
 function OgreHeader() {
   return (

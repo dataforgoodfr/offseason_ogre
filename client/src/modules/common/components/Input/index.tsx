@@ -1,20 +1,19 @@
 interface InputProps {
   text: string;
   type: string;
-  id: string;
   name: string;
   value: string;
   setValue: any;
   placeholder: string;
 }
 
-function Input({ text, type, id, name, value, setValue, placeholder }: InputProps) {
+function Input({ text, type, name, value, setValue, placeholder }: InputProps) {
   return (
     <label htmlFor={name} className="flex flex-col items-center mb-4">
       <span className="m-1 text-white">{text}</span>
       <input
         type={type}
-        id={id}
+        id={name}
         name={name}
         value={value}
         onChange={(e) => setValue(e.target.value)}
