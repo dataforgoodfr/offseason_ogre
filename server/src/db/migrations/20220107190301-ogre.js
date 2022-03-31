@@ -51,6 +51,53 @@ module.exports = {
             created_at: Sequelize.DATE,
             updated_at: Sequelize.DATE
         });
+        await queryInterface.createTable('role', {
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: Sequelize.INTEGER,
+                autoIncrement: false
+            },
+            name: Sequelize.STRING,
+            created_at: Sequelize.DATE,
+            updated_at: Sequelize.DATE
+        })
+        await queryInterface.createTable('user', {
+            id: {
+                type: Sequelize.INTEGER,
+                primaryKey: Sequelize.INTEGER,
+                autoIncrement: true
+            },
+            first_name: {
+                type: Sequelize.STRING
+            },
+            last_name: {
+                type: Sequelize.STRING
+            },
+            email: {
+                type: Sequelize.STRING,
+                allowNull: false
+            },
+            password: {
+                type: Sequelize.STRING
+            },
+            role_id: {
+                type: Sequelize.INTEGER,
+                defaultValue: 3 
+            },
+            created_at: Sequelize.DATE,
+            updated_at: Sequelize.DATE
+        })
+        await queryInterface.addConstraint('user', {
+                fields: ['role_id'],
+                type: 'foreign key',
+                name: 'role_id_fk',
+                references: { //Required field
+                    table: 'role',
+                    field: 'id'
+                },
+                onDelete: 'cascade',
+                onUpdate: 'cascade'
+          });        
     },
 
     down: async(queryInterface, Sequelize) => {
@@ -59,5 +106,7 @@ module.exports = {
 		await queryInterface.dropTable('wind_turbine_onshore_production');
         await queryInterface.dropTable('player');
         await queryInterface.dropTable('windturbineonshore_production');
+        await queryInterface.dropTable('user');
+        await queryInterface.dropTable('role');
     }
 };
