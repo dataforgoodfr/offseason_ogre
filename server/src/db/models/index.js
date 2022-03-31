@@ -1,6 +1,8 @@
 const Player = require('./Player');
 const CarConsumption = require('./CarConsumption');
 const PlaneConsumption = require('./PlaneConsumption');
+const User = require('./User');
+const Role = require('./Role');
 
 //Associations between models are defined here
 
@@ -10,4 +12,13 @@ CarConsumption.belongsTo(Player);
 Player.hasOne(PlaneConsumption);
 PlaneConsumption.belongsTo(Player);
 
-module.exports = { Player, CarConsumption, PlaneConsumption};
+Role.hasMany(User, {
+    as: "users",
+    foreignKey: "role_id"
+});
+User.belongsTo(Role, {
+    as: "role",
+    foreignKey: "role_id"
+});
+
+module.exports = { Player, CarConsumption, PlaneConsumption, User, Role };
