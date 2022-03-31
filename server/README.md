@@ -36,7 +36,7 @@ OR 2.b - local database
 - Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
 - Création de la BDD automatiquement avec l'ORM sequelize au lancement du server node
 
-3. Seed the database: `yarn seed` (Optional)
+3. Seed the database: `yarn migrate` then `yarn seed` (Optional)
 
 4. Interagir / tester le serveur
 
