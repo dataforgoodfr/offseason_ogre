@@ -1,6 +1,9 @@
-require('dotenv').config({ path: __dirname + '/.env' });
 const express = require('express');
 const app = express();
+
+require('dotenv-flow').config();
+const database = require('./config/database');
+import { apiRouter } from './modules/apiRouter'
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 const bodyParser = require('body-parser');
@@ -18,12 +21,28 @@ app.use(cors());
 
 const port = process.env.PORT || 8080;
 
-const router = require('./app/router');
+createTablesIfNotExist();
 
+const router = require('./router');
+
+app.use('/api', apiRouter);
 app.use(router);
+
+app.use((err, req, res) => {
+    console.log("handleError", err.message)
+    handleError(err, res)
+})
 
 app.listen(port, () => {
     console.log(`app listening on port ${port}!`);
 });
 
 module.exports = app
+
+function createTablesIfNotExist() {
+    database.sync();
+}
+
+function handleError(err, res) {
+    res.status(err.statusCode || 500).send(err.message || "Unkown error"); // TODO: remove stack when on PROD.
+}

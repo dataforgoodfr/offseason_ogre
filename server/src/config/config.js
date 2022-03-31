@@ -3,7 +3,6 @@
 var path = require('path')
 const dotenv = require("dotenv");
 dotenv.config(path.resolve('./', '.env'));
-console.log(process.env.DATABASE_URL);
 module.exports = {
     "development": {
         "url": process.env.DATABASE_URL,

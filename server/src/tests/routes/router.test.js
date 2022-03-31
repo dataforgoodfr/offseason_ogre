@@ -1,8 +1,8 @@
 const router = require('../../../app/router');
-const playerController = require('../../../app/controllers/playerController');
+const playerController = require('../../../src/controllers/playerController');
 const request = require('supertest');
 
-app = require('../../../index');
+app = require('../../index');
 
 // https://stackoverflow.com/questions/55463886/unit-testing-controllers-use-jest-nodejs/57081471
 
