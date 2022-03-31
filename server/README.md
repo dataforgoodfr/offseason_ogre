@@ -40,8 +40,8 @@ OR 2.b - local database
 
 4. Interagir / tester le serveur
 
-- S'assurer d'avoir lancer postgresql et d'avoir créé la DB
-- lancer un serveur : `yarn dev`. le serveur sera accessible sur le port 8080
+- make sure you have created the database
+- Start the server: `yarn dev`. Server will be accessible on port 8080.
 
 ## Run app from build
 
