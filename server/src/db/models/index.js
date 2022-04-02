@@ -14,7 +14,11 @@ PlaneConsumption.belongsTo(Player);
 
 Role.hasMany(User, {
     as: "users",
-    foreignKey: "role_id"
+    foreignKey: {
+        name: "role_id",
+        allowNull: false,
+        defaultValue: 3
+    }
 });
 User.belongsTo(Role, {
     as: "role",
