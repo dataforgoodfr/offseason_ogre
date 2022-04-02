@@ -60,6 +60,22 @@ module.exports = {
             created_at: Sequelize.fn('NOW'),
             updated_at: Sequelize.fn('NOW')
         }], {});
+        await queryInterface.bulkInsert('role', [{
+            id: 1,
+            name: 'administrator',
+            created_at: Sequelize.fn('NOW'),
+            updated_at: Sequelize.fn('NOW')
+        },{
+            id: 2,
+            name: 'facilitator',
+            created_at: Sequelize.fn('NOW'),
+            updated_at: Sequelize.fn('NOW')
+        },{
+            id: 3,
+            name: 'player',
+            created_at: Sequelize.fn('NOW'),
+            updated_at: Sequelize.fn('NOW')
+        }], {})
     },
 
     down: async(queryInterface, Sequelize) => {
@@ -68,5 +84,6 @@ module.exports = {
         await queryInterface.bulkDelete('wind_turbine_onshore_production', null, {});
         await queryInterface.bulkDelete('player', null, {});
         await queryInterface.bulkDelete('windturbineonshore_production', null, {});
+        await queryInterface.bulkDelete('role', null, {})
     }
 };
