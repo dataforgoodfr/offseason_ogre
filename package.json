@@ -6,10 +6,15 @@
     "request": "^2.88.2",
     "should": "^13.2.3"
   },
+  "scripts": {
+    "build": "yarn workspace ogre-client build && yarn workspace ogre-server build",
+    "start": "yarn workspace ogre-server start"
+  },
   "engines": {
     "node": "16.x.x"
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "private": true
 }
