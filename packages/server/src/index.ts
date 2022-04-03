@@ -39,8 +39,7 @@ app.use(
   })
 );
 
-// We want to serve index.html for every path that are not matched by the api or static middleware.
-// For example 'http://host/products/1000'.
+// Serving index.html by default
 app.get("*", function serveFront(_request: Request, response: Response) {
   response.set("Cache-control", "no-cache");
   response.set("last-modified", new Date().toUTCString());
