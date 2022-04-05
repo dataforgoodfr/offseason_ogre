@@ -16,6 +16,8 @@
     "scripts": {
         "start": "node built/index.js",
         "build": "tsc",
+        "db:up": "docker-compose up -d",
+        "db:down": "docker-compose down",
         "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.ts",
         "migrate": "sequelize db:migrate",
         "test": "./node_modules/.bin/mocha",
