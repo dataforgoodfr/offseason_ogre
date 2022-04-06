@@ -6,7 +6,17 @@
     "request": "^2.88.2",
     "should": "^13.2.3"
   },
-  "dependencies": {
-    "node": "^16.13.1"
-  }
+  "scripts": {
+    "build": "yarn workspace ogre-client build && yarn workspace ogre-server build",
+    "db:up": "yarn workspace ogre-server db:up",
+    "db:down": "yarn workspace ogre-server db:down",
+    "start": "yarn workspace ogre-server start"
+  },
+  "engines": {
+    "node": "16.x.x"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true
 }

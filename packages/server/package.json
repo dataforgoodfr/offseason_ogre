@@ -1,4 +1,6 @@
 {
+    "name": "ogre-server",
+    "version": "0.1.0",
     "dependencies": {
         "cors": "^2.8.5",
         "dotenv": "^16.0.0",
@@ -14,6 +16,8 @@
     "scripts": {
         "start": "node built/index.js",
         "build": "tsc",
+        "db:up": "docker-compose up -d",
+        "db:down": "docker-compose down",
         "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.ts",
         "migrate": "sequelize db:migrate",
         "test": "./node_modules/.bin/mocha",
