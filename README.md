@@ -27,7 +27,13 @@ OGRE uses a number of open source projects to work properly:
 
 ## Development
 
-Want to contribute ? Great!
+1. Run "yarn env:default" from root, it will set default .env values in server
+2. Run "yarn install" from root, it will install all dependencies in all workspaces
+3. Run "yarn db:up" from root, it will lauch a postgre container
+4. Run "yarn db:migrate" from root, it creates the tables in the database
+5. Run "yarn db:seed" from root, it feeds the database with some dummy database
+6. Run "yarn workspace ogre-client dev" to launch client
+7. In another client shell run "yarn workspace ogre-server dev" to launch client
 
 ### Running frontend and backend apps
 
@@ -43,16 +49,12 @@ A postGreSQL database is required, the connection string must be set as DATABASE
 
 Node, npm et Docker must be installed locally.
 
-1. Copy the content of file `.env.example` into a new `.env` file
-
-```sh
-cp packages/server/.env.example packages/server/.env
-```
-
-2. Run "yarn install" from root
-3. Run "yarn build" from root
-4. Run "yarn db:up" from root
-5. Run "yarn start" from root
+1. Run "yarn env:default" from root, it will set default .env values in server
+2. Run "yarn install" from root, it will install all dependencies in all workspaces
+3. Run "yarn build" from root, it will transpile all typescript in all workspaces
+4. Run "yarn db:up" from root, it will lauch a postgre container
+5. Run "yarn db:migrate" from root, it creates the tables in the database
+6. Run "yarn start" from root
 
 App should be up at http://localhost:8080/
 
