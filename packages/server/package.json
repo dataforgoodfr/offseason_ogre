@@ -2,6 +2,7 @@
     "name": "ogre-server",
     "version": "0.1.0",
     "dependencies": {
+        "@prisma/client": "^3.12.0",
         "cors": "^2.8.5",
         "dotenv": "^16.0.0",
         "dotenv-flow": "^3.2.0",
@@ -18,10 +19,11 @@
         "build": "tsc",
         "db:up": "docker-compose up -d",
         "db:down": "docker-compose down",
+        "db:studio": "npx prisma studio",
         "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.ts",
-        "migrate": "sequelize db:migrate",
-        "test": "./node_modules/.bin/mocha",
-        "seed": "sequelize db:seed:all"
+        "migrate": "npx prisma migrate dev",
+        "seed": "npx ts-node ./src/database/seed.ts",
+        "test": "./node_modules/.bin/mocha"
     },
     "engines": {
         "node": "^16.13.1"
@@ -32,6 +34,7 @@
         "jest": "^27.4.5",
         "jest-plugin-context": "^2.9.0",
         "mocha": "^9.2.1",
+        "prisma": "^3.12.0",
         "request": "^2.88.2",
         "should": "^13.2.3",
         "supertest": "^6.1.6",

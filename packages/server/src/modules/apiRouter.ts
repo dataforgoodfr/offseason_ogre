@@ -1,8 +1,8 @@
-import express from 'express';
-import { router as playersRouter } from './players/routes';
+import express from "express";
+import { router as usersRouter } from "./users/routes";
 
 export { apiRouter };
 
 const apiRouter = express.Router();
 
-apiRouter.use('/players', playersRouter);
+apiRouter.use("/users", usersRouter);

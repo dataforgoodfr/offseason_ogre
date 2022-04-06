@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model game {
+  id   Int      @id @default(autoincrement())
+  date DateTime
+}
+
+model user {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  isTeacher Boolean @default(false)
+}
+
+model team {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+
+model household {
+  id         Int  @id @default(autoincrement())
+  childCount Int?
+}
+
+model policy {
+  id             Int  @id @default(autoincrement())
+  nuclearInPoint Int?
+}
