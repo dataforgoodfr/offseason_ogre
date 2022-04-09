@@ -1,8 +1,7 @@
-import type { Model } from "sequelize";
 import type { Request, Response } from "express";
 import * as z from "zod";
 
-export { buildCrudControllers, buildCrudServices };
+export { buildCrudControllers };
 export type { CrudControllers, CrudServices };
 
 interface CrudServices<T> {
@@ -11,27 +10,6 @@ interface CrudServices<T> {
 
 interface CrudControllers<T> {
   getDocumentController: (request: Request, response: Response) => void;
-}
-
-// Typing is badly done, but I don't want to spend more type unstanding sequelize typing
-// https://stackoverflow.com/questions/55166230/sequelize-typescript-typeof-model
-type Constructor<M> = new (...args: any[]) => M;
-type ModelType<M extends Model<M>> = Constructor<M> & typeof Model;
-
-function buildCrudServices<T, M extends Model<M>>(
-  model: ModelType<M>
-): CrudServices<T> {
-  const getDocument = async (id: number): Promise<T> => {
-    const document = model.findByPk(id) as unknown as T | null;
-    if (document === null) {
-      throw new Error("Not found!");
-    }
-    return document;
-  };
-
-  return {
-    getDocument,
-  };
 }
 
 function buildCrudControllers<T>(

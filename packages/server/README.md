@@ -9,11 +9,7 @@
 
 # Run & play with application localy
 
-1. Copy the content of file `.env.example` into a new `.env` file
-
-```sh
-cp server/.env.example server/.env
-```
+1. Set default value in .env `yarn env:default`
 
 2. You can chose either to run the application using docker or by launching yourself the application in local and taking care of the dependencies and DB creation
 
@@ -25,9 +21,7 @@ cp server/.env.example server/.env
 
 2.a - database as container
 
-- launch postgre container
-  `cd server`
-  `docker-compose up -d`
+- launch a postgre docker container with `yarn db:up`
 
 OR 2.b - local database
 
@@ -36,9 +30,11 @@ OR 2.b - local database
 - Exécuter la base de donnée : `sudo service postgresql start` (pour vérifier l’état de la BDD : `sudo service postgresql status` et pour arrêter l’exécution : `sudo service postgresql stop`) (sinon on reçoit une erreur `Error: connect ECONNREFUSED`)
 - Création de la BDD automatiquement avec l'ORM sequelize au lancement du server node
 
-3. Seed the database: `yarn migrate` then `yarn seed` (Optional)
+3. Create the database tables: `yarn db:migrate`
 
-4. Interagir / tester le serveur
+4. `yarn db:seed` (Optional)
+
+5. Interagir / tester le serveur
 
 - make sure you have created the database
 - Start the server: `yarn dev`. Server will be accessible on port 8080.

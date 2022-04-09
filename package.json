@@ -10,6 +10,9 @@
     "build": "yarn workspace ogre-client build && yarn workspace ogre-server build",
     "db:up": "yarn workspace ogre-server db:up",
     "db:down": "yarn workspace ogre-server db:down",
+    "db:migrate": "yarn workspace ogre-server db:migrate",
+    "db:seed": "yarn workspace ogre-server db:seed",
+    "db:studio": "yarn workspace ogre-server db:studio",
     "start": "yarn workspace ogre-server start"
   },
   "engines": {

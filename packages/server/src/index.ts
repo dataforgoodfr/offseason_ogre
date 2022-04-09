@@ -6,8 +6,10 @@ const app = express();
 
 require("dotenv-flow").config();
 
-import database from "./config/database";
 import { apiRouter } from "./modules/apiRouter";
+import { connectToDatase } from "./database";
+
+connectToDatase();
 
 // Parse URL-encoded bodies (as sent by HTML forms)
 const bodyParser = require("body-parser");
@@ -24,8 +26,6 @@ const cors = require("cors");
 app.use(cors());
 
 const port = process.env.PORT || 8080;
-
-createTablesIfNotExist();
 
 app.use("/api", apiRouter);
 
@@ -58,10 +58,6 @@ app.listen(port, () => {
 });
 
 export default app;
-
-function createTablesIfNotExist() {
-  database.sync();
-}
 
 function handleError(err, res) {
   res.status(err.statusCode || 500).send(err.message || "Unkown error"); // TODO: remove stack when on PROD.
