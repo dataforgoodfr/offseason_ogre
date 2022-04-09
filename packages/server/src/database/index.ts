@@ -9,5 +9,5 @@ async function connectToDatase() {
 }
 
 async function disconnectFromDatase() {
-  await prisma.$connect();
+  await prisma.$disconnect();
 }
