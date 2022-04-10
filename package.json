@@ -13,6 +13,7 @@
     "db:migrate": "yarn workspace ogre-server db:migrate",
     "db:seed": "yarn workspace ogre-server db:seed",
     "db:studio": "yarn workspace ogre-server db:studio",
+    "env:default": "yarn workspace ogre-server env:default",
     "start": "yarn workspace ogre-server start"
   },
   "engines": {
