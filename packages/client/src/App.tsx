@@ -1,8 +1,8 @@
-import React from 'react';
 import logo from './logo.svg';
 import PlayerSelect from './components/PlayerSelect';
 
 function App() {
+
   return (
     <div className="App bg-slate-800 h-screen">
       <header className="App-header space-y-60 flex flex-col items-center">

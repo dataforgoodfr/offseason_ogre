@@ -1,0 +1,11 @@
+**/*.svg
+**/*.png
+**/*.snap
+**/*.txt
+**/*.json
+**/*.otf
+**/*.ttf
+**/*.css
+**/.eslintrc.js
+build
+node_modules

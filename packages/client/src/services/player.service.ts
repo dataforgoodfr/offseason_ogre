@@ -27,4 +27,4 @@ class PlayerDataService
   deleteAll() {
     return http.delete<any>(`players`);
   }
-} export default new PlayerDataService;
+} export default new PlayerDataService();
