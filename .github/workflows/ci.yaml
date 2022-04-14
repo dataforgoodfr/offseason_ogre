@@ -4,12 +4,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '16.14.0'
-    - name: Install modules
-      run: yarn install
-    - name: Run check for the client
-      run: yarn workspace ogre-client lint
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "16.14.0"
+      - name: Install modules
+        run: yarn install
+      - name: Run lint for the client
+        run: yarn workspace ogre-client lint
+      - name: Run prettier for the client
+        run: yarn workspace ogre-client prettier:check
