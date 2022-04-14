@@ -29,7 +29,8 @@
     "env:default": "cp .env.example .env",
     "check-type": "tsc --noEmit",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "prettier:check": "npx prettier --check ."
   },
   "engines": {
     "node": "^16.13.1"

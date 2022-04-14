@@ -24,7 +24,7 @@
     "check-type": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier:check": "yarn prettier --write .",
+    "prettier:check": "yarn prettier --check .",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

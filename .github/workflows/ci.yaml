@@ -19,5 +19,7 @@ jobs:
         run: yarn workspace ogre-client check-type
       - name: Run lint for the server
         run: yarn workspace ogre-server lint
+      - name: Run prettier for the server
+        run: yarn workspace ogre-server prettier:check
       - name: Run type-check for the server
         run: yarn workspace ogre-server check-type
