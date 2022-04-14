@@ -1,4 +1,4 @@
-const OGREConstants = require('../../OGREConstants');
+const OGREConstants = require("../../OGREConstants");
 
 class CarConsumption extends Model {}
 
@@ -19,7 +19,7 @@ CarConsumption.init(
       type: DataTypes.FLOAT,
       get() {
         // getter to adapt value with motortype if no initial value was provided
-        const rawValue = this.getDataValue('litresPer100km');
+        const rawValue = this.getDataValue("litresPer100km");
         if (!rawValue) {
           if (this.motorType != 3) {
             // motorType : 3 => electricity
@@ -61,9 +61,9 @@ CarConsumption.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (this.dailyAloneDistance
-            * OGREConstants.carConstants.calorificValue)
-          / this.distancePerLiter
+          (this.dailyAloneDistance *
+            OGREConstants.carConstants.calorificValue) /
+          this.distancePerLiter
         );
       },
     },
@@ -71,10 +71,10 @@ CarConsumption.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (this.dailyWithHouseholdDistance
-            * OGREConstants.carConstants.calorificValue)
-          / this.distancePerLiter
-          / this.personsPerHousehold
+          (this.dailyWithHouseholdDistance *
+            OGREConstants.carConstants.calorificValue) /
+          this.distancePerLiter /
+          this.personsPerHousehold
         );
       },
     },
@@ -88,16 +88,17 @@ CarConsumption.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (this.dailycarShareDistance
-            * OGREConstants.carConstants.calorificValue)
-          / this.distancePerLiter
+          (this.dailycarShareDistance *
+            OGREConstants.carConstants.calorificValue) /
+          this.distancePerLiter
         );
       },
     },
     carConsumption: {
       type: DataTypes.VIRTUAL,
       get() {
-        if (this.hasCar) return this.withHouseholdConsumption + this.aloneConsumption;
+        if (this.hasCar)
+          return this.withHouseholdConsumption + this.aloneConsumption;
         return this.carShareConsumption;
       },
     },
@@ -105,9 +106,9 @@ CarConsumption.init(
   {
     // Other model options go here
     sequelize, // connection instance
-    modelName: 'CarConsumption',
-    tableName: 'car_consumption',
-  },
+    modelName: "CarConsumption",
+    tableName: "car_consumption",
+  }
 );
 
 module.exports = CarConsumption;

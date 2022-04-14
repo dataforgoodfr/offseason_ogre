@@ -1,4 +1,4 @@
-const OGREConstants = require('../../OGREConstants');
+const OGREConstants = require("../../OGREConstants");
 
 class User extends Model {}
 
@@ -29,9 +29,9 @@ User.init(
   {
     // Other model options go here
     sequelize, // connection instance
-    modelName: 'User',
-    tableName: 'user',
-  },
+    modelName: "User",
+    tableName: "user",
+  }
 );
 
 module.exports = User;

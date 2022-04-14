@@ -1,4 +1,4 @@
-const OGREConstants = require('../../OGREConstants');
+const OGREConstants = require("../../OGREConstants");
 
 class PlaneConsumption extends Model {}
 
@@ -20,9 +20,9 @@ PlaneConsumption.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (OGREConstants.planeConstants.consumptionByPassenger
-            * this.distancePerYear)
-          / (OGREConstants.planeConstants.distanceOneRide * 2)
+          (OGREConstants.planeConstants.consumptionByPassenger *
+            this.distancePerYear) /
+          (OGREConstants.planeConstants.distanceOneRide * 2)
         );
       },
     },
@@ -36,7 +36,7 @@ PlaneConsumption.init(
   {
     // Other model options go here
     sequelize, // connection instance
-    modelName: 'PlaneConsumption',
-    tableName: 'plane_consumption',
-  },
+    modelName: "PlaneConsumption",
+    tableName: "plane_consumption",
+  }
 );

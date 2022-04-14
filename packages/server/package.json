@@ -1,46 +1,47 @@
 {
-    "name": "ogre-server",
-    "version": "0.1.0",
-    "dependencies": {
-        "@prisma/client": "^3.12.0",
-        "@typescript-eslint/eslint-plugin": "^5.19.0",
-        "cors": "^2.8.5",
-        "dotenv": "^16.0.0",
-        "dotenv-flow": "^3.2.0",
-        "eslint": "^7.32.0",
-        "eslint-config-airbnb-base": "^15.0.0",
-        "express": "^4.17.1",
-        "pg": "^8.7.1",
-        "sequelize": "^7.0.0-alpha.4",
-        "sequelize-cli": "^6.3.0",
-        "sequelize-pg-utilities": "^2.0.1",
-        "zod": "^3.14.2"
-    },
-    "license": "MIT",
-    "scripts": {
-        "start": "node built/index.js",
-        "build": "tsc",
-        "db:up": "docker-compose up -d",
-        "db:down": "docker-compose down",
-        "db:migrate": "npx prisma migrate dev",
-        "db:seed": "npx ts-node ./src/database/seed.ts",
-        "db:studio": "npx prisma studio",
-        "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.ts",
-        "env:default": "cp .env.example .env",
-        "check-type": "tsc --noEmit",
-        "lint": "eslint .",
-        "lint:fix": "eslint . --fix"    
-    },
-    "engines": {
-        "node": "^16.13.1"
-    },
-    "devDependencies": {
-        "@types/express": "^4.17.13",
-        "eslint": "^8.13.0",
-        "jest-plugin-context": "^2.9.0",
-        "prisma": "^3.12.0",
-        "supertest": "^6.1.6",
-        "ts-node-dev": "^1.1.8",
-        "typescript": "^4.6.3"
-    }
+  "name": "ogre-server",
+  "version": "0.1.0",
+  "dependencies": {
+    "@prisma/client": "^3.12.0",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "dotenv-flow": "^3.2.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "express": "^4.17.1",
+    "pg": "^8.7.1",
+    "sequelize": "^7.0.0-alpha.4",
+    "sequelize-cli": "^6.3.0",
+    "sequelize-pg-utilities": "^2.0.1",
+    "zod": "^3.14.2"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "node built/index.js",
+    "build": "tsc",
+    "db:up": "docker-compose up -d",
+    "db:down": "docker-compose down",
+    "db:migrate": "npx prisma migrate dev",
+    "db:seed": "npx ts-node ./src/database/seed.ts",
+    "db:studio": "npx prisma studio",
+    "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.ts",
+    "env:default": "cp .env.example .env",
+    "check-type": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "engines": {
+    "node": "^16.13.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "eslint": "^8.13.0",
+    "jest-plugin-context": "^2.9.0",
+    "prettier": "2.6.2",
+    "prisma": "^3.12.0",
+    "supertest": "^6.1.6",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.3"
+  }
 }

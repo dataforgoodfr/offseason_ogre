@@ -12,9 +12,9 @@ const planeConstants = {
   calorificValue: 10,
   get consumptionByPassenger() {
     return (
-      ((this.consumptionOneRide * this.calorificValue)
-        / this.passengersByPlane)
-      * 2
+      ((this.consumptionOneRide * this.calorificValue) /
+        this.passengersByPlane) *
+      2
     );
   },
 };
