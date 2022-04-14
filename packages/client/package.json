@@ -21,6 +21,7 @@
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
+    "check-type": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier:check": "yarn prettier --write .",
