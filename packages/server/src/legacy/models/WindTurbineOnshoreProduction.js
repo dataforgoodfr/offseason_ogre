@@ -1,11 +1,11 @@
-const OGREConstants = require("../../OGREConstants");
+const OGREConstants = require('../../OGREConstants');
 
 class WindTurbineOnshoreProduction extends Model {}
 
 WindTurbineOnshoreProduction.init(
   {
     // Model attributes are defined here
-    //attributes stored in DB
+    // attributes stored in DB
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -13,16 +13,16 @@ WindTurbineOnshoreProduction.init(
     },
     ratioTerritory: DataTypes.FLOAT,
 
-    //virtual attributes which are not stored in DB
+    // virtual attributes which are not stored in DB
     availablePowerPerDay: {
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          ((OGREConstants.windTurbineOnshoreConstants.powerPerM2 / 1000) *
-            24 *
-            OGREConstants.globalConstants.areaFrance *
-            10 ** 6) /
-          OGREConstants.globalConstants.populationFrance
+          ((OGREConstants.windTurbineOnshoreConstants.powerPerM2 / 1000)
+            * 24
+            * OGREConstants.globalConstants.areaFrance
+            * 10 ** 6)
+          / OGREConstants.globalConstants.populationFrance
         );
       },
     },
@@ -38,11 +38,11 @@ WindTurbineOnshoreProduction.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (this.energyProductionPerDay /
-            24 /
-            10 ** 6 /
-            OGREConstants.windTurbineOnshoreConstants.loadFactor) *
-          OGREConstants.globalConstants.populationFrance
+          (this.energyProductionPerDay
+            / 24
+            / 10 ** 6
+            / OGREConstants.windTurbineOnshoreConstants.loadFactor)
+          * OGREConstants.globalConstants.populationFrance
         );
       },
     },
@@ -51,8 +51,8 @@ WindTurbineOnshoreProduction.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          this.energyProductionPerDay *
-          OGREConstants.windTurbineOnshoreConstants.CO2EmissionsPerkWh
+          this.energyProductionPerDay
+          * OGREConstants.windTurbineOnshoreConstants.CO2EmissionsPerkWh
         );
       },
     },
@@ -61,18 +61,18 @@ WindTurbineOnshoreProduction.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          this.energyProductionPerDay *
-          OGREConstants.windTurbineOnshoreConstants.averageLCOE
+          this.energyProductionPerDay
+          * OGREConstants.windTurbineOnshoreConstants.averageLCOE
         );
       },
     },
   },
   {
     // Other model options go here
-    sequelize, //connection instance
-    modelName: "WindTurbineOnshoreProduction",
-    tableName: "wind_turbine_onshore_production",
-  }
+    sequelize, // connection instance
+    modelName: 'WindTurbineOnshoreProduction',
+    tableName: 'wind_turbine_onshore_production',
+  },
 );
 
 module.exports = WindTurbineOnshoreProduction;

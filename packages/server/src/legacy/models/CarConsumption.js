@@ -1,11 +1,11 @@
-const OGREConstants = require("../../OGREConstants");
+const OGREConstants = require('../../OGREConstants');
 
 class CarConsumption extends Model {}
 
 CarConsumption.init(
   {
     // Model attributes are defined here
-    //attributes stored in DB
+    // attributes stored in DB
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -18,22 +18,21 @@ CarConsumption.init(
     litresPer100km: {
       type: DataTypes.FLOAT,
       get() {
-        //getter to adapt value with motortype if no initial value was provided
-        const rawValue = this.getDataValue("litresPer100km");
+        // getter to adapt value with motortype if no initial value was provided
+        const rawValue = this.getDataValue('litresPer100km');
         if (!rawValue) {
           if (this.motorType != 3) {
-            //motorType : 3 => electricity
+            // motorType : 3 => electricity
             return 7;
-          } else {
-            return 4.5;
           }
+          return 4.5;
         }
         return rawValue;
       },
     },
     motorType: DataTypes.INTEGER,
 
-    //virtual attributes which are not stored in DB
+    // virtual attributes which are not stored in DB
     personsPerHousehold: {
       type: DataTypes.VIRTUAL,
       get() {
@@ -62,9 +61,9 @@ CarConsumption.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (this.dailyAloneDistance *
-            OGREConstants.carConstants.calorificValue) /
-          this.distancePerLiter
+          (this.dailyAloneDistance
+            * OGREConstants.carConstants.calorificValue)
+          / this.distancePerLiter
         );
       },
     },
@@ -72,10 +71,10 @@ CarConsumption.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (this.dailyWithHouseholdDistance *
-            OGREConstants.carConstants.calorificValue) /
-          this.distancePerLiter /
-          this.personsPerHousehold
+          (this.dailyWithHouseholdDistance
+            * OGREConstants.carConstants.calorificValue)
+          / this.distancePerLiter
+          / this.personsPerHousehold
         );
       },
     },
@@ -89,27 +88,26 @@ CarConsumption.init(
       type: DataTypes.VIRTUAL,
       get() {
         return (
-          (this.dailycarShareDistance *
-            OGREConstants.carConstants.calorificValue) /
-          this.distancePerLiter
+          (this.dailycarShareDistance
+            * OGREConstants.carConstants.calorificValue)
+          / this.distancePerLiter
         );
       },
     },
     carConsumption: {
       type: DataTypes.VIRTUAL,
       get() {
-        if (this.hasCar)
-          return this.withHouseholdConsumption + this.aloneConsumption;
-        else return this.carShareConsumption;
+        if (this.hasCar) return this.withHouseholdConsumption + this.aloneConsumption;
+        return this.carShareConsumption;
       },
     },
   },
   {
     // Other model options go here
-    sequelize, //connection instance
-    modelName: "CarConsumption",
-    tableName: "car_consumption",
-  }
+    sequelize, // connection instance
+    modelName: 'CarConsumption',
+    tableName: 'car_consumption',
+  },
 );
 
 module.exports = CarConsumption;

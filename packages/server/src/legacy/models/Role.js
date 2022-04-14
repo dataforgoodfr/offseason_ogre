@@ -1,11 +1,11 @@
-const OGREConstants = require("../../OGREConstants");
+const OGREConstants = require('../../OGREConstants');
 
 class Role extends Model {}
 
 Role.init(
   {
     // Model attributes are defined here
-    //attributes stored in DB
+    // attributes stored in DB
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -16,10 +16,10 @@ Role.init(
   },
   {
     // Other model options go here
-    sequelize, //connection instance
-    modelName: "Role",
-    tableName: "role",
-  }
+    sequelize, // connection instance
+    modelName: 'Role',
+    tableName: 'role',
+  },
 );
 
 module.exports = Role;
