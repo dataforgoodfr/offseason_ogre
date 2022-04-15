@@ -5,7 +5,7 @@ class Player extends Model {}
 Player.init(
   {
     // Model attributes are defined here
-    //attributes stored in DB
+    // attributes stored in DB
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -18,7 +18,7 @@ Player.init(
       type: DataTypes.INTEGER,
     },
 
-    //virtual attributes which are not stored in DB
+    // virtual attributes which are not stored in DB
     personsPerHousehold: {
       type: DataTypes.VIRTUAL,
       get() {
@@ -28,7 +28,7 @@ Player.init(
   },
   {
     // Other model options go here
-    sequelize, //connection instance
+    sequelize, // connection instance
     modelName: "Player",
     tableName: "player",
   }
