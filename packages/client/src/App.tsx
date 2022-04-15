@@ -1,7 +1,21 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 function App() {
-  return <Button variant="contained">Hello World!</Button>;
+  return (
+    <Box
+      sx={{
+        alignItems: "center",
+        backgroundColor: (theme) => theme.palette.primary.main,
+        display: "flex",
+        justifyContent: "center",
+        minHeight: "100vh",
+      }}
+    >
+      <Button color="secondary" variant="contained">
+        Hello World!
+      </Button>
+    </Box>
+  );
 }
 
 export default App;

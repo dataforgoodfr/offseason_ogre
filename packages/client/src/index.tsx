@@ -7,10 +7,14 @@ import "@fontsource/roboto/700.css";
 
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./utils/theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
