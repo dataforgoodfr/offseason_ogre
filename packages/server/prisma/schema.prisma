@@ -15,6 +15,9 @@ model game {
 model user {
   id        Int     @id @default(autoincrement())
   email     String  @unique
+  firstname String
+  lastname  String
+  country   String?
   isTeacher Boolean @default(false)
 }
 
