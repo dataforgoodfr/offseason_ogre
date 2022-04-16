@@ -19,9 +19,8 @@ Work In Progress
 OGRE uses a number of open source projects to work properly:
 
 - Backend
-  - **node.js** - evented I/O for the backend
+  - **Node.js** - evented I/O for the backend
   - **Express** - fast node.js network app framework
-  - **Docker** - dockerize the app in dev environment
 - Frontend
   - **React** : Framework/library for front-end dev
 
@@ -33,7 +32,7 @@ OGRE uses a number of open source projects to work properly:
 4. Run "yarn db:migrate" from root, it creates the tables in the database
 5. Run "yarn db:seed" from root, it feeds the database with some dummy database
 6. Run "yarn workspace ogre-client dev" to launch client
-7. In another client shell run "yarn workspace ogre-server dev" to launch client
+7. In another shell run "yarn workspace ogre-server dev" to launch server
 
 ### Running frontend and backend apps
 
