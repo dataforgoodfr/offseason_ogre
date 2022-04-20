@@ -11,8 +11,6 @@ import "@fontsource/roboto/700.css";
 
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./utils/theme";
-import React from "react";
-import ReactDOM from "react-dom";
 
 ReactDOM.render(
   <React.StrictMode>
