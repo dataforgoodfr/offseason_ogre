@@ -30,7 +30,12 @@ const Form = () => {
       </div>
       <TermsOfUse />
       <CheckboxWithText control={control} />
-      <CustomButton type="submit" variant="contained" sx={{ width: "161px" }}>
+      <CustomButton
+        type="submit"
+        variant="contained"
+        color="secondary"
+        sx={{ margin: "auto", width: "161px" }}
+      >
         Créer le compte
       </CustomButton>
     </form>
