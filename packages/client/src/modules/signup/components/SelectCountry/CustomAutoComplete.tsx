@@ -6,13 +6,13 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
 
   "& .MuiOutlinedInput-root": {
     backgroundColor: theme.palette.primary.main,
-    border: "1px solid #AFAFAF",
-    color: "#AFAFAF",
+    border: "1px solid " + theme.palette.grey[500],
+    color: theme.palette.grey[500],
     borderRadius: "0.8rem",
     padding: 0,
 
     "&.Mui-focused fieldset": {
-      borderColor: "#AFAFAF",
+      borderColor: theme.palette.grey[500],
       border: "0px",
     },
 
@@ -27,15 +27,15 @@ const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   },
 
   "& label.Mui-focused": {
-    color: "#AFAFAF",
+    color: theme.palette.grey[500],
   },
 
   "& .MuiSvgIcon-root": {
-    color: "#AFAFAF",
+    color: theme.palette.grey[500],
   },
 
   "& .MuiInputLabel-root": {
-    color: "#AFAFAF",
+    color: theme.palette.grey[500],
     top: -7,
     left: 0,
   },

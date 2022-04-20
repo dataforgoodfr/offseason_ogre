@@ -1,35 +1,25 @@
 import TextField from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
 
-declare module "@mui/material/styles" {
-  interface Theme {
-    width: string;
-  }
-  // allow configuration using `createTheme`
-  interface ThemeOptions {
-    width?: string;
-  }
-}
-
 const CustomTextField = styled(TextField)(({ theme }) => ({
   marginBottom: "1rem",
 
   "& .MuiOutlinedInput-root": {
-    color: "#AFAFAF",
+    color: theme.palette.grey[500],
     borderRadius: "0.8rem",
 
     "&.Mui-focused fieldset": {
-      borderColor: "#AFAFAF",
+      borderColor: theme.palette.grey[500],
       border: "0px",
     },
     "&:hover fieldset": {
-      borderColor: "#AFAFAF",
+      borderColor: theme.palette.grey[500],
     },
   },
 
   "& .MuiInputBase-input": {
     backgroundColor: theme.palette.primary.main,
-    border: "1px solid #AFAFAF",
+    border: "1px solid " + theme.palette.grey[500],
     borderRadius: "0.8rem",
     height: "40px",
     padding: 0,
@@ -37,11 +27,11 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
 
   "& label.Mui-focused": {
-    color: "#AFAFAF",
+    color: theme.palette.grey[500],
   },
 
   "& .MuiInputLabel-root": {
-    color: "#AFAFAF",
+    color: theme.palette.grey[500],
     top: -7,
     left: 0,
   },

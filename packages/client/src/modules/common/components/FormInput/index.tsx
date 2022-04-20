@@ -30,6 +30,7 @@ const FormInput = ({ control, name, label }: FormInputProps) => {
           label={label}
           type={name === "email" ? "email" : "text"}
           required
+          color="secondary"
         />
       )}
     />
