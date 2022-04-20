@@ -12,14 +12,14 @@ declare module "@mui/material/styles" {
 }
 
 const CustomButton = styled(Button)(({ theme }) => ({
-  backgroundColor: "#F9C74F",
-  color: "#1A3D5C",
+  backgroundColor: theme.palette.secondary.main,
+  color: theme.palette.primary.main,
   borderRadius: "0.5rem",
   height: "43px",
   alignSelf: "center",
   "&:hover": {
-    backgroundColor: "#F9C74F",
-    color: "#1A3D5C",
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
     opacity: 0.9,
   },
 }));

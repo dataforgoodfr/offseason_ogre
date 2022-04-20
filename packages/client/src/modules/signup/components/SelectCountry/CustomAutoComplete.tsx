@@ -1,11 +1,11 @@
 import Autocomplete from "@mui/material/Autocomplete";
 import { styled } from "@mui/material/styles";
 
-const CustomAutocomplete = styled(Autocomplete)(() => ({
+const CustomAutocomplete = styled(Autocomplete)(({ theme }) => ({
   marginBottom: "1rem",
 
   "& .MuiOutlinedInput-root": {
-    backgroundColor: "#1A3D5C",
+    backgroundColor: theme.palette.primary.main,
     border: "1px solid #AFAFAF",
     color: "#AFAFAF",
     borderRadius: "0.8rem",

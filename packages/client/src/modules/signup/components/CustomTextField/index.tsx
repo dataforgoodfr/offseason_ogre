@@ -28,7 +28,7 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
 
   "& .MuiInputBase-input": {
-    backgroundColor: "#1A3D5C",
+    backgroundColor: theme.palette.primary.main,
     border: "1px solid #AFAFAF",
     borderRadius: "0.8rem",
     height: "40px",
