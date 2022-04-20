@@ -18,7 +18,6 @@ function App() {
           <Route path="/success" element={<Success />} />
         </Routes>
       </div>
-    </div>
   );
 }
 
