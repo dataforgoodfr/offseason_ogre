@@ -26,6 +26,7 @@ const FormInput = ({ control, name, label }: FormInputProps) => {
       render={({ field }) => (
         <CustomTextField
           {...field}
+          sx={{ width: "280px" }}
           label={label}
           type={name === "email" ? "email" : "text"}
           required

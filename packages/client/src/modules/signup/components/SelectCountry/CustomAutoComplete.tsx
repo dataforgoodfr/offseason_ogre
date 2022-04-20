@@ -2,7 +2,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { styled } from "@mui/material/styles";
 
 const CustomAutocomplete = styled(Autocomplete)(() => ({
-  width: "218px",
   marginBottom: "1rem",
 
   "& .MuiOutlinedInput-root": {

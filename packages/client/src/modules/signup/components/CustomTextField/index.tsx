@@ -12,7 +12,6 @@ declare module "@mui/material/styles" {
 }
 
 const CustomTextField = styled(TextField)(({ theme }) => ({
-  width: theme.width,
   marginBottom: "1rem",
 
   "& .MuiOutlinedInput-root": {

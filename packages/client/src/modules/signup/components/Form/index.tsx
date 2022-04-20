@@ -3,16 +3,7 @@ import FormInput from "../../../common/components/FormInput";
 import { useForm } from "react-hook-form";
 import CheckboxWithText from "../CheckboxWithText";
 import { useNavigate } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TermsOfUse from "../../../common/components/TermsOfUse";
-
-const inputTheme = createTheme({
-  width: "218px",
-});
-
-const buttonTheme = createTheme({
-  width: "161px",
-});
 
 const Form = () => {
   const navigate = useNavigate();
@@ -32,20 +23,16 @@ const Form = () => {
   return (
     <form className="flex flex-col w-72" onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col justify-center items-center">
-        <ThemeProvider theme={inputTheme}>
-          <FormInput control={control} name="firstName" label="Nom" />
-          <FormInput control={control} name="lastName" label="Prénom" />
-          <FormInput control={control} name="country" label="Pays" />
-          <FormInput control={control} name="email" label="Adresse mail" />
-        </ThemeProvider>
+        <FormInput control={control} name="firstName" label="Nom" />
+        <FormInput control={control} name="lastName" label="Prénom" />
+        <FormInput control={control} name="country" label="Pays" />
+        <FormInput control={control} name="email" label="Adresse mail" />
       </div>
       <TermsOfUse />
       <CheckboxWithText control={control} />
-      <ThemeProvider theme={buttonTheme}>
-        <CustomButton type="submit" variant="contained">
-          Créer le compte
-        </CustomButton>
-      </ThemeProvider>
+      <CustomButton type="submit" variant="contained" sx={{ width: "161px" }}>
+        Créer le compte
+      </CustomButton>
     </form>
   );
 };
