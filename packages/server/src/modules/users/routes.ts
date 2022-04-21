@@ -7,3 +7,5 @@ export { router };
 const router = express.Router();
 
 router.get("/:id", asyncErrorHandler(controllers.getDocumentController));
+router.get("/", asyncErrorHandler(controllers.getAllDocumentsController));
+router.post("/login", asyncErrorHandler(controllers.getUser));
