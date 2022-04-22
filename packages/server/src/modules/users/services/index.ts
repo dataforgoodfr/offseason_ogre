@@ -1,11 +1,10 @@
 import { prisma } from "../../../database";
 import { CrudServices } from "../../utils/crudBuilders";
 import { User } from "../types/entity";
-import * as customServices from "./";
 
 const model = prisma.user;
 const crudServices = { getDocument } as CrudServices<User>;
-const services = { ...crudServices, ...customServices };
+const services = { ...crudServices };
 
 export { services };
 

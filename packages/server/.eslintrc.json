@@ -16,10 +16,19 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "import/extensions": 0,
+    "import/prefer-default-export": "off",
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": [
       "error",
       { "functions": false, "typedefs": false }
     ]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"]
+      }
+    }
   }
 }
