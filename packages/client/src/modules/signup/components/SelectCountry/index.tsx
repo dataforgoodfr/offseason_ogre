@@ -38,7 +38,7 @@ function SelectCountry({ field, label }: { field: any; label: string }) {
               autoComplete: "new-password", // disable autocomplete and autofill
             }}
             required
-            sx={{ width: "280px" }}
+            sx={{ width: "300px" }}
           />
         );
       }}
