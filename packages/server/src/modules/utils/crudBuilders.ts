@@ -5,10 +5,12 @@ export { buildCrudControllers, buildCrudServices };
 export type { CrudControllers, CrudServices };
 
 interface CrudServices<T> {
+  createDocument: (document: Omit<T, "id">) => Promise<T>;
   getDocument: (id: number) => Promise<T>;
 }
 
 interface PrismaModel<T> {
+  create: ({ data: document }: { data: Omit<T, "id"> }) => Promise<T>;
   findUnique: ({ where: { id } }: { where: { id: number } }) => Promise<T>;
 }
 
@@ -16,7 +18,10 @@ function buildCrudServices<T>(model: PrismaModel<T>): CrudServices<T> {
   const getDocument = (id: number): Promise<T> =>
     model.findUnique({ where: { id } });
 
-  return { getDocument };
+  const createDocument = (document: Omit<T, "id">): Promise<T> =>
+    model.create({ data: document });
+
+  return { createDocument, getDocument };
 }
 
 interface CrudControllers {
