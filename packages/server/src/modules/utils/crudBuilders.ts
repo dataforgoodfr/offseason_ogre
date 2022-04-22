@@ -8,13 +8,11 @@ interface CrudServices<T> {
   getDocument: (id: number) => Promise<T>;
 }
 
-interface CrudControllers<T> {
+interface CrudControllers {
   getDocumentController: (request: Request, response: Response) => void;
 }
 
-function buildCrudControllers<T>(
-  services: CrudServices<T>
-): CrudControllers<T> {
+function buildCrudControllers<T>(services: CrudServices<T>): CrudControllers {
   const getDocumentController = async (req, res) => {
     const paramsSchema = z.object({
       id: z.string().regex(/^\d+$/).transform(Number),
