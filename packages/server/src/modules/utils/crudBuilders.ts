@@ -1,11 +1,22 @@
 import type { Request, Response } from "express";
 import * as z from "zod";
 
-export { buildCrudControllers };
+export { buildCrudControllers, buildCrudServices };
 export type { CrudControllers, CrudServices };
 
 interface CrudServices<T> {
   getDocument: (id: number) => Promise<T>;
+}
+
+interface PrismaModel<T> {
+  findUnique: ({ where: { id } }: { where: { id: number } }) => Promise<T>;
+}
+
+function buildCrudServices<T>(model: PrismaModel<T>): CrudServices<T> {
+  const getDocument = (id: number): Promise<T> =>
+    model.findUnique({ where: { id } });
+
+  return { getDocument };
 }
 
 interface CrudControllers {
