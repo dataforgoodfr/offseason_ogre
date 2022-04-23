@@ -1,28 +1,30 @@
 import path from "path";
-import { Request, Response } from "express";
-import express from "express";
+import express, { Request, Response } from "express";
 
-const app = express();
-
-require("dotenv-flow").config();
-
+import bodyParser from "body-parser";
+import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase } from "./database";
 
+// Parse URL-encoded bodies (as sent by HTML forms)
+
+// parse cookies sent via http requests
+// const cookieParser = require('cookie-parser');
+// app.use(cookieParser())
+
+// use cors to accept other non domain websites to access api
+
+const app = express();
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("dotenv-flow").config();
+
 connectToDatase();
 
-// Parse URL-encoded bodies (as sent by HTML forms)
-const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse JSON bodies (as sent by API clients)
 app.use(bodyParser.json());
 
-//parse cookies sent via http requests
-//const cookieParser = require('cookie-parser');
-//app.use(cookieParser())
-
-//use cors to accept other non domain websites to access api
-const cors = require("cors");
 app.use(cors());
 
 const port = process.env.PORT || 8080;
@@ -40,7 +42,7 @@ app.use(
 );
 
 // Serving index.html by default
-app.get("*", function serveFront(_request: Request, response: Response) {
+app.get("*", (_request: Request, response: Response) => {
   response.set("Cache-control", "no-cache");
   response.set("last-modified", new Date().toUTCString());
   return response.sendFile(
@@ -49,16 +51,17 @@ app.get("*", function serveFront(_request: Request, response: Response) {
   );
 });
 
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: any) => {
   handleError(err, res);
 });
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`app listening on port ${port}!`);
 });
 
 export default app;
 
-function handleError(err, res) {
+function handleError(err: any, res: Response) {
   res.status(err.statusCode || 500).send(err.message || "Unkown error"); // TODO: remove stack when on PROD.
 }
