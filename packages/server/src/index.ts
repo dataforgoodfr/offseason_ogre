@@ -1,18 +1,10 @@
 import path from "path";
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
 import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase } from "./database";
-
-// Parse URL-encoded bodies (as sent by HTML forms)
-
-// parse cookies sent via http requests
-// const cookieParser = require('cookie-parser');
-// app.use(cookieParser())
-
-// use cors to accept other non domain websites to access api
 
 const app = express();
 
@@ -51,7 +43,8 @@ app.get("*", (_request: Request, response: Response) => {
   );
 });
 
-app.use((err: any, req: Request, res: Response, next: any) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   handleError(err, res);
 });
 
@@ -62,6 +55,7 @@ app.listen(port, () => {
 
 export default app;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleError(err: any, res: Response) {
   res.status(err.statusCode || 500).send(err.message || "Unkown error"); // TODO: remove stack when on PROD.
 }
