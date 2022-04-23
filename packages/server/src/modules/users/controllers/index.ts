@@ -9,10 +9,16 @@ export { controllers };
 
 async function createController(request: Request, response: Response) {
   const bodySchema = z.object({
-    email: z.string().email(),
+    country: z.string(),
+    email: z.string(),
+    lastName: z.string(),
+    firstName: z.string(),
   });
   const documentToCreate = bodySchema.parse(request.body);
-  const newDocument = await services.create(documentToCreate);
+  const newDocument = await services.create({
+    ...documentToCreate,
+    isTeacher: false,
+  });
   response.status(201).json({ data: newDocument });
 }
 
