@@ -16,6 +16,9 @@ model user {
   id        Int     @id @default(autoincrement())
   email     String  @unique
   isTeacher Boolean @default(false)
+  country   String
+  firstName String
+  lastName  String
 }
 
 model team {
