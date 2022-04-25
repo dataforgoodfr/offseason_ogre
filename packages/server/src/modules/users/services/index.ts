@@ -1,14 +1,18 @@
 import { prisma } from "../../../database";
-import { CrudServices } from "../../utils/crudBuilders";
 import { User } from "../types/entity";
-import * as customServices from "./";
 
 const model = prisma.user;
-const crudServices = { getDocument } as CrudServices<User>;
-const services = { ...crudServices, ...customServices };
+type Model = User;
+
+const crudServices = { getDocument, create };
+const services = { ...crudServices };
 
 export { services };
 
-function getDocument(id: number): Promise<User> {
+async function getDocument(id: number): Promise<Model | null> {
   return model.findUnique({ where: { id } });
+}
+
+async function create(document: Omit<Model, "id">): Promise<Model> {
+  return model.create({ data: document });
 }

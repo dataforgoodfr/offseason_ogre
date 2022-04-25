@@ -7,3 +7,4 @@ export { router };
 const router = express.Router();
 
 router.get("/:id", asyncErrorHandler(controllers.getDocumentController));
+router.post("/", asyncErrorHandler(controllers.createController));
