@@ -20,15 +20,7 @@ const token = generate(email);
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const sendMail = async (msg) => {
-  try {
     await sendGridMail.send(msg);
-    console.log("mail envoyé avec succès");
-  } catch (error) {
-    console.error(error);
-    if (error.response) {
-      console.error(error.response.body);
-    }
-  }
 };
 
 sendMail({
