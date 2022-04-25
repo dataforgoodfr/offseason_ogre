@@ -1,1 +1,1 @@
-var tree={};
+var tree = {};

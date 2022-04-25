@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
 
-const crudController = { getDocumentController, createController };
+const crudController = { getDocumentController, createController, signIn };
 const controllers = { ...crudController };
 
 export { controllers };
@@ -29,4 +29,13 @@ async function getDocumentController(request: Request, response: Response) {
   const { id } = paramsSchema.parse(request.params);
   const document = await services.getDocument(id);
   response.status(200).json({ data: document });
+}
+
+async function signIn(request: Request, response: Response) {
+  const email = await services.findEmail(request.body.email);
+  if (email) {
+    response.status(200).send("email existant");
+  } else {
+    response.status(200).send("email non existant");
+  }
 }

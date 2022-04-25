@@ -7,7 +7,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  background: #F0F0F0;
+  background: #f0f0f0;
 }
 /* Base color: saturation 0; */
 .hljs,
@@ -48,11 +48,11 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
 .hljs-link,
 .hljs-selector-attr,
 .hljs-selector-pseudo {
-  color: #BC6060;
+  color: #bc6060;
 }
 /* Language color: hue: 90; */
 .hljs-literal {
-  color: #78A960;
+  color: #78a960;
 }
 .hljs-built_in,
 .hljs-bullet,
@@ -75,7 +75,7 @@ Original highlight.js style (c) Ivan Sagalaev <maniac@softwaremaniacs.org>
   font-weight: bold;
 }
 body {
-  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, FreeSerif, serif;
   font-size: 15px;
   line-height: 22px;
   margin: 0;
@@ -294,7 +294,7 @@ td.docs {
   padding: 5px;
   padding-left: 10px;
   border: 1px solid #d6d6d6;
-  background: #F0F0F0;
+  background: #f0f0f0;
   font-size: 12px;
   overflow: auto;
 }
@@ -317,7 +317,7 @@ td.docs {
 }
 .dox .details {
   padding: 10px;
-  background: #F0F0F0;
+  background: #f0f0f0;
   border: 1px solid #d6d6d6;
   margin-bottom: 10px;
 }
@@ -356,7 +356,7 @@ td.docs {
   color: #555555;
 }
 .pilwrap .pilcrow:before {
-  content: '\b6';
+  content: "\b6";
 }
 .pilwrap:hover .pilcrow {
   opacity: 1;
@@ -366,7 +366,7 @@ td.code {
   width: 100%;
   vertical-align: top;
   border-left: 1px solid #d6d6d6;
-  background: #F0F0F0;
+  background: #f0f0f0;
 }
 .background {
   border-left: 1px solid #d6d6d6;
@@ -376,7 +376,7 @@ td.code {
   right: 0;
   bottom: 0;
   left: 525px;
-  background: #F0F0F0;
+  background: #f0f0f0;
 }
 pre,
 tt,
@@ -387,7 +387,7 @@ code {
   margin: 0;
   padding: 0;
   white-space: pre-wrap;
-  background: #F0F0F0;
+  background: #f0f0f0;
 }
 .line-num {
   display: inline-block;
