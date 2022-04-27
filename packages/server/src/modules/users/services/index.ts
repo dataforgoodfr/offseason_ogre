@@ -26,12 +26,12 @@ async function create(document: Omit<Model, "id">): Promise<Model> {
   return model.create({ data: document });
 }
 
-async function isMailAlreadyUsed(email: string): Promise<number | null> {
-  const mail = await model.findUnique({ where: { email } });
-  if (mail) {
-    return 1;
+async function isMailAlreadyUsed(email: string): Promise<Boolean> {
+  const userWithEmail = await model.findUnique({ where: { email } });
+  if (userWithEmail === null) {
+    return false;
   }
-  return 0;
+  return true;
 }
 
 async function sendWithSendgrid(email: string) {

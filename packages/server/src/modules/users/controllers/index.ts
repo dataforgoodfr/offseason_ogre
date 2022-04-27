@@ -32,7 +32,7 @@ async function getDocumentController(request: Request, response: Response) {
 }
 
 async function signIn(request: Request, response: Response) {
-  if ((await services.isMailAlreadyUsed(request.body.email)) === 1) {
+  if (await services.isMailAlreadyUsed(request.body.email)) {
     services.sendWithSendgrid(request.body.email);
     response.status(200).send("Magic Link envoyé");
   } else {
