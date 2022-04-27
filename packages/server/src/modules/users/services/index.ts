@@ -26,7 +26,7 @@ async function create(document: Omit<Model, "id">): Promise<Model> {
   return model.create({ data: document });
 }
 
-async function isMailAlreadyUsed(email: string): Promise<Boolean> {
+async function isMailAlreadyUsed(email: string): Promise<boolean> {
   const userWithEmail = await model.findUnique({ where: { email } });
   if (userWithEmail === null) {
     return false;
@@ -39,7 +39,6 @@ async function sendWithSendgrid(email: string) {
   const generate = (email2: string) =>
     jwt.sign({ email2 }, "secret_key", { expiresIn: "60" });
   const token = generate(email);
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   await sendMail({
     to: email,
     from: "grandeur.energies@gmail.com",
