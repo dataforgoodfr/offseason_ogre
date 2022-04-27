@@ -40,21 +40,22 @@ async function sendWithSendgrid(email: string) {
     jwt.sign({ email2 }, "secret_key", { expiresIn: "60" });
   const token = generate(email);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  sendGridMail.setApiKey(process.env.SENDGRID_API_KEY!);
-  const sendMail = async (msg: {
-    to: string;
-    from: string;
-    subject: string;
-    text: string;
-    html: string;
-  }) => {
-    await sendGridMail.send(msg);
-  };
-  sendMail({
+  await sendMail({
     to: email,
     from: "grandeur.energies@gmail.com",
     subject: "Votre lien de connexion OGRE",
     text: "Votre lien: ",
     html: `<p><a href="${url}"> account?token=${token} </a></p>`,
   });
+}
+
+async function sendMail(msg: {
+  to: string;
+  from: string;
+  subject: string;
+  text: string;
+  html: string;
+}) {
+  sendGridMail.setApiKey(process.env.SENDGRID_API_KEY!);
+  await sendGridMail.send(msg);
 }
