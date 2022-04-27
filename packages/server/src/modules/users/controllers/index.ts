@@ -32,10 +32,14 @@ async function getDocumentController(request: Request, response: Response) {
 }
 
 async function signIn(request: Request, response: Response) {
-  const email = await services.findEmail(request.body.email);
-  if (email) {
-    response.status(200).send("email existant");
-  } else {
-    response.status(200).send("email non existant");
+  if (!(await services.isMailAlreadyUsed(request.body.email))) {
+    response
+      .status(200)
+      .send({ hasEmailBeenSent: false, hasUserWithThatEmail: false });
+    return;
   }
+  await services.sendWithSendgrid(request.body.email);
+  response
+    .status(200)
+    .send({ hasEmailBeenSent: true, hasUserWithThatEmail: false });
 }
