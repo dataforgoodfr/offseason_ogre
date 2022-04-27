@@ -32,10 +32,14 @@ async function getDocumentController(request: Request, response: Response) {
 }
 
 async function signIn(request: Request, response: Response) {
-  if (await services.isMailAlreadyUsed(request.body.email)) {
-    services.sendWithSendgrid(request.body.email);
-    response.status(200).send("Magic Link envoyé");
-  } else {
-    response.status(200).send("email non existant!");
+  if (!(await services.isMailAlreadyUsed(request.body.email))) {
+    response
+      .status(200)
+      .send({ hasEmailBeenSent: false, hasUserWithThatEmail: false });
+    return;
   }
+  await services.sendWithSendgrid(request.body.email);
+  response
+    .status(200)
+    .send({ hasEmailBeenSent: true, hasUserWithThatEmail: false });
 }
