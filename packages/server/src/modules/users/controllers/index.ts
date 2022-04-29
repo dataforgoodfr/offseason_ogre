@@ -41,5 +41,5 @@ async function signIn(request: Request, response: Response) {
   await services.sendWithSendgrid(request.body.email);
   response
     .status(200)
-    .send({ hasEmailBeenSent: true, hasUserWithThatEmail: false });
+    .send({ hasEmailBeenSent: true, hasUserWithThatEmail: true });
 }
