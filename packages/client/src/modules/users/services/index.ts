@@ -1,7 +1,7 @@
 import axios from "axios";
 import { User } from "../types";
 
-export { createUser };
+export { createUser, sendMagicLink };
 
 interface NewUser {
   email: string;
@@ -13,4 +13,10 @@ interface NewUser {
 async function createUser({ newUser }: { newUser: NewUser }): Promise<User> {
   const { data } = await axios.post("/api/users", { ...newUser });
   return data.data;
+}
+
+async function sendMagicLink({ email }: { email: string }) {
+  const { data } = await axios.post("/api/users/signin", { email });
+  console.log(data);
+  return data;
 }

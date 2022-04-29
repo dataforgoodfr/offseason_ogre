@@ -3,6 +3,7 @@ import FormInput from "../common/components/FormInput";
 import CustomButton from "../common/components/CustomButton";
 import { Link, useNavigate } from "react-router-dom";
 import TermsOfUse from "../common/components/TermsOfUse";
+import { sendMagicLink } from "../users/services";
 
 const Signin = () => {
   const navigate = useNavigate();
@@ -13,7 +14,9 @@ const Signin = () => {
   });
 
   const onSubmit = ({ email }: any) => {
-    navigate("/success", { state: { status: "signin", email } });
+    sendMagicLink({ email }).then(() =>
+      navigate("/success", { state: { status: "signin", email } })
+    );
   };
 
   return (
