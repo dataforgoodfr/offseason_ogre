@@ -2,7 +2,11 @@ import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
 
-const crudController = { getDocumentController, createController, signIn };
+const crudController = {
+  getDocumentController,
+  createController,
+  sendMagicLinkController,
+};
 const controllers = { ...crudController };
 
 export { controllers };
@@ -31,7 +35,7 @@ async function getDocumentController(request: Request, response: Response) {
   response.status(200).json({ data: document });
 }
 
-async function signIn(request: Request, response: Response) {
+async function sendMagicLinkController(request: Request, response: Response) {
   if (!(await services.isMailAlreadyUsed(request.body.email))) {
     response
       .status(200)

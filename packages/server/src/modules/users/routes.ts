@@ -8,4 +8,7 @@ const router = express.Router();
 
 router.get("/:id", asyncErrorHandler(controllers.getDocumentController));
 router.post("/", asyncErrorHandler(controllers.createController));
-router.post("/signin", asyncErrorHandler(controllers.signIn));
+router.post(
+  "/magic-link",
+  asyncErrorHandler(controllers.sendMagicLinkController)
+);
