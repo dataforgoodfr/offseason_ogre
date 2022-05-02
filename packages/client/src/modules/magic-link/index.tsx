@@ -10,7 +10,7 @@ interface MagicForm {
   email: string;
 }
 
-function Signin() {
+function MagicLink() {
   const [hasMagicLinkBeenSent, setHasMagicLinkBeenSent] = useState(false);
 
   const { control, getValues, handleSubmit } = useForm<MagicForm, any>({
@@ -56,4 +56,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default MagicLink;

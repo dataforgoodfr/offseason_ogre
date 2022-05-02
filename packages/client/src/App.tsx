@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import OgreHeader from "./modules/common/components/OgreHeader";
-import Signin from "./modules/signin";
+import MagicLink from "./modules/magic-link";
 import Signup from "./modules/signup";
 import { theme } from "./utils/theme";
 
@@ -15,7 +15,8 @@ function App() {
         <OgreHeader />
         <div className="flex flex-col min-h-[80vh] items-center">
           <Routes>
-            <Route path="/" element={<Signin />} />
+            <Route path="/" element={<MagicLink />} />
+            <Route path="/magic-link" element={<MagicLink />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
         </div>
