@@ -1,5 +1,7 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
+import { prisma } from "../../../database";
+import { verify } from "../../tokens";
 import { services } from "../services";
 import { signInController } from "./signInController";
 
@@ -41,7 +43,22 @@ async function getDocumentController(request: Request, response: Response) {
 }
 
 async function getLoggedUserController(request: Request, response: Response) {
-  response.status(200).json({ user: { email: "fakemail@fake.com" } });
+  const { authentificationToken } = request.cookies;
+  let email: string | undefined;
+  try {
+    const payload = verify(authentificationToken);
+    const payloadSchema = z.object({
+      email: z.string(),
+    });
+    email = payloadSchema.parse(payload).email;
+  } catch (err) {
+    response.status(403).send({ message: "Invalid auth token" });
+    return;
+  }
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  response.status(200).json({ user });
 }
 
 async function sendMagicLinkController(request: Request, response: Response) {

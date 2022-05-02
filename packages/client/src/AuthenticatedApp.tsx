@@ -1,5 +1,8 @@
+import { useAuth } from "./modules/auth/authProvider";
+
 export { AuthenticatedApp };
 
 function AuthenticatedApp() {
-  return <div>Congratz you are logged in!</div>;
+  const { user } = useAuth();
+  return <div>Congratz you are logged in as {user?.email}!</div>;
 }
