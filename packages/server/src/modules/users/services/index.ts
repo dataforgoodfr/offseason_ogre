@@ -36,17 +36,36 @@ async function isMailAlreadyUsed(email: string): Promise<boolean> {
 }
 
 async function sendWithSendgrid(email: string) {
-  const url = "https://atelierogre-staging.herokuapp.com/";
-  const generate = (email2: string) =>
-    jwt.sign({ email2 }, "secret_key", { expiresIn: "60" });
-  const token = generate(email);
+  const origin = getOrigin();
+  const token = signMagicToken(email);
+  const magicLink = `${origin}/api/users/sign-in?token=${token}`;
   await sendMail({
     to: email,
     from: "grandeur.energies@gmail.com",
     subject: "Votre lien de connexion OGRE",
     text: "Votre lien: ",
-    html: `<p><a href="${url}"> account?token=${token} </a></p>`,
+    html: `<p><a href="${magicLink}">${magicLink}</a></p>`,
   });
+}
+
+function signMagicToken(email: string): string {
+  const secretKey = process.env.SECRET_KEY || "secret_key";
+  return jwt.sign({ email, type: "magicLink" }, secretKey, {
+    expiresIn: "24h",
+  });
+}
+
+function getOrigin(): string {
+  if (process.env.ORIGIN) {
+    return process.env.ORIGIN;
+  }
+  if (process.env.NODE_ENV === "production") {
+    return "https://atelierogre.herokuapp.com";
+  }
+  if (process.env.NODE_ENV === "staging") {
+    return "https://atelierogre-staging.herokuapp.com";
+  }
+  return "http://localhost:3001";
 }
 
 async function sendMail(msg: {
