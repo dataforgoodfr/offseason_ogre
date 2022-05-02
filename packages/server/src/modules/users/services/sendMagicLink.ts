@@ -1,6 +1,6 @@
 import invariant from "tiny-invariant";
-import * as jwt from "jsonwebtoken";
 import sendGridMail from "@sendgrid/mail";
+import { sign } from "../../tokens";
 
 export { sendMagicLink };
 
@@ -18,10 +18,7 @@ async function sendMagicLink(email: string) {
 }
 
 function signMagicToken(email: string): string {
-  const secretKey = process.env.SECRET_KEY || "secret_key";
-  return jwt.sign({ email, type: "magicLink" }, secretKey, {
-    expiresIn: "24h",
-  });
+  return sign({ payload: { email, type: "magicLink" }, expiresIn: "24h" });
 }
 
 function getOrigin(): string {
