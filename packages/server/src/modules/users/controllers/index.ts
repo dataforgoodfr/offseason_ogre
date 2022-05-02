@@ -52,7 +52,7 @@ async function getLoggedUserController(request: Request, response: Response) {
     });
     email = payloadSchema.parse(payload).email;
   } catch (err) {
-    response.status(403).send({ message: "Invalid auth token" });
+    response.status(200).json({ user: null });
     return;
   }
   const user = await prisma.user.findUnique({
