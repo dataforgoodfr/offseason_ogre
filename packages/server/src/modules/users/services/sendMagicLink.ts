@@ -1,11 +1,12 @@
 import invariant from "tiny-invariant";
 import sendGridMail from "@sendgrid/mail";
 import { sign } from "../../tokens";
+import { getApiOrigin } from "../../config";
 
 export { sendMagicLink };
 
 async function sendMagicLink(email: string) {
-  const origin = getOrigin();
+  const origin = getApiOrigin();
   const token = signMagicToken(email);
   const magicLink = `${origin}/api/users/sign-in?token=${token}`;
   await sendMail({
@@ -19,19 +20,6 @@ async function sendMagicLink(email: string) {
 
 function signMagicToken(email: string): string {
   return sign({ payload: { email, type: "magicLink" }, expiresIn: "24h" });
-}
-
-function getOrigin(): string {
-  if (process.env.ORIGIN) {
-    return process.env.ORIGIN;
-  }
-  if (process.env.NODE_ENV === "production") {
-    return "https://atelierogre.herokuapp.com";
-  }
-  if (process.env.NODE_ENV === "staging") {
-    return "https://atelierogre-staging.herokuapp.com";
-  }
-  return "http://localhost:8080";
 }
 
 async function sendMail(msg: {
