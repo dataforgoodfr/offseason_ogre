@@ -9,6 +9,7 @@ const crudController = {
 };
 const controllers = {
   ...crudController,
+  getLoggedUserController,
   sendMagicLinkController,
   signInController,
 };
@@ -37,6 +38,10 @@ async function getDocumentController(request: Request, response: Response) {
   const { id } = paramsSchema.parse(request.params);
   const document = await services.getDocument(id);
   response.status(200).json({ data: document });
+}
+
+async function getLoggedUserController(request: Request, response: Response) {
+  response.status(200).json({ user: { email: "fakemail@fake.com" } });
 }
 
 async function sendMagicLinkController(request: Request, response: Response) {
