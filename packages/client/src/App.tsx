@@ -1,7 +1,10 @@
+import { AuthenticatedApp } from "./AuthenticatedApp";
+import { useAuth } from "./modules/auth/authProvider";
 import { UnauthenticatedApp } from "./UnauthenticatedApp";
 
 function App() {
-  return <UnauthenticatedApp></UnauthenticatedApp>;
+  const { user } = useAuth();
+  return user ? <AuthenticatedApp /> : <UnauthenticatedApp />;
 }
 
 export default App;

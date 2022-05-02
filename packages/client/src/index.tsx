@@ -11,12 +11,15 @@ import "@fontsource/roboto/700.css";
 
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./utils/theme";
+import { AuthProvider } from "./modules/auth/authProvider";
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
