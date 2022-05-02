@@ -1,23 +1,41 @@
 import { useForm } from "react-hook-form";
 import FormInput from "../common/components/FormInput";
 import CustomButton from "../common/components/CustomButton";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TermsOfUse from "../common/components/TermsOfUse";
 import { sendMagicLink } from "../users/services";
+import { useState } from "react";
 
-const Signin = () => {
-  const navigate = useNavigate();
-  const { control, handleSubmit } = useForm({
+interface MagicForm {
+  email: string;
+}
+
+function Signin() {
+  const [hasMagicLinkBeenSent, setHasMagicLinkBeenSent] = useState(false);
+
+  const { control, getValues, handleSubmit } = useForm<MagicForm, any>({
     defaultValues: {
       email: "",
     },
   });
 
-  const onSubmit = ({ email }: any) => {
-    sendMagicLink({ email }).then(() =>
-      navigate("/success", { state: { status: "signin", email } })
+  const onSubmit = ({ email }: MagicForm) =>
+    sendMagicLink({ email }).then(() => setHasMagicLinkBeenSent(true));
+
+  if (hasMagicLinkBeenSent) {
+    return (
+      <div className="flex justify-center items-center w-120">
+        <p className="text-white text-center">
+          Un mail contenant un lien de connexion a été envoyé à l'adresse{" "}
+          <span className="underline">{getValues("email")}</span>.
+          <br />
+          Cliquez sur le lien fourni pour accéder à l'application.
+          <br />
+          Vérifiez que le mail n'est pas arrivé dans votre boîte de Spam.
+        </p>
+      </div>
     );
-  };
+  }
 
   return (
     <div className="flex flex-col">
@@ -36,6 +54,6 @@ const Signin = () => {
       <TermsOfUse />
     </div>
   );
-};
+}
 
 export default Signin;
