@@ -3,7 +3,6 @@ import { Routes, Route } from "react-router-dom";
 import OgreHeader from "./modules/common/components/OgreHeader";
 import Signin from "./modules/signin";
 import Signup from "./modules/signup";
-import Success from "./modules/success";
 import { theme } from "./utils/theme";
 
 function App() {
@@ -18,7 +17,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/success" element={<Success />} />
           </Routes>
         </div>
       </div>
