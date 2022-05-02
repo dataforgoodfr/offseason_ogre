@@ -42,7 +42,7 @@ async function sendMagicLinkController(request: Request, response: Response) {
       .send({ hasEmailBeenSent: false, hasUserWithThatEmail: false });
     return;
   }
-  await services.sendWithSendgrid(request.body.email);
+  await services.sendMagicLink(request.body.email);
   response
     .status(200)
     .send({ hasEmailBeenSent: true, hasUserWithThatEmail: true });
