@@ -1,5 +1,6 @@
 import * as jwt from "jsonwebtoken";
 import sendGridMail from "@sendgrid/mail";
+import invariant from "tiny-invariant";
 import { prisma } from "../../../database";
 import { User } from "../types/entity";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -55,6 +56,8 @@ async function sendMail(msg: {
   text: string;
   html: string;
 }) {
-  sendGridMail.setApiKey(process.env.SENDGRID_API_KEY!);
+  const apiKey = process.env.SENDGRID_API_KEY;
+  invariant(apiKey, "SENDGRID_API_KEY must be set in env variables.");
+  sendGridMail.setApiKey(apiKey);
   await sendGridMail.send(msg);
 }
