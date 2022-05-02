@@ -31,7 +31,7 @@ function getOrigin(): string {
   if (process.env.NODE_ENV === "staging") {
     return "https://atelierogre-staging.herokuapp.com";
   }
-  return "http://localhost:3001";
+  return "http://localhost:8080";
 }
 
 async function sendMail(msg: {

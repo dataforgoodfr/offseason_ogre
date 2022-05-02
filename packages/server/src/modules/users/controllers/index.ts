@@ -1,13 +1,17 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { signInController } from "./signInController";
 
 const crudController = {
   getDocumentController,
   createController,
-  sendMagicLinkController,
 };
-const controllers = { ...crudController };
+const controllers = {
+  ...crudController,
+  sendMagicLinkController,
+  signInController,
+};
 
 export { controllers };
 

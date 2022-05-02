@@ -6,6 +6,7 @@ export { router };
 
 const router = express.Router();
 
+router.get("/sign-in", asyncErrorHandler(controllers.signInController));
 router.get("/:id", asyncErrorHandler(controllers.getDocumentController));
 router.post("/", asyncErrorHandler(controllers.createController));
 router.post(
