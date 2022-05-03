@@ -2,6 +2,7 @@ import path from "path";
 import express, { NextFunction, Request, Response } from "express";
 
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase } from "./database";
@@ -16,7 +17,7 @@ connectToDatase();
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse JSON bodies (as sent by API clients)
 app.use(bodyParser.json());
-
+app.use(cookieParser());
 app.use(cors());
 
 const port = process.env.PORT || 8080;

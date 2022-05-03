@@ -16,7 +16,6 @@ async function createUser({ newUser }: { newUser: NewUser }): Promise<User> {
 }
 
 async function sendMagicLink({ email }: { email: string }) {
-  const { data } = await axios.post("/api/users/signin", { email });
-  console.log(data);
+  const { data } = await axios.post("/api/users/magic-link", { email });
   return data;
 }

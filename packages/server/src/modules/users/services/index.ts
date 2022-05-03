@@ -1,7 +1,6 @@
-import * as jwt from "jsonwebtoken";
-import sendGridMail from "@sendgrid/mail";
 import { prisma } from "../../../database";
 import { User } from "../types/entity";
+import { sendMagicLink } from "./sendMagicLink";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require("dotenv").config();
 
@@ -11,10 +10,8 @@ type Model = User;
 const crudServices = {
   getDocument,
   create,
-  isMailAlreadyUsed,
-  sendWithSendgrid,
 };
-const services = { ...crudServices };
+const services = { ...crudServices, isMailAlreadyUsed, sendMagicLink };
 
 export { services };
 
@@ -32,29 +29,4 @@ async function isMailAlreadyUsed(email: string): Promise<boolean> {
     return false;
   }
   return true;
-}
-
-async function sendWithSendgrid(email: string) {
-  const url = "https://atelierogre-staging.herokuapp.com/";
-  const generate = (email2: string) =>
-    jwt.sign({ email2 }, "secret_key", { expiresIn: "60" });
-  const token = generate(email);
-  await sendMail({
-    to: email,
-    from: "grandeur.energies@gmail.com",
-    subject: "Votre lien de connexion OGRE",
-    text: "Votre lien: ",
-    html: `<p><a href="${url}"> account?token=${token} </a></p>`,
-  });
-}
-
-async function sendMail(msg: {
-  to: string;
-  from: string;
-  subject: string;
-  text: string;
-  html: string;
-}) {
-  sendGridMail.setApiKey(process.env.SENDGRID_API_KEY!);
-  await sendGridMail.send(msg);
 }
