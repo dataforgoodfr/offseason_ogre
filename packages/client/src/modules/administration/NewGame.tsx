@@ -1,7 +1,7 @@
+import { LoadingButton } from "@mui/lab";
 import {
   Alert,
   Box,
-  Button,
   Grid,
   Snackbar,
   TextField,
@@ -36,8 +36,6 @@ function NewGame(): JSX.Element {
     return mutation.mutate(newGame);
   };
 
-  console.log("mutation.isError", mutation.isError);
-
   return (
     <Layout>
       <>
@@ -58,13 +56,14 @@ function NewGame(): JSX.Element {
                   />
                 )}
               />
-              <Button
+              <LoadingButton
+                loading={mutation.isLoading}
                 type="submit"
-                variant="contained"
                 sx={{ width: "200px", mt: 2 }}
+                variant="contained"
               >
                 Créer le compte
-              </Button>
+              </LoadingButton>
             </Grid>
           </form>
         </Box>
