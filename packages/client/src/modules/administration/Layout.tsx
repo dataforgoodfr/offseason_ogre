@@ -182,7 +182,7 @@ function MainListItems() {
             <AddBoxIcon color="primary" />
           </ListItemIcon>
           <ListItemText
-            primary="New Game"
+            primary="Nouveau jeu"
             primaryTypographyProps={{
               color: "primary",
             }}

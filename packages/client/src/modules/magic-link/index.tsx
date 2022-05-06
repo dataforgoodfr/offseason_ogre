@@ -49,7 +49,7 @@ function MagicLink() {
         className="text-white self-center m-4 hover:text-white hover:underline"
         to="/signup"
       >
-        Créer un compte
+        Envoyer le lien
       </Link>
       <TermsOfUse />
     </div>

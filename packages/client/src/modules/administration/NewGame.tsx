@@ -39,7 +39,7 @@ function NewGame(): JSX.Element {
   return (
     <Layout>
       <>
-        <Typography variant="h3">New Game</Typography>
+        <Typography variant="h3">Nouvel atelier</Typography>
         <Box sx={{ mt: 4 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container direction="column">
@@ -62,7 +62,7 @@ function NewGame(): JSX.Element {
                 sx={{ width: "200px", mt: 2 }}
                 variant="contained"
               >
-                Créer le compte
+                Créer l'atelier.
               </LoadingButton>
             </Grid>
           </form>
@@ -91,7 +91,7 @@ function SuccessAlert() {
     <CreationAlert
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="success" variant="filled">
-          Game created!
+          Nouvel atelier créé!
         </Alert>
       )}
     ></CreationAlert>
