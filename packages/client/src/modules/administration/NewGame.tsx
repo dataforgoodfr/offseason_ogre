@@ -68,12 +68,43 @@ function NewGame(): JSX.Element {
           </form>
         </Box>
         {mutation.isError && <ErrorAlert message={mutation.error.message} />}
+        {mutation.isSuccess && <SuccessAlert />}
       </>
     </Layout>
   );
 }
 
 function ErrorAlert({ message }: { message: string }) {
+  return (
+    <CreationAlert
+      renderAlert={(onClose) => (
+        <Alert onClose={onClose} severity="error" variant="filled">
+          {message}
+        </Alert>
+      )}
+    ></CreationAlert>
+  );
+}
+
+function SuccessAlert() {
+  return (
+    <CreationAlert
+      renderAlert={(onClose) => (
+        <Alert onClose={onClose} severity="success" variant="filled">
+          Game created!
+        </Alert>
+      )}
+    ></CreationAlert>
+  );
+}
+
+function CreationAlert({
+  renderAlert,
+}: {
+  renderAlert: (
+    onClose: (event: React.SyntheticEvent<Element, Event>) => void
+  ) => JSX.Element;
+}) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const onClose = () => setIsOpen(false);
   return (
@@ -83,9 +114,7 @@ function ErrorAlert({ message }: { message: string }) {
       onClose={onClose}
       open={isOpen}
     >
-      <Alert onClose={onClose} severity="error" variant="filled">
-        {message}
-      </Alert>
+      {renderAlert(onClose)}
     </Snackbar>
   );
 }
