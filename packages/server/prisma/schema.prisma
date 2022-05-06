@@ -8,9 +8,11 @@ datasource db {
 }
 
 model game {
-  id   Int      @id @default(autoincrement())
-  date DateTime
-  name String
+  id        Int      @id @default(autoincrement())
+  date      DateTime
+  name      String
+  teacher   user     @relation(fields: [teacherId], references: [id])
+  teacherId Int
 }
 
 model user {
@@ -20,6 +22,7 @@ model user {
   country   String
   firstName String
   lastName  String
+  games     game[]
 }
 
 model team {

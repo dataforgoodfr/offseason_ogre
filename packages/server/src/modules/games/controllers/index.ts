@@ -19,6 +19,7 @@ async function createController(request: Request, response: Response) {
   const newDocument = await services.create({
     ...documentToCreate,
     date: new Date(),
+    teacherId: response.locals.user.id,
   });
   response.status(201).json({ data: newDocument });
 }
