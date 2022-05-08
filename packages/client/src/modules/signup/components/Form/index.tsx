@@ -1,4 +1,3 @@
-import CustomButton from "../../../common/components/CustomButton";
 import FormInput from "../../../common/components/FormInput";
 import { useForm } from "react-hook-form";
 import CheckboxWithText from "../CheckboxWithText";
@@ -7,6 +6,7 @@ import { NewUser } from "../../../users/services";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../alert";
+import { Button } from "@mui/material";
 
 export default Form;
 
@@ -63,14 +63,14 @@ function Form() {
         </div>
         <TermsOfUse />
         <CheckboxWithText control={control} />
-        <CustomButton
+        <Button
           type="submit"
           variant="contained"
           color="secondary"
           sx={{ margin: "auto", width: "161px" }}
         >
           Créer le compte
-        </CustomButton>
+        </Button>
       </form>
     );
   }
