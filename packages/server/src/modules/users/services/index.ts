@@ -1,8 +1,6 @@
 import { prisma } from "../../../database";
 import { User } from "../types/entity";
 import { sendMagicLink } from "./sendMagicLink";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require("dotenv").config();
 
 const model = prisma.user;
 type Model = User;

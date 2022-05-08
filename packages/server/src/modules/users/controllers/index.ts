@@ -1,7 +1,5 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { prisma } from "../../../database";
-import { verify } from "../../tokens";
 import { services } from "../services";
 import { signInController } from "./signInController";
 
@@ -43,21 +41,7 @@ async function getDocumentController(request: Request, response: Response) {
 }
 
 async function getLoggedUserController(request: Request, response: Response) {
-  const { authentificationToken } = request.cookies;
-  let email: string | undefined;
-  try {
-    const payload = verify(authentificationToken);
-    const payloadSchema = z.object({
-      email: z.string(),
-    });
-    email = payloadSchema.parse(payload).email;
-  } catch (err) {
-    response.status(200).json({ user: null });
-    return;
-  }
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
+  const user = response.locals.user || null;
   response.status(200).json({ user });
 }
 
