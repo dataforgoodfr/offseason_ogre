@@ -18,6 +18,9 @@ async function getDocument(id: number): Promise<Model | null> {
 }
 
 async function create(document: Omit<Model, "id">): Promise<Model> {
+  if (await isMailAlreadyUsed(document.email)) {
+    throw new Error("Email is already taken.");
+  }
   return model.create({ data: document });
 }
 

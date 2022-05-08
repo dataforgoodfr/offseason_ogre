@@ -5,7 +5,7 @@ import CheckboxWithText from "../CheckboxWithText";
 import TermsOfUse from "../../../common/components/TermsOfUse";
 import { NewUser } from "../../../users/services";
 import { useMutation } from "react-query";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../alert";
 
 export default Form;
@@ -21,11 +21,13 @@ function Form() {
     },
   });
 
-  const mutation = useMutation<Response, { message: string }, NewUser>(
-    (newUser) => {
-      return axios.post("/api/users", newUser);
-    }
-  );
+  const mutation = useMutation<
+    Response,
+    AxiosError<{ message: string }>,
+    NewUser
+  >((newUser) => {
+    return axios.post("/api/users", newUser);
+  });
 
   const onValid = (formContent: any) =>
     mutation.mutate({ ...formContent, country: formContent.country.code });
@@ -41,7 +43,11 @@ function Form() {
 
   return (
     <>
-      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
+      {mutation.isError && (
+        <ErrorAlert
+          message={mutation.error.response?.data.message || "Unkown error"}
+        />
+      )}
       <UserForm />
     </>
   );
