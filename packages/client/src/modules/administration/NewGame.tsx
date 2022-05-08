@@ -1,16 +1,9 @@
 import { LoadingButton } from "@mui/lab";
-import {
-  Alert,
-  Box,
-  Grid,
-  Snackbar,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
+import { ErrorAlert, SuccessAlert } from "../alert";
 import { Layout } from "./Layout";
 
 export { NewGame };
@@ -69,50 +62,5 @@ function NewGame(): JSX.Element {
         {mutation.isSuccess && <SuccessAlert />}
       </>
     </Layout>
-  );
-}
-
-function ErrorAlert({ message }: { message: string }) {
-  return (
-    <AlertSnackbar
-      renderAlert={(onClose) => (
-        <Alert onClose={onClose} severity="error" variant="filled">
-          {message}
-        </Alert>
-      )}
-    ></AlertSnackbar>
-  );
-}
-
-function SuccessAlert() {
-  return (
-    <AlertSnackbar
-      renderAlert={(onClose) => (
-        <Alert onClose={onClose} severity="success" variant="filled">
-          Nouvel atelier créé!
-        </Alert>
-      )}
-    ></AlertSnackbar>
-  );
-}
-
-function AlertSnackbar({
-  renderAlert,
-}: {
-  renderAlert: (
-    onClose: (event: React.SyntheticEvent<Element, Event>) => void
-  ) => JSX.Element;
-}) {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const onClose = () => setIsOpen(false);
-  return (
-    <Snackbar
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      autoHideDuration={6000}
-      onClose={onClose}
-      open={isOpen}
-    >
-      {renderAlert(onClose)}
-    </Snackbar>
   );
 }
