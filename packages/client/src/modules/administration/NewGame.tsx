@@ -74,29 +74,29 @@ function NewGame(): JSX.Element {
 
 function ErrorAlert({ message }: { message: string }) {
   return (
-    <CreationAlert
+    <AlertSnackbar
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="error" variant="filled">
           {message}
         </Alert>
       )}
-    ></CreationAlert>
+    ></AlertSnackbar>
   );
 }
 
 function SuccessAlert() {
   return (
-    <CreationAlert
+    <AlertSnackbar
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="success" variant="filled">
           Nouvel atelier créé!
         </Alert>
       )}
-    ></CreationAlert>
+    ></AlertSnackbar>
   );
 }
 
-function CreationAlert({
+function AlertSnackbar({
   renderAlert,
 }: {
   renderAlert: (
