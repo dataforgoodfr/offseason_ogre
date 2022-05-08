@@ -10,7 +10,7 @@ function Games(): JSX.Element {
   return (
     <Layout>
       <>
-        <Typography variant="h3">Games</Typography>
+        <Typography variant="h3">Ateliers</Typography>
         <Box sx={{ mt: 2 }}>
           <GamesDataGrid />
         </Box>
@@ -19,12 +19,18 @@ function Games(): JSX.Element {
   );
 }
 
-const columns: GridColDef<{ date: string }>[] = [
+const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
   { field: "id", headerName: "ID", width: 90 },
   {
     field: "name",
     headerName: "Nom",
     width: 150,
+  },
+  {
+    field: "teacher",
+    headerName: "Animateur",
+    width: 250,
+    valueGetter: (params) => params.row.teacher.email,
   },
   {
     field: "date",
@@ -53,9 +59,14 @@ function GamesDataGrid() {
       <DataGrid
         rows={rows}
         columns={columns}
+        disableSelectionOnClick
+        initialState={{
+          sorting: {
+            sortModel: [{ field: "date", sort: "desc" }],
+          },
+        }}
         pageSize={20}
         rowsPerPageOptions={[20]}
-        disableSelectionOnClick
       />
     </div>
   );

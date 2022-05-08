@@ -18,7 +18,7 @@ async function getDocument(id: number): Promise<Model | null> {
 }
 
 async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {
-  return model.findMany({ where: partial });
+  return model.findMany({ where: partial, include: { teacher: true } });
 }
 
 async function create(document: Omit<Model, "id">): Promise<Model> {

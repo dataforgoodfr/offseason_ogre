@@ -189,7 +189,7 @@ function MainListItems() {
           label: "Nouveau jeu",
           to: "/administration/new-game",
         },
-        { Icon: GamesIcon, label: "Games", to: "/administration/games" },
+        { Icon: GamesIcon, label: "Ateliers", to: "/administration/games" },
       ].map(renderListItem)}
     </Fragment>
   );
