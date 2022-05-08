@@ -96,7 +96,7 @@ function Layout({ children }: { children: JSX.Element }) {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
           {children}
         </Container>
       </Box>
