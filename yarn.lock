@@ -1633,6 +1633,16 @@
     prop-types "^15.7.2"
     react-is "^17.0.2"
 
+"@mui/x-data-grid@^5.10.0":
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/@mui/x-data-grid/-/x-data-grid-5.10.0.tgz#22917a8c1a6e95a2d3cde691f53071a838cba0e2"
+  integrity sha512-+NELUtA+6RAVFHR8sGrSxtJC8+3NQMLflYBm816DXjQvPA8vvCPI50SPKCUYUpBuepQtTBQWcty0Tdm9tjzInA==
+  dependencies:
+    "@mui/utils" "^5.6.1"
+    clsx "^1.1.1"
+    prop-types "^15.8.1"
+    reselect "^4.1.5"
+
 "@mui/x-date-pickers@5.0.0-alpha.0":
   version "5.0.0-alpha.0"
   resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.0-alpha.0.tgz#a62ffbab453d3c2dcd4ec20bd4f3f6338ad2ed3f"
@@ -8428,6 +8438,11 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
+
+reselect@^4.1.5:
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.1.5.tgz#852c361247198da6756d07d9296c2b51eddb79f6"
+  integrity sha512-uVdlz8J7OO+ASpBYoz1Zypgx0KasCY20H+N8JD13oUMtPvSHQuscrHop4KbXrbsBcdB9Ds7lVK7eRkBIfO43vQ==
 
 resolve-cwd@^3.0.0:
   version "3.0.0"

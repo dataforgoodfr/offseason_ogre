@@ -4,6 +4,7 @@ import { services } from "../services";
 
 const crudController = {
   createController,
+  getManyControllers,
 };
 const controllers = {
   ...crudController,
@@ -22,4 +23,9 @@ async function createController(request: Request, response: Response) {
     teacherId: response.locals.user.id,
   });
   response.status(201).json({ data: newDocument });
+}
+
+async function getManyControllers(request: Request, response: Response) {
+  const documents = await services.getMany();
+  response.status(200).json({ documents });
 }
