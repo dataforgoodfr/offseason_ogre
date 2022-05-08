@@ -19,12 +19,21 @@ function Games(): JSX.Element {
   );
 }
 
-const columns: GridColDef[] = [
+const columns: GridColDef<{ date: string }>[] = [
   { field: "id", headerName: "ID", width: 90 },
   {
     field: "name",
     headerName: "Nom",
     width: 150,
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    type: "dateTime",
+    valueGetter: (params) => {
+      return new Date(params.row.date).toLocaleString();
+    },
+    width: 200,
   },
 ];
 
