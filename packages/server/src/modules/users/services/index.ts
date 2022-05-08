@@ -1,5 +1,6 @@
 import { prisma } from "../../../database";
 import { User } from "../types/entity";
+import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
 import { sendMagicLink } from "./sendMagicLink";
 
 const model = prisma.user;
@@ -22,12 +23,4 @@ async function create(document: Omit<Model, "id">): Promise<Model> {
     throw new Error("Email is already taken.");
   }
   return model.create({ data: document });
-}
-
-async function isMailAlreadyUsed(email: string): Promise<boolean> {
-  const userWithEmail = await model.findUnique({ where: { email } });
-  if (userWithEmail === null) {
-    return false;
-  }
-  return true;
 }

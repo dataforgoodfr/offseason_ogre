@@ -5,7 +5,7 @@ import TermsOfUse from "../common/components/TermsOfUse";
 import { sendMagicLink } from "../users/services";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
-import { SuccessAlert } from "../alert";
+import { ErrorAlert, SuccessAlert } from "../alert";
 import { Button } from "@mui/material";
 
 interface MagicForm {
@@ -46,21 +46,28 @@ function MagicLink() {
   }
 
   return (
-    <div className="flex flex-col">
-      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <FormInput control={control} name="email" label="Adresse mail" />
-        <Button color="secondary" variant="contained" type="submit">
-          Envoyez moi un lien de connexion
-        </Button>
-      </form>
-      <Link
-        className="text-white self-center m-4 hover:text-white hover:underline"
-        to="/signup"
-      >
-        Créer un compte
-      </Link>
-      <TermsOfUse />
-    </div>
+    <>
+      {mutation.isError && (
+        <ErrorAlert
+          message={mutation.error.response?.data.message || "Unknown error"}
+        ></ErrorAlert>
+      )}
+      <div className="flex flex-col">
+        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+          <FormInput control={control} name="email" label="Adresse mail" />
+          <Button color="secondary" variant="contained" type="submit">
+            Envoyez moi un lien de connexion
+          </Button>
+        </form>
+        <Link
+          className="text-white self-center m-4 hover:text-white hover:underline"
+          to="/signup"
+        >
+          Créer un compte
+        </Link>
+        <TermsOfUse />
+      </div>
+    </>
   );
 }
 
