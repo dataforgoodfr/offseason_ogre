@@ -47,11 +47,9 @@ function GamesDataGrid() {
   }
 
   const rows = query?.data?.data?.documents ?? [];
-  console.log("rows", rows);
-  console.log("query.data", query.data);
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
+    <div style={{ height: 600, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
