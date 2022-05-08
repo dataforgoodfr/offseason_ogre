@@ -51,6 +51,12 @@ app.listen(port, () => {
   console.log(`app listening on port ${port}!`);
 });
 
+process.on("SIGTERM", () => {
+  // eslint-disable-next-line no-console
+  console.log("SIGTERM received");
+  process.exit();
+});
+
 export default app;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
