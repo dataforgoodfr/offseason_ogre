@@ -10,10 +10,17 @@ import Container from "@mui/material/Container";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Link } from "react-router-dom";
-import { ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import GamesIcon from "@mui/icons-material/Games";
+import {
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  SvgIconTypeMap,
+} from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { Fragment } from "react";
 import { theme } from "../../utils/theme";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 const drawerWidth: number = 240;
 
@@ -89,7 +96,7 @@ function Layout({ children }: { children: JSX.Element }) {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
           {children}
         </Container>
       </Box>
@@ -176,19 +183,42 @@ function LayoutAppBar({
 function MainListItems() {
   return (
     <Fragment>
-      <Link to="/administration/new-game">
-        <ListItemButton>
-          <ListItemIcon>
-            <AddBoxIcon color="primary" />
-          </ListItemIcon>
-          <ListItemText
-            primary="Nouveau jeu"
-            primaryTypographyProps={{
-              color: "primary",
-            }}
-          />
-        </ListItemButton>
-      </Link>
+      {[
+        {
+          Icon: AddBoxIcon,
+          label: "Nouveau jeu",
+          to: "/administration/new-game",
+        },
+        { Icon: GamesIcon, label: "Ateliers", to: "/administration/games" },
+      ].map(renderListItem)}
     </Fragment>
+  );
+}
+
+function renderListItem({
+  Icon,
+  label,
+  to,
+}: {
+  Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+    muiName: string;
+  };
+  label: string;
+  to: string;
+}) {
+  return (
+    <Link to={to} key={to}>
+      <ListItemButton>
+        <ListItemIcon>
+          <Icon color="primary" />
+        </ListItemIcon>
+        <ListItemText
+          primary={label}
+          primaryTypographyProps={{
+            color: "primary",
+          }}
+        />
+      </ListItemButton>
+    </Link>
   );
 }

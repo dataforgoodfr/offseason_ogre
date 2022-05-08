@@ -9,9 +9,6 @@ import { connectToDatase } from "./database";
 
 const app = express();
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require("dotenv-flow").config();
-
 connectToDatase();
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -52,6 +49,12 @@ app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
 app.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`app listening on port ${port}!`);
+});
+
+process.on("SIGTERM", () => {
+  // eslint-disable-next-line no-console
+  console.log("SIGTERM received");
+  process.exit();
 });
 
 export default app;

@@ -2,8 +2,9 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Grid, TextField, Typography } from "@mui/material";
 import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import { ErrorAlert, SuccessAlert } from "../alert";
+import { useMutation, useQueryClient } from "react-query";
+import { Navigate } from "react-router-dom";
+import { ErrorAlert } from "../alert";
 import { Layout } from "./Layout";
 
 export { NewGame };
@@ -19,9 +20,14 @@ function NewGame(): JSX.Element {
     },
   });
 
+  const queryClient = useQueryClient();
+
   const mutation = useMutation<Response, { message: string }, INewGame>(
     (newGame) => {
       return axios.post("/api/games", newGame);
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries("games"),
     }
   );
 
@@ -59,7 +65,7 @@ function NewGame(): JSX.Element {
           </form>
         </Box>
         {mutation.isError && <ErrorAlert message={mutation.error.message} />}
-        {mutation.isSuccess && <SuccessAlert />}
+        {mutation.isSuccess && <Navigate to="/administration/games" />}
       </>
     </Layout>
   );
