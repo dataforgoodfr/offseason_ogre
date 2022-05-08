@@ -58,5 +58,7 @@ export default app;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function handleError(err: any, res: Response) {
-  res.status(err.statusCode || 500).send(err.message || "Unkown error"); // TODO: remove stack when on PROD.
+  res
+    .status(err.statusCode || 500)
+    .send({ message: err.message || "Unkown error" }); // TODO: remove stack when on PROD.
 }

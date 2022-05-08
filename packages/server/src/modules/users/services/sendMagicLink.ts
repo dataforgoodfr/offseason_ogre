@@ -2,10 +2,14 @@ import invariant from "tiny-invariant";
 import sendGridMail from "@sendgrid/mail";
 import { sign } from "../../tokens";
 import { getApiOrigin } from "../../config";
+import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
 
 export { sendMagicLink };
 
 async function sendMagicLink(email: string) {
+  if (!(await isMailAlreadyUsed(email))) {
+    throw new Error("No user with that email");
+  }
   const origin = getApiOrigin();
   const token = signMagicToken(email);
   const magicLink = `${origin}/api/users/sign-in?token=${token}`;

@@ -46,13 +46,8 @@ async function getLoggedUserController(request: Request, response: Response) {
 }
 
 async function sendMagicLinkController(request: Request, response: Response) {
-  if (!(await services.isMailAlreadyUsed(request.body.email))) {
-    response
-      .status(200)
-      .send({ hasEmailBeenSent: false, hasUserWithThatEmail: false });
-    return;
-  }
-  await services.sendMagicLink(request.body.email);
+  const { email } = request.body;
+  await services.sendMagicLink(email);
   response
     .status(200)
     .send({ hasEmailBeenSent: true, hasUserWithThatEmail: true });

@@ -1,13 +1,16 @@
-import CustomButton from "../../../common/components/CustomButton";
 import FormInput from "../../../common/components/FormInput";
 import { useForm } from "react-hook-form";
 import CheckboxWithText from "../CheckboxWithText";
 import TermsOfUse from "../../../common/components/TermsOfUse";
-import { createUser } from "../../../users/services";
-import { useState } from "react";
+import { NewUser } from "../../../users/services";
+import { useMutation } from "react-query";
+import axios, { AxiosError } from "axios";
+import { ErrorAlert, SuccessAlert } from "../../../alert";
+import { Button } from "@mui/material";
 
-const Form = () => {
-  const [hasUserBeenCreated, setHasUserBeenCreated] = useState(false);
+export default Form;
+
+function Form() {
   const { control, getValues, handleSubmit } = useForm({
     defaultValues: {
       firstName: "",
@@ -18,47 +21,72 @@ const Form = () => {
     },
   });
 
-  const onSubmit = (formContent: any) => {
-    const newUser = { ...formContent, country: formContent.country.code };
-    createUser({ newUser }).then(() => setHasUserBeenCreated(true));
-  };
+  const mutation = useMutation<
+    Response,
+    AxiosError<{ message: string }>,
+    NewUser
+  >((newUser) => {
+    return axios.post("/api/users", newUser);
+  });
 
-  if (hasUserBeenCreated) {
+  const onValid = (formContent: any) =>
+    mutation.mutate({ ...formContent, country: formContent.country.code });
+
+  if (mutation.isSuccess) {
     return (
-      <div className="flex justify-center items-center w-120">
-        <p className="text-white text-center">
-          Votre compte a été créé, un mail contenant un lien de connexion a été
-          envoyé sur l'adresse{" "}
-          <span className="underline">{getValues("email")}</span>.
-          <br />
-          Cliquez sur le lien de connexion pour accéder à l'application.
-          <br />
-          Vérifiez que le mail n'est pas arrivé dans votre boîte de Spam.
-        </p>
-      </div>
+      <>
+        <SuccessAlert />
+        <SuccessMessage email={getValues("email")} />
+      </>
     );
   }
 
   return (
-    <form className="flex flex-col w-72" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col justify-center items-center">
-        <FormInput control={control} name="firstName" label="Prénom" />
-        <FormInput control={control} name="lastName" label="Nom" />
-        <FormInput control={control} name="country" label="Pays" />
-        <FormInput control={control} name="email" label="Adresse mail" />
-      </div>
-      <TermsOfUse />
-      <CheckboxWithText control={control} />
-      <CustomButton
-        type="submit"
-        variant="contained"
-        color="secondary"
-        sx={{ margin: "auto", width: "161px" }}
-      >
-        Créer le compte
-      </CustomButton>
-    </form>
+    <>
+      {mutation.isError && (
+        <ErrorAlert
+          message={mutation.error.response?.data.message || "Unkown error"}
+        />
+      )}
+      <UserForm />
+    </>
   );
-};
 
-export default Form;
+  function UserForm() {
+    return (
+      <form className="flex flex-col w-72" onSubmit={handleSubmit(onValid)}>
+        <div className="flex flex-col justify-center items-center">
+          <FormInput control={control} name="firstName" label="Prénom" />
+          <FormInput control={control} name="lastName" label="Nom" />
+          <FormInput control={control} name="country" label="Pays" />
+          <FormInput control={control} name="email" label="Adresse mail" />
+        </div>
+        <TermsOfUse />
+        <CheckboxWithText control={control} />
+        <Button
+          type="submit"
+          variant="contained"
+          color="secondary"
+          sx={{ margin: "auto", width: "161px" }}
+        >
+          Créer le compte
+        </Button>
+      </form>
+    );
+  }
+}
+
+function SuccessMessage({ email }: { email: string }) {
+  return (
+    <div className="flex justify-center items-center w-120">
+      <p className="text-white text-center">
+        Votre compte a été créé, un mail contenant un lien de connexion a été
+        envoyé sur l'adresse <span className="underline">{email}</span>.
+        <br />
+        Cliquez sur le lien de connexion pour accéder à l'application.
+        <br />
+        Vérifiez que le mail n'est pas arrivé dans votre boîte de Spam.
+      </p>
+    </div>
+  );
+}
