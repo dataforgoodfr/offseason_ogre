@@ -3,11 +3,13 @@ import FormInput from "../../../common/components/FormInput";
 import { useForm } from "react-hook-form";
 import CheckboxWithText from "../CheckboxWithText";
 import TermsOfUse from "../../../common/components/TermsOfUse";
-import { createUser } from "../../../users/services";
-import { useState } from "react";
+import { NewUser } from "../../../users/services";
+import { useMutation } from "react-query";
+import axios from "axios";
 
-const Form = () => {
-  const [hasUserBeenCreated, setHasUserBeenCreated] = useState(false);
+export default Form;
+
+function Form() {
   const { control, getValues, handleSubmit } = useForm({
     defaultValues: {
       firstName: "",
@@ -18,12 +20,16 @@ const Form = () => {
     },
   });
 
-  const onSubmit = (formContent: any) => {
-    const newUser = { ...formContent, country: formContent.country.code };
-    createUser({ newUser }).then(() => setHasUserBeenCreated(true));
-  };
+  const mutation = useMutation<Response, { message: string }, NewUser>(
+    (newUser) => {
+      return axios.post("/api/users", newUser);
+    }
+  );
 
-  if (hasUserBeenCreated) {
+  const onValid = (formContent: any) =>
+    mutation.mutate({ ...formContent, country: formContent.country.code });
+
+  if (mutation.isSuccess) {
     return (
       <div className="flex justify-center items-center w-120">
         <p className="text-white text-center">
@@ -40,7 +46,7 @@ const Form = () => {
   }
 
   return (
-    <form className="flex flex-col w-72" onSubmit={handleSubmit(onSubmit)}>
+    <form className="flex flex-col w-72" onSubmit={handleSubmit(onValid)}>
       <div className="flex flex-col justify-center items-center">
         <FormInput control={control} name="firstName" label="Prénom" />
         <FormInput control={control} name="lastName" label="Nom" />
@@ -59,6 +65,4 @@ const Form = () => {
       </CustomButton>
     </form>
   );
-};
-
-export default Form;
+}

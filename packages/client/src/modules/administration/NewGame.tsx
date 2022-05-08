@@ -32,16 +32,14 @@ function NewGame(): JSX.Element {
     }
   );
 
-  const onSubmit = (newGame: INewGame) => {
-    return mutation.mutate(newGame);
-  };
+  const onValid = (newGame: INewGame) => mutation.mutate(newGame);
 
   return (
     <Layout>
       <>
         <Typography variant="h3">Nouvel atelier</Typography>
         <Box sx={{ mt: 4 }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onValid)}>
             <Grid container direction="column">
               <Controller
                 control={control}

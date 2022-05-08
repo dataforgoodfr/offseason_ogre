@@ -2,6 +2,7 @@ import axios from "axios";
 import { User } from "../types";
 
 export { createUser, sendMagicLink };
+export type { NewUser };
 
 interface NewUser {
   email: string;
