@@ -3,8 +3,10 @@ import { Layout } from "../administration/Layout";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { GameDetail } from './GameDetail'
+import { useNavigate } from "react-router-dom";
 
-export { Games };
+export { Games, GameDetail };
 
 function Games(): JSX.Element {
   return (
@@ -44,6 +46,7 @@ const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
 ];
 
 function GamesDataGrid() {
+  const navigate = useNavigate();
   const query = useQuery("games", () => {
     return axios.get<undefined, { data: { documents: any[] } }>("/api/games");
   });
@@ -67,6 +70,7 @@ function GamesDataGrid() {
         }}
         pageSize={20}
         rowsPerPageOptions={[20]}
+        onRowClick={(rowData) => navigate(`/game-detail/${rowData.id}`)}
       />
     </div>
   );

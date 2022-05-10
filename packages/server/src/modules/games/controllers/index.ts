@@ -5,6 +5,7 @@ import { services } from "../services";
 const crudController = {
   createController,
   getManyControllers,
+  getGame,
 };
 const controllers = {
   ...crudController,
@@ -28,4 +29,13 @@ async function createController(request: Request, response: Response) {
 async function getManyControllers(request: Request, response: Response) {
   const documents = await services.getMany();
   response.status(200).json({ documents });
+}
+
+async function getGame(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+  const { id } = paramsSchema.parse(request.params);
+  const document = await services.getDocument(id);
+  response.status(200).json({ document });
 }
