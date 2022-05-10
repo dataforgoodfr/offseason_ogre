@@ -29,11 +29,13 @@ export const Accordion = styled(MuiAccordion)(() => ({
 export { GameDetail };
 
 function GameDetail() {
-  const [expanded, setExpanded] = useState<string | false>(false);
+  const [expanded, setExpanded] = useState<string[]>(["info"]);
 
   const handleChange =
     (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
+      isExpanded ?
+        setExpanded((expanded: string[]) => [...expanded, panel]) :
+        setExpanded(expanded.filter(value => value !== panel))
     };
 
 
@@ -43,9 +45,7 @@ function GameDetail() {
     return axios.get<undefined, { data: { document: any } }>(`/api/games/${params.id}`);
   });
 
-  const atelier = query?.data?.data?.document ?? [];
-  console.log(atelier)
-
+  const atelier = query?.data?.data?.document || [];
 
   return (
     <Layout>
@@ -55,7 +55,7 @@ function GameDetail() {
         </Button>
         <Typography variant="h3"> Atelier {atelier.id} </Typography>
         <Box sx={{ mt: 2, pl: 10, pr: 10 }}>
-          <Accordion expanded={expanded === 'info'} onChange={handleChange('info')}>
+          <Accordion expanded={expanded.indexOf('info') > -1} onChange={handleChange('info')}>
             <AccordionSummary
               expandIcon={<ArrowForwardIosIcon />}
               aria-controls="infobh-content"
@@ -67,12 +67,11 @@ function GameDetail() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
-                Aliquam eget maximus est, id dignissim quam.
+                Informations générales.
               </Typography>
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === 'players'} onChange={handleChange('players')}>
+          <Accordion expanded={expanded.indexOf('players') > -1} onChange={handleChange('players')}>
             <AccordionSummary
               expandIcon={<ArrowForwardIosIcon />}
               aria-controls="playersbh-content"
@@ -84,13 +83,11 @@ function GameDetail() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus,
-                varius pulvinar diam eros in elit. Pellentesque convallis laoreet
-                laoreet.
+                Joueurs.
               </Typography>
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === 'prepare'} onChange={handleChange('prepare')}>
+          <Accordion expanded={expanded.indexOf('prepare') > -1} onChange={handleChange('prepare')}>
             <AccordionSummary
               expandIcon={<ArrowForwardIosIcon />}
               aria-controls="preparebh-content"
@@ -102,12 +99,11 @@ function GameDetail() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-                amet egestas eros, vitae egestas augue. Duis vel est augue.
+                Préparation de l'atelier.
               </Typography>
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === 'animation'} onChange={handleChange('animation')}>
+          <Accordion expanded={expanded.indexOf('animation') > -1} onChange={handleChange('animation')}>
             <AccordionSummary
               expandIcon={<ArrowForwardIosIcon />}
               aria-controls="animationbh-content"
@@ -119,8 +115,7 @@ function GameDetail() {
             </AccordionSummary>
             <AccordionDetails>
               <Typography>
-                Nunc vitae orci ultricies, auctor nunc in, volutpat nisl. Integer sit
-                amet egestas eros, vitae egestas augue. Duis vel est augue.
+                Animation de l'atelier.
               </Typography>
             </AccordionDetails>
           </Accordion>

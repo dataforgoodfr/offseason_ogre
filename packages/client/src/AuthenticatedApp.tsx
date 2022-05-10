@@ -11,7 +11,7 @@ function AuthenticatedApp() {
       <Route path="administration">
         <Route path="new-game" element={<NewGame />} />
         <Route path="games" element={<Games />} />
-        <Route path="game-detail/:id" element={<GameDetail />} />
+        <Route path="games/:id" element={<GameDetail />} />
       </Route>
       <Route
         path="*"
