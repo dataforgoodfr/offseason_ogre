@@ -8,3 +8,4 @@ const router = express.Router();
 
 router.get("/", asyncErrorHandler(controllers.getManyControllers));
 router.post("/", asyncErrorHandler(controllers.createController));
+router.get("/:id", asyncErrorHandler(controllers.getGame));
