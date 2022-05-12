@@ -15,6 +15,7 @@ import { useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { theme } from "../../utils/theme";
+import { GameInfo } from "./GameInfo";
 
 export const AccordionSummary = styled(MuiAccordionSummary)(() => ({
   backgroundColor: theme.palette.primary.main,
@@ -47,13 +48,13 @@ function GameDetail() {
 
   const params = useParams();
 
-  const query = useQuery("game", () => {
+  const { data: result, isLoading } = useQuery("game", () => {
     return axios.get<undefined, { data: { document: any } }>(
       `/api/games/${params.id}`
     );
   });
 
-  const atelier = query?.data?.data?.document || [];
+  const atelier = result?.data?.document || [];
 
   return (
     <Layout>
@@ -83,7 +84,7 @@ function GameDetail() {
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>Informations générales.</Typography>
+              {!isLoading && <GameInfo game={atelier} />}
             </AccordionDetails>
           </Accordion>
           <Accordion
