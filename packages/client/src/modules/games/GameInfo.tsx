@@ -1,39 +1,33 @@
-import {
-  Box,
-  TextField,
-  Grid,
-  Button
-} from "@mui/material";
+import { Box, TextField, Grid, Button } from "@mui/material";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import SaveIcon from '@mui/icons-material/Save';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import SaveIcon from "@mui/icons-material/Save";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 export { GameInfo };
 
 interface IGame {
-  id: number
-  name: string
-  date: Date
-  teacherId: string
-  description?: string
+  id: number;
+  name: string;
+  date: Date;
+  teacherId: string;
+  description?: string;
 }
 
 interface IGameFormProps {
-  name: string
-  description?: string
-  date: Date
+  name: string;
+  description?: string;
+  date: Date;
 }
 
 interface IInfoProps {
-  game: IGame
+  game: IGame;
 }
 
 function GameInfo(props: IInfoProps) {
-
   const queryClient = useQueryClient();
 
   const query = useQuery("teacher", () => {
@@ -42,24 +36,26 @@ function GameInfo(props: IInfoProps) {
     );
   });
   const document = query?.data?.data?.data || [];
-  const teacher = (document.firstName && document.lastName) ? `${document.firstName} ${document.lastName}` : ""
-
+  const teacher =
+    document.firstName && document.lastName
+      ? `${document.firstName} ${document.lastName}`
+      : "";
 
   const { handleSubmit, control } = useForm({
-    defaultValues:
-    {
+    defaultValues: {
       name: props.game?.name || "",
       date: props.game?.date || new Date(),
       description: props.game?.description || "",
-    }
+    },
   });
 
   const mutation = useMutation<Response, { message: string }, IGameFormProps>(
     (game: IGameFormProps) => {
       const formattedGame = {
-        ...game, date: new Date(game.date)
-      }
-      const path = `/api/games/${props.game?.id}`
+        ...game,
+        date: new Date(game.date),
+      };
+      const path = `/api/games/${props.game?.id}`;
       return axios.put(path, formattedGame);
     },
     {
@@ -69,12 +65,12 @@ function GameInfo(props: IInfoProps) {
 
   const onValid = (game: IGameFormProps) => {
     mutation.mutate(game);
-  }
+  };
 
   return (
     <Box sx={{ mt: 2 }}>
       <form onSubmit={handleSubmit(onValid)}>
-        <Grid container direction="column" spacing={2} sx={{ pl: 3, pt: 3 }} >
+        <Grid container direction="column" spacing={2} sx={{ pl: 3, pt: 3 }}>
           <Grid container direction="row">
             <Grid item xs={6}>
               <Controller
@@ -113,8 +109,13 @@ function GameInfo(props: IInfoProps) {
                       label="Date de l'atelier"
                       value={fieldProps.value}
                       onChange={(e) => fieldProps.onChange(e)}
-                      renderInput={(params) =>
-                        <TextField {...params} sx={{ width: "90%", mb: 3 }} fullWidth />}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          sx={{ width: "90%", mb: 3 }}
+                          fullWidth
+                        />
+                      )}
                     />
                   )}
                 />
@@ -134,8 +135,8 @@ function GameInfo(props: IInfoProps) {
             />
           </Grid>
         </Grid>
-        <Grid sx={{ float: 'right', pb: 4, pr: 4 }}>
-          <Button type="submit" variant="contained" color="primary" >
+        <Grid sx={{ float: "right", pb: 4, pr: 4 }}>
+          <Button type="submit" variant="contained" color="primary">
             <SaveIcon /> Enregistrer
           </Button>
         </Grid>

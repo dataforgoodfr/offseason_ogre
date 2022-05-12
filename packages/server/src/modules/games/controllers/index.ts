@@ -1,11 +1,13 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { dateSchema } from "./types";
 
 const crudController = {
   createController,
   getManyControllers,
   getGame,
+  updateGame,
 };
 const controllers = {
   ...crudController,
@@ -22,6 +24,7 @@ async function createController(request: Request, response: Response) {
     ...documentToCreate,
     date: new Date(),
     teacherId: response.locals.user.id,
+    description: "",
   });
   response.status(201).json({ data: newDocument });
 }
@@ -37,5 +40,22 @@ async function getGame(request: Request, response: Response) {
   });
   const { id } = paramsSchema.parse(request.params);
   const document = await services.getDocument(id);
+  response.status(200).json({ document });
+}
+
+async function updateGame(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+  const bodySchema = z.object({
+    name: z.string(),
+    description: z.string(),
+    date: dateSchema,
+  });
+
+  const { id } = paramsSchema.parse(request.params);
+  const fieldToUpdate = bodySchema.parse(request.body);
+
+  const document = await services.update(id, fieldToUpdate);
   response.status(200).json({ document });
 }
