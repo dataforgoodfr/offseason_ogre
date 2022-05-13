@@ -5,7 +5,7 @@ import { signInController } from "./signInController";
 
 const crudController = {
   getDocumentController,
-  createController,
+  signUpController,
 };
 const controllers = {
   ...crudController,
@@ -16,7 +16,7 @@ const controllers = {
 
 export { controllers };
 
-async function createController(request: Request, response: Response) {
+async function signUpController(request: Request, response: Response) {
   const bodySchema = z.object({
     country: z.string(),
     email: z.string(),
@@ -24,7 +24,7 @@ async function createController(request: Request, response: Response) {
     firstName: z.string(),
   });
   const documentToCreate = bodySchema.parse(request.body);
-  const newDocument = await services.create({
+  const newDocument = await services.signUp({
     ...documentToCreate,
     isTeacher: false,
   });

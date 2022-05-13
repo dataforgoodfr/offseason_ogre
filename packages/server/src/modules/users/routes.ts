@@ -12,7 +12,7 @@ router.get(
 );
 router.get("/sign-in", asyncErrorHandler(controllers.signInController));
 router.get("/:id", asyncErrorHandler(controllers.getDocumentController));
-router.post("/", asyncErrorHandler(controllers.createController));
+router.post("/sign-up", asyncErrorHandler(controllers.signUpController));
 router.post(
   "/magic-link",
   asyncErrorHandler(controllers.sendMagicLinkController)
