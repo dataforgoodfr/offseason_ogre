@@ -15,12 +15,17 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
   SvgIconTypeMap,
 } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { Fragment } from "react";
 import { theme } from "../../utils/theme";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { AccountCircle } from "@mui/icons-material";
+import axios from "axios";
+import { useQueryClient } from "react-query";
 
 const drawerWidth: number = 240;
 
@@ -61,6 +66,7 @@ function Layout({ children }: { children: JSX.Element }) {
           >
             Ogre
           </Typography>
+          <LoggedUser />
         </Toolbar>
       </LayoutAppBar>
       <LayoutDrawer open={open}>
@@ -220,5 +226,60 @@ function renderListItem({
         />
       </ListItemButton>
     </Link>
+  );
+}
+
+function LoggedUser() {
+  const queryClient = useQueryClient();
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <IconButton
+        size="large"
+        aria-label="account of current user"
+        aria-controls="menu-appbar"
+        aria-haspopup="true"
+        onClick={handleMenu}
+        color="inherit"
+      >
+        <AccountCircle />
+      </IconButton>
+      <Menu
+        id="menu-appbar"
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem
+          onClick={() => {
+            axios.post("/api/users/logout").then(() => {
+              queryClient.invalidateQueries("logged-user");
+              handleClose();
+            });
+          }}
+        >
+          Logout
+        </MenuItem>
+      </Menu>
+    </div>
   );
 }

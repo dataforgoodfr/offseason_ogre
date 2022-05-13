@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { logoutController } from "./logoutController";
 import { signInController } from "./signInController";
 
 const crudController = {
@@ -10,6 +11,7 @@ const crudController = {
 const controllers = {
   ...crudController,
   getLoggedUserController,
+  logoutController,
   sendMagicLinkController,
   signInController,
 };

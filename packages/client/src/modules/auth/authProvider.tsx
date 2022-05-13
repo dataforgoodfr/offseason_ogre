@@ -1,6 +1,7 @@
 import { CircularProgress } from "@mui/material";
 import axios from "axios";
 import * as React from "react";
+import { useQuery } from "react-query";
 import { theme } from "../../utils/theme";
 import { User } from "../users/types";
 
@@ -10,17 +11,13 @@ const AuthContext = React.createContext<{ user: null | User }>({ user: null });
 const useAuth = () => React.useContext<{ user: null | User }>(AuthContext);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [user, setUser] = React.useState<null | User>(null);
+  const query = useQuery("logged-user", () => {
+    return axios.get<any, { data: { user: null | User } }>(
+      "/api/users/logged-user"
+    );
+  });
 
-  React.useEffect(() => {
-    axios.get("/api/users/logged-user").then((res) => {
-      setUser(res.data.user);
-      setIsLoading(false);
-    });
-  }, []);
-
-  if (isLoading) {
+  if (query.isLoading) {
     return (
       <div
         className="min-h-screen flex"
@@ -31,6 +28,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   }
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user: query.data?.data?.user || null }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
