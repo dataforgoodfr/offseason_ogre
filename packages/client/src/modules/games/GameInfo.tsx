@@ -103,7 +103,7 @@ function GameInfo(props: IInfoProps) {
                   name="date"
                   render={({ field: { ref, ...fieldProps } }) => (
                     <DateTimePicker
-                      inputFormat="dd/MM/yyyy HH:mm:00"
+                      inputFormat="dd/MM/yyyy HH:mm"
                       {...fieldProps}
                       inputRef={ref}
                       label="Date de l'atelier"
