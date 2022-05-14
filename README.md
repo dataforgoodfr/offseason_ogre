@@ -32,7 +32,8 @@ OGRE uses a number of open source projects to work properly:
 4. Run "yarn db:migrate" from root, it creates the tables in the database
 5. Run "yarn db:seed" from root, it feeds the database with some dummy database
 6. Run "yarn workspace ogre-client dev" to launch client
-7. In another shell run "yarn workspace ogre-server dev" to launch server
+7. In another shell run "yarn-workspace ogre-server db:generate to link Prisma configuration with env variables.
+8. Run "yarn workspace ogre-server dev" to launch server
 
 ### Running frontend and backend apps
 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import SaveIcon from "@mui/icons-material/Save";
+import { SuccessAlert, ErrorAlert } from "../alert";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -69,6 +70,8 @@ function GameInfo(props: IInfoProps) {
 
   return (
     <Box sx={{ mt: 2 }}>
+      {mutation.isSuccess && <SuccessAlert />}
+      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       <form onSubmit={handleSubmit(onValid)}>
         <Grid container direction="column" spacing={2} sx={{ pl: 3, pt: 3 }}>
           <Grid container direction="row">
