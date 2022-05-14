@@ -5,4 +5,5 @@ interface Game {
   date: Date;
   name: string;
   teacherId: number;
+  description: string | null;
 }
