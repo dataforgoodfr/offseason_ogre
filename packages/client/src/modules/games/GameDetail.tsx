@@ -4,6 +4,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  CircularProgress,
   Typography,
 } from "@mui/material";
 import { Layout } from "../administration/Layout";
@@ -13,6 +14,7 @@ import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 export { GameDetail };
 
@@ -62,7 +64,7 @@ function GeneralInfo({ game }: { game: any }) {
 function Players() {
   return (
     <AccordionLayout title="Joueurs">
-      {<Typography>Joueurs.</Typography>}
+      <PlayersDataGrid />
     </AccordionLayout>
   );
 }
@@ -117,5 +119,41 @@ function AccordionLayout({
       </AccordionSummary>
       <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
+  );
+}
+
+const columns: GridColDef<{ name: string }>[] = [
+  {
+    field: "email",
+    headerName: "Email",
+    width: 150,
+  },
+];
+
+function PlayersDataGrid() {
+  const params = useParams();
+
+  const query = useQuery("games", () => {
+    return axios.get<undefined, { data: { players: any[] } }>(
+      `/api/games/${params.id}/players`
+    );
+  });
+
+  if (query.isLoading) {
+    return <CircularProgress />;
+  }
+
+  const rows = query?.data?.data?.players ?? [];
+
+  return (
+    <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        disableSelectionOnClick
+        pageSize={20}
+        rowsPerPageOptions={[20]}
+      />
+    </Box>
   );
 }

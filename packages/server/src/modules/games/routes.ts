@@ -14,4 +14,5 @@ router.get(
 router.post("/", asyncErrorHandler(controllers.createController));
 router.post("/register", asyncErrorHandler(controllers.registerController));
 router.get("/:id", asyncErrorHandler(controllers.getGame));
+router.get("/:id/players", asyncErrorHandler(controllers.getPlayersController));
 router.put("/:id", asyncErrorHandler(controllers.updateGame));
