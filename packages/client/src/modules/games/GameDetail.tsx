@@ -122,11 +122,24 @@ function AccordionLayout({
   );
 }
 
-const columns: GridColDef<{ name: string }>[] = [
+const columns: GridColDef<{
+  name: string;
+  firstName: string;
+  lastName: string;
+}>[] = [
+  {
+    field: "name",
+    headerName: "Nom",
+    valueGetter: (params) => {
+      const row = params.row;
+      return row.firstName + " " + row.lastName;
+    },
+    width: 150,
+  },
   {
     field: "email",
     headerName: "Email",
-    width: 150,
+    width: 250,
   },
 ];
 
@@ -146,13 +159,13 @@ function PlayersDataGrid() {
   const rows = query?.data?.data?.players ?? [];
 
   return (
-    <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
+    <Box style={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
         disableSelectionOnClick
-        pageSize={20}
-        rowsPerPageOptions={[20]}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
       />
     </Box>
   );
