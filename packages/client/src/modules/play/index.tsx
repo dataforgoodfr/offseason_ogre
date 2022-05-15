@@ -36,7 +36,7 @@ function MyGames() {
 }
 
 function MyGamesList() {
-  const query = useQuery("games", () => {
+  const query = useQuery("games/played-games", () => {
     return axios.get<undefined, { data: { games: any[] } }>(
       "/api/games/played-games"
     );
@@ -50,7 +50,7 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {games.map((game) => (
-        <Card>
+        <Card sx={{ mt: 2 }}>
           <CardContent>
             <Typography variant="h6">{game.name}</Typography>
             <Typography>
@@ -77,7 +77,7 @@ function JoinGame() {
       return axios.post("/api/games/register", { gameId });
     },
     {
-      onSuccess: () => queryClient.invalidateQueries("games"),
+      onSuccess: () => queryClient.invalidateQueries("games/played-games"),
     }
   );
 
