@@ -2,6 +2,8 @@ import { LoadingButton } from "@mui/lab";
 import {
   AppBar,
   Box,
+  Card,
+  CardContent,
   CircularProgress,
   Container,
   Grid,
@@ -44,8 +46,21 @@ function MyGamesList() {
     return <CircularProgress />;
   }
 
-  const rows = query?.data?.data?.games ?? [];
-  return <Box sx={{ mt: 4 }}>{JSON.stringify(rows)}</Box>;
+  const games = query?.data?.data?.games ?? [];
+  return (
+    <Box sx={{ mt: 4 }}>
+      {games.map((game) => (
+        <Card>
+          <CardContent>
+            <Typography variant="h6">{game.name}</Typography>
+            <Typography>
+              {"Date: " + new Date(game.date).toLocaleString()}
+            </Typography>
+          </CardContent>
+        </Card>
+      ))}
+    </Box>
+  );
 }
 
 function JoinGame() {
