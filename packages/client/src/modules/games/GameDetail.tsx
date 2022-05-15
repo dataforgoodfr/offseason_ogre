@@ -48,13 +48,13 @@ function GameDetail() {
 
   const params = useParams();
 
-  const { data: result, isLoading } = useQuery("game", () => {
+  const { data: result } = useQuery("game", () => {
     return axios.get<undefined, { data: { document: any } }>(
       `/api/games/${params.id}`
     );
   });
 
-  const atelier = result?.data?.document || [];
+  const game = result?.data?.document || null;
 
   return (
     <Layout>
@@ -68,25 +68,9 @@ function GameDetail() {
         >
           <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
         </Button>
-        <Typography variant="h3"> Atelier {atelier.id} </Typography>
+        <Typography variant="h3"> Atelier {game?.id} </Typography>
         <Box sx={{ mt: 2, pl: 10, pr: 10 }}>
-          <Accordion
-            expanded={expanded.indexOf("info") > -1}
-            onChange={handleChange("info")}
-          >
-            <AccordionSummary
-              expandIcon={<ArrowForwardIosIcon />}
-              aria-controls="infobh-content"
-              id="infobh-header"
-            >
-              <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                Informations générales
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              {!isLoading && <GameInfo game={atelier} />}
-            </AccordionDetails>
-          </Accordion>
+          <GeneralInfo game={game} />
           <Accordion
             expanded={expanded.indexOf("players") > -1}
             onChange={handleChange("players")}
@@ -141,5 +125,22 @@ function GameDetail() {
         </Box>
       </>
     </Layout>
+  );
+}
+
+function GeneralInfo({ game }: { game: any }) {
+  return (
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ArrowForwardIosIcon />}
+        aria-controls="infobh-content"
+        id="infobh-header"
+      >
+        <Typography sx={{ width: "33%", flexShrink: 0 }}>
+          Informations générales
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>{game && <GameInfo game={game} />}</AccordionDetails>
+    </Accordion>
   );
 }
