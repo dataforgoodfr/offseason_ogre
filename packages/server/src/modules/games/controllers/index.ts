@@ -1,12 +1,16 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { getPlayedGames } from "../services/getPlayedGames";
+import { registerController } from "./registerController";
 import { dateSchema } from "./types";
 
 const crudController = {
   createController,
   getManyControllers,
   getGame,
+  getPlayedGamesController,
+  registerController,
   updateGame,
 };
 const controllers = {
@@ -32,6 +36,12 @@ async function createController(request: Request, response: Response) {
 async function getManyControllers(request: Request, response: Response) {
   const documents = await services.getMany();
   response.status(200).json({ documents });
+}
+
+async function getPlayedGamesController(request: Request, response: Response) {
+  const user = response.locals.user || null;
+  const games = await getPlayedGames({ userId: user.id });
+  response.status(200).json({ games });
 }
 
 async function getGame(request: Request, response: Response) {

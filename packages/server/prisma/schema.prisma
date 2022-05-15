@@ -10,20 +10,22 @@ datasource db {
 model game {
   id          Int      @id @default(autoincrement())
   date        DateTime
+  description String   @default("")
   name        String
-  teacher     user     @relation(fields: [teacherId], references: [id])
+  players     user[]   @relation("PlayedGames")
+  teacher     user     @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
-  description String?
 }
 
 model user {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  isTeacher Boolean @default(false)
-  country   String
-  firstName String
-  lastName  String
-  games     game[]
+  id          Int     @id @default(autoincrement())
+  email       String  @unique
+  isTeacher   Boolean @default(false)
+  country     String
+  firstName   String
+  lastName    String
+  playedGames game[]  @relation("PlayedGames")
+  taughtGames game[]  @relation("TaughtGames")
 }
 
 model team {

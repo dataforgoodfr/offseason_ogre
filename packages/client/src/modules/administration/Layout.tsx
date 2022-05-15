@@ -60,7 +60,7 @@ function Layout({ children }: { children: JSX.Element }) {
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            Ogre
+            Administration
           </Typography>
           <LoggedUser />
         </Toolbar>

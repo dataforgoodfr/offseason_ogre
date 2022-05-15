@@ -59,7 +59,7 @@ function NewGame(): JSX.Element {
                 sx={{ width: "200px", mt: 2 }}
                 variant="contained"
               >
-                Créer l'atelier.
+                Créer l'atelier
               </LoadingButton>
             </Grid>
           </form>
