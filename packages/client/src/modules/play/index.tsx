@@ -5,6 +5,10 @@ export { MyGames };
 
 function MyGames() {
   const children = <>Hello MyGames</>;
+  return <PlayLayout>{children}</PlayLayout>;
+}
+
+function PlayLayout({ children }: { children: JSX.Element }) {
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar color="primary" position="absolute">
