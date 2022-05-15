@@ -7,7 +7,18 @@ import { useQueryClient } from "react-query";
 
 export { LoggedUser };
 
-function LoggedUser() {
+type muiColor =
+  | "inherit"
+  | "secondary"
+  | "default"
+  | "primary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning"
+  | undefined;
+
+function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
   const queryClient = useQueryClient();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -28,7 +39,7 @@ function LoggedUser() {
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenu}
-        color="primary"
+        color={color}
       >
         <AccountCircle />
       </IconButton>
