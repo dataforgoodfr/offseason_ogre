@@ -9,8 +9,7 @@ async function register({
   gameId: number;
   userId: number;
 }) {
-  await prisma.game.update({
-    where: { id: gameId },
-    data: { players: { connect: [{ id: userId }] } },
+  await prisma.usersOnGames.create({
+    data: { gameId, userId },
   });
 }

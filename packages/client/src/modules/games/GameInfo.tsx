@@ -1,4 +1,4 @@
-import { Box, TextField, Grid, Button } from "@mui/material";
+import { Box, TextField, Grid, Button, Typography } from "@mui/material";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -140,7 +140,7 @@ function GameInfo(props: IInfoProps) {
         </Grid>
         <Grid sx={{ float: "right", pb: 4, pr: 4 }}>
           <Button type="submit" variant="contained" color="primary">
-            <SaveIcon /> Enregistrer
+            <SaveIcon /> <Typography sx={{ ml: 1 }}>Enregistrer</Typography>
           </Button>
         </Grid>
       </form>

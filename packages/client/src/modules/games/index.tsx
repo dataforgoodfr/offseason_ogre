@@ -58,7 +58,7 @@ function GamesDataGrid() {
   const rows = query?.data?.data?.documents ?? [];
 
   return (
-    <div style={{ height: 600, width: "100%", cursor: "pointer" }}>
+    <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -77,6 +77,6 @@ function GamesDataGrid() {
           return navigate(path);
         }}
       />
-    </div>
+    </Box>
   );
 }

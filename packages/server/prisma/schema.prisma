@@ -7,33 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model game {
-  id          Int      @id @default(autoincrement())
+model Game {
+  id          Int            @id @default(autoincrement())
   date        DateTime
-  description String   @default("")
+  description String         @default("")
   name        String
-  players     user[]   @relation("PlayedGames")
-  teacher     user     @relation("TaughtGames", fields: [teacherId], references: [id])
+  teacher     User           @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
+  players     UsersOnGames[]
 }
 
-model user {
-  id          Int     @id @default(autoincrement())
-  email       String  @unique
-  isTeacher   Boolean @default(false)
+model UsersOnGames {
+  user   User @relation(fields: [userId], references: [id])
+  userId Int // relation scalar field (used in the `@relation` attribute above)
+  game   Game @relation(fields: [gameId], references: [id])
+  gameId Int // relation scalar field (used in the `@relation` attribute above)
+
+  @@id([userId, gameId])
+}
+
+model User {
+  id          Int            @id @default(autoincrement())
+  email       String         @unique
+  isTeacher   Boolean        @default(false)
   country     String
   firstName   String
   lastName    String
-  playedGames game[]  @relation("PlayedGames")
-  taughtGames game[]  @relation("TaughtGames")
+  taughtGames Game[]         @relation("TaughtGames")
+  playedGames UsersOnGames[]
 }
 
-model team {
+model Team {
   id   Int    @id @default(autoincrement())
   name String
 }
 
-model household {
+model Household {
   id         Int  @id @default(autoincrement())
   childCount Int?
 }
