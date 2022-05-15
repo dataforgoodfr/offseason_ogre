@@ -130,17 +130,29 @@ function GameDetail() {
 
 function GeneralInfo({ game }: { game: any }) {
   return (
+    <AccordionLayout title="General Info">
+      {game && <GameInfo game={game} />}
+    </AccordionLayout>
+  );
+}
+
+function AccordionLayout({
+  children,
+  title,
+}: {
+  children: JSX.Element;
+  title: string;
+}) {
+  return (
     <Accordion>
       <AccordionSummary
         expandIcon={<ArrowForwardIosIcon />}
         aria-controls="infobh-content"
         id="infobh-header"
       >
-        <Typography sx={{ width: "33%", flexShrink: 0 }}>
-          Informations générales
-        </Typography>
+        <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
       </AccordionSummary>
-      <AccordionDetails>{game && <GameInfo game={game} />}</AccordionDetails>
+      <AccordionDetails>{children}</AccordionDetails>
     </Accordion>
   );
 }
