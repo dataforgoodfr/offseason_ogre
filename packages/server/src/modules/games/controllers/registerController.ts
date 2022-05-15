@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import { prisma } from "../../../database";
+import { register } from "../services/register";
 
 export { registerController };
 
@@ -13,9 +13,6 @@ async function registerController(request: Request, response: Response) {
     throw new Error("User must be logged in.");
   }
   const { gameId } = bodySchema.parse(request.body);
-  await prisma.game.update({
-    where: { id: gameId },
-    data: { players: { connect: [{ id: user.id }] } },
-  });
+  await register({ gameId, userId: user.id });
   response.status(200).json({});
 }

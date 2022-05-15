@@ -1,5 +1,6 @@
 import { prisma } from "../../../database";
 import { Game } from "../types";
+import { register } from "./register";
 
 const model = prisma.game;
 type Model = Game;
@@ -10,7 +11,7 @@ const crudServices = {
   create,
   update,
 };
-const services = { ...crudServices };
+const services = { ...crudServices, register };
 
 export { services };
 
