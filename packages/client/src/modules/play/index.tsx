@@ -2,6 +2,7 @@ import { LoadingButton } from "@mui/lab";
 import {
   AppBar,
   Box,
+  CircularProgress,
   Container,
   Grid,
   TextField,
@@ -10,7 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../alert";
 import { LoggedUser } from "../auth";
 
@@ -26,15 +27,31 @@ function MyGames() {
       <>
         <Typography variant="h3">Mes ateliers</Typography>
         <JoinGame />
+        <MyGamesList />
       </>
     </PlayLayout>
   );
 }
 
+function MyGamesList() {
+  const query = useQuery("games", () => {
+    return axios.get<undefined, { data: { games: any[] } }>(
+      "/api/games/played-games"
+    );
+  });
+
+  if (query.isLoading) {
+    return <CircularProgress />;
+  }
+
+  const rows = query?.data?.data?.games ?? [];
+  return <Box sx={{ mt: 4 }}>{JSON.stringify(rows)}</Box>;
+}
+
 function JoinGame() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      gameId: NaN,
+      gameId: 0,
     },
   });
 

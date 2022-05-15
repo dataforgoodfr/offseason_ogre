@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
+import { prisma } from "../../../database";
 import { services } from "../services";
 import { registerController } from "./registerController";
 import { dateSchema } from "./types";
@@ -8,6 +9,7 @@ const crudController = {
   createController,
   getManyControllers,
   getGame,
+  getPlayedGamesController,
   registerController,
   updateGame,
 };
@@ -34,6 +36,14 @@ async function createController(request: Request, response: Response) {
 async function getManyControllers(request: Request, response: Response) {
   const documents = await services.getMany();
   response.status(200).json({ documents });
+}
+
+async function getPlayedGamesController(request: Request, response: Response) {
+  const user = response.locals.user || null;
+  const games = await prisma.game.findMany({
+    where: { players: { some: { id: user.id } } },
+  });
+  response.status(200).json({ games });
 }
 
 async function getGame(request: Request, response: Response) {
