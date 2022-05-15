@@ -17,7 +17,7 @@ import { LoggedUser } from "../auth";
 export { MyGames };
 
 interface Registration {
-  gameId: string;
+  gameId: number;
 }
 
 function MyGames() {
@@ -34,7 +34,7 @@ function MyGames() {
 function JoinGame() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      gameId: "",
+      gameId: NaN,
     },
   });
 
@@ -58,7 +58,13 @@ function JoinGame() {
             control={control}
             name="gameId"
             render={({ field }) => (
-              <TextField {...field} label="Game Id" type="number" required />
+              <TextField
+                {...field}
+                onChange={(e) => field.onChange(parseInt(e.target.value))}
+                label="Game Id"
+                type="number"
+                required
+              />
             )}
           />
           <LoadingButton

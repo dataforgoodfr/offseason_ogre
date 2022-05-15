@@ -1,12 +1,14 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { registerController } from "./registerController";
 import { dateSchema } from "./types";
 
 const crudController = {
   createController,
   getManyControllers,
   getGame,
+  registerController,
   updateGame,
 };
 const controllers = {
