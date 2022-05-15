@@ -11,7 +11,6 @@ import { Layout } from "../administration/Layout";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { theme } from "../../utils/theme";
@@ -37,15 +36,6 @@ export const Accordion = styled(MuiAccordion)(() => ({
 export { GameDetail };
 
 function GameDetail() {
-  const [expanded, setExpanded] = useState<string[]>(["info"]);
-
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      isExpanded
-        ? setExpanded((expanded: string[]) => [...expanded, panel])
-        : setExpanded(expanded.filter((value) => value !== panel));
-    };
-
   const params = useParams();
 
   const { data: result } = useQuery("game", () => {
@@ -71,57 +61,9 @@ function GameDetail() {
         <Typography variant="h3"> Atelier {game?.id} </Typography>
         <Box sx={{ mt: 2, pl: 10, pr: 10 }}>
           <GeneralInfo game={game} />
-          <Accordion
-            expanded={expanded.indexOf("players") > -1}
-            onChange={handleChange("players")}
-          >
-            <AccordionSummary
-              expandIcon={<ArrowForwardIosIcon />}
-              aria-controls="playersbh-content"
-              id="playersbh-header"
-            >
-              <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                Joueurs
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>Joueurs.</Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded.indexOf("prepare") > -1}
-            onChange={handleChange("prepare")}
-          >
-            <AccordionSummary
-              expandIcon={<ArrowForwardIosIcon />}
-              aria-controls="preparebh-content"
-              id="preparebh-header"
-            >
-              <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                Préparer l'atelier
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>Préparation de l'atelier.</Typography>
-            </AccordionDetails>
-          </Accordion>
-          <Accordion
-            expanded={expanded.indexOf("animation") > -1}
-            onChange={handleChange("animation")}
-          >
-            <AccordionSummary
-              expandIcon={<ArrowForwardIosIcon />}
-              aria-controls="animationbh-content"
-              id="animationbh-header"
-            >
-              <Typography sx={{ width: "33%", flexShrink: 0 }}>
-                Animer l'atelier
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>Animation de l'atelier.</Typography>
-            </AccordionDetails>
-          </Accordion>
+          <Players />
+          <Preparation />
+          <Animation />
         </Box>
       </>
     </Layout>
@@ -132,6 +74,30 @@ function GeneralInfo({ game }: { game: any }) {
   return (
     <AccordionLayout title="General Info">
       {game && <GameInfo game={game} />}
+    </AccordionLayout>
+  );
+}
+
+function Players() {
+  return (
+    <AccordionLayout title="Joueurs">
+      {<Typography>Joueurs.</Typography>}
+    </AccordionLayout>
+  );
+}
+
+function Preparation() {
+  return (
+    <AccordionLayout title="Préparation">
+      {<Typography>Préparation.</Typography>}
+    </AccordionLayout>
+  );
+}
+
+function Animation() {
+  return (
+    <AccordionLayout title="Animation">
+      {<Typography>Animation.</Typography>}
     </AccordionLayout>
   );
 }
