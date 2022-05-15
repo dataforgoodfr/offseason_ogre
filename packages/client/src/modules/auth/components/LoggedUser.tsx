@@ -1,5 +1,6 @@
 import { AccountCircle } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 import axios from "axios";
 import React from "react";
 import { useQueryClient } from "react-query";
@@ -27,7 +28,7 @@ function LoggedUser() {
         aria-controls="menu-appbar"
         aria-haspopup="true"
         onClick={handleMenu}
-        color="inherit"
+        color="primary"
       >
         <AccountCircle />
       </IconButton>
@@ -45,6 +46,7 @@ function LoggedUser() {
         }}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        sx={{ mt: 4 }}
       >
         <MenuItem
           onClick={() => {
@@ -54,7 +56,8 @@ function LoggedUser() {
             });
           }}
         >
-          Déconnexion
+          <LogoutIcon />
+          <Typography sx={{ ml: 2 }}>Déconnexion</Typography>
         </MenuItem>
       </Menu>
     </div>
