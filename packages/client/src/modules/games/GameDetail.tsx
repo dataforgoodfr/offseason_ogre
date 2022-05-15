@@ -1,37 +1,18 @@
 import {
-  Accordion as MuiAccordion,
+  Accordion,
   AccordionDetails,
-  AccordionSummary as MuiAccordionSummary,
+  AccordionSummary,
   Box,
   Button,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import { Layout } from "../administration/Layout";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import { theme } from "../../utils/theme";
 import { GameInfo } from "./GameInfo";
-
-export const AccordionSummary = styled(MuiAccordionSummary)(() => ({
-  backgroundColor: theme.palette.primary.main,
-  "& .MuiAccordionSummary-expandIconWrapper": {
-    color: "white",
-  },
-  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
-    transform: "rotate(90deg)",
-  },
-  "& .MuiAccordionSummary-content": {
-    color: theme.palette.secondary.main,
-  },
-}));
-
-export const Accordion = styled(MuiAccordion)(() => ({
-  marginBottom: "2%",
-}));
 
 export { GameDetail };
 
@@ -110,11 +91,27 @@ function AccordionLayout({
   title: string;
 }) {
   return (
-    <Accordion>
+    <Accordion
+      sx={{
+        marginBottom: "2%",
+      }}
+    >
       <AccordionSummary
         expandIcon={<ArrowForwardIosIcon />}
         aria-controls="infobh-content"
         id="infobh-header"
+        sx={{
+          backgroundColor: (theme) => theme.palette.primary.main,
+          "& .MuiAccordionSummary-expandIconWrapper": {
+            color: "white",
+          },
+          "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+            transform: "rotate(90deg)",
+          },
+          "& .MuiAccordionSummary-content": {
+            color: (theme) => theme.palette.secondary.main,
+          },
+        }}
       >
         <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
       </AccordionSummary>
