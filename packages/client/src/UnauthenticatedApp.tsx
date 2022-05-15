@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import OgreHeader from "./modules/common/components/OgreHeader";
 import MagicLink from "./modules/magic-link";
 import Signup from "./modules/signup";
@@ -18,6 +18,7 @@ function UnauthenticatedApp() {
           <Route path="/" element={<MagicLink />} />
           <Route path="/magic-link" element={<MagicLink />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>
     </div>

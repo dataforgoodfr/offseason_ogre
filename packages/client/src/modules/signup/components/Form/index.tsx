@@ -26,7 +26,7 @@ function Form() {
     AxiosError<{ message: string }>,
     NewUser
   >((newUser) => {
-    return axios.post("/api/users", newUser);
+    return axios.post("/api/users/sign-up", newUser);
   });
 
   const onValid = (formContent: any) =>

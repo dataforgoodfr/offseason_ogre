@@ -21,6 +21,7 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { Fragment } from "react";
 import { theme } from "../../utils/theme";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { LoggedUser } from "../auth";
 
 const drawerWidth: number = 240;
 
@@ -61,6 +62,7 @@ function Layout({ children }: { children: JSX.Element }) {
           >
             Ogre
           </Typography>
+          <LoggedUser />
         </Toolbar>
       </LayoutAppBar>
       <LayoutDrawer open={open}>

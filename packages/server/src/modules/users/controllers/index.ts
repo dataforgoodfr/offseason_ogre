@@ -1,22 +1,24 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { logoutController } from "./logoutController";
 import { signInController } from "./signInController";
 
 const crudController = {
   getDocumentController,
-  createController,
+  signUpController,
 };
 const controllers = {
   ...crudController,
   getLoggedUserController,
+  logoutController,
   sendMagicLinkController,
   signInController,
 };
 
 export { controllers };
 
-async function createController(request: Request, response: Response) {
+async function signUpController(request: Request, response: Response) {
   const bodySchema = z.object({
     country: z.string(),
     email: z.string(),
@@ -24,7 +26,7 @@ async function createController(request: Request, response: Response) {
     firstName: z.string(),
   });
   const documentToCreate = bodySchema.parse(request.body);
-  const newDocument = await services.create({
+  const newDocument = await services.signUp({
     ...documentToCreate,
     isTeacher: false,
   });
