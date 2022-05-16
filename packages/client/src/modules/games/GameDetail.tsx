@@ -21,7 +21,7 @@ export { GameDetail };
 function GameDetail() {
   const params = useParams();
 
-  const { data: result } = useQuery("game", () => {
+  const { data: result } = useQuery(`/api/games/${params.id}`, () => {
     return axios.get<undefined, { data: { document: any } }>(
       `/api/games/${params.id}`
     );
@@ -34,7 +34,7 @@ function GameDetail() {
       <>
         <Button
           component={Link}
-          to="/games"
+          to="/administration/games"
           variant="contained"
           color="secondary"
           sx={{ mb: 2 }}
@@ -146,7 +146,7 @@ const columns: GridColDef<{
 function PlayersDataGrid() {
   const params = useParams();
 
-  const query = useQuery("games", () => {
+  const query = useQuery(`/api/games/${params.id}/players`, () => {
     return axios.get<undefined, { data: { players: any[] } }>(
       `/api/games/${params.id}/players`
     );

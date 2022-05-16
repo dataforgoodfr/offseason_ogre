@@ -31,7 +31,7 @@ interface IInfoProps {
 function GameInfo(props: IInfoProps) {
   const queryClient = useQueryClient();
 
-  const query = useQuery("teacher", () => {
+  const query = useQuery(`/api/users/${props.game.teacherId}`, () => {
     return axios.get<undefined, { data: { data: any } }>(
       `/api/users/${props.game.teacherId}`
     );
