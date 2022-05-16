@@ -26,10 +26,7 @@ function AuthenticatedApp() {
         <Route path="" element={<Navigate to="my-games" />} />
         <Route path="*" element={<Navigate to="my-games" />} />
       </Route>
-      <Route
-        path="*"
-        element={<Navigate replace to="/administration/games" />}
-      />
+      <Route path="*" element={<Navigate replace to="/play" />} />
     </Routes>
   );
 }
