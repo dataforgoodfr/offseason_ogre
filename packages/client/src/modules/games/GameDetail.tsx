@@ -34,7 +34,7 @@ function GameDetail() {
       <>
         <Button
           component={Link}
-          to="/games"
+          to="/administration/games"
           variant="contained"
           color="secondary"
           sx={{ mb: 2 }}
