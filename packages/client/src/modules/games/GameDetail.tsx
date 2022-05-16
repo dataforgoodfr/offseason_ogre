@@ -126,6 +126,7 @@ const columns: GridColDef<{
   name: string;
   firstName: string;
   lastName: string;
+  playedGames: { team: { name: string } }[];
 }>[] = [
   {
     field: "name",
@@ -140,6 +141,15 @@ const columns: GridColDef<{
     field: "email",
     headerName: "Email",
     width: 250,
+  },
+  {
+    field: "Equipe",
+    headerName: "Equipe",
+    valueGetter: (params) => {
+      const row = params.row;
+      return row.playedGames[0].team.name;
+    },
+    width: 150,
   },
 ];
 
