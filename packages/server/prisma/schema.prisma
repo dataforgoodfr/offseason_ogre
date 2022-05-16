@@ -12,39 +12,46 @@ model Game {
   date        DateTime
   description String         @default("")
   name        String
+  players     UsersOnGames[]
   teacher     User           @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
-  players     UsersOnGames[]
+  team        Team[]
 }
 
 model UsersOnGames {
-  user   User @relation(fields: [userId], references: [id])
-  userId Int // relation scalar field (used in the `@relation` attribute above)
   game   Game @relation(fields: [gameId], references: [id])
   gameId Int // relation scalar field (used in the `@relation` attribute above)
+  team   Team @relation(fields: [teamId], references: [id])
+  teamId Int
+  user   User @relation(fields: [userId], references: [id])
+  userId Int // relation scalar field (used in the `@relation` attribute above)
 
   @@id([userId, gameId])
 }
 
 model User {
   id          Int            @id @default(autoincrement())
-  email       String         @unique
-  isTeacher   Boolean        @default(false)
   country     String
+  email       String         @unique
   firstName   String
   lastName    String
+  isTeacher   Boolean        @default(false)
   taughtGames Game[]         @relation("TaughtGames")
   playedGames UsersOnGames[]
 }
 
 model Team {
-  id   Int    @id @default(autoincrement())
-  name String
+  id      Int            @id @default(autoincrement())
+  game    Game           @relation(fields: [gameId], references: [id])
+  gameId  Int
+  name    String
+  players UsersOnGames[]
+
+  @@unique([gameId, name], map: "Team_gameId_name_unique_constraint")
 }
 
 model Household {
-  id         Int  @id @default(autoincrement())
-  childCount Int?
+  id Int @id @default(autoincrement())
 }
 
 model policy {

@@ -36,7 +36,7 @@ function MyGames() {
 }
 
 function MyGamesList() {
-  const query = useQuery("games/played-games", () => {
+  const query = useQuery("/api/games/played-games", () => {
     return axios.get<undefined, { data: { games: any[] } }>(
       "/api/games/played-games"
     );
@@ -77,7 +77,11 @@ function JoinGame() {
       return axios.post("/api/games/register", { gameId });
     },
     {
-      onSuccess: () => queryClient.invalidateQueries("games/played-games"),
+      onSuccess: (data, { gameId }) =>
+        queryClient.invalidateQueries([
+          "/api/games/played-games",
+          `/api/games/${gameId}/players`,
+        ]),
     }
   );
 

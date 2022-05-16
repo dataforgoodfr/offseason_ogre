@@ -60,7 +60,8 @@ function GameInfo(props: IInfoProps) {
       return axios.put(path, formattedGame);
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(["game", "teacher"]),
+      onSuccess: (data, game) =>
+        queryClient.invalidateQueries([`/api/games/${props.game.id}`]),
     }
   );
 
