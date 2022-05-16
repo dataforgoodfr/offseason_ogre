@@ -15,6 +15,7 @@ model Game {
   teacher     User           @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
   players     UsersOnGames[]
+  Team        Team[]
 }
 
 model UsersOnGames {
@@ -22,6 +23,8 @@ model UsersOnGames {
   userId Int // relation scalar field (used in the `@relation` attribute above)
   game   Game @relation(fields: [gameId], references: [id])
   gameId Int // relation scalar field (used in the `@relation` attribute above)
+  team   Team @relation(fields: [teamId], references: [id])
+  teamId Int
 
   @@id([userId, gameId])
 }
@@ -38,13 +41,15 @@ model User {
 }
 
 model Team {
-  id   Int    @id @default(autoincrement())
-  name String
+  id      Int            @id @default(autoincrement())
+  name    String
+  game    Game           @relation(fields: [gameId], references: [id])
+  gameId  Int
+  players UsersOnGames[]
 }
 
 model Household {
-  id         Int  @id @default(autoincrement())
-  childCount Int?
+  id Int @id @default(autoincrement())
 }
 
 model policy {
