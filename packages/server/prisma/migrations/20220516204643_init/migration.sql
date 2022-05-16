@@ -11,9 +11,9 @@ CREATE TABLE "Game" (
 
 -- CreateTable
 CREATE TABLE "UsersOnGames" (
-    "userId" INTEGER NOT NULL,
     "gameId" INTEGER NOT NULL,
     "teamId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
 
     CONSTRAINT "UsersOnGames_pkey" PRIMARY KEY ("userId","gameId")
 );
@@ -21,11 +21,11 @@ CREATE TABLE "UsersOnGames" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
-    "email" TEXT NOT NULL,
-    "isTeacher" BOOLEAN NOT NULL DEFAULT false,
     "country" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "isTeacher" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -33,8 +33,8 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Team" (
     "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
     "gameId" INTEGER NOT NULL,
+    "name" TEXT NOT NULL,
 
     CONSTRAINT "Team_pkey" PRIMARY KEY ("id")
 );
@@ -56,6 +56,9 @@ CREATE TABLE "policy" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Team_gameId_name_unique_constraint" ON "Team"("gameId", "name");
 
 -- AddForeignKey
 ALTER TABLE "Game" ADD CONSTRAINT "Game_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
