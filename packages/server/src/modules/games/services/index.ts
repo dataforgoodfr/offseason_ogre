@@ -1,4 +1,5 @@
 import { database } from "../../../database";
+import * as teamServices from "../../teams/services";
 import { Game } from "../types";
 import { register } from "./register";
 
@@ -24,7 +25,10 @@ async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {
 }
 
 async function create(document: Omit<Model, "id">): Promise<Model> {
-  return model.create({ data: document });
+  const game = await model.create({ data: document });
+  await teamServices.create({ gameId: game.id, name: "Equipe 1" });
+  await teamServices.create({ gameId: game.id, name: "Equipe 2" });
+  return game;
 }
 
 async function update(
