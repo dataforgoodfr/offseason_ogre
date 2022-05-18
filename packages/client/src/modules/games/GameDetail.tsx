@@ -30,19 +30,12 @@ function GameDetail() {
   const game = result?.data?.document || null;
 
   return (
-    <Layout>
+    <Layout renderLeftTool={renderLeftTool}>
       <>
-        <Button
-          component={Link}
-          to="/administration/games"
-          variant="contained"
-          color="secondary"
-          sx={{ mb: 2 }}
-        >
-          <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
-        </Button>
-        <Typography variant="h3"> Atelier {game?.id} </Typography>
-        <Box sx={{ mt: 2, pl: 10, pr: 10 }}>
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="h3" sx={{ mb: 2 }}>
+            Atelier {game?.id}
+          </Typography>
           <GeneralInfo game={game} />
           <Players />
           <Preparation />
@@ -50,6 +43,20 @@ function GameDetail() {
         </Box>
       </>
     </Layout>
+  );
+}
+
+function renderLeftTool(): JSX.Element {
+  return (
+    <Button
+      component={Link}
+      to="/administration/games"
+      variant="contained"
+      color="inherit"
+      sx={{ mr: 2 }}
+    >
+      <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
+    </Button>
   );
 }
 
