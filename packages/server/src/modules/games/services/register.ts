@@ -1,4 +1,4 @@
-import { prisma } from "../../../database";
+import { database } from "../../../database";
 
 export { register };
 
@@ -9,17 +9,17 @@ async function register({
   gameId: number;
   userId: number;
 }) {
-  const team1 = await prisma.team.upsert({
+  const team1 = await database.team.upsert({
     where: { gameId_name: { gameId, name: "Team 1" } },
     update: {},
     create: { gameId, name: "Team 1" },
   });
-  const team2 = await prisma.team.upsert({
+  const team2 = await database.team.upsert({
     where: { gameId_name: { gameId, name: "Team 2" } },
     update: {},
     create: { gameId, name: "Team 2" },
   });
-  await prisma.usersOnGames.create({
+  await database.usersOnGames.create({
     data: {
       gameId,
       userId,

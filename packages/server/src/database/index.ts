@@ -1,13 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
-const prisma = new PrismaClient();
+const prismaClient = new PrismaClient();
 
-export { connectToDatase, disconnectFromDatase, prisma };
+export { connectToDatase, disconnectFromDatase, prismaClient as database };
 
 async function connectToDatase() {
-  await prisma.$connect();
+  await prismaClient.$connect();
 }
 
 async function disconnectFromDatase() {
-  await prisma.$disconnect();
+  await prismaClient.$disconnect();
 }
