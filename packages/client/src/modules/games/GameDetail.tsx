@@ -129,61 +129,81 @@ function AccordionLayout({
   );
 }
 
-const columns: GridColDef<{
+interface Team {
+  id: number;
+  gameId: number;
   name: string;
-  firstName: string;
-  lastName: string;
-  playedGames: { team: { name: string } }[];
-}>[] = [
-  {
-    field: "name",
-    headerName: "Nom",
-    valueGetter: (params) => {
-      const row = params.row;
-      return row.firstName + " " + row.lastName;
-    },
-    width: 150,
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    width: 250,
-  },
-  {
-    field: "Equipe",
-    headerName: "Equipe",
-    valueGetter: (params) => {
-      const row = params.row;
-      return row.playedGames[0].team.name;
-    },
-    width: 150,
-  },
-];
+}
 
 function PlayersDataGrid() {
   const params = useParams();
+  const gameId = params.id;
+  if (!gameId) throw new Error("game id must be defined");
 
-  const query = useQuery(`/api/games/${params.id}/players`, () => {
+  const playersQuery = useQuery(`/api/games/${gameId}/players`, () => {
     return axios.get<undefined, { data: { players: any[] } }>(
-      `/api/games/${params.id}/players`
+      `/api/games/${gameId}/players`
     );
   });
+  const teamQueryPath = `/api/teams?${new URLSearchParams({ gameId })}`;
+  const teamQuery = useQuery(teamQueryPath, () => {
+    return axios.get<undefined, { data: { teams: Team[] } }>(teamQueryPath);
+  });
 
-  if (query.isLoading) {
+  if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
   }
 
-  const rows = query?.data?.data?.players ?? [];
+  const rows = playersQuery?.data?.data?.players ?? [];
+  const teams = teamQuery?.data?.data?.teams ?? [];
 
   return (
     <Box style={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
-        columns={columns}
+        columns={buidColumns({ teams })}
         disableSelectionOnClick
         pageSize={10}
         rowsPerPageOptions={[10]}
+        experimentalFeatures={{ newEditingApi: true }}
       />
     </Box>
   );
+}
+
+function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
+  name: string;
+  firstName: string;
+  lastName: string;
+  playedGames: { team: { name: string } }[];
+}>[] {
+  console.log("teams", teams);
+  return [
+    {
+      field: "name",
+      headerName: "Nom",
+      valueGetter: (params) => {
+        const row = params.row;
+        return row.firstName + " " + row.lastName;
+      },
+      width: 150,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 250,
+    },
+    {
+      field: "Equipe",
+      headerName: "Equipe",
+      editable: true,
+      valueGetter: (params) => {
+        const row = params.row;
+        return row.playedGames[0].team.name;
+      },
+      type: "singleSelect",
+      valueOptions: teams.map(({ name }) => name),
+      width: 160,
+    },
+  ];
 }
