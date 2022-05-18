@@ -1,10 +1,10 @@
-import { prisma } from "../../../database";
+import { database } from "../../../database";
 import { User } from "../types/entity";
 import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
 import { sendMagicLink } from "./sendMagicLink";
 import { signUp } from "./signUp";
 
-const model = prisma.user;
+const model = database.user;
 type Model = User;
 
 const crudServices = {

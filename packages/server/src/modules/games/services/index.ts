@@ -1,8 +1,8 @@
-import { prisma } from "../../../database";
+import { database } from "../../../database";
 import { Game } from "../types";
 import { register } from "./register";
 
-const model = prisma.game;
+const model = database.game;
 type Model = Game;
 
 const crudServices = {
