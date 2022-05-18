@@ -27,7 +27,13 @@ const drawerWidth: number = 240;
 
 export { Layout };
 
-function Layout({ children }: { children: JSX.Element }) {
+function Layout({
+  children,
+  renderLeftTool = () => <></>,
+}: {
+  children: JSX.Element;
+  renderLeftTool?: () => JSX.Element;
+}) {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -53,6 +59,7 @@ function Layout({ children }: { children: JSX.Element }) {
           >
             <MenuIcon />
           </IconButton>
+          {renderLeftTool()}
           <Typography
             component="h1"
             variant="h6"
@@ -98,7 +105,7 @@ function Layout({ children }: { children: JSX.Element }) {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
           {children}
         </Container>
       </Box>
