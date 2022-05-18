@@ -14,7 +14,12 @@ import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridCellEditStopParams,
+  GridColDef,
+  MuiEvent,
+} from "@mui/x-data-grid";
 
 export { GameDetail };
 
@@ -166,6 +171,13 @@ function PlayersDataGrid() {
         pageSize={10}
         rowsPerPageOptions={[10]}
         experimentalFeatures={{ newEditingApi: true }}
+        onCellEditStop={(params: GridCellEditStopParams, event: MuiEvent) => {
+          if (params.field === "team") {
+            const newTeamName = params.value;
+            console.log("newTeamName", newTeamName);
+            return;
+          }
+        }}
       />
     </Box>
   );
@@ -177,7 +189,6 @@ function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
   lastName: string;
   playedGames: { team: { name: string } }[];
 }>[] {
-  console.log("teams", teams);
   return [
     {
       field: "name",
@@ -194,7 +205,7 @@ function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
       width: 250,
     },
     {
-      field: "Equipe",
+      field: "team",
       headerName: "Equipe",
       editable: true,
       valueGetter: (params) => {
