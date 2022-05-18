@@ -76,14 +76,14 @@ function GameInfo(props: IInfoProps) {
       <form onSubmit={handleSubmit(onValid)}>
         <Grid container direction="column" spacing={2} sx={{ pl: 3, pt: 3 }}>
           <Grid container direction="row">
-            <Grid item xs={6}>
+            <Grid item xs={6} sx={{ pr: 2 }}>
               <Controller
                 name="name"
                 control={control}
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    sx={{ width: "90%", mb: 3 }}
+                    sx={{ width: "100%", mb: 3 }}
                     label={"Nom atelier"}
                     type={"text"}
                     required
@@ -91,16 +91,16 @@ function GameInfo(props: IInfoProps) {
                 )}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} sx={{ pl: 2 }}>
               <TextField
                 value={teacher}
-                sx={{ width: "90%", mb: 3 }}
+                sx={{ width: "100%", mb: 3 }}
                 label={"Animateur assigné"}
                 type={"text"}
                 disabled
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} sx={{ pr: 2 }}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Controller
                   control={control}
@@ -114,29 +114,29 @@ function GameInfo(props: IInfoProps) {
                       value={fieldProps.value}
                       onChange={(e) => fieldProps.onChange(e)}
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          sx={{ width: "90%", mb: 3 }}
-                          fullWidth
-                        />
+                        <TextField {...params} sx={{ mb: 3 }} fullWidth />
                       )}
                     />
                   )}
                 />
               </LocalizationProvider>
             </Grid>
-            <Controller
-              name="description"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  sx={{ width: "90%", mb: 3 }}
-                  label={"Description"}
-                  type={"text"}
-                />
-              )}
-            />
+            <Grid item xs={12}>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    sx={{ width: "100%", mb: 3 }}
+                    label={"Description"}
+                    type={"text"}
+                    multiline
+                    rows={4}
+                  />
+                )}
+              />
+            </Grid>
           </Grid>
         </Grid>
         <Grid sx={{ float: "right", pb: 4, pr: 4 }}>
