@@ -102,7 +102,7 @@ function AccordionLayout({
   return (
     <Accordion
       sx={{
-        marginBottom: "2%",
+        mb: 2,
       }}
     >
       <AccordionSummary
@@ -124,7 +124,7 @@ function AccordionLayout({
       >
         <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
       </AccordionSummary>
-      <AccordionDetails>{children}</AccordionDetails>
+      <AccordionDetails sx={{ pt: 2 }}>{children}</AccordionDetails>
     </Accordion>
   );
 }
