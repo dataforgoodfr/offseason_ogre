@@ -50,7 +50,7 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {games.map((game) => (
-        <Card sx={{ mt: 2 }}>
+        <Card key={game.id} sx={{ mt: 2 }}>
           <CardContent>
             <Typography variant="h6">{game.name}</Typography>
             <Typography>
@@ -77,11 +77,10 @@ function JoinGame() {
       return axios.post("/api/games/register", { gameId });
     },
     {
-      onSuccess: (data, { gameId }) =>
-        queryClient.invalidateQueries([
-          "/api/games/played-games",
-          `/api/games/${gameId}/players`,
-        ]),
+      onSuccess: (data, { gameId }) => {
+        queryClient.invalidateQueries("/api/games/played-games");
+        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
+      },
     }
   );
 
