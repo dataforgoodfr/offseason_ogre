@@ -8,7 +8,7 @@ export { sendMagicLink };
 
 async function sendMagicLink(email: string) {
   if (!(await isMailAlreadyUsed(email))) {
-    throw new Error("No user with that email");
+    throw new Error("Pas d'utilisateur avec cet email");
   }
   const origin = getApiOrigin();
   const token = signMagicToken(email);
