@@ -32,7 +32,7 @@ OGRE uses a number of open source projects to work properly:
 4. Run "yarn db:migrate" from root, it creates the tables in the database
 5. Run "yarn db:seed" from root, it feeds the database with some dummy database
 6. Run "yarn workspace ogre-client dev" to launch client
-7. In another shell run "yarn-workspace ogre-server db:generate to link Prisma configuration with env variables.
+7. In another shell run "yarn workspace ogre-server db:generate to link Prisma configuration with env variables.
 8. Run "yarn workspace ogre-server dev" to launch server
 
 ### Running frontend and backend apps
@@ -60,7 +60,7 @@ App should be up at http://localhost:8080/
 
 ## Tickets and issues
 
-If you don't have access yet to this [board](https://trello.com/b/pymIamFD/dev-web) please request access to admin.
+If you don't have access yet to this [board](https://ogre-d4g.atlassian.net/jira/software/c/projects/D4G/boards/4) please request access to admin.
 
 Then chose an issue and there you go!
 
