@@ -55,7 +55,7 @@ function GameDetail() {
 
 function GeneralInfo({ game }: { game: any }) {
   return (
-    <AccordionLayout title="General Info">
+    <AccordionLayout title="Informations générales">
       {game && <GameInfo game={game} />}
     </AccordionLayout>
   );
