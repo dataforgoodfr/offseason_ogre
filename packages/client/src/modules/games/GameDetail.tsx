@@ -15,6 +15,7 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { GameInfo } from "./GameInfo";
 import { GamePlayers } from "./GamePlayers";
+import AlertDialog from "../dialog/index";
 
 export { GameDetail };
 
@@ -142,6 +143,12 @@ function AnimationActions() {
 
   console.log(game);
 
+  const buttonParams = {
+    message: "Animer",
+    variant: "contained",
+    color: "secondary",
+  };
+
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Button
@@ -153,6 +160,11 @@ function AnimationActions() {
       >
         <RocketLaunchIcon sx={{ height: "1rem" }} /> Animer
       </Button>
+      <AlertDialog
+        message={buttonParams.message}
+        // variant={buttonParams.contained}
+        // color={buttonParams.secondary}
+      />
     </Box>
   );
 }
