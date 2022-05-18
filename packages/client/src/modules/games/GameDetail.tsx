@@ -12,6 +12,7 @@ import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { GameInfo } from "./GameInfo";
 import { GamePlayers } from "./GamePlayers";
 
@@ -86,7 +87,7 @@ function Preparation() {
 function Animation() {
   return (
     <AccordionLayout title="Animation">
-      {<Typography>Animation.</Typography>}
+      <AnimationActions />
     </AccordionLayout>
   );
 }
@@ -125,5 +126,33 @@ function AccordionLayout({
       </AccordionSummary>
       <AccordionDetails sx={{ pt: 2 }}>{children}</AccordionDetails>
     </Accordion>
+  );
+}
+
+function AnimationActions() {
+  const params = useParams();
+
+  const { data: result } = useQuery(`/api/games/${params.id}`, () => {
+    return axios.get<undefined, { data: { document: any } }>(
+      `/api/games/${params.id}`
+    );
+  });
+
+  const game = result?.data?.document || null;
+
+  console.log(game);
+
+  return (
+    <Box sx={{ display: "flex", justifyContent: "center" }}>
+      <Button
+        component={Link}
+        to="/administration/games"
+        variant="contained"
+        color="secondary"
+        sx={{ mb: 2 }}
+      >
+        <RocketLaunchIcon sx={{ height: "1rem" }} /> Animer
+      </Button>
+    </Box>
   );
 }
