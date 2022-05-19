@@ -1,6 +1,6 @@
 import { createTheme } from "@mui/material";
 
-export { theme };
+export { theme, blueTheme, yellowTheme };
 
 const blueTheme = "#1A3D5C";
 const yellowTheme = "#f9c74f";

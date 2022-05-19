@@ -70,7 +70,7 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
           }}
         >
           <PlayArrowIcon />
-          <Typography sx={{ ml: 2 }}>Play</Typography>
+          <Typography sx={{ ml: 2 }}>Jouer</Typography>
         </MenuItem>
         <MenuItem
           onClick={() => {

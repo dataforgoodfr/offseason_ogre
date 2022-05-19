@@ -1,7 +1,10 @@
 import { LoadingButton } from "@mui/lab";
+import { Link } from "react-router-dom";
+import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import {
   AppBar,
   Box,
+  Button,
   Card,
   CardContent,
   CircularProgress,
@@ -16,8 +19,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../alert";
 import { LoggedUser } from "../auth";
+import { useAuth } from "../auth/authProvider";
 
-export { MyGames };
+export { MyGames, PlayLayout };
 
 interface Registration {
   gameId: number;
@@ -25,12 +29,12 @@ interface Registration {
 
 function MyGames() {
   return (
-    <PlayLayout>
-      <>
+    <PlayLayout title="Ateliers">
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
         <Typography variant="h3">Mes ateliers</Typography>
         <JoinGame />
         <MyGamesList />
-      </>
+      </Container>
     </PlayLayout>
   );
 }
@@ -52,10 +56,25 @@ function MyGamesList() {
       {games.map((game) => (
         <Card key={game.id} sx={{ mt: 2 }}>
           <CardContent>
-            <Typography variant="h6">{game.name}</Typography>
-            <Typography>
-              {"Date: " + new Date(game.date).toLocaleString()}
-            </Typography>
+            <Grid container direction="row" alignItems="center">
+              <Grid item xs={6}>
+                <Typography variant="h6">{game.name}</Typography>
+                <Typography>
+                  {"Date: " + new Date(game.date).toLocaleString()}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  component={Link}
+                  to={`/play/my-games/${game.id}/persona`}
+                  color="secondary"
+                  variant="contained"
+                  sx={{ float: "left" }}
+                >
+                  <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
+                </Button>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       ))}
@@ -118,7 +137,15 @@ function JoinGame() {
   );
 }
 
-function PlayLayout({ children }: { children: JSX.Element }) {
+function PlayLayout({
+  title,
+  children,
+}: {
+  title: string;
+  children: JSX.Element;
+}) {
+  const { user } = useAuth();
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar color="primary" position="fixed">
@@ -130,7 +157,10 @@ function PlayLayout({ children }: { children: JSX.Element }) {
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            Play
+            {user?.firstName || user?.lastName
+              ? `${user.firstName} ${user.lastName} | `
+              : ""}{" "}
+            {title}
           </Typography>
           <LoggedUser />
         </Toolbar>
@@ -148,9 +178,7 @@ function PlayLayout({ children }: { children: JSX.Element }) {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
-          {children}
-        </Container>
+        <>{children}</>
       </Box>
     </Box>
   );
