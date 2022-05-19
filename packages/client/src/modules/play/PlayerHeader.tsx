@@ -74,12 +74,10 @@ function PlayerHeader(props: any) {
           </Grid>
           <Grid item xs={6}>
             <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-              {" "}
-              {user?.firstName} {user?.lastName}{" "}
+              {user?.firstName} {user?.lastName}
             </Typography>
             <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
-              {" "}
-              Equipe jaune{" "}
+              Equipe jaune
             </Typography>
           </Grid>
         </Grid>
@@ -93,13 +91,11 @@ function PlayerHeader(props: any) {
           }}
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {" "}
-            Etape nº XXX{" "}
+            Etape nº XXX
           </Typography>
           <Typography> ------- </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {" "}
-            XXX <EmojiEventsRoundedIcon />{" "}
+            XXX <EmojiEventsRoundedIcon />
           </Typography>
         </Grid>
         <Grid
@@ -112,20 +108,16 @@ function PlayerHeader(props: any) {
           }}
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            {" "}
-            <FactoryRoundedIcon sx={{ mr: 1 }} /> XXX kWh{" "}
+            <FactoryRoundedIcon sx={{ mr: 1 }} /> XXX kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            {" "}
-            <ShoppingCartRoundedIcon sx={{ mr: 1 }} /> XXX kWh{" "}
+            <ShoppingCartRoundedIcon sx={{ mr: 1 }} /> XXX kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            {" "}
-            <PaidRoundedIcon sx={{ mr: 1 }} /> XXX €/J{" "}
+            <PaidRoundedIcon sx={{ mr: 1 }} /> XXX €/J
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            {" "}
-            <WaterRoundedIcon sx={{ mr: 1 }} /> XXX T/an{" "}
+            <WaterRoundedIcon sx={{ mr: 1 }} /> XXX T/an
           </Typography>
         </Grid>
         <Grid
@@ -139,28 +131,27 @@ function PlayerHeader(props: any) {
           }}
         >
           <ScoresLegendLayout>
-            {" "}
             {
               <Box>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  {" "}
-                  <FactoryRoundedIcon sx={{ mr: 1 }} /> <br /> Production en
-                  kiloWattheures{" "}
+                  <FactoryRoundedIcon sx={{ mr: 1 }} />
+                  <br />
+                  Production en kiloWattheures
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  {" "}
-                  <ShoppingCartRoundedIcon sx={{ mr: 1 }} /> <br />
-                  Consommation en kiloWattheures{" "}
+                  <ShoppingCartRoundedIcon sx={{ mr: 1 }} />
+                  <br />
+                  Consommation en kiloWattheures
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  {" "}
                   <PaidRoundedIcon sx={{ mr: 1 }} />
-                  <br /> Budget en euro à dépenser par jour{" "}
+                  <br />
+                  Budget en euro à dépenser par jour
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  {" "}
                   <WaterRoundedIcon sx={{ mr: 1 }} />
-                  <br /> CO2 produit en Tonnes par an{" "}
+                  <br />
+                  CO2 produit en Tonnes par an
                 </Typography>
               </Box>
             }
