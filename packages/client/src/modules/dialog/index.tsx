@@ -3,12 +3,8 @@ import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { useState } from "react";
 
-// export { ErrorAlert, SuccessAlert, AlertSnackbar };
-
 export default function AlertDialog(
-    { message }: { message: string },
-    // { variant }: { variant: typeof variant },
-    // { color }: { color: typeof color }
+    props: any
 ) {
     const [open, setOpen] = useState(false);
 
@@ -20,11 +16,18 @@ export default function AlertDialog(
         setOpen(false);
     };
 
+    const launchGame = () => {
+        if (props.gameStatus === "NOT_STARTED") {
+            console.log("launch game !");
+            setOpen(false);
+        }
+    }
+
     return (
         <div>
             <Button onClick={handleClickOpen}>
                 <RocketLaunchIcon sx={{ height: "1rem" }} />
-                {message}
+                Animer
             </Button>
             <Dialog
                 open={open}
@@ -42,7 +45,7 @@ export default function AlertDialog(
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Annuler</Button>
-                    <Button onClick={handleClose} autoFocus>
+                    <Button onClick={launchGame} autoFocus>
                         Continuer
                     </Button>
                 </DialogActions>

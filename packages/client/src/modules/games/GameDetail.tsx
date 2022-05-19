@@ -12,7 +12,6 @@ import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { GameInfo } from "./GameInfo";
 import { GamePlayers } from "./GamePlayers";
 import AlertDialog from "../dialog/index";
@@ -40,7 +39,7 @@ function GameDetail() {
           <GeneralInfo game={game} />
           <Players />
           <Preparation />
-          <Animation />
+          <Animation game={game} />
         </Box>
       </>
     </Layout>
@@ -85,10 +84,10 @@ function Preparation() {
   );
 }
 
-function Animation() {
+function Animation({ game }: { game: any }) {
   return (
     <AccordionLayout title="Animation">
-      <AnimationActions />
+      {game && <AnimationActions game={game} />}
     </AccordionLayout>
   );
 }
@@ -131,40 +130,9 @@ function AccordionLayout({
 }
 
 function AnimationActions() {
-  const params = useParams();
-
-  const { data: result } = useQuery(`/api/games/${params.id}`, () => {
-    return axios.get<undefined, { data: { document: any } }>(
-      `/api/games/${params.id}`
-    );
-  });
-
-  const game = result?.data?.document || null;
-
-  console.log(game);
-
-  const buttonParams = {
-    message: "Animer",
-    variant: "contained",
-    color: "secondary",
-  };
-
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <Button
-        component={Link}
-        to="/administration/games"
-        variant="contained"
-        color="secondary"
-        sx={{ mb: 2 }}
-      >
-        <RocketLaunchIcon sx={{ height: "1rem" }} /> Animer
-      </Button>
-      <AlertDialog
-        message={buttonParams.message}
-        // variant={buttonParams.contained}
-        // color={buttonParams.secondary}
-      />
+      <AlertDialog gameStatus={"NOT_STARTED"} />
     </Box>
   );
 }
