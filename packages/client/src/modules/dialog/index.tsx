@@ -7,14 +7,8 @@ export default function AlertDialog(
     props: any
 ) {
     const [open, setOpen] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const handleClickOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     const launchGame = () => {
         if (props.gameStatus === "NOT_STARTED") {
