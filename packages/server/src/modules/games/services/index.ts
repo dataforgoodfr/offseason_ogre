@@ -11,7 +11,7 @@ const crudServices = {
   getMany,
   create,
   update,
-  launch
+  launch,
 };
 const services = { ...crudServices, register };
 

@@ -16,7 +16,7 @@ const crudController = {
   getPlayersController,
   registerController,
   updateGame,
-  launchGame
+  launchGame,
 };
 const controllers = {
   ...crudController,
@@ -34,7 +34,7 @@ async function createController(request: Request, response: Response) {
     date: new Date(),
     teacherId: response.locals.user.id,
     description: "",
-    status: false
+    status: false,
   });
   response.status(201).json({ data: newDocument });
 }
