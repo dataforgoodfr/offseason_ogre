@@ -10,8 +10,9 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
+import { Game } from "../../../utils/types";
 
-export default function Launch(props: any) {
+export default function Launch({ game }: { game: Game }) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -20,17 +21,16 @@ export default function Launch(props: any) {
 
   const mutation = useMutation<Response, { message: string }, any>(
     (status: boolean) => {
-      const path = `/api/games/${props.gameId}/launch`;
+      const path = `/api/games/${game.id}/launch`;
       return axios.put(path, status);
     },
     {
-      onSuccess: () =>
-        queryClient.invalidateQueries([`/api/games/${props.gameId}`]),
+      onSuccess: () => queryClient.invalidateQueries([`/api/games/${game.id}`]),
     }
   );
 
   const launchGame = () => {
-    if (props.gameStatus === false) {
+    if (game.status === "draft") {
       mutation.mutate({ status: true });
       setOpen(false);
     }
