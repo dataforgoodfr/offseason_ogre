@@ -129,7 +129,7 @@ function AccordionLayout({
   );
 }
 
-function AnimationActions() {
+function AnimationActions({ game }: { game: any }) {
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <AlertDialog />
