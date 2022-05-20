@@ -25,13 +25,12 @@ export default function AlertDialog(props: any) {
     },
     {
       onSuccess: (data, game) =>
-        queryClient.invalidateQueries([`/api/games/${props.gameId}/launch`]),
+        queryClient.invalidateQueries([`/api/games/${props.gameId}`]),
     }
   );
 
   const launchGame = () => {
     if (props.gameStatus === false) {
-      console.log("launch game !");
       mutation.mutate({ status: true });
       setOpen(false);
     }
