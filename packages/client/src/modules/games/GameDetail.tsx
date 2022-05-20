@@ -9,17 +9,12 @@ import {
 } from "@mui/material";
 import { Layout } from "../administration/Layout";
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
-import {
-  DataGrid,
-  GridCellEditStopParams,
-  GridColDef,
-  MuiEvent,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 export { GameDetail };
 
@@ -141,26 +136,47 @@ interface Team {
 }
 
 function PlayersDataGrid() {
-  const params = useParams();
-  const gameId = params.id;
-  if (!gameId) throw new Error("game id must be defined");
+  const gameId = useGameId();
 
   const playersQuery = useQuery(`/api/games/${gameId}/players`, () => {
     return axios.get<undefined, { data: { players: any[] } }>(
       `/api/games/${gameId}/players`
     );
   });
-  const teamQueryPath = `/api/teams?${new URLSearchParams({ gameId })}`;
+  const teamQueryPath = `/api/teams?${new URLSearchParams({
+    gameId: `${gameId}`,
+  })}`;
   const teamQuery = useQuery(teamQueryPath, () => {
     return axios.get<undefined, { data: { teams: Team[] } }>(teamQueryPath);
   });
+
+  const queryClient = useQueryClient();
+  const changeTeamMutation = useMutation<
+    Response,
+    { message: string },
+    { teamId: number; userId: number }
+  >(
+    ({ teamId, userId }) => {
+      return axios.put("/api/games/change-team", { gameId, teamId, userId });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
+      },
+    }
+  );
 
   if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
   }
 
-  const rows = playersQuery?.data?.data?.players ?? [];
+  const players = playersQuery?.data?.data?.players ?? [];
   const teams = teamQuery?.data?.data?.teams ?? [];
+
+  const rows = players.map(({ playedGames, ...player }) => ({
+    ...player,
+    teamId: playedGames[0].team.id,
+  }));
 
   return (
     <Box style={{ height: 500, width: "100%" }}>
@@ -171,12 +187,14 @@ function PlayersDataGrid() {
         pageSize={10}
         rowsPerPageOptions={[10]}
         experimentalFeatures={{ newEditingApi: true }}
-        onCellEditStop={(params: GridCellEditStopParams, event: MuiEvent) => {
-          if (params.field === "team") {
-            const newTeamName = params.value;
-            console.log("newTeamName", newTeamName);
-            return;
+        processRowUpdate={(newRow, oldRow) => {
+          if (newRow.teamId !== oldRow.teamId) {
+            changeTeamMutation.mutate({
+              teamId: newRow.teamId,
+              userId: newRow.id,
+            });
           }
+          return newRow;
         }}
       />
     </Box>
@@ -187,7 +205,7 @@ function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
   name: string;
   firstName: string;
   lastName: string;
-  playedGames: { team: { name: string } }[];
+  playedGames: { team: { id: number; name: string } }[];
 }>[] {
   return [
     {
@@ -205,16 +223,29 @@ function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
       width: 250,
     },
     {
-      field: "team",
+      field: "teamId",
       headerName: "Equipe",
       editable: true,
-      valueGetter: (params) => {
-        const row = params.row;
-        return row.playedGames[0].team.name;
-      },
       type: "singleSelect",
-      valueOptions: teams.map(({ name }) => name),
+      valueOptions: teams.map(({ id, name }) => ({
+        value: id,
+        label: name,
+      })),
+      valueFormatter: ({ value, field, api }) => {
+        const colDef = api.getColumn(field);
+        const option = colDef.valueOptions.find(
+          ({ value: optionValue }: { value: any }) => value === optionValue
+        );
+        return option.label;
+      },
       width: 160,
     },
   ];
+}
+
+function useGameId() {
+  const { id } = useParams();
+  if (!id) throw new Error("game id must be defined");
+  const gameId = +id;
+  return gameId;
 }
