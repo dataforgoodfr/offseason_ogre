@@ -1,8 +1,7 @@
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, useTheme } from "@mui/material";
 import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
-import { theme } from "../../utils/theme";
 import { User } from "../users/types";
 
 export { AuthProvider, useAuth };
@@ -16,6 +15,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       "/api/users/logged-user"
     );
   });
+
+  const theme = useTheme();
 
   if (query.isLoading) {
     return (

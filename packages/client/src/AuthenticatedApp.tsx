@@ -4,6 +4,7 @@ import { useAuth } from "./modules/auth/authProvider";
 import { Games } from "./modules/games";
 import { GameDetail } from "./modules/games";
 import { MyGames } from "./modules/play";
+import { PlayerPersona } from "./modules/play/PlayerPersona";
 
 export { AuthenticatedApp };
 
@@ -23,6 +24,8 @@ function AuthenticatedApp() {
       </Route>
       <Route path="play">
         <Route path="my-games" element={<MyGames />} />
+        <Route path="my-games/:id" element={<PlayerPersona />} />
+        <Route path="my-games/:id/persona" element={<PlayerPersona />} />
         <Route path="" element={<Navigate to="my-games" />} />
         <Route path="*" element={<Navigate to="my-games" />} />
       </Route>

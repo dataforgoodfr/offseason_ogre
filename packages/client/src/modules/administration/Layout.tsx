@@ -16,10 +16,10 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIconTypeMap,
+  useTheme,
 } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { Fragment } from "react";
-import { theme } from "../../utils/theme";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../auth";
 
@@ -120,6 +120,8 @@ function LayoutDrawer({
   children: JSX.Element;
   open: boolean;
 }) {
+  const theme = useTheme();
+
   return (
     <Drawer
       variant="permanent"

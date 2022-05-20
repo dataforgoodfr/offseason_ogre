@@ -1,12 +1,16 @@
 import { LoadingButton } from "@mui/lab";
+import { Link } from "react-router-dom";
+import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import {
   AppBar,
   Box,
+  Button,
   Card,
   CardContent,
   CircularProgress,
   Container,
   Grid,
+  Paper,
   TextField,
   Toolbar,
   Typography,
@@ -16,8 +20,9 @@ import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../alert";
 import { LoggedUser } from "../auth";
+import { useAuth } from "../auth/authProvider";
 
-export { MyGames };
+export { MyGames, PlayLayout };
 
 interface Registration {
   gameId: number;
@@ -25,12 +30,14 @@ interface Registration {
 
 function MyGames() {
   return (
-    <PlayLayout>
-      <>
-        <Typography variant="h3">Mes ateliers</Typography>
+    <PlayLayout title="Ateliers">
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
+        <Typography variant="h3" color="white">
+          Mes ateliers
+        </Typography>
         <JoinGame />
         <MyGamesList />
-      </>
+      </Container>
     </PlayLayout>
   );
 }
@@ -52,10 +59,25 @@ function MyGamesList() {
       {games.map((game) => (
         <Card key={game.id} sx={{ mt: 2 }}>
           <CardContent>
-            <Typography variant="h6">{game.name}</Typography>
-            <Typography>
-              {"Date: " + new Date(game.date).toLocaleString()}
-            </Typography>
+            <Grid container direction="row" alignItems="center">
+              <Grid item xs={6}>
+                <Typography variant="h6">{game.name}</Typography>
+                <Typography>
+                  {"Date: " + new Date(game.date).toLocaleString()}
+                </Typography>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  component={Link}
+                  to={`/play/my-games/${game.id}/persona`}
+                  color="secondary"
+                  variant="contained"
+                  sx={{ float: "left" }}
+                >
+                  <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
+                </Button>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       ))}
@@ -86,7 +108,7 @@ function JoinGame() {
 
   const onValid = (registration: Registration) => mutation.mutate(registration);
   return (
-    <Box sx={{ mt: 4 }}>
+    <Paper sx={{ width: "fit-content", mt: 4, p: 2 }}>
       <form onSubmit={handleSubmit(onValid)}>
         <Grid container>
           <Controller
@@ -114,13 +136,21 @@ function JoinGame() {
       </form>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       {mutation.isSuccess && <SuccessAlert />}
-    </Box>
+    </Paper>
   );
 }
 
-function PlayLayout({ children }: { children: JSX.Element }) {
+function PlayLayout({
+  title,
+  children,
+}: {
+  title: string;
+  children: JSX.Element;
+}) {
+  const { user } = useAuth();
+
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box display="flex">
       <AppBar color="primary" position="fixed">
         <Toolbar>
           <Typography
@@ -130,7 +160,10 @@ function PlayLayout({ children }: { children: JSX.Element }) {
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            Play
+            {user?.firstName || user?.lastName
+              ? `${user.firstName} ${user.lastName} | `
+              : ""}{" "}
+            {title}
           </Typography>
           <LoggedUser />
         </Toolbar>
@@ -138,19 +171,14 @@ function PlayLayout({ children }: { children: JSX.Element }) {
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
+          bgcolor: "#577590",
           flexGrow: 1,
           height: "100vh",
           overflow: "auto",
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
-          {children}
-        </Container>
+        <>{children}</>
       </Box>
     </Box>
   );
