@@ -21,8 +21,8 @@ export default function Launch({ game }: { game: Game }) {
 
   const mutation = useMutation<Response, { message: string }, any>(
     (status: boolean) => {
-      const path = `/api/games/${game.id}/launch`;
-      return axios.put(path, status);
+      const path = `/api/games/${game.id}`;
+      return axios.put(path, { status: "ready" });
     },
     {
       onSuccess: () => queryClient.invalidateQueries([`/api/games/${game.id}`]),
