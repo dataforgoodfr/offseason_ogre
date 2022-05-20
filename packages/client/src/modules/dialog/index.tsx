@@ -2,17 +2,33 @@ import { Button } from "@mui/material";
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import { useState } from "react";
+import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export default function AlertDialog(
     props: any
 ) {
+    const queryClient = useQueryClient();
+
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
+    const mutation = useMutation<Response, { message: string }, any>(
+        (status: boolean) => {
+            const path = `/api/games/${props.gameId}/launch`;
+            return axios.put(path, status);
+        },
+        {
+            onSuccess: (data, game) =>
+                queryClient.invalidateQueries([`/api/games/${props.gameId}/launch`]),
+        }
+    );
+
     const launchGame = () => {
         if (props.gameStatus === false) {
             console.log("launch game !");
+            mutation.mutate({ status: true });
             setOpen(false);
         }
     }

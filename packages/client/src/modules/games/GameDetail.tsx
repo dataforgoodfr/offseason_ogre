@@ -132,7 +132,7 @@ function AccordionLayout({
 function AnimationActions() {
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <AlertDialog gameStatus={"NOT_STARTED"} />
+      <AlertDialog />
     </Box>
   );
 }
