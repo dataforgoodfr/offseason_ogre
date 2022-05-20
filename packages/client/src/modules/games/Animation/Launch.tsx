@@ -11,7 +11,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 
-export default function AlertDialog(props: any) {
+export default function Launch(props: any) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -24,7 +24,7 @@ export default function AlertDialog(props: any) {
       return axios.put(path, status);
     },
     {
-      onSuccess: (data, game) =>
+      onSuccess: () =>
         queryClient.invalidateQueries([`/api/games/${props.gameId}`]),
     }
   );

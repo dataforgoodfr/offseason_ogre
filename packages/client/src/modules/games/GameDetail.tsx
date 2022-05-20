@@ -13,8 +13,9 @@ import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
+import { Game } from "../../utils/types";
 import { GamePlayers } from "./GamePlayers";
-import AlertDialog from "../dialog/index";
+import { Animation } from "./Animation";
 
 export { GameDetail };
 
@@ -39,7 +40,7 @@ function GameDetail() {
           <GeneralInfo game={game} />
           <Players />
           <Preparation />
-          <Animation game={game} />
+          <AnimationAccordion game={game} />
         </Box>
       </>
     </Layout>
@@ -84,10 +85,10 @@ function Preparation() {
   );
 }
 
-function Animation({ game }: { game: any }) {
+function AnimationAccordion({ game }: { game: Game }) {
   return (
     <AccordionLayout title="Animation">
-      {game && <AnimationActions game={game} />}
+      {game && <Animation game={game} />}
     </AccordionLayout>
   );
 }
@@ -126,13 +127,5 @@ function AccordionLayout({
       </AccordionSummary>
       <AccordionDetails sx={{ pt: 2 }}>{children}</AccordionDetails>
     </Accordion>
-  );
-}
-
-function AnimationActions({ game }: { game: any }) {
-  return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
-      <AlertDialog />
-    </Box>
   );
 }
