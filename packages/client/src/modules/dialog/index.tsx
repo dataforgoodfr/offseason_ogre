@@ -11,7 +11,7 @@ export default function AlertDialog(
     const handleClose = () => setOpen(false);
 
     const launchGame = () => {
-        if (props.gameStatus === "NOT_STARTED") {
+        if (props.gameStatus === false) {
             console.log("launch game !");
             setOpen(false);
         }

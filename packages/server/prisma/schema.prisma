@@ -16,7 +16,7 @@ model Game {
   teacher     User           @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
   team        Team[]
-  status      GameStatus     @default(NOT_STARTED)
+  status      Boolean        @default(false)
 }
 
 model UsersOnGames {
@@ -58,10 +58,4 @@ model Household {
 model policy {
   id             Int  @id @default(autoincrement())
   nuclearInPoint Int?
-}
-
-enum GameStatus {
-  NOT_STARTED
-  STARTED
-  FINISHED
 }

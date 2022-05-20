@@ -16,6 +16,7 @@ const crudController = {
   getPlayersController,
   registerController,
   updateGame,
+  launchGame
 };
 const controllers = {
   ...crudController,
@@ -33,6 +34,7 @@ async function createController(request: Request, response: Response) {
     date: new Date(),
     teacherId: response.locals.user.id,
     description: "",
+    status: false
   });
   response.status(201).json({ data: newDocument });
 }
@@ -80,5 +82,20 @@ async function updateGame(request: Request, response: Response) {
   const fieldToUpdate = bodySchema.parse(request.body);
 
   const document = await services.update(id, fieldToUpdate);
+  response.status(200).json({ document });
+}
+
+async function launchGame(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+  const bodySchema = z.object({
+    status: z.boolean(),
+  });
+
+  const { id } = paramsSchema.parse(request.params);
+  const fieldToUpdate = bodySchema.parse(request.body);
+
+  const document = await services.launch(id, fieldToUpdate);
   response.status(200).json({ document });
 }

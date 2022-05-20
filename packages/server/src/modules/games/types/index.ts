@@ -6,5 +6,5 @@ interface Game {
   name: string;
   teacherId: number;
   description: string;
-  status: string;
+  status: boolean;
 }
