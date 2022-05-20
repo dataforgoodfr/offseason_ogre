@@ -9,10 +9,9 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  useTheme,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { theme, blueTheme, yellowTheme } from "../../utils/theme";
-
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
 import FactoryRoundedIcon from "@mui/icons-material/FactoryRounded";
@@ -27,6 +26,7 @@ export { PlayerHeader };
 
 function PlayerHeader(props: any) {
   const { user } = useAuth();
+  const theme = useTheme();
   const { game } = props;
 
   return (
@@ -165,7 +165,7 @@ function PlayerHeader(props: any) {
           variant="contained"
           color="secondary"
           sx={{
-            border: `2px solid ${blueTheme}`,
+            border: `2px solid ${theme.palette.primary}`,
             width: "90%",
             borderRadius: "10px",
           }}
@@ -180,7 +180,7 @@ function PlayerHeader(props: any) {
           variant="contained"
           color="primary"
           sx={{
-            border: `2px solid ${yellowTheme}`,
+            border: `2px solid ${theme.palette.secondary}`,
             width: "90%",
             borderRadius: "10px",
           }}
@@ -193,6 +193,7 @@ function PlayerHeader(props: any) {
 }
 
 function ScoresLegendLayout({ children }: { children: any }) {
+  const theme = useTheme();
   return (
     <Accordion
       sx={{

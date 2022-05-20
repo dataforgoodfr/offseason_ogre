@@ -1,19 +1,19 @@
 import { createTheme } from "@mui/material";
 
-export { theme, blueTheme, yellowTheme };
+export { theme };
 
-const blueTheme = "#1A3D5C";
-const yellowTheme = "#f9c74f";
+const blue = "#1A3D5C";
+const yellow = "#f9c74f";
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: blueTheme,
-      contrastText: yellowTheme,
+      main: blue,
+      contrastText: yellow,
     },
     secondary: {
-      main: yellowTheme,
-      contrastText: blueTheme,
+      main: yellow,
+      contrastText: blue,
     },
   },
 });

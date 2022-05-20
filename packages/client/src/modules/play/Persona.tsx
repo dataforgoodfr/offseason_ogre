@@ -6,18 +6,20 @@ import LunchDiningRoundedIcon from "@mui/icons-material/LunchDiningRounded";
 import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
 import DryCleaningRoundedIcon from "@mui/icons-material/DryCleaningRounded";
 
-import { theme } from "../../utils/theme";
 import {
   Box,
   Typography,
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  useTheme,
 } from "@mui/material";
 
 export { Persona };
 
 function Persona() {
+  const theme = useTheme();
+
   return (
     <Box
       sx={{
@@ -71,6 +73,8 @@ function AccordionLayout({
   title: string;
   titleIcon?: JSX.Element;
 }) {
+  const theme = useTheme();
+
   return (
     <Accordion
       sx={{
