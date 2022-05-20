@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Container,
   Grid,
+  Paper,
   TextField,
   Toolbar,
   Typography,
@@ -31,7 +32,9 @@ function MyGames() {
   return (
     <PlayLayout title="Ateliers">
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
-        <Typography variant="h3">Mes ateliers</Typography>
+        <Typography variant="h3" color="white">
+          Mes ateliers
+        </Typography>
         <JoinGame />
         <MyGamesList />
       </Container>
@@ -105,7 +108,7 @@ function JoinGame() {
 
   const onValid = (registration: Registration) => mutation.mutate(registration);
   return (
-    <Box sx={{ mt: 4 }}>
+    <Paper sx={{ width: "fit-content", mt: 4, p: 2 }}>
       <form onSubmit={handleSubmit(onValid)}>
         <Grid container>
           <Controller
@@ -133,7 +136,7 @@ function JoinGame() {
       </form>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       {mutation.isSuccess && <SuccessAlert />}
-    </Box>
+    </Paper>
   );
 }
 
@@ -147,7 +150,7 @@ function PlayLayout({
   const { user } = useAuth();
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box display="flex">
       <AppBar color="primary" position="fixed">
         <Toolbar>
           <Typography
@@ -168,10 +171,7 @@ function PlayLayout({
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
+          bgcolor: "#577590",
           flexGrow: 1,
           height: "100vh",
           overflow: "auto",

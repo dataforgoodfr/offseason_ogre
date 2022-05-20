@@ -36,8 +36,8 @@ function PlayerPersona() {
 
   return (
     <PlayLayout title="Persona">
-      <Box sx={{ height: "100vh", bgcolor: "#577590" }}>
-        <Grid container direction="row" sx={{ pt: 3 }}>
+      <Box>
+        <Grid container direction="row">
           <Grid
             item
             xs={12}
