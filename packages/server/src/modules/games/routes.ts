@@ -17,4 +17,3 @@ router.put("/change-team", asyncErrorHandler(controllers.changeTeamController));
 router.get("/:id", asyncErrorHandler(controllers.getGame));
 router.get("/:id/players", asyncErrorHandler(controllers.getPlayersController));
 router.put("/:id", asyncErrorHandler(controllers.updateGame));
-router.put("/:id/launch", asyncErrorHandler(controllers.launchGame));

@@ -11,7 +11,6 @@ const crudServices = {
   getMany,
   create,
   update,
-  launch,
 };
 const services = { ...crudServices, register };
 
@@ -34,14 +33,7 @@ async function create(document: Omit<Model, "id">): Promise<Model> {
 
 async function update(
   id: number,
-  document: Omit<Model, "id" | "teacherId" | "status">
-): Promise<Model> {
-  return model.update({ data: document, where: { id } });
-}
-
-async function launch(
-  id: number,
-  document: Omit<Model, "id" | "teacherId" | "name" | "date" | "description">
+  document: Partial<Omit<Model, "id">>
 ): Promise<Model> {
   return model.update({ data: document, where: { id } });
 }
