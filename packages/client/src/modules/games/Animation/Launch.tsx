@@ -11,6 +11,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { Game } from "../../../utils/types";
+import { SuccessAlert } from "../../alert";
 
 export default function Launch({ game }: { game: Game }) {
   const queryClient = useQueryClient();
@@ -32,12 +33,13 @@ export default function Launch({ game }: { game: Game }) {
   const launchGame = () => {
     if (game.status === "draft") {
       mutation.mutate({ status: true });
-      setOpen(false);
     }
+    setOpen(false);
   };
 
   return (
     <div>
+      {mutation.isSuccess && <SuccessAlert />}
       <Button onClick={handleClickOpen}>
         <RocketLaunchIcon sx={{ height: "1rem" }} />
         Animer
@@ -53,7 +55,7 @@ export default function Launch({ game }: { game: Game }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Êtes-vous sûr.e de vouloir lancer l’atelier ?
+            Êtes-vous sûr.e de vouloir lancer l'atelier ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
