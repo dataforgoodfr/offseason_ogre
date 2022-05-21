@@ -198,7 +198,7 @@ function MainListItems() {
         {
           Icon: AddBoxIcon,
           label: "Nouveau jeu",
-          to: "/administration/new-game",
+          to: "/administration/games/new",
         },
         { Icon: GamesIcon, label: "Ateliers", to: "/administration/games" },
       ].map(renderListItem)}

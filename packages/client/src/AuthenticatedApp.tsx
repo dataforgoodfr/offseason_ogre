@@ -16,8 +16,8 @@ function AuthenticatedApp() {
   return (
     <Routes>
       <Route path="administration">
-        <Route path="new-game" element={<NewGame />} />
         <Route path="games" element={<Games />} />
+        <Route path="games/new" element={<NewGame />} />
         <Route path="games/:id" element={<Game />} />
         <Route path="" element={<Navigate to="games" />} />
         <Route path="*" element={<Navigate to="games" />} />

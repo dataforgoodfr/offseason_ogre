@@ -23,7 +23,7 @@ function Games(): JSX.Element {
         <Box alignItems="center" display="flex">
           <Typography variant="h3">Ateliers</Typography>
           <Button
-            onClick={() => navigate("/administration/new-game")}
+            onClick={() => navigate("/administration/games/new")}
             variant="contained"
             sx={{ marginLeft: "auto" }}
           >
