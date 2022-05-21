@@ -18,7 +18,6 @@ import {
   SvgIconTypeMap,
   useTheme,
 } from "@mui/material";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { Fragment } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../auth";

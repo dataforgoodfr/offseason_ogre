@@ -32,17 +32,20 @@ function Games(): JSX.Element {
 }
 
 const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
-  { field: "id", headerName: "ID", width: 90 },
+  { field: "id", headerName: "ID", width: 80 },
   {
     field: "name",
     headerName: "Nom",
-    width: 150,
+    flex: 1,
+    minWidth: 150,
   },
   {
     field: "teacher",
     headerName: "Animateur",
     width: 250,
     valueGetter: (params) => params.row.teacher.email,
+    flex: 1,
+    minWidth: 150,
   },
   {
     field: "date",
@@ -54,7 +57,8 @@ const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
         timeStyle: "short",
       });
     },
-    width: 200,
+    flex: 1,
+    minWidth: 150,
   },
 ];
 
