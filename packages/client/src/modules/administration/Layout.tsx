@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { Link, useMatch } from "react-router-dom";
+import { Link, Navigate, useMatch } from "react-router-dom";
 import GamesIcon from "@mui/icons-material/Games";
 import {
   ListItemButton,
@@ -21,6 +21,7 @@ import {
 import React, { Fragment } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../auth";
+import { useAuth } from "../auth/authProvider";
 
 const drawerWidth: number = 240;
 
@@ -37,6 +38,12 @@ function Layout({
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const { user } = useAuth();
+
+  if (!user?.isTeacher) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <Box sx={{ display: "flex" }}>
