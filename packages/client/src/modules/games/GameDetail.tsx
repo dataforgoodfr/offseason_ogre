@@ -49,13 +49,7 @@ function GameDetail() {
 
 function renderLeftTool(): JSX.Element {
   return (
-    <Button
-      component={Link}
-      to="/administration/games"
-      variant="contained"
-      color="inherit"
-      sx={{ mr: 2 }}
-    >
+    <Button component={Link} to="/administration/games" sx={{ mr: 2 }}>
       <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
     </Button>
   );
