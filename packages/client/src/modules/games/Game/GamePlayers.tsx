@@ -50,12 +50,8 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     }
   );
 
-  if (game.status === "draft") {
-    return (
-      <Typography align="center">
-        L'atelier n'a pas encore été lancé.
-      </Typography>
-    );
+  if (game.status !== "draft") {
+    return <Typography align="center">L'atelier a déjà été lancé.</Typography>;
   }
 
   if (playersQuery.isLoading || teamQuery.isLoading) {
