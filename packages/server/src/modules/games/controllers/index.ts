@@ -6,6 +6,7 @@ import { getPlayedGames } from "../services/getPlayedGames";
 import { getPlayers } from "../services/getPlayers";
 import { registerController } from "./registerController";
 import { dateSchema } from "./types";
+import { removePlayerController } from "./removePlayerController";
 
 const crudController = {
   createController,
@@ -15,6 +16,7 @@ const crudController = {
   getPlayedGamesController,
   getPlayersController,
   registerController,
+  removePlayerController,
   updateGame,
 };
 const controllers = {
