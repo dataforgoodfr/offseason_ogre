@@ -101,12 +101,14 @@ function buidColumns({ teams }: { teams: Team[] }): GridColumns<Row> {
         const row = params.row;
         return row.firstName + " " + row.lastName;
       },
-      width: 150,
+      flex: 1,
+      minWidth: 150,
     },
     {
       field: "email",
       headerName: "Email",
-      width: 250,
+      flex: 1,
+      minWidth: 250,
     },
     {
       field: "teamId",
@@ -124,7 +126,8 @@ function buidColumns({ teams }: { teams: Team[] }): GridColumns<Row> {
         );
         return option.label;
       },
-      width: 160,
+      flex: 1,
+      minWidth: 160,
     },
     {
       field: "actions",
