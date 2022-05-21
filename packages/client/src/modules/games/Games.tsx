@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import { Layout } from "../administration/Layout";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
@@ -12,9 +12,9 @@ function Games(): JSX.Element {
     <Layout>
       <>
         <Typography variant="h3">Ateliers</Typography>
-        <Box sx={{ mt: 2 }}>
+        <Paper sx={{ mt: 2, p: 2 }}>
           <GamesDataGrid />
-        </Box>
+        </Paper>
       </>
     </Layout>
   );
