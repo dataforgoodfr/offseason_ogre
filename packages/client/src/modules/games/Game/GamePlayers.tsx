@@ -9,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
-import { Game } from "../../utils/types";
+import { IGame } from "../../../utils/types";
 
 interface Team {
   id: number;
@@ -19,7 +19,7 @@ interface Team {
 
 export { GamePlayers };
 
-function GamePlayers({ game }: { game: Game }): JSX.Element {
+function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const gameId = useGameId();
 
   const playersQuery = useQuery(`/api/games/${gameId}/players`, () => {

@@ -6,20 +6,20 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { Layout } from "../administration/Layout";
+import { Layout } from "../../administration/Layout";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
-import { Game } from "../../utils/types";
+import { IGame } from "../../../utils/types";
 import { GamePlayers } from "./GamePlayers";
 import { Animation } from "./Animation";
 
-export { GameDetail };
+export { Game };
 
-function GameDetail() {
+function Game() {
   const params = useParams();
 
   const { data: result } = useQuery(`/api/games/${params.id}`, () => {
@@ -55,7 +55,7 @@ function renderLeftTool(): JSX.Element {
   );
 }
 
-function GeneralInfo({ game }: { game: Game }) {
+function GeneralInfo({ game }: { game: IGame }) {
   return (
     <AccordionLayout title="Informations générales">
       {game && <GameInfo game={game} />}
@@ -63,7 +63,7 @@ function GeneralInfo({ game }: { game: Game }) {
   );
 }
 
-function Players({ game }: { game: Game }) {
+function Players({ game }: { game: IGame }) {
   return (
     <AccordionLayout title="Joueurs">
       {game && <GamePlayers game={game} />}
@@ -79,7 +79,7 @@ function Preparation() {
   );
 }
 
-function AnimationAccordion({ game }: { game: Game }) {
+function AnimationAccordion({ game }: { game: IGame }) {
   return (
     <AccordionLayout title="Animation">
       {game && <Animation game={game} />}

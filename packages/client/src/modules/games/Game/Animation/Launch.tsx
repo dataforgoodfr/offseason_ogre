@@ -10,10 +10,10 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { Game } from "../../../utils/types";
-import { SuccessAlert } from "../../alert";
+import { IGame } from "../../../../utils/types";
+import { SuccessAlert } from "../../../alert";
 
-export default function Launch({ game }: { game: Game }) {
+export default function Launch({ game }: { game: IGame }) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
