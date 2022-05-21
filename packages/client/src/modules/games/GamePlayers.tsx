@@ -1,5 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem, GridColumns } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
@@ -78,12 +79,12 @@ function GamePlayers() {
   );
 }
 
-function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
-  name: string;
+function buidColumns({ teams }: { teams: Team[] }): GridColumns<{
   firstName: string;
   lastName: string;
-  playedGames: { team: { id: number; name: string } }[];
-}>[] {
+  email: string;
+  teamId: number;
+}> {
   return [
     {
       field: "name",
@@ -116,6 +117,18 @@ function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
         return option.label;
       },
       width: 160,
+    },
+    {
+      field: "actions",
+      type: "actions",
+      width: 80,
+      getActions: () => [
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete"
+          onClick={() => {}}
+        />,
+      ],
     },
   ];
 }
