@@ -1,4 +1,11 @@
-import { Box, CircularProgress, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Paper,
+  Typography,
+} from "@mui/material";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Layout } from "../administration/Layout";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
@@ -8,10 +15,21 @@ import { useNavigate } from "react-router-dom";
 export { Games };
 
 function Games(): JSX.Element {
+  const navigate = useNavigate();
+
   return (
     <Layout>
       <>
-        <Typography variant="h3">Ateliers</Typography>
+        <Box alignItems="center" display="flex">
+          <Typography variant="h3">Ateliers</Typography>
+          <Button
+            onClick={() => navigate("/administration/new-game")}
+            variant="contained"
+            sx={{ marginLeft: "auto" }}
+          >
+            <AddBoxIcon sx={{ mr: 1 }} /> Nouveau Jeu
+          </Button>
+        </Box>
         <Paper sx={{ mt: 2, p: 2 }}>
           <GamesDataGrid />
         </Paper>
