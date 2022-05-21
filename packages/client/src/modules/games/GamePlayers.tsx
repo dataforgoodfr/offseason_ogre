@@ -144,7 +144,6 @@ function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
   const queryClient = useQueryClient();
   const gameId = useGameId();
   const userId = params.row.id;
-  console.log("params", params);
   const removePlayerMutation = useMutation<Response, { message: string }>(
     () => {
       return axios.post("/api/games/remove-player", { gameId, userId });
