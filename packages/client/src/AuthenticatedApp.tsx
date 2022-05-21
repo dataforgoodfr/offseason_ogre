@@ -1,5 +1,4 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { NewGame } from "./modules/administration";
 import { useAuth } from "./modules/auth/authProvider";
 import { Games } from "./modules/games";
 import { Game } from "./modules/games";
@@ -17,7 +16,6 @@ function AuthenticatedApp() {
     <Routes>
       <Route path="administration">
         <Route path="games" element={<Games />} />
-        <Route path="games/new" element={<NewGame />} />
         <Route path="games/:id" element={<Game />} />
         <Route path="" element={<Navigate to="games" />} />
         <Route path="*" element={<Navigate to="games" />} />

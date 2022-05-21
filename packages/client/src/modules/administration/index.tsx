@@ -1,3 +1,3 @@
-import { NewGame } from "./NewGame";
+import { Layout } from "./Layout";
 
-export { NewGame };
+export { Layout };

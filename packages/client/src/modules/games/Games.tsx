@@ -9,26 +9,19 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Layout } from "../administration/Layout";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { ErrorAlert, SuccessAlert } from "../alert";
 
 export { Games };
 
 function Games(): JSX.Element {
-  const navigate = useNavigate();
-
   return (
     <Layout>
       <>
         <Box alignItems="center" display="flex">
           <Typography variant="h3">Ateliers</Typography>
-          <Button
-            onClick={() => navigate("/administration/games/new")}
-            variant="contained"
-            sx={{ marginLeft: "auto" }}
-          >
-            <AddBoxIcon sx={{ mr: 1 }} /> Nouveau Jeu
-          </Button>
+          <NewGame />
         </Box>
         <Paper sx={{ mt: 2, p: 2 }}>
           <GamesDataGrid />
@@ -98,5 +91,32 @@ function GamesDataGrid() {
         }}
       />
     </Box>
+  );
+}
+
+function NewGame() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<Response, { message: string }>(
+    (newGame) => {
+      return axios.post("/api/games", newGame);
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries("games"),
+    }
+  );
+
+  return (
+    <>
+      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
+      {mutation.isSuccess && <SuccessAlert />}
+      <Button
+        onClick={() => mutation.mutate()}
+        variant="contained"
+        sx={{ marginLeft: "auto" }}
+      >
+        <AddBoxIcon sx={{ mr: 1 }} /> Nouveau Jeu
+      </Button>
+    </>
   );
 }

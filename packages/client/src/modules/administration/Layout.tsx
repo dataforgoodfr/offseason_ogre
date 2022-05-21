@@ -195,11 +195,6 @@ function MainListItems() {
   return (
     <Fragment>
       {[
-        {
-          Icon: AddBoxIcon,
-          label: "Nouveau jeu",
-          to: "/administration/games/new",
-        },
         { Icon: GamesIcon, label: "Ateliers", to: "/administration/games" },
       ].map(renderListItem)}
     </Fragment>
