@@ -38,6 +38,7 @@ function computeIsTeacher(newUser: Omit<Model, "id">) {
 function shouldHaveTeacherRole(email: string): boolean {
   const mails = [
     "b00461284@essec.edu",
+    "chareyronlaurene@gmail.com",
     "felix.barriere@gmail.com",
     "grandeur.energies@gmail.com",
     "louis.sanna@gmail.com",
