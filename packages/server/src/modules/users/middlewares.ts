@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
-import { prisma } from "../../database";
+import { database } from "../../database";
 import { verify } from "../tokens";
 
 export { authenticateUser };
@@ -25,7 +25,7 @@ async function authenticateUser(
     next();
     return;
   }
-  prisma.user
+  database.user
     .findUnique({
       where: { email },
     })

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { changeTeamController } from "./changeTeamController";
 import { getPlayedGames } from "../services/getPlayedGames";
 import { getPlayers } from "../services/getPlayers";
 import { registerController } from "./registerController";
@@ -8,6 +9,7 @@ import { dateSchema } from "./types";
 
 const crudController = {
   createController,
+  changeTeamController,
   getManyControllers,
   getGame,
   getPlayedGamesController,

@@ -1,4 +1,4 @@
-import { prisma } from "../../../database";
+import { database } from "../../../database";
 
 export { register };
 
@@ -9,17 +9,15 @@ async function register({
   gameId: number;
   userId: number;
 }) {
-  const team1 = await prisma.team.upsert({
-    where: { gameId_name: { gameId, name: "Team 1" } },
-    update: {},
-    create: { gameId, name: "Team 1" },
+  const team1 = await database.team.findUnique({
+    where: { gameId_name: { gameId, name: "Equipe 1" } },
+    rejectOnNotFound: true,
   });
-  const team2 = await prisma.team.upsert({
-    where: { gameId_name: { gameId, name: "Team 2" } },
-    update: {},
-    create: { gameId, name: "Team 2" },
+  const team2 = await database.team.findUnique({
+    where: { gameId_name: { gameId, name: "Equipe 2" } },
+    rejectOnNotFound: true,
   });
-  await prisma.usersOnGames.create({
+  await database.usersOnGames.create({
     data: {
       gameId,
       userId,

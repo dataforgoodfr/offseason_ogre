@@ -1,12 +1,12 @@
-import { prisma } from ".";
+import { database } from ".";
 
 // eslint-disable-next-line no-console
 console.log("Starting seeding...");
 
 async function seed() {
-  await prisma.$connect();
+  await database.$connect();
 
-  await prisma.user.create({
+  await database.user.create({
     data: {
       email: "seeding@database.com",
       isTeacher: false,
@@ -16,7 +16,7 @@ async function seed() {
     },
   });
 
-  await prisma.$disconnect();
+  await database.$disconnect();
 }
 
 seed().then(() => {

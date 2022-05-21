@@ -4,7 +4,6 @@ import {
   AccordionSummary,
   Box,
   Button,
-  CircularProgress,
   Typography,
 } from "@mui/material";
 import { Layout } from "../administration/Layout";
@@ -14,7 +13,7 @@ import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { GamePlayers } from "./GamePlayers";
 
 export { GameDetail };
 
@@ -71,7 +70,7 @@ function GeneralInfo({ game }: { game: any }) {
 function Players() {
   return (
     <AccordionLayout title="Joueurs">
-      <PlayersDataGrid />
+      <GamePlayers />
     </AccordionLayout>
   );
 }
@@ -126,64 +125,5 @@ function AccordionLayout({
       </AccordionSummary>
       <AccordionDetails sx={{ pt: 2 }}>{children}</AccordionDetails>
     </Accordion>
-  );
-}
-
-const columns: GridColDef<{
-  name: string;
-  firstName: string;
-  lastName: string;
-  playedGames: { team: { name: string } }[];
-}>[] = [
-  {
-    field: "name",
-    headerName: "Nom",
-    valueGetter: (params) => {
-      const row = params.row;
-      return row.firstName + " " + row.lastName;
-    },
-    width: 150,
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    width: 250,
-  },
-  {
-    field: "Equipe",
-    headerName: "Equipe",
-    valueGetter: (params) => {
-      const row = params.row;
-      return row.playedGames[0].team.name;
-    },
-    width: 150,
-  },
-];
-
-function PlayersDataGrid() {
-  const params = useParams();
-
-  const query = useQuery(`/api/games/${params.id}/players`, () => {
-    return axios.get<undefined, { data: { players: any[] } }>(
-      `/api/games/${params.id}/players`
-    );
-  });
-
-  if (query.isLoading) {
-    return <CircularProgress />;
-  }
-
-  const rows = query?.data?.data?.players ?? [];
-
-  return (
-    <Box style={{ height: 500, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        disableSelectionOnClick
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-      />
-    </Box>
   );
 }
