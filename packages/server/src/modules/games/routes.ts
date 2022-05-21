@@ -11,9 +11,13 @@ router.get(
   "/played-games",
   asyncErrorHandler(controllers.getPlayedGamesController)
 );
-router.post("/", asyncErrorHandler(controllers.createController));
-router.post("/register", asyncErrorHandler(controllers.registerController));
-router.put("/change-team", asyncErrorHandler(controllers.changeTeamController));
 router.get("/:id", asyncErrorHandler(controllers.getGame));
 router.get("/:id/players", asyncErrorHandler(controllers.getPlayersController));
+router.post("/", asyncErrorHandler(controllers.createController));
+router.post("/register", asyncErrorHandler(controllers.registerController));
+router.post(
+  "/remove-player",
+  asyncErrorHandler(controllers.removePlayerController)
+);
+router.put("/change-team", asyncErrorHandler(controllers.changeTeamController));
 router.put("/:id", asyncErrorHandler(controllers.updateGame));

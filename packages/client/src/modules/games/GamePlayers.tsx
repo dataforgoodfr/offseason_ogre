@@ -1,5 +1,11 @@
 import { Box, CircularProgress } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridColumns,
+  GridRowParams,
+} from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
@@ -78,12 +84,15 @@ function GamePlayers() {
   );
 }
 
-function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
-  name: string;
+interface Row {
+  id: number;
   firstName: string;
   lastName: string;
-  playedGames: { team: { id: number; name: string } }[];
-}>[] {
+  email: string;
+  teamId: number;
+}
+
+function buidColumns({ teams }: { teams: Team[] }): GridColumns<Row> {
   return [
     {
       field: "name",
@@ -117,7 +126,39 @@ function buidColumns({ teams }: { teams: Team[] }): GridColDef<{
       },
       width: 160,
     },
+    {
+      field: "actions",
+      type: "actions",
+      width: 80,
+      getActions: (params: GridRowParams<Row>) => [
+        <DeleteActionCellItem params={params} />,
+      ],
+    },
   ];
+}
+
+function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
+  const queryClient = useQueryClient();
+  const gameId = useGameId();
+  const userId = params.row.id;
+  console.log("params", params);
+  const removePlayerMutation = useMutation<Response, { message: string }>(
+    () => {
+      return axios.post("/api/games/remove-player", { gameId, userId });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
+      },
+    }
+  );
+  return (
+    <GridActionsCellItem
+      icon={<DeleteIcon />}
+      label="Delete"
+      onClick={() => removePlayerMutation.mutate()}
+    />
+  );
 }
 
 function useGameId() {
