@@ -38,7 +38,7 @@ function GameDetail() {
             Atelier {game?.id}
           </Typography>
           <GeneralInfo game={game} />
-          <Players />
+          <Players game={game} />
           <Preparation />
           <AnimationAccordion game={game} />
         </Box>
@@ -55,7 +55,7 @@ function renderLeftTool(): JSX.Element {
   );
 }
 
-function GeneralInfo({ game }: { game: any }) {
+function GeneralInfo({ game }: { game: Game }) {
   return (
     <AccordionLayout title="Informations générales">
       {game && <GameInfo game={game} />}
@@ -63,10 +63,10 @@ function GeneralInfo({ game }: { game: any }) {
   );
 }
 
-function Players() {
+function Players({ game }: { game: Game }) {
   return (
     <AccordionLayout title="Joueurs">
-      <GamePlayers />
+      {game && <GamePlayers game={game} />}
     </AccordionLayout>
   );
 }

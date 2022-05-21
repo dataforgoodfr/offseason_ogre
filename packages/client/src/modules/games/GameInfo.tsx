@@ -7,16 +7,9 @@ import { SuccessAlert, ErrorAlert } from "../alert";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { Game } from "../../utils/types";
 
 export { GameInfo };
-
-interface IGame {
-  id: number;
-  name: string;
-  date: Date;
-  teacherId: string;
-  description?: string;
-}
 
 interface IGameFormProps {
   name: string;
@@ -25,7 +18,7 @@ interface IGameFormProps {
 }
 
 interface IInfoProps {
-  game: IGame;
+  game: Game;
 }
 
 function GameInfo(props: IInfoProps) {

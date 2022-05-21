@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -9,6 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
+import { Game } from "../../utils/types";
 
 interface Team {
   id: number;
@@ -18,7 +19,7 @@ interface Team {
 
 export { GamePlayers };
 
-function GamePlayers() {
+function GamePlayers({ game }: { game: Game }): JSX.Element {
   const gameId = useGameId();
 
   const playersQuery = useQuery(`/api/games/${gameId}/players`, () => {
@@ -48,6 +49,14 @@ function GamePlayers() {
       },
     }
   );
+
+  if (game.status === "draft") {
+    return (
+      <Typography align="center">
+        L'atelier n'a pas encore été lancé.
+      </Typography>
+    );
+  }
 
   if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
