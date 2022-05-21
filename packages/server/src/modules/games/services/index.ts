@@ -33,7 +33,7 @@ async function create(document: Omit<Model, "id">): Promise<Model> {
 
 async function update(
   id: number,
-  document: Omit<Model, "id" | "teacherId">
+  document: Partial<Omit<Model, "id">>
 ): Promise<Model> {
   return model.update({ data: document, where: { id } });
 }

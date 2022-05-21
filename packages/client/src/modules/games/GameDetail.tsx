@@ -13,7 +13,9 @@ import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
+import { Game } from "../../utils/types";
 import { GamePlayers } from "./GamePlayers";
+import { Animation } from "./Animation";
 
 export { GameDetail };
 
@@ -38,7 +40,7 @@ function GameDetail() {
           <GeneralInfo game={game} />
           <Players />
           <Preparation />
-          <Animation />
+          <AnimationAccordion game={game} />
         </Box>
       </>
     </Layout>
@@ -83,10 +85,10 @@ function Preparation() {
   );
 }
 
-function Animation() {
+function AnimationAccordion({ game }: { game: Game }) {
   return (
     <AccordionLayout title="Animation">
-      {<Typography>Animation.</Typography>}
+      {game && <Animation game={game} />}
     </AccordionLayout>
   );
 }

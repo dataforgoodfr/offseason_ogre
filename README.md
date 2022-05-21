@@ -10,10 +10,6 @@ https://laconsciencedesetudiants.fr/atelier-ogre/
 
 Our goal is to develop a web application to digitalize OGRE's workshop. It will improve the user experience and allow to scale up the reach of the workshop.
 
-## Features
-
-Work In Progress
-
 ## Tech
 
 OGRE uses a number of open source projects to work properly:
@@ -26,13 +22,15 @@ OGRE uses a number of open source projects to work properly:
 
 ## Development
 
+Node, npm, yarn and Docker must be installed locally.
+
 1. Run "yarn env:default" from root, it will set default .env values in server
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
 3. Run "yarn db:up" from root, it will lauch a postgre container
 4. Run "yarn db:migrate" from root, it creates the tables in the database
-5. Run "yarn db:seed" from root, it feeds the database with some dummy database
+5. Run "yarn db:seed" from root, it seeds the database with some dummy data
 6. Run "yarn workspace ogre-client dev" to launch client
-7. In another shell run "yarn-workspace ogre-server db:generate to link Prisma configuration with env variables.
+7. In another shell run "yarn workspace ogre-server db:generate" to generate Prisma client from schema.
 8. Run "yarn workspace ogre-server dev" to launch server
 
 ### Running frontend and backend apps
@@ -45,9 +43,9 @@ The app can be deployed to heroku. A procfile is not needed as the "start" and "
 
 A postGreSQL database is required, the connection string must be set as DATABASE_URL in the secrets.
 
-### Testing deployment locally
+### Testing production build locally
 
-Node, npm et Docker must be installed locally.
+Node, npm, yarn and Docker must be installed locally.
 
 1. Run "yarn env:default" from root, it will set default .env values in server
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
@@ -60,7 +58,7 @@ App should be up at http://localhost:8080/
 
 ## Tickets and issues
 
-If you don't have access yet to this [board](https://trello.com/b/pymIamFD/dev-web) please request access to admin.
+If you don't have access yet to this [board](https://ogre-d4g.atlassian.net/jira/software/c/projects/D4G/boards/4) please request access to admin.
 
 Then chose an issue and there you go!
 

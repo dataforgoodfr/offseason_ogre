@@ -16,6 +16,12 @@ model Game {
   teacher     User           @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
   team        Team[]
+  status      Status         @default(draft)
+}
+
+enum Status {
+  draft
+  ready
 }
 
 model UsersOnGames {

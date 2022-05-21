@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('draft', 'ready');
+
 -- CreateTable
 CREATE TABLE "Game" (
     "id" SERIAL NOT NULL,
@@ -5,6 +8,7 @@ CREATE TABLE "Game" (
     "description" TEXT NOT NULL DEFAULT E'',
     "name" TEXT NOT NULL,
     "teacherId" INTEGER NOT NULL,
+    "status" "Status" NOT NULL DEFAULT E'draft',
 
     CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
 );

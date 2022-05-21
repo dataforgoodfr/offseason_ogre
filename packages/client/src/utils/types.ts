@@ -1,7 +1,8 @@
 export interface Game {
   id: number;
   date: Date;
+  description: string;
   name: string;
   teacherId: number;
-  description: string;
+  status: string;
 }

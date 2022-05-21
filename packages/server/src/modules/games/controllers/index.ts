@@ -33,6 +33,7 @@ async function createController(request: Request, response: Response) {
     date: new Date(),
     teacherId: response.locals.user.id,
     description: "",
+    status: "draft",
   });
   response.status(201).json({ data: newDocument });
 }
@@ -71,14 +72,15 @@ async function updateGame(request: Request, response: Response) {
     id: z.string().regex(/^\d+$/).transform(Number),
   });
   const bodySchema = z.object({
-    name: z.string(),
-    description: z.string(),
-    date: dateSchema,
+    description: z.string().optional(),
+    date: dateSchema.optional(),
+    name: z.string().optional(),
+    status: z.enum(["draft", "ready"]).optional(),
   });
 
   const { id } = paramsSchema.parse(request.params);
-  const fieldToUpdate = bodySchema.parse(request.body);
+  const update = bodySchema.parse(request.body);
 
-  const document = await services.update(id, fieldToUpdate);
+  const document = await services.update(id, update);
   response.status(200).json({ document });
 }
