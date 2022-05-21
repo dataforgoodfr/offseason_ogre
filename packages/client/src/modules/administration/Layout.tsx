@@ -5,10 +5,7 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Link, Navigate, useMatch } from "react-router-dom";
 import GamesIcon from "@mui/icons-material/Games";
 import {
@@ -22,7 +19,7 @@ import React, { Fragment } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../auth";
 import { useAuth } from "../auth/authProvider";
-import { useLayoutContext } from "../Layout/context";
+import InvertColorsIcon from "@mui/icons-material/InvertColors";
 
 const drawerWidth: number = 240;
 
@@ -35,12 +32,8 @@ function Layout({
   children: JSX.Element;
   renderLeftTool?: () => JSX.Element;
 }) {
-  const { isDrawerOpen, setIsDrawerOpen } = useLayoutContext();
-  const toggleDrawer = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
-
   const { user } = useAuth();
+  const theme = useTheme();
 
   if (!user?.isTeacher) {
     return <Navigate to="/" />;
@@ -48,24 +41,12 @@ function Layout({
 
   return (
     <Box sx={{ display: "flex" }}>
-      <LayoutAppBar open={isDrawerOpen}>
+      <LayoutAppBar>
         <Toolbar
           sx={{
             pr: "24px", // keep right padding when drawer closed
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: "36px",
-              ...(isDrawerOpen && { display: "none" }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
           {renderLeftTool()}
           <Typography
             component="h1"
@@ -79,20 +60,27 @@ function Layout({
           <LoggedUser />
         </Toolbar>
       </LayoutAppBar>
-      <LayoutDrawer open={isDrawerOpen}>
+      <LayoutDrawer>
         <>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
+          <Link to="/">
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <InvertColorsIcon
+                color="primary"
+                style={{
+                  fontSize: theme.spacing(5),
+                }}
+              />
+              <Typography color="primary" variant="h4">
+                Ogre
+              </Typography>
+            </Toolbar>
+          </Link>
           <Divider />
           <List component="nav">
             <MainListItems />
@@ -120,42 +108,17 @@ function Layout({
   );
 }
 
-function LayoutDrawer({
-  children,
-  open,
-}: {
-  children: JSX.Element;
-  open: boolean;
-}) {
-  const theme = useTheme();
-
+function LayoutDrawer({ children }: { children: JSX.Element }) {
   return (
     <Drawer
       variant="permanent"
-      open={open}
+      open={true}
       sx={{
         "& .MuiDrawer-paper": {
           position: "relative",
           whiteSpace: "nowrap",
           width: drawerWidth,
-          transition: (theme) =>
-            theme.transitions.create("width", {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
           boxSizing: "border-box",
-          ...(!open && {
-            overflowX: "hidden",
-            transition: (theme) =>
-              theme.transitions.create("width", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-              }),
-            width: (theme) => theme.spacing(7),
-            [theme.breakpoints.up("sm")]: {
-              width: (theme) => theme.spacing(9),
-            },
-          }),
         },
       }}
     >
@@ -164,33 +127,15 @@ function LayoutDrawer({
   );
 }
 
-function LayoutAppBar({
-  children,
-  open,
-}: {
-  children: JSX.Element;
-  open: boolean;
-}): JSX.Element {
+function LayoutAppBar({ children }: { children: JSX.Element }): JSX.Element {
   return (
     <AppBar
       color="secondary"
       position="absolute"
       sx={{
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        transition: (theme) =>
-          theme.transitions.create(["width", "margin"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
-        ...(open && {
-          marginLeft: drawerWidth,
-          width: `calc(100% - ${drawerWidth}px)`,
-          transition: (theme) =>
-            theme.transitions.create(["width", "margin"], {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
-        }),
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
       }}
     >
       {children}
