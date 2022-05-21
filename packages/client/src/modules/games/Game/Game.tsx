@@ -6,20 +6,20 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import { Layout } from "../administration/Layout";
+import { Layout } from "../../administration/Layout";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
-import { Game } from "../../utils/types";
+import { IGame } from "../../../utils/types";
 import { GamePlayers } from "./GamePlayers";
 import { Animation } from "./Animation";
 
-export { GameDetail };
+export { Game };
 
-function GameDetail() {
+function Game() {
   const params = useParams();
 
   const { data: result } = useQuery(`/api/games/${params.id}`, () => {
@@ -38,7 +38,7 @@ function GameDetail() {
             Atelier {game?.id}
           </Typography>
           <GeneralInfo game={game} />
-          <Players />
+          <Players game={game} />
           <Preparation />
           <AnimationAccordion game={game} />
         </Box>
@@ -49,19 +49,13 @@ function GameDetail() {
 
 function renderLeftTool(): JSX.Element {
   return (
-    <Button
-      component={Link}
-      to="/administration/games"
-      variant="contained"
-      color="inherit"
-      sx={{ mr: 2 }}
-    >
+    <Button component={Link} to="/administration/games" sx={{ mr: 2 }}>
       <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
     </Button>
   );
 }
 
-function GeneralInfo({ game }: { game: any }) {
+function GeneralInfo({ game }: { game: IGame }) {
   return (
     <AccordionLayout title="Informations générales">
       {game && <GameInfo game={game} />}
@@ -69,10 +63,10 @@ function GeneralInfo({ game }: { game: any }) {
   );
 }
 
-function Players() {
+function Players({ game }: { game: IGame }) {
   return (
     <AccordionLayout title="Joueurs">
-      <GamePlayers />
+      {game && <GamePlayers game={game} />}
     </AccordionLayout>
   );
 }
@@ -85,7 +79,7 @@ function Preparation() {
   );
 }
 
-function AnimationAccordion({ game }: { game: Game }) {
+function AnimationAccordion({ game }: { game: IGame }) {
   return (
     <AccordionLayout title="Animation">
       {game && <Animation game={game} />}

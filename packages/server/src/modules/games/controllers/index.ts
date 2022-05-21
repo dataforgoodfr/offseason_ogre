@@ -27,15 +27,16 @@ export { controllers };
 
 async function createController(request: Request, response: Response) {
   const bodySchema = z.object({
-    name: z.string(),
+    name: z.string().optional(),
   });
   const documentToCreate = bodySchema.parse(request.body);
   const newDocument = await services.create({
-    ...documentToCreate,
     date: new Date(),
-    teacherId: response.locals.user.id,
     description: "",
+    name: `Nouveau jeu - ${new Date().toLocaleString()}`,
+    teacherId: response.locals.user.id,
     status: "draft",
+    ...documentToCreate,
   });
   response.status(201).json({ data: newDocument });
 }

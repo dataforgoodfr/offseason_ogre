@@ -1,8 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { NewGame } from "./modules/administration";
 import { useAuth } from "./modules/auth/authProvider";
 import { Games } from "./modules/games";
-import { GameDetail } from "./modules/games";
+import { Game } from "./modules/games";
 import { MyGames } from "./modules/play";
 import { PlayerPersona } from "./modules/play/PlayerPersona";
 
@@ -16,9 +15,8 @@ function AuthenticatedApp() {
   return (
     <Routes>
       <Route path="administration">
-        <Route path="new-game" element={<NewGame />} />
         <Route path="games" element={<Games />} />
-        <Route path="games/:id" element={<GameDetail />} />
+        <Route path="games/:id" element={<Game />} />
         <Route path="" element={<Navigate to="games" />} />
         <Route path="*" element={<Navigate to="games" />} />
       </Route>

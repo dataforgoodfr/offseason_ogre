@@ -1,4 +1,4 @@
-export interface Game {
+export interface IGame {
   id: number;
   date: Date;
   description: string;

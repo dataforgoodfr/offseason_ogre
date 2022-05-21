@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { Link } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 import GamesIcon from "@mui/icons-material/Games";
 import {
   ListItemButton,
@@ -18,7 +18,6 @@ import {
   SvgIconTypeMap,
   useTheme,
 } from "@mui/material";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import React, { Fragment } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../auth";
@@ -195,18 +194,13 @@ function MainListItems() {
   return (
     <Fragment>
       {[
-        {
-          Icon: AddBoxIcon,
-          label: "Nouveau jeu",
-          to: "/administration/new-game",
-        },
         { Icon: GamesIcon, label: "Ateliers", to: "/administration/games" },
-      ].map(renderListItem)}
+      ].map(RenderListItem)}
     </Fragment>
   );
 }
 
-function renderListItem({
+function RenderListItem({
   Icon,
   label,
   to,
@@ -217,9 +211,10 @@ function renderListItem({
   label: string;
   to: string;
 }) {
+  const match = useMatch(`${to}/*`);
   return (
     <Link to={to} key={to}>
-      <ListItemButton>
+      <ListItemButton selected={match !== null}>
         <ListItemIcon>
           <Icon color="primary" />
         </ListItemIcon>

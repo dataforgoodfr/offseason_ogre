@@ -3,20 +3,13 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import SaveIcon from "@mui/icons-material/Save";
-import { SuccessAlert, ErrorAlert } from "../alert";
+import { SuccessAlert, ErrorAlert } from "../../alert";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { IGame } from "../../../utils/types";
 
 export { GameInfo };
-
-interface IGame {
-  id: number;
-  name: string;
-  date: Date;
-  teacherId: string;
-  description?: string;
-}
 
 interface IGameFormProps {
   name: string;

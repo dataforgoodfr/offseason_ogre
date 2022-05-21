@@ -10,9 +10,10 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { Game } from "../../../utils/types";
+import { IGame } from "../../../../utils/types";
+import { SuccessAlert } from "../../../alert";
 
-export default function Launch({ game }: { game: Game }) {
+export default function Launch({ game }: { game: IGame }) {
   const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
@@ -32,13 +33,14 @@ export default function Launch({ game }: { game: Game }) {
   const launchGame = () => {
     if (game.status === "draft") {
       mutation.mutate({ status: true });
-      setOpen(false);
     }
+    setOpen(false);
   };
 
   return (
     <div>
-      <Button onClick={handleClickOpen}>
+      {mutation.isSuccess && <SuccessAlert />}
+      <Button disabled={game.status !== "draft"} onClick={handleClickOpen}>
         <RocketLaunchIcon sx={{ height: "1rem" }} />
         Animer
       </Button>
@@ -53,7 +55,7 @@ export default function Launch({ game }: { game: Game }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Êtes-vous sûr.e de vouloir lancer l’atelier ?
+            Êtes-vous sûr.e de vouloir lancer l'atelier ?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
