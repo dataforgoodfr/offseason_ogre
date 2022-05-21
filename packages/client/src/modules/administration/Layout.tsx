@@ -22,6 +22,7 @@ import React, { Fragment } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../auth";
 import { useAuth } from "../auth/authProvider";
+import { useLayoutContext } from "../Layout/context";
 
 const drawerWidth: number = 240;
 
@@ -34,9 +35,9 @@ function Layout({
   children: JSX.Element;
   renderLeftTool?: () => JSX.Element;
 }) {
-  const [open, setOpen] = React.useState(true);
+  const { isDrawerOpen, setIsDrawerOpen } = useLayoutContext();
   const toggleDrawer = () => {
-    setOpen(!open);
+    setIsDrawerOpen(!isDrawerOpen);
   };
 
   const { user } = useAuth();
@@ -47,7 +48,7 @@ function Layout({
 
   return (
     <Box sx={{ display: "flex" }}>
-      <LayoutAppBar open={open}>
+      <LayoutAppBar open={isDrawerOpen}>
         <Toolbar
           sx={{
             pr: "24px", // keep right padding when drawer closed
@@ -60,7 +61,7 @@ function Layout({
             onClick={toggleDrawer}
             sx={{
               marginRight: "36px",
-              ...(open && { display: "none" }),
+              ...(isDrawerOpen && { display: "none" }),
             }}
           >
             <MenuIcon />
@@ -78,7 +79,7 @@ function Layout({
           <LoggedUser />
         </Toolbar>
       </LayoutAppBar>
-      <LayoutDrawer open={open}>
+      <LayoutDrawer open={isDrawerOpen}>
         <>
           <Toolbar
             sx={{

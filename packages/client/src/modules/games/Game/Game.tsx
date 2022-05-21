@@ -4,6 +4,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Divider,
   Typography,
 } from "@mui/material";
 import { Layout } from "../../administration/Layout";
@@ -31,7 +32,7 @@ function Game() {
   const game = result?.data?.document || null;
 
   return (
-    <Layout renderLeftTool={renderLeftTool}>
+    <Layout renderLeftTool={RenderLeftTool}>
       <>
         <Box sx={{ mt: 2 }}>
           <Typography variant="h3" sx={{ mb: 2 }}>
@@ -47,11 +48,18 @@ function Game() {
   );
 }
 
-function renderLeftTool(): JSX.Element {
+function RenderLeftTool(): JSX.Element {
   return (
-    <Button component={Link} to="/administration/games" sx={{ mr: 2 }}>
-      <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
-    </Button>
+    <>
+      <Button component={Link} to="/administration/games" sx={{ mr: 2 }}>
+        <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
+      </Button>
+      <Divider
+        orientation="vertical"
+        color="secondary"
+        sx={{ height: (theme) => theme.spacing(4), mr: 3 }}
+      />
+    </>
   );
 }
 
