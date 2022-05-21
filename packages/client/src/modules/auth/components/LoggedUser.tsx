@@ -7,6 +7,7 @@ import axios from "axios";
 import React from "react";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../authProvider";
 
 export { LoggedUser };
 
@@ -72,15 +73,7 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
           <PlayArrowIcon />
           <Typography sx={{ ml: 2 }}>Jouer</Typography>
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            navigate("/administration");
-          }}
-        >
-          <AdminPanelSettingsIcon />
-          <Typography sx={{ ml: 2 }}>Administration</Typography>
-        </MenuItem>
+        <AdministrationMenuItem handleClose={handleClose} />
         <MenuItem
           onClick={() => {
             axios.post("/api/users/logout").then(() => {
@@ -94,5 +87,25 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
         </MenuItem>
       </Menu>
     </div>
+  );
+}
+
+function AdministrationMenuItem({ handleClose }: { handleClose: () => void }) {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+
+  if (!user?.isTeacher) {
+    return <></>;
+  }
+  return (
+    <MenuItem
+      onClick={() => {
+        handleClose();
+        navigate("/administration");
+      }}
+    >
+      <AdminPanelSettingsIcon />
+      <Typography sx={{ ml: 2 }}>Administration</Typography>
+    </MenuItem>
   );
 }
