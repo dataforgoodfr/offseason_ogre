@@ -40,7 +40,7 @@ export default function Launch({ game }: { game: Game }) {
   return (
     <div>
       {mutation.isSuccess && <SuccessAlert />}
-      <Button onClick={handleClickOpen}>
+      <Button disabled={game.status !== "draft"} onClick={handleClickOpen}>
         <RocketLaunchIcon sx={{ height: "1rem" }} />
         Animer
       </Button>
