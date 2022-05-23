@@ -12,6 +12,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IGame } from "../../../../utils/types";
 import { SuccessAlert } from "../../../alert";
+import { Navigate } from "react-router-dom";
 
 export default function Launch({ game }: { game: IGame }) {
   const queryClient = useQueryClient();
@@ -39,8 +40,12 @@ export default function Launch({ game }: { game: IGame }) {
 
   return (
     <div>
-      {mutation.isSuccess && <SuccessAlert />}
-      <Button disabled={game.status !== "draft"} onClick={handleClickOpen}>
+      {mutation.isSuccess && <SuccessAlert /> && <Navigate to="/administration/games" replace={true} />}
+      <Button
+        disabled={game.status !== "draft"} onClick={handleClickOpen}
+        variant="contained"
+        color="secondary"
+      >
         <RocketLaunchIcon sx={{ height: "1rem" }} />
         Animer
       </Button>
