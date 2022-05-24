@@ -66,17 +66,19 @@ function MyGamesList() {
                   {"Date: " + new Date(game.date).toLocaleString()}
                 </Typography>
               </Grid>
-              <Grid item xs={6}>
-                <Button
-                  component={Link}
-                  to={`/play/my-games/${game.id}/persona`}
-                  color="secondary"
-                  variant="contained"
-                  sx={{ float: "left" }}
-                >
-                  <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
-                </Button>
-              </Grid>
+              {game.status === "ready" && (
+                <Grid item xs={6}>
+                  <Button
+                    component={Link}
+                    to={`/play/my-games/${game.id}/persona`}
+                    color="secondary"
+                    variant="contained"
+                    sx={{ float: "left" }}
+                  >
+                    <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </CardContent>
         </Card>

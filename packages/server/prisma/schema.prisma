@@ -17,6 +17,7 @@ model Game {
   teacherId   Int
   team        Team[]
   status      Status         @default(draft)
+  step        Int            @default(0)
 }
 
 enum Status {

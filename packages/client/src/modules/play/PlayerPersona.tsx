@@ -3,19 +3,12 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { PlayLayout } from ".";
+import { Game } from "../games/types";
 
 import { Persona } from "./Persona";
 import { PlayerHeader } from "./PlayerHeader";
 
 export { PlayerPersona };
-
-interface Game {
-  id: number;
-  name: string;
-  date: Date;
-  teacherId: string;
-  description?: string;
-}
 
 function PlayerPersona() {
   const params = useParams();
@@ -47,7 +40,7 @@ function PlayerPersona() {
               pr: 1,
             }}
           >
-            <PlayerHeader game={{ gameId: game?.id }} />
+            <PlayerHeader game={{ gameId: game?.id, step: game?.step }} />
           </Grid>
           <Grid
             item
