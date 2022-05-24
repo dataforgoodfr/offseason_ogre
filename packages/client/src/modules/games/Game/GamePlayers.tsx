@@ -5,7 +5,6 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  Typography,
 } from "@mui/material";
 import {
   DataGrid,
@@ -59,10 +58,6 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     }
   );
 
-  if (game.status !== "draft") {
-    return <Typography align="center">L'atelier a déjà été lancé.</Typography>;
-  }
-
   if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
   }
@@ -79,7 +74,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     <Box style={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
-        columns={buidColumns({ teams })}
+        columns={buidColumns({ game, teams })}
         disableSelectionOnClick
         pageSize={10}
         rowsPerPageOptions={[10]}
@@ -106,7 +101,13 @@ interface Row {
   teamId: number;
 }
 
-function buidColumns({ teams }: { teams: Team[] }): GridColumns<Row> {
+function buidColumns({
+  game,
+  teams,
+}: {
+  game: IGame;
+  teams: Team[];
+}): GridColumns<Row> {
   return [
     {
       field: "name",
@@ -124,25 +125,53 @@ function buidColumns({ teams }: { teams: Team[] }): GridColumns<Row> {
       flex: 1,
       minWidth: 250,
     },
+    ...buildTeamColumns({ game, teams }),
+    ...buildActionColumns({ game }),
+  ];
+}
+
+function buildTeamColumns({
+  game,
+  teams,
+}: {
+  game: IGame;
+  teams: Team[];
+}): GridColumns<Row> {
+  const baseTeamColumn = {
+    editable: false,
+    field: "teamId",
+    headerName: "Equipe",
+    valueFormatter: ({ value, field, api }) => {
+      const colDef = api.getColumn(field);
+      const option = colDef.valueOptions.find(
+        ({ value: optionValue }: { value: any }) => value === optionValue
+      );
+      return option.label;
+    },
+    valueOptions: teams.map(({ id, name }) => ({
+      value: id,
+      label: name,
+    })),
+    flex: 1,
+    minWidth: 160,
+  } as GridColumns<Row>[0];
+  if (game.status !== "draft") {
+    return [baseTeamColumn];
+  }
+  return [
     {
-      field: "teamId",
-      headerName: "Equipe",
+      ...baseTeamColumn,
       editable: true,
       type: "singleSelect",
-      valueOptions: teams.map(({ id, name }) => ({
-        value: id,
-        label: name,
-      })),
-      valueFormatter: ({ value, field, api }) => {
-        const colDef = api.getColumn(field);
-        const option = colDef.valueOptions.find(
-          ({ value: optionValue }: { value: any }) => value === optionValue
-        );
-        return option.label;
-      },
-      flex: 1,
-      minWidth: 160,
     },
+  ] as GridColumns<Row>;
+}
+
+function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
+  if (game.status !== "draft") {
+    return [];
+  }
+  return [
     {
       field: "actions",
       type: "actions",
