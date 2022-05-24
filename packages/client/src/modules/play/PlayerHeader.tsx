@@ -21,13 +21,28 @@ import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import { useAuth } from "../auth/authProvider";
+import GameStepper from "../common/components/Stepper";
+import { useQuery } from "react-query";
+import axios from "axios";
 
 export { PlayerHeader };
 
-function PlayerHeader(props: any) {
+function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
   const { user } = useAuth();
   const theme = useTheme();
   const { game } = props;
+
+  const { data, isLoading } = useQuery(
+    `${user?.id}/games/${game.gameId}/team`,
+    () => {
+      return axios.get<
+        undefined,
+        { data: { data: { team: { name: string } } } }
+      >(`/api/users/${user?.id}/games/${game.gameId}/team`);
+    }
+  );
+
+  const teamName = data?.data?.data?.team?.name ?? "";
 
   return (
     <Box>
@@ -77,7 +92,7 @@ function PlayerHeader(props: any) {
               {user?.firstName} {user?.lastName}
             </Typography>
             <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
-              Equipe jaune
+              {!isLoading && teamName}
             </Typography>
           </Grid>
         </Grid>
@@ -91,9 +106,11 @@ function PlayerHeader(props: any) {
           }}
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            Etape nº XXX
+            {game.step === 0 ? "Situation initiale" : `Etape nº${game.step}`}
           </Typography>
-          <Typography> ------- </Typography>
+          <Typography>
+            <GameStepper step={game.step} />
+          </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
             XXX <EmojiEventsRoundedIcon />
           </Typography>

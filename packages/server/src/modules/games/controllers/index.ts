@@ -36,6 +36,7 @@ async function createController(request: Request, response: Response) {
     name: `Nouveau jeu - ${new Date().toLocaleString()}`,
     teacherId: response.locals.user.id,
     status: "draft",
+    step: 0,
     ...documentToCreate,
   });
   response.status(201).json({ data: newDocument });

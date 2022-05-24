@@ -7,6 +7,7 @@ import { signInController } from "./signInController";
 const crudController = {
   getDocumentController,
   signUpController,
+  getTeamForPlayer,
 };
 const controllers = {
   ...crudController,
@@ -53,4 +54,14 @@ async function sendMagicLinkController(request: Request, response: Response) {
   response
     .status(200)
     .send({ hasEmailBeenSent: true, hasUserWithThatEmail: true });
+}
+
+async function getTeamForPlayer(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    gameId: z.string().regex(/^\d+$/).transform(Number),
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+  const { gameId, id } = paramsSchema.parse(request.params);
+  const document = await services.getTeamForPlayer(gameId, id);
+  response.status(200).json({ data: document });
 }
