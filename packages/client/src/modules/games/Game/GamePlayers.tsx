@@ -1,4 +1,12 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -10,6 +18,7 @@ import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
 import { IGame } from "../../../utils/types";
+import { useState } from "react";
 
 interface Team {
   id: number;
@@ -159,12 +168,38 @@ function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
       },
     }
   );
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   return (
-    <GridActionsCellItem
-      icon={<DeleteIcon />}
-      label="Delete"
-      onClick={() => removePlayerMutation.mutate()}
-    />
+    <>
+      <GridActionsCellItem
+        icon={<DeleteIcon />}
+        label="Delete"
+        onClick={() => setIsDialogOpen(true)}
+      />
+      <Dialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Voulez-vous supprimer le joueur ?
+        </DialogTitle>
+        <DialogActions>
+          <Button autoFocus onClick={() => setIsDialogOpen(false)}>
+            Non
+          </Button>
+          <Button
+            onClick={() => {
+              removePlayerMutation.mutate();
+              setIsDialogOpen(false);
+            }}
+          >
+            Oui
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
