@@ -15,4 +15,5 @@ interface UsersOnGames {
   gameId: number;
   teamId: number;
   userId: number;
+  team: Team;
 }

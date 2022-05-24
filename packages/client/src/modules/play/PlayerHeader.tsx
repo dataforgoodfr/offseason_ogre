@@ -32,23 +32,17 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
   const theme = useTheme();
   const { game } = props;
 
-  const { data } = useQuery(`${user?.id}/games/${game.gameId}/team`, () => {
-    return axios.get<undefined, { data: { data: { teamId: number } } }>(
-      `/api/users/${user?.id}/games/${game.gameId}/team`
-    );
-  });
+  const { data, isLoading } = useQuery(
+    `${user?.id}/games/${game.gameId}/team`,
+    () => {
+      return axios.get<
+        undefined,
+        { data: { data: { team: { name: string } } } }
+      >(`/api/users/${user?.id}/games/${game.gameId}/team`);
+    }
+  );
 
-  const teamId = data?.data?.data.teamId ?? 0;
-
-  const teamQuery = useQuery(`/teams/${teamId}`, () => {
-    return axios.get<
-      undefined,
-      {
-        data: { teams: { name: string } };
-      }
-    >(`/api/teams/${teamId}`);
-  });
-  const teamName = teamQuery?.data?.data?.teams?.name ?? [];
+  const teamName = data?.data?.data?.team?.name ?? "";
 
   return (
     <Box>
@@ -98,7 +92,7 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
               {user?.firstName} {user?.lastName}
             </Typography>
             <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
-              {!teamQuery.isLoading && teamName}
+              {!isLoading && teamName}
             </Typography>
           </Grid>
         </Grid>
