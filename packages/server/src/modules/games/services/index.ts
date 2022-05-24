@@ -28,6 +28,9 @@ async function create(document: Omit<Model, "id">): Promise<Model> {
   const game = await model.create({ data: document });
   await teamServices.create({ gameId: game.id, name: "Equipe 1" });
   await teamServices.create({ gameId: game.id, name: "Equipe 2" });
+  await teamServices.create({ gameId: game.id, name: "Equipe 3" });
+  await teamServices.create({ gameId: game.id, name: "Equipe 4" });
+  await teamServices.create({ gameId: game.id, name: "Equipe 5" });
   return game;
 }
 
