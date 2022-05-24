@@ -38,7 +38,7 @@ function AlertSnackbar({
   const onClose = () => setIsOpen(false);
   return (
     <Snackbar
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
       autoHideDuration={6000}
       onClose={onClose}
       open={isOpen}
