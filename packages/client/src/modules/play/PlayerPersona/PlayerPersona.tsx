@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import { PlayLayout } from ".";
+import { PlayLayout } from "../PlayLayout";
 
 import { Persona } from "./Persona";
 import { PlayerHeader } from "./PlayerHeader";
