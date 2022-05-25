@@ -66,23 +66,23 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {games.map((game) => (
-        <Card key={game.id} sx={{ mt: 2 }}>
+        <Card key={game.id} sx={{ mt: 2, pl: 1, pr: 1 }}>
           <CardContent>
             <Grid container direction="row" alignItems="center">
-              <Grid item xs={6}>
+              <Grid item xs={10}>
                 <Typography variant="h6">{game.name}</Typography>
                 <Typography>
                   {"Date: " + new Date(game.date).toLocaleString()}
                 </Typography>
               </Grid>
               {game.status === "ready" && (
-                <Grid item xs={6}>
+                <Grid display="flex" xs={2}>
                   <Button
                     component={Link}
-                    to={`/play/my-games/${game.id}/persona`}
                     color="secondary"
                     variant="contained"
-                    sx={{ float: "left" }}
+                    to={`/play/my-games/${game.id}/persona`}
+                    sx={{ ml: "auto" }}
                   >
                     <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
                   </Button>
