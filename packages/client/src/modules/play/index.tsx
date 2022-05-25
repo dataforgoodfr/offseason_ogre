@@ -21,8 +21,9 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../alert";
 import { LoggedUser } from "../auth";
 import { useAuth } from "../auth/authProvider";
+import { GameAdmin } from "./GameAdmin";
 
-export { MyGames, PlayLayout };
+export { GameAdmin, MyGames, PlayLayout };
 
 interface Registration {
   gameId: number;
