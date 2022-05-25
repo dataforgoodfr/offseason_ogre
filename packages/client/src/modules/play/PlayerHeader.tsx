@@ -49,29 +49,15 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
       <Box
         sx={{
           mt: 2,
-          pl: 2,
-          pr: 2,
+          p: 2,
           border: "2px solid white",
           borderRadius: "10px",
           bgcolor: theme.palette.primary.main,
           color: "white",
         }}
       >
-        <Grid
-          container
-          direction="row"
-          alignItems="center"
-          alignContent="center"
-          sx={{ pt: 1, pb: 1 }}
-        >
-          <Grid
-            item
-            xs={6}
-            sx={{
-              pl: 2,
-              pr: 2,
-            }}
-          >
+        <Grid container>
+          <Grid item xs={4}>
             <Card>
               <CardActionArea
                 component={Link}
@@ -87,8 +73,8 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
               </CardActionArea>
             </Card>
           </Grid>
-          <Grid item xs={6}>
-            <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
+          <Grid item sx={{ pl: 2 }} xs={8}>
+            <Typography variant="h6">
               {user?.firstName} {user?.lastName}
             </Typography>
             <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
@@ -102,6 +88,7 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
           sx={{
             ml: "auto",
             mr: "auto",
+            mt: 2,
             textAlign: "center",
           }}
         >
