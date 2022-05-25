@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import {
-  AppBar,
   Box,
   Button,
   Card,
@@ -12,19 +11,17 @@ import {
   Grid,
   Paper,
   TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../alert";
-import { LoggedUser } from "../auth";
-import { useAuth } from "../auth/authProvider";
 import { GameAdmin } from "./GameAdmin";
 import { PlayerPersona } from "./PlayerPersona";
+import { PlayLayout } from "./PlayLayout";
 
-export { GameAdmin, MyGames, PlayLayout, PlayerPersona };
+export { GameAdmin, MyGames, PlayerPersona };
 
 interface Registration {
   gameId: number;
@@ -149,51 +146,5 @@ function JoinGame() {
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       {mutation.isSuccess && <SuccessAlert />}
     </Paper>
-  );
-}
-
-function PlayLayout({
-  title,
-  children,
-}: {
-  title: string;
-  children: JSX.Element;
-}) {
-  const { user } = useAuth();
-
-  return (
-    <Box display="flex">
-      <AppBar color="primary" position="fixed">
-        <Toolbar>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
-          >
-            {user?.firstName || user?.lastName
-              ? `${user.firstName} ${user.lastName} | `
-              : ""}{" "}
-            {title}
-          </Typography>
-          <LoggedUser />
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="main"
-        sx={{
-          bgcolor: "#577590",
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-        }}
-      >
-        <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
-          {children}
-        </Container>
-      </Box>
-    </Box>
   );
 }
