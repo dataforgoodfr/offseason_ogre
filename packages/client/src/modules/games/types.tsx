@@ -4,6 +4,6 @@ export interface Game {
   description?: string;
   name: string;
   status: string;
-  teacherId: number;
   step: number;
+  teacherId: number;
 }

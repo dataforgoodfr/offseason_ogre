@@ -24,25 +24,25 @@ import { useAuth } from "../auth/authProvider";
 import GameStepper from "../common/components/Stepper";
 import { useQuery } from "react-query";
 import axios from "axios";
+import { IGame, ITeam, IUser } from "../../utils/types";
 
 export { PlayerHeader };
 
-function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
+function PlayerHeader(props: { game: IGame }) {
   const { user } = useAuth();
   const theme = useTheme();
   const { game } = props;
 
-  const { data, isLoading } = useQuery(
-    `${user?.id}/games/${game.gameId}/team`,
-    () => {
-      return axios.get<
-        undefined,
-        { data: { data: { team: { name: string } } } }
-      >(`/api/users/${user?.id}/games/${game.gameId}/team`);
-    }
-  );
+  const { data } = useQuery(`${user?.id}/games/${game.id}/team`, () => {
+    return axios.get<undefined, { data: { data: { team: ITeam } } }>(
+      `/api/users/${user?.id}/games/${game.id}/team`
+    );
+  });
+  if (user === null) {
+    throw new Error("User must be authentified");
+  }
 
-  const teamName = data?.data?.data?.team?.name ?? "";
+  const team = data?.data?.data?.team;
 
   return (
     <Box>
@@ -56,32 +56,7 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
           color: "white",
         }}
       >
-        <Grid container>
-          <Grid item xs={4}>
-            <Card>
-              <CardActionArea
-                component={Link}
-                to={`/play/my-games/${game.gameId}/persona`}
-              >
-                <CardContent sx={{ p: 0 }}>
-                  <img
-                    style={{ border: "2px solid white", borderRadius: "10px" }}
-                    src="/avatar.png"
-                    alt="avatar"
-                  />
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          </Grid>
-          <Grid item sx={{ pl: 2 }} xs={8}>
-            <Typography variant="h6">
-              {user?.firstName} {user?.lastName}
-            </Typography>
-            <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
-              {!isLoading && teamName}
-            </Typography>
-          </Grid>
-        </Grid>
+        <Header game={game} team={team} user={user} />
         <Grid
           item
           xs={12}
@@ -164,6 +139,45 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
       </Box>
       <Actions />
     </Box>
+  );
+}
+
+function Header({
+  game,
+  team,
+  user,
+}: {
+  game?: IGame;
+  team?: ITeam;
+  user?: IUser;
+}) {
+  return (
+    <Grid container>
+      <Grid item xs={4}>
+        <Card>
+          <CardActionArea
+            to={`/play/my-games/${game?.id}/persona`}
+            component={Link}
+          >
+            <CardContent sx={{ p: 0 }}>
+              <img
+                style={{ border: "2px solid white", borderRadius: "10px" }}
+                src="/avatar.png"
+                alt="avatar"
+              />
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
+      <Grid item sx={{ pl: 2 }} xs={8}>
+        <Typography variant="h6">
+          {user?.firstName} {user?.lastName}
+        </Typography>
+        <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
+          {team?.name ?? ""}
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
 
