@@ -175,34 +175,37 @@ function PlayerHeader(props: { game: { gameId?: number; step?: number } }) {
           </ScoresLegendLayout>
         </Grid>
       </Box>
-      <Box sx={{ textAlign: "center", mt: 6 }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+          justifyContent: "center",
+          mt: 4,
+        }}
+      >
         <Button
           component={Link}
           to="/my-games"
           variant="contained"
           color="secondary"
           sx={{
-            border: `2px solid ${theme.palette.primary}`,
-            width: "90%",
-            borderRadius: "10px",
+            width: "200px",
           }}
         >
-          <BarChartRoundedIcon /> Statistiques
+          <BarChartRoundedIcon sx={{ mr: 1 }} /> Statistiques
         </Button>
-      </Box>
-      <Box sx={{ textAlign: "center", mt: 6 }}>
         <Button
           component={Link}
           to="/my-games"
           variant="contained"
           color="primary"
           sx={{
-            border: `2px solid ${theme.palette.secondary}`,
-            width: "90%",
-            borderRadius: "10px",
+            mt: 2,
+            width: "200px",
           }}
         >
-          <VideogameAssetRoundedIcon /> Actions
+          <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> Actions
         </Button>
       </Box>
     </Box>

@@ -34,7 +34,7 @@ function PlayerPersona() {
           <Grid
             item
             xs={12}
-            sm={2}
+            sm={3}
             sx={{
               pl: 1,
               pr: 1,
@@ -45,7 +45,7 @@ function PlayerPersona() {
           <Grid
             item
             xs={12}
-            sm={10}
+            sm={9}
             sx={{
               pl: 1,
               pr: 1,
