@@ -180,7 +180,9 @@ function PlayLayout({
         }}
       >
         <Toolbar />
-        <>{children}</>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
+          {children}
+        </Container>
       </Box>
     </Box>
   );
