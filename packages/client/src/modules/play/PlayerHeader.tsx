@@ -156,7 +156,7 @@ function Header({
       <Grid item xs={4}>
         <Card>
           <CardActionArea
-            to={`/play/my-games/${game?.id}/persona`}
+            to={`/play/games/${game?.id}/persona`}
             component={Link}
           >
             <CardContent sx={{ p: 0 }}>

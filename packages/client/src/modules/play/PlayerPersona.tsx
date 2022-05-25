@@ -12,14 +12,11 @@ export { PlayerPersona };
 
 function PlayerPersona() {
   const params = useParams();
-  const { data, isLoading } = useQuery(
-    `/play/my-games/${params.id}/persona`,
-    () => {
-      return axios.get<any, { data: { document: null | Game } }>(
-        `/api/games/${params.id}`
-      );
-    }
-  );
+  const { data, isLoading } = useQuery(`/play/games/${params.id}`, () => {
+    return axios.get<any, { data: { document: null | Game } }>(
+      `/api/games/${params.id}`
+    );
+  });
 
   const game = data?.data?.document;
 
