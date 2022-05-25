@@ -1,4 +1,3 @@
-import { LoadingButton } from "@mui/lab";
 import { Link } from "react-router-dom";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import {
@@ -9,6 +8,7 @@ import {
   CardContent,
   CircularProgress,
   Container,
+  Divider,
   Grid,
   Paper,
   TextField,
@@ -32,10 +32,19 @@ function MyGames() {
   return (
     <PlayLayout title="Ateliers">
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
-        <Typography variant="h3" color="white">
+        <Typography variant="h3" color="secondary">
           Mes ateliers
         </Typography>
-        <JoinGame />
+        <Divider
+          sx={{
+            "&::before, &::after": {
+              borderColor: "secondary.light",
+            },
+            mt: 4,
+          }}
+        >
+          <JoinGame />
+        </Divider>
         <MyGamesList />
       </Container>
     </PlayLayout>
@@ -57,23 +66,23 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {games.map((game) => (
-        <Card key={game.id} sx={{ mt: 2 }}>
+        <Card key={game.id} sx={{ mt: 2, pl: 1, pr: 1 }}>
           <CardContent>
             <Grid container direction="row" alignItems="center">
-              <Grid item xs={6}>
+              <Grid item xs={10}>
                 <Typography variant="h6">{game.name}</Typography>
                 <Typography>
                   {"Date: " + new Date(game.date).toLocaleString()}
                 </Typography>
               </Grid>
               {game.status === "ready" && (
-                <Grid item xs={6}>
+                <Grid display="flex" xs={2}>
                   <Button
                     component={Link}
-                    to={`/play/my-games/${game.id}/persona`}
                     color="secondary"
                     variant="contained"
-                    sx={{ float: "left" }}
+                    to={`/play/my-games/${game.id}/persona`}
+                    sx={{ ml: "auto" }}
                   >
                     <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
                   </Button>
@@ -110,7 +119,7 @@ function JoinGame() {
 
   const onValid = (registration: Registration) => mutation.mutate(registration);
   return (
-    <Paper sx={{ width: "fit-content", mt: 4, p: 2 }}>
+    <Paper sx={{ width: "443px", p: 2 }}>
       <form onSubmit={handleSubmit(onValid)}>
         <Grid container>
           <Controller
@@ -126,14 +135,13 @@ function JoinGame() {
               />
             )}
           />
-          <LoadingButton
-            loading={mutation.isLoading}
+          <Button
             type="submit"
             sx={{ width: "200px", ml: 2 }}
             variant="contained"
           >
             Rejoindre le jeu
-          </LoadingButton>
+          </Button>
         </Grid>
       </form>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
@@ -180,7 +188,9 @@ function PlayLayout({
         }}
       >
         <Toolbar />
-        <>{children}</>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
+          {children}
+        </Container>
       </Box>
     </Box>
   );

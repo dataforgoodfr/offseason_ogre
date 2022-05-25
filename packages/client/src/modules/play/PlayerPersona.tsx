@@ -21,7 +21,11 @@ function PlayerPersona() {
     }
   );
 
-  const game = data?.data?.document || null;
+  const game = data?.data?.document;
+
+  if (!game) {
+    return <>No Game found!</>;
+  }
 
   if (isLoading) {
     return <CircularProgress />;
@@ -34,18 +38,18 @@ function PlayerPersona() {
           <Grid
             item
             xs={12}
-            sm={2}
+            sm={3}
             sx={{
               pl: 1,
               pr: 1,
             }}
           >
-            <PlayerHeader game={{ gameId: game?.id, step: game?.step }} />
+            <PlayerHeader game={game} />
           </Grid>
           <Grid
             item
             xs={12}
-            sm={10}
+            sm={9}
             sx={{
               pl: 1,
               pr: 1,

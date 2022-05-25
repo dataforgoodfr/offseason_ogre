@@ -1,8 +1,11 @@
-export interface IGame {
+import { Game } from "../modules/games/types";
+import { User } from "../modules/users/types";
+
+export type IGame = Game;
+
+export interface ITeam {
   id: number;
-  date: Date;
-  description: string;
   name: string;
-  teacherId: number;
-  status: string;
 }
+
+export type IUser = User;

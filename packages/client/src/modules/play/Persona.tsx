@@ -13,7 +13,9 @@ import {
   AccordionSummary,
   AccordionDetails,
   useTheme,
+  SvgIconTypeMap,
 } from "@mui/material";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 
 export { Persona };
 
@@ -33,32 +35,26 @@ function Persona() {
         color: "white",
       }}
     >
-      <Typography sx={{ textAlign: "center", mb: 3, mt: 3 }}>
+      <Typography sx={{ textAlign: "center", mb: 3, mt: 3 }} variant="h3">
         Mes caractéristiques
       </Typography>
-      <AccordionLayout title="Général" titleIcon={<PersonPinRoundedIcon />}>
-        {<Typography>Caractéristiques.</Typography>}
+      <AccordionLayout title="Général" TitleIcon={PersonPinRoundedIcon}>
+        <Typography>Caractéristiques.</Typography>
       </AccordionLayout>
-      <AccordionLayout
-        title="Déplacement"
-        titleIcon={<DirectionsCarRoundedIcon />}
-      >
-        {<Typography>Caractéristiques.</Typography>}
+      <AccordionLayout title="Déplacement" TitleIcon={DirectionsCarRoundedIcon}>
+        <Typography>Caractéristiques.</Typography>
       </AccordionLayout>
-      <AccordionLayout title="Logement" titleIcon={<HomeRoundedIcon />}>
-        {<Typography>Caractéristiques.</Typography>}
+      <AccordionLayout title="Logement" TitleIcon={HomeRoundedIcon}>
+        <Typography>Caractéristiques.</Typography>
       </AccordionLayout>
-      <AccordionLayout
-        title="Alimentation"
-        titleIcon={<LunchDiningRoundedIcon />}
-      >
-        {<Typography>Caractéristiques.</Typography>}
+      <AccordionLayout title="Alimentation" TitleIcon={LunchDiningRoundedIcon}>
+        <Typography>Caractéristiques.</Typography>
       </AccordionLayout>
-      <AccordionLayout title="Numérique" titleIcon={<ComputerRoundedIcon />}>
-        {<Typography>Caractéristiques.</Typography>}
+      <AccordionLayout title="Numérique" TitleIcon={ComputerRoundedIcon}>
+        <Typography>Caractéristiques.</Typography>
       </AccordionLayout>
-      <AccordionLayout title="Textile" titleIcon={<DryCleaningRoundedIcon />}>
-        {<Typography>Caractéristiques.</Typography>}
+      <AccordionLayout title="Textile" TitleIcon={DryCleaningRoundedIcon}>
+        <Typography>Caractéristiques.</Typography>
       </AccordionLayout>
     </Box>
   );
@@ -67,11 +63,13 @@ function Persona() {
 function AccordionLayout({
   children,
   title,
-  titleIcon,
+  TitleIcon,
 }: {
   children: JSX.Element;
   title: string;
-  titleIcon?: JSX.Element;
+  TitleIcon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+    muiName: string;
+  };
 }) {
   const theme = useTheme();
 
@@ -100,8 +98,9 @@ function AccordionLayout({
           },
         }}
       >
-        <Typography sx={{ width: "33%", flexShrink: 0 }}>
-          {titleIcon} {title}
+        <Typography alignItems="center" display="flex" variant="h6">
+          {TitleIcon && <TitleIcon sx={{ mr: 1 }} />}
+          {title}
         </Typography>
       </AccordionSummary>
       <AccordionDetails
