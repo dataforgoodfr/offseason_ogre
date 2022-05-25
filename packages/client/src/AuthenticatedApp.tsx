@@ -3,7 +3,7 @@ import { useAuth } from "./modules/auth/authProvider";
 import { Games } from "./modules/games";
 import { Game } from "./modules/games";
 import { GameAdmin, MyGames } from "./modules/play";
-import { PlayerPersona } from "./modules/play/PlayerPersona";
+import { PlayerPersona } from "./modules/play";
 
 export { AuthenticatedApp };
 

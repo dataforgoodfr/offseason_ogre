@@ -20,11 +20,11 @@ import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
-import { useAuth } from "../auth/authProvider";
-import GameStepper from "../common/components/Stepper";
+import { useAuth } from "../../auth/authProvider";
+import GameStepper from "../../common/components/Stepper";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { IGame, ITeam, IUser } from "../../utils/types";
+import { IGame, ITeam, IUser } from "../../../utils/types";
 
 export { PlayerHeader };
 

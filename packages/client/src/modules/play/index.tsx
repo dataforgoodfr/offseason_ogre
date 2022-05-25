@@ -22,8 +22,9 @@ import { ErrorAlert, SuccessAlert } from "../alert";
 import { LoggedUser } from "../auth";
 import { useAuth } from "../auth/authProvider";
 import { GameAdmin } from "./GameAdmin";
+import { PlayerPersona } from "./PlayerPersona";
 
-export { GameAdmin, MyGames, PlayLayout };
+export { GameAdmin, MyGames, PlayLayout, PlayerPersona };
 
 interface Registration {
   gameId: number;
