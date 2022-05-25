@@ -1,4 +1,3 @@
-import { LoadingButton } from "@mui/lab";
 import { Link } from "react-router-dom";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import {
@@ -9,6 +8,7 @@ import {
   CardContent,
   CircularProgress,
   Container,
+  Divider,
   Grid,
   Paper,
   TextField,
@@ -32,10 +32,19 @@ function MyGames() {
   return (
     <PlayLayout title="Ateliers">
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
-        <Typography variant="h3" color="white">
+        <Typography variant="h3" color="secondary">
           Mes ateliers
         </Typography>
-        <JoinGame />
+        <Divider
+          sx={{
+            "&::before, &::after": {
+              borderColor: "secondary.light",
+            },
+            mt: 4,
+          }}
+        >
+          <JoinGame />
+        </Divider>
         <MyGamesList />
       </Container>
     </PlayLayout>
@@ -110,7 +119,7 @@ function JoinGame() {
 
   const onValid = (registration: Registration) => mutation.mutate(registration);
   return (
-    <Paper sx={{ width: "fit-content", mt: 4, p: 2 }}>
+    <Paper sx={{ width: "443px", p: 2 }}>
       <form onSubmit={handleSubmit(onValid)}>
         <Grid container>
           <Controller
@@ -126,14 +135,13 @@ function JoinGame() {
               />
             )}
           />
-          <LoadingButton
-            loading={mutation.isLoading}
+          <Button
             type="submit"
             sx={{ width: "200px", ml: 2 }}
             variant="contained"
           >
             Rejoindre le jeu
-          </LoadingButton>
+          </Button>
         </Grid>
       </form>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
