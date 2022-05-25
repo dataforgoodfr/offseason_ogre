@@ -59,6 +59,6 @@ async function getTeamForPlayer(
 ): Promise<UsersOnGamesModel | null> {
   return userOnGameModel.findUnique({
     where: { userId_gameId: { gameId, userId } },
-    include: { team: true },
+    include: { game: true, team: true },
   });
 }

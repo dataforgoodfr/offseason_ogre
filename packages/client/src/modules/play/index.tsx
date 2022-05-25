@@ -81,7 +81,7 @@ function MyGamesList() {
                     component={Link}
                     color="secondary"
                     variant="contained"
-                    to={`/play/my-games/${game.id}/persona`}
+                    to={`/play/games/${game.id}/persona`}
                     sx={{ ml: "auto" }}
                   >
                     <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer

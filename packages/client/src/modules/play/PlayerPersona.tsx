@@ -1,9 +1,5 @@
-import { Box, CircularProgress, Grid } from "@mui/material";
-import axios from "axios";
-import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { Box, Grid } from "@mui/material";
 import { PlayLayout } from ".";
-import { Game } from "../games/types";
 
 import { Persona } from "./Persona";
 import { PlayerHeader } from "./PlayerHeader";
@@ -11,26 +7,6 @@ import { PlayerHeader } from "./PlayerHeader";
 export { PlayerPersona };
 
 function PlayerPersona() {
-  const params = useParams();
-  const { data, isLoading } = useQuery(
-    `/play/my-games/${params.id}/persona`,
-    () => {
-      return axios.get<any, { data: { document: null | Game } }>(
-        `/api/games/${params.id}`
-      );
-    }
-  );
-
-  const game = data?.data?.document;
-
-  if (!game) {
-    return <>No Game found!</>;
-  }
-
-  if (isLoading) {
-    return <CircularProgress />;
-  }
-
   return (
     <PlayLayout title="Persona">
       <Box>
@@ -44,7 +20,7 @@ function PlayerPersona() {
               pr: 1,
             }}
           >
-            <PlayerHeader game={game} />
+            <PlayerHeader />
           </Grid>
           <Grid
             item
