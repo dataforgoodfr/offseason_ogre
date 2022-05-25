@@ -11,7 +11,7 @@ import {
   CardContent,
   useTheme,
 } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
 import FactoryRoundedIcon from "@mui/icons-material/FactoryRounded";
@@ -28,21 +28,27 @@ import { IGame, ITeam, IUser } from "../../utils/types";
 
 export { PlayerHeader };
 
-function PlayerHeader(props: { game: IGame }) {
+function PlayerHeader() {
   const { user } = useAuth();
   const theme = useTheme();
-  const { game } = props;
+  const gameId = useGameId();
 
-  const { data } = useQuery(`${user?.id}/games/${game.id}/team`, () => {
-    return axios.get<undefined, { data: { data: { team: ITeam } } }>(
-      `/api/users/${user?.id}/games/${game.id}/team`
-    );
+  const { data } = useQuery(`${user?.id}/games/${gameId}/team`, () => {
+    return axios.get<
+      undefined,
+      { data: { data: { game: IGame; team: ITeam } } }
+    >(`/api/users/${user?.id}/games/${gameId}/team`);
   });
   if (user === null) {
     throw new Error("User must be authentified");
   }
 
+  const game = data?.data?.data?.game;
   const team = data?.data?.data?.team;
+
+  if (!game || !team) {
+    return <></>;
+  }
 
   return (
     <Box>
@@ -259,4 +265,11 @@ function ScoresLegendLayout({ children }: { children: any }) {
       </AccordionDetails>
     </Accordion>
   );
+}
+
+function useGameId() {
+  const { id } = useParams();
+  if (!id) throw new Error("game id must be defined");
+  const gameId = +id;
+  return gameId;
 }
