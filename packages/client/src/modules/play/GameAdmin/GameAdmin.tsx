@@ -1,4 +1,11 @@
-import { Box, Grid, Tooltip, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Rating,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import GameStepper from "../../common/components/Stepper";
@@ -8,7 +15,6 @@ import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
-import { theme } from "../../../utils/theme";
 
 export { GameAdmin };
 
@@ -73,10 +79,20 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
               <CloudIcon />
               <Typography ml={1}>Bilan carbone: 11,9 kgCO2/an</Typography>
             </Box>
+            <ActionPoints />
           </PlayBox>
         );
       })}
     </>
+  );
+}
+
+function ActionPoints() {
+  return (
+    <Box mt={2}>
+      <Typography>Action points</Typography>
+      <Rating name="action-points" max={10} value={7} readOnly />
+    </Box>
   );
 }
 
