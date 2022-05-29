@@ -1,13 +1,36 @@
-import { MobileStepper, useTheme } from "@mui/material";
+import {
+  Box,
+  BoxProps,
+  MobileStepper,
+  Typography,
+  TypographyProps,
+  useTheme,
+} from "@mui/material";
 
-const GameStepper = (props: any) => {
-  const { step } = props;
+const MAX_NUMBER_STEPS = 7;
+
+const GameStepper = ({
+  step,
+  typographyProps = {},
+  ...props
+}: { step: number; typographyProps?: TypographyProps } & BoxProps) => {
+  return (
+    <Box {...props}>
+      <Typography textAlign="center" {...typographyProps}>
+        {step === 0 ? "Situation initiale" : `Etape nº${step}`}
+      </Typography>
+      <StyledStepper step={step} />
+    </Box>
+  );
+};
+
+function StyledStepper({ step }: { step: number }) {
   const theme = useTheme();
 
   return (
     <MobileStepper
       variant="progress"
-      steps={7}
+      steps={MAX_NUMBER_STEPS}
       position="static"
       activeStep={step}
       sx={{
@@ -31,6 +54,6 @@ const GameStepper = (props: any) => {
       backButton={<></>}
     />
   );
-};
+}
 
 export default GameStepper;
