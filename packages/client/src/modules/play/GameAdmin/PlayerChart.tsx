@@ -5,44 +5,16 @@ export { PlayerChart };
 
 const data5 = [
   {
-    name: "J1",
-    EnergieRenouvelable: 30,
-    EnergieFossile: 57,
-    EnergieMixte: 15,
-    EnergieGrise: 112,
-  },
-  {
-    name: "J2",
-    EnergieRenouvelable: 30,
-    EnergieFossile: 57,
-    EnergieMixte: 15,
-    EnergieGrise: 112,
-  },
-  {
-    name: "J3",
-    EnergieRenouvelable: 30,
-    EnergieFossile: 57,
-    EnergieMixte: 15,
-    EnergieGrise: 112,
-  },
-  {
-    name: "J4",
-    EnergieRenouvelable: 30,
-    EnergieFossile: 57,
-    EnergieMixte: 15,
-    EnergieGrise: 112,
-  },
-  {
-    name: "J5",
-    EnergieRenouvelable: 30,
-    EnergieFossile: 57,
-    EnergieMixte: 15,
-    EnergieGrise: 112,
+    name: "Very long name",
+    renewableEnergy: 30,
+    fossilEnergy: 57,
+    mixteEnergy: 15,
+    greyEnergy: 112,
   },
   {
     name: "Prod",
-    ProductionOffshore: 4,
-    ProductionTerrestre: 10,
+    offshoreProduction: 4,
+    terrestrialProduction: 10,
   },
 ];
 
@@ -66,29 +38,29 @@ function PlayerChart() {
           <Tooltip />
           <Legend />
           <Bar
-            dataKey="EnergieRenouvelable"
+            dataKey="renewableEnergy"
             stackId="a"
             fill="#84BDF0"
             barSize={25}
             unit="kWh"
           />
-          <Bar dataKey="EnergieMixte" stackId="a" fill="#F9C74F" unit="kWh" />
-          <Bar dataKey="EnergieFossile" stackId="a" fill="#AF6A28" unit="kWh" />
+          <Bar dataKey="mixteEnergy" stackId="a" fill="#F9C74F" unit="kWh" />
+          <Bar dataKey="fossilEnergy" stackId="a" fill="#AF6A28" unit="kWh" />
           <Bar
-            dataKey="ProductionOffshore"
+            dataKey="offshoreProduction"
             stackId="a"
             fill="#4C677E"
             barSize={25}
             unit="kWh"
           />
           <Bar
-            dataKey="ProductionTerrestre"
+            dataKey="terrestrialProduction"
             stackId="a"
             fill="#8A8256"
             barSize={25}
             unit="kWh"
           />
-          <Bar dataKey="EnergieGrise" stackId="a" fill="#6C6C6C" unit="kWh" />
+          <Bar dataKey="greyEnergy" stackId="a" fill="#6C6C6C" unit="kWh" />
         </BarChart>
       </Card>
     </Box>
