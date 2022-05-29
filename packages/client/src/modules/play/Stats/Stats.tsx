@@ -1,14 +1,13 @@
 import { Box, Grid } from "@mui/material";
 import { PlayLayout } from "../PlayLayout";
+import { PlayerHeader } from "../PlayerPersona";
+import { StatsGraphs } from "./StatsGraphs";
 
-import { Persona } from "./Persona";
-import { PlayerHeader } from "./PlayerHeader";
+export { Stats };
 
-export { PlayerPersona, PlayerHeader };
-
-function PlayerPersona() {
+function Stats() {
   return (
-    <PlayLayout title="Persona">
+    <PlayLayout title="StatsHeader">
       <Box>
         <Grid container direction="row">
           <Grid
@@ -31,7 +30,7 @@ function PlayerPersona() {
               pr: 1,
             }}
           >
-            <Persona />
+            <StatsGraphs />
           </Grid>
         </Grid>
       </Box>

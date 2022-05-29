@@ -27,7 +27,7 @@ import axios from "axios";
 import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
 
-export { PlayerHeader };
+export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
   const { user } = useAuth();
@@ -174,6 +174,7 @@ function Header({
 }
 
 function Actions() {
+  const gameId = useGameId();
   return (
     <Box
       sx={{
@@ -186,7 +187,7 @@ function Actions() {
     >
       <Button
         component={Link}
-        to="/my-games"
+        to={`/play/games/${gameId}/persona/stats`}
         variant="contained"
         color="secondary"
         sx={{

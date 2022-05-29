@@ -62,6 +62,7 @@ function MyGamesList() {
   }
 
   const games = query?.data?.data?.games ?? [];
+  // console.log(game.id);
   return (
     <Box sx={{ mt: 4 }}>
       {games.map((game) => (
