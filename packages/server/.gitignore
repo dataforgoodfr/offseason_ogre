@@ -3,3 +3,4 @@ node_modules
 .env
 sendgridmail.ts
 .DS_Store
+prisma/.DS_Store

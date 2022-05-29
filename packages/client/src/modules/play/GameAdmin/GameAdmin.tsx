@@ -6,6 +6,9 @@ import { PlayBox } from "../Components";
 import { PlayProvider, usePlay } from "../context/playContext";
 import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
+import PaidIcon from "@mui/icons-material/Paid";
+import CloudIcon from "@mui/icons-material/Cloud";
+import { theme } from "../../../utils/theme";
 
 export { GameAdmin };
 
@@ -62,6 +65,14 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
         return (
           <PlayBox mt={2}>
             <Typography variant="h5">{buildName(player.user)}</Typography>
+            <Box display="flex" alignItems="center" mt={2}>
+              <PaidIcon />
+              <Typography ml={1}>Budget restant: 15h/j</Typography>
+            </Box>
+            <Box display="flex" alignItems="center">
+              <CloudIcon />
+              <Typography ml={1}>Bilan carbone: 11,9 kgCO2/an</Typography>
+            </Box>
           </PlayBox>
         );
       })}
