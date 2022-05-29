@@ -1,24 +1,10 @@
 import { Box, Card, useTheme } from "@mui/material";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { ITeamWithPlayers, IUser } from "../../../utils/types";
 
 export { PlayerChart };
 
-const data5 = [
-  {
-    name: "Very long name",
-    renewableEnergy: 30,
-    fossilEnergy: 57,
-    mixteEnergy: 15,
-    greyEnergy: 112,
-  },
-  {
-    name: "Production",
-    offshoreProduction: 4,
-    terrestrialProduction: 10,
-  },
-];
-
-function PlayerChart() {
+function PlayerChart({ team }: { team: ITeamWithPlayers }) {
   const theme = useTheme();
   return (
     <Box p={2}>
@@ -33,7 +19,7 @@ function PlayerChart() {
           pl: 2,
         }}
       >
-        <BarChart width={500} height={500} data={data5}>
+        <BarChart width={500} height={500} data={buildData({ team })}>
           <XAxis dataKey="name" />
           <YAxis name="kWh/j" domain={[0, 300]} />
           <Tooltip />
@@ -89,6 +75,25 @@ function PlayerChart() {
   );
 }
 
+function buildData({ team }: { team: ITeamWithPlayers }) {
+  return [
+    ...team.players.map((player) => {
+      return {
+        name: buildName(player.user),
+        renewableEnergy: 30,
+        fossilEnergy: 57,
+        mixteEnergy: 15,
+        greyEnergy: 112,
+      };
+    }),
+    {
+      name: "Production",
+      offshoreProduction: 4,
+      terrestrialProduction: 10,
+    },
+  ];
+}
+
 function translateLabel(value: string): string {
   const translations = {
     fossilEnergy: "Energie fossile",
@@ -99,4 +104,8 @@ function translateLabel(value: string): string {
     terrestrialProduction: "Production terrestre",
   } as Record<string, string>;
   return translations[value] ?? "Unkown";
+}
+
+function buildName(user: IUser): string {
+  return `${user.firstName} ${user.lastName}`;
 }

@@ -52,7 +52,7 @@ function TeamDetails({ team }: { team: ITeamWithPlayers }) {
           <PlayerList team={team} />
         </Grid>
         <Grid item xs={6}>
-          <PlayerChart />
+          <PlayerChart team={team} />
         </Grid>
       </Grid>
     </PlayBox>
