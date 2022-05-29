@@ -17,11 +17,11 @@ import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../alert";
-import { GameAdmin } from "./GameAdmin";
+import { GameConsole } from "./GameConsole";
 import { PlayerPersona } from "./PlayerPersona";
 import { PlayLayout } from "./PlayLayout";
 
-export { GameAdmin, MyGames, PlayerPersona };
+export { GameConsole, MyGames, PlayerPersona };
 
 interface Registration {
   gameId: number;

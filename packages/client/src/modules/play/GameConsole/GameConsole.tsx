@@ -3,20 +3,18 @@ import PersonIcon from "@mui/icons-material/Person";
 import { ITeamWithPlayers } from "../../../utils/types";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
-import { PlayProvider, usePlay } from "../context/playContext";
+import { usePlay } from "../context/playContext";
 import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import { PlayerList } from "./PlayerList";
 import { PlayerChart } from "./PlayerChart";
 
-export { GameAdmin };
+export { GameConsole };
 
-function GameAdmin() {
+function GameConsole() {
   return (
-    <PlayLayout title="Console Animateur">
-      <PlayProvider>
-        <GameAdminContent />
-      </PlayProvider>
+    <PlayLayout title="Console">
+      <GameAdminContent />
     </PlayLayout>
   );
 }
@@ -41,7 +39,7 @@ function GameAdminContent() {
 
 function TeamDetails({ team }: { team: ITeamWithPlayers }) {
   return (
-    <PlayBox mt={4}>
+    <PlayBox mt={2}>
       <Typography
         display="flex"
         justifyContent="center"
@@ -84,7 +82,7 @@ function Teams({
   const { game } = usePlay();
   const theme = useTheme();
   return (
-    <Grid container justifyContent="space-between" mt={4}>
+    <Grid container justifyContent="space-between" mt={2}>
       {game.teams.map((team) => {
         const color =
           team.id === selectedTeamId ? theme.palette.secondary.main : "white";

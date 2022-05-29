@@ -2,10 +2,10 @@ import { CircularProgress } from "@mui/material";
 import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 
-export { PlayProvider, useLoadedPlay as usePlay };
+export { PlayProvider, useLoadedPlay as usePlay, RootPlayProvider };
 
 interface IPlayContext {
   game: IGameWithTeams;
@@ -14,8 +14,18 @@ type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
 const PlayContext = React.createContext<IPlayContext | null>(null);
 
+function RootPlayProvider({ children }: { children: React.ReactNode }) {
+  const isPlayRoute = useMatch(`play/games/:gameId/*`);
+  if (!isPlayRoute) {
+    return <PlayContext.Provider value={null}>{children}</PlayContext.Provider>;
+  }
+  return <PlayProvider>{children}</PlayProvider>;
+}
+
 function PlayProvider({ children }: { children: React.ReactNode }) {
-  const { id: gameId } = useParams();
+  const match = useMatch(`play/games/:gameId/*`);
+  if (!match) throw new Error("Provider use ouside of game play.");
+  const { gameId } = match.params;
 
   const { data: result, isLoading } = useQuery(`/api/games/${gameId}`, () => {
     return axios.get<undefined, { data: { document: IGameWithTeams } }>(
