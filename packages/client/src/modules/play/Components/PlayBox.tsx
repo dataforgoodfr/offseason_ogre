@@ -7,7 +7,8 @@ function PlayBox(boxProps: BoxProps = {}) {
   return (
     <Box
       bgcolor={theme.palette.primary.main}
-      border="2px solid white"
+      border="2px solid"
+      borderColor="white"
       borderRadius="10px"
       color="white"
       p={2}
