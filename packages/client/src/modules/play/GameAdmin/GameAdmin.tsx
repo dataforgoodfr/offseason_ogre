@@ -1,6 +1,6 @@
 import { Box, Grid, Tooltip, Typography, useTheme } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import { ITeamWithPlayers } from "../../../utils/types";
+import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
 import { PlayProvider, usePlay } from "../context/playContext";
@@ -45,7 +45,27 @@ function TeamDetails({ team }: { team: ITeamWithPlayers }) {
         justifyContent="center"
         variant="h5"
       >{`Détails ${team.name}`}</Typography>
+      <Grid container>
+        <Grid item xs={6}>
+          <PlayerList team={team} />
+        </Grid>
+        <Grid item xs={6}></Grid>
+      </Grid>
     </PlayBox>
+  );
+}
+
+function PlayerList({ team }: { team: ITeamWithPlayers }) {
+  return (
+    <>
+      {team.players.map((player) => {
+        return (
+          <PlayBox mt={2}>
+            <Typography variant="h5">{buildName(player.user)}</Typography>
+          </PlayBox>
+        );
+      })}
+    </>
   );
 }
 
@@ -111,4 +131,8 @@ function Players({ teamWithPlayers }: { teamWithPlayers: ITeamWithPlayers }) {
       })}
     </Box>
   );
+}
+
+function buildName(user: IUser): string {
+  return `${user.firstName} ${user.lastName}`;
 }
