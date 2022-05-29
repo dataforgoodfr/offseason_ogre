@@ -3,13 +3,14 @@ import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { IGame } from "../../../utils/types";
+import { IGame, ITeam } from "../../../utils/types";
 
 export { PlayProvider, useLoadedPlay as usePlay };
 
 interface IPlayContext {
-  game: IGame;
+  game: IGameWithTeams;
 }
+type IGameWithTeams = IGame & { teams: ITeam[] };
 
 const PlayContext = React.createContext<IPlayContext | null>(null);
 
@@ -17,7 +18,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const { id: gameId } = useParams();
 
   const { data: result, isLoading } = useQuery(`/api/games/${gameId}`, () => {
-    return axios.get<undefined, { data: { document: IGame } }>(
+    return axios.get<undefined, { data: { document: IGameWithTeams } }>(
       `/api/games/${gameId}`
     );
   });

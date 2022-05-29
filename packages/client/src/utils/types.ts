@@ -8,4 +8,7 @@ export interface ITeam {
   name: string;
 }
 
+export interface ITeam {
+  name: string;
+}
 export type IUser = User;
