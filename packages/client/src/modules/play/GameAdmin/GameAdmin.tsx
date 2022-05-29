@@ -3,7 +3,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { ITeamWithPlayers } from "../../../utils/types";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
-import { PlayProvider, usePlay } from "../context/playContext";
+import { usePlay } from "../context/playContext";
 import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import { PlayerList } from "./PlayerList";
@@ -14,9 +14,7 @@ export { GameAdmin };
 function GameAdmin() {
   return (
     <PlayLayout title="Console Animateur">
-      <PlayProvider>
-        <GameAdminContent />
-      </PlayProvider>
+      <GameAdminContent />
     </PlayLayout>
   );
 }
