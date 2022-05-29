@@ -1,4 +1,6 @@
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid, Tooltip, Typography } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import { ITeamWithPlayers } from "../../../utils/types";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
 import { PlayProvider, usePlay } from "../context/playContext";
@@ -43,10 +45,25 @@ function Teams() {
               <Typography textAlign="center" variant="h5">
                 {team.name}
               </Typography>
+              <Players teamWithPlayers={team} />
             </PlayBox>
           </Grid>
         );
       })}
     </Grid>
+  );
+}
+
+function Players({ teamWithPlayers }: { teamWithPlayers: ITeamWithPlayers }) {
+  return (
+    <Box display="flex" minHeight="24px">
+      {teamWithPlayers.players.map(({ user }) => {
+        return (
+          <Tooltip title={`${user.firstName} ${user.lastName}`}>
+            <PersonIcon />
+          </Tooltip>
+        );
+      })}
+    </Box>
   );
 }

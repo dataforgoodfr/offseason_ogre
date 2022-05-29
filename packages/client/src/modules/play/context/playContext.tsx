@@ -3,14 +3,14 @@ import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { IGame, ITeam } from "../../../utils/types";
+import { IGame, ITeamWithPlayers } from "../../../utils/types";
 
 export { PlayProvider, useLoadedPlay as usePlay };
 
 interface IPlayContext {
   game: IGameWithTeams;
 }
-type IGameWithTeams = IGame & { teams: ITeam[] };
+type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
 const PlayContext = React.createContext<IPlayContext | null>(null);
 
