@@ -17,7 +17,10 @@ const services = { ...crudServices, register };
 export { services };
 
 async function getDocument(id: number): Promise<Model | null> {
-  return model.findUnique({ where: { id } });
+  return model.findUnique({
+    where: { id },
+    include: { teams: { include: { players: { include: { user: true } } } } },
+  });
 }
 
 async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {

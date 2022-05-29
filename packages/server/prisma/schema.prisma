@@ -15,7 +15,7 @@ model Game {
   players     UsersOnGames[]
   teacher     User           @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
-  team        Team[]
+  teams       Team[]
   status      Status         @default(draft)
   step        Int            @default(0)
 }

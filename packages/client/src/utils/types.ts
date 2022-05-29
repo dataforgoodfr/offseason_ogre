@@ -7,5 +7,8 @@ export interface ITeam {
   id: number;
   name: string;
 }
+export type ITeamWithPlayers = ITeam & {
+  players: { gameId: number; teamId: number; userId: number; user: IUser }[];
+};
 
 export type IUser = User;

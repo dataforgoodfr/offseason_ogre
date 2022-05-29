@@ -75,7 +75,7 @@ function MyGamesList() {
                 </Typography>
               </Grid>
               {game.status === "ready" && (
-                <Grid display="flex" xs={2}>
+                <Grid item display="flex" xs={2}>
                   <Button
                     component={Link}
                     color="secondary"
