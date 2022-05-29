@@ -38,19 +38,33 @@ function PlayerChart() {
           <Tooltip />
           <Legend />
           <Bar
-            dataKey="renewableEnergy"
-            stackId="a"
-            fill="#84BDF0"
             barSize={25}
+            dataKey="renewableEnergy"
+            fill="#84BDF0"
+            name={translateLabel("renewableEnergy")}
+            stackId="a"
             unit="kWh"
           />
-          <Bar dataKey="mixteEnergy" stackId="a" fill="#F9C74F" unit="kWh" />
-          <Bar dataKey="fossilEnergy" stackId="a" fill="#AF6A28" unit="kWh" />
+          <Bar
+            dataKey="mixteEnergy"
+            fill="#F9C74F"
+            name={translateLabel("mixteEnergy")}
+            stackId="a"
+            unit="kWh"
+          />
+          <Bar
+            dataKey="fossilEnergy"
+            stackId="a"
+            fill="#AF6A28"
+            name={translateLabel("fossilEnergy")}
+            unit="kWh"
+          />
           <Bar
             dataKey="offshoreProduction"
-            stackId="a"
             fill="#4C677E"
             barSize={25}
+            name={translateLabel("offshoreProduction")}
+            stackId="a"
             unit="kWh"
           />
           <Bar
@@ -58,11 +72,30 @@ function PlayerChart() {
             stackId="a"
             fill="#8A8256"
             barSize={25}
+            name={translateLabel("terrestrialProduction")}
             unit="kWh"
           />
-          <Bar dataKey="greyEnergy" stackId="a" fill="#6C6C6C" unit="kWh" />
+          <Bar
+            dataKey="greyEnergy"
+            stackId="a"
+            fill="#6C6C6C"
+            unit="kWh"
+            name={translateLabel("greyEnergy")}
+          />
         </BarChart>
       </Card>
     </Box>
   );
+}
+
+function translateLabel(value: string): string {
+  const translations = {
+    fossilEnergy: "Energie fossile",
+    greyEnergy: "Energie grise",
+    renewableEnergy: "Energie renouvelable",
+    mixteEnergy: "Energie mixte",
+    offshoreProduction: "Production offshore",
+    terrestrialProduction: "Production terrestre",
+  } as Record<string, string>;
+  return translations[value] ?? "Unkown";
 }

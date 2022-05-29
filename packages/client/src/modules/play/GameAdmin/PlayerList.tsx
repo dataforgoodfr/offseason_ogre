@@ -11,7 +11,7 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
     <>
       {team.players.map((player) => {
         return (
-          <PlayBox mt={2}>
+          <PlayBox key={player.userId} mt={2}>
             <Typography variant="h5">{buildName(player.user)}</Typography>
             <Box display="flex" alignItems="center" mt={2}>
               <PaidIcon />
