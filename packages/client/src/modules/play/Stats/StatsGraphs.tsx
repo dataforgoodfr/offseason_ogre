@@ -1,25 +1,13 @@
-import { Box, useTheme } from "@mui/material";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { PlayBox } from "../Components";
 
 export { StatsGraphs };
 
 function StatsGraphs() {
-  const theme = useTheme();
   return (
-    <Box
-      sx={{
-        mt: 2,
-        pl: 2,
-        pr: 2,
-        pb: 2,
-        border: "2px solid white",
-        borderRadius: "10px",
-        bgcolor: theme.palette.primary.main,
-        color: "white",
-      }}
-    >
+    <PlayBox>
       <GraphGen />
-    </Box>
+    </PlayBox>
   );
 }
 
