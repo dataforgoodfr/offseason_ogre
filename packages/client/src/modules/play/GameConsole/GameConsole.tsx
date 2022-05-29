@@ -13,7 +13,7 @@ export { GameConsole };
 
 function GameConsole() {
   return (
-    <PlayLayout title="Console Animateur">
+    <PlayLayout title="Console">
       <GameAdminContent />
     </PlayLayout>
   );
