@@ -7,6 +7,7 @@ import { PlayProvider, usePlay } from "../context/playContext";
 import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import { PlayerList } from "./PlayerList";
+import { PlayerChart } from "./PlayerChart";
 
 export { GameAdmin };
 
@@ -50,7 +51,9 @@ function TeamDetails({ team }: { team: ITeamWithPlayers }) {
         <Grid item xs={6}>
           <PlayerList team={team} />
         </Grid>
-        <Grid item xs={6}></Grid>
+        <Grid item xs={6}>
+          <PlayerChart />
+        </Grid>
       </Grid>
     </PlayBox>
   );
