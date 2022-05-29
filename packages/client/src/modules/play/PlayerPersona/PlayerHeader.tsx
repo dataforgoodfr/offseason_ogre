@@ -167,7 +167,7 @@ function Header({
           >
             <CardContent sx={{ p: 0 }}>
               <img
-                style={{ border: "2px solid white", borderRadius: "10px" }}
+                style={{ border: "2px solid white", borderRadius: "5px" }}
                 src="/avatar.png"
                 alt="avatar"
               />

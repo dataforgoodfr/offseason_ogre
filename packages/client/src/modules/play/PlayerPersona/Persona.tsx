@@ -29,13 +29,14 @@ function Persona() {
         pl: 2,
         pr: 2,
         pb: 2,
+        p: 2,
         border: "2px solid white",
         borderRadius: "10px",
         bgcolor: theme.palette.primary.main,
         color: "white",
       }}
     >
-      <Typography sx={{ textAlign: "center", mb: 3, mt: 3 }} variant="h3">
+      <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
         Mes caractéristiques
       </Typography>
       <AccordionLayout title="Général" TitleIcon={PersonPinRoundedIcon}>
