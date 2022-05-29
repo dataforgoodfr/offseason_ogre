@@ -1,10 +1,11 @@
-import { Box, Grid, Tooltip, Typography } from "@mui/material";
+import { Box, Grid, Tooltip, Typography, useTheme } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import { ITeamWithPlayers } from "../../../utils/types";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
 import { PlayProvider, usePlay } from "../context/playContext";
 import { PlayLayout } from "../PlayLayout";
+import { useState } from "react";
 
 export { GameAdmin };
 
@@ -12,10 +13,24 @@ function GameAdmin() {
   return (
     <PlayLayout title="Console Animateur">
       <PlayProvider>
-        <Header />
-        <Teams />
+        <GameAdminContent />
       </PlayProvider>
     </PlayLayout>
+  );
+}
+
+function GameAdminContent() {
+  const { game } = usePlay();
+  const firstTeamId = game.teams[0].id;
+  const [selectedTeamId, setSelectedTeamId] = useState<number>(firstTeamId);
+  return (
+    <>
+      <Header />
+      <Teams
+        selectedTeamId={selectedTeamId}
+        setSelectedTeamId={setSelectedTeamId}
+      />
+    </>
   );
 }
 
@@ -34,14 +49,29 @@ function Header() {
   );
 }
 
-function Teams() {
+function Teams({
+  selectedTeamId,
+  setSelectedTeamId,
+}: {
+  selectedTeamId: number;
+  setSelectedTeamId: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const { game } = usePlay();
+  const theme = useTheme();
   return (
-    <Grid container justifyContent="space-between" mt={4} xs={12}>
+    <Grid container justifyContent="space-between" mt={4}>
       {game.teams.map((team) => {
+        const color =
+          team.id === selectedTeamId ? theme.palette.secondary.main : "white";
         return (
-          <Grid item xs={2}>
-            <PlayBox>
+          <Grid
+            key={team.id}
+            item
+            onClick={() => setSelectedTeamId(team.id)}
+            sx={{ cursor: "pointer" }}
+            xs={2}
+          >
+            <PlayBox borderColor={color} color={color}>
               <Typography textAlign="center" variant="h5">
                 {team.name}
               </Typography>
@@ -59,7 +89,7 @@ function Players({ teamWithPlayers }: { teamWithPlayers: ITeamWithPlayers }) {
     <Box display="flex" minHeight="24px">
       {teamWithPlayers.players.map(({ user }) => {
         return (
-          <Tooltip title={`${user.firstName} ${user.lastName}`}>
+          <Tooltip key={user.id} title={`${user.firstName} ${user.lastName}`}>
             <PersonIcon />
           </Tooltip>
         );
