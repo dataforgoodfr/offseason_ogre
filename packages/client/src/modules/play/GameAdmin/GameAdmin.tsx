@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { PlayBox } from "../Components";
 import { PlayLayout } from "../PlayLayout";
 
 export { GameAdmin };
@@ -6,7 +6,7 @@ export { GameAdmin };
 function GameAdmin() {
   return (
     <PlayLayout title="Console Animateur">
-      <Typography>Hello Admin!</Typography>
+      <PlayBox>Game</PlayBox>
     </PlayLayout>
   );
 }
