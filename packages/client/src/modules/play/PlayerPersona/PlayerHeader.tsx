@@ -64,12 +64,7 @@ function PlayerHeader() {
             textAlign: "center",
           }}
         >
-          <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {game.step === 0 ? "Situation initiale" : `Etape nº${game.step}`}
-          </Typography>
-          <Typography>
-            <GameStepper step={game.step} />
-          </Typography>
+          <GameStepper step={game.step} />
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
             XXX <EmojiEventsRoundedIcon />
           </Typography>
