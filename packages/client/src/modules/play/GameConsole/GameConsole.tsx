@@ -9,9 +9,9 @@ import { useState } from "react";
 import { PlayerList } from "./PlayerList";
 import { PlayerChart } from "./PlayerChart";
 
-export { GameAdmin };
+export { GameConsole };
 
-function GameAdmin() {
+function GameConsole() {
   return (
     <PlayLayout title="Console Animateur">
       <GameAdminContent />
