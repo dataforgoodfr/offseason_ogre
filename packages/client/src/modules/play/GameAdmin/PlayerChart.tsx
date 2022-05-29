@@ -1,4 +1,4 @@
-import { Box, Card } from "@mui/material";
+import { Box, Card, useTheme } from "@mui/material";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 
 export { PlayerChart };
@@ -12,13 +12,14 @@ const data5 = [
     greyEnergy: 112,
   },
   {
-    name: "Prod",
+    name: "Production",
     offshoreProduction: 4,
     terrestrialProduction: 10,
   },
 ];
 
 function PlayerChart() {
+  const theme = useTheme();
   return (
     <Box p={2}>
       <Card
@@ -40,28 +41,28 @@ function PlayerChart() {
           <Bar
             barSize={25}
             dataKey="renewableEnergy"
-            fill="#84BDF0"
+            fill={theme.palette.energy.renewable}
             name={translateLabel("renewableEnergy")}
             stackId="a"
             unit="kWh"
           />
           <Bar
             dataKey="mixteEnergy"
-            fill="#F9C74F"
+            fill={theme.palette.energy.mixte}
             name={translateLabel("mixteEnergy")}
             stackId="a"
             unit="kWh"
           />
           <Bar
             dataKey="fossilEnergy"
+            fill={theme.palette.energy.fossile}
             stackId="a"
-            fill="#AF6A28"
             name={translateLabel("fossilEnergy")}
             unit="kWh"
           />
           <Bar
             dataKey="offshoreProduction"
-            fill="#4C677E"
+            fill={theme.palette.production.offshore}
             barSize={25}
             name={translateLabel("offshoreProduction")}
             stackId="a"
@@ -70,7 +71,7 @@ function PlayerChart() {
           <Bar
             dataKey="terrestrialProduction"
             stackId="a"
-            fill="#8A8256"
+            fill={theme.palette.production.terrestrial}
             barSize={25}
             name={translateLabel("terrestrialProduction")}
             unit="kWh"
@@ -78,7 +79,7 @@ function PlayerChart() {
           <Bar
             dataKey="greyEnergy"
             stackId="a"
-            fill="#6C6C6C"
+            fill={theme.palette.energy.grey}
             unit="kWh"
             name={translateLabel("greyEnergy")}
           />
