@@ -25,12 +25,12 @@ import GameStepper from "../../common/components/Stepper";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { IGame, ITeam, IUser } from "../../../utils/types";
+import { PlayBox } from "../Components";
 
 export { PlayerHeader };
 
 function PlayerHeader() {
   const { user } = useAuth();
-  const theme = useTheme();
   const gameId = useGameId();
 
   const { data } = useQuery(`${user?.id}/games/${gameId}/team`, () => {
@@ -52,16 +52,7 @@ function PlayerHeader() {
 
   return (
     <Box>
-      <Box
-        sx={{
-          mt: 2,
-          p: 2,
-          border: "2px solid white",
-          borderRadius: "10px",
-          bgcolor: theme.palette.primary.main,
-          color: "white",
-        }}
-      >
+      <PlayBox>
         <Header game={game} team={team} user={user} />
         <Grid
           item
@@ -142,7 +133,7 @@ function PlayerHeader() {
             }
           </ScoresLegendLayout>
         </Grid>
-      </Box>
+      </PlayBox>
       <Actions />
     </Box>
   );

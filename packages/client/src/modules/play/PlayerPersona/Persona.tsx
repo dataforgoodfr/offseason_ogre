@@ -7,7 +7,6 @@ import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
 import DryCleaningRoundedIcon from "@mui/icons-material/DryCleaningRounded";
 
 import {
-  Box,
   Typography,
   Accordion,
   AccordionSummary,
@@ -16,26 +15,13 @@ import {
   SvgIconTypeMap,
 } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
+import { PlayBox } from "../Components";
 
 export { Persona };
 
 function Persona() {
-  const theme = useTheme();
-
   return (
-    <Box
-      sx={{
-        mt: 2,
-        pl: 2,
-        pr: 2,
-        pb: 2,
-        p: 2,
-        border: "2px solid white",
-        borderRadius: "10px",
-        bgcolor: theme.palette.primary.main,
-        color: "white",
-      }}
-    >
+    <PlayBox>
       <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
         Mes caractéristiques
       </Typography>
@@ -57,7 +43,7 @@ function Persona() {
       <AccordionLayout title="Textile" TitleIcon={DryCleaningRoundedIcon}>
         <Typography>Caractéristiques.</Typography>
       </AccordionLayout>
-    </Box>
+    </PlayBox>
   );
 }
 
