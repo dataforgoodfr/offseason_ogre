@@ -12,6 +12,7 @@ import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IGame } from "../../../../utils/types";
 import { SuccessAlert } from "../../../alert";
+import { useNavigate } from "react-router-dom";
 
 export default function Launch({ game }: { game: IGame }) {
   const queryClient = useQueryClient();
@@ -20,13 +21,17 @@ export default function Launch({ game }: { game: IGame }) {
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const navigate = useNavigate();
   const mutation = useMutation<Response, { message: string }, any>(
     (status: boolean) => {
       const path = `/api/games/${game.id}`;
       return axios.put(path, { status: "ready" });
     },
     {
-      onSuccess: () => queryClient.invalidateQueries([`/api/games/${game.id}`]),
+      onSuccess: () => {
+        queryClient.invalidateQueries([`/api/games/${game.id}`]);
+        navigate(`/play/games/${game.id}/console`);
+      },
     }
   );
 
