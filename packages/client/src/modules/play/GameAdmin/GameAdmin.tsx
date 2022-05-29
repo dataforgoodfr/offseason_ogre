@@ -39,7 +39,7 @@ function GameAdminContent() {
 
 function TeamDetails({ team }: { team: ITeamWithPlayers }) {
   return (
-    <PlayBox mt={4}>
+    <PlayBox mt={2}>
       <Typography
         display="flex"
         justifyContent="center"
@@ -82,7 +82,7 @@ function Teams({
   const { game } = usePlay();
   const theme = useTheme();
   return (
-    <Grid container justifyContent="space-between" mt={4}>
+    <Grid container justifyContent="space-between" mt={2}>
       {game.teams.map((team) => {
         const color =
           team.id === selectedTeamId ? theme.palette.secondary.main : "white";

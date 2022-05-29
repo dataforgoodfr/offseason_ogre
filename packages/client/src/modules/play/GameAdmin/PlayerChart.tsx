@@ -7,7 +7,7 @@ export { PlayerChart };
 function PlayerChart({ team }: { team: ITeamWithPlayers }) {
   const theme = useTheme();
   return (
-    <Box p={2}>
+    <Box p={2} pl={4}>
       <Card
         sx={{
           alignItems: "center",
