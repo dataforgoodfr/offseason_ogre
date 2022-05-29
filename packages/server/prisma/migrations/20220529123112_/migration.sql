@@ -9,6 +9,7 @@ CREATE TABLE "Game" (
     "name" TEXT NOT NULL,
     "teacherId" INTEGER NOT NULL,
     "status" "Status" NOT NULL DEFAULT E'draft',
+    "step" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "Game_pkey" PRIMARY KEY ("id")
 );
