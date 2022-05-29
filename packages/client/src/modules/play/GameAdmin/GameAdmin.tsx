@@ -23,6 +23,8 @@ function GameAdminContent() {
   const { game } = usePlay();
   const firstTeamId = game.teams[0].id;
   const [selectedTeamId, setSelectedTeamId] = useState<number>(firstTeamId);
+  const selectedTeam = game.teams.find(({ id }) => id === selectedTeamId);
+  if (!selectedTeam) return <></>;
   return (
     <>
       <Header />
@@ -30,7 +32,20 @@ function GameAdminContent() {
         selectedTeamId={selectedTeamId}
         setSelectedTeamId={setSelectedTeamId}
       />
+      <TeamDetails team={selectedTeam} />
     </>
+  );
+}
+
+function TeamDetails({ team }: { team: ITeamWithPlayers }) {
+  return (
+    <PlayBox mt={4}>
+      <Typography
+        display="flex"
+        justifyContent="center"
+        variant="h5"
+      >{`Détails ${team.name}`}</Typography>
+    </PlayBox>
   );
 }
 
