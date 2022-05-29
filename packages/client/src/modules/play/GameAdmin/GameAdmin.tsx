@@ -1,20 +1,12 @@
-import {
-  Box,
-  Grid,
-  Rating,
-  Tooltip,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Grid, Tooltip, Typography, useTheme } from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
-import { ITeamWithPlayers, IUser } from "../../../utils/types";
+import { ITeamWithPlayers } from "../../../utils/types";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
 import { PlayProvider, usePlay } from "../context/playContext";
 import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
-import PaidIcon from "@mui/icons-material/Paid";
-import CloudIcon from "@mui/icons-material/Cloud";
+import { PlayerList } from "./PlayerList";
 
 export { GameAdmin };
 
@@ -61,38 +53,6 @@ function TeamDetails({ team }: { team: ITeamWithPlayers }) {
         <Grid item xs={6}></Grid>
       </Grid>
     </PlayBox>
-  );
-}
-
-function PlayerList({ team }: { team: ITeamWithPlayers }) {
-  return (
-    <>
-      {team.players.map((player) => {
-        return (
-          <PlayBox mt={2}>
-            <Typography variant="h5">{buildName(player.user)}</Typography>
-            <Box display="flex" alignItems="center" mt={2}>
-              <PaidIcon />
-              <Typography ml={1}>Budget restant: 15h/j</Typography>
-            </Box>
-            <Box display="flex" alignItems="center">
-              <CloudIcon />
-              <Typography ml={1}>Bilan carbone: 11,9 kgCO2/an</Typography>
-            </Box>
-            <ActionPoints />
-          </PlayBox>
-        );
-      })}
-    </>
-  );
-}
-
-function ActionPoints() {
-  return (
-    <Box mt={2}>
-      <Typography>Action points</Typography>
-      <Rating name="action-points" max={10} value={7} readOnly />
-    </Box>
   );
 }
 
@@ -158,8 +118,4 @@ function Players({ teamWithPlayers }: { teamWithPlayers: ITeamWithPlayers }) {
       })}
     </Box>
   );
-}
-
-function buildName(user: IUser): string {
-  return `${user.firstName} ${user.lastName}`;
 }
