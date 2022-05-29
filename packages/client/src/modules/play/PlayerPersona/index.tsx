@@ -1,3 +1,3 @@
-import { PlayerPersona } from "./PlayerPersona";
+import { PlayerPersona, PlayerHeader } from "./PlayerPersona";
 
-export { PlayerPersona };
+export { PlayerPersona, PlayerHeader };

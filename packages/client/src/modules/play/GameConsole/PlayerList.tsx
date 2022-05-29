@@ -3,6 +3,7 @@ import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
 import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
+import StarIcon from "@mui/icons-material/Star";
 
 export { PlayerList };
 
@@ -33,7 +34,15 @@ function ActionPoints() {
   return (
     <Box mt={2}>
       <Typography>Point d'actions</Typography>
-      <Rating name="action-points" max={10} value={7} readOnly />
+      <Rating
+        emptyIcon={
+          <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
+        }
+        max={10}
+        name="action-points"
+        readOnly
+        value={7}
+      />
     </Box>
   );
 }
