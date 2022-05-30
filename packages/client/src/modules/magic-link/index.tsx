@@ -6,7 +6,7 @@ import { sendMagicLink } from "../users/services";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import { ErrorAlert, SuccessAlert } from "../alert";
-import { Button } from "@mui/material";
+import { Button, Typography, useTheme } from "@mui/material";
 
 interface MagicForm {
   email: string;
@@ -18,14 +18,18 @@ function MagicLink() {
       email: "",
     },
   });
-
   const mutation = useMutation<
     Response,
     AxiosError<{ message: string }>,
     { email: string }
   >(sendMagicLink);
+  const theme = useTheme();
 
-  const onSubmit = ({ email }: MagicForm) => mutation.mutate({ email });
+  if (mutation.isLoading) {
+    return (
+      <Typography color={theme.palette.grey[100]}>Envoi du mail...</Typography>
+    );
+  }
 
   if (mutation.isSuccess) {
     return (
@@ -44,6 +48,8 @@ function MagicLink() {
       </>
     );
   }
+
+  const onSubmit = ({ email }: MagicForm) => mutation.mutate({ email });
 
   return (
     <>

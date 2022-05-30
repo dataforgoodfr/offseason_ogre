@@ -7,3 +7,4 @@ export { router };
 const router = express.Router();
 
 router.get("/", asyncErrorHandler(controllers.getTeamsController));
+router.get("/:teamId", asyncErrorHandler(controllers.getTeamController));

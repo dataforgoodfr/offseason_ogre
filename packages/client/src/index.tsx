@@ -14,6 +14,7 @@ import { theme } from "./utils/theme";
 import { AuthProvider } from "./modules/auth/authProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LayoutProvider } from "./modules/Layout/context";
+import { RootPlayProvider } from "./modules/play/context/playContext";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,9 @@ ReactDOM.render(
         <ThemeProvider theme={theme}>
           <AuthProvider>
             <LayoutProvider>
-              <App />
+              <RootPlayProvider>
+                <App />
+              </RootPlayProvider>
             </LayoutProvider>
           </AuthProvider>
         </ThemeProvider>

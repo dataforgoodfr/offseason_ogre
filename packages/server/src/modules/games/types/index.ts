@@ -7,6 +7,7 @@ interface Game {
   name: string;
   status: status;
   teacherId: number;
+  step: number;
 }
 
 type status = "draft" | "ready";

@@ -1,15 +1,19 @@
 import { database } from "../../../database";
-import { User } from "../types/entity";
+import { User, UsersOnGames } from "../types/entity";
 import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
 import { sendMagicLink } from "./sendMagicLink";
 import { signUp } from "./signUp";
 
 const model = database.user;
+const userOnGameModel = database.usersOnGames;
+
 type Model = User;
+type UsersOnGamesModel = UsersOnGames;
 
 const crudServices = {
   getDocument,
   create,
+  getTeamForPlayer,
 };
 const services = { ...crudServices, isMailAlreadyUsed, sendMagicLink, signUp };
 
@@ -47,4 +51,14 @@ function shouldHaveTeacherRole(email: string): boolean {
     "tcateland@gmail.com",
   ];
   return mails.includes(email);
+}
+
+async function getTeamForPlayer(
+  gameId: number,
+  userId: number
+): Promise<UsersOnGamesModel | null> {
+  return userOnGameModel.findUnique({
+    where: { userId_gameId: { gameId, userId } },
+    include: { game: true, team: true },
+  });
 }

@@ -12,7 +12,7 @@ import axios from "axios";
 import { useMutation, useQueryClient, useQuery } from "react-query";
 import { IGame } from "../../../../utils/types";
 import { SuccessAlert } from "../../../alert";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const TeamHasTooManyPLayers = (playersQuery: any) => {
   const players = playersQuery?.data?.data?.players ?? [];
@@ -46,13 +46,17 @@ export default function Launch({ game }: { game: IGame }) {
     warningMessage: "Une ou plusieurs équipe(s) dépasse(nt) le nombre de joueurs recommandé (5 joueurs)"
   }
 
+  const navigate = useNavigate();
   const mutation = useMutation<Response, { message: string }, any>(
     (status: boolean) => {
       const path = `/api/games/${game.id}`;
       return axios.put(path, { status: "ready" });
     },
     {
-      onSuccess: () => queryClient.invalidateQueries([`/api/games/${game.id}`]),
+      onSuccess: () => {
+        queryClient.invalidateQueries([`/api/games/${game.id}`]);
+        navigate(`/play/games/${game.id}/console`);
+      },
     }
   );
 

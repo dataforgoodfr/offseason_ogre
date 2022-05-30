@@ -1,28 +1,27 @@
-import { LoadingButton } from "@mui/lab";
 import { Link } from "react-router-dom";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import {
-  AppBar,
   Box,
   Button,
   Card,
   CardContent,
   CircularProgress,
   Container,
+  Divider,
   Grid,
   Paper,
   TextField,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../alert";
-import { LoggedUser } from "../auth";
-import { useAuth } from "../auth/authProvider";
+import { GameConsole } from "./GameConsole";
+import { PlayerPersona } from "./PlayerPersona";
+import { PlayLayout } from "./PlayLayout";
 
-export { MyGames, PlayLayout };
+export { GameConsole, MyGames, PlayerPersona };
 
 interface Registration {
   gameId: number;
@@ -32,10 +31,19 @@ function MyGames() {
   return (
     <PlayLayout title="Ateliers">
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: 4 }}>
-        <Typography variant="h3" color="white">
+        <Typography variant="h3" color="secondary">
           Mes ateliers
         </Typography>
-        <JoinGame />
+        <Divider
+          sx={{
+            "&::before, &::after": {
+              borderColor: "secondary.light",
+            },
+            mt: 4,
+          }}
+        >
+          <JoinGame />
+        </Divider>
         <MyGamesList />
       </Container>
     </PlayLayout>
@@ -54,29 +62,32 @@ function MyGamesList() {
   }
 
   const games = query?.data?.data?.games ?? [];
+  // console.log(game.id);
   return (
     <Box sx={{ mt: 4 }}>
       {games.map((game) => (
-        <Card key={game.id} sx={{ mt: 2 }}>
+        <Card key={game.id} sx={{ mt: 2, pl: 1, pr: 1 }}>
           <CardContent>
             <Grid container direction="row" alignItems="center">
-              <Grid item xs={6}>
+              <Grid item xs={10}>
                 <Typography variant="h6">{game.name}</Typography>
                 <Typography>
                   {"Date: " + new Date(game.date).toLocaleString()}
                 </Typography>
               </Grid>
-              <Grid item xs={6}>
-                <Button
-                  component={Link}
-                  to={`/play/my-games/${game.id}/persona`}
-                  color="secondary"
-                  variant="contained"
-                  sx={{ float: "left" }}
-                >
-                  <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
-                </Button>
-              </Grid>
+              {game.status === "ready" && (
+                <Grid item display="flex" xs={2}>
+                  <Button
+                    component={Link}
+                    color="secondary"
+                    variant="contained"
+                    to={`/play/games/${game.id}/persona`}
+                    sx={{ ml: "auto" }}
+                  >
+                    <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
+                  </Button>
+                </Grid>
+              )}
             </Grid>
           </CardContent>
         </Card>
@@ -108,7 +119,7 @@ function JoinGame() {
 
   const onValid = (registration: Registration) => mutation.mutate(registration);
   return (
-    <Paper sx={{ width: "fit-content", mt: 4, p: 2 }}>
+    <Paper sx={{ width: "443px", p: 2 }}>
       <form onSubmit={handleSubmit(onValid)}>
         <Grid container>
           <Controller
@@ -124,62 +135,17 @@ function JoinGame() {
               />
             )}
           />
-          <LoadingButton
-            loading={mutation.isLoading}
+          <Button
             type="submit"
             sx={{ width: "200px", ml: 2 }}
             variant="contained"
           >
             Rejoindre le jeu
-          </LoadingButton>
+          </Button>
         </Grid>
       </form>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       {mutation.isSuccess && <SuccessAlert />}
     </Paper>
-  );
-}
-
-function PlayLayout({
-  title,
-  children,
-}: {
-  title: string;
-  children: JSX.Element;
-}) {
-  const { user } = useAuth();
-
-  return (
-    <Box display="flex">
-      <AppBar color="primary" position="fixed">
-        <Toolbar>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
-          >
-            {user?.firstName || user?.lastName
-              ? `${user.firstName} ${user.lastName} | `
-              : ""}{" "}
-            {title}
-          </Typography>
-          <LoggedUser />
-        </Toolbar>
-      </AppBar>
-      <Box
-        component="main"
-        sx={{
-          bgcolor: "#577590",
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-        }}
-      >
-        <Toolbar />
-        <>{children}</>
-      </Box>
-    </Box>
   );
 }
