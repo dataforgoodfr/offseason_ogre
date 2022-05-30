@@ -16,9 +16,7 @@ import { useNavigate } from "react-router-dom";
 
 const TeamHasTooManyPLayers = (playersQuery: any) => {
   const players = playersQuery?.data?.data?.players ?? [];
-  const teams = players.map((player: any) => (
-    player.playedGames[0].team.name
-  ));
+  const teams = players.map((player: any) => player.playedGames[0].team.name);
   const teamOccurences = teams.reduce((obj: any, teamName: string) => {
     obj[teamName] = ++obj[teamName] || 1;
     return obj;
@@ -29,7 +27,7 @@ const TeamHasTooManyPLayers = (playersQuery: any) => {
     }
   }
   return false;
-}
+};
 
 export default function Launch({ game }: { game: IGame }) {
   const queryClient = useQueryClient();
@@ -43,8 +41,9 @@ export default function Launch({ game }: { game: IGame }) {
   });
   const dialogContent = {
     message: "Êtes-vous sûr.e de vouloir lancer l'atelier ?",
-    warningMessage: "Une ou plusieurs équipe(s) dépasse(nt) le nombre de joueurs recommandé (5 joueurs)"
-  }
+    warningMessage:
+      "Une ou plusieurs équipe(s) dépasse(nt) le nombre de joueurs recommandé (5 joueurs)",
+  };
 
   const navigate = useNavigate();
   const mutation = useMutation<Response, { message: string }, any>(
@@ -72,7 +71,9 @@ export default function Launch({ game }: { game: IGame }) {
       {mutation.isSuccess && <SuccessAlert />}
       <Button
         onClick={() => {
-          game.status === "draft" ? handleClickOpen() : navigate(`/play/games/${game.id}/console`)
+          game.status === "draft"
+            ? handleClickOpen()
+            : navigate(`/play/games/${game.id}/console`);
         }}
         variant="contained"
         color="secondary"
@@ -92,9 +93,10 @@ export default function Launch({ game }: { game: IGame }) {
         <DialogContent>
           <DialogContentText
             id="alert-dialog-warning"
-            sx={{ color: 'red', mb: 2 }}
+            sx={{ color: "red", mb: 2 }}
           >
-            {TeamHasTooManyPLayers(playersQuery) && dialogContent.warningMessage}
+            {TeamHasTooManyPLayers(playersQuery) &&
+              dialogContent.warningMessage}
           </DialogContentText>
           <DialogContentText id="alert-dialog-description">
             {dialogContent.message}
