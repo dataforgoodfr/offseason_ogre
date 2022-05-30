@@ -69,11 +69,10 @@ export default function Launch({ game }: { game: IGame }) {
 
   return (
     <div>
-      {mutation.isSuccess && <SuccessAlert /> && <Navigate to="/administration/games" replace={true} />}
-      {/* {game.status === "ready" && <Navigate to="/administration/games" replace={true} />} */}
+      {mutation.isSuccess && <SuccessAlert />}
       <Button
         onClick={() => {
-          game.status === "draft" ? handleClickOpen() : <Navigate to="/administration/games" replace={true} />
+          game.status === "draft" ? handleClickOpen() : navigate(`/play/games/${game.id}/console`)
         }}
         variant="contained"
         color="secondary"
