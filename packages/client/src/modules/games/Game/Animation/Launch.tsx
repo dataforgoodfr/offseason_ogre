@@ -33,7 +33,6 @@ const TeamHasTooManyPLayers = (playersQuery: any) => {
 
 export default function Launch({ game }: { game: IGame }) {
   const queryClient = useQueryClient();
-
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -67,13 +66,16 @@ export default function Launch({ game }: { game: IGame }) {
   return (
     <div>
       {mutation.isSuccess && <SuccessAlert /> && <Navigate to="/administration/games" replace={true} />}
+      {/* {game.status === "ready" && <Navigate to="/administration/games" replace={true} />} */}
       <Button
-        disabled={game.status !== "draft"} onClick={handleClickOpen}
+        onClick={() => {
+          game.status === "draft" ? handleClickOpen() : <Navigate to="/administration/games" replace={true} />
+        }}
         variant="contained"
         color="secondary"
       >
         <RocketLaunchIcon sx={{ height: "1rem" }} />
-        Animer
+        {game.status === "draft" ? "Animer" : "Rejoindre"}
       </Button>
       <Dialog
         open={open}
