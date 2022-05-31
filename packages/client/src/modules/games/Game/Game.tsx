@@ -15,10 +15,13 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
 import { IGame } from "../../../utils/types";
+import { ITeamWithPlayers } from "../../../utils/types";
 import { GamePlayers } from "./GamePlayers";
 import { Animation } from "./Animation";
 
 export { Game };
+
+type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
 function Game() {
   const params = useParams();
@@ -87,7 +90,7 @@ function Preparation() {
   );
 }
 
-function AnimationAccordion({ game }: { game: IGame }) {
+function AnimationAccordion({ game }: { game: IGameWithTeams }) {
   return (
     <AccordionLayout title="Animation">
       {game && <Animation game={game} />}
