@@ -15,6 +15,9 @@ import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
+import axios from "axios";
+import { useMutation, useQueryClient } from "react-query";
+import { ErrorAlert, SuccessAlert } from "../../alert";
 
 export { GameConsole };
 
@@ -119,8 +122,21 @@ function Header(props: any) {
   const { game } = usePlay();
   const theme = useTheme();
 
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation<Response, { message: string }>(
+    () => {
+      return axios.put(`/api/games/${game.id}/step/next`);
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries(`/api/games/${game.id}`),
+    }
+  );
+
   return (
     <PlayBox>
+      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
+      {mutation.isSuccess && <SuccessAlert />}
       <Grid container>
         <Grid item xs={3}>
           <Button
@@ -148,7 +164,7 @@ function Header(props: any) {
             variant="contained"
             color={selectedScreen === "Mean Stats" ? "secondary" : "primary"}
             sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-            onClick={() => console.log("next step - wip")}
+            onClick={() => mutation.mutate()}
           >
             Passer à l'étape suivante <ArrowForwardIcon />
           </Button>

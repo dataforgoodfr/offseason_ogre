@@ -18,6 +18,7 @@ const crudController = {
   registerController,
   removePlayerController,
   updateGame,
+  incrementGameStep,
 };
 const controllers = {
   ...crudController,
@@ -86,5 +87,15 @@ async function updateGame(request: Request, response: Response) {
   const update = bodySchema.parse(request.body);
 
   const document = await services.update(id, update);
+  response.status(200).json({ document });
+}
+
+async function incrementGameStep(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+
+  const { id } = paramsSchema.parse(request.params);
+  const document = await services.incrementStep(id);
   response.status(200).json({ document });
 }

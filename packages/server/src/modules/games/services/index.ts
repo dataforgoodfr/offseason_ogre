@@ -11,6 +11,7 @@ const crudServices = {
   getMany,
   create,
   update,
+  incrementStep,
 };
 const services = { ...crudServices, register };
 
@@ -42,4 +43,8 @@ async function update(
   document: Partial<Omit<Model, "id">>
 ): Promise<Model> {
   return model.update({ data: document, where: { id } });
+}
+
+async function incrementStep(id: number): Promise<Model> {
+  return model.update({ data: { step: { increment: 1 } }, where: { id } });
 }

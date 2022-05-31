@@ -21,3 +21,4 @@ router.post(
 );
 router.put("/change-team", asyncErrorHandler(controllers.changeTeamController));
 router.put("/:id", asyncErrorHandler(controllers.updateGame));
+router.put("/:id/step/next", asyncErrorHandler(controllers.incrementGameStep));
