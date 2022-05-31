@@ -16,7 +16,7 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
             <Typography variant="h5">{buildName(player.user)}</Typography>
             <Box display="flex" alignItems="center" mt={2}>
               <PaidIcon />
-              <Typography ml={1}>Budget restant: 15h/j</Typography>
+              <Typography ml={1}>Budget restant: 15€/j</Typography>
             </Box>
             <Box display="flex" alignItems="center">
               <CloudIcon />
