@@ -44,11 +44,11 @@ function MeanStatsConsole() {
   const { game } = usePlay();
   return (
     <Box>
-      <Grid container justifyContent="space-evenly">
-        <Grid item sx={{ m: 1 }} xs={11} sm={5}>
+      <Grid container justifyContent="space-between">
+        <Grid item xs={11} sm={5.75}>
           <ConsumptionStats />
         </Grid>
-        <Grid item sx={{ m: 1 }} xs={11} sm={5}>
+        <Grid item xs={11} sm={5.75}>
           <ProductionStats />
         </Grid>
       </Grid>
@@ -61,7 +61,10 @@ function MeanStatsConsole() {
             </Typography>
             {game.teams.map((team) => {
               return (
-                <Typography sx={{ textAlign: "center", fontSize: "0.7em" }}>
+                <Typography
+                  key={team.id}
+                  sx={{ textAlign: "center", fontSize: "0.7em" }}
+                >
                   {" "}
                   <GroupsIcon /> {`${team.name}:  250pts`}{" "}
                 </Typography>
@@ -77,7 +80,10 @@ function MeanStatsConsole() {
             </Typography>
             {game.teams.map((team) => {
               return (
-                <Typography sx={{ textAlign: "center", fontSize: "0.7em" }}>
+                <Typography
+                  key={team.id}
+                  sx={{ textAlign: "center", fontSize: "0.7em" }}
+                >
                   {" "}
                   <GroupsIcon /> {`${team.name}:  250T/an`}{" "}
                 </Typography>
@@ -93,7 +99,10 @@ function MeanStatsConsole() {
             </Typography>
             {game.teams.map((team) => {
               return (
-                <Typography sx={{ textAlign: "center", fontSize: "0.7em" }}>
+                <Typography
+                  key={team.id}
+                  sx={{ textAlign: "center", fontSize: "0.7em" }}
+                >
                   {" "}
                   <GroupsIcon /> {`${team.name}:  250€/J`}{" "}
                 </Typography>
