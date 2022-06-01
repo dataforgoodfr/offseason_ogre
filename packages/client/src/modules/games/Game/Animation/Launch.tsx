@@ -16,10 +16,10 @@ import { useNavigate } from "react-router-dom";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
-const hasTeamWithTooManyPlayers = (teams: any) => {
-  const MAX_TEAM_SIZE = 5;
-  return teams.some((team: any) => team.players.length > MAX_TEAM_SIZE);
-};
+// const hasTeamWithTooManyPlayers = (teams: any) => {
+//   const MAX_TEAM_SIZE = 5;
+//   return teams.some((team: any) => team.players.length > MAX_TEAM_SIZE);
+// };
 
 export default function Launch({ game }: { game: IGameWithTeams }) {
   const queryClient = useQueryClient();
@@ -78,13 +78,13 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
           {"Lancer la partie ?"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText
+          {/* <DialogContentText
             id="alert-dialog-warning"
             sx={{ color: "red", mb: 2 }}
           >
             {hasTeamWithTooManyPlayers(game.teams) &&
               dialogContent.warningMessage}
-          </DialogContentText>
+          </DialogContentText> */}
           <DialogContentText id="alert-dialog-description">
             {dialogContent.message}
           </DialogContentText>
