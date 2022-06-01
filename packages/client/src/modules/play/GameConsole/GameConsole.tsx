@@ -15,105 +15,121 @@ import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
-import axios from "axios";
-import { useMutation, useQueryClient } from "react-query";
-import { ErrorAlert, SuccessAlert } from "../../alert";
 
 export { GameConsole };
 
 function GameConsole() {
   return (
     <PlayLayout title="Console">
-      <GameAdminContent />
+      <GameConsoleContent />
     </PlayLayout>
   );
 }
 
-function GameAdminContent() {
-  const { game } = usePlay();
-  const firstTeamId = game.teams[0].id;
+function GameConsoleContent() {
   const [selectedScreen, setSelectedScreen] = useState<string>("Mean Stats");
-  const [selectedTeamId, setSelectedTeamId] = useState<number>(firstTeamId);
-  const selectedTeam = game.teams.find(({ id }) => id === selectedTeamId);
-  if (selectedScreen === "Teams" && !selectedTeam) return <></>;
   return (
     <>
       <Header
         selectedScreen={selectedScreen}
         setSelectedScreen={setSelectedScreen}
       />
-      {selectedScreen === "Teams" && selectedTeam && (
-        <Box>
-          <Teams
-            selectedTeamId={selectedTeamId}
-            setSelectedTeamId={setSelectedTeamId}
-          />
-          <TeamDetails team={selectedTeam} />
-        </Box>
-      )}
-      {selectedScreen === "Mean Stats" && (
-        <Box>
-          <Grid container justifyContent="space-evenly">
-            <Grid item sx={{ m: 1 }} xs={11} sm={5}>
-              <ConsumptionStats />
-            </Grid>
-            <Grid item sx={{ m: 1 }} xs={11} sm={5}>
-              <ProductionStats />
-            </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
-            <Grid item sx={{ m: 1 }} xs={4} sm={3}>
-              <PlayBox sx={{ m: 2, p: 1 }}>
-                <Typography sx={{ color: "#F9C74F", textAlign: "center" }}>
-                  {" "}
-                  Points <EmojiEventsIcon />{" "}
-                </Typography>
-                {game.teams.map((team) => {
-                  return (
-                    <Typography sx={{ textAlign: "center", fontSize: "0.7em" }}>
-                      {" "}
-                      <GroupsIcon /> {`${team.name}:  250pts`}{" "}
-                    </Typography>
-                  );
-                })}
-              </PlayBox>
-            </Grid>
-            <Grid item sx={{ m: 1 }} xs={4} sm={3}>
-              <PlayBox sx={{ m: 2, p: 1 }}>
-                <Typography sx={{ textAlign: "center" }}>
-                  {" "}
-                  CO2 (T/an) <WaterRoundedIcon />{" "}
-                </Typography>
-                {game.teams.map((team) => {
-                  return (
-                    <Typography sx={{ textAlign: "center", fontSize: "0.7em" }}>
-                      {" "}
-                      <GroupsIcon /> {`${team.name}:  250T/an`}{" "}
-                    </Typography>
-                  );
-                })}
-              </PlayBox>
-            </Grid>
-            <Grid item sx={{ m: 1 }} xs={4} sm={3}>
-              <PlayBox sx={{ m: 2, p: 1 }}>
-                <Typography sx={{ textAlign: "center" }}>
-                  {" "}
-                  Budget (€/J) <PaidRoundedIcon />{" "}
-                </Typography>
-                {game.teams.map((team) => {
-                  return (
-                    <Typography sx={{ textAlign: "center", fontSize: "0.7em" }}>
-                      {" "}
-                      <GroupsIcon /> {`${team.name}:  250€/J`}{" "}
-                    </Typography>
-                  );
-                })}
-              </PlayBox>
-            </Grid>
-          </Grid>
-        </Box>
-      )}
+      {selectedScreen === "Teams" ? <TeamsConsole /> : null}
+      {selectedScreen === "Mean Stats" ? <MeanStatsConsole /> : null}
     </>
+  );
+}
+
+function MeanStatsConsole() {
+  const { game } = usePlay();
+  return (
+    <Box>
+      <Grid container justifyContent="space-between">
+        <Grid item xs={11} sm={5.75}>
+          <ConsumptionStats />
+        </Grid>
+        <Grid item xs={11} sm={5.75}>
+          <ProductionStats />
+        </Grid>
+      </Grid>
+      <Grid container justifyContent="center">
+        <Grid item sx={{ m: 1 }} xs={4} sm={3}>
+          <PlayBox sx={{ m: 2, p: 1 }}>
+            <Typography sx={{ color: "#F9C74F", textAlign: "center" }}>
+              {" "}
+              Points <EmojiEventsIcon />{" "}
+            </Typography>
+            {game.teams.map((team) => {
+              return (
+                <Typography
+                  key={team.id}
+                  sx={{ textAlign: "center", fontSize: "0.7em" }}
+                >
+                  {" "}
+                  <GroupsIcon /> {`${team.name}:  250pts`}{" "}
+                </Typography>
+              );
+            })}
+          </PlayBox>
+        </Grid>
+        <Grid item sx={{ m: 1 }} xs={4} sm={3}>
+          <PlayBox sx={{ m: 2, p: 1 }}>
+            <Typography sx={{ textAlign: "center" }}>
+              {" "}
+              CO2 (T/an) <WaterRoundedIcon />{" "}
+            </Typography>
+            {game.teams.map((team) => {
+              return (
+                <Typography
+                  key={team.id}
+                  sx={{ textAlign: "center", fontSize: "0.7em" }}
+                >
+                  {" "}
+                  <GroupsIcon /> {`${team.name}:  250T/an`}{" "}
+                </Typography>
+              );
+            })}
+          </PlayBox>
+        </Grid>
+        <Grid item sx={{ m: 1 }} xs={4} sm={3}>
+          <PlayBox sx={{ m: 2, p: 1 }}>
+            <Typography sx={{ textAlign: "center" }}>
+              {" "}
+              Budget (€/J) <PaidRoundedIcon />{" "}
+            </Typography>
+            {game.teams.map((team) => {
+              return (
+                <Typography
+                  key={team.id}
+                  sx={{ textAlign: "center", fontSize: "0.7em" }}
+                >
+                  {" "}
+                  <GroupsIcon /> {`${team.name}:  250€/J`}{" "}
+                </Typography>
+              );
+            })}
+          </PlayBox>
+        </Grid>
+      </Grid>
+    </Box>
+  );
+}
+
+function TeamsConsole() {
+  const { game } = usePlay();
+  const firstTeamId = game.teams[0].id;
+  const [selectedTeamId, setSelectedTeamId] = useState<number>(firstTeamId);
+  const selectedTeam = game.teams.find(({ id }) => id === selectedTeamId);
+  if (!selectedTeam) return <></>;
+
+  return (
+    <Box>
+      <Teams
+        selectedTeamId={selectedTeamId}
+        setSelectedTeamId={setSelectedTeamId}
+      />
+      <TeamDetails team={selectedTeam} />
+    </Box>
   );
 }
 
@@ -122,21 +138,8 @@ function Header(props: any) {
   const { game } = usePlay();
   const theme = useTheme();
 
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation<Response, { message: string }>(
-    () => {
-      return axios.put(`/api/games/${game.id}/step/next`);
-    },
-    {
-      onSuccess: () => queryClient.invalidateQueries(`/api/games/${game.id}`),
-    }
-  );
-
   return (
     <PlayBox>
-      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
-      {mutation.isSuccess && <SuccessAlert />}
       <Grid container>
         <Grid item xs={3}>
           <Button
@@ -162,9 +165,9 @@ function Header(props: any) {
         <Grid item sx={{ margin: "auto" }} xs={3}>
           <Button
             variant="contained"
-            color={selectedScreen === "Mean Stats" ? "secondary" : "primary"}
+            color={"secondary"}
             sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-            onClick={() => mutation.mutate()}
+            onClick={() => console.log("next step - wip")}
           >
             Passer à l'étape suivante <ArrowForwardIcon />
           </Button>

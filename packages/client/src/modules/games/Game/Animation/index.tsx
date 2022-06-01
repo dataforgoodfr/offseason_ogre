@@ -1,10 +1,12 @@
 import { Box } from "@mui/material";
-import { IGame } from "../../../../utils/types";
+import { IGame, ITeamWithPlayers } from "../../../../utils/types";
 import Launch from "./Launch";
 
 export { Animation };
 
-function Animation({ game }: { game: IGame }) {
+type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
+
+function Animation({ game }: { game: IGameWithTeams }) {
   return (
     <Box sx={{ display: "flex", justifyContent: "center" }}>
       <Launch game={game} />

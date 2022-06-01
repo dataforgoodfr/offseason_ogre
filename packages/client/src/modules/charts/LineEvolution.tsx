@@ -1,4 +1,4 @@
-import { Card, useTheme } from "@mui/material";
+import { Card } from "@mui/material";
 import {
   LineChart,
   Line,
@@ -13,7 +13,6 @@ import {
 export { LineEvolution };
 
 function LineEvolution({ data }: { data: any[] }) {
-  const theme = useTheme();
   return (
     <Card
       sx={{
