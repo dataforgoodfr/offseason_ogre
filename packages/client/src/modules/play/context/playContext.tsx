@@ -30,6 +30,11 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     const socket = io();
+
+    socket.on("resetGameState", (arg) =>
+      console.log("arg", JSON.stringify(arg))
+    );
+
     // client-side
     socket.on("connect", () => {
       socket.emit("joinGame", gameId);
