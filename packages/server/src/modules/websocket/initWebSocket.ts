@@ -11,12 +11,9 @@ function initWebSocket({ app }: { app: Express }) {
   });
 
   io.on("connection", (socket) => {
-    // eslint-disable-next-line no-console
-    console.log("io connection");
-    // ...
-    console.log(socket.rooms); // Set { <socket.id> }
-    socket.join("room1");
-    console.log(socket.rooms); // Set { <socket.id>, "room1" }
+    socket.on("joinGame", (gameId) => {
+      socket.join(gameId);
+    });
   });
   return { httpServer };
 }

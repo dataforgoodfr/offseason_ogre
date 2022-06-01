@@ -28,18 +28,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   if (!match) throw new Error("Provider use ouside of game play.");
   const { gameId } = match.params;
 
-  console.log("PlayProvider");
   React.useEffect(() => {
     const socket = io();
     // client-side
     socket.on("connect", () => {
-      console.log("connect", socket.id); // x8WIv7-mJelg7on_ALbx
+      socket.emit("joinGame", gameId);
     });
 
     socket.on("disconnect", () => {
-      console.log(socket.id); // undefined
+      console.log(socket.id);
     });
-  }, []);
+  }, [gameId]);
 
   const { data: result, isLoading } = useQuery(`/api/games/${gameId}`, () => {
     return axios.get<undefined, { data: { document: IGameWithTeams } }>(
