@@ -1,8 +1,7 @@
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
-import axios from "axios";
 import * as React from "react";
-import { useQuery } from "react-query";
 import { useMatch } from "react-router-dom";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 
@@ -26,42 +25,21 @@ function RootPlayProvider({ children }: { children: React.ReactNode }) {
 function PlayProvider({ children }: { children: React.ReactNode }) {
   const match = useMatch(`play/games/:gameId/*`);
   if (!match) throw new Error("Provider use ouside of game play.");
-  const { gameId } = match.params;
+  const gameId = +(match.params.gameId as string);
 
-  React.useEffect(() => {
-    const socket = io();
+  const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
+    null
+  );
+  useGameSocket({ gameId, setGameWithTeams });
 
-    socket.on("resetGameState", (arg) =>
-      console.log("arg", JSON.stringify(arg))
-    );
-
-    // client-side
-    socket.on("connect", () => {
-      socket.emit("joinGame", gameId);
-    });
-
-    socket.on("disconnect", () => {
-      console.log(socket.id);
-    });
-  }, [gameId]);
-
-  const { data: result, isLoading } = useQuery(`/api/games/${gameId}`, () => {
-    return axios.get<undefined, { data: { document: IGameWithTeams } }>(
-      `/api/games/${gameId}`
-    );
-  });
-
-  if (isLoading) {
+  if (gameWithTeams === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
 
-  const game = result?.data?.document;
-  if (typeof game === "undefined") {
-    throw new Error("game is undefined");
-  }
-
   return (
-    <PlayContext.Provider value={{ game }}>{children}</PlayContext.Provider>
+    <PlayContext.Provider value={{ game: gameWithTeams }}>
+      {children}
+    </PlayContext.Provider>
   );
 }
 
@@ -71,6 +49,31 @@ function useLoadedPlay(): IPlayContext {
     throw new Error("play context should have been loaded");
   }
   return playValue;
+}
+
+function useGameSocket({
+  gameId,
+  setGameWithTeams,
+}: {
+  gameId: number;
+  setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
+}) {
+  useEffect(() => {
+    const socket = io();
+
+    socket.on("resetGameState", (state) => {
+      const { gameWithTeams } = state;
+      setGameWithTeams(gameWithTeams);
+    });
+
+    socket.on("connect", () => {
+      socket.emit("joinGame", gameId);
+    });
+
+    socket.on("disconnect", () => {
+      console.log(socket.id);
+    });
+  }, [gameId, setGameWithTeams]);
 }
 
 function usePlay() {

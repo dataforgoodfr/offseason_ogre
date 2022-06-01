@@ -13,7 +13,6 @@ function initWebSocket({ app }: { app: Express }) {
     socket.on("joinGame", (gameId: string) => {
       socket.join(gameId);
       gameServices.initState({ gameId: +gameId }).then((state) => {
-        console.log("state", state);
         socket.emit("resetGameState", state);
       });
     });
