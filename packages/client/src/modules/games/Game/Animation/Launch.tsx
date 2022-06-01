@@ -16,9 +16,9 @@ import { useNavigate } from "react-router-dom";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
-const hasTeamWithTooManyPlayers = (teams: any) => {
+const hasTeamWithTooManyPlayers = (teams: ITeamWithPlayers[]) => {
   const MAX_TEAM_SIZE = 5;
-  return teams.some((team: any) => team.players.length > MAX_TEAM_SIZE);
+  return teams.some((team: ITeamWithPlayers) => team.players.length > MAX_TEAM_SIZE);
 };
 
 export default function Launch({ game }: { game: IGameWithTeams }) {
