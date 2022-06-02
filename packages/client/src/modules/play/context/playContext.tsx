@@ -71,7 +71,7 @@ function useGameSocket({
     });
 
     socket.on("disconnect", () => {
-      console.log(socket.id);
+      console.log("disconnect", socket.id);
     });
   }, [gameId, setGameWithTeams]);
 }
