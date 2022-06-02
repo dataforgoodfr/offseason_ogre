@@ -1,23 +1,38 @@
+import React from "react";
 import { Card, useTheme } from "@mui/material";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 
 export { StackedEnergyBars };
 
-function StackedEnergyBars({ data }: { data: any[] }) {
-  const theme = useTheme();
+
+
+function StackedEnergyBars({ data, getState, isShowingDetails }: { data: any[], getState: Function, isShowingDetails: boolean }) {
+
+  const theme = useTheme()
+
   return (
     <Card
-      sx={{
-        alignItems: "center",
-        display: "flex",
-        justifyContent: "center",
-        pt: 4,
-        pb: 4,
-        pr: 2,
-        pl: 2,
-      }}
+      sx={
+        isShowingDetails ? {
+          width: "50%",
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+          pt: 2,
+          pb: 2,
+          pr: 1,
+          pl: 1,
+        } : {
+          alignItems: "center",
+          display: "flex",
+          justifyContent: "center",
+          pt: 4,
+          pb: 4,
+          pr: 2,
+          pl: 2,
+        }}
     >
-      <BarChart width={500} height={500} data={data}>
+      <BarChart width={500} height={500} data={data} onClick={(e) => getState(e)}>
         <XAxis dataKey="name" />
         <YAxis name="kWh/j" domain={[0, 300]} />
         <Tooltip />

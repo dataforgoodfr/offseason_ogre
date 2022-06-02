@@ -13,17 +13,28 @@ import {
 
 export { DetailsEnergyBars }
 
-function DetailsEnergyBars({ data, colors }: { data: any[], colors: any[] }) {
+function DetailsEnergyBars({ data, colors, isShowingDetails }: { data: any[], colors: string[], isShowingDetails: boolean }) {
     return (
-        <Card sx={{
-            alignItems: "center",
-            display: "flex",
-            justifyContent: "center",
-            pt: 4,
-            pb: 4,
-            pr: 2,
-            pl: 2,
-        }}>
+        <Card sx={
+            () => isShowingDetails ? {
+                width: "50%",
+                alignItems: "center",
+                display: "flex",
+                justifyContent: "center",
+                pt: 4,
+                pb: 4,
+                pr: 2,
+                pl: 2,
+            } : {
+                alignItems: "center",
+                display: "flex",
+                justifyContent: "center",
+                pt: 4,
+                pb: 4,
+                pr: 2,
+                pl: 2,
+            }
+        }>
             <BarChart
                 width={500}
                 height={500}
