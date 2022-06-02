@@ -14,9 +14,9 @@ function initWebSocket({ app }: { app: Express }) {
     socket.on("joinGame", (rawGameId: unknown) => {
       const gameId = z.number().parse(rawGameId);
       socket.join(`${gameId}`);
-      gameServices.initState({ gameId: +gameId }).then((state) => {
-        socket.emit("resetGameState", state);
-      });
+      gameServices
+        .initState({ gameId })
+        .then((state) => socket.emit("resetGameState", state));
     });
   });
   return { httpServer };
