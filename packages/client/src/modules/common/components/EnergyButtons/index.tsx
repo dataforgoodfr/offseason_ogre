@@ -20,13 +20,19 @@ function EnergyButtons() {
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        mt: 2,
       }}
     >
       {energies.map((item) => (
         <Button
+          key={item.name}
           variant="contained"
           sx={{
             bgcolor: item.color,
+            "&:hover": {
+              backgroundColor: item.color,
+              filter: "brightness(85%)",
+            },
             color: "white",
             width: "50%",
             m: 1,
