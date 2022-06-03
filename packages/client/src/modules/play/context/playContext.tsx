@@ -42,7 +42,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       if (previous === null) return null;
       return { ...previous, ...update };
     });
-    socket.emit("updateGame", update);
+    socket.emit("updateGame", { gameId, update });
   };
 
   return (
@@ -74,6 +74,13 @@ function useGameSocket({
     newSocket.on("resetGameState", (state) => {
       const { gameWithTeams } = state;
       setGameWithTeams(gameWithTeams);
+    });
+
+    newSocket.on("gameUpdated", ({ update }: { update: Partial<IGame> }) => {
+      setGameWithTeams((previous) => {
+        if (previous === null) return null;
+        return { ...previous, ...update };
+      });
     });
 
     newSocket.on("connect", () => {

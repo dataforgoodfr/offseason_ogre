@@ -18,6 +18,18 @@ function initWebSocket({ app }: { app: Express }) {
         .initState({ gameId })
         .then((state) => socket.emit("resetGameState", state));
     });
+    socket.on("updateGame", (args: unknown) => {
+      const schema = z.object({
+        gameId: z.number(),
+        update: z.object({ step: z.number().optional() }),
+      });
+      const { gameId, update } = schema.parse(args);
+      gameServices.update(gameId, update).then(() => {
+        socket.broadcast
+          .to(`${gameId}`)
+          .emit("gameUpdated", { gameId, update });
+      });
+    });
   });
   return { httpServer };
 }
