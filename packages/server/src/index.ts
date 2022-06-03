@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase } from "./database";
+import { initWebSocket } from "./modules/websocket";
 
 const app = express();
 
@@ -46,7 +47,8 @@ app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   handleError(err, res);
 });
 
-app.listen(port, () => {
+const { httpServer } = initWebSocket({ app });
+httpServer.listen(port, () => {
   // eslint-disable-next-line no-console
   console.log(`app listening on port ${port}!`);
 });

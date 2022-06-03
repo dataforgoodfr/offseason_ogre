@@ -49,6 +49,7 @@ function shouldHaveTeacherRole(email: string): boolean {
     "ogre.teacher@yopmail.com",
     "remi.riviere.free@gmail.com",
     "tcateland@gmail.com",
+    "william_haidar@hotmail.fr",
   ];
   return mails.includes(email);
 }

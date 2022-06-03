@@ -1,6 +1,7 @@
 import { database } from "../../../database";
 import * as teamServices from "../../teams/services";
 import { Game } from "../types";
+import { initState } from "./initState";
 import { register } from "./register";
 
 const model = database.game;
@@ -12,7 +13,7 @@ const crudServices = {
   create,
   update,
 };
-const services = { ...crudServices, register };
+const services = { ...crudServices, initState, register };
 
 export { services };
 
