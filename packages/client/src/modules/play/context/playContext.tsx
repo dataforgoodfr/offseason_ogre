@@ -9,6 +9,7 @@ export { PlayProvider, useLoadedPlay as usePlay, RootPlayProvider };
 
 interface IPlayContext {
   game: IGameWithTeams;
+  updateGame: (update: Partial<IGame>) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -45,7 +46,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <PlayContext.Provider value={{ game: gameWithTeams }}>
+    <PlayContext.Provider value={{ game: gameWithTeams, updateGame }}>
       {children}
     </PlayContext.Provider>
   );
