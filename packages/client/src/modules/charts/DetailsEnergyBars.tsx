@@ -1,4 +1,3 @@
-import React from "react";
 import { Card } from "@mui/material";
 import {
   BarChart,
@@ -12,13 +11,8 @@ import {
 
 export { DetailsEnergyBars };
 
-function DetailsEnergyBars({
-  data,
-  colors,
-}: {
-  data: any[];
-  colors: string[];
-}) {
+function DetailsEnergyBars({ data }: { data: any[] }) {
+  const colors = ["#F9C74F", "#84BDF0", "#AF6A28", "Grey"];
   return (
     <Card
       sx={{

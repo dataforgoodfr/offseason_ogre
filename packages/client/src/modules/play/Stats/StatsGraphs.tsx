@@ -18,7 +18,7 @@ function StatsGraphs() {
       />
       {typeof selectedIndex !== "undefined" ? (
         <>
-          <DetailsEnergyBars data={data} colors={colors} />
+          <DetailsEnergyBars data={data} />
           <EnergyButtons />
         </>
       ) : (
@@ -27,8 +27,6 @@ function StatsGraphs() {
     </PlayBox>
   );
 }
-
-const colors = ["#F9C74F", "#84BDF0", "#AF6A28", "Grey"];
 
 function buildData() {
   return [
