@@ -4,11 +4,16 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
 
 export { StackedEnergyBars };
 
-
-
-function StackedEnergyBars({ data, getState, isShowingDetails }: { data: any[], getState: Function, isShowingDetails: boolean }) {
-
-  const theme = useTheme()
+function StackedEnergyBars({
+  data,
+  getState,
+  isShowingDetails,
+}: {
+  data: any[];
+  getState: Function;
+  isShowingDetails: boolean;
+}) {
+  const theme = useTheme();
 
   return (
     <Card
@@ -20,10 +25,15 @@ function StackedEnergyBars({ data, getState, isShowingDetails }: { data: any[], 
         pb: 4,
         pr: 2,
         pl: 2,
-        mb: 1
+        mb: 1,
       }}
     >
-      <BarChart width={500} height={500} data={data} onClick={(e) => getState(e)}>
+      <BarChart
+        width={500}
+        height={500}
+        data={data}
+        onClick={(e) => getState(e)}
+      >
         <XAxis dataKey="name" />
         <YAxis name="kWh/j" domain={[0, 300]} />
         <Tooltip />

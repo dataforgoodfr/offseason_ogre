@@ -1,38 +1,38 @@
-import React from "react"
+import React from "react";
 import { StackedEnergyBars, DetailsEnergyBars } from "../../charts";
 import { PlayBox } from "../Components";
 import { EnergyButtons } from "../../common/components/EnergyButtons";
 
-
 export { StatsGraphs };
 
-
-
 function StatsGraphs() {
-
-  const [isShowingDetails, setIsShowingDetails] = React.useState(false)
+  const [isShowingDetails, setIsShowingDetails] = React.useState(false);
   const [activeLabel, setActiveLabel] = React.useState("");
 
   function getState(e: any) {
-    buildData().forEach(elm => {
+    buildData().forEach((elm) => {
       if (e.activeLabel && e.activeLabel === elm.name) {
-        setActiveLabel(e.activeLabel) // e.activeLabel is the click event key with values "Initial", "Step 1", "Step 2" ... which identifiy the differents bars
-        setIsShowingDetails(!isShowingDetails)
+        setActiveLabel(e.activeLabel); // e.activeLabel is the click event key with values "Initial", "Step 1", "Step 2" ... which identifiy the differents bars
+        setIsShowingDetails(!isShowingDetails);
       }
-    })
+    });
   }
 
   return (
     <PlayBox>
-      <StackedEnergyBars data={buildData()} getState={getState} isShowingDetails={isShowingDetails} />
-      {
-        isShowingDetails ?
-          <>
-            <DetailsEnergyBars data={data} colors={colors} />
-            <EnergyButtons />
-          </>
-          : <></>
-      }
+      <StackedEnergyBars
+        data={buildData()}
+        getState={getState}
+        isShowingDetails={isShowingDetails}
+      />
+      {isShowingDetails ? (
+        <>
+          <DetailsEnergyBars data={data} colors={colors} />
+          <EnergyButtons />
+        </>
+      ) : (
+        <></>
+      )}
     </PlayBox>
   );
 }
@@ -86,15 +86,15 @@ const data = [
   {
     name: "Usage domestique",
     value: 17,
-    Type: 1
+    Type: 1,
   },
   { name: "Service public", value: 8, Type: 3 },
   { name: "Eclairage", value: 4, Type: 1 },
   { name: "Train", value: 2, Type: 3 },
   { name: "Climatisation", value: 16, Type: 1 },
   { name: "Numérique", value: 11, Type: 3 },
-  { name: "ProduitsBruns", value: 7, Type: 1 }
-]
+  { name: "ProduitsBruns", value: 7, Type: 1 },
+];
 
 data.sort(function (a, b) {
   return b.value - a.value;
@@ -102,5 +102,3 @@ data.sort(function (a, b) {
 data.sort(function (a, b) {
   return b.Type - a.Type;
 });
-
-

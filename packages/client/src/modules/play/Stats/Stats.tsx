@@ -3,7 +3,6 @@ import { PlayLayout } from "../PlayLayout";
 import { PlayerHeader } from "../PlayerPersona";
 import { StatsGraphs } from "./StatsGraphs";
 
-
 export { Stats };
 
 function Stats() {

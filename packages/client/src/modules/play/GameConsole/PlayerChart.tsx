@@ -6,10 +6,13 @@ import { DetailsEnergyBars } from "../../charts";
 export { PlayerChart };
 
 function PlayerChart({ team }: { team: ITeamWithPlayers }) {
-
   return (
     <Box p={2} pl={4}>
-      <StackedEnergyBars data={buildData({ team })} getState={() => { }} isShowingDetails={false} />
+      <StackedEnergyBars
+        data={buildData({ team })}
+        getState={() => {}}
+        isShowingDetails={false}
+      />
     </Box>
   );
 }
