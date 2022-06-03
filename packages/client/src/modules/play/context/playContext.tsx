@@ -30,11 +30,19 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
     null
   );
-  useGameSocket({ gameId, setGameWithTeams });
+  const { socket } = useGameSocket({ gameId, setGameWithTeams });
 
-  if (gameWithTeams === null) {
+  if (gameWithTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
+
+  const updateGame = (update: Partial<IGame>) => {
+    setGameWithTeams((previous) => {
+      if (previous === null) return null;
+      return { ...previous, ...update };
+    });
+    socket.emit("updateGame", update);
+  };
 
   return (
     <PlayContext.Provider value={{ game: gameWithTeams }}>
