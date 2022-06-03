@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
@@ -57,23 +57,32 @@ function useGameSocket({
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
-}) {
+}): { socket: Socket | null } {
+  const [socket, setSocket] = useState<Socket | null>(null);
   useEffect(() => {
-    const socket = io();
+    const newSocket = io();
 
-    socket.on("resetGameState", (state) => {
+    newSocket.on("resetGameState", (state) => {
       const { gameWithTeams } = state;
       setGameWithTeams(gameWithTeams);
     });
 
-    socket.on("connect", () => {
-      socket.emit("joinGame", gameId);
+    newSocket.on("connect", () => {
+      console.log("connect", newSocket.id);
+      newSocket.emit("joinGame", gameId);
     });
 
-    socket.on("disconnect", () => {
-      console.log("disconnect", socket.id);
+    newSocket.on("disconnect", () => {
+      console.log("disconnect");
     });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.close();
+    };
   }, [gameId, setGameWithTeams]);
+  return { socket };
 }
 
 function usePlay() {
