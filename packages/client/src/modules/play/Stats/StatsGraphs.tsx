@@ -7,12 +7,10 @@ export { StatsGraphs };
 
 function StatsGraphs() {
   const [isShowingDetails, setIsShowingDetails] = React.useState(false);
-  const [activeLabel, setActiveLabel] = React.useState("");
 
   function getState(e: any) {
     buildData().forEach((elm) => {
       if (e.activeLabel && e.activeLabel === elm.name) {
-        setActiveLabel(e.activeLabel); // e.activeLabel is the click event key with values "Initial", "Step 1", "Step 2" ... which identifiy the differents bars
         setIsShowingDetails(!isShowingDetails);
       }
     });

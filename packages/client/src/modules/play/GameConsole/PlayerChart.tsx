@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
-import { DetailsEnergyBars } from "../../charts";
 
 export { PlayerChart };
 
