@@ -3,8 +3,6 @@ import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   CircularProgress,
   Container,
   Divider,
@@ -20,6 +18,7 @@ import { ErrorAlert, SuccessAlert } from "../alert";
 import { GameConsole } from "./GameConsole";
 import { PlayerPersona } from "./PlayerPersona";
 import { PlayLayout } from "./PlayLayout";
+import { PlayBox } from "./Components";
 
 export { GameConsole, MyGames, PlayerPersona };
 
@@ -65,31 +64,29 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {games.map((game) => (
-        <Card key={game.id} sx={{ mt: 2, pl: 1, pr: 1 }}>
-          <CardContent>
-            <Grid container direction="row" alignItems="center">
-              <Grid item xs={10}>
-                <Typography variant="h6">{game.name}</Typography>
-                <Typography>
-                  {"Date: " + new Date(game.date).toLocaleString()}
-                </Typography>
-              </Grid>
-              {game.status === "ready" && (
-                <Grid item display="flex" xs={2}>
-                  <Button
-                    component={Link}
-                    color="secondary"
-                    variant="contained"
-                    to={`/play/games/${game.id}/persona`}
-                    sx={{ ml: "auto" }}
-                  >
-                    <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
-                  </Button>
-                </Grid>
-              )}
+        <PlayBox key={game.id} sx={{ mt: 2 }}>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs={10}>
+              <Typography variant="h6">{game.name}</Typography>
+              <Typography>
+                {"Date: " + new Date(game.date).toLocaleString()}
+              </Typography>
             </Grid>
-          </CardContent>
-        </Card>
+            {game.status === "ready" && (
+              <Grid item display="flex" xs={2}>
+                <Button
+                  component={Link}
+                  color="secondary"
+                  variant="contained"
+                  to={`/play/games/${game.id}/persona`}
+                  sx={{ ml: "auto" }}
+                >
+                  <VideogameAssetRoundedIcon sx={{ mr: 2 }} /> Jouer
+                </Button>
+              </Grid>
+            )}
+          </Grid>
+        </PlayBox>
       ))}
     </Box>
   );

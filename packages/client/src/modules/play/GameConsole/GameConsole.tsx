@@ -27,7 +27,7 @@ function GameConsole() {
 }
 
 function GameConsoleContent() {
-  const [selectedScreen, setSelectedScreen] = useState<string>("Mean Stats");
+  const [selectedScreen, setSelectedScreen] = useState<string>("Teams");
   return (
     <>
       <Header
