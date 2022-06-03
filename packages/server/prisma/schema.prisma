@@ -18,11 +18,17 @@ model Game {
   teams       Team[]
   status      Status         @default(draft)
   step        Int            @default(0)
+  stepStatus  StepStatus     @default(closed)
 }
 
 enum Status {
   draft
   ready
+}
+
+enum StepStatus {
+  inProgress
+  closed
 }
 
 model UsersOnGames {

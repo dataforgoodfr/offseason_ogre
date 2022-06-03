@@ -135,9 +135,16 @@ function TeamsConsole() {
 
 function Header(props: any) {
   const { selectedScreen, setSelectedScreen } = props;
-  const { game } = usePlay();
+  const { game, socket } = usePlay();
   const theme = useTheme();
 
+  const getNextStepText = (game: any) => {
+    if (game.stepStatus === "inProgress") {
+      return `Clôturer l'étape ${game.step}`;
+    } else {
+      return `Lancer l'étape ${game.step}`;
+    }
+  };
   return (
     <PlayBox>
       <Grid container>
@@ -167,9 +174,9 @@ function Header(props: any) {
             variant="contained"
             color={"secondary"}
             sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-            onClick={() => console.log("next step - wip")}
+            onClick={() => socket.emit("updateStep", game.id)}
           >
-            Passer à l'étape suivante <ArrowForwardIcon />
+            {getNextStepText(game)} <ArrowForwardIcon />
           </Button>
         </Grid>
       </Grid>

@@ -18,7 +18,7 @@ const crudController = {
   registerController,
   removePlayerController,
   updateGame,
-  incrementGameStep,
+  updateGameStep,
 };
 const controllers = {
   ...crudController,
@@ -38,6 +38,7 @@ async function createController(request: Request, response: Response) {
     teacherId: response.locals.user.id,
     status: "draft",
     step: 0,
+    stepStatus: "closed",
     ...documentToCreate,
   });
   response.status(201).json({ data: newDocument });
@@ -90,12 +91,22 @@ async function updateGame(request: Request, response: Response) {
   response.status(200).json({ document });
 }
 
-async function incrementGameStep(request: Request, response: Response) {
-  const paramsSchema = z.object({
-    id: z.string().regex(/^\d+$/).transform(Number),
-  });
+async function updateGameStep({ gameId }: { gameId: number }) {
+  const game = await services.getDocument(gameId);
 
-  const { id } = paramsSchema.parse(request.params);
-  const document = await services.incrementStep(id);
-  response.status(200).json({ document });
+  if (game && game.stepStatus === "closed") {
+    await services.updateStep({
+      id: game.id,
+      step: game.step,
+      stepStatus: "inProgress",
+    });
+  }
+  if (game && game.stepStatus === "inProgress") {
+    await services.updateStep({
+      id: game.id,
+      step: game.step + 1,
+      stepStatus: "closed",
+    });
+  }
+  return gameId;
 }

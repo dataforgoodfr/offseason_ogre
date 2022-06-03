@@ -26,6 +26,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
+import { usePlay } from "../context/playContext";
 
 export { PlayerHeader, Header, Actions };
 
@@ -174,7 +175,17 @@ function Header({
 }
 
 function Actions() {
-  const gameId = useGameId();
+  const { game } = usePlay();
+
+  const getActionText = (game: IGame) => {
+    if (game.step === 1 && game.stepStatus === "inProgress") {
+      return `Choix conso 1`;
+    } else if (game.step === 2 && game.stepStatus === "inProgress") {
+      return `Choix prod 1`;
+    } else {
+      return "Actions";
+    }
+  };
   return (
     <Box
       sx={{
@@ -187,7 +198,7 @@ function Actions() {
     >
       <Button
         component={Link}
-        to={`/play/games/${gameId}/persona/stats`}
+        to={`/play/games/${game.id}/persona/stats`}
         variant="contained"
         color="secondary"
         sx={{
@@ -206,7 +217,7 @@ function Actions() {
           width: "200px",
         }}
       >
-        <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> Actions
+        <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> {getActionText(game)}
       </Button>
     </Box>
   );

@@ -1,3 +1,4 @@
+import { StepStatus } from "@prisma/client";
 import { database } from "../../../database";
 import * as teamServices from "../../teams/services";
 import { Game } from "../types";
@@ -12,7 +13,7 @@ const crudServices = {
   getMany,
   create,
   update,
-  incrementStep,
+  updateStep,
 };
 const services = { ...crudServices, initState, register };
 
@@ -46,6 +47,14 @@ async function update(
   return model.update({ data: document, where: { id } });
 }
 
-async function incrementStep(id: number): Promise<Model> {
-  return model.update({ data: { step: { increment: 1 } }, where: { id } });
+async function updateStep({
+  id,
+  step,
+  stepStatus,
+}: {
+  id: number;
+  step: number;
+  stepStatus: StepStatus;
+}): Promise<Model> {
+  return model.update({ data: { step, stepStatus }, where: { id } });
 }

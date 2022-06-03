@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
@@ -9,6 +9,7 @@ export { PlayProvider, useLoadedPlay as usePlay, RootPlayProvider };
 
 interface IPlayContext {
   game: IGameWithTeams;
+  socket: Socket;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -24,20 +25,21 @@ function RootPlayProvider({ children }: { children: React.ReactNode }) {
 
 function PlayProvider({ children }: { children: React.ReactNode }) {
   const match = useMatch(`play/games/:gameId/*`);
-  if (!match) throw new Error("Provider use ouside of game play.");
+  if (!match) throw new Error("Provider use outside of game play.");
   const gameId = +(match.params.gameId as string);
+  const socket = io();
 
   const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
     null
   );
-  useGameSocket({ gameId, setGameWithTeams });
+  useGameSocket({ gameId, setGameWithTeams, socket });
 
   if (gameWithTeams === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
 
   return (
-    <PlayContext.Provider value={{ game: gameWithTeams }}>
+    <PlayContext.Provider value={{ game: gameWithTeams, socket: socket }}>
       {children}
     </PlayContext.Provider>
   );
@@ -54,13 +56,13 @@ function useLoadedPlay(): IPlayContext {
 function useGameSocket({
   gameId,
   setGameWithTeams,
+  socket,
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
+  socket: Socket;
 }) {
   useEffect(() => {
-    const socket = io();
-
     socket.on("resetGameState", (state) => {
       const { gameWithTeams } = state;
       setGameWithTeams(gameWithTeams);
