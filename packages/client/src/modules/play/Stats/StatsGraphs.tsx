@@ -1,6 +1,8 @@
 import React from "react"
 import { StackedEnergyBars, DetailsEnergyBars } from "../../charts";
 import { PlayBox } from "../Components";
+import { EnergyButtons } from "../../common/components/EnergyButtons";
+
 
 export { StatsGraphs };
 
@@ -9,20 +11,27 @@ export { StatsGraphs };
 function StatsGraphs() {
 
   const [isShowingDetails, setIsShowingDetails] = React.useState(false)
+  const [activeLabel, setActiveLabel] = React.useState("");
 
   function getState(e: any) {
     buildData().forEach(elm => {
-      e.activeLabel === elm.name ? setIsShowingDetails(!isShowingDetails) : <></>
+      if (e.activeLabel && e.activeLabel === elm.name) {
+        setActiveLabel(e.activeLabel) // e.activeLabel is the click event key with values "Initial", "Step 1", "Step 2" ... which identifiy the differents bars
+        setIsShowingDetails(!isShowingDetails)
+      }
     })
   }
 
   return (
-    <PlayBox sx={
-      isShowingDetails ? { display: "flex", m: 1, justifyContent: "space-around" } : {}
-    }>
+    <PlayBox>
       <StackedEnergyBars data={buildData()} getState={getState} isShowingDetails={isShowingDetails} />
       {
-        isShowingDetails == true ? <DetailsEnergyBars data={data} colors={colors} isShowingDetails={isShowingDetails} /> : <></>
+        isShowingDetails ?
+          <>
+            <DetailsEnergyBars data={data} colors={colors} />
+            <EnergyButtons />
+          </>
+          : <></>
       }
     </PlayBox>
   );
@@ -63,7 +72,6 @@ function buildData() {
   ];
 }
 
-
 const data = [
   { name: "Fret", value: 12, Type: 3 },
   { name: "Manufacture de voiture", value: 42, Type: 3 },
@@ -87,10 +95,12 @@ const data = [
   { name: "Numérique", value: 11, Type: 3 },
   { name: "ProduitsBruns", value: 7, Type: 1 }
 ]
+
 data.sort(function (a, b) {
   return b.value - a.value;
 });
 data.sort(function (a, b) {
   return b.Type - a.Type;
 });
+
 

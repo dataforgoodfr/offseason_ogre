@@ -11,21 +11,13 @@ import {
     Cell
 } from "recharts";
 
+
 export { DetailsEnergyBars }
 
-function DetailsEnergyBars({ data, colors, isShowingDetails }: { data: any[], colors: string[], isShowingDetails: boolean }) {
+function DetailsEnergyBars({ data, colors }: { data: any[], colors: string[] }) {
     return (
         <Card sx={
-            () => isShowingDetails ? {
-                width: "50%",
-                alignItems: "center",
-                display: "flex",
-                justifyContent: "center",
-                pt: 4,
-                pb: 4,
-                pr: 2,
-                pl: 2,
-            } : {
+            {
                 alignItems: "center",
                 display: "flex",
                 justifyContent: "center",
@@ -37,7 +29,7 @@ function DetailsEnergyBars({ data, colors, isShowingDetails }: { data: any[], co
         }>
             <BarChart
                 width={500}
-                height={500}
+                height={550}
                 data={data}
                 layout="vertical"
                 margin={{
@@ -49,7 +41,7 @@ function DetailsEnergyBars({ data, colors, isShowingDetails }: { data: any[], co
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis type="number" unit="kWh" />
-                <YAxis type="category" width={250} dataKey="name" />
+                <YAxis type="category" width={160} dataKey="name" />
                 <Tooltip />
                 <Bar dataKey="value" unit="kWh">
                     {data.map((entry, index) => (

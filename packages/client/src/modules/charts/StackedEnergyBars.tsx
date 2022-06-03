@@ -12,25 +12,16 @@ function StackedEnergyBars({ data, getState, isShowingDetails }: { data: any[], 
 
   return (
     <Card
-      sx={
-        isShowingDetails ? {
-          width: "50%",
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-          pt: 2,
-          pb: 2,
-          pr: 1,
-          pl: 1,
-        } : {
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-          pt: 4,
-          pb: 4,
-          pr: 2,
-          pl: 2,
-        }}
+      sx={{
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "center",
+        pt: 4,
+        pb: 4,
+        pr: 2,
+        pl: 2,
+        mb: 1
+      }}
     >
       <BarChart width={500} height={500} data={data} onClick={(e) => getState(e)}>
         <XAxis dataKey="name" />
