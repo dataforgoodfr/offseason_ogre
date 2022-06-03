@@ -6,24 +6,17 @@ import { EnergyButtons } from "../../common/components/EnergyButtons";
 export { StatsGraphs };
 
 function StatsGraphs() {
-  const [isShowingDetails, setIsShowingDetails] = React.useState(false);
-
-  function getState(e: any) {
-    buildData().forEach((elm) => {
-      if (e.activeLabel && e.activeLabel === elm.name) {
-        setIsShowingDetails(!isShowingDetails);
-      }
-    });
-  }
+  const [selectedIndex, setSelectedIndex] = React.useState<number>();
 
   return (
     <PlayBox>
       <StackedEnergyBars
         data={buildData()}
-        getState={getState}
-        isShowingDetails={isShowingDetails}
+        onClick={({ activeTooltipIndex }) => {
+          setSelectedIndex(activeTooltipIndex);
+        }}
       />
-      {isShowingDetails ? (
+      {typeof selectedIndex !== "undefined" ? (
         <>
           <DetailsEnergyBars data={data} colors={colors} />
           <EnergyButtons />
