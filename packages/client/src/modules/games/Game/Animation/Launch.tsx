@@ -80,13 +80,13 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
           {"Lancer la partie ?"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText
+          {/* <DialogContentText
             id="alert-dialog-warning"
             sx={{ color: "red", mb: 2 }}
           >
             {hasTeamWithTooManyPlayers(game.teams) &&
               dialogContent.warningMessage}
-          </DialogContentText>
+          </DialogContentText> */}
           <DialogContentText id="alert-dialog-description">
             {dialogContent.message}
           </DialogContentText>
