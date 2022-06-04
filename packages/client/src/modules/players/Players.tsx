@@ -64,7 +64,9 @@ const columns: GridColDef<{
 
 function UsersDataGrid() {
   const query = useQuery("users", () => {
-    return axios.get<undefined, { data: { documents: any[] } }>("/api/users?page=1&sort=email:asc");
+    return axios.get<undefined, { data: { documents: any[] } }>(
+      "/api/users?page=1&sort=email:asc"
+    );
   });
 
   if (query.isLoading) {
