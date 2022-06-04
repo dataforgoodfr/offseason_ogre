@@ -26,7 +26,7 @@ Node, npm, yarn and Docker must be installed locally.
 
 1. Run "yarn env:default" from root, it will set default .env values in server
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
-3. Run "yarn db:up" from root, it will lauch a postgre container
+3. Run "yarn db:up" from root, it will launch a postgre container
 4. Run "yarn db:migrate" from root, it creates the tables in the database
 5. Run "yarn db:seed" from root, it seeds the database with some dummy data
 6. Run "yarn workspace ogre-client dev" to launch client

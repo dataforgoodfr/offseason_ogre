@@ -19,7 +19,7 @@ function StatsGraphs() {
       {typeof selectedIndex !== "undefined" ? (
         <>
           <DetailsEnergyBars data={data} />
-          <EnergyButtons />
+          <EnergyButtons data={data} />
         </>
       ) : (
         <></>
