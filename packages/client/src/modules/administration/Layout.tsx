@@ -3,11 +3,13 @@ import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
+import ListSubheader from "@mui/material/ListSubheader";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
 import { Link, Navigate, useMatch } from "react-router-dom";
 import GamesIcon from "@mui/icons-material/Games";
+import PersonIcon from "@mui/icons-material/Person";
 import {
   ListItemButton,
   ListItemIcon,
@@ -82,9 +84,7 @@ function Layout({
             </Toolbar>
           </Link>
           <Divider />
-          <List component="nav">
-            <MainListItems />
-          </List>
+          <Navigation />
         </>
       </LayoutDrawer>
       <Box
@@ -143,11 +143,52 @@ function LayoutAppBar({ children }: { children: JSX.Element }): JSX.Element {
   );
 }
 
-function MainListItems() {
+function Navigation() {
+  return (
+    <Fragment>
+      <List
+        component="nav"
+        subheader={
+          <ListSubheader component="div" id="game-list-items-subheader">
+            Ateliers
+          </ListSubheader>
+        }
+      >
+        <GameListItems />
+      </List>
+      <List
+        component="nav"
+        subheader={
+          <ListSubheader component="div" id="admin-list-items-subheader">
+            Administration
+          </ListSubheader>
+        }
+      >
+        <AdminListItems />
+      </List>
+    </Fragment>
+  );
+}
+
+function GameListItems() {
   return (
     <Fragment>
       {[
-        { Icon: GamesIcon, label: "Ateliers", to: "/administration/games" },
+        {
+          Icon: GamesIcon,
+          label: "Gestion des ateliers",
+          to: "/administration/games",
+        },
+      ].map(RenderListItem)}
+    </Fragment>
+  );
+}
+
+function AdminListItems() {
+  return (
+    <Fragment>
+      {[
+        { Icon: PersonIcon, label: "Joueurs", to: "/administration/players" },
       ].map(RenderListItem)}
     </Fragment>
   );

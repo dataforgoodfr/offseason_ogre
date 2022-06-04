@@ -5,6 +5,7 @@ import { Game } from "./modules/games";
 import { GameConsole, MyGames } from "./modules/play";
 import { PlayerPersona } from "./modules/play";
 import { Stats } from "./modules/play/Stats";
+import { Players } from "./modules/players";
 
 export { AuthenticatedApp };
 
@@ -18,6 +19,7 @@ function AuthenticatedApp() {
       <Route path="administration">
         <Route path="games" element={<Games />} />
         <Route path="games/:id" element={<Game />} />
+        <Route path="players" element={<Players />} />
         <Route path="" element={<Navigate to="games" />} />
         <Route path="*" element={<Navigate to="games" />} />
       </Route>
