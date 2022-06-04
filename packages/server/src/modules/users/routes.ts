@@ -6,6 +6,7 @@ export { router };
 
 const router = express.Router();
 
+router.get("/", asyncErrorHandler(controllers.getManyControllers));
 router.get(
   "/logged-user",
   asyncErrorHandler(controllers.getLoggedUserController)

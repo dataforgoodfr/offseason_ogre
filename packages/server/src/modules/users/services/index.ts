@@ -12,6 +12,7 @@ type UsersOnGamesModel = UsersOnGames;
 
 const crudServices = {
   getDocument,
+  getMany,
   create,
   getTeamForPlayer,
 };
@@ -21,6 +22,25 @@ export { services };
 
 async function getDocument(id: number): Promise<Model | null> {
   return model.findUnique({ where: { id } });
+}
+
+async function getMany({
+  partial = {},
+  orderBy = {},
+  page = 1,
+}: {
+  partial?: Partial<Model>;
+  orderBy?: { [k: string]: "asc" | "desc" };
+  page?: number;
+}): Promise<Model[]> {
+  const PAGE_SIZE = 100;
+  const pageIdx = page - 1;
+  return model.findMany({
+    where: partial,
+    orderBy,
+    skip: pageIdx * PAGE_SIZE,
+    take: PAGE_SIZE,
+  });
 }
 
 async function create(newUser: Omit<Model, "id">): Promise<Model> {
