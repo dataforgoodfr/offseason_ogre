@@ -28,10 +28,9 @@ Node, npm, yarn and Docker must be installed locally.
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
 3. Run "yarn db:up" from root, it will lauch a postgre container
 4. Run "yarn db:migrate" from root, it creates the tables in the database
-5. Run "yarn db:seed" from root, it seeds the database with some dummy data
-6. Run "yarn workspace ogre-client dev" to launch client
-7. In another shell run "yarn workspace ogre-server db:generate" to generate Prisma client from schema.
-8. Run "yarn workspace ogre-server dev" to launch server
+5. Run "yarn workspace ogre-client dev" to launch client
+6. In another shell run "yarn workspace ogre-server db:generate" to generate Prisma client from schema.
+7. Run "yarn workspace ogre-server dev" to launch server
 
 ### Running frontend and backend apps
 
