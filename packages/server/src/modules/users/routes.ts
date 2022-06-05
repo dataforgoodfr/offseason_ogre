@@ -24,3 +24,5 @@ router.post(
   "/magic-link",
   asyncErrorHandler(controllers.sendMagicLinkController)
 );
+
+router.put("/:id", asyncErrorHandler(controllers.updateUser));

@@ -14,6 +14,7 @@ const crudServices = {
   getDocument,
   getMany,
   create,
+  update,
   getTeamForPlayer,
 };
 const services = { ...crudServices, isMailAlreadyUsed, sendMagicLink, signUp };
@@ -50,6 +51,13 @@ async function create(newUser: Omit<Model, "id">): Promise<Model> {
   return model.create({
     data: { ...newUser, isTeacher: computeIsTeacher(newUser) },
   });
+}
+
+async function update(
+  id: number,
+  document: Partial<Omit<Model, "id">>
+): Promise<Model> {
+  return model.update({ data: document, where: { id } });
 }
 
 function computeIsTeacher(newUser: Omit<Model, "id">) {

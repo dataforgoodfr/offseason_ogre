@@ -16,6 +16,7 @@ const controllers = {
   logoutController,
   sendMagicLinkController,
   signInController,
+  updateUser,
 };
 
 export { controllers };
@@ -82,4 +83,23 @@ async function getTeamForPlayer(request: Request, response: Response) {
   const { gameId, id } = paramsSchema.parse(request.params);
   const document = await services.getTeamForPlayer(gameId, id);
   response.status(200).json({ data: document });
+}
+
+async function updateUser(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+  const bodySchema = z.object({
+    country: z.string().optional(),
+    email: z.string().optional(),
+    lastName: z.string().optional(),
+    firstName: z.string().optional(),
+    isTeacher: z.boolean().optional(),
+  });
+
+  const { id } = paramsSchema.parse(request.params);
+  const updateData = bodySchema.parse(request.body);
+
+  const document = await services.update(id, updateData);
+  response.status(200).json({ document });
 }
