@@ -1,6 +1,6 @@
 import { Team } from "@prisma/client";
 
-export type { User, UsersOnGames };
+export type { User, Players };
 
 interface User {
   id: number;
@@ -11,7 +11,7 @@ interface User {
   lastName: string;
 }
 
-interface UsersOnGames {
+interface Players {
   gameId: number;
   teamId: number;
   userId: number;
