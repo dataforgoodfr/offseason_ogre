@@ -56,12 +56,3 @@ model Team {
 
   @@unique([gameId, name], map: "Team_gameId_name_unique_constraint")
 }
-
-model Household {
-  id Int @id @default(autoincrement())
-}
-
-model policy {
-  id             Int  @id @default(autoincrement())
-  nuclearInPoint Int?
-}
