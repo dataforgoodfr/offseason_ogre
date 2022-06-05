@@ -65,3 +65,12 @@ model policy {
   id             Int  @id @default(autoincrement())
   nuclearInPoint Int?
 }
+
+model PersonaConsumption {
+	id            	Int  	@id @default(autoincrement())
+	personaName		String
+	version			Int
+	name			String
+	energieType		String
+	initialValue	Float
+}

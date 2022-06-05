@@ -5,9 +5,9 @@ const prismaClient = new PrismaClient();
 export { connectToDatase, disconnectFromDatase, prismaClient as database };
 
 async function connectToDatase() {
-  await prismaClient.$connect();
+	await prismaClient.$connect();
 }
 
 async function disconnectFromDatase() {
-  await prismaClient.$disconnect();
+	await prismaClient.$disconnect();
 }
