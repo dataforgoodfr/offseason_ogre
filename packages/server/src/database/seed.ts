@@ -1,7 +1,7 @@
 import { database } from ".";
-const { Prisma } = require('@prisma/client')
+// const { Prisma } = require('@prisma/client')
 
-import { jsonDataConsumption } from "./dataConsumption"
+// import { jsonDataConsumption } from "./dataConsumption"
 
 // console.log(jsonDataConsumption);
 
