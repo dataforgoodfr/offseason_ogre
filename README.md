@@ -38,9 +38,16 @@ Please refer to README.md in `/server` and `/client` folders.
 
 ## Deployment
 
-The app can be deployed to heroku. A procfile is not needed as the "start" and "build" script are executed by default: https://help.heroku.com/P5IMU3MP/heroku-node-js-build-script-change-faq
+The app can be deployed to heroku.
+
+The "start" and "build" script are executed by default: https://help.heroku.com/P5IMU3MP/heroku-node-js-build-script-change-faq
 
 A postGreSQL database is required, the connection string must be set as DATABASE_URL in the secrets.
+
+A procfile is needed to run the PRISMA migrations.
+
+https://github.com/prisma/prisma-examples/tree/latest/deployment-platforms/heroku
+https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-heroku
 
 ### Testing production build locally
 
