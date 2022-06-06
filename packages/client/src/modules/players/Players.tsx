@@ -113,6 +113,7 @@ const columns: GridColDef<{
 ];
 
 function UsersDataGrid() {
+  // TODO: perform sorting and pagination on server side after v1.
   const queryUsers = useQuery("users", () => {
     return axios.get<undefined, { data: { documents: any[] } }>(
       "/api/users?page=1&sort=email:asc"

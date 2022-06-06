@@ -34,7 +34,8 @@ async function getMany({
   orderBy?: { [k: string]: "asc" | "desc" };
   page?: number;
 }): Promise<Model[]> {
-  const PAGE_SIZE = 100;
+  // TODO: set page size to 100 after v1.
+  const PAGE_SIZE = 100_000;
   const pageIdx = page - 1;
   return model.findMany({
     where: partial,
