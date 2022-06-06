@@ -1,9 +1,11 @@
 import { Box, CircularProgress, Paper, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
+import { IUser } from "../../utils/types";
 import { Layout } from "../administration/Layout";
+import { SuccessAlert } from "../alert";
 
 export { Players };
 
@@ -52,38 +54,53 @@ const columns: GridColDef<{
   },
   {
     field: "isTeacher",
-    headerName: "Rôle",
+    headerName: "Animateur",
+    editable: true,
+    type: "boolean",
     valueGetter: (params) => params.row.isTeacher,
-    renderCell: function (props) {
-      return props.value ? "Animateur" : "Joueur";
-    },
     flex: 1,
     minWidth: 150,
   },
 ];
 
 function UsersDataGrid() {
-  const query = useQuery("users", () => {
+  // TODO: perform sorting and pagination on server side after v1.
+  const queryUsers = useQuery("users", () => {
     return axios.get<undefined, { data: { documents: any[] } }>(
       "/api/users?page=1&sort=email:asc"
     );
   });
 
-  if (query.isLoading) {
+  const mutateUser = useMutation((user: IUser) => {
+    const path = `/api/users/${user.id}`;
+    return axios.put(path, user);
+  });
+
+  const handleCellEditCommit = (params: any) => {
+    const newValue = { ...params.row, [params.field]: params.value };
+    mutateUser.mutate(newValue);
+  };
+
+  if (queryUsers.isLoading) {
     return <CircularProgress />;
   }
 
-  const rows = query?.data?.data?.documents ?? [];
+  const rows = queryUsers?.data?.data?.documents ?? [];
 
   return (
-    <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        disableSelectionOnClick
-        pageSize={20}
-        rowsPerPageOptions={[20]}
-      />
-    </Box>
+    <>
+      {mutateUser.isSuccess && <SuccessAlert />}
+
+      <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          disableSelectionOnClick
+          pageSize={20}
+          rowsPerPageOptions={[20]}
+          onCellEditCommit={handleCellEditCommit}
+        />
+      </Box>
+    </>
   );
 }

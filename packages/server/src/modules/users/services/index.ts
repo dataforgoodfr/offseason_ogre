@@ -14,6 +14,7 @@ const crudServices = {
   getDocument,
   getMany,
   create,
+  update,
   getTeamForPlayer,
 };
 const services = { ...crudServices, isMailAlreadyUsed, sendMagicLink, signUp };
@@ -33,7 +34,8 @@ async function getMany({
   orderBy?: { [k: string]: "asc" | "desc" };
   page?: number;
 }): Promise<Model[]> {
-  const PAGE_SIZE = 100;
+  // TODO: set page size to 100 after v1.
+  const PAGE_SIZE = 100_000;
   const pageIdx = page - 1;
   return model.findMany({
     where: partial,
@@ -50,6 +52,13 @@ async function create(newUser: Omit<Model, "id">): Promise<Model> {
   return model.create({
     data: { ...newUser, isTeacher: computeIsTeacher(newUser) },
   });
+}
+
+async function update(
+  id: number,
+  document: Partial<Omit<Model, "id">>
+): Promise<Model> {
+  return model.update({ data: document, where: { id } });
 }
 
 function computeIsTeacher(newUser: Omit<Model, "id">) {
