@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
@@ -9,6 +9,7 @@ export { PlayProvider, useLoadedPlay as usePlay, RootPlayProvider };
 
 interface IPlayContext {
   game: IGameWithTeams;
+  updateGame: (update: Partial<IGame>) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -30,14 +31,22 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
     null
   );
-  useGameSocket({ gameId, setGameWithTeams });
+  const { socket } = useGameSocket({ gameId, setGameWithTeams });
 
-  if (gameWithTeams === null) {
+  if (gameWithTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
 
+  const updateGame = (update: Partial<IGame>) => {
+    setGameWithTeams((previous) => {
+      if (previous === null) return null;
+      return { ...previous, ...update };
+    });
+    socket.emit("updateGame", { gameId, update });
+  };
+
   return (
-    <PlayContext.Provider value={{ game: gameWithTeams }}>
+    <PlayContext.Provider value={{ game: gameWithTeams, updateGame }}>
       {children}
     </PlayContext.Provider>
   );
@@ -57,23 +66,34 @@ function useGameSocket({
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
-}) {
+}): { socket: Socket | null } {
+  const [socket, setSocket] = useState<Socket | null>(null);
   useEffect(() => {
-    const socket = io();
+    const newSocket = io();
 
-    socket.on("resetGameState", (state) => {
+    newSocket.on("resetGameState", (state) => {
       const { gameWithTeams } = state;
       setGameWithTeams(gameWithTeams);
     });
 
-    socket.on("connect", () => {
-      socket.emit("joinGame", gameId);
+    newSocket.on("gameUpdated", ({ update }: { update: Partial<IGame> }) => {
+      setGameWithTeams((previous) => {
+        if (previous === null) return null;
+        return { ...previous, ...update };
+      });
     });
 
-    socket.on("disconnect", () => {
-      console.log("disconnect", socket.id);
+    newSocket.on("connect", () => {
+      newSocket.emit("joinGame", gameId);
     });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
   }, [gameId, setGameWithTeams]);
+  return { socket };
 }
 
 function usePlay() {
