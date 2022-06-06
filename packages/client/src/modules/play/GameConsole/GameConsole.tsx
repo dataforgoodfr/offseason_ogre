@@ -167,7 +167,7 @@ function Header(props: any) {
             variant="contained"
             color={"secondary"}
             sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-            onClick={() => updateGame({ step: game.step ? 0 : 1 })}
+            onClick={() => updateGame({ step: ++game.step })}
           >
             Passer à l'étape suivante <ArrowForwardIcon />
           </Button>
