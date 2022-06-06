@@ -84,18 +84,13 @@ function useGameSocket({
     });
 
     newSocket.on("connect", () => {
-      console.log("connect", newSocket.id);
       newSocket.emit("joinGame", gameId);
-    });
-
-    newSocket.on("disconnect", () => {
-      console.log("disconnect");
     });
 
     setSocket(newSocket);
 
     return () => {
-      newSocket.close();
+      newSocket.disconnect();
     };
   }, [gameId, setGameWithTeams]);
   return { socket };
