@@ -17,7 +17,7 @@ async function register({
     where: { gameId_name: { gameId, name: "Equipe 2" } },
     rejectOnNotFound: true,
   });
-  await database.usersOnGames.create({
+  await database.players.create({
     data: {
       gameId,
       userId,

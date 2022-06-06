@@ -1,7 +1,7 @@
+import { useEffect, useState } from "react";
+import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
-import axios from "axios";
 import * as React from "react";
-import { useQuery } from "react-query";
 import { useMatch } from "react-router-dom";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 
@@ -9,6 +9,7 @@ export { PlayProvider, useLoadedPlay as usePlay, RootPlayProvider };
 
 interface IPlayContext {
   game: IGameWithTeams;
+  updateGame: (update: Partial<IGame>) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -25,25 +26,29 @@ function RootPlayProvider({ children }: { children: React.ReactNode }) {
 function PlayProvider({ children }: { children: React.ReactNode }) {
   const match = useMatch(`play/games/:gameId/*`);
   if (!match) throw new Error("Provider use ouside of game play.");
-  const { gameId } = match.params;
+  const gameId = +(match.params.gameId as string);
 
-  const { data: result, isLoading } = useQuery(`/api/games/${gameId}`, () => {
-    return axios.get<undefined, { data: { document: IGameWithTeams } }>(
-      `/api/games/${gameId}`
-    );
-  });
+  const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
+    null
+  );
+  const { socket } = useGameSocket({ gameId, setGameWithTeams });
 
-  if (isLoading) {
+  if (gameWithTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
 
-  const game = result?.data?.document;
-  if (typeof game === "undefined") {
-    throw new Error("game is undefined");
-  }
+  const updateGame = (update: Partial<IGame>) => {
+    setGameWithTeams((previous) => {
+      if (previous === null) return null;
+      return { ...previous, ...update };
+    });
+    socket.emit("updateGame", { gameId, update });
+  };
 
   return (
-    <PlayContext.Provider value={{ game }}>{children}</PlayContext.Provider>
+    <PlayContext.Provider value={{ game: gameWithTeams, updateGame }}>
+      {children}
+    </PlayContext.Provider>
   );
 }
 
@@ -53,6 +58,42 @@ function useLoadedPlay(): IPlayContext {
     throw new Error("play context should have been loaded");
   }
   return playValue;
+}
+
+function useGameSocket({
+  gameId,
+  setGameWithTeams,
+}: {
+  gameId: number;
+  setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
+}): { socket: Socket | null } {
+  const [socket, setSocket] = useState<Socket | null>(null);
+  useEffect(() => {
+    const newSocket = io();
+
+    newSocket.on("resetGameState", (state) => {
+      const { gameWithTeams } = state;
+      setGameWithTeams(gameWithTeams);
+    });
+
+    newSocket.on("gameUpdated", ({ update }: { update: Partial<IGame> }) => {
+      setGameWithTeams((previous) => {
+        if (previous === null) return null;
+        return { ...previous, ...update };
+      });
+    });
+
+    newSocket.on("connect", () => {
+      newSocket.emit("joinGame", gameId);
+    });
+
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [gameId, setGameWithTeams]);
+  return { socket };
 }
 
 function usePlay() {

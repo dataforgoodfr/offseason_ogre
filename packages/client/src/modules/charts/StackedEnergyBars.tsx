@@ -1,10 +1,19 @@
+import React from "react";
 import { Card, useTheme } from "@mui/material";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 
 export { StackedEnergyBars };
 
-function StackedEnergyBars({ data }: { data: any[] }) {
+function StackedEnergyBars({
+  data,
+  onClick,
+}: {
+  data: any[];
+  onClick?: CategoricalChartFunc;
+}) {
   const theme = useTheme();
+
   return (
     <Card
       sx={{
@@ -15,9 +24,10 @@ function StackedEnergyBars({ data }: { data: any[] }) {
         pb: 4,
         pr: 2,
         pl: 2,
+        mb: 1,
       }}
     >
-      <BarChart width={500} height={500} data={data}>
+      <BarChart width={500} height={500} data={data} onClick={onClick}>
         <XAxis dataKey="name" />
         <YAxis name="kWh/j" domain={[0, 300]} />
         <Tooltip />

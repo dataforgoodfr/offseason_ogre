@@ -27,7 +27,7 @@ function GameConsole() {
 }
 
 function GameConsoleContent() {
-  const [selectedScreen, setSelectedScreen] = useState<string>("Mean Stats");
+  const [selectedScreen, setSelectedScreen] = useState<string>("Teams");
   return (
     <>
       <Header
@@ -135,7 +135,7 @@ function TeamsConsole() {
 
 function Header(props: any) {
   const { selectedScreen, setSelectedScreen } = props;
-  const { game } = usePlay();
+  const { game, updateGame } = usePlay();
   const theme = useTheme();
 
   return (
@@ -167,7 +167,7 @@ function Header(props: any) {
             variant="contained"
             color={"secondary"}
             sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-            onClick={() => console.log("next step - wip")}
+            onClick={() => updateGame({ step: ++game.step })}
           >
             Passer à l'étape suivante <ArrowForwardIcon />
           </Button>

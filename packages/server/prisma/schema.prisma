@@ -8,16 +8,16 @@ datasource db {
 }
 
 model Game {
-  id          Int            @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   date        DateTime
-  description String         @default("")
+  description String    @default("")
   name        String
-  players     UsersOnGames[]
-  teacher     User           @relation("TaughtGames", fields: [teacherId], references: [id])
+  players     Players[]
+  teacher     User      @relation("TaughtGames", fields: [teacherId], references: [id])
   teacherId   Int
   teams       Team[]
-  status      Status         @default(draft)
-  step        Int            @default(0)
+  status      Status    @default(draft)
+  step        Int       @default(0)
 }
 
 enum Status {
@@ -25,46 +25,38 @@ enum Status {
   ready
 }
 
-model UsersOnGames {
+model Players {
   game   Game @relation(fields: [gameId], references: [id])
-  gameId Int // relation scalar field (used in the `@relation` attribute above)
+  gameId Int
   team   Team @relation(fields: [teamId], references: [id])
   teamId Int
   user   User @relation(fields: [userId], references: [id])
-  userId Int // relation scalar field (used in the `@relation` attribute above)
+  userId Int
 
   @@id([userId, gameId])
 }
 
 model User {
-  id          Int            @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   country     String
-  email       String         @unique
+  email       String    @unique
   firstName   String
   lastName    String
-  isTeacher   Boolean        @default(false)
-  taughtGames Game[]         @relation("TaughtGames")
-  playedGames UsersOnGames[]
+  isTeacher   Boolean   @default(false)
+  playedGames Players[]
+  taughtGames Game[]    @relation("TaughtGames")
 }
 
 model Team {
-  id      Int            @id @default(autoincrement())
-  game    Game           @relation(fields: [gameId], references: [id])
+  id      Int       @id @default(autoincrement())
+  game    Game      @relation(fields: [gameId], references: [id])
   gameId  Int
   name    String
-  players UsersOnGames[]
+  players Players[]
 
   @@unique([gameId, name], map: "Team_gameId_name_unique_constraint")
 }
 
-model Household {
-  id Int @id @default(autoincrement())
-}
-
-model policy {
-  id             Int  @id @default(autoincrement())
-  nuclearInPoint Int?
-}
 
 model PersonaConsumption {
 	id            	Int  	@id @default(autoincrement())

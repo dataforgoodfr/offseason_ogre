@@ -1,17 +1,18 @@
 import { database } from "../../../database";
-import { User, UsersOnGames } from "../types/entity";
+import { User, Players } from "../types/entity";
 import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
 import { sendMagicLink } from "./sendMagicLink";
 import { signUp } from "./signUp";
 
 const model = database.user;
-const userOnGameModel = database.usersOnGames;
+const userOnGameModel = database.players;
 
 type Model = User;
-type UsersOnGamesModel = UsersOnGames;
+type PlayersModel = Players;
 
 const crudServices = {
   getDocument,
+  getMany,
   create,
   getTeamForPlayer,
 };
@@ -21,6 +22,25 @@ export { services };
 
 async function getDocument(id: number): Promise<Model | null> {
   return model.findUnique({ where: { id } });
+}
+
+async function getMany({
+  partial = {},
+  orderBy = {},
+  page = 1,
+}: {
+  partial?: Partial<Model>;
+  orderBy?: { [k: string]: "asc" | "desc" };
+  page?: number;
+}): Promise<Model[]> {
+  const PAGE_SIZE = 100;
+  const pageIdx = page - 1;
+  return model.findMany({
+    where: partial,
+    orderBy,
+    skip: pageIdx * PAGE_SIZE,
+    take: PAGE_SIZE,
+  });
 }
 
 async function create(newUser: Omit<Model, "id">): Promise<Model> {
@@ -57,7 +77,7 @@ function shouldHaveTeacherRole(email: string): boolean {
 async function getTeamForPlayer(
   gameId: number,
   userId: number
-): Promise<UsersOnGamesModel | null> {
+): Promise<PlayersModel | null> {
   return userOnGameModel.findUnique({
     where: { userId_gameId: { gameId, userId } },
     include: { game: true, team: true },

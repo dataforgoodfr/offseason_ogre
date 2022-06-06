@@ -9,7 +9,7 @@ async function removePlayer({
   gameId: number;
   userId: number;
 }) {
-  await database.usersOnGames.delete({
+  await database.players.delete({
     where: { userId_gameId: { gameId, userId } },
   });
 }
