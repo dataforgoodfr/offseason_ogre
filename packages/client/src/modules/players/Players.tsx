@@ -1,6 +1,7 @@
 import { Box, CircularProgress, Paper, Typography } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridFilterItem } from "@mui/x-data-grid";
 import axios from "axios";
+import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 
 import { IUser } from "../../utils/types";
@@ -63,7 +64,13 @@ const columns: GridColDef<{
   },
 ];
 
+const defaultItemFilter: GridFilterItem[] = [
+  { columnField: "isTeacher", operatorValue: "is", value: "false" },
+];
+
 function UsersDataGrid() {
+  const [itemFilter] = useState<GridFilterItem[]>(defaultItemFilter);
+
   // TODO: perform sorting and pagination on server side after v1.
   const queryUsers = useQuery("users", () => {
     return axios.get<undefined, { data: { documents: any[] } }>(
@@ -95,6 +102,13 @@ function UsersDataGrid() {
         <DataGrid
           rows={rows}
           columns={columns}
+          initialState={{
+            filter: {
+              filterModel: {
+                items: itemFilter,
+              },
+            },
+          }}
           disableSelectionOnClick
           pageSize={20}
           rowsPerPageOptions={[20]}
