@@ -10,6 +10,7 @@ import Container from "@mui/material/Container";
 import { Link, Navigate, useMatch } from "react-router-dom";
 import GamesIcon from "@mui/icons-material/Games";
 import PersonIcon from "@mui/icons-material/Person";
+import SchoolIcon from "@mui/icons-material/School";
 import {
   ListItemButton,
   ListItemIcon,
@@ -189,6 +190,11 @@ function AdminListItems() {
     <Fragment>
       {[
         { Icon: PersonIcon, label: "Joueurs", to: "/administration/players" },
+        {
+          Icon: SchoolIcon,
+          label: "Animateurs",
+          to: "/administration/teachers",
+        },
       ].map(RenderListItem)}
     </Fragment>
   );
