@@ -1,24 +1,25 @@
 import { database } from ".";
 
+// eslint-disable-next-line no-console
 console.log("Starting seeding...");
 
 async function seed() {
-	await database.$connect();
+  await database.$connect();
 
-	await database.user.create({
-		data: {
-			email: "seeding@database.com",
-			isTeacher: false,
-			firstName: "Seeding",
-			lastName: "Master",
-			country: "FR",
-		},
-	});
+  await database.user.create({
+    data: {
+      email: "seeding@database.com",
+      isTeacher: false,
+      firstName: "Seeding",
+      lastName: "Master",
+      country: "FR",
+    },
+  });
 
-	await database.$disconnect();
+  await database.$disconnect();
 }
 
 seed().then(() => {
-	// eslint-disable-next-line no-console
-	console.log("Seeding done");
+  // eslint-disable-next-line no-console
+  console.log("Seeding done");
 });

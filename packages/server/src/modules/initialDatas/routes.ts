@@ -4,8 +4,6 @@ import { controllers } from "./controllers";
 
 const router = express.Router();
 
-router.get(
-	"/initialdata", asyncErrorHandler(controllers.getManyDatas)
-);
+router.get("/initialdata", asyncErrorHandler(controllers.getManyDatas));
 
 export { router };
