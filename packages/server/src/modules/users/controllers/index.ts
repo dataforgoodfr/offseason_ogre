@@ -11,13 +11,32 @@ const crudController = {
 };
 const controllers = {
   ...crudController,
+  getManyControllers,
   getLoggedUserController,
   logoutController,
   sendMagicLinkController,
   signInController,
+  updateUser,
 };
 
 export { controllers };
+
+async function getManyControllers(request: Request, response: Response) {
+  const querySchema = z.object({
+    page: z.string().regex(/^\d+$/).default("1").transform(Number),
+    sort: z
+      .string()
+      .regex(/[a-zA-Z_]+:(asc|desc)+/)
+      .default("id:asc"),
+  });
+  const { page, sort } = querySchema.parse(request.query);
+  const [sortAttr, sortValue] = sort.split(":") as [string, "asc" | "desc"];
+  const documents = await services.getMany({
+    orderBy: { [sortAttr]: sortValue },
+    page,
+  });
+  response.status(200).json({ documents });
+}
 
 async function signUpController(request: Request, response: Response) {
   const bodySchema = z.object({
@@ -64,4 +83,23 @@ async function getTeamForPlayer(request: Request, response: Response) {
   const { gameId, id } = paramsSchema.parse(request.params);
   const document = await services.getTeamForPlayer(gameId, id);
   response.status(200).json({ data: document });
+}
+
+async function updateUser(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+  const bodySchema = z.object({
+    country: z.string().optional(),
+    email: z.string().optional(),
+    lastName: z.string().optional(),
+    firstName: z.string().optional(),
+    isTeacher: z.boolean().optional(),
+  });
+
+  const { id } = paramsSchema.parse(request.params);
+  const updateData = bodySchema.parse(request.body);
+
+  const document = await services.update(id, updateData);
+  response.status(200).json({ document });
 }

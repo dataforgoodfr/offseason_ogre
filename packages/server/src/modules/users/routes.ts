@@ -6,6 +6,7 @@ export { router };
 
 const router = express.Router();
 
+router.get("/", asyncErrorHandler(controllers.getManyControllers));
 router.get(
   "/logged-user",
   asyncErrorHandler(controllers.getLoggedUserController)
@@ -23,3 +24,5 @@ router.post(
   "/magic-link",
   asyncErrorHandler(controllers.sendMagicLinkController)
 );
+
+router.put("/:id", asyncErrorHandler(controllers.updateUser));

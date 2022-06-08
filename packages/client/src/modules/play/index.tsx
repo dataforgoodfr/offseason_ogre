@@ -3,8 +3,6 @@ import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded
 import {
   Box,
   Button,
-  Card,
-  CardContent,
   CircularProgress,
   Container,
   Divider,

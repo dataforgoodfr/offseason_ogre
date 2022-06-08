@@ -9,16 +9,18 @@ import {
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import axios from "axios";
-import { useMutation, useQueryClient, useQuery } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { IGame, ITeamWithPlayers } from "../../../../utils/types";
 import { SuccessAlert } from "../../../alert";
 import { useNavigate } from "react-router-dom";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
-const hasTeamWithTooManyPlayers = (teams: any) => {
+const hasTeamWithTooManyPlayers = (teams: ITeamWithPlayers[]) => {
   const MAX_TEAM_SIZE = 5;
-  return teams.some((team: any) => team.players.length > MAX_TEAM_SIZE);
+  return teams.some(
+    (team: ITeamWithPlayers) => team.players.length > MAX_TEAM_SIZE
+  );
 };
 
 export default function Launch({ game }: { game: IGameWithTeams }) {
@@ -78,13 +80,13 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
           {"Lancer la partie ?"}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText
+          {/* <DialogContentText
             id="alert-dialog-warning"
             sx={{ color: "red", mb: 2 }}
           >
             {hasTeamWithTooManyPlayers(game.teams) &&
               dialogContent.warningMessage}
-          </DialogContentText>
+          </DialogContentText> */}
           <DialogContentText id="alert-dialog-description">
             {dialogContent.message}
           </DialogContentText>

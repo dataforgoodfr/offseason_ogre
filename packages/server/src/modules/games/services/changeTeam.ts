@@ -11,7 +11,7 @@ async function changeTeam({
   teamId: number;
   userId: number;
 }) {
-  await database.usersOnGames.update({
+  await database.players.update({
     where: { userId_gameId: { gameId, userId } },
     data: {
       gameId,

@@ -15,12 +15,12 @@ CREATE TABLE "Game" (
 );
 
 -- CreateTable
-CREATE TABLE "UsersOnGames" (
+CREATE TABLE "Players" (
     "gameId" INTEGER NOT NULL,
     "teamId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
 
-    CONSTRAINT "UsersOnGames_pkey" PRIMARY KEY ("userId","gameId")
+    CONSTRAINT "Players_pkey" PRIMARY KEY ("userId","gameId")
 );
 
 -- CreateTable
@@ -44,21 +44,6 @@ CREATE TABLE "Team" (
     CONSTRAINT "Team_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
-CREATE TABLE "Household" (
-    "id" SERIAL NOT NULL,
-
-    CONSTRAINT "Household_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "policy" (
-    "id" SERIAL NOT NULL,
-    "nuclearInPoint" INTEGER,
-
-    CONSTRAINT "policy_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -69,13 +54,13 @@ CREATE UNIQUE INDEX "Team_gameId_name_unique_constraint" ON "Team"("gameId", "na
 ALTER TABLE "Game" ADD CONSTRAINT "Game_teacherId_fkey" FOREIGN KEY ("teacherId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UsersOnGames" ADD CONSTRAINT "UsersOnGames_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Players" ADD CONSTRAINT "Players_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UsersOnGames" ADD CONSTRAINT "UsersOnGames_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Players" ADD CONSTRAINT "Players_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UsersOnGames" ADD CONSTRAINT "UsersOnGames_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Players" ADD CONSTRAINT "Players_teamId_fkey" FOREIGN KEY ("teamId") REFERENCES "Team"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Team" ADD CONSTRAINT "Team_gameId_fkey" FOREIGN KEY ("gameId") REFERENCES "Game"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
