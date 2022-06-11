@@ -22,38 +22,26 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
-import { useQuery } from "react-query";
-import axios from "axios";
 import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
+import { usePlay } from "../context/playContext";
 
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
   const { user } = useAuth();
-  const gameId = useGameId();
-
-  const { data } = useQuery(`${user?.id}/games/${gameId}/team`, () => {
-    return axios.get<
-      undefined,
-      { data: { data: { game: IGame; team: ITeam } } }
-    >(`/api/users/${user?.id}/games/${gameId}/team`);
-  });
+  const { game } = usePlay();
   if (user === null) {
     throw new Error("User must be authentified");
   }
-
-  const game = data?.data?.data?.game;
-  const team = data?.data?.data?.team;
-
-  if (!game || !team) {
-    return <></>;
-  }
+  const myTeam = game.teams.find((team) =>
+    team.players.some((player) => player.userId === user.id)
+  );
 
   return (
     <Box>
       <PlayBox>
-        <Header game={game} team={team} user={user} />
+        <Header game={game} team={myTeam} user={user} />
         <Grid
           item
           xs={12}
