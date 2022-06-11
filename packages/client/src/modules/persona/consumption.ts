@@ -6,12 +6,12 @@ interface ConsumptionDatum {
   type: ConsumptionType;
   value: number;
 }
-type ConsumptionType = "directFossile" | "directDecarbonized";
+type ConsumptionType = "directFossil" | "directDecarbonized";
 
 const consumption = [
-  { name: "fossileCar", type: "directFossile", value: 25.41 },
-  { name: "plane", type: "directFossile", value: 5.57 },
-  { name: "fossileHeating", type: "directFossile", value: 27.4 },
+  { name: "fossilCar", type: "directFossil", value: 25.41 },
+  { name: "plane", type: "directFossil", value: 5.57 },
+  { name: "fossileHeating", type: "directFossil", value: 27.4 },
   { name: "electricCar", type: "directDecarbonized", value: 0 },
   { name: "train", type: "directDecarbonized", value: 0.73 },
   { name: "noCarbonHeating", type: "directDecarbonized", value: 0 },
