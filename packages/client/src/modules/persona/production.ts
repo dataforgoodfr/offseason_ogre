@@ -6,7 +6,10 @@ interface ProductionDatum {
   type: ProductionType;
   value: number;
 }
-type ProductionType = "nuclear";
+type ProductionType =
+  | "nuclear"
+  | "offshoreProduction"
+  | "terrestrialProduction";
 
 const production = [
   {

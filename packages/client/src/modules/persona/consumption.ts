@@ -6,19 +6,23 @@ interface ConsumptionDatum {
   type: ConsumptionType;
   value: number;
 }
-type ConsumptionType = "directFossil" | "directDecarbonized";
+type ConsumptionType =
+  | "fossilEnergy"
+  | "renewableEnergy"
+  | "mixteEnergy"
+  | "greyEnergy";
 
 const consumption = [
-  { name: "fossilCar", type: "directFossil", value: 25.41 },
-  { name: "plane", type: "directFossil", value: 5.57 },
-  { name: "fossileHeating", type: "directFossil", value: 27.4 },
-  { name: "electricCar", type: "directDecarbonized", value: 0 },
-  { name: "train", type: "directDecarbonized", value: 0.73 },
-  { name: "noCarbonHeating", type: "directDecarbonized", value: 0 },
-  { name: "airConditionning", type: "directDecarbonized", value: 0 },
-  { name: "cleanCook", type: "directDecarbonized", value: 17.36 },
-  { name: "Light", type: "directDecarbonized", value: 4 },
-  { name: "brownGoods", type: "directDecarbonized", value: 7.5 },
+  { name: "fossilCar", type: "fossilEnergy", value: 25.41 },
+  { name: "plane", type: "fossilEnergy", value: 5.57 },
+  { name: "fossilHeating", type: "fossilEnergy", value: 27.4 },
+  { name: "electricCar", type: "renewableEnergy", value: 0 },
+  { name: "train", type: "renewableEnergy", value: 0.73 },
+  { name: "noCarbonHeating", type: "renewableEnergy", value: 0 },
+  { name: "airConditionning", type: "renewableEnergy", value: 0 },
+  { name: "cleanCook", type: "renewableEnergy", value: 17.36 },
+  { name: "Light", type: "renewableEnergy", value: 4 },
+  { name: "brownGoods", type: "renewableEnergy", value: 7.5 },
 ] as ConsumptionDatum[];
 
 // Consommations:

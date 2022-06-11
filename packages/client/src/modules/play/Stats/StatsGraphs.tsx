@@ -2,6 +2,9 @@ import React from "react";
 import { StackedEnergyBars, DetailsEnergyBars } from "../../charts";
 import { PlayBox } from "../Components";
 import { EnergyButtons } from "../../common/components/EnergyButtons";
+import { MAX_NUMBER_STEPS } from "../constants";
+import _ from "lodash";
+import { usePersonaByStep } from "../context/playContext";
 
 export { StatsGraphs };
 
@@ -11,7 +14,7 @@ function StatsGraphs() {
   return (
     <PlayBox>
       <StackedEnergyBars
-        data={buildData()}
+        data={useStackedEnergyData()}
         onClick={({ activeTooltipIndex }) => {
           setSelectedIndex(activeTooltipIndex);
         }}
@@ -28,37 +31,28 @@ function StatsGraphs() {
   );
 }
 
-function buildData() {
-  return [
-    {
-      name: "Initial",
-      renewableEnergy: 30,
-      fossilEnergy: 57,
-      mixteEnergy: 15,
-      greyEnergy: 112,
-    },
-    {
-      name: "Step 1",
-      renewableEnergy: 30,
-      fossilEnergy: 57,
-      mixteEnergy: 40,
-    },
-    {
-      name: "Step 2",
-      renewableEnergy: 90,
-      fossilEnergy: 90,
-      mixteEnergy: 9,
-    },
-    {
-      name: "",
-    },
-    {
-      name: "",
-    },
-    {
-      name: "",
-    },
-  ];
+function useStackedEnergyData() {
+  const personaByStep = usePersonaByStep();
+  return _.range(0, MAX_NUMBER_STEPS).map((step: number) => {
+    const persona = personaByStep[step];
+    return {
+      name: step ? `Etape ${step}` : "Initial",
+      renewableEnergy: sumBy(persona.consumption, "renewableEnergy"),
+      fossilEnergy: sumBy(persona.consumption, "fossilEnergy"),
+      mixteEnergy: sumBy(persona.consumption, "mixteEnergy"),
+      greyEnergy: sumBy(persona.consumption, "greyEnergy"),
+    };
+  });
+}
+
+function sumBy<T extends { type: string; value: number }>(
+  array: T[],
+  type: string
+) {
+  return _.sumBy(
+    array.filter(({ type: _type }) => _type === type),
+    "value"
+  ).toFixed(2);
 }
 
 const data = [
