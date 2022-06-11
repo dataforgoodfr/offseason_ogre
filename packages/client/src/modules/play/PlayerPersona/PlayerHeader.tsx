@@ -30,18 +30,15 @@ export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
   const { user } = useAuth();
-  const { game } = usePlay();
+  const { game, myTeam } = usePlay();
   if (user === null) {
     throw new Error("User must be authentified");
   }
-  const myTeam = game.teams.find((team) =>
-    team.players.some((player) => player.userId === user.id)
-  );
 
   return (
     <Box>
       <PlayBox>
-        <Header game={game} team={myTeam} user={user} />
+        <Header game={game} team={myTeam || undefined} user={user} />
         <Grid
           item
           xs={12}
