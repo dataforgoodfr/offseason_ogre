@@ -5,12 +5,18 @@ import * as React from "react";
 import { useMatch } from "react-router-dom";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
+import { persona } from "../../persona/persona";
 
-export { PlayProvider, useLoadedPlay as usePlay, RootPlayProvider };
+export {
+  PlayProvider,
+  RootPlayProvider,
+  useMyTeam,
+  useLoadedPlay as usePlay,
+  usePersonna,
+};
 
 interface IPlayContext {
   game: IGameWithTeams;
-  myTeam: ITeamWithPlayers | null;
   updateGame: (update: Partial<IGame>) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
@@ -35,8 +41,6 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   );
   const { socket } = useGameSocket({ gameId, setGameWithTeams });
 
-  const myTeam = useMyTeam({ gameWithTeams });
-
   if (gameWithTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
@@ -50,7 +54,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <PlayContext.Provider value={{ game: gameWithTeams, myTeam, updateGame }}>
+    <PlayContext.Provider value={{ game: gameWithTeams, updateGame }}>
       {children}
     </PlayContext.Provider>
   );
@@ -64,11 +68,8 @@ function useLoadedPlay(): IPlayContext {
   return playValue;
 }
 
-function useMyTeam({
-  gameWithTeams,
-}: {
-  gameWithTeams: IGameWithTeams | null;
-}): ITeamWithPlayers | null {
+function useMyTeam(): ITeamWithPlayers | null {
+  const { game: gameWithTeams } = useLoadedPlay();
   const { user } = useAuth();
   if (!user) return null;
   if (!gameWithTeams) return null;
@@ -77,6 +78,10 @@ function useMyTeam({
       team.players.some((player) => player.userId === user.id)
     ) ?? null
   );
+}
+
+function usePersonna() {
+  return persona;
 }
 
 function useGameSocket({

@@ -24,13 +24,14 @@ import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
-import { usePlay } from "../context/playContext";
+import { useMyTeam, usePlay } from "../context/playContext";
 
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
   const { user } = useAuth();
-  const { game, myTeam } = usePlay();
+  const { game } = usePlay();
+  const myTeam = useMyTeam();
   if (user === null) {
     throw new Error("User must be authentified");
   }
