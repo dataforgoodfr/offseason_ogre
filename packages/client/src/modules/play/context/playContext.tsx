@@ -4,8 +4,18 @@ import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
+import { useAuth } from "../../auth/authProvider";
+import { Persona, persona } from "../../persona/persona";
+import { MAX_NUMBER_STEPS } from "../constants";
+import _ from "lodash";
 
-export { PlayProvider, useLoadedPlay as usePlay, RootPlayProvider };
+export {
+  PlayProvider,
+  RootPlayProvider,
+  useMyTeam,
+  useLoadedPlay as usePlay,
+  usePersonaByStep,
+};
 
 interface IPlayContext {
   game: IGameWithTeams;
@@ -58,6 +68,24 @@ function useLoadedPlay(): IPlayContext {
     throw new Error("play context should have been loaded");
   }
   return playValue;
+}
+
+function useMyTeam(): ITeamWithPlayers | null {
+  const { game: gameWithTeams } = useLoadedPlay();
+  const { user } = useAuth();
+  if (!user) return null;
+  if (!gameWithTeams) return null;
+  return (
+    gameWithTeams.teams.find((team) =>
+      team.players.some((player) => player.userId === user.id)
+    ) ?? null
+  );
+}
+
+function usePersonaByStep(): Record<string, Persona> {
+  return Object.fromEntries(
+    _.range(0, MAX_NUMBER_STEPS).map((step) => [step, persona])
+  );
 }
 
 function useGameSocket({

@@ -6,8 +6,7 @@ import {
   TypographyProps,
   useTheme,
 } from "@mui/material";
-
-const MAX_NUMBER_STEPS = 7;
+import { MAX_NUMBER_STEPS } from "../../../play";
 
 const GameStepper = ({
   step,
