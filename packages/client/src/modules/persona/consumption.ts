@@ -16,37 +16,55 @@ const consumption = [
   ...getFossilEnergy(),
   ...getRenewableEnergy(),
   ...getMixteEnergy(),
+  ...getGreyEnergy(),
 ] as ConsumptionDatum[];
 
 function getFossilEnergy(): (ConsumptionDatum & { type: "fossilEnergy" })[] {
-  return [
-    { name: "fossilCar", type: "fossilEnergy", value: 25.41 },
-    { name: "plane", type: "fossilEnergy", value: 5.57 },
-    { name: "fossilHeating", type: "fossilEnergy", value: 27.4 },
+  const energies = [
+    { name: "fossilCar", value: 25.41 },
+    { name: "plane", value: 5.57 },
+    { name: "fossilHeating", value: 27.4 },
   ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "fossilEnergy",
+  }));
 }
 
 function getRenewableEnergy(): (ConsumptionDatum & {
   type: "renewableEnergy";
 })[] {
-  return [
-    { name: "electricCar", type: "renewableEnergy", value: 0 },
-    { name: "train", type: "renewableEnergy", value: 0.73 },
-    { name: "noCarbonHeating", type: "renewableEnergy", value: 0 },
-    { name: "airConditionning", type: "renewableEnergy", value: 0 },
-    { name: "cleanCook", type: "renewableEnergy", value: 17.36 },
-    { name: "Light", type: "renewableEnergy", value: 4 },
-    { name: "brownGoods", type: "renewableEnergy", value: 7.5 },
+  const energies = [
+    { name: "electricCar", value: 0 },
+    { name: "train", value: 0.73 },
+    { name: "noCarbonHeating", value: 0 },
+    { name: "airConditionning", value: 0 },
+    { name: "cleanCook", value: 17.36 },
+    { name: "Light", value: 4 },
+    { name: "brownGoods", value: 7.5 },
   ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "renewableEnergy",
+  }));
 }
 
 function getMixteEnergy(): (ConsumptionDatum & { type: "mixteEnergy" })[] {
-  return [{ name: "food", type: "mixteEnergy", value: 14.9 }];
+  const energies = [{ name: "food", value: 14.9 }];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "mixteEnergy",
+  }));
+}
+
+function getGreyEnergy(): (ConsumptionDatum & { type: "greyEnergy" })[] {
+  const energies = [{ name: "greyHouse", value: 3 }];
+  return energies.map((datum) => ({
+    ...datum,
+    type: "greyEnergy",
+  }));
 }
 // Consommations:
-
-// Energie directe mixte
-// Se nourrir: 						consumptionFood = 14,9
 
 // Energie indirecte
 // EG construction: 					consumptionGreyHouse = 3
