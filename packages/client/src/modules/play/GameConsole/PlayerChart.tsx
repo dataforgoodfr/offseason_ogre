@@ -25,7 +25,7 @@ function buildData({ team }: { team: ITeamWithPlayers }) {
     }),
     {
       name: "Production",
-      offshoreProduction: 4,
+      hydroProduction: 4,
       terrestrialProduction: 10,
     },
   ];

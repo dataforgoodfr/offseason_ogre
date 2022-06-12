@@ -6,15 +6,29 @@ interface ProductionDatum {
   type: ProductionType;
   value: number;
 }
-type ProductionType =
-  | "nuclear"
-  | "offshoreProduction"
-  | "terrestrialProduction";
+type ProductionType = "hydroProduction" | "nuclear" | "terrestrialProduction";
 
 const production = [
+  ...getHydroEnergies(),
   ...getNuclearEnergies(),
   ...getTerrestrialEnergies(),
 ] as ProductionDatum[];
+
+function getHydroEnergies(): (ProductionDatum & {
+  type: "hydroProduction";
+})[] {
+  const energies = [
+    { name: "geothermal", value: 0.005 },
+    { name: "hydroPower", value: 2.667 },
+    { name: "offshoreTurbine", value: 0.403 },
+    { name: "tidal", value: 0.022 },
+    { name: "wave", value: 0 },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "hydroProduction",
+  }));
+}
 
 function getNuclearEnergies(): (ProductionDatum & { type: "nuclear" })[] {
   const energies = [
@@ -47,12 +61,3 @@ function getTerrestrialEnergies(): (ProductionDatum & {
     type: "terrestrialProduction",
   }));
 }
-
-// Productions:
-
-// Hydro
-// Hydroélectricité: 					productionHydropower = 2,667
-// Eolien offshore: 					productionWindTurbineOffshore = 0,403
-// Vagues: 						productionWave = 0
-// Marées: 						productionTidal = 0,022
-// Géothermie:						productionGeothermal = 0,005
