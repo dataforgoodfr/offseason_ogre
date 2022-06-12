@@ -12,20 +12,43 @@ type ProductionType =
   | "terrestrialProduction";
 
 const production = [
-  {
-    name: "nuclear",
-    type: "nuclear",
-    value: 0,
-  },
+  ...getNuclearEnergies(),
+  ...getTerrestrialEnergies(),
 ] as ProductionDatum[];
 
+function getNuclearEnergies(): (ProductionDatum & { type: "nuclear" })[] {
+  const energies = [
+    {
+      name: "nuclear",
+      value: 0,
+    },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "nuclear",
+  }));
+}
+
+function getTerrestrialEnergies(): (ProductionDatum & {
+  type: "terrestrialProduction";
+})[] {
+  const energies = [
+    { name: "biomass", value: 7.138 },
+    {
+      name: "onshoreWindTurbine",
+      value: 2.084,
+    },
+    { name: "photovoltaicFarm", value: 0.307 },
+    { name: "photovoltaicRoof", value: 0.251 },
+    { name: "thermalSolar", value: 0.107 },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "terrestrialProduction",
+  }));
+}
+
 // Productions:
-// Terrestre
-// Eolien terrestre: 					productionWindTurbineOnshore = 2,084
-// Solaire thermique: 					productionThermalSolar = 0,107
-// PV toiture: 						productionPhotovoltaicRoof = 0,251
-// Ferme solaire: 					productionPhotovoltaicFarm = 0,307
-// Biomasse: 						productionBiomass = 7,138
 
 // Hydro
 // Hydroélectricité: 					productionHydropower = 2,667
