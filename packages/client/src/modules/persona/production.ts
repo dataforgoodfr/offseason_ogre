@@ -6,30 +6,58 @@ interface ProductionDatum {
   type: ProductionType;
   value: number;
 }
-type ProductionType =
-  | "nuclear"
-  | "offshoreProduction"
-  | "terrestrialProduction";
+type ProductionType = "hydroProduction" | "nuclear" | "terrestrialProduction";
 
 const production = [
-  {
-    name: "nuclear",
-    type: "nuclear",
-    value: 0,
-  },
+  ...getHydroEnergies(),
+  ...getNuclearEnergies(),
+  ...getTerrestrialEnergies(),
 ] as ProductionDatum[];
 
-// Productions:
-// Terrestre
-// Eolien terrestre: 					productionWindTurbineOnshore = 2,084
-// Solaire thermique: 					productionThermalSolar = 0,107
-// PV toiture: 						productionPhotovoltaicRoof = 0,251
-// Ferme solaire: 					productionPhotovoltaicFarm = 0,307
-// Biomasse: 						productionBiomass = 7,138
+function getHydroEnergies(): (ProductionDatum & {
+  type: "hydroProduction";
+})[] {
+  const energies = [
+    { name: "geothermal", value: 0.005 },
+    { name: "hydroPower", value: 2.667 },
+    { name: "offshoreTurbine", value: 0.403 },
+    { name: "tidal", value: 0.022 },
+    { name: "wave", value: 0 },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "hydroProduction",
+  }));
+}
 
-// Hydro
-// Hydroélectricité: 					productionHydropower = 2,667
-// Eolien offshore: 					productionWindTurbineOffshore = 0,403
-// Vagues: 						productionWave = 0
-// Marées: 						productionTidal = 0,022
-// Géothermie:						productionGeothermal = 0,005
+function getNuclearEnergies(): (ProductionDatum & { type: "nuclear" })[] {
+  const energies = [
+    {
+      name: "nuclear",
+      value: 0,
+    },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "nuclear",
+  }));
+}
+
+function getTerrestrialEnergies(): (ProductionDatum & {
+  type: "terrestrialProduction";
+})[] {
+  const energies = [
+    { name: "biomass", value: 7.138 },
+    {
+      name: "onshoreWindTurbine",
+      value: 2.084,
+    },
+    { name: "photovoltaicFarm", value: 0.307 },
+    { name: "photovoltaicRoof", value: 0.251 },
+    { name: "thermalSolar", value: 0.107 },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "terrestrialProduction",
+  }));
+}

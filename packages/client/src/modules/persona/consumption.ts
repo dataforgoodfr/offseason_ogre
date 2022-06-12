@@ -8,32 +8,66 @@ interface ConsumptionDatum {
 }
 type ConsumptionType =
   | "fossilEnergy"
-  | "renewableEnergy"
+  | "greyEnergy"
   | "mixteEnergy"
-  | "greyEnergy";
+  | "renewableEnergy";
 
 const consumption = [
-  { name: "fossilCar", type: "fossilEnergy", value: 25.41 },
-  { name: "plane", type: "fossilEnergy", value: 5.57 },
-  { name: "fossilHeating", type: "fossilEnergy", value: 27.4 },
-  { name: "electricCar", type: "renewableEnergy", value: 0 },
-  { name: "train", type: "renewableEnergy", value: 0.73 },
-  { name: "noCarbonHeating", type: "renewableEnergy", value: 0 },
-  { name: "airConditionning", type: "renewableEnergy", value: 0 },
-  { name: "cleanCook", type: "renewableEnergy", value: 17.36 },
-  { name: "Light", type: "renewableEnergy", value: 4 },
-  { name: "brownGoods", type: "renewableEnergy", value: 7.5 },
+  ...getFossilEnergies(),
+  ...getGreyEnergies(),
+  ...getMixteEnergies(),
+  ...getRenewableEnergies(),
 ] as ConsumptionDatum[];
 
-// Consommations:
+function getFossilEnergies(): (ConsumptionDatum & { type: "fossilEnergy" })[] {
+  const energies = [
+    { name: "fossilCar", value: 25.41 },
+    { name: "fossilHeating", value: 27.4 },
+    { name: "plane", value: 5.57 },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "fossilEnergy",
+  }));
+}
 
-// Energie directe mixte
-// Se nourrir: 						consumptionFood = 14,9
+function getRenewableEnergies(): (ConsumptionDatum & {
+  type: "renewableEnergy";
+})[] {
+  const energies = [
+    { name: "airConditionning", value: 0 },
+    { name: "brownGoods", value: 7.5 },
+    { name: "cleanCook", value: 17.36 },
+    { name: "electricCar", value: 0 },
+    { name: "light", value: 4 },
+    { name: "noCarbonHeating", value: 0 },
+    { name: "train", value: 0.73 },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "renewableEnergy",
+  }));
+}
 
-// Energie indirecte
-// EG construction: 					consumptionGreyHouse = 3
-// EG numérique: 					consumptionGreyNumeric = 10,72
-// EG fabrication voiture: 				consumptionGreyCar = 42
-// EG fret: 						consumptionGreyTransport = 12
-// EG autres: 						consumptionGreyOther = 36
-// Service public: 					consumptionPublicService = 7,97
+function getMixteEnergies(): (ConsumptionDatum & { type: "mixteEnergy" })[] {
+  const energies = [{ name: "food", value: 14.9 }];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "mixteEnergy",
+  }));
+}
+
+function getGreyEnergies(): (ConsumptionDatum & { type: "greyEnergy" })[] {
+  const energies = [
+    { name: "greyCar", value: 42 },
+    { name: "greyHouse", value: 3 },
+    { name: "greyNumeric", value: 10.72 },
+    { name: "greyOther", value: 36 },
+    { name: "greyTransport", value: 12 },
+    { name: "servicePublic", value: 7.97 },
+  ];
+  return energies.map((datum) => ({
+    ...datum,
+    type: "greyEnergy",
+  }));
+}

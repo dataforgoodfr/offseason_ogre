@@ -12,9 +12,11 @@ import _ from "lodash";
 export {
   PlayProvider,
   RootPlayProvider,
+  useCurrentPersona,
   useMyTeam,
   useLoadedPlay as usePlay,
   usePersonaByStep,
+  usePersonaByUserId,
 };
 
 interface IPlayContext {
@@ -86,6 +88,18 @@ function usePersonaByStep(): Record<string, Persona> {
   return Object.fromEntries(
     _.range(0, MAX_NUMBER_STEPS).map((step) => [step, persona])
   );
+}
+
+function useCurrentPersona() {
+  return persona;
+}
+
+function usePersonaByUserId({
+  userIds,
+}: {
+  userIds: number[];
+}): Record<number, Persona> {
+  return Object.fromEntries(userIds.map((userId) => [userId, persona]));
 }
 
 function useGameSocket({
