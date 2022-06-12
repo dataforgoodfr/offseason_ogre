@@ -13,18 +13,36 @@ type ConsumptionType =
   | "greyEnergy";
 
 const consumption = [
-  { name: "fossilCar", type: "fossilEnergy", value: 25.41 },
-  { name: "plane", type: "fossilEnergy", value: 5.57 },
-  { name: "fossilHeating", type: "fossilEnergy", value: 27.4 },
-  { name: "electricCar", type: "renewableEnergy", value: 0 },
-  { name: "train", type: "renewableEnergy", value: 0.73 },
-  { name: "noCarbonHeating", type: "renewableEnergy", value: 0 },
-  { name: "airConditionning", type: "renewableEnergy", value: 0 },
-  { name: "cleanCook", type: "renewableEnergy", value: 17.36 },
-  { name: "Light", type: "renewableEnergy", value: 4 },
-  { name: "brownGoods", type: "renewableEnergy", value: 7.5 },
+  ...getFossilEnergy(),
+  ...getRenewableEnergy(),
+  ...getMixteEnergy(),
 ] as ConsumptionDatum[];
 
+function getFossilEnergy(): (ConsumptionDatum & { type: "fossilEnergy" })[] {
+  return [
+    { name: "fossilCar", type: "fossilEnergy", value: 25.41 },
+    { name: "plane", type: "fossilEnergy", value: 5.57 },
+    { name: "fossilHeating", type: "fossilEnergy", value: 27.4 },
+  ];
+}
+
+function getRenewableEnergy(): (ConsumptionDatum & {
+  type: "renewableEnergy";
+})[] {
+  return [
+    { name: "electricCar", type: "renewableEnergy", value: 0 },
+    { name: "train", type: "renewableEnergy", value: 0.73 },
+    { name: "noCarbonHeating", type: "renewableEnergy", value: 0 },
+    { name: "airConditionning", type: "renewableEnergy", value: 0 },
+    { name: "cleanCook", type: "renewableEnergy", value: 17.36 },
+    { name: "Light", type: "renewableEnergy", value: 4 },
+    { name: "brownGoods", type: "renewableEnergy", value: 7.5 },
+  ];
+}
+
+function getMixteEnergy(): (ConsumptionDatum & { type: "mixteEnergy" })[] {
+  return [{ name: "food", type: "mixteEnergy", value: 14.9 }];
+}
 // Consommations:
 
 // Energie directe mixte
