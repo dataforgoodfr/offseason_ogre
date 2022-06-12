@@ -31,15 +31,22 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
         renewableEnergy: sumFor(playerPersona.consumption, "renewableEnergy"),
       };
     }),
-    {
-      name: "Production",
-      hydroProduction: sumFor(firstPersona.production, "hydroProduction"),
-      nuclear: sumFor(firstPersona.production, "nuclear"),
-      terrestrialProduction: sumFor(
-        firstPersona.production,
-        "terrestrialProduction"
-      ),
-    },
+    firstPersona
+      ? {
+          name: "Production",
+          hydroProduction: sumFor(firstPersona.production, "hydroProduction"),
+          nuclear: sumFor(firstPersona.production, "nuclear"),
+          terrestrialProduction: sumFor(
+            firstPersona.production,
+            "terrestrialProduction"
+          ),
+        }
+      : {
+          name: "Production",
+          hydroProduction: 0,
+          nuclear: 0,
+          terrestrialProduction: 0,
+        },
   ];
 }
 
