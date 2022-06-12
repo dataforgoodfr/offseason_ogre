@@ -5,6 +5,7 @@ import { EnergyButtons } from "../../common/components/EnergyButtons";
 import { MAX_NUMBER_STEPS } from "../constants";
 import _ from "lodash";
 import { usePersonaByStep } from "../context/playContext";
+import { sumFor } from "../../persona";
 
 export { StatsGraphs };
 
@@ -37,22 +38,12 @@ function useStackedEnergyData() {
     const persona = personaByStep[step];
     return {
       name: step ? `Etape ${step}` : "Initial",
-      renewableEnergy: sumBy(persona.consumption, "renewableEnergy"),
-      fossilEnergy: sumBy(persona.consumption, "fossilEnergy"),
-      mixteEnergy: sumBy(persona.consumption, "mixteEnergy"),
-      greyEnergy: sumBy(persona.consumption, "greyEnergy"),
+      renewableEnergy: sumFor(persona.consumption, "renewableEnergy"),
+      fossilEnergy: sumFor(persona.consumption, "fossilEnergy"),
+      mixteEnergy: sumFor(persona.consumption, "mixteEnergy"),
+      greyEnergy: sumFor(persona.consumption, "greyEnergy"),
     };
   });
-}
-
-function sumBy<T extends { type: string; value: number }>(
-  array: T[],
-  type: string
-) {
-  return _.sumBy(
-    array.filter(({ type: _type }) => _type === type),
-    "value"
-  ).toFixed(2);
 }
 
 const data = [

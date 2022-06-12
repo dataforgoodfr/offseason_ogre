@@ -16,6 +16,7 @@ export {
   useMyTeam,
   useLoadedPlay as usePlay,
   usePersonaByStep,
+  usePersonaByUserId,
 };
 
 interface IPlayContext {
@@ -91,6 +92,14 @@ function usePersonaByStep(): Record<string, Persona> {
 
 function useCurrentPersona() {
   return persona;
+}
+
+function usePersonaByUserId({
+  userIds,
+}: {
+  userIds: number[];
+}): Record<number, Persona> {
+  return Object.fromEntries(userIds.map((userId) => [userId, persona]));
 }
 
 function useGameSocket({

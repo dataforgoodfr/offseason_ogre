@@ -13,7 +13,7 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
   return (
     <>
       {team.players.map((player) => (
-        <PlayerMini player={player} />
+        <PlayerMini key={player.user.id} player={player} />
       ))}
     </>
   );
