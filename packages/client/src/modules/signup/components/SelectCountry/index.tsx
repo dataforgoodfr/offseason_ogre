@@ -6,14 +6,19 @@ import countries from "./countries";
 import CustomTextField from "../CustomTextField";
 import { ThemeVariant } from "../../../../utils/theme";
 
-interface SelectCountryProps {   
-  field: any; 
+interface SelectCountryProps {
+  field: any;
   label: string;
   themeVariant?: ThemeVariant;
-  variant?: TextFieldProps["variant"]
+  variant?: TextFieldProps["variant"];
 }
 
-function SelectCountry({ field, label, themeVariant, variant }: SelectCountryProps) {
+function SelectCountry({
+  field,
+  label,
+  themeVariant,
+  variant,
+}: SelectCountryProps) {
   return (
     <CustomAutocomplete
       themeVariant={themeVariant}

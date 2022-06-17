@@ -10,16 +10,29 @@ interface FormInputProps {
   name: string;
   label: string;
   themeVariant?: ThemeVariant;
-  variant?: TextFieldProps["variant"]
+  variant?: TextFieldProps["variant"];
 }
 
-const FormInput = ({ control, name, label,themeVariant = "dark", variant="outlined" }: FormInputProps) => {
+const FormInput = ({
+  control,
+  name,
+  label,
+  themeVariant = "dark",
+  variant = "outlined",
+}: FormInputProps) => {
   if (name === "country") {
     return (
       <Controller
         control={control}
         name={name}
-        render={({ field }) => <SelectCountry field={field} label={label} themeVariant={themeVariant} variant={variant} />}
+        render={({ field }) => (
+          <SelectCountry
+            field={field}
+            label={label}
+            themeVariant={themeVariant}
+            variant={variant}
+          />
+        )}
       />
     );
   }
