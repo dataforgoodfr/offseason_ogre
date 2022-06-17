@@ -184,7 +184,7 @@ function Actions() {
       </Button>
       <Button
         component={Link}
-        to="/my-games"
+        to={`/play/games/${gameId}/persona/actions`}
         variant="contained"
         color="primary"
         sx={{
