@@ -1,6 +1,9 @@
 import { createTheme } from "@mui/material";
 
+export type { ThemeVariant };
 export { theme };
+
+type ThemeVariant = "light" | "dark" | "system";
 
 const blue = "#1A3D5C";
 const yellow = "#f9c74f";

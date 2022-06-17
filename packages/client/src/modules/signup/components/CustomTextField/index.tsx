@@ -1,40 +1,90 @@
-import TextField from "@mui/material/TextField";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { styled } from "@mui/material/styles";
 
-const CustomTextField = styled(TextField)(({ theme }) => ({
-  marginBottom: "1rem",
+import { ThemeVariant } from "../../../../utils/theme";
 
-  "& .MuiOutlinedInput-root": {
-    color: theme.palette.grey[500],
-    borderRadius: "0.8rem",
+interface CustomTextFieldProps {
+  themeVariant?: ThemeVariant;
+  variant?: TextFieldProps["variant"]
+}
 
-    "&.Mui-focused fieldset": {
-      borderColor: theme.palette.grey[500],
-      border: "0px",
-    },
-    "&:hover fieldset": {
-      borderColor: theme.palette.grey[500],
-    },
-  },
+const CustomTextField = styled(TextField, {
+  shouldForwardProp: (prop) => !["themeVariant", "variant"].includes(prop as any)
+})<CustomTextFieldProps>(({ theme, themeVariant = "dark", variant = "outlined" }) => {
+  
+  const commonStyle = {
+    marginBottom: "1rem"
+  }
+  
+  let style = {};
+  if (variant === "outlined") {
+    style = {
+      "& .MuiOutlinedInput-root": {
+        color: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+        borderRadius: "0.8rem",
+                height: "40px",
+        minHeight: "40px",
+        maxHeight: "40px",
 
-  "& .MuiInputBase-input": {
-    backgroundColor: theme.palette.primary.main,
-    border: "1px solid " + theme.palette.grey[500],
-    borderRadius: "0.8rem",
-    height: "40px",
-    padding: 0,
-    paddingLeft: "7.5px",
-  },
-
-  "& label.Mui-focused": {
-    color: theme.palette.grey[500],
-  },
-
-  "& .MuiInputLabel-root": {
-    color: theme.palette.grey[500],
-    top: -7,
-    left: 0,
-  },
-}));
+    
+        "fieldset": {
+          borderColor: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+          border: 0,
+        },
+        "&:hover fieldset": {
+          borderColor: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+        },
+      },
+    
+      "& .MuiInputBase-input": {
+        backgroundColor: themeVariant === "dark" ? theme.palette.primary.main : "white" ,
+        border: "1px solid " + (themeVariant === "dark" ? theme.palette.grey[500] : "auto"),
+        borderRadius: "0.8rem",
+        height: "40px",
+        padding: 0,
+        paddingLeft: "7.5px",
+      },
+    
+      "& label.Mui-focused": {
+        color: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+      },
+    
+      "& .MuiInputLabel-root": {
+        color: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+        top: -7,
+        left: 0,
+      },
+    }
+  } else {
+    style = {
+      "& .MuiOutlinedInput-root": {
+        "fieldset": {
+          border: 0,
+          borderBottom: "1px solid" + theme.palette.grey[500],
+          borderRadius: 0,
+        },
+        "&:hover fieldset": {
+          borderColor: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+        },
+      },
+    
+      "& .MuiInputBase-input": {
+        height: "40px",
+        padding: 0,
+      },
+    
+      "& label.Mui-focused": {
+        color: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+      },
+    
+      "& .MuiInputLabel-root": {
+        color: themeVariant === "dark" ? theme.palette.grey[500] : "auto",
+        top: -7,
+        left: -14,
+      },
+    }
+  }
+  return {...commonStyle, ...style};
+});
 
 export default CustomTextField;

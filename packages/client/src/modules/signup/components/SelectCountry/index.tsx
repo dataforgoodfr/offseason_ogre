@@ -1,11 +1,23 @@
-import TextField from "@mui/material/TextField";
+import { TextFieldProps } from "@mui/material/TextField";
 import Box from "@mui/material/Box";
+
 import CustomAutocomplete from "./CustomAutoComplete";
 import countries from "./countries";
+import CustomTextField from "../CustomTextField";
+import { ThemeVariant } from "../../../../utils/theme";
 
-function SelectCountry({ field, label }: { field: any; label: string }) {
+interface SelectCountryProps {   
+  field: any; 
+  label: string;
+  themeVariant?: ThemeVariant;
+  variant?: TextFieldProps["variant"]
+}
+
+function SelectCountry({ field, label, themeVariant, variant }: SelectCountryProps) {
   return (
     <CustomAutocomplete
+      themeVariant={themeVariant}
+      variant={variant}
       options={countries}
       onChange={(_, value: any) => field.onChange(value)}
       autoHighlight
@@ -30,7 +42,7 @@ function SelectCountry({ field, label }: { field: any; label: string }) {
       )}
       renderInput={(params) => {
         return (
-          <TextField
+          <CustomTextField
             {...params}
             label={label}
             inputProps={{
@@ -39,6 +51,8 @@ function SelectCountry({ field, label }: { field: any; label: string }) {
             }}
             required
             sx={{ width: "300px" }}
+            themeVariant={themeVariant}
+            variant={variant}
           />
         );
       }}
