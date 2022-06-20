@@ -1,3 +1,5 @@
+export type { CountryType };
+
 interface CountryType {
   code: string;
   label: string;

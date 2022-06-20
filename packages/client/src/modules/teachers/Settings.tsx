@@ -7,44 +7,48 @@ import { useMutation } from "react-query";
 import { Layout } from "../administration/Layout";
 import { SuccessAlert } from "../alert";
 import FormInput from "../common/components/FormInput";
-import { NewUser } from "../users/services";
+import { User } from "../users/types";
+import { useAuth } from "../auth/authProvider";
+import { getCountryByCode } from "../signup/components/SelectCountry";
+import { useEffect } from "react";
 
 export { Settings };
 
 function Settings(): JSX.Element {
-  const { control, getValues, handleSubmit } = useForm({
+  const { user, refetchUser } = useAuth();
+  let { control, handleSubmit } = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      country: "",
-      email: "",
-      policies: false,
+      firstName: user?.firstName || "",
+      lastName: user?.lastName || "",
+      country: getCountryByCode(user?.country) || "",
+      email: user?.email || "",
     },
   });
 
-  const mutation = useMutation<
+  const mutateUser = useMutation<
     Response,
     AxiosError<{ message: string }>,
-    NewUser
-  >((newUser) => {
-    return axios.post("/api/users/sign-up", newUser);
+    User
+  >((updateData) => {
+    return axios.put(`/api/users/${user!.id}`, updateData);
   });
 
-  const onValid = (formContent: any) =>
-    mutation.mutate({ ...formContent, country: formContent.country.code });
+  useEffect(() => {
+    if (mutateUser.isSuccess) {
+      refetchUser();
+      mutateUser.reset();
+    }
+  }, [mutateUser, refetchUser]);
 
-  if (mutation.isSuccess) {
-    return (
-      <>
-        <SuccessAlert />
-        <SuccessMessage email={getValues("email")} />
-      </>
-    );
-  }
+  const onValid = (formContent: any) => {
+    mutateUser.mutate({ ...formContent, country: formContent.country.code });
+  };
 
   return (
     <Layout>
       <>
+        {mutateUser.isSuccess && <SuccessAlert />}
+
         <Box alignItems="center" display="flex">
           <Typography variant="h3">Mes informations générales</Typography>
         </Box>
@@ -107,20 +111,5 @@ function Settings(): JSX.Element {
         </Paper>
       </>
     </Layout>
-  );
-}
-
-function SuccessMessage({ email }: { email: string }) {
-  return (
-    <div className="flex justify-center items-center w-120">
-      <p className="text-white text-center">
-        Votre compte a été créé, un mail contenant un lien de connexion a été
-        envoyé sur l'adresse <span className="underline">{email}</span>.
-        <br />
-        Cliquez sur le lien de connexion pour accéder à l'application.
-        <br />
-        Vérifiez que le mail n'est pas arrivé dans votre boîte de Spam.
-      </p>
-    </div>
   );
 }
