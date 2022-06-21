@@ -82,8 +82,9 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.points
-                    }`}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.points
+                  }`}
                 </Typography>
               );
             })}
@@ -103,8 +104,9 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.carbonFootprint
-                    }T/an`}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.carbonFootprint
+                  }T/an`}
                 </Typography>
               );
             })}
@@ -124,8 +126,9 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.budget
-                    }€/J`}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.budget
+                  }€/J`}
                 </Typography>
               );
             })}
