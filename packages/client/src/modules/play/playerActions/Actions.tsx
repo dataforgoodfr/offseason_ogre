@@ -1,30 +1,14 @@
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import PersonPinRoundedIcon from "@mui/icons-material/PersonPinRounded";
-import DirectionsCarRoundedIcon from "@mui/icons-material/DirectionsCarRounded";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import LunchDiningRoundedIcon from "@mui/icons-material/LunchDiningRounded";
-import ComputerRoundedIcon from "@mui/icons-material/ComputerRounded";
-import DryCleaningRoundedIcon from "@mui/icons-material/DryCleaningRounded";
-
+import React from "react";
+import InfoIcon from '@mui/icons-material/Info';
 import { Box, Rating } from "@mui/material";
-import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import PaidIcon from "@mui/icons-material/Paid";
-import CloudIcon from "@mui/icons-material/Cloud";
-import StarIcon from "@mui/icons-material/Star";
-import { MAX_ACTION_POINTS } from "../constants";
-import { useCurrentPersona } from "../context/playContext";
-
+import Checkbox from "@mui/material/Checkbox";
+import { styled } from "@mui/material/styles";
 
 import {
-    Grid,
     Typography,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
     useTheme,
-    SvgIconTypeMap,
 } from "@mui/material";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 
@@ -34,73 +18,73 @@ function Actions() {
     return (
         <PlayBox>
             <ActionsHeader />
-            <AccordionLayout title="Passer au véhicule électrique" TitleIcon={PersonPinRoundedIcon}>
+            <ActionLayout title="Passer au véhicule électrique">
                 <Typography>Caractéristiques.</Typography>
-            </AccordionLayout>
-            <AccordionLayout title="Déplacement en voiture" TitleIcon={DirectionsCarRoundedIcon}>
+            </ActionLayout>
+            <ActionLayout title="Déplacement en voiture" >
                 <Typography>Caractéristiques.</Typography>
-            </AccordionLayout>
-            <AccordionLayout title="Moins d'équipement numérique" TitleIcon={HomeRoundedIcon}>
+            </ActionLayout>
+            <ActionLayout title="Moins d'équipement numérique" >
                 <Typography>Caractéristiques.</Typography>
-            </AccordionLayout>
-            <AccordionLayout title="Arrêt boissons canettes" TitleIcon={LunchDiningRoundedIcon}>
+            </ActionLayout>
+            <ActionLayout title="Arrêt boissons canettes" >
                 <Typography>Caractéristiques.</Typography>
-            </AccordionLayout>
-            <AccordionLayout title="Acheter moins de vêtements" TitleIcon={ComputerRoundedIcon}>
+            </ActionLayout>
+            <ActionLayout title="Acheter moins de vêtements">
                 <Typography>Caractéristiques.</Typography>
-            </AccordionLayout>
+            </ActionLayout>
         </PlayBox>
     );
 }
 
-function AccordionLayout({
+const CustomCheckbox = styled(Checkbox)(() => ({
+    path: {
+        color: "#C4C4C4",
+    },
+}));
+
+function ActionLayout({
     children,
     title,
-    TitleIcon,
 }: {
     children: JSX.Element;
     title: string;
-    TitleIcon?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-        muiName: string;
-    };
 }) {
     const theme = useTheme();
+    const [checked, setChecked] = React.useState(false);
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked);
+    };
     return (
-        <Accordion
+        <Box
             sx={{
                 mb: 2,
                 borderRadius: "5px",
                 border: "3px solid #F9C74F",
+                padding: 1,
             }}
         >
-            <AccordionSummary
-                expandIcon={<ArrowForwardIosIcon />}
-                aria-controls="infobh-content"
-                id="infobh-header"
-                sx={{
-                    backgroundColor: (theme) => theme.palette.primary.main,
-                    "& .MuiAccordionSummary-expandIconWrapper": {
-                        color: "white",
-                    },
-                    "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
-                        transform: "rotate(90deg)",
-                    },
-                    "& .MuiAccordionSummary-content": {
-                        color: "white",
-                    },
-                }}
-            >
-                <Typography alignItems="center" display="flex" variant="h6">
-                    {TitleIcon && <TitleIcon sx={{ mr: 1 }} />}
-                    {title}
-                </Typography>
-            </AccordionSummary>
-            <AccordionDetails
-                sx={{ pt: 2, bgcolor: theme.palette.primary.main, color: "white" }}
-            >
-                {children}
-            </AccordionDetails>
-        </Accordion>
+            <Typography alignItems="center" display="flex" variant="h6">
+                <InfoIcon sx={{ mr: 1 }} />
+                {title}
+                <CustomCheckbox
+                    checked={checked}
+                    onChange={handleChange}
+                    inputProps={{ 'aria-label': 'controlled' }}
+                />
+            </Typography>
+            <Box display="flex" alignItems="center" mt={1}>
+                Cout:
+                <Rating
+                    name="action-points-cost"
+                    readOnly
+                    max={3}
+                    value={3}
+                />
+                <PaidIcon />
+                {`${2.19}€/j`}
+            </Box>
+        </Box>
     );
 }
