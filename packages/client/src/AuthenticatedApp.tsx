@@ -7,7 +7,7 @@ import { PlayerPersona } from "./modules/play";
 import { Stats } from "./modules/play/Stats";
 import { PlayerActions } from "./modules/play/playerActions";
 import { Players } from "./modules/players";
-import { Teachers } from "./modules/teachers";
+import { Settings, Teachers } from "./modules/teachers";
 
 export { AuthenticatedApp };
 
@@ -23,6 +23,7 @@ function AuthenticatedApp() {
         <Route path="games/:id" element={<Game />} />
         <Route path="players" element={<Players />} />
         <Route path="teachers" element={<Teachers />} />
+        <Route path="settings" element={<Settings />} />
         <Route path="" element={<Navigate to="games" />} />
         <Route path="*" element={<Navigate to="games" />} />
       </Route>
