@@ -5,12 +5,11 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 
 import { Layout } from "../administration/Layout";
-import { SuccessAlert } from "../alert";
+import { ErrorAlert, SuccessAlert } from "../alert";
 import FormInput from "../common/components/FormInput";
 import { User } from "../users/types";
 import { useAuth } from "../auth/authProvider";
 import { getCountryByCode } from "../signup/components/SelectCountry";
-import { useEffect } from "react";
 
 export { Settings };
 
@@ -29,16 +28,16 @@ function Settings(): JSX.Element {
     Response,
     AxiosError<{ message: string }>,
     User
-  >((updateData) => {
-    return axios.put(`/api/users/${user!.id}`, updateData);
-  });
-
-  useEffect(() => {
-    if (mutateUser.isSuccess) {
-      refetchUser();
-      mutateUser.reset();
+  >(
+    (updateData) => {
+      return axios.put(`/api/users/${user!.id}`, updateData);
+    },
+    {
+      onSuccess: async () => {
+        await refetchUser();
+      },
     }
-  }, [mutateUser, refetchUser]);
+  );
 
   const onValid = (formContent: any) => {
     mutateUser.mutate({ ...formContent, country: formContent.country.code });
@@ -48,6 +47,11 @@ function Settings(): JSX.Element {
     <Layout>
       <>
         {mutateUser.isSuccess && <SuccessAlert />}
+        {mutateUser.isError && (
+          <ErrorAlert
+            message={mutateUser.error.response?.data.message || "Unkown error"}
+          />
+        )}
 
         <Box alignItems="center" display="flex">
           <Typography variant="h3">Mes informations générales</Typography>
