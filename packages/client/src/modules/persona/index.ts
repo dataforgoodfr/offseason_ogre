@@ -1,1 +1,1 @@
-export * from "./utils";
+export { sumFor, sumAllValues } from "./utils";

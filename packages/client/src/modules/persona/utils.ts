@@ -9,3 +9,9 @@ export function sumFor<T extends { type: string; value: number }>(
     "value"
   ).toFixed(2);
 }
+
+export function sumAllValues<T extends { type: string; value: number }>(
+  array: T[]
+) {
+  return _.sumBy(array, "value").toFixed(2);
+}

@@ -6,7 +6,10 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 
 export { ConsumptionStats, ProductionStats };
 
-function ConsumptionStats() {
+function ConsumptionStats(
+  consumption: { id: number; consumption: number; playerCount: number }[]
+) {
+  console.log(consumption);
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -23,7 +26,7 @@ function ConsumptionStats() {
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
-            <LineEvolution data={buildDataCons()} />
+            <LineEvolution data={buildDataCons(consumption)} />
           </Box>
         </Grid>
       </Grid>
@@ -31,7 +34,8 @@ function ConsumptionStats() {
   );
 }
 
-function ProductionStats() {
+function ProductionStats(production: { id: number; production: number }[]) {
+  console.log(production);
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -48,7 +52,7 @@ function ProductionStats() {
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
-            <LineEvolution data={buildDataProd()} />
+            <LineEvolution data={buildDataProd(production)} />
           </Box>
         </Grid>
       </Grid>
@@ -56,13 +60,18 @@ function ProductionStats() {
   );
 }
 
-function buildDataCons() {
+function buildDataCons(
+  teams: { id: number; consumption: number; playerCount: number }[]
+) {
   return [
     {
       name: "Situation initiale",
-      team1: "1300",
-      team2: "1270",
-      team3: "1250",
+      team1: teams[0]?.consumption / teams[0]?.playerCount,
+      team2: teams[1]?.consumption / teams[1]?.playerCount,
+      team3: teams[2]?.consumption / teams[2]?.playerCount,
+      team4: teams[3]?.consumption / teams[3]?.playerCount,
+      team5: teams[4]?.consumption / teams[4]?.playerCount,
+      team6: teams[5]?.consumption / teams[5]?.playerCount,
     },
     {
       name: "Etape 1",
@@ -85,13 +94,16 @@ function buildDataCons() {
   ];
 }
 
-function buildDataProd() {
+function buildDataProd(teams: { id: number; production: number }[]) {
   return [
     {
       name: "Situation initiale",
-      team1: "0",
-      team2: "0",
-      team3: "0",
+      team1: teams[0]?.production,
+      team2: teams[1]?.production,
+      team3: teams[2]?.production,
+      team4: teams[3]?.production,
+      team5: teams[4]?.production,
+      team6: teams[5]?.production,
     },
     {
       name: "Etape 1",
