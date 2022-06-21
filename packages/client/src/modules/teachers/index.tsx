@@ -1,3 +1,4 @@
+import { Settings } from "./Settings";
 import { Teachers } from "./Teachers";
 
-export { Teachers };
+export { Settings, Teachers };

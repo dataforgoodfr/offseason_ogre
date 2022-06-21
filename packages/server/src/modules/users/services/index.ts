@@ -58,6 +58,12 @@ async function update(
   id: number,
   document: Partial<Omit<Model, "id">>
 ): Promise<Model> {
+  if (document.email) {
+    if (await isMailAlreadyUsed(document.email, { excludeUser: id })) {
+      throw new Error("Email is already taken.");
+    }
+  }
+
   return model.update({ data: document, where: { id } });
 }
 
