@@ -18,13 +18,6 @@ import { useAuth } from "../../auth/authProvider";
 import { useMyTeam, usePlay } from "../context/playContext";
 import { stages } from "../../stages"
 
-interface IPlayer {
-    gameId: number;
-    teamId: number;
-    userId: number;
-    user: IUser;
-}
-
 export { ActionsHeader };
 
 function GetCurrentStageData() {
