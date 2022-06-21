@@ -1,14 +1,11 @@
 import React from "react";
-import InfoIcon from '@mui/icons-material/Info';
+import InfoIcon from "@mui/icons-material/Info";
 import { Box, Rating } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 
-import {
-    Typography,
-    useTheme,
-} from "@mui/material";
+import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 
@@ -21,13 +18,13 @@ function Actions() {
             <ActionLayout title="Passer au véhicule électrique">
                 <Typography>Caractéristiques.</Typography>
             </ActionLayout>
-            <ActionLayout title="Déplacement en voiture" >
+            <ActionLayout title="Déplacement en voiture">
                 <Typography>Caractéristiques.</Typography>
             </ActionLayout>
-            <ActionLayout title="Moins d'équipement numérique" >
+            <ActionLayout title="Moins d'équipement numérique">
                 <Typography>Caractéristiques.</Typography>
             </ActionLayout>
-            <ActionLayout title="Arrêt boissons canettes" >
+            <ActionLayout title="Arrêt boissons canettes">
                 <Typography>Caractéristiques.</Typography>
             </ActionLayout>
             <ActionLayout title="Acheter moins de vêtements">
@@ -50,7 +47,6 @@ function ActionLayout({
     children: JSX.Element;
     title: string;
 }) {
-    const theme = useTheme();
     const [checked, setChecked] = React.useState(false);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,17 +67,12 @@ function ActionLayout({
                 <CustomCheckbox
                     checked={checked}
                     onChange={handleChange}
-                    inputProps={{ 'aria-label': 'controlled' }}
+                    inputProps={{ "aria-label": "controlled" }}
                 />
             </Typography>
             <Box display="flex" alignItems="center" mt={1}>
                 Cout:
-                <Rating
-                    name="action-points-cost"
-                    readOnly
-                    max={3}
-                    value={3}
-                />
+                <Rating name="action-points-cost" readOnly max={3} value={3} />
                 <PaidIcon />
                 {`${2.19}€/j`}
             </Box>
