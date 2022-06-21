@@ -9,7 +9,6 @@ export { ConsumptionStats, ProductionStats };
 function ConsumptionStats(
   consumption: { id: number; consumption: number; playerCount: number }[]
 ) {
-  console.log(consumption);
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -35,7 +34,6 @@ function ConsumptionStats(
 }
 
 function ProductionStats(production: { id: number; production: number }[]) {
-  console.log(production);
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -66,12 +64,12 @@ function buildDataCons(
   return [
     {
       name: "Situation initiale",
-      team1: teams[0]?.consumption / teams[0]?.playerCount,
-      team2: teams[1]?.consumption / teams[1]?.playerCount,
-      team3: teams[2]?.consumption / teams[2]?.playerCount,
-      team4: teams[3]?.consumption / teams[3]?.playerCount,
-      team5: teams[4]?.consumption / teams[4]?.playerCount,
-      team6: teams[5]?.consumption / teams[5]?.playerCount,
+      team1: teams[0]?.consumption / teams[0]?.playerCount || 0,
+      team2: teams[1]?.consumption / teams[1]?.playerCount || 0,
+      team3: teams[2]?.consumption / teams[2]?.playerCount || 0,
+      team4: teams[3]?.consumption / teams[3]?.playerCount || 0,
+      team5: teams[4]?.consumption / teams[4]?.playerCount || 0,
+      team6: teams[5]?.consumption / teams[5]?.playerCount || 0,
     },
     {
       name: "Etape 1",
