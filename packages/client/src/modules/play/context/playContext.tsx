@@ -6,13 +6,14 @@ import { useMatch } from "react-router-dom";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
 import { Persona, persona } from "../../persona/persona";
-import { MAX_NUMBER_STEPS } from "../constants";
+import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
 import _ from "lodash";
 
 export {
   PlayProvider,
   RootPlayProvider,
   useCurrentPersona,
+  useCurrentStep,
   useMyTeam,
   useLoadedPlay as usePlay,
   usePersonaByStep,
@@ -92,6 +93,15 @@ function usePersonaByStep(): Record<string, Persona> {
 
 function useCurrentPersona() {
   return persona;
+}
+
+function useCurrentStep(): GameStep | null {
+  const playValue = usePlay();
+  if (!playValue) {
+    throw new Error("play context should have been loaded");
+  }
+  const game = playValue.game;
+  return STEPS?.[game.step] || null;
 }
 
 function usePersonaByUserId({

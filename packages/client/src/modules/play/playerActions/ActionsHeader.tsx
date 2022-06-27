@@ -7,14 +7,14 @@ import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
 import { useCurrentPersona } from "../context/playContext";
 import { usePlay } from "../context/playContext";
-import { stages } from "../../stages";
+import { Stage, stages } from "../../stages";
 
 export { ActionsHeader };
 
-function GetCurrentStageData() {
+function GetCurrentStageData(): Stage | null {
   const { game } = usePlay();
   const currentStage = stages.filter((stage) => stage.step === game.step)[0];
-  return currentStage;
+  return currentStage ?? null;
 }
 
 function ActionsHeader() {
@@ -25,7 +25,7 @@ function ActionsHeader() {
       <Box display="flex" alignItems="center">
         <ShoppingCartIcon />
         <Typography ml={1} mr={2} variant="h5">
-          {currentStage.title}
+          {currentStage?.title}
         </Typography>
         <HelpIcon />
       </Box>
@@ -56,10 +56,10 @@ function ActionPoints() {
         emptyIcon={
           <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
         }
-        max={currentStage.available_points}
+        max={currentStage?.available_points ?? 0}
         name="action-points"
         readOnly
-        value={currentStage.available_points - persona.points}
+        value={(currentStage?.available_points ?? 0) - persona.points}
       />
     </Box>
   );

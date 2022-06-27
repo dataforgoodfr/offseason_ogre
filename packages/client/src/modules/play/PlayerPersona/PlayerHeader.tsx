@@ -24,13 +24,26 @@ import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
-import { useMyTeam, usePlay } from "../context/playContext";
+import {
+  useCurrentStep,
+  useMyTeam,
+  usePersonaByUserId,
+  usePlay,
+} from "../context/playContext";
+import { persona } from "../../persona/persona";
+import { sumAllValues } from "../../persona";
 
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
   const { user } = useAuth();
   const { game } = usePlay();
+
+  const userIds = user && user.id ? [user.id] : [];
+
+  const personaByUserId = usePersonaByUserId({ userIds });
+  const userPersona = user?.id ? personaByUserId[user.id] : persona;
+
   const myTeam = useMyTeam();
   if (user === null) {
     throw new Error("User must be authentified");
@@ -52,7 +65,7 @@ function PlayerHeader() {
         >
           <GameStepper step={game.step} />
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            XXX <EmojiEventsRoundedIcon />
+            {userPersona.points || 0} <EmojiEventsRoundedIcon />
           </Typography>
         </Grid>
         <Grid
@@ -65,16 +78,19 @@ function PlayerHeader() {
           }}
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <FactoryRoundedIcon sx={{ mr: 1 }} /> XXX kWh
+            <FactoryRoundedIcon sx={{ mr: 1 }} />{" "}
+            {sumAllValues(userPersona.production) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <ShoppingCartRoundedIcon sx={{ mr: 1 }} /> XXX kWh
+            <ShoppingCartRoundedIcon sx={{ mr: 1 }} />{" "}
+            {sumAllValues(userPersona.consumption) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <PaidRoundedIcon sx={{ mr: 1 }} /> XXX €/J
+            <PaidRoundedIcon sx={{ mr: 1 }} /> {userPersona.budget || 0} €/J
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <WaterRoundedIcon sx={{ mr: 1 }} /> XXX T/an
+            <WaterRoundedIcon sx={{ mr: 1 }} />{" "}
+            {userPersona.carbonFootprint || 0} T/an
           </Typography>
         </Grid>
         <Grid
@@ -161,6 +177,9 @@ function Header({
 
 function Actions() {
   const gameId = useGameId();
+  const { game } = usePlay();
+  const currentStep = useCurrentStep();
+
   return (
     <Box
       sx={{
@@ -191,8 +210,9 @@ function Actions() {
           mt: 2,
           width: "200px",
         }}
+        disabled={!game.isStepActive}
       >
-        <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> Actions
+        <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> {currentStep?.label}
       </Button>
     </Box>
   );

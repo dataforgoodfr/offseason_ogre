@@ -21,7 +21,10 @@ function initWebSocket({ app }: { app: Express }) {
     socket.on("updateGame", (args: unknown) => {
       const schema = z.object({
         gameId: z.number(),
-        update: z.object({ step: z.number().optional() }),
+        update: z.object({
+          step: z.number().optional(),
+          isStepActive: z.boolean().optional(),
+        }),
       });
       const { gameId, update } = schema.parse(args);
       gameServices.update(gameId, update).then(() => {
