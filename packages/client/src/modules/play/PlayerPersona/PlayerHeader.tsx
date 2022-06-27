@@ -24,7 +24,7 @@ import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
-import { useMyTeam, usePlay } from "../context/playContext";
+import { useCurrentStep, useMyTeam, usePlay } from "../context/playContext";
 
 export { PlayerHeader, Header, Actions };
 
@@ -162,6 +162,7 @@ function Header({
 function Actions() {
   const gameId = useGameId();
   const { game } = usePlay();
+  const currentStep = useCurrentStep();
 
   return (
     <Box
@@ -195,7 +196,7 @@ function Actions() {
         }}
         disabled={!game.isStepActive}
       >
-        <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> Actions
+        <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> {currentStep?.label}
       </Button>
     </Box>
   );
