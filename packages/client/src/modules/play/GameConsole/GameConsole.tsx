@@ -10,11 +10,12 @@ import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 
 import { PlayBox } from "../Components";
-import { usePlay } from "../context/playContext";
+import { usePersonaByUserId, usePlay } from "../context/playContext";
 import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
+import { sumAllValues } from "../../persona";
 
 export { GameConsole };
 
@@ -42,14 +43,28 @@ function GameConsoleContent() {
 
 function MeanStatsConsole() {
   const { game } = usePlay();
+  const teamsValues = useTeamValues();
+
   return (
     <Box>
       <Grid container justifyContent="space-between">
         <Grid item xs={11} sm={5.75}>
-          <ConsumptionStats />
+          <ConsumptionStats
+            {...teamsValues.map((t) => {
+              return {
+                id: t.id,
+                consumption: t.consumption,
+                playerCount: t.playerCount,
+              };
+            })}
+          />
         </Grid>
         <Grid item xs={11} sm={5.75}>
-          <ProductionStats />
+          <ProductionStats
+            {...teamsValues.map((t) => {
+              return { id: t.id, production: t.production };
+            })}
+          />
         </Grid>
       </Grid>
       <Grid container justifyContent="center">
@@ -66,7 +81,10 @@ function MeanStatsConsole() {
                   sx={{ textAlign: "center", fontSize: "0.7em" }}
                 >
                   {" "}
-                  <GroupsIcon /> {`${team.name}:  250pts`}{" "}
+                  <GroupsIcon />{" "}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.points
+                  }`}
                 </Typography>
               );
             })}
@@ -85,7 +103,10 @@ function MeanStatsConsole() {
                   sx={{ textAlign: "center", fontSize: "0.7em" }}
                 >
                   {" "}
-                  <GroupsIcon /> {`${team.name}:  250T/an`}{" "}
+                  <GroupsIcon />{" "}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.carbonFootprint
+                  }T/an`}
                 </Typography>
               );
             })}
@@ -104,7 +125,10 @@ function MeanStatsConsole() {
                   sx={{ textAlign: "center", fontSize: "0.7em" }}
                 >
                   {" "}
-                  <GroupsIcon /> {`${team.name}:  250€/J`}{" "}
+                  <GroupsIcon />{" "}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.budget
+                  }€/J`}
                 </Typography>
               );
             })}
@@ -113,6 +137,40 @@ function MeanStatsConsole() {
       </Grid>
     </Box>
   );
+}
+
+function useTeamValues() {
+  const { game } = usePlay();
+  const userIds: number[] = [];
+  game.teams.map((team) =>
+    team.players.map(({ user }) => userIds.push(user?.id))
+  );
+  const personaByUserId = usePersonaByUserId({ userIds });
+  return game.teams.map((team) => {
+    return {
+      id: team.id,
+      playerCount: team.players.length,
+      points: team.players
+        .map(({ user }) => personaByUserId[user.id].points)
+        .reduce((a, b) => a + b, 0),
+      budget: team.players
+        .map(({ user }) => personaByUserId[user.id].budget)
+        .reduce((a, b) => a + b, 0),
+      carbonFootprint: team.players
+        .map(({ user }) => personaByUserId[user.id].carbonFootprint)
+        .reduce((a, b) => a + b, 0),
+      consumption: team.players
+        .map(({ user }) =>
+          parseInt(sumAllValues(personaByUserId[user.id].consumption))
+        )
+        .reduce((a, b) => a + b, 0),
+      production: team.players
+        .map(({ user }) =>
+          parseInt(sumAllValues(personaByUserId[user.id].production))
+        )
+        .reduce((a, b) => a + b, 0),
+    };
+  });
 }
 
 function TeamsConsole() {
