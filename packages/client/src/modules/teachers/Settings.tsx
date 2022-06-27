@@ -4,7 +4,6 @@ import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
 
-import { Layout } from "../administration/Layout";
 import { ErrorAlert, SuccessAlert } from "../alert";
 import FormInput from "../common/components/FormInput";
 import { User } from "../users/types";
@@ -44,76 +43,74 @@ function Settings(): JSX.Element {
   };
 
   return (
-    <Layout>
-      <>
-        {mutateUser.isSuccess && <SuccessAlert />}
-        {mutateUser.isError && (
-          <ErrorAlert
-            message={mutateUser.error.response?.data.message || "Unkown error"}
-          />
-        )}
+    <>
+      {mutateUser.isSuccess && <SuccessAlert />}
+      {mutateUser.isError && (
+        <ErrorAlert
+          message={mutateUser.error.response?.data.message || "Unkown error"}
+        />
+      )}
 
-        <Box alignItems="center" display="flex">
-          <Typography variant="h3">Mes informations générales</Typography>
-        </Box>
+      <Box alignItems="center" display="flex">
+        <Typography variant="h3">Mes informations générales</Typography>
+      </Box>
 
-        <Paper sx={{ mt: 2, p: 2, pt: 4, pb: 4 }}>
-          <form className="flex flex-col" onSubmit={handleSubmit(onValid)}>
-            <Container
-              sx={{ display: "flex", justifyContent: "space-between" }}
-              className="mt-2 mb-2"
+      <Paper sx={{ mt: 2, p: 2, pt: 4, pb: 4 }}>
+        <form className="flex flex-col" onSubmit={handleSubmit(onValid)}>
+          <Container
+            sx={{ display: "flex", justifyContent: "space-between" }}
+            className="mt-2 mb-2"
+          >
+            <FormInput
+              control={control}
+              name="firstName"
+              label="Prénom"
+              themeVariant="light"
+              variant="standard"
+            />
+            <FormInput
+              control={control}
+              name="lastName"
+              label="Nom"
+              themeVariant="light"
+              variant="standard"
+            />
+            <FormInput
+              control={control}
+              name="email"
+              label="Adresse mail"
+              themeVariant="light"
+              variant="standard"
+            />
+          </Container>
+          <Container
+            sx={{ display: "flex", alignItems: "end" }}
+            className="mt-4 mb-2"
+          >
+            <FormInput
+              control={control}
+              name="country"
+              label="Pays"
+              themeVariant="light"
+              variant="standard"
+            />
+          </Container>
+          <Container
+            sx={{ display: "flex", justifyContent: "end" }}
+            className="mt-4 mb-2"
+          >
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              sx={{ width: "161px" }}
+              startIcon={<SaveIcon />}
             >
-              <FormInput
-                control={control}
-                name="firstName"
-                label="Prénom"
-                themeVariant="light"
-                variant="standard"
-              />
-              <FormInput
-                control={control}
-                name="lastName"
-                label="Nom"
-                themeVariant="light"
-                variant="standard"
-              />
-              <FormInput
-                control={control}
-                name="email"
-                label="Adresse mail"
-                themeVariant="light"
-                variant="standard"
-              />
-            </Container>
-            <Container
-              sx={{ display: "flex", alignItems: "end" }}
-              className="mt-4 mb-2"
-            >
-              <FormInput
-                control={control}
-                name="country"
-                label="Pays"
-                themeVariant="light"
-                variant="standard"
-              />
-            </Container>
-            <Container
-              sx={{ display: "flex", justifyContent: "end" }}
-              className="mt-4 mb-2"
-            >
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                sx={{ width: "161px" }}
-                startIcon={<SaveIcon />}
-              >
-                Sauvegarder
-              </Button>
-            </Container>
-          </form>
-        </Paper>
-      </>
-    </Layout>
+              Sauvegarder
+            </Button>
+          </Container>
+        </form>
+      </Paper>
+    </>
   );
 }

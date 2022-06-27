@@ -8,6 +8,7 @@ import { Stats } from "./modules/play/Stats";
 import { PlayerActions } from "./modules/play/playerActions";
 import { Players } from "./modules/players";
 import { Settings, Teachers } from "./modules/teachers";
+import { Layout as AdministrationLayout } from "./modules/administration";
 
 export { AuthenticatedApp };
 
@@ -18,7 +19,7 @@ function AuthenticatedApp() {
   }
   return (
     <Routes>
-      <Route path="administration">
+      <Route path="administration" element={<AdministrationLayout />}>
         <Route path="games" element={<Games />} />
         <Route path="games/:id" element={<Game />} />
         <Route path="players" element={<Players />} />

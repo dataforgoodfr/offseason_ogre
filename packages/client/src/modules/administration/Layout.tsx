@@ -7,12 +7,14 @@ import ListSubheader from "@mui/material/ListSubheader";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
-import { Link, Navigate, useMatch } from "react-router-dom";
+import { Link, Navigate, Outlet, useMatch } from "react-router-dom";
 import GamesIcon from "@mui/icons-material/Games";
 import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
 import SettingsIcon from "@mui/icons-material/Settings";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
+  Button,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -29,15 +31,10 @@ const drawerWidth: number = 240;
 
 export { Layout };
 
-function Layout({
-  children,
-  renderLeftTool = () => <></>,
-}: {
-  children: JSX.Element;
-  renderLeftTool?: () => JSX.Element;
-}) {
+function Layout() {
   const { user } = useAuth();
   const theme = useTheme();
+  const isGameAdministraionRoute = useMatch(`administration/games/:gameId/*`);
 
   if (!user?.isTeacher) {
     return <Navigate to="/" />;
@@ -51,7 +48,7 @@ function Layout({
             pr: "24px", // keep right padding when drawer closed
           }}
         >
-          {renderLeftTool()}
+          {isGameAdministraionRoute ? renderBackButton() : <></>}
           <Typography
             component="h1"
             variant="h6"
@@ -103,10 +100,25 @@ function Layout({
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
-          {children}
+          <Outlet />
         </Container>
       </Box>
     </Box>
+  );
+}
+
+function renderBackButton(): JSX.Element {
+  return (
+    <>
+      <Button component={Link} to="/administration/games" sx={{ mr: 2 }}>
+        <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
+      </Button>
+      <Divider
+        orientation="vertical"
+        color="secondary"
+        sx={{ height: (theme) => theme.spacing(4), mr: 3 }}
+      />
+    </>
   );
 }
 
