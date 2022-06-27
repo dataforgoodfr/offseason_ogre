@@ -196,6 +196,16 @@ function Header(props: any) {
   const { game, updateGame } = usePlay();
   const theme = useTheme();
 
+  const startStepLabel = `Lancer l'étape ${game.step + 1}`;
+  const stopStepLabel = `Terminer l'étape ${game.step + 1}`;
+
+  const startStep = () => {
+    updateGame({ isStepActive: true });
+  };
+  const stopStep = () => {
+    updateGame({ step: game.step + 1, isStepActive: false });
+  };
+
   return (
     <PlayBox>
       <Grid container>
@@ -225,9 +235,10 @@ function Header(props: any) {
             variant="contained"
             color={"secondary"}
             sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-            onClick={() => updateGame({ step: ++game.step })}
+            onClick={game.isStepActive ? stopStep : startStep}
           >
-            Passer à l'étape suivante <ArrowForwardIcon />
+            {game.isStepActive ? stopStepLabel : startStepLabel}
+            <ArrowForwardIcon />
           </Button>
         </Grid>
       </Grid>
