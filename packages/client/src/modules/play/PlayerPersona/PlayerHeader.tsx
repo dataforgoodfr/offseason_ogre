@@ -161,6 +161,8 @@ function Header({
 
 function Actions() {
   const gameId = useGameId();
+  const { game } = usePlay();
+
   return (
     <Box
       sx={{
@@ -191,6 +193,7 @@ function Actions() {
           mt: 2,
           width: "200px",
         }}
+        disabled={!game.isStepActive}
       >
         <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> Actions
       </Button>
