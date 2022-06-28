@@ -34,7 +34,7 @@ export { Layout };
 function Layout() {
   const { user } = useAuth();
   const theme = useTheme();
-  const isGameAdministraionRoute = useMatch(`administration/games/:gameId/*`);
+  const isGameAdministrationRoute = useMatch(`administration/games/:gameId/*`);
 
   if (!user?.isTeacher) {
     return <Navigate to="/" />;
@@ -48,7 +48,7 @@ function Layout() {
             pr: "24px", // keep right padding when drawer closed
           }}
         >
-          {isGameAdministraionRoute ? renderBackButton() : <></>}
+          {isGameAdministrationRoute ? renderBackButton() : <></>}
           <Typography
             component="h1"
             variant="h6"
