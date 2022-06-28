@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { Layout } from "../administration/Layout";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -17,17 +16,15 @@ export { Games };
 
 function Games(): JSX.Element {
   return (
-    <Layout>
-      <>
-        <Box alignItems="center" display="flex">
-          <Typography variant="h3">Ateliers</Typography>
-          <NewGame />
-        </Box>
-        <Paper sx={{ mt: 2, p: 2 }}>
-          <GamesDataGrid />
-        </Paper>
-      </>
-    </Layout>
+    <>
+      <Box alignItems="center" display="flex">
+        <Typography variant="h3">Ateliers</Typography>
+        <NewGame />
+      </Box>
+      <Paper sx={{ mt: 2, p: 2 }}>
+        <GamesDataGrid />
+      </Paper>
+    </>
   );
 }
 

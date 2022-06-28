@@ -3,16 +3,12 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
-  Divider,
   Typography,
 } from "@mui/material";
-import { Layout } from "../../administration/Layout";
 import axios from "axios";
 import { useQuery } from "react-query";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { GameInfo } from "./GameInfo";
 import { IGame } from "../../../utils/types";
 import { ITeamWithPlayers } from "../../../utils/types";
@@ -35,33 +31,16 @@ function Game() {
   const game = result?.data?.document || null;
 
   return (
-    <Layout renderLeftTool={RenderLeftTool}>
-      <>
-        <Box sx={{ mt: 2 }}>
-          <Typography variant="h3" sx={{ mb: 2 }}>
-            Atelier {game?.id}
-          </Typography>
-          <GeneralInfo game={game} />
-          <Players game={game} />
-          <Preparation />
-          <AnimationAccordion game={game} />
-        </Box>
-      </>
-    </Layout>
-  );
-}
-
-function RenderLeftTool(): JSX.Element {
-  return (
     <>
-      <Button component={Link} to="/administration/games" sx={{ mr: 2 }}>
-        <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
-      </Button>
-      <Divider
-        orientation="vertical"
-        color="secondary"
-        sx={{ height: (theme) => theme.spacing(4), mr: 3 }}
-      />
+      <Box sx={{ mt: 2 }}>
+        <Typography variant="h3" sx={{ mb: 2 }}>
+          Atelier {game?.id}
+        </Typography>
+        <GeneralInfo game={game} />
+        <Players game={game} />
+        <Preparation />
+        <AnimationAccordion game={game} />
+      </Box>
     </>
   );
 }

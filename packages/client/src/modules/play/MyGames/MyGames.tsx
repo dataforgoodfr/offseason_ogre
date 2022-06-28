@@ -12,7 +12,6 @@ import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../../alert";
-import { PlayLayout } from "../PlayLayout";
 import { PlayBox } from "../Components";
 import {
   CustomContainer,
@@ -29,17 +28,15 @@ interface Registration {
 
 function MyGames() {
   return (
-    <PlayLayout title="Ateliers">
-      <CustomContainer maxWidth="lg">
-        <Typography variant="h3" color="secondary">
-          Mes ateliers
-        </Typography>
-        <CustomDivider>
-          <JoinGame />
-        </CustomDivider>
-        <MyGamesList />
-      </CustomContainer>
-    </PlayLayout>
+    <CustomContainer maxWidth="lg">
+      <Typography variant="h3" color="secondary">
+        Mes ateliers
+      </Typography>
+      <CustomDivider>
+        <JoinGame />
+      </CustomDivider>
+      <MyGamesList />
+    </CustomContainer>
   );
 }
 

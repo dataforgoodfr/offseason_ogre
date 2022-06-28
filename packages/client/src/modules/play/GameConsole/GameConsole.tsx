@@ -11,7 +11,6 @@ import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 
 import { PlayBox } from "../Components";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
-import { PlayLayout } from "../PlayLayout";
 import { useState } from "react";
 import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
@@ -20,11 +19,7 @@ import { sumAllValues } from "../../persona";
 export { GameConsole };
 
 function GameConsole() {
-  return (
-    <PlayLayout title="Console">
-      <GameConsoleContent />
-    </PlayLayout>
-  );
+  return <GameConsoleContent />;
 }
 
 function GameConsoleContent() {
