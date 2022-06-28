@@ -19,6 +19,7 @@ import {
   CustomDivider,
   CustomPaper,
   GameItemHost,
+  JoinGameInputWrapper,
 } from "./styles";
 
 export { MyGames };
@@ -118,7 +119,7 @@ function JoinGame() {
   return (
     <CustomPaper>
       <form onSubmit={handleSubmit(onValid)}>
-        <Grid container>
+        <JoinGameInputWrapper>
           <Controller
             control={control}
             name="gameId"
@@ -132,14 +133,10 @@ function JoinGame() {
               />
             )}
           />
-          <Button
-            type="submit"
-            sx={{ width: "200px", ml: 2 }}
-            variant="contained"
-          >
+          <Button type="submit" variant="contained">
             Rejoindre le jeu
           </Button>
-        </Grid>
+        </JoinGameInputWrapper>
       </form>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       {mutation.isSuccess && <SuccessAlert />}
