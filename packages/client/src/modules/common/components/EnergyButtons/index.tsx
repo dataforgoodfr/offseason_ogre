@@ -1,24 +1,33 @@
 import { Box, Button, useTheme, Tooltip } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { Persona } from "../../../persona/persona";
 
 export { EnergyButtons };
 
-function EnergyButtons({ data }: { data: any[] }) {
+function EnergyButtons({ persona }: { persona: Persona }) {
   const theme = useTheme();
 
   const energies = [
     {
-      name: "Energies grises (indirectes)",
       color: theme.palette.energy.grey,
-      Type: 3,
+      name: "Energies grises (indirectes)",
+      type: "greyEnergy",
     },
-    { name: "Energies fossiles", color: theme.palette.energy.fossil, Type: 2 },
     {
-      name: "Energies décarbonnées",
-      color: theme.palette.energy.renewable,
-      Type: 1,
+      color: theme.palette.energy.fossil,
+      name: "Energies fossiles",
+      type: "fossilEnergy",
     },
-    { name: "Energies mixtes", color: theme.palette.energy.mixte, Type: 0 },
+    {
+      color: theme.palette.energy.renewable,
+      name: "Energies décarbonnées",
+      type: "renewableEnergy",
+    },
+    {
+      color: theme.palette.energy.mixte,
+      name: "Energies mixtes",
+      type: "mixteEnergy",
+    },
   ];
 
   return (
@@ -31,21 +40,28 @@ function EnergyButtons({ data }: { data: any[] }) {
         mt: 2,
       }}
     >
-      {energies.map((item) => (
+      {energies.map((energyTypes) => (
         <Tooltip
-          key={item.Type}
-          title={data.map((elm) =>
-            elm.Type === item.Type ? `${elm.name} : ${elm.value} kWh - ` : ""
-          )}
+          key={energyTypes.type}
+          title={
+            <div style={{ whiteSpace: "pre-line" }}>
+              {persona.consumption
+                .filter(({ type }) => type === energyTypes.type)
+                .map(({ name, value }) => {
+                  return `${name} : ${value} kWh `;
+                })
+                .join("\n")}
+            </div>
+          }
           arrow
         >
           <Button
-            key={item.name}
+            key={energyTypes.name}
             variant="contained"
             sx={{
-              bgcolor: item.color,
+              bgcolor: energyTypes.color,
               "&:hover": {
-                backgroundColor: item.color,
+                backgroundColor: energyTypes.color,
                 filter: "brightness(85%)",
               },
               color: "white",
@@ -55,7 +71,7 @@ function EnergyButtons({ data }: { data: any[] }) {
               justifyContent: "space-between",
             }}
           >
-            {item.name} <ArrowForwardIosIcon />
+            {energyTypes.name} <ArrowForwardIosIcon />
           </Button>
         </Tooltip>
       ))}

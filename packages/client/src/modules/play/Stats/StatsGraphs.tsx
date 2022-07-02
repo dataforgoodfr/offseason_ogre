@@ -32,7 +32,7 @@ function StepDetails({ step }: { step: number | undefined }) {
   return (
     <>
       <DetailsEnergyBars persona={persona} />
-      <EnergyButtons data={data} />
+      <EnergyButtons persona={persona} />
     </>
   );
 }
