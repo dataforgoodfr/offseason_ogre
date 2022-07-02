@@ -12,7 +12,7 @@ function EnergyButtons({ data }: { data: any[] }) {
       color: theme.palette.energy.grey,
       Type: 3,
     },
-    { name: "Energies fossiles", color: theme.palette.energy.fossile, Type: 2 },
+    { name: "Energies fossiles", color: theme.palette.energy.fossil, Type: 2 },
     {
       name: "Energies décarbonnées",
       color: theme.palette.energy.renewable,

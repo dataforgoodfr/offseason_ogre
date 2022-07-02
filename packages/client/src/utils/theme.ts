@@ -20,7 +20,7 @@ const theme = createTheme({
     },
     energy: {
       grey: "#6C6C6C",
-      fossile: "#AF6A28",
+      fossil: "#AF6A28",
       mixte: "#F9C74F",
       renewable: "#84BDF0",
     },
@@ -44,7 +44,7 @@ declare module "@mui/material/styles" {
 
 interface EnergyPalette {
   grey: string;
-  fossile: string;
+  fossil: string;
   mixte: string;
   renewable: string;
 }

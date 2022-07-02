@@ -49,7 +49,7 @@ function StackedEnergyBars({
         />
         <Bar
           dataKey="fossilEnergy"
-          fill={theme.palette.energy.fossile}
+          fill={theme.palette.energy.fossil}
           stackId="a"
           name={translateLabel("fossilEnergy")}
           unit="kWh"

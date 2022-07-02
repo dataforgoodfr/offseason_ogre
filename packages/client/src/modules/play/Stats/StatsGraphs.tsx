@@ -17,7 +17,6 @@ function StatsGraphs() {
       <StackedEnergyBars
         data={useStackedEnergyData()}
         onClick={({ activeTooltipIndex }) => {
-          console.log("activeTooltipIndex", activeTooltipIndex);
           setSelectedStep(activeTooltipIndex);
         }}
       />
