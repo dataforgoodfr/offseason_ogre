@@ -10,25 +10,31 @@ import { sumFor } from "../../persona";
 export { StatsGraphs };
 
 function StatsGraphs() {
-  const [selectedIndex, setSelectedIndex] = React.useState<number>();
+  const [step, setSelectedStep] = React.useState<number>();
 
   return (
     <PlayBox>
       <StackedEnergyBars
         data={useStackedEnergyData()}
         onClick={({ activeTooltipIndex }) => {
-          setSelectedIndex(activeTooltipIndex);
+          console.log("activeTooltipIndex", activeTooltipIndex);
+          setSelectedStep(activeTooltipIndex);
         }}
       />
-      {typeof selectedIndex !== "undefined" ? (
-        <>
-          <DetailsEnergyBars data={data} />
-          <EnergyButtons data={data} />
-        </>
-      ) : (
-        <></>
-      )}
+      {<StepDetails step={step} />}
     </PlayBox>
+  );
+}
+
+function StepDetails({ step }: { step: number | undefined }) {
+  const personaByStep = usePersonaByStep();
+  if (typeof step === "undefined") return <></>;
+  const persona = personaByStep[step];
+  return (
+    <>
+      <DetailsEnergyBars persona={persona} />
+      <EnergyButtons data={data} />
+    </>
   );
 }
 

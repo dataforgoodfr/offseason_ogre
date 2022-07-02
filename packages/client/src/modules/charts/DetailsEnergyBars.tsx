@@ -8,10 +8,11 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
+import { Persona } from "../persona/persona";
 
 export { DetailsEnergyBars };
 
-function DetailsEnergyBars({ data }: { data: any[] }) {
+function DetailsEnergyBars({ persona }: { persona: Persona }) {
   const colors = ["#F9C74F", "#84BDF0", "#AF6A28", "Grey"];
   return (
     <Card
@@ -28,7 +29,7 @@ function DetailsEnergyBars({ data }: { data: any[] }) {
       <BarChart
         width={500}
         height={550}
-        data={data}
+        data={persona.consumption}
         layout="vertical"
         margin={{
           top: 5,
@@ -42,8 +43,8 @@ function DetailsEnergyBars({ data }: { data: any[] }) {
         <YAxis type="category" width={160} dataKey="name" />
         <Tooltip />
         <Bar dataKey="value" unit="kWh">
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={colors[entry.Type]} />
+          {persona.consumption.map(({ name }) => (
+            <Cell key={`cell-${name}`} fill={colors[0]} />
           ))}
         </Bar>
       </BarChart>
