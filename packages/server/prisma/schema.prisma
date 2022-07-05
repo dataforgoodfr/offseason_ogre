@@ -64,8 +64,7 @@ model Action {
   name      String  @unique
   step      Int
   points    Int
-  cost      Int
-  category  String
+  cost      Float
   players   PlayerActions[]
 }
 
