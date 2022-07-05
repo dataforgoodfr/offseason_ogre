@@ -51,11 +51,7 @@ function DetailsEnergyBars({ persona }: { persona: Persona }) {
             return (
               <Cell
                 key={`cell-${name}`}
-                fill={
-                  theme.palette.energy[
-                    type.slice(0, -6) as keyof typeof theme.palette.energy
-                  ] || "blue"
-                }
+                fill={theme.palette.energy[type] || "blue"}
               />
             );
           })}

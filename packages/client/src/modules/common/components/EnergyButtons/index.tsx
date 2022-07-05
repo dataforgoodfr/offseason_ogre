@@ -11,22 +11,22 @@ function EnergyButtons({ persona }: { persona: Persona }) {
     {
       color: theme.palette.energy.grey,
       name: "Energies grises (indirectes)",
-      type: "greyEnergy",
+      type: "grey",
     },
     {
       color: theme.palette.energy.fossil,
       name: "Energies fossiles",
-      type: "fossilEnergy",
+      type: "fossil",
     },
     {
       color: theme.palette.energy.renewable,
       name: "Energies décarbonnées",
-      type: "renewableEnergy",
+      type: "renewable",
     },
     {
       color: theme.palette.energy.mixte,
       name: "Energies mixtes",
-      type: "mixteEnergy",
+      type: "mixte",
     },
   ];
 

@@ -43,10 +43,10 @@ function useStackedEnergyData() {
     const persona = personaByStep[step];
     return {
       name: step ? `Etape ${step}` : "Initial",
-      renewableEnergy: sumFor(persona.consumption, "renewableEnergy"),
-      fossilEnergy: sumFor(persona.consumption, "fossilEnergy"),
-      mixteEnergy: sumFor(persona.consumption, "mixteEnergy"),
-      greyEnergy: sumFor(persona.consumption, "greyEnergy"),
+      renewable: sumFor(persona.consumption, "renewable"),
+      fossil: sumFor(persona.consumption, "fossil"),
+      mixte: sumFor(persona.consumption, "mixte"),
+      grey: sumFor(persona.consumption, "grey"),
     };
   });
 }
