@@ -11,12 +11,11 @@ import { ActionsHeader } from "./ActionsHeader";
 
 import { useQuery } from "react-query";
 import axios from "axios";
-import { CircularProgress, useTheme } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
 export { Actions };
 
 function Actions() {
-
   return (
     <PlayBox>
       <ActionsHeader />
@@ -35,19 +34,21 @@ function ActionsLayout() {
   const actions = query?.data?.data?.actions ?? [];
 
   return (
-    <Box>{actions.map((action) => {
-      return (
-        <ActionLayout
-          key={action.id}
-          title={action.name}
-          cost={action.cost}
-          points={action.points}
-        >
-          <Typography>Caractéristiques.</Typography>
-        </ActionLayout>
-      )})}
+    <Box>
+      {actions.map((action) => {
+        return (
+          <ActionLayout
+            key={action.id}
+            title={action.name}
+            cost={action.cost}
+            points={action.points}
+          >
+            <Typography>Caractéristiques.</Typography>
+          </ActionLayout>
+        );
+      })}
     </Box>
-  )
+  );
 }
 
 const CustomCheckbox = styled(Checkbox)(() => ({
@@ -60,7 +61,7 @@ function ActionLayout({
   children,
   title,
   cost,
-  points
+  points,
 }: {
   children: JSX.Element;
   title: string;

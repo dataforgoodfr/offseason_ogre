@@ -20,6 +20,7 @@ function GetCurrentStageData(): Stage | null {
 function ActionsHeader() {
   const persona = useCurrentPersona();
   const currentStage = GetCurrentStageData();
+
   return (
     <Box mt={2} mb={2}>
       <Box display="flex" alignItems="center">

@@ -1,7 +1,11 @@
 import { database } from ".";
 
+import { Action } from "../modules/actions/types";
+
 // eslint-disable-next-line no-console
 console.log("Starting seeding...");
+
+const actions = [...getActionInformation()] as Action[];
 
 async function seed() {
   await database.$connect();
@@ -17,8 +21,8 @@ async function seed() {
   });
 
   await database.action.createMany({
-    data: actions
-  })
+    data: actions,
+  });
 
   await database.$disconnect();
 }
@@ -28,12 +32,8 @@ seed().then(() => {
   console.log("Seeding done");
 });
 
-import { Action } from "../modules/actions/types"
-
-const actions = [...getActionInformation()] as Action[];
-
 function getActionInformation(): Action[] {
-  const actions = [
+  const actionsList = [
     {
       name: "Réduire ses déplacements en avion de 50%",
       points: 2,
@@ -55,44 +55,37 @@ function getActionInformation(): Action[] {
       cost: 0,
     },
     {
-      name: "Arrêter de consommer des produits laitiers (inutile si déjà végétalien)"
-      ,
+      name: "Arrêter de consommer des produits laitiers (inutile si déjà végétalien)",
       points: 1,
       cost: 0,
     },
     {
-      name: "Arrêter de consommer des œufs (inutile si déjà végétalien)"
-      ,
+      name: "Arrêter de consommer des œufs (inutile si déjà végétalien)",
       points: 1,
       cost: 0,
     },
     {
-      name: "Arrêter les boissons en cannette"
-      ,
+      name: "Arrêter les boissons en cannette",
       points: 1,
       cost: 0,
     },
     {
-      name: "Arrêter de consommer de la viande (inutile si déjà végétalien)"
-      ,
+      name: "Arrêter de consommer de la viande (inutile si déjà végétalien)",
       points: 2,
       cost: 0,
     },
     {
-      name: "Passer au zéro déchet alimentaire"
-      ,
+      name: "Passer au zéro déchet alimentaire",
       points: 2,
       cost: 0,
     },
     {
-      name: "Réduire ses déplacements en train de 50%"
-      ,
+      name: "Réduire ses déplacements en train de 50%",
       points: 1,
       cost: 0,
     },
     {
-      name: "Pratiquer l'éco-conduite"
-      ,
+      name: "Pratiquer l'éco-conduite",
       points: 1,
       cost: 0,
     },
@@ -102,8 +95,7 @@ function getActionInformation(): Action[] {
       cost: 0,
     },
     {
-      name: "Passer au véhicule électrique (laisser la valeur 0 si déjà équipé)"
-      ,
+      name: "Passer au véhicule électrique (laisser la valeur 0 si déjà équipé)",
       points: 3,
       cost: 2.19,
     },
@@ -113,10 +105,8 @@ function getActionInformation(): Action[] {
       cost: 0,
     },
   ];
-  return actions.map((action) => ({
+  return actionsList.map((action) => ({
     ...action,
     step: 1,
   }));
 }
-
-
