@@ -1,16 +1,11 @@
 import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import { Outlet } from "react-router-dom";
 import { LoggedUser } from "../../auth";
 import { useAuth } from "../../auth/authProvider";
 
 export { PlayLayout };
 
-function PlayLayout({
-  title,
-  children,
-}: {
-  title: string;
-  children: JSX.Element;
-}) {
+function PlayLayout() {
   const { user } = useAuth();
 
   return (
@@ -27,7 +22,7 @@ function PlayLayout({
             {user?.firstName || user?.lastName
               ? `${user.firstName} ${user.lastName} | `
               : ""}{" "}
-            {title}
+            {"Play"}
           </Typography>
           <LoggedUser />
         </Toolbar>
@@ -43,7 +38,7 @@ function PlayLayout({
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
-          {children}
+          <Outlet />
         </Container>
       </Box>
     </Box>

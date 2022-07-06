@@ -1,7 +1,13 @@
 import { Container, Divider, Grid, Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-export { CustomContainer, CustomDivider, CustomPaper, GameItemHost };
+export {
+  CustomContainer,
+  CustomDivider,
+  CustomPaper,
+  GameItemHost,
+  JoinGameInputWrapper,
+};
 
 const CustomContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
@@ -13,6 +19,9 @@ const CustomContainer = styled(Container)(({ theme }) => ({
 
 const CustomDivider = styled(Divider)(({ theme }) => ({
   marginTop: theme.spacing(4),
+  ".MuiDivider-wrapper": {
+    width: "100%",
+  },
   "&::before, &::after": {
     borderColor: theme.palette.secondary.light,
   },
@@ -33,6 +42,21 @@ const CustomPaper = styled(Paper)(({ theme }) => ({
   },
   [theme.breakpoints.up("sm")]: {
     width: "443px",
+  },
+}));
+
+const JoinGameInputWrapper = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    flexDirection: "row",
+    alignItems: "center",
+    "> *": {
+      alignSelf: "stretch",
+      width: "200px",
+    },
   },
 }));
 

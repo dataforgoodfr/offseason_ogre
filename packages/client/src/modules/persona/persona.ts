@@ -13,7 +13,7 @@ interface Persona {
 }
 
 const persona = {
-  budget: 17.7,
+  budget: 13.7,
   carbonFootprint: 32.73,
   points: 0,
   consumption,

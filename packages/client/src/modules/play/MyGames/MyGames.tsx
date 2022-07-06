@@ -12,13 +12,13 @@ import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../../alert";
-import { PlayLayout } from "../PlayLayout";
 import { PlayBox } from "../Components";
 import {
   CustomContainer,
   CustomDivider,
   CustomPaper,
   GameItemHost,
+  JoinGameInputWrapper,
 } from "./styles";
 
 export { MyGames };
@@ -29,17 +29,15 @@ interface Registration {
 
 function MyGames() {
   return (
-    <PlayLayout title="Ateliers">
-      <CustomContainer maxWidth="lg">
-        <Typography variant="h3" color="secondary">
-          Mes ateliers
-        </Typography>
-        <CustomDivider>
-          <JoinGame />
-        </CustomDivider>
-        <MyGamesList />
-      </CustomContainer>
-    </PlayLayout>
+    <CustomContainer maxWidth="lg">
+      <Typography variant="h3" color="secondary">
+        Mes ateliers
+      </Typography>
+      <CustomDivider>
+        <JoinGame />
+      </CustomDivider>
+      <MyGamesList />
+    </CustomContainer>
   );
 }
 
@@ -118,7 +116,7 @@ function JoinGame() {
   return (
     <CustomPaper>
       <form onSubmit={handleSubmit(onValid)}>
-        <Grid container>
+        <JoinGameInputWrapper>
           <Controller
             control={control}
             name="gameId"
@@ -132,14 +130,10 @@ function JoinGame() {
               />
             )}
           />
-          <Button
-            type="submit"
-            sx={{ width: "200px", ml: 2 }}
-            variant="contained"
-          >
+          <Button type="submit" variant="contained">
             Rejoindre le jeu
           </Button>
-        </Grid>
+        </JoinGameInputWrapper>
       </form>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       {mutation.isSuccess && <SuccessAlert />}
