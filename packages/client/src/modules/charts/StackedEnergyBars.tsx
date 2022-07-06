@@ -34,24 +34,24 @@ function StackedEnergyBars({
         <Legend />
         <Bar
           barSize={25}
-          dataKey="renewableEnergy"
+          dataKey="renewable"
           fill={theme.palette.energy.renewable}
-          name={translateLabel("renewableEnergy")}
+          name={translateLabel("renewable")}
           stackId="a"
           unit="kWh"
         />
         <Bar
-          dataKey="mixteEnergy"
+          dataKey="mixte"
           fill={theme.palette.energy.mixte}
-          name={translateLabel("mixteEnergy")}
+          name={translateLabel("mixte")}
           stackId="a"
           unit="kWh"
         />
         <Bar
-          dataKey="fossilEnergy"
-          fill={theme.palette.energy.fossile}
+          dataKey="fossil"
+          fill={theme.palette.energy.fossil}
           stackId="a"
-          name={translateLabel("fossilEnergy")}
+          name={translateLabel("fossil")}
           unit="kWh"
         />
         <Bar
@@ -71,11 +71,11 @@ function StackedEnergyBars({
           unit="kWh"
         />
         <Bar
-          dataKey="greyEnergy"
+          dataKey="grey"
           stackId="a"
           fill={theme.palette.energy.grey}
           unit="kWh"
-          name={translateLabel("greyEnergy")}
+          name={translateLabel("grey")}
         />
       </BarChart>
     </Card>
@@ -84,10 +84,10 @@ function StackedEnergyBars({
 
 function translateLabel(value: string): string {
   const translations = {
-    fossilEnergy: "Energie fossile",
-    greyEnergy: "Energie grise",
-    renewableEnergy: "Energie renouvelable",
-    mixteEnergy: "Energie mixte",
+    fossil: "Energie fossile",
+    grey: "Energie grise",
+    renewable: "Energie renouvelable",
+    mixte: "Energie mixte",
     hydroProduction: "Production offshore",
     terrestrialProduction: "Production terrestre",
   } as Record<string, string>;

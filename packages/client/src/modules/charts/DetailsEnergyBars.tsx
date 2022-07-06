@@ -1,4 +1,4 @@
-import { Card } from "@mui/material";
+import { Card, useTheme } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -8,11 +8,13 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
+import { Persona } from "../persona/persona";
+import { translateConsumptionName } from "../translations";
 
 export { DetailsEnergyBars };
 
-function DetailsEnergyBars({ data }: { data: any[] }) {
-  const colors = ["#F9C74F", "#84BDF0", "#AF6A28", "Grey"];
+function DetailsEnergyBars({ persona }: { persona: Persona }) {
+  const theme = useTheme();
   return (
     <Card
       sx={{
@@ -28,7 +30,10 @@ function DetailsEnergyBars({ data }: { data: any[] }) {
       <BarChart
         width={500}
         height={550}
-        data={data}
+        data={persona.consumption.map((item) => ({
+          ...item,
+          name: translateConsumptionName(item.name),
+        }))}
         layout="vertical"
         margin={{
           top: 5,
@@ -42,9 +47,14 @@ function DetailsEnergyBars({ data }: { data: any[] }) {
         <YAxis type="category" width={160} dataKey="name" />
         <Tooltip />
         <Bar dataKey="value" unit="kWh">
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={colors[entry.Type]} />
-          ))}
+          {persona.consumption.map(({ name, type }) => {
+            return (
+              <Cell
+                key={`cell-${name}`}
+                fill={theme.palette.energy[type] || "blue"}
+              />
+            );
+          })}
         </Bar>
       </BarChart>
     </Card>

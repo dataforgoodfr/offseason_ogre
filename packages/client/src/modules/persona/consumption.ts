@@ -6,11 +6,7 @@ interface ConsumptionDatum {
   type: ConsumptionType;
   value: number;
 }
-type ConsumptionType =
-  | "fossilEnergy"
-  | "greyEnergy"
-  | "mixteEnergy"
-  | "renewableEnergy";
+type ConsumptionType = "fossil" | "grey" | "mixte" | "renewable";
 
 const consumption = [
   ...getFossilEnergies(),
@@ -19,7 +15,7 @@ const consumption = [
   ...getRenewableEnergies(),
 ] as ConsumptionDatum[];
 
-function getFossilEnergies(): (ConsumptionDatum & { type: "fossilEnergy" })[] {
+function getFossilEnergies(): (ConsumptionDatum & { type: "fossil" })[] {
   const energies = [
     { name: "fossilCar", value: 25.41 },
     { name: "fossilHeating", value: 27.4 },
@@ -27,12 +23,12 @@ function getFossilEnergies(): (ConsumptionDatum & { type: "fossilEnergy" })[] {
   ];
   return energies.map((energie) => ({
     ...energie,
-    type: "fossilEnergy",
+    type: "fossil",
   }));
 }
 
 function getRenewableEnergies(): (ConsumptionDatum & {
-  type: "renewableEnergy";
+  type: "renewable";
 })[] {
   const energies = [
     { name: "airConditionning", value: 0 },
@@ -45,19 +41,19 @@ function getRenewableEnergies(): (ConsumptionDatum & {
   ];
   return energies.map((energie) => ({
     ...energie,
-    type: "renewableEnergy",
+    type: "renewable",
   }));
 }
 
-function getMixteEnergies(): (ConsumptionDatum & { type: "mixteEnergy" })[] {
+function getMixteEnergies(): (ConsumptionDatum & { type: "mixte" })[] {
   const energies = [{ name: "food", value: 14.9 }];
   return energies.map((energie) => ({
     ...energie,
-    type: "mixteEnergy",
+    type: "mixte",
   }));
 }
 
-function getGreyEnergies(): (ConsumptionDatum & { type: "greyEnergy" })[] {
+function getGreyEnergies(): (ConsumptionDatum & { type: "grey" })[] {
   const energies = [
     { name: "greyCar", value: 42 },
     { name: "greyHouse", value: 3 },
@@ -68,6 +64,6 @@ function getGreyEnergies(): (ConsumptionDatum & { type: "greyEnergy" })[] {
   ];
   return energies.map((datum) => ({
     ...datum,
-    type: "greyEnergy",
+    type: "grey",
   }));
 }
