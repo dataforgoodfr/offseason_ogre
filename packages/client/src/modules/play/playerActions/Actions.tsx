@@ -9,29 +9,45 @@ import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 
+import { useQuery } from "react-query";
+import axios from "axios";
+import { CircularProgress, useTheme } from "@mui/material";
+
 export { Actions };
 
 function Actions() {
+
   return (
     <PlayBox>
       <ActionsHeader />
-      <ActionLayout title="Passer au véhicule électrique">
-        <Typography>Caractéristiques.</Typography>
-      </ActionLayout>
-      <ActionLayout title="Déplacement en voiture">
-        <Typography>Caractéristiques.</Typography>
-      </ActionLayout>
-      <ActionLayout title="Moins d'équipement numérique">
-        <Typography>Caractéristiques.</Typography>
-      </ActionLayout>
-      <ActionLayout title="Arrêt boissons canettes">
-        <Typography>Caractéristiques.</Typography>
-      </ActionLayout>
-      <ActionLayout title="Acheter moins de vêtements">
-        <Typography>Caractéristiques.</Typography>
-      </ActionLayout>
+      <ActionsLayout />
     </PlayBox>
   );
+}
+
+function ActionsLayout() {
+  const query = useQuery("actions", () => {
+    return axios.get<undefined, { data: { actions: any[] } }>("/api/actions");
+  });
+  if (query.isLoading) {
+    return <CircularProgress />;
+  }
+  const actions = query?.data?.data?.actions ?? [];
+
+  return (
+    <Box>{actions.map((action) => {
+      return (
+        <ActionLayout
+          key={action.id}
+          title={action.name}
+          cost={action.cost}
+          points={action.points}
+        >
+          <Typography>Caractéristiques.</Typography>
+        </ActionLayout>
+      )})}
+    </Box>
+  )
 }
 
 const CustomCheckbox = styled(Checkbox)(() => ({
@@ -43,9 +59,13 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 function ActionLayout({
   children,
   title,
+  cost,
+  points
 }: {
   children: JSX.Element;
   title: string;
+  cost: number;
+  points: number;
 }) {
   const [checked, setChecked] = React.useState(false);
 
@@ -71,10 +91,10 @@ function ActionLayout({
         />
       </Typography>
       <Box display="flex" alignItems="center" mt={1}>
-        Cout:
-        <Rating name="action-points-cost" readOnly max={3} value={3} />
+        Coût :
+        <Rating name="action-points-cost" readOnly max={3} value={points} />
         <PaidIcon />
-        {`${2.19}€/j`}
+        {`${cost}€/j`}
       </Box>
     </Box>
   );
