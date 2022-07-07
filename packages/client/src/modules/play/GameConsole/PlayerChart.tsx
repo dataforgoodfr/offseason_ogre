@@ -25,10 +25,10 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
       const playerPersona = personaByUserId[userId];
       return {
         name: buildName(player.user),
-        fossilEnergy: sumFor(playerPersona.consumption, "fossilEnergy"),
-        greyEnergy: sumFor(playerPersona.consumption, "greyEnergy"),
-        mixteEnergy: sumFor(playerPersona.consumption, "mixteEnergy"),
-        renewableEnergy: sumFor(playerPersona.consumption, "renewableEnergy"),
+        fossil: sumFor(playerPersona.consumption, "fossil"),
+        grey: sumFor(playerPersona.consumption, "grey"),
+        mixte: sumFor(playerPersona.consumption, "mixte"),
+        renewable: sumFor(playerPersona.consumption, "renewable"),
       };
     }),
     firstPersona
