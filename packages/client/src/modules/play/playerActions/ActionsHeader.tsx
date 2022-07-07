@@ -6,20 +6,12 @@ import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
 import { useCurrentPersona } from "../context/playContext";
-import { usePlay } from "../context/playContext";
-import { Stage, stages } from "../../stages";
+import { Stage } from "../../stages";
 
 export { ActionsHeader };
 
-function GetCurrentStageData(): Stage | null {
-  const { game } = usePlay();
-  const currentStage = stages.filter((stage) => stage.step === game.step)[0];
-  return currentStage ?? null;
-}
-
-function ActionsHeader() {
+function ActionsHeader({ currentStage }: { currentStage: Stage }) {
   const persona = useCurrentPersona();
-  const currentStage = GetCurrentStageData();
 
   return (
     <Box mt={2} mb={2}>
@@ -42,14 +34,13 @@ function ActionsHeader() {
           ml={1}
         >{`Bilan carbone: ${persona.carbonFootprint} kgCO2/an`}</Typography>
       </Box>
-      <ActionPoints />
+      <ActionPoints available_points={currentStage?.available_points} />
     </Box>
   );
 }
 
-function ActionPoints() {
+function ActionPoints({ available_points }: { available_points: number }) {
   const persona = useCurrentPersona();
-  const currentStage = GetCurrentStageData();
   return (
     <Box display="flex" alignItems="center" mt={1}>
       <Typography>PA utilisés:</Typography>
@@ -57,10 +48,10 @@ function ActionPoints() {
         emptyIcon={
           <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
         }
-        max={currentStage?.available_points ?? 0}
+        max={available_points ?? 0}
         name="action-points"
         readOnly
-        value={(currentStage?.available_points ?? 0) - persona.points}
+        value={(available_points ?? 0) - persona.points}
       />
     </Box>
   );

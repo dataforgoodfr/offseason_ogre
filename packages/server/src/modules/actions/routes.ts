@@ -6,4 +6,5 @@ export { router };
 
 const router = express.Router();
 
-router.get("/", asyncErrorHandler(controllers.getActionsController));
+router.get("/", asyncErrorHandler(controllers.getAllActionsController));
+router.get("/:step", asyncErrorHandler(controllers.getActionsController));

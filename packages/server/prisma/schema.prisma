@@ -60,12 +60,12 @@ model Team {
 }
 
 model Action {
-  id        Int     @id @default(autoincrement())
-  name      String  @unique
-  step      Int
-  points    Int
-  cost      Float
-  players   PlayerActions[]
+  id                Int     @id @default(autoincrement())
+  name              String  @unique
+  step              Int
+  actionPointCost   Int
+  financialCost     Float
+  players           PlayerActions[]
 }
 
 model PlayerActions {

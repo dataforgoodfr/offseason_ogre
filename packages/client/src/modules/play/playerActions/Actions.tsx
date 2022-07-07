@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
+import { Stage } from "../../stages";
 
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -15,18 +16,20 @@ import { CircularProgress } from "@mui/material";
 
 export { Actions };
 
-function Actions() {
+function Actions({ currentStage }: { currentStage: Stage }) {
   return (
     <PlayBox>
-      <ActionsHeader />
-      <ActionsLayout />
+      <ActionsHeader currentStage={currentStage} />
+      <ActionsLayout step={currentStage.step} />
     </PlayBox>
   );
 }
 
-function ActionsLayout() {
+function ActionsLayout({ step }: { step: number }) {
   const query = useQuery("actions", () => {
-    return axios.get<undefined, { data: { actions: any[] } }>("/api/actions");
+    return axios.get<undefined, { data: { actions: any[] } }>(
+      `/api/actions/${step}`
+    );
   });
   if (query.isLoading) {
     return <CircularProgress />;
@@ -40,8 +43,8 @@ function ActionsLayout() {
           <ActionLayout
             key={action.id}
             title={action.name}
-            cost={action.cost}
-            points={action.points}
+            financialCost={action.financialCost}
+            actionPointCost={action.actionPointCost}
           >
             <Typography>Caractéristiques.</Typography>
           </ActionLayout>
@@ -60,13 +63,13 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 function ActionLayout({
   children,
   title,
-  cost,
-  points,
+  financialCost,
+  actionPointCost,
 }: {
-  children: JSX.Element;
+  children?: JSX.Element;
   title: string;
-  cost: number;
-  points: number;
+  financialCost: number;
+  actionPointCost: number;
 }) {
   const [checked, setChecked] = React.useState(false);
 
@@ -93,9 +96,14 @@ function ActionLayout({
       </Typography>
       <Box display="flex" alignItems="center" mt={1}>
         Coût :
-        <Rating name="action-points-cost" readOnly max={3} value={points} />
+        <Rating
+          name="action-points-cost"
+          readOnly
+          max={3}
+          value={actionPointCost}
+        />
         <PaidIcon />
-        {`${cost}€/j`}
+        {`${financialCost}€/j`}
       </Box>
     </Box>
   );

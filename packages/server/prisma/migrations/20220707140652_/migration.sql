@@ -3,9 +3,8 @@ CREATE TABLE "Action" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "step" INTEGER NOT NULL,
-    "points" INTEGER NOT NULL,
-    "cost" INTEGER NOT NULL,
-    "category" TEXT NOT NULL,
+    "actionPointCost" INTEGER NOT NULL,
+    "financialCost" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "Action_pkey" PRIMARY KEY ("id")
 );
