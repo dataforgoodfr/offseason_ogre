@@ -14,7 +14,6 @@ function GetCurrentStageData(): Stage {
 
 function PlayerActions() {
   const currentStage = GetCurrentStageData();
-  console.log(currentStage);
   return (
     <Box>
       <Grid container direction="row">

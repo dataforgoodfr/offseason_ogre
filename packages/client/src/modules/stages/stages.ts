@@ -7,14 +7,14 @@ interface Action {
   name: string;
   actionPointCost: number;
   financialCost: number;
-  category: string;
+  category?: string;
 }
 
 interface Stage {
   title: string;
   step: number;
   available_points: number;
-  StageType: StageType;
+  type: StageType;
 }
 
 const stages = [...getStageInformation()] as Stage[];
@@ -25,25 +25,25 @@ function getStageInformation(): Stage[] {
       step: 1,
       title: "Choix de consommation 1",
       available_points: 12,
-      StageType: "consumption",
+      type: "consumption",
     },
     {
       step: 2,
       title: "Choix de production 1",
       available_points: 12,
-      StageType: "production",
+      type: "production",
     },
     {
       step: 3,
       title: "Choix de consommation 2",
       available_points: 12,
-      StageType: "consumption",
+      type: "consumption",
     },
     {
       step: 4,
       title: "Choix de production 2",
       available_points: 12,
-      StageType: "production",
+      type: "production",
     },
   ];
   return stages;
