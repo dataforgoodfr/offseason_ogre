@@ -9,11 +9,12 @@ export { PlayerActions, PlayerHeader };
 function GetCurrentStageData(): Stage {
   const { game } = usePlay();
   const currentStage = stages.filter((stage) => stage.step === game.step)[0];
-  return currentStage ?? 0;
+  return currentStage ?? stages.filter((stage) => stage.step === 1)[0];
 }
 
 function PlayerActions() {
   const currentStage = GetCurrentStageData();
+  console.log(currentStage);
   return (
     <Box>
       <Grid container direction="row">
