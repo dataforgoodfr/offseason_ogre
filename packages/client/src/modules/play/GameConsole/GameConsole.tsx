@@ -191,14 +191,17 @@ function Header(props: any) {
   const { game, updateGame } = usePlay();
   const theme = useTheme();
 
-  const startStepLabel = `Lancer l'étape ${game.step + 1}`;
-  const stopStepLabel = `Terminer l'étape ${game.step + 1}`;
+  const nextStepNumber = game.step + 1;
+  const currentStepNumber = game.step;
+
+  const startStepLabel = `Lancer l'étape ${nextStepNumber}`;
+  const stopStepLabel = `Terminer l'étape ${currentStepNumber}`;
 
   const startStep = () => {
-    updateGame({ isStepActive: true });
+    updateGame({ step: game.step + 1, isStepActive: true });
   };
   const stopStep = () => {
-    updateGame({ step: game.step + 1, isStepActive: false });
+    updateGame({ isStepActive: false });
   };
 
   return (

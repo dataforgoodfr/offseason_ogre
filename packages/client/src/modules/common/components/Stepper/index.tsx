@@ -29,7 +29,7 @@ function StyledStepper({ step }: { step: number }) {
   return (
     <MobileStepper
       variant="progress"
-      steps={MAX_NUMBER_STEPS}
+      steps={MAX_NUMBER_STEPS + 1}
       position="static"
       activeStep={step}
       sx={{
