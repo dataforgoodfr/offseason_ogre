@@ -28,8 +28,8 @@ function Actions({ currentStage }: { currentStage: Stage }) {
 }
 
 function ActionsLayout({ step }: { step: number }) {
-  const {game} = usePlay()
-  
+  const { game } = usePlay();
+
   const query = useQuery("actions", () => {
     return axios.get<undefined, { data: { playerActions: PlayerActions[] } }>(
       `/api/actions/me?step=${step}&gameId=${game.id}`
@@ -71,7 +71,7 @@ function ActionLayout({
   title,
   financialCost,
   actionPointCost,
-  isPerformed
+  isPerformed,
 }: {
   children?: JSX.Element;
   playerActionId: number;
@@ -80,17 +80,19 @@ function ActionLayout({
   actionPointCost: number;
   isPerformed: boolean;
 }) {
-  const {updatePlayerActions} = usePlay()
-  
+  const { updatePlayerActions } = usePlay();
+
   const [checked, setChecked] = React.useState(isPerformed);
 
   React.useEffect(() => {
-    setChecked(isPerformed)
-  }, [])
-  
+    setChecked(isPerformed);
+  }, []);
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-    updatePlayerActions([{id: playerActionId, isPerformed: event.target.checked}])
+    updatePlayerActions([
+      { id: playerActionId, isPerformed: event.target.checked },
+    ]);
   };
 
   return (
