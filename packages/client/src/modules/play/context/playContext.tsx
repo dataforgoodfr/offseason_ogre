@@ -23,6 +23,7 @@ export {
 interface IPlayContext {
   game: IGameWithTeams;
   updateGame: (update: Partial<IGame>) => void;
+  updatePlayerActions: (update: any) => void; 
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -58,8 +59,12 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     socket.emit("updateGame", { gameId, update });
   };
 
+  const updatePlayerActions = (playerActions: {id:number, isPerformed:boolean}[]) => {
+    socket.emit("updatePlayerActions", {update: {playerActions} });
+  };
+
   return (
-    <PlayContext.Provider value={{ game: gameWithTeams, updateGame }}>
+    <PlayContext.Provider value={{ game: gameWithTeams, updateGame, updatePlayerActions }}>
       {children}
     </PlayContext.Provider>
   );
