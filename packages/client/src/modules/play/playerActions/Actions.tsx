@@ -13,6 +13,8 @@ import { Stage } from "../../stages";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
+import { usePlay } from "../context/playContext";
+import { PlayerActions } from "../../../utils/types";
 
 export { Actions };
 
@@ -26,25 +28,29 @@ function Actions({ currentStage }: { currentStage: Stage }) {
 }
 
 function ActionsLayout({ step }: { step: number }) {
+  const {game} = usePlay()
+  
   const query = useQuery("actions", () => {
-    return axios.get<undefined, { data: { actions: any[] } }>(
-      `/api/actions/${step}`
+    return axios.get<undefined, { data: { playerActions: PlayerActions[] } }>(
+      `/api/actions/me?step=${step}&gameId=${game.id}`
     );
   });
   if (query.isLoading) {
     return <CircularProgress />;
   }
-  const actions = query?.data?.data?.actions ?? [];
+  const playerActions = query?.data?.data?.playerActions ?? [];
 
   return (
     <Box>
-      {actions.map((action) => {
+      {playerActions.map((playerAction) => {
         return (
           <ActionLayout
-            key={action.id}
-            title={action.name}
-            financialCost={action.financialCost}
-            actionPointCost={action.actionPointCost}
+            key={playerAction.id}
+            playerActionId={playerAction.id}
+            title={playerAction.action.name}
+            financialCost={playerAction.action.financialCost}
+            actionPointCost={playerAction.action.actionPointCost}
+            isPerformed={playerAction.isPerformed}
           >
             <Typography>Caractéristiques.</Typography>
           </ActionLayout>
@@ -61,21 +67,32 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 }));
 
 function ActionLayout({
-  children,
+  playerActionId,
   title,
   financialCost,
   actionPointCost,
+  isPerformed
 }: {
   children?: JSX.Element;
+  playerActionId: number;
   title: string;
   financialCost: number;
   actionPointCost: number;
+  isPerformed: boolean;
 }) {
-  const [checked, setChecked] = React.useState(false);
+  const {updatePlayerActions} = usePlay()
+  
+  const [checked, setChecked] = React.useState(isPerformed);
 
+  React.useEffect(() => {
+    setChecked(isPerformed)
+  }, [])
+  
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
+    updatePlayerActions([{id: playerActionId, isPerformed: event.target.checked}])
   };
+
   return (
     <Box
       sx={{
