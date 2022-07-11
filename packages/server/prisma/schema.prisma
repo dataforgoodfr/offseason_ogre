@@ -27,11 +27,11 @@ enum Status {
 }
 
 model Players {
-  game    Game @relation(fields: [gameId], references: [id])
+  game    Game            @relation(fields: [gameId], references: [id])
   gameId  Int
-  team    Team @relation(fields: [teamId], references: [id])
+  team    Team            @relation(fields: [teamId], references: [id])
   teamId  Int
-  user    User @relation(fields: [userId], references: [id])
+  user    User            @relation(fields: [userId], references: [id])
   userId  Int
   actions PlayerActions[]
 
@@ -60,19 +60,22 @@ model Team {
 }
 
 model Action {
-  id                Int     @id @default(autoincrement())
-  name              String  @unique
-  step              Int
-  actionPointCost   Int
-  financialCost     Float
-  players           PlayerActions[]
+  id              Int             @id @default(autoincrement())
+  name            String          @unique
+  step            Int
+  actionPointCost Int
+  financialCost   Float
+  players         PlayerActions[]
 }
 
 model PlayerActions {
-  id        Int     @id @default(autoincrement())
-  player    Players @relation(fields: [userId, gameId], references: [userId, gameId])
-  userId    Int
-  gameId    Int
-  action    Action @relation(fields: [actionId], references: [id])
-  actionId  Int
+  id          Int     @id @default(autoincrement())
+  player      Players @relation(fields: [userId, gameId], references: [userId, gameId])
+  userId      Int
+  gameId      Int
+  action      Action  @relation(fields: [actionId], references: [id])
+  actionId    Int
+  isPerformed Boolean @default(false)
+
+  @@unique([id, userId])
 }
