@@ -1,5 +1,3 @@
-import { Players } from "../../users/types";
-
 export type { Action, PlayerActions };
 
 interface Action {
@@ -11,6 +9,9 @@ interface Action {
 }
 
 interface PlayerActions {
-  player: Players;
-  action: Action[];
+  id: number;
+  userId: number;
+  gameId: number;
+  actionId: number;
+  isPerformed: boolean;
 }
