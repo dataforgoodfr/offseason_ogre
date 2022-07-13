@@ -1,3 +1,4 @@
+import cookie from "cookie";
 import { Socket } from "socket.io";
 import { z } from "zod";
 import { database } from "../../../database";
@@ -21,8 +22,9 @@ function handleUpdatePlayerActions(socket: Socket) {
       update: { playerActions },
     } = schema.parse(args);
 
-    const authToken = getAuthTokenFromCookies(socket.handshake.headers.cookie);
-    const user = await usersServices.authenticateUser(authToken);
+    const cookies = socket.handshake.headers.cookie || "";
+    const { authentificationToken } = cookie.parse(cookies);
+    const user = await usersServices.authenticateUser(authentificationToken);
 
     await Promise.all(
       playerActions.map((playerAction) =>
@@ -40,17 +42,4 @@ function handleUpdatePlayerActions(socket: Socket) {
       )
     );
   });
-}
-
-function getAuthTokenFromCookies(cookies?: string) {
-  try {
-    return (
-      cookies
-        ?.split("; ")
-        .find((row) => row.startsWith("authentificationToken="))
-        ?.split("=")[1] || ""
-    );
-  } catch (err) {
-    return "";
-  }
 }

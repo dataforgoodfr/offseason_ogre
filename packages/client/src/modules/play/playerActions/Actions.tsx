@@ -51,9 +51,7 @@ function ActionsLayout({ step }: { step: number }) {
             financialCost={playerAction.action.financialCost}
             actionPointCost={playerAction.action.actionPointCost}
             isPerformed={playerAction.isPerformed}
-          >
-            <Typography>Caractéristiques.</Typography>
-          </ActionLayout>
+          />
         );
       })}
     </Box>
@@ -73,7 +71,6 @@ function ActionLayout({
   actionPointCost,
   isPerformed,
 }: {
-  children?: JSX.Element;
   playerActionId: number;
   title: string;
   financialCost: number;
