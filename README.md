@@ -1,6 +1,6 @@
 # OGRE
 
-## Présentation workshop OGRE
+## OGRE workshop presentation
 
 Ogre is a recreational workshop to help understand orders of magnitude of energies and what it implies for the ecological transition.
 
@@ -15,26 +15,22 @@ Our goal is to develop a web application to digitalize OGRE's workshop. It will 
 OGRE uses a number of open source projects to work properly:
 
 - Backend
-  - **Node.js** - evented I/O for the backend
-  - **Express** - fast node.js network app framework
+  - **Node.js** - a JavaScript runtime
+  - **Express** - a web framework for node.js
 - Frontend
-  - **React** : Framework/library for front-end dev
+  - **React** - a JavaScript library for building user interfaces
 
 ## Development
 
 Node, npm, yarn and Docker must be installed locally.
 
-1. Run "yarn env:default" from root, it will set default .env values in server
+1. Run "yarn env:default" from root, it will set then default values in the file at /packages/server/.env
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
-3. Run "yarn db:up" from root, it will launch a postgre container
-4. Run "yarn db:migrate" from root, it creates the tables in the database
-5. Run "yarn workspace ogre-client dev" to launch client
-6. In another shell run "yarn workspace ogre-server db:generate" to generate Prisma client from schema.
-7. Run "yarn workspace ogre-server dev" to launch server
-
-### Running frontend and backend apps
-
-Please refer to README.md in `/server` and `/client` folders.
+3. Run "yarn db:up" from root, it will launch a container running a postGre database
+4. Run "yarn db:migrate" from root, it creates the tables in the database (must be run on a new database or after a schema change)
+5. Run "yarn workspace ogre-server db:generate" to generate the Prisma client from schema.
+6. Run "yarn workspace ogre-server dev" to launch server
+7. In another shell run "yarn workspace ogre-client dev" to launch client
 
 ## Deployment
 
@@ -49,14 +45,14 @@ A procfile is needed to run the PRISMA migrations.
 https://github.com/prisma/prisma-examples/tree/latest/deployment-platforms/heroku
 https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-heroku
 
-### Testing production build locally
+### Testing the production build locally
 
 Node, npm, yarn and Docker must be installed locally.
 
 1. Run "yarn env:default" from root, it will set default .env values in server
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
 3. Run "yarn build" from root, it will transpile all typescript in all workspaces
-4. Run "yarn db:up" from root, it will lauch a postgre container
+4. Run "yarn db:up" from root, it will launch a postGre container
 5. Run "yarn db:migrate" from root, it creates the tables in the database
 6. Run "yarn start" from root
 
@@ -70,4 +66,4 @@ Then chose an issue and there you go!
 
 ## License
 
-The project is under MIT licence. For more informations please read [LICENCE](https://github.com/dataforgoodfr/offseason_ogre/blob/master/LICENSE) file
+The project is under MIT license. For more information please read [LICENSE](https://github.com/dataforgoodfr/offseason_ogre/blob/master/LICENSE) file
