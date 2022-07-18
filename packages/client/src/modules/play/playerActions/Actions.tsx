@@ -1,18 +1,12 @@
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { Box, Rating } from "@mui/material";
+import { Box, CircularProgress, Rating, Typography } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
-
-import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
-
-import { useQuery } from "react-query";
-import axios from "axios";
-import { CircularProgress } from "@mui/material";
 import { usePlay } from "../context/playContext";
 import { PlayerActions } from "../../../utils/types";
 
@@ -28,17 +22,29 @@ function Actions({ currentStage }: { currentStage: Stage }) {
 }
 
 function ActionsLayout({ step }: { step: number }) {
-  const { game } = usePlay();
+  const {
+    fetchPlayerActions,
+    playerActions,
+    setPlayerActionsLocal,
+    playerActionsQuery,
+  } = usePlay();
 
-  const query = useQuery("actions", () => {
-    return axios.get<undefined, { data: { playerActions: PlayerActions[] } }>(
-      `/api/actions/me?step=${step}&gameId=${game.id}`
-    );
-  });
-  if (query.isLoading) {
+  fetchPlayerActions(step);
+
+  if (playerActionsQuery.isLoading) {
     return <CircularProgress />;
   }
-  const playerActions = query?.data?.data?.playerActions ?? [];
+
+  const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
+    const playerActionIdx = playerActions.findIndex(
+      (playerAction) => playerAction.id === playerActionId
+    );
+
+    if (playerActionIdx > -1) {
+      playerActions[playerActionIdx].isPerformed = isPerformed;
+      setPlayerActionsLocal([...playerActions]);
+    }
+  };
 
   return (
     <Box>
@@ -46,11 +52,10 @@ function ActionsLayout({ step }: { step: number }) {
         return (
           <ActionLayout
             key={playerAction.id}
-            playerActionId={playerAction.id}
-            title={playerAction.action.name}
-            financialCost={playerAction.action.financialCost}
-            actionPointCost={playerAction.action.actionPointCost}
-            isPerformed={playerAction.isPerformed}
+            playerAction={playerAction}
+            onPlayerActionChanged={(isPerformed) =>
+              handleActionChange(playerAction.id, isPerformed)
+            }
           />
         );
       })}
@@ -65,31 +70,14 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 }));
 
 function ActionLayout({
-  playerActionId,
-  title,
-  financialCost,
-  actionPointCost,
-  isPerformed,
+  playerAction,
+  onPlayerActionChanged,
 }: {
-  playerActionId: number;
-  title: string;
-  financialCost: number;
-  actionPointCost: number;
-  isPerformed: boolean;
+  playerAction: PlayerActions;
+  onPlayerActionChanged: (isPerformed: boolean) => void;
 }) {
-  const { updatePlayerActions } = usePlay();
-
-  const [checked, setChecked] = React.useState(isPerformed);
-
-  React.useEffect(() => {
-    setChecked(isPerformed);
-  }, []);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    updatePlayerActions([
-      { id: playerActionId, isPerformed: event.target.checked },
-    ]);
+  const handleActionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onPlayerActionChanged(event.target.checked);
   };
 
   return (
@@ -103,10 +91,10 @@ function ActionLayout({
     >
       <Typography alignItems="center" display="flex" variant="h6">
         <InfoIcon sx={{ mr: 1 }} />
-        {title}
+        {playerAction.action.name}
         <CustomCheckbox
-          checked={checked}
-          onChange={handleChange}
+          checked={playerAction.isPerformed}
+          onChange={handleActionChange}
           inputProps={{ "aria-label": "controlled" }}
         />
       </Typography>
@@ -116,10 +104,10 @@ function ActionLayout({
           name="action-points-cost"
           readOnly
           max={3}
-          value={actionPointCost}
+          value={playerAction.action.actionPointCost}
         />
         <PaidIcon />
-        {`${financialCost}€/j`}
+        {`${playerAction.action.financialCost}€/j`}
       </Box>
     </Box>
   );

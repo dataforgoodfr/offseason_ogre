@@ -3,11 +3,13 @@ import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
-import { IGame, ITeamWithPlayers } from "../../../utils/types";
+import { IGame, ITeamWithPlayers, PlayerActions } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
 import { Persona, persona } from "../../persona/persona";
 import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
 import _ from "lodash";
+import { useQuery, UseQueryResult } from "react-query";
+import axios from "axios";
 
 export {
   PlayProvider,
@@ -26,6 +28,10 @@ interface IPlayContext {
   updatePlayerActions: (
     playerActions: { id: number; isPerformed: boolean }[]
   ) => void;
+  playerActions: PlayerActions[];
+  setPlayerActionsLocal: (playerActions: PlayerActions[]) => void;
+  playerActionsQuery: UseQueryResult<any>;
+  fetchPlayerActions: (step: number) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -48,6 +54,45 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     null
   );
   const { socket } = useGameSocket({ gameId, setGameWithTeams });
+  const [step, setStep] = useState(0);
+  const [playerActions, setPlayerActions] = useState<PlayerActions[]>([]);
+
+  const playerActionsQuery = useQuery(
+    ["actions", gameId, gameWithTeams],
+    ({ queryKey }) => {
+      const [_, gameId, gameWithTeams]: [
+        string,
+        number,
+        IGameWithTeams | null
+      ] = queryKey as any;
+      if (!gameId || !gameWithTeams?.step) {
+        return Promise.resolve({ data: { playerActions: [] } });
+      }
+
+      return axios.get<undefined, { data: { playerActions: PlayerActions[] } }>(
+        `/api/actions/me?step=${gameWithTeams.step}&gameId=${gameId}`
+      );
+    },
+    {
+      enabled: false,
+    }
+  );
+
+  useEffect(() => {
+    if (gameWithTeams && gameWithTeams?.step !== step) {
+      setStep(gameWithTeams.step ?? 0);
+    }
+  }, [step, gameWithTeams]);
+
+  useEffect(() => {
+    if (playerActionsQuery.isSuccess) {
+      setPlayerActions(playerActionsQuery?.data?.data?.playerActions ?? []);
+    }
+  }, [playerActionsQuery.isSuccess]);
+
+  useEffect(() => {
+    playerActionsQuery.refetch();
+  }, [step, playerActionsQuery]);
 
   if (gameWithTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
@@ -67,9 +112,21 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     socket.emit("updatePlayerActions", { update: { playerActions } });
   };
 
+  const fetchPlayerActions = (step: number) => {
+    setStep(step);
+  };
+
   return (
     <PlayContext.Provider
-      value={{ game: gameWithTeams, updateGame, updatePlayerActions }}
+      value={{
+        game: gameWithTeams,
+        updateGame,
+        updatePlayerActions,
+        playerActions,
+        setPlayerActionsLocal: setPlayerActions,
+        playerActionsQuery,
+        fetchPlayerActions,
+      }}
     >
       {children}
     </PlayContext.Provider>
