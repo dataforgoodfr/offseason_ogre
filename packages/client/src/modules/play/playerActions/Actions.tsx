@@ -32,7 +32,7 @@ function ActionsLayout({ step }: { step: number }) {
 
   const query = useQuery("actions", () => {
     return axios.get<undefined, { data: { playerActions: PlayerActions[] } }>(
-      `/api/actions/me?step=${step}&gameId=${game.id}`
+      `/api/actions/user?step=${step}&gameId=${game.id}`
     );
   });
   if (query.isLoading) {
@@ -47,7 +47,7 @@ function ActionsLayout({ step }: { step: number }) {
           <ActionLayout
             key={playerAction.id}
             playerActionId={playerAction.id}
-            title={playerAction.action.name}
+            title={playerAction.action.description}
             financialCost={playerAction.action.financialCost}
             actionPointCost={playerAction.action.actionPointCost}
             isPerformed={playerAction.isPerformed}

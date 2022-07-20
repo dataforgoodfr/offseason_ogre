@@ -34,6 +34,7 @@ interface Player {
 interface Action {
   id: number;
   name: string;
+  description: string;
   step: number;
   actionPointCost: number;
   financialCost: number;

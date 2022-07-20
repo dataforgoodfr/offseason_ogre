@@ -10,11 +10,12 @@ import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 
 import { PlayBox } from "../Components";
-import { usePersonaByUserId, usePlay } from "../context/playContext";
+import { useResultsByUserId, usePlay } from "../context/playContext";
 import { useState } from "react";
 import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
 import { sumAllValues } from "../../persona";
+import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { GameConsole };
 
@@ -48,7 +49,7 @@ function MeanStatsConsole() {
             {...teamsValues.map((t) => {
               return {
                 id: t.id,
-                consumption: t.consumption,
+                consumption: [{ step: 0, consumption: t.initialConsumption }, { step: 1, consumption: t.firstStepConsumption }],
                 playerCount: t.playerCount,
               };
             })}
@@ -77,9 +78,8 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${
-                    teamsValues.find((t) => t.id === team.id)?.points
-                  }`}
+                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.points
+                    }`}
                 </Typography>
               );
             })}
@@ -99,9 +99,8 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${
-                    teamsValues.find((t) => t.id === team.id)?.carbonFootprint
-                  }T/an`}
+                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.carbonFootprint
+                    }T/an`}
                 </Typography>
               );
             })}
@@ -121,9 +120,8 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${
-                    teamsValues.find((t) => t.id === team.id)?.budget
-                  }€/J`}
+                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.budget
+                    }€/J`}
                 </Typography>
               );
             })}
@@ -140,28 +138,33 @@ function useTeamValues() {
   game.teams.map((team) =>
     team.players.map(({ user }) => userIds.push(user?.id))
   );
-  const personaByUserId = usePersonaByUserId({ userIds });
+  const personaByUserId = useResultsByUserId({ userIds, game });
   return game.teams.map((team) => {
     return {
       id: team.id,
       playerCount: team.players.length,
       points: team.players
-        .map(({ user }) => personaByUserId[user.id].points)
+        .map(({ user }) => getLastCompletedStepPlayerValues(game, personaByUserId[user.id]).points)
         .reduce((a, b) => a + b, 0),
       budget: team.players
-        .map(({ user }) => personaByUserId[user.id].budget)
+        .map(({ user }) => getLastCompletedStepPlayerValues(game, personaByUserId[user.id]).budget)
         .reduce((a, b) => a + b, 0),
       carbonFootprint: team.players
-        .map(({ user }) => personaByUserId[user.id].carbonFootprint)
+        .map(({ user }) => getLastCompletedStepPlayerValues(game, personaByUserId[user.id]).carbonFootprint)
         .reduce((a, b) => a + b, 0),
-      consumption: team.players
+      initialConsumption: team.players
         .map(({ user }) =>
-          parseInt(sumAllValues(personaByUserId[user.id].consumption))
+          parseInt(sumAllValues(personaByUserId[user.id][0].consumption))
+        )
+        .reduce((a, b) => a + b, 0),
+      firstStepConsumption: team.players
+        .map(({ user }) =>
+          parseInt(sumAllValues(personaByUserId[user.id][game.step > 1 || (game.step === 1 && !game.isStepActive) ? 1 : 0].consumption))
         )
         .reduce((a, b) => a + b, 0),
       production: team.players
         .map(({ user }) =>
-          parseInt(sumAllValues(personaByUserId[user.id].production))
+          parseInt(sumAllValues(personaByUserId[user.id][0].production))
         )
         .reduce((a, b) => a + b, 0),
     };

@@ -8,7 +8,11 @@ const router = express.Router();
 
 router.get("/", asyncErrorHandler(controllers.getAllActionsController));
 router.get(
-  "/me",
+  "/user",
+  asyncErrorHandler(controllers.getOrCreatePlayerActionsController)
+);
+router.get(
+  "/user/:userId",
   asyncErrorHandler(controllers.getOrCreatePlayerActionsController)
 );
 router.get("/:step", asyncErrorHandler(controllers.getActionsController));
