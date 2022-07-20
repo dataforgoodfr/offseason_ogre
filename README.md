@@ -22,7 +22,7 @@ OGRE uses a number of open source projects to work properly:
 
 ## Development
 
-Node, npm, yarn and Docker must be installed locally.
+Node, yarn and Docker must be installed locally.
 
 1. Run "yarn env:default" from root, it will set then default values in the file at /packages/server/.env
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
@@ -47,7 +47,7 @@ https://www.prisma.io/docs/guides/deployment/deployment-guides/deploying-to-hero
 
 ### Testing the production build locally
 
-Node, npm, yarn and Docker must be installed locally.
+Node, yarn and Docker must be installed locally.
 
 1. Run "yarn env:default" from root, it will set default .env values in server
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
