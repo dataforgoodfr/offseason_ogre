@@ -49,7 +49,10 @@ function MeanStatsConsole() {
             {...teamsValues.map((t) => {
               return {
                 id: t.id,
-                consumption: [{ step: 0, consumption: t.initialConsumption }, { step: 1, consumption: t.firstStepConsumption }],
+                consumption: [
+                  { step: 0, consumption: t.initialConsumption },
+                  { step: 1, consumption: t.firstStepConsumption },
+                ],
                 playerCount: t.playerCount,
               };
             })}
@@ -78,8 +81,9 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.points
-                    }`}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.points
+                  }`}
                 </Typography>
               );
             })}
@@ -99,8 +103,9 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.carbonFootprint
-                    }T/an`}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.carbonFootprint
+                  }T/an`}
                 </Typography>
               );
             })}
@@ -120,8 +125,9 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.budget
-                    }€/J`}
+                  {`${team.name}:  ${
+                    teamsValues.find((t) => t.id === team.id)?.budget
+                  }€/J`}
                 </Typography>
               );
             })}
@@ -144,13 +150,25 @@ function useTeamValues() {
       id: team.id,
       playerCount: team.players.length,
       points: team.players
-        .map(({ user }) => getLastCompletedStepPlayerValues(game, personaByUserId[user.id]).points)
+        .map(
+          ({ user }) =>
+            getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
+              .points
+        )
         .reduce((a, b) => a + b, 0),
       budget: team.players
-        .map(({ user }) => getLastCompletedStepPlayerValues(game, personaByUserId[user.id]).budget)
+        .map(
+          ({ user }) =>
+            getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
+              .budget
+        )
         .reduce((a, b) => a + b, 0),
       carbonFootprint: team.players
-        .map(({ user }) => getLastCompletedStepPlayerValues(game, personaByUserId[user.id]).carbonFootprint)
+        .map(
+          ({ user }) =>
+            getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
+              .carbonFootprint
+        )
         .reduce((a, b) => a + b, 0),
       initialConsumption: team.players
         .map(({ user }) =>
@@ -159,7 +177,13 @@ function useTeamValues() {
         .reduce((a, b) => a + b, 0),
       firstStepConsumption: team.players
         .map(({ user }) =>
-          parseInt(sumAllValues(personaByUserId[user.id][game.step > 1 || (game.step === 1 && !game.isStepActive) ? 1 : 0].consumption))
+          parseInt(
+            sumAllValues(
+              personaByUserId[user.id][
+                game.step > 1 || (game.step === 1 && !game.isStepActive) ? 1 : 0
+              ].consumption
+            )
+          )
         )
         .reduce((a, b) => a + b, 0),
       production: team.players

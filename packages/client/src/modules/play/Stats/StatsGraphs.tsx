@@ -14,15 +14,16 @@ export { StatsGraphs };
 
 function StatsGraphs() {
   const [step, setSelectedStep] = React.useState<number>();
-  const { game } = usePlay()
-  const { user } = useAuth()
+  const { game } = usePlay();
+  const { user } = useAuth();
 
-  const playerActions = game.teams
-    .find((team: ITeamWithPlayers) => team.players.find((player: Player) => player.userId === user?.id))
-    ?.players
-    .find((player: Player) => player.userId === user?.id)
-    ?.actions
-    || []
+  const playerActions =
+    game.teams
+      .find((team: ITeamWithPlayers) =>
+        team.players.find((player: Player) => player.userId === user?.id)
+      )
+      ?.players.find((player: Player) => player.userId === user?.id)?.actions ||
+    [];
 
   return (
     <PlayBox>
@@ -37,12 +38,18 @@ function StatsGraphs() {
   );
 }
 
-function StepDetails({ step, playerActions }: { step: number | undefined, playerActions: PlayerActions[] }) {
+function StepDetails({
+  step,
+  playerActions,
+}: {
+  step: number | undefined;
+  playerActions: PlayerActions[];
+}) {
   const { game } = usePlay();
 
   const personaByStep = getResultsByStep(playerActions);
   if (typeof step === "undefined") return <></>;
-  const persona = getPlayerValuesByStep(step, game, personaByStep)
+  const persona = getPlayerValuesByStep(step, game, personaByStep);
   return (
     <>
       <DetailsEnergyBars persona={persona} />
@@ -56,7 +63,7 @@ function useStackedEnergyData(playerActions: PlayerActions[]) {
 
   const personaByStep = getResultsByStep(playerActions);
   return _.range(0, MAX_NUMBER_STEPS).map((step: number) => {
-    const persona = getPlayerValuesByStep(step, game, personaByStep)
+    const persona = getPlayerValuesByStep(step, game, personaByStep);
     return {
       name: step ? `Etape ${step}` : "Initial",
       renewable: sumFor(persona.consumption, "renewable"),

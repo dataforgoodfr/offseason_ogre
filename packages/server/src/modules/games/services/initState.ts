@@ -8,21 +8,17 @@ async function initState({ gameId }: { gameId: number }) {
     include: {
       teams: {
         include: {
-          players:
-          {
-            include:
-            {
+          players: {
+            include: {
               user: true,
-              actions:
-              {
-                include:
-                  { action: true }
-              }
-            }
-          }
+              actions: {
+                include: { action: true },
+              },
+            },
+          },
         },
-      }
-    }
+      },
+    },
   });
   return { gameWithTeams };
 }

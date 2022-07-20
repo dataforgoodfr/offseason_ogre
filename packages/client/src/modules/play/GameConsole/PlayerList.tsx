@@ -5,7 +5,11 @@ import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
 import { MAX_ACTION_POINTS } from "../constants";
-import { useCurrentPersona, usePlay, useResultsByUserId } from "../context/playContext";
+import {
+  useCurrentPersona,
+  usePlay,
+  useResultsByUserId,
+} from "../context/playContext";
 import { persona } from "../../persona/persona";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
@@ -31,8 +35,13 @@ interface IPlayer {
 function PlayerMini({ player }: { player: IPlayer }) {
   const { game } = usePlay();
 
-  const results = useResultsByUserId({ game, userIds: player ? [player.userId] : [] });
-  const userData = player ? getLastCompletedStepPlayerValues(game, results[player.userId]) : persona
+  const results = useResultsByUserId({
+    game,
+    userIds: player ? [player.userId] : [],
+  });
+  const userData = player
+    ? getLastCompletedStepPlayerValues(game, results[player.userId])
+    : persona;
   return (
     <PlayBox key={player.userId} mt={2}>
       <Typography variant="h5">{buildName(player.user)}</Typography>

@@ -39,7 +39,8 @@ async function getOrCreatePlayerActionsController(
 
   const { step, gameId } = querySchema.parse(request.query);
 
-  const userId = paramsSchema.parse(request.params)?.userId || response.locals?.user
+  const userId =
+    paramsSchema.parse(request.params)?.userId || response.locals?.user;
   if (!userId) {
     response.status(401);
     return;

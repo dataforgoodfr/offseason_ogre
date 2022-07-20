@@ -2,7 +2,7 @@ import { ConsumptionDatum } from "../../persona/consumption";
 import { persona } from "../../persona/persona";
 import { availableActions } from "../playerActions/constants/actions";
 
-export { computeConsumptionChoices }
+export { computeConsumptionChoices };
 
 function computeConsumptionChoices(
   { name, type, value }: ConsumptionDatum,
@@ -93,6 +93,5 @@ function computeConsumptionChoices(
       value = value > 28 ? value - 28 : 0;
     }
   }
-  return { name, type, value }
+  return { name, type, value };
 }
-

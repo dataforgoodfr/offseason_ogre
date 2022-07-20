@@ -27,28 +27,43 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
       const playerPersona = personaByUserId[userId];
       return {
         name: buildName(player.user),
-        fossil: sumFor(getLastCompletedStepPlayerValues(game, playerPersona).consumption, "fossil"),
-        grey: sumFor(getLastCompletedStepPlayerValues(game, playerPersona).consumption, "grey"),
-        mixte: sumFor(getLastCompletedStepPlayerValues(game, playerPersona).consumption, "mixte"),
-        renewable: sumFor(getLastCompletedStepPlayerValues(game, playerPersona).consumption, "renewable"),
+        fossil: sumFor(
+          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
+          "fossil"
+        ),
+        grey: sumFor(
+          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
+          "grey"
+        ),
+        mixte: sumFor(
+          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
+          "mixte"
+        ),
+        renewable: sumFor(
+          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
+          "renewable"
+        ),
       };
     }),
     firstPersona
       ? {
-        name: "Production",
-        hydroProduction: sumFor(firstPersona[0].production, "hydroProduction"),
-        nuclear: sumFor(firstPersona[0].production, "nuclear"),
-        terrestrialProduction: sumFor(
-          firstPersona[0].production,
-          "terrestrialProduction"
-        ),
-      }
+          name: "Production",
+          hydroProduction: sumFor(
+            firstPersona[0].production,
+            "hydroProduction"
+          ),
+          nuclear: sumFor(firstPersona[0].production, "nuclear"),
+          terrestrialProduction: sumFor(
+            firstPersona[0].production,
+            "terrestrialProduction"
+          ),
+        }
       : {
-        name: "Production",
-        hydroProduction: 0,
-        nuclear: 0,
-        terrestrialProduction: 0,
-      },
+          name: "Production",
+          hydroProduction: 0,
+          nuclear: 0,
+          terrestrialProduction: 0,
+        },
   ];
 }
 

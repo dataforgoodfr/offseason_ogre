@@ -161,20 +161,24 @@ function useResultsByUserId({
   game,
   userIds,
 }: {
-  game: IGameWithTeams,
+  game: IGameWithTeams;
   userIds: number[];
 }): Record<number, Record<number, Persona>> {
-  return Object.fromEntries(userIds.map((userId) => {
-    const playerActions = game.teams
-      .find((team: ITeamWithPlayers) => team.players.find((player: Player) => player.userId === userId))
-      ?.players
-      .find((player: Player) => player.userId === userId)
-      ?.actions
-    return [userId, getResultsByStep(playerActions || [])]
-  }))
+  return Object.fromEntries(
+    userIds.map((userId) => {
+      const playerActions = game.teams
+        .find((team: ITeamWithPlayers) =>
+          team.players.find((player: Player) => player.userId === userId)
+        )
+        ?.players.find((player: Player) => player.userId === userId)?.actions;
+      return [userId, getResultsByStep(playerActions || [])];
+    })
+  );
 }
 
-function getResultsByStep(playerActions: PlayerActions[]): Record<number, Persona> {
+function getResultsByStep(
+  playerActions: PlayerActions[]
+): Record<number, Persona> {
   return Object.fromEntries(
     _.range(0, MAX_NUMBER_STEPS).map((step) => [
       step,
@@ -203,10 +207,11 @@ function computeResultsByStep(
       (action: Action) => action.name
     );
 
-    const newConsumption = JSON.parse(JSON.stringify(persona.consumption))
-      .map((consumption: ConsumptionDatum) => {
+    const newConsumption = JSON.parse(JSON.stringify(persona.consumption)).map(
+      (consumption: ConsumptionDatum) => {
         return computeConsumptionChoices(consumption, performedActionsNames);
-      });
+      }
+    );
 
     return {
       budget: persona.budget - costPerDay,

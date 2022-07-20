@@ -7,7 +7,11 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 export { ConsumptionStats, ProductionStats };
 
 function ConsumptionStats(
-  consumption: { id: number; consumption: { step: number, consumption: number }[]; playerCount: number }[]
+  consumption: {
+    id: number;
+    consumption: { step: number; consumption: number }[];
+    playerCount: number;
+  }[]
 ) {
   return (
     <PlayBox mt={2}>
@@ -59,7 +63,11 @@ function ProductionStats(production: { id: number; production: number }[]) {
 }
 
 function buildDataConsumption(
-  teams: { id: number; consumption: { step: number, consumption: number }[]; playerCount: number }[]
+  teams: {
+    id: number;
+    consumption: { step: number; consumption: number }[];
+    playerCount: number;
+  }[]
 ) {
   return [
     {
@@ -101,7 +109,9 @@ function buildDataConsumption(
   ];
 
   function getConsumptionByTeamAndStep(teamId: number, step: number) {
-    return (teams[teamId]?.consumption?.find((v) => v.step === step))?.consumption || 0;
+    return (
+      teams[teamId]?.consumption?.find((v) => v.step === step)?.consumption || 0
+    );
   }
 }
 
