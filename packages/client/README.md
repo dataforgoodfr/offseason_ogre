@@ -2,16 +2,6 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Prerequisites
-
-- npm
-- install all dependecies with command line `npm i`
-
-## Getting started
-
-- While the backend app is not deployed on Heroku, make sure to launch the backend app on your computer first (see README.md in `/server` directory to launch it)
-- In another terminal start the client server (check below the scripts available to run & play with the front app)
-
 ## Available Scripts
 
 In the project directory, you can run:
