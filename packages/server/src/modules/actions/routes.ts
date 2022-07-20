@@ -11,8 +11,4 @@ router.get(
   "/user",
   asyncErrorHandler(controllers.getOrCreatePlayerActionsController)
 );
-router.get(
-  "/user/:userId",
-  asyncErrorHandler(controllers.getOrCreatePlayerActionsController)
-);
 router.get("/:step", asyncErrorHandler(controllers.getActionsController));

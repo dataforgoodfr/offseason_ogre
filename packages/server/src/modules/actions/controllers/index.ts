@@ -33,15 +33,10 @@ async function getOrCreatePlayerActionsController(
     gameId: z.string().regex(/^\d+$/).transform(Number),
   });
 
-  const paramsSchema = z.object({
-    userId: z.string().regex(/^\d+$/).transform(Number).optional(),
-  });
-
   const { step, gameId } = querySchema.parse(request.query);
 
-  const userId =
-    paramsSchema.parse(request.params)?.userId || response.locals?.user;
-  if (!userId) {
+  const { user } = response.locals;
+  if (!user) {
     response.status(401);
     return;
   }
@@ -50,7 +45,7 @@ async function getOrCreatePlayerActionsController(
   const playerActionsCurrent = await playerActionsServices.getMany({
     actionIds: stepActions.map((action) => action.id),
     gameId,
-    userId,
+    userId: user.id,
   });
 
   // Create player actions that are potentially missing.
@@ -68,7 +63,7 @@ async function getOrCreatePlayerActionsController(
       playerActionsServices.create({
         actionId: action.id,
         gameId,
-        userId,
+        userId: user.id,
       })
     )
   );
