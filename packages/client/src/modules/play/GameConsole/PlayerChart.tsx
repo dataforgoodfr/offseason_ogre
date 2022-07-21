@@ -25,24 +25,16 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
     ...team.players.map((player) => {
       const userId = player.user.id;
       const playerPersona = personaByUserId[userId];
+      const playerConsumption = getLastCompletedStepPlayerValues(
+        game,
+        playerPersona
+      ).consumption;
       return {
         name: buildName(player.user),
-        fossil: sumFor(
-          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
-          "fossil"
-        ),
-        grey: sumFor(
-          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
-          "grey"
-        ),
-        mixte: sumFor(
-          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
-          "mixte"
-        ),
-        renewable: sumFor(
-          getLastCompletedStepPlayerValues(game, playerPersona).consumption,
-          "renewable"
-        ),
+        fossil: sumFor(playerConsumption, "fossil"),
+        grey: sumFor(playerConsumption, "grey"),
+        mixte: sumFor(playerConsumption, "mixte"),
+        renewable: sumFor(playerConsumption, "renewable"),
       };
     }),
     firstPersona

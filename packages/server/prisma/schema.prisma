@@ -62,7 +62,7 @@ model Team {
 model Action {
   id              Int             @id @default(autoincrement())
   name            String          @unique
-  description     String
+  description     String          @default("")
   step            Int
   actionPointCost Int
   financialCost   Float

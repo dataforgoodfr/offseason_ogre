@@ -166,14 +166,18 @@ function useResultsByUserId({
 }): Record<number, Record<number, Persona>> {
   return Object.fromEntries(
     userIds.map((userId) => {
-      const playerActions = game.teams
-        .find((team: ITeamWithPlayers) =>
-          team.players.find((player: Player) => player.userId === userId)
-        )
-        ?.players.find((player: Player) => player.userId === userId)?.actions;
+      const playerActions = getPlayer(game, userId)?.actions;
       return [userId, getResultsByStep(playerActions || [])];
     })
   );
+}
+
+function getPlayer(game: IGameWithTeams, userId: number) {
+  const playerTeam = game.teams.find((team: ITeamWithPlayers) =>
+    team.players.find((player: Player) => player.userId === userId)
+  );
+
+  return playerTeam?.players.find((player: Player) => player.userId === userId);
 }
 
 function getResultsByStep(
