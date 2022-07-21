@@ -32,9 +32,7 @@ async function getOrCreatePlayerActionsController(
     step: z.string().regex(/^\d+$/).transform(Number),
     gameId: z.string().regex(/^\d+$/).transform(Number),
   });
-
   const { step, gameId } = querySchema.parse(request.query);
-
   const { user } = response.locals;
   if (!user) {
     response.status(401);

@@ -32,7 +32,7 @@ function ActionsLayout({ step }: { step: number }) {
 
   const query = useQuery("actions", () => {
     return axios.get<undefined, { data: { playerActions: PlayerActions[] } }>(
-      `/api/actions/user?step=${step}&gameId=${game.id}`
+      `/api/actions/me?step=${step}&gameId=${game.id}`
     );
   });
   if (query.isLoading) {
