@@ -5,8 +5,9 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
-import { useCurrentPersona } from "../context/playContext";
+import { useCurrentPersona, useCurrentStep } from "../context/playContext";
 import { Stage } from "../../stages";
+import { usePlayerActions } from "./usePlayerActions";
 
 export { ActionsHeader };
 
@@ -34,13 +35,15 @@ function ActionsHeader({ currentStage }: { currentStage: Stage }) {
           ml={1}
         >{`Bilan carbone: ${persona.carbonFootprint} kgCO2/an`}</Typography>
       </Box>
-      <ActionPoints available_points={currentStage?.available_points} />
+      <ActionPoints />
     </Box>
   );
 }
 
-function ActionPoints({ available_points }: { available_points: number }) {
-  const persona = useCurrentPersona();
+function ActionPoints() {
+  const { actionPointsUsedAtCurrentStep } = usePlayerActions();
+  let currentStep = useCurrentStep();
+
   return (
     <Box display="flex" alignItems="center" mt={1}>
       <Typography>PA utilisés:</Typography>
@@ -48,10 +51,10 @@ function ActionPoints({ available_points }: { available_points: number }) {
         emptyIcon={
           <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
         }
-        max={available_points ?? 0}
+        max={currentStep?.availableActionPoints ?? 0}
         name="action-points"
         readOnly
-        value={(available_points ?? 0) - persona.points}
+        value={actionPointsUsedAtCurrentStep}
       />
     </Box>
   );

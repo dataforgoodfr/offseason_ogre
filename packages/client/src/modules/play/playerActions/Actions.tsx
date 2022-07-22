@@ -1,18 +1,14 @@
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { Box, Rating } from "@mui/material";
+import { Box, CircularProgress, Rating, Typography } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
-
-import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
-
-import { useQuery } from "react-query";
-import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { PlayerActions } from "../../../utils/types";
+import { usePlayerActions } from "./usePlayerActions";
 
 export { Actions };
 
@@ -26,28 +22,32 @@ function Actions({ currentStage }: { currentStage: Stage }) {
 }
 
 function ActionsLayout({ step }: { step: number }) {
-  const query = useQuery("actions", () => {
-    return axios.get<undefined, { data: { actions: any[] } }>(
-      `/api/actions/${step}`
-    );
-  });
+  const { playerActions, query, mutation } = usePlayerActions();
+
   if (query.isLoading) {
     return <CircularProgress />;
   }
-  const actions = query?.data?.data?.actions ?? [];
+
+  const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
+    mutation.mutate(
+      playerActions.map((pa) => ({
+        id: pa.id,
+        isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,
+      }))
+    );
+  };
 
   return (
     <Box>
-      {actions.map((action) => {
+      {playerActions.map((playerAction) => {
         return (
           <ActionLayout
-            key={action.id}
-            title={action.name}
-            financialCost={action.financialCost}
-            actionPointCost={action.actionPointCost}
-          >
-            <Typography>Caractéristiques.</Typography>
-          </ActionLayout>
+            key={playerAction.id}
+            playerAction={playerAction}
+            onPlayerActionChanged={(isPerformed) =>
+              handleActionChange(playerAction.id, isPerformed)
+            }
+          />
         );
       })}
     </Box>
@@ -61,21 +61,16 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 }));
 
 function ActionLayout({
-  children,
-  title,
-  financialCost,
-  actionPointCost,
+  playerAction,
+  onPlayerActionChanged,
 }: {
-  children?: JSX.Element;
-  title: string;
-  financialCost: number;
-  actionPointCost: number;
+  playerAction: PlayerActions;
+  onPlayerActionChanged: (isPerformed: boolean) => void;
 }) {
-  const [checked, setChecked] = React.useState(false);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+  const handleActionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onPlayerActionChanged(event.target.checked);
   };
+
   return (
     <Box
       sx={{
@@ -87,10 +82,10 @@ function ActionLayout({
     >
       <Typography alignItems="center" display="flex" variant="h6">
         <InfoIcon sx={{ mr: 1 }} />
-        {title}
+        {playerAction.action.name}
         <CustomCheckbox
-          checked={checked}
-          onChange={handleChange}
+          checked={playerAction.isPerformed}
+          onChange={handleActionChange}
           inputProps={{ "aria-label": "controlled" }}
         />
       </Typography>
@@ -100,10 +95,10 @@ function ActionLayout({
           name="action-points-cost"
           readOnly
           max={3}
-          value={actionPointCost}
+          value={playerAction.action.actionPointCost}
         />
         <PaidIcon />
-        {`${financialCost}€/j`}
+        {`${playerAction.action.financialCost}€/j`}
       </Box>
     </Box>
   );

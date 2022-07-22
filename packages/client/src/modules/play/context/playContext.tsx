@@ -12,6 +12,7 @@ import _ from "lodash";
 export {
   PlayProvider,
   RootPlayProvider,
+  useGameSocket,
   useCurrentPersona,
   useCurrentStep,
   useMyTeam,
@@ -59,7 +60,12 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <PlayContext.Provider value={{ game: gameWithTeams, updateGame }}>
+    <PlayContext.Provider
+      value={{
+        game: gameWithTeams,
+        updateGame,
+      }}
+    >
       {children}
     </PlayContext.Provider>
   );

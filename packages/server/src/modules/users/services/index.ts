@@ -1,5 +1,6 @@
 import { database } from "../../../database";
 import { User, Players } from "../types/entity";
+import { authenticateUser } from "./authenticateUser";
 import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
 import { sendMagicLink } from "./sendMagicLink";
 import { signUp } from "./signUp";
@@ -17,7 +18,13 @@ const crudServices = {
   update,
   getTeamForPlayer,
 };
-const services = { ...crudServices, isMailAlreadyUsed, sendMagicLink, signUp };
+const services = {
+  ...crudServices,
+  isMailAlreadyUsed,
+  sendMagicLink,
+  signUp,
+  authenticateUser,
+};
 
 export { services };
 
