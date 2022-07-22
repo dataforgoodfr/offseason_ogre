@@ -1,10 +1,11 @@
-import { PlayerActions } from "../types";
+import { Action, PlayerActions } from "../types";
 import { database } from "../../../database";
+import * as services from "./index";
 
 const model = database.playerActions;
 type Model = PlayerActions;
 
-export { create, getMany };
+export { create, getMany, getOrCreatePlayerActions };
 
 async function create({
   actionId,
@@ -46,4 +47,42 @@ async function getMany({
     },
   });
   return documents;
+}
+
+async function getOrCreatePlayerActions(
+  gameId: number,
+  userId: number
+): Promise<PlayerActions[]> {
+  const stepActions = await services.getMany();
+  const playerActionsCurrent = await getMany({
+    actionIds: stepActions.map((action) => action.id),
+    gameId,
+    userId,
+  });
+
+  // Create player actions that are potentially missing.
+  const actionsById = stepActions.reduce((map, action) => {
+    map.set(action.id, action);
+    return map;
+  }, new Map<number, Action>());
+
+  playerActionsCurrent.forEach((playerAction) =>
+    actionsById.delete(playerAction.actionId)
+  );
+
+  const createdPlayerActions = await Promise.all(
+    Array.from(actionsById).map(([_, action]) =>
+      create({
+        actionId: action.id,
+        gameId,
+        userId,
+      })
+    )
+  );
+
+  const playerActions = [...playerActionsCurrent, ...createdPlayerActions].sort(
+    (a, b) => a.id - b.id
+  );
+
+  return playerActions;
 }

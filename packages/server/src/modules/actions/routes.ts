@@ -11,4 +11,5 @@ router.get(
   "/me",
   asyncErrorHandler(controllers.getOrCreatePlayerActionsController)
 );
+router.put("/me", asyncErrorHandler(controllers.updatePlayerActionsController));
 router.get("/:step", asyncErrorHandler(controllers.getActionsController));

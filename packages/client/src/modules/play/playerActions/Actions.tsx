@@ -7,8 +7,8 @@ import { styled } from "@mui/material/styles";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
-import { usePlay } from "../context/playContext";
 import { PlayerActions } from "../../../utils/types";
+import { usePlayerActions } from "./usePlayerActions";
 
 export { Actions };
 
@@ -22,28 +22,19 @@ function Actions({ currentStage }: { currentStage: Stage }) {
 }
 
 function ActionsLayout({ step }: { step: number }) {
-  const {
-    fetchPlayerActions,
-    playerActions,
-    setPlayerActionsLocal,
-    playerActionsQuery,
-  } = usePlay();
+  const { playerActions, query, mutation } = usePlayerActions();
 
-  fetchPlayerActions(step);
-
-  if (playerActionsQuery.isLoading) {
+  if (query.isLoading) {
     return <CircularProgress />;
   }
 
   const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
-    const playerActionIdx = playerActions.findIndex(
-      (playerAction) => playerAction.id === playerActionId
+    mutation.mutate(
+      playerActions.map((pa) => ({
+        id: pa.id,
+        isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,
+      }))
     );
-
-    if (playerActionIdx > -1) {
-      playerActions[playerActionIdx].isPerformed = isPerformed;
-      setPlayerActionsLocal([...playerActions]);
-    }
   };
 
   return (

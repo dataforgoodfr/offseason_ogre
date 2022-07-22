@@ -1,13 +1,14 @@
 import { Request, Response } from "express";
 import { z } from "zod";
+import { database } from "../../../database";
 import * as services from "../services";
 import * as playerActionsServices from "../services/playerActions";
-import { Action } from "../types";
 
 export {
   getAllActionsController,
   getActionsController,
   getOrCreatePlayerActionsController,
+  updatePlayerActionsController,
 };
 
 async function getAllActionsController(request: Request, response: Response) {
@@ -29,46 +30,61 @@ async function getOrCreatePlayerActionsController(
   response: Response
 ) {
   const querySchema = z.object({
-    step: z.string().regex(/^\d+$/).transform(Number),
     gameId: z.string().regex(/^\d+$/).transform(Number),
   });
-  const { step, gameId } = querySchema.parse(request.query);
+  const { gameId } = querySchema.parse(request.query);
   const { user } = response.locals;
   if (!user) {
     response.status(401);
     return;
   }
 
-  const stepActions = await services.getMany(step);
-  const playerActionsCurrent = await playerActionsServices.getMany({
-    actionIds: stepActions.map((action) => action.id),
+  const playerActions = await playerActionsServices.getOrCreatePlayerActions(
     gameId,
-    userId: user.id,
-  });
-
-  // Create player actions that are potentially missing.
-  const actionsById = stepActions.reduce((map, action) => {
-    map.set(action.id, action);
-    return map;
-  }, new Map<number, Action>());
-
-  playerActionsCurrent.forEach((playerAction) =>
-    actionsById.delete(playerAction.actionId)
+    user.id
   );
 
-  const createdPlayerActions = await Promise.all(
-    Array.from(actionsById).map(([_, action]) =>
-      playerActionsServices.create({
-        actionId: action.id,
-        gameId,
-        userId: user.id,
+  response.status(200).json({ playerActions });
+}
+
+async function updatePlayerActionsController(
+  request: Request,
+  response: Response
+) {
+  const bodySchema = z.object({
+    playerActions: z
+      .object({
+        id: z.number(),
+        isPerformed: z.boolean(),
+      })
+      .array()
+      .min(1),
+  });
+  const { playerActions } = bodySchema.parse(request.body);
+  const { user } = response.locals;
+  if (!user) {
+    response.status(401);
+    return;
+  }
+
+  const [{ gameId }] = await Promise.all(
+    playerActions.map((playerAction) =>
+      database.playerActions.update({
+        where: {
+          id_userId: {
+            id: playerAction.id,
+            userId: user.id,
+          },
+        },
+        data: {
+          isPerformed: playerAction.isPerformed,
+        },
       })
     )
   );
 
-  const playerActions = [...playerActionsCurrent, ...createdPlayerActions].sort(
-    (a, b) => a.id - b.id
-  );
+  const updatedPlayerActions =
+    await playerActionsServices.getOrCreatePlayerActions(gameId, user.id);
 
-  response.status(200).json({ playerActions });
+  response.status(200).json({ playerActions: updatedPlayerActions });
 }
