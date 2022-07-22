@@ -36,7 +36,6 @@ function PlayerMini({ player }: { player: IPlayer }) {
   const { game } = usePlay();
 
   const results = useResultsByUserId({
-    game,
     userIds: player ? [player.userId] : [],
   });
   const userData = player

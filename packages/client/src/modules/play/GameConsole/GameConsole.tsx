@@ -16,6 +16,8 @@ import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
 import { sumAllValues } from "../../persona";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
+import { IGame, ITeamWithPlayers } from "../../../utils/types";
+import { Persona } from "../../persona/persona";
 
 export { GameConsole };
 
@@ -50,8 +52,8 @@ function MeanStatsConsole() {
               return {
                 id: t.id,
                 consumption: [
-                  { step: 0, consumption: t.initialConsumption },
-                  { step: 1, consumption: t.firstStepConsumption },
+                  { step: 0, consumption: t.consumption[0] },
+                  { step: 1, consumption: t.consumption[1] },
                 ],
                 playerCount: t.playerCount,
               };
@@ -61,7 +63,7 @@ function MeanStatsConsole() {
         <Grid item xs={11} sm={5.75}>
           <ProductionStats
             {...teamsValues.map((t) => {
-              return { id: t.id, production: t.production };
+              return { id: t.id, production: t.production[0] };
             })}
           />
         </Grid>
@@ -81,9 +83,8 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${
-                    teamsValues.find((t) => t.id === team.id)?.points
-                  }`}
+                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.points
+                    }`}
                 </Typography>
               );
             })}
@@ -103,9 +104,8 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${
-                    teamsValues.find((t) => t.id === team.id)?.carbonFootprint
-                  }T/an`}
+                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.carbonFootprint
+                    }T/an`}
                 </Typography>
               );
             })}
@@ -125,9 +125,8 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${
-                    teamsValues.find((t) => t.id === team.id)?.budget
-                  }€/J`}
+                  {`${team.name}:  ${teamsValues.find((t) => t.id === team.id)?.budget
+                    }€/J`}
                 </Typography>
               );
             })}
@@ -144,7 +143,7 @@ function useTeamValues() {
   game.teams.map((team) =>
     team.players.map(({ user }) => userIds.push(user?.id))
   );
-  const personaByUserId = useResultsByUserId({ userIds, game });
+  const personaByUserId = useResultsByUserId({ userIds });
   return game.teams.map((team) => {
     return {
       id: team.id,
@@ -170,29 +169,71 @@ function useTeamValues() {
               .carbonFootprint
         )
         .reduce((a, b) => a + b, 0),
-      initialConsumption: team.players
-        .map(({ user }) =>
-          parseInt(sumAllValues(personaByUserId[user.id][0].consumption))
-        )
-        .reduce((a, b) => a + b, 0),
-      firstStepConsumption: team.players
-        .map(({ user }) =>
-          parseInt(
-            sumAllValues(
-              personaByUserId[user.id][
-                game.step > 1 || (game.step === 1 && !game.isStepActive) ? 1 : 0
-              ].consumption
-            )
-          )
-        )
-        .reduce((a, b) => a + b, 0),
-      production: team.players
-        .map(({ user }) =>
-          parseInt(sumAllValues(personaByUserId[user.id][0].production))
-        )
-        .reduce((a, b) => a + b, 0),
+      consumption: buildConsumption(team, personaByUserId, game),
+      production: buildProduction(team, personaByUserId, game),
     };
   });
+}
+
+function buildConsumption(
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  return [
+    getConsumptionByStep(0, team, personaByUserId, game),
+    getConsumptionByStep(1, team, personaByUserId, game),
+  ];
+}
+
+function getConsumptionByStep(
+  step: number,
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  const lastFinishedStep = getFinishedStep(game, step);
+
+  return team.players
+    .map(({ user }) =>
+      parseInt(
+        sumAllValues(personaByUserId[user.id][lastFinishedStep].consumption)
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+}
+
+function buildProduction(
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  return [getProductionByStep(0, team, personaByUserId, game)];
+}
+
+function getProductionByStep(
+  step: number,
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  const lastFinishedStep = getFinishedStep(game, step);
+
+  return team.players
+    .map(({ user }) =>
+      parseInt(
+        sumAllValues(personaByUserId[user.id][lastFinishedStep].production)
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+}
+
+function getFinishedStep(game: IGame, step: number) {
+  return game.step === 0 ||
+    game.step > step ||
+    (game.step === step && !game.isStepActive)
+    ? step
+    : step - 1;
 }
 
 function TeamsConsole() {

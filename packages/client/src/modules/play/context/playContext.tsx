@@ -158,15 +158,14 @@ function usePlay() {
 }
 
 function useResultsByUserId({
-  game,
   userIds,
 }: {
-  game: IGameWithTeams;
   userIds: number[];
 }): Record<number, Record<number, Persona>> {
+  const { game: gameWithTeams } = useLoadedPlay();
   return Object.fromEntries(
     userIds.map((userId) => {
-      const playerActions = getPlayer(game, userId)?.actions;
+      const playerActions = getPlayer(gameWithTeams, userId)?.actions;
       return [userId, getResultsByStep(playerActions || [])];
     })
   );

@@ -42,7 +42,7 @@ function PlayerHeader() {
 
   const userIds = user && user.id ? [user.id] : [];
 
-  const personaByUserId = useResultsByUserId({ userIds, game });
+  const personaByUserId = useResultsByUserId({ userIds });
   const userPersona = user?.id
     ? getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
     : persona;

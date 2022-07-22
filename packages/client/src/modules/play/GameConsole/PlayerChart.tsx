@@ -19,7 +19,7 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
 function useBuildData({ team }: { team: ITeamWithPlayers }) {
   const { game } = usePlay();
   const userIds = team.players.map(({ user }) => user.id);
-  const personaByUserId = useResultsByUserId({ userIds, game });
+  const personaByUserId = useResultsByUserId({ userIds });
   const [firstPersona] = Object.values(personaByUserId); // TODO: I am not sure how production should be computed. Sum for all team members?
   return [
     ...team.players.map((player) => {
