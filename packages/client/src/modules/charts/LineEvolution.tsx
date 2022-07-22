@@ -26,7 +26,7 @@ function LineEvolution({ data }: { data: any[] }) {
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis name="kWh/j" domain={[0, 1500]} />
+          <YAxis name="kWh/j" domain={[0, 750]} />
           <Tooltip />
           <Legend />
           <Line dataKey="team1" stroke="blue" name="Equipe 1" unit="kWh" />

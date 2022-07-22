@@ -5,7 +5,13 @@ import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
 import { MAX_ACTION_POINTS } from "../constants";
-import { useCurrentPersona } from "../context/playContext";
+import {
+  useCurrentPersona,
+  usePlay,
+  useResultsByUserId,
+} from "../context/playContext";
+import { persona } from "../../persona/persona";
+import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerList };
 
@@ -27,7 +33,14 @@ interface IPlayer {
 }
 
 function PlayerMini({ player }: { player: IPlayer }) {
-  const personna = useCurrentPersona();
+  const { game } = usePlay();
+
+  const results = useResultsByUserId({
+    userIds: player ? [player.userId] : [],
+  });
+  const userData = player
+    ? getLastCompletedStepPlayerValues(game, results[player.userId])
+    : persona;
   return (
     <PlayBox key={player.userId} mt={2}>
       <Typography variant="h5">{buildName(player.user)}</Typography>
@@ -35,13 +48,13 @@ function PlayerMini({ player }: { player: IPlayer }) {
         <PaidIcon />
         <Typography
           ml={1}
-        >{`Budget restant: ${personna.budget} €/j`}</Typography>
+        >{`Budget restant: ${userData.budget} €/j`}</Typography>
       </Box>
       <Box display="flex" alignItems="center">
         <CloudIcon />
         <Typography
           ml={1}
-        >{`Bilan carbone: ${personna.carbonFootprint} kgCO2/an`}</Typography>
+        >{`Bilan carbone: ${userData.carbonFootprint} kgCO2/an`}</Typography>
       </Box>
       <ActionPoints />
     </PlayBox>

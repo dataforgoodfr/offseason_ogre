@@ -10,11 +10,14 @@ import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 
 import { PlayBox } from "../Components";
-import { usePersonaByUserId, usePlay } from "../context/playContext";
+import { useResultsByUserId, usePlay } from "../context/playContext";
 import { useState } from "react";
 import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
 import { sumAllValues } from "../../persona";
+import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
+import { IGame, ITeamWithPlayers } from "../../../utils/types";
+import { Persona } from "../../persona/persona";
 
 export { GameConsole };
 
@@ -48,7 +51,10 @@ function MeanStatsConsole() {
             {...teamsValues.map((t) => {
               return {
                 id: t.id,
-                consumption: t.consumption,
+                consumption: [
+                  { step: 0, consumption: t.consumption[0] },
+                  { step: 1, consumption: t.consumption[1] },
+                ],
                 playerCount: t.playerCount,
               };
             })}
@@ -57,7 +63,7 @@ function MeanStatsConsole() {
         <Grid item xs={11} sm={5.75}>
           <ProductionStats
             {...teamsValues.map((t) => {
-              return { id: t.id, production: t.production };
+              return { id: t.id, production: t.production[0] };
             })}
           />
         </Grid>
@@ -140,32 +146,97 @@ function useTeamValues() {
   game.teams.map((team) =>
     team.players.map(({ user }) => userIds.push(user?.id))
   );
-  const personaByUserId = usePersonaByUserId({ userIds });
+  const personaByUserId = useResultsByUserId({ userIds });
   return game.teams.map((team) => {
     return {
       id: team.id,
       playerCount: team.players.length,
       points: team.players
-        .map(({ user }) => personaByUserId[user.id].points)
+        .map(
+          ({ user }) =>
+            getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
+              .points
+        )
         .reduce((a, b) => a + b, 0),
       budget: team.players
-        .map(({ user }) => personaByUserId[user.id].budget)
+        .map(
+          ({ user }) =>
+            getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
+              .budget
+        )
         .reduce((a, b) => a + b, 0),
       carbonFootprint: team.players
-        .map(({ user }) => personaByUserId[user.id].carbonFootprint)
-        .reduce((a, b) => a + b, 0),
-      consumption: team.players
-        .map(({ user }) =>
-          parseInt(sumAllValues(personaByUserId[user.id].consumption))
+        .map(
+          ({ user }) =>
+            getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
+              .carbonFootprint
         )
         .reduce((a, b) => a + b, 0),
-      production: team.players
-        .map(({ user }) =>
-          parseInt(sumAllValues(personaByUserId[user.id].production))
-        )
-        .reduce((a, b) => a + b, 0),
+      consumption: buildConsumption(team, personaByUserId, game),
+      production: buildProduction(team, personaByUserId, game),
     };
   });
+}
+
+function buildConsumption(
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  return [
+    getConsumptionByStep(0, team, personaByUserId, game),
+    getConsumptionByStep(1, team, personaByUserId, game),
+  ];
+}
+
+function getConsumptionByStep(
+  step: number,
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  const lastFinishedStep = getFinishedStep(game, step);
+
+  return team.players
+    .map(({ user }) =>
+      parseInt(
+        sumAllValues(personaByUserId[user.id][lastFinishedStep].consumption)
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+}
+
+function buildProduction(
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  return [getProductionByStep(0, team, personaByUserId, game)];
+}
+
+function getProductionByStep(
+  step: number,
+  team: ITeamWithPlayers,
+  personaByUserId: Record<number, Record<number, Persona>>,
+  game: IGame
+) {
+  const lastFinishedStep = getFinishedStep(game, step);
+
+  return team.players
+    .map(({ user }) =>
+      parseInt(
+        sumAllValues(personaByUserId[user.id][lastFinishedStep].production)
+      )
+    )
+    .reduce((a, b) => a + b, 0);
+}
+
+function getFinishedStep(game: IGame, step: number) {
+  return game.step === 0 ||
+    game.step > step ||
+    (game.step === step && !game.isStepActive)
+    ? step
+    : step - 1;
 }
 
 function TeamsConsole() {

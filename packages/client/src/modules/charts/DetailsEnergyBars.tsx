@@ -43,7 +43,7 @@ function DetailsEnergyBars({ persona }: { persona: Persona }) {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" unit="kWh" />
+        <XAxis type="number" domain={[0, 50]} unit="kWh" />
         <YAxis type="category" width={160} dataKey="name" />
         <Tooltip />
         <Bar dataKey="value" unit="kWh">

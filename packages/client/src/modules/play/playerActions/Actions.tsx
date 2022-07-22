@@ -47,7 +47,7 @@ function ActionsLayout({ step }: { step: number }) {
           <ActionLayout
             key={playerAction.id}
             playerActionId={playerAction.id}
-            title={playerAction.action.name}
+            title={playerAction.action.description}
             financialCost={playerAction.action.financialCost}
             actionPointCost={playerAction.action.actionPointCost}
             isPerformed={playerAction.isPerformed}
