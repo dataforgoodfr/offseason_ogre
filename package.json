@@ -6,8 +6,12 @@
     "request": "^2.88.2",
     "should": "^13.2.3"
   },
+  "dependencies": {
+    "husky": "^8.0.1"
+  },
   "scripts": {
     "build": "yarn workspace ogre-client build && yarn workspace ogre-server build",
+    "prepare": "husky install",
     "db:up": "yarn workspace ogre-server db:up",
     "db:down": "yarn workspace ogre-server db:down",
     "db:migrate": "yarn workspace ogre-server db:migrate",
