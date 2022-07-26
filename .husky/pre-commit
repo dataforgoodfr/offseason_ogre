@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn workspace ogre-client lint:fix
-yarn workspace ogre-client prettier:write 
-yarn workspace ogre-server lint:fix 
-yarn workspace ogre-server prettier:write
+yarn workspace ogre-client lint
+yarn workspace ogre-client prettier:check
+yarn workspace ogre-server lint
+yarn workspace ogre-server prettier:check
