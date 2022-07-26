@@ -2,6 +2,7 @@ import { Game } from "../modules/games/types";
 import { User } from "../modules/users/types";
 
 export type IGame = Game;
+export type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
 export interface ITeam {
   id: number;
