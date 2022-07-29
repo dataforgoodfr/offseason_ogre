@@ -6,6 +6,7 @@ export type GameStep = {
   label: string;
 };
 export const STEPS: GameStep[] = [
+  { id: "initial-situation", label: "Actions" },
   { id: "consumption-1", label: "Choix conso 1" },
   { id: "production-1", label: "Choix prod 1" },
   { id: "consumption-2", label: "Choix conso 2" },
