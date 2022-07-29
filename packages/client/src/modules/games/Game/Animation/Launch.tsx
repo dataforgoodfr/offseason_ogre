@@ -16,8 +16,10 @@ import { useNavigate } from "react-router-dom";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
-const hasTeamWithTooManyPlayers = (teams: ITeamWithPlayers[]) => {
-  const MAX_TEAM_SIZE = 5;
+const hasTeamWithTooManyPlayers = (
+  teams: ITeamWithPlayers[],
+  MAX_TEAM_SIZE: number
+) => {
   return teams.some(
     (team: ITeamWithPlayers) => team.players.length > MAX_TEAM_SIZE
   );
@@ -28,10 +30,10 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const MAX_TEAM_SIZE = 5;
   const dialogContent = {
     message: "Êtes-vous sûr.e de vouloir lancer l'atelier ?",
-    warningMessage:
-      "Une ou plusieurs équipe(s) dépasse(nt) le nombre de joueurs recommandé (5 joueurs)",
+    warningMessage: `Une ou plusieurs équipe(s) dépasse(nt) le nombre de joueurs recommandé (${MAX_TEAM_SIZE} joueurs)`,
   };
 
   const navigate = useNavigate();
@@ -80,13 +82,13 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
           {"Lancer la partie ?"}
         </DialogTitle>
         <DialogContent>
-          {/* <DialogContentText
+          <DialogContentText
             id="alert-dialog-warning"
             sx={{ color: "red", mb: 2 }}
           >
-            {hasTeamWithTooManyPlayers(game.teams) &&
+            {hasTeamWithTooManyPlayers(game.teams, MAX_TEAM_SIZE) &&
               dialogContent.warningMessage}
-          </DialogContentText> */}
+          </DialogContentText>
           <DialogContentText id="alert-dialog-description">
             {dialogContent.message}
           </DialogContentText>
