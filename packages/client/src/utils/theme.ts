@@ -7,6 +7,8 @@ type ThemeVariant = "light" | "dark" | "system";
 
 const blue = "#1A3D5C";
 const yellow = "#f9c74f";
+const lightBlue = "#014EA6";
+const white = "#FFFFFF";
 
 const theme = createTheme({
   palette: {
@@ -28,6 +30,11 @@ const theme = createTheme({
       offshore: "#4C677E",
       terrestrial: "#8A8256",
     },
+    actionValidation: {
+      main: lightBlue,
+      contrastText: white,
+      dark: "#0066ff",
+    },
   },
 });
 
@@ -39,6 +46,19 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {
     energy: EnergyPalette;
     production: ProductionPalette;
+  }
+  interface Palette {
+    actionValidation: Palette["primary"];
+  }
+  interface PaletteOptions {
+    actionValidation: PaletteOptions["primary"];
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    actionValidation: true;
   }
 }
 
