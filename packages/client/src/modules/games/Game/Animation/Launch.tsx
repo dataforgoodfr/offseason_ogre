@@ -20,10 +20,8 @@ const hasTeamWithTooManyPlayers = (
   teams: ITeamWithPlayers[],
   MAX_TEAM_SIZE: number
 ) => {
-  return (
-    teams.some(
-      (team: ITeamWithPlayers) => team.players.length > MAX_TEAM_SIZE
-    ) || false
+  return teams.some(
+    (team: ITeamWithPlayers) => team.players.length > MAX_TEAM_SIZE
   );
 };
 
