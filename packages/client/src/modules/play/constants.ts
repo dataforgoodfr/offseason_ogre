@@ -12,8 +12,8 @@ export type GameStep = {
 
 export const STEPS: GameStep[] = [
   {
-    id: "initial",
-    label: "Choix conso 1",
+    id: "initial-situation",
+    label: "Actions",
     availableActionPoints: 0,
     type: "consumption",
   },

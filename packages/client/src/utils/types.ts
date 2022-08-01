@@ -9,8 +9,10 @@ export type {
   Player,
   Action,
   PlayerActions,
+  IGameWithTeams,
 };
 
+type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 type IGame = Game;
 
 interface ITeam {

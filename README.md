@@ -26,11 +26,12 @@ Node, yarn and Docker must be installed locally.
 
 1. Run "yarn env:default" from root, it will set then default values in the file at /packages/server/.env
 2. Run "yarn install" from root, it will install all dependencies in all workspaces
-3. Run "yarn db:up" from root, it will launch a container running a postGre database
-4. Run "yarn db:migrate" from root, it creates the tables in the database (must be run on a new database or after a schema change)
-5. Run "yarn workspace ogre-server db:generate" to generate the Prisma client from schema.
-6. Run "yarn workspace ogre-server dev" to launch server
-7. In another shell run "yarn workspace ogre-client dev" to launch client
+3. Run "yarn prepare" to initialize husky. 
+4. Run "yarn db:up" from root, it will launch a container running a postGre database
+5. Run "yarn db:migrate" from root, it creates the tables in the database (must be run on a new database or after a schema change)
+6. Run "yarn workspace ogre-server db:generate" to generate the Prisma client from schema.
+7. Run "yarn workspace ogre-server dev" to launch server
+8. In another shell run "yarn workspace ogre-client dev" to launch client
 
 ## Deployment
 
