@@ -1,6 +1,6 @@
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { Box, CircularProgress, Rating, Typography } from "@mui/material";
+import { Box, Rating, Typography } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
@@ -8,7 +8,7 @@ import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
 import { PlayerActions } from "../../../utils/types";
-import { usePlayerActions } from "./usePlayerActions";
+import { usePlay } from "../context/playContext";
 
 export { Actions };
 
@@ -16,20 +16,16 @@ function Actions({ currentStage }: { currentStage: Stage }) {
   return (
     <PlayBox>
       <ActionsHeader currentStage={currentStage} />
-      <ActionsLayout step={currentStage.step} />
+      <ActionsLayout />
     </PlayBox>
   );
 }
 
-function ActionsLayout({ step }: { step: number }) {
-  const { playerActions, query, mutation } = usePlayerActions();
-
-  if (query.isLoading) {
-    return <CircularProgress />;
-  }
+function ActionsLayout() {
+  const { playerActions, updatePlayerActions } = usePlay();
 
   const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
-    mutation.mutate(
+    updatePlayerActions(
       playerActions.map((pa) => ({
         id: pa.id,
         isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,

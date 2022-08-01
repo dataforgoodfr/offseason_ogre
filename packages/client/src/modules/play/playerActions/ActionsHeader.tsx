@@ -5,9 +5,12 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
-import { useCurrentPersona, useCurrentStep } from "../context/playContext";
+import {
+  useCurrentPersona,
+  useCurrentStep,
+  usePlayerActions,
+} from "../context/playContext";
 import { Stage } from "../../stages";
-import { usePlayerActions } from "./usePlayerActions";
 
 export { ActionsHeader };
 

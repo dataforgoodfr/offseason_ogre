@@ -5,7 +5,7 @@ import * as services from "./index";
 const model = database.playerActions;
 type Model = PlayerActions;
 
-export { create, getMany, getOrCreatePlayerActions };
+export { create, getMany, getOrCreatePlayerActions, updatePlayerActions };
 
 async function create({
   actionId,
@@ -85,4 +85,32 @@ async function getOrCreatePlayerActions(
   );
 
   return playerActions;
+}
+
+async function updatePlayerActions(
+  userId: number,
+  playerActions: {
+    isPerformed: boolean;
+    id: number;
+  }[]
+): Promise<PlayerActions[]> {
+  const [{ gameId }] = await Promise.all(
+    playerActions.map((playerAction) =>
+      database.playerActions.update({
+        where: {
+          id_userId: {
+            id: playerAction.id,
+            userId,
+          },
+        },
+        data: {
+          isPerformed: playerAction.isPerformed,
+        },
+      })
+    )
+  );
+
+  const updatedPlayerActions = await getOrCreatePlayerActions(gameId, userId);
+
+  return updatedPlayerActions;
 }
