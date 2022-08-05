@@ -8,7 +8,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { useCurrentPersona } from "../context/playContext";
 import { Stage } from "../../stages";
 import React, { useState } from "react";
-import { DialogHelp } from "./HelpDialog";
+import { HelpDialog } from "./HelpDialog";
 
 export { ActionsHeader };
 
@@ -17,6 +17,8 @@ function ActionsHeader({ currentStage }: { currentStage: Stage }) {
   const [openHelp, setOpenHelp] = useState(false);
   const handleClickOpenHelp = () => setOpenHelp(true);
   const handleCloseHelp = () => setOpenHelp(false);
+  const helpMessage =
+    "Tu peux utiliser tes points d’action pour réduire ta consommation. Tu en as un nombre limité, alors utilise-les à bon escient. Tu ne peux les utiliser que pour ce tour. Fais attention car certaines actions coûtent de l’argent en plus des points d’action.";
 
   return (
     <Box mt={2} mb={2}>
@@ -31,7 +33,11 @@ function ActionsHeader({ currentStage }: { currentStage: Stage }) {
         >
           <HelpIcon sx={{ color: "white" }} />
         </IconButton>
-        <DialogHelp open={openHelp} handleClose={handleCloseHelp} />
+        <HelpDialog
+          open={openHelp}
+          handleClose={handleCloseHelp}
+          message={helpMessage}
+        />
       </Box>
       <Box display="flex" alignItems="center" mt={1}>
         <PaidIcon />
