@@ -8,7 +8,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { useCurrentPersona } from "../context/playContext";
 import { Stage } from "../../stages";
 import React, { useState } from "react";
-import { HelpDialog } from "./HelpDialog";
+import { StepHelpDialog } from "./HelpDialogs";
 
 export { ActionsHeader };
 
@@ -33,7 +33,7 @@ function ActionsHeader({ currentStage }: { currentStage: Stage }) {
         >
           <HelpIcon sx={{ color: "white" }} />
         </IconButton>
-        <HelpDialog
+        <StepHelpDialog
           open={openHelp}
           handleClose={handleCloseHelp}
           message={helpMessage}
