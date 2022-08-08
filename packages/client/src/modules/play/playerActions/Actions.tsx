@@ -1,6 +1,6 @@
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { Box, Rating } from "@mui/material";
+import { Box, Rating, IconButton } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
@@ -10,9 +10,12 @@ import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
 
+import { actionHelpCards } from "../../actions";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { CircularProgress } from "@mui/material";
+import { ActionHelpDialog } from "./HelpDialogs";
 
 export { Actions };
 
@@ -45,6 +48,11 @@ function ActionsLayout({ step }: { step: number }) {
             title={action.name}
             financialCost={action.financialCost}
             actionPointCost={action.actionPointCost}
+            helpCardLink={
+              actionHelpCards.filter(
+                (actionHelpCard) => actionHelpCard.name === action.name
+              )[0].helpCardLink
+            }
           >
             <Typography>Caractéristiques.</Typography>
           </ActionLayout>
@@ -65,17 +73,25 @@ function ActionLayout({
   title,
   financialCost,
   actionPointCost,
+  helpCardLink,
 }: {
   children?: JSX.Element;
   title: string;
   financialCost: number;
   actionPointCost: number;
+  helpCardLink: string;
 }) {
   const [checked, setChecked] = React.useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
   };
+  const [openHelp, setOpenHelp] = useState(false);
+  const handleClickOpenHelp = () => setOpenHelp(true);
+  const handleCloseHelp = () => setOpenHelp(false);
+  const helpMessage =
+    "Voici le lien vers une carte qui te permettra de mieux comprendre les implications de ce choix";
+
   return (
     <Box
       sx={{
@@ -86,7 +102,18 @@ function ActionLayout({
       }}
     >
       <Typography alignItems="center" display="flex" variant="h6">
-        <InfoIcon sx={{ mr: 1 }} />
+        <IconButton
+          aria-label="help with current step"
+          onClick={handleClickOpenHelp}
+        >
+          <InfoIcon sx={{ mr: 1, color: "white" }} />
+        </IconButton>
+        <ActionHelpDialog
+          open={openHelp}
+          handleClose={handleCloseHelp}
+          message={helpMessage}
+          helpCardLink={helpCardLink}
+        />
         {title}
         <CustomCheckbox
           checked={checked}
