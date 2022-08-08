@@ -12,7 +12,6 @@ import _ from "lodash";
 export {
   PlayProvider,
   RootPlayProvider,
-  useGameSocket,
   useCurrentPersona,
   useCurrentStep,
   useMyTeam,
