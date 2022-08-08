@@ -1,14 +1,18 @@
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { Box, Rating, Typography } from "@mui/material";
+import { Box, Rating, Typography, IconButton } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
+
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
+import { actionHelpCards } from "../../actions";
+import { useState } from "react";
 import { PlayerActions } from "../../../utils/types";
 import { usePlay } from "../context/playContext";
+import { ActionHelpDialog } from "./HelpDialogs";
 
 export { Actions };
 
@@ -43,6 +47,12 @@ function ActionsLayout() {
             onPlayerActionChanged={(isPerformed) =>
               handleActionChange(playerAction.id, isPerformed)
             }
+            helpCardLink={
+              actionHelpCards.filter(
+                (actionHelpCard) =>
+                  actionHelpCard.name === playerAction.action.name
+              )[0].helpCardLink
+            }
           />
         );
       })}
@@ -59,13 +69,23 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 function ActionLayout({
   playerAction,
   onPlayerActionChanged,
+  helpCardLink,
 }: {
   playerAction: PlayerActions;
   onPlayerActionChanged: (isPerformed: boolean) => void;
+  helpCardLink: string;
 }) {
+  const [openHelp, setOpenHelp] = useState(false);
+
+  const handleClickOpenHelp = () => setOpenHelp(true);
+  const handleCloseHelp = () => setOpenHelp(false);
+
   const handleActionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onPlayerActionChanged(event.target.checked);
   };
+
+  const helpMessage =
+    "Voici le lien vers une carte qui te permettra de mieux comprendre les implications de ce choix";
 
   return (
     <Box
@@ -77,7 +97,18 @@ function ActionLayout({
       }}
     >
       <Typography alignItems="center" display="flex" variant="h6">
-        <InfoIcon sx={{ mr: 1 }} />
+        <IconButton
+          aria-label="help with current step"
+          onClick={handleClickOpenHelp}
+        >
+          <InfoIcon sx={{ mr: 1, color: "white" }} />
+        </IconButton>
+        <ActionHelpDialog
+          open={openHelp}
+          handleClose={handleCloseHelp}
+          message={helpMessage}
+          helpCardLink={helpCardLink}
+        />
         {playerAction.action.name}
         <CustomCheckbox
           checked={playerAction.isPerformed}
