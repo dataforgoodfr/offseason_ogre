@@ -1,15 +1,53 @@
 import { Game } from "../modules/games/types";
 import { User } from "../modules/users/types";
 
-export type IGame = Game;
-export type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
+export type {
+  IGame,
+  ITeam,
+  ITeamWithPlayers,
+  IUser,
+  Player,
+  Action,
+  PlayerActions,
+  IGameWithTeams,
+};
 
-export interface ITeam {
+type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
+type IGame = Game;
+
+interface ITeam {
   id: number;
   name: string;
 }
-export type ITeamWithPlayers = ITeam & {
-  players: { gameId: number; teamId: number; userId: number; user: IUser }[];
+type ITeamWithPlayers = ITeam & {
+  players: Player[];
 };
 
-export type IUser = User;
+type IUser = User;
+
+interface Player {
+  gameId: number;
+  teamId: number;
+  userId: number;
+  user: IUser;
+  actions: PlayerActions[];
+}
+
+interface Action {
+  id: number;
+  name: string;
+  step: number;
+  actionPointCost: number;
+  financialCost: number;
+  players: PlayerActions[];
+}
+
+interface PlayerActions {
+  id: number;
+  player: Player;
+  userId: number;
+  gameId: number;
+  action: Action;
+  actionId: number;
+  isPerformed: boolean;
+}

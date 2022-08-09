@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
-import { IGame, ITeamWithPlayers } from "../../../utils/types";
+import { IGame, ITeamWithPlayers, PlayerActions } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
 import { Persona, persona } from "../../persona/persona";
 import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
@@ -18,11 +18,19 @@ export {
   useLoadedPlay as usePlay,
   usePersonaByStep,
   usePersonaByUserId,
+  usePlayerActions,
 };
 
 interface IPlayContext {
   game: IGameWithTeams;
   updateGame: (update: Partial<IGame>) => void;
+  playerActions: PlayerActions[];
+  updatePlayerActions: (
+    update: {
+      isPerformed: boolean;
+      id: number;
+    }[]
+  ) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -44,7 +52,12 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
     null
   );
-  const { socket } = useGameSocket({ gameId, setGameWithTeams });
+  const [playerActions, setPlayerActions] = useState<PlayerActions[]>([]);
+  const { socket } = useGameSocket({
+    gameId,
+    setGameWithTeams,
+    setPlayerActions,
+  });
 
   if (gameWithTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
@@ -58,8 +71,24 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     socket.emit("updateGame", { gameId, update });
   };
 
+  const updatePlayerActions = (
+    playerActions: {
+      isPerformed: boolean;
+      id: number;
+    }[]
+  ) => {
+    socket.emit("updatePlayerActions", { playerActions });
+  };
+
   return (
-    <PlayContext.Provider value={{ game: gameWithTeams, updateGame }}>
+    <PlayContext.Provider
+      value={{
+        game: gameWithTeams,
+        updateGame,
+        playerActions,
+        updatePlayerActions,
+      }}
+    >
       {children}
     </PlayContext.Provider>
   );
@@ -112,12 +141,33 @@ function usePersonaByUserId({
   return Object.fromEntries(userIds.map((userId) => [userId, persona]));
 }
 
+function usePlayerActions() {
+  const { game, playerActions } = useLoadedPlay();
+
+  const playerActionsAtCurrentStep = playerActions.filter(
+    (pa) => pa.action.step === game.step
+  );
+
+  const actionPointsUsedAtCurrentStep = playerActionsAtCurrentStep.reduce(
+    (sum, pa) => (pa.isPerformed ? sum + pa.action.actionPointCost : sum),
+    0
+  );
+
+  return {
+    playerActions,
+    playerActionsAtCurrentStep,
+    actionPointsUsedAtCurrentStep,
+  };
+}
+
 function useGameSocket({
   gameId,
   setGameWithTeams,
+  setPlayerActions,
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
+  setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   useEffect(() => {
@@ -135,6 +185,13 @@ function useGameSocket({
       });
     });
 
+    newSocket.on(
+      "playerActionsUpdated",
+      ({ playerActions }: { playerActions: PlayerActions[] }) => {
+        setPlayerActions(playerActions);
+      }
+    );
+
     newSocket.on("connect", () => {
       newSocket.emit("joinGame", gameId);
     });
@@ -144,7 +201,7 @@ function useGameSocket({
     return () => {
       newSocket.disconnect();
     };
-  }, [gameId, setGameWithTeams]);
+  }, [gameId, setGameWithTeams, setPlayerActions]);
   return { socket };
 }
 

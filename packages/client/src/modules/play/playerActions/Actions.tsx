@@ -1,20 +1,17 @@
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { Box, Rating, IconButton } from "@mui/material";
+import { Box, Rating, Typography, IconButton } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 
-import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
-
 import { actionHelpCards } from "../../actions";
 import { useState } from "react";
-import { useQuery } from "react-query";
-import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { PlayerActions } from "../../../utils/types";
+import { usePlay } from "../context/playContext";
 import { ActionHelpDialog } from "./HelpDialogs";
 
 export { Actions };
@@ -23,39 +20,40 @@ function Actions({ currentStage }: { currentStage: Stage }) {
   return (
     <PlayBox>
       <ActionsHeader currentStage={currentStage} />
-      <ActionsLayout step={currentStage.step} />
+      <ActionsLayout />
     </PlayBox>
   );
 }
 
-function ActionsLayout({ step }: { step: number }) {
-  const query = useQuery("actions", () => {
-    return axios.get<undefined, { data: { actions: any[] } }>(
-      `/api/actions/${step}`
+function ActionsLayout() {
+  const { playerActions, updatePlayerActions } = usePlay();
+
+  const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
+    updatePlayerActions(
+      playerActions.map((pa) => ({
+        id: pa.id,
+        isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,
+      }))
     );
-  });
-  if (query.isLoading) {
-    return <CircularProgress />;
-  }
-  const actions = query?.data?.data?.actions ?? [];
+  };
 
   return (
     <Box>
-      {actions.map((action) => {
+      {playerActions.map((playerAction) => {
         return (
           <ActionLayout
-            key={action.id}
-            title={action.name}
-            financialCost={action.financialCost}
-            actionPointCost={action.actionPointCost}
+            key={playerAction.id}
+            playerAction={playerAction}
+            onPlayerActionChanged={(isPerformed) =>
+              handleActionChange(playerAction.id, isPerformed)
+            }
             helpCardLink={
               actionHelpCards.filter(
-                (actionHelpCard) => actionHelpCard.name === action.name
+                (actionHelpCard) =>
+                  actionHelpCard.name === playerAction.action.name
               )[0].helpCardLink
             }
-          >
-            <Typography>Caractéristiques.</Typography>
-          </ActionLayout>
+          />
         );
       })}
     </Box>
@@ -69,26 +67,23 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 }));
 
 function ActionLayout({
-  children,
-  title,
-  financialCost,
-  actionPointCost,
+  playerAction,
+  onPlayerActionChanged,
   helpCardLink,
 }: {
-  children?: JSX.Element;
-  title: string;
-  financialCost: number;
-  actionPointCost: number;
+  playerAction: PlayerActions;
+  onPlayerActionChanged: (isPerformed: boolean) => void;
   helpCardLink: string;
 }) {
-  const [checked, setChecked] = React.useState(false);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-  };
   const [openHelp, setOpenHelp] = useState(false);
+
   const handleClickOpenHelp = () => setOpenHelp(true);
   const handleCloseHelp = () => setOpenHelp(false);
+
+  const handleActionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onPlayerActionChanged(event.target.checked);
+  };
+
   const helpMessage =
     "Voici le lien vers une carte qui te permettra de mieux comprendre les implications de ce choix";
 
@@ -114,10 +109,10 @@ function ActionLayout({
           message={helpMessage}
           helpCardLink={helpCardLink}
         />
-        {title}
+        {playerAction.action.name}
         <CustomCheckbox
-          checked={checked}
-          onChange={handleChange}
+          checked={playerAction.isPerformed}
+          onChange={handleActionChange}
           inputProps={{ "aria-label": "controlled" }}
         />
       </Typography>
@@ -127,10 +122,10 @@ function ActionLayout({
           name="action-points-cost"
           readOnly
           max={3}
-          value={actionPointCost}
+          value={playerAction.action.actionPointCost}
         />
         <PaidIcon />
-        {`${financialCost}€/j`}
+        {`${playerAction.action.financialCost}€/j`}
       </Box>
     </Box>
   );
