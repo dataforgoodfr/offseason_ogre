@@ -38,6 +38,10 @@ const theme = createTheme({
   },
 });
 
+export const getStyledProps = (...props: string[]) => ({
+  shouldForwardProp: (prop: any) => !props.includes(prop as any),
+});
+
 declare module "@mui/material/styles" {
   interface Palette {
     energy: EnergyPalette;

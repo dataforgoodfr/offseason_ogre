@@ -2,17 +2,17 @@ import { TextFieldProps } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import { styled, Theme } from "@mui/material/styles";
 
-import { ThemeVariant } from "../../../../utils/theme";
+import { getStyledProps, ThemeVariant } from "../../../../utils/theme";
 
 interface CustomAutocompleteProps {
   themeVariant?: ThemeVariant;
   variant?: TextFieldProps["variant"];
 }
 
-const CustomAutocomplete = styled(Autocomplete, {
-  shouldForwardProp: (prop) =>
-    !["themeVariant", "variant"].includes(prop as any),
-})<CustomAutocompleteProps>(
+const CustomAutocomplete = styled(
+  Autocomplete,
+  getStyledProps("themeVariant", "variant")
+)<CustomAutocompleteProps>(
   ({ theme, themeVariant = "dark", variant = "outlined" }) => {
     const commonStyle = {
       marginBottom: "1rem",
