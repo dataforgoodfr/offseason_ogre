@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, responsiveFontSizes } from "@mui/material";
 
 export type { ThemeVariant };
 export { theme };
@@ -10,7 +10,7 @@ const yellow = "#f9c74f";
 const lightBlue = "#014EA6";
 const white = "#FFFFFF";
 
-const theme = createTheme({
+let theme = createTheme({
   palette: {
     primary: {
       main: blue,
@@ -37,6 +37,7 @@ const theme = createTheme({
     },
   },
 });
+theme = responsiveFontSizes(theme);
 
 declare module "@mui/material/styles" {
   interface Palette {
