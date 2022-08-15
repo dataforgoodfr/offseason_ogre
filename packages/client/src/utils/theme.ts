@@ -36,24 +36,39 @@ let theme = createTheme({
       dark: "#0066ff",
     },
   },
+  variables: {
+    headerHeight: {
+      sm: 56,
+      default: 64,
+    },
+  },
 });
 theme = responsiveFontSizes(theme);
 
 declare module "@mui/material/styles" {
-  interface Palette {
+  interface CustomPalette {
     energy: EnergyPalette;
     production: ProductionPalette;
+    actionValidation: Partial<Palette["primary"]>;
   }
-  interface PaletteOptions {
-    energy: EnergyPalette;
-    production: ProductionPalette;
+
+  interface CustomVariables {
+    headerHeight: {
+      sm: number;
+      default: number;
+    };
   }
-  interface Palette {
-    actionValidation: Palette["primary"];
+
+  interface CustomTheme {
+    palette: CustomPalette;
+    variables: CustomVariables;
   }
-  interface PaletteOptions {
-    actionValidation: PaletteOptions["primary"];
-  }
+
+  interface Palette extends CustomPalette {}
+  interface PaletteOptions extends CustomPalette {}
+
+  interface Theme extends CustomTheme {}
+  interface ThemeOptions extends CustomTheme {}
 }
 
 // Update the Button's color prop options
