@@ -8,6 +8,9 @@ const Typography = styled(TypographyMui)(({ theme }) => ({
     "&:is(h5)": {
       fontSize: 18,
     },
+    "&:is(h6)": {
+      fontSize: 16,
+    },
     "&:is(p)": {
       marginRight: 0,
       fontSize: 14,

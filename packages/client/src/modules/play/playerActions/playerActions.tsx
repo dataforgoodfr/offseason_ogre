@@ -17,7 +17,7 @@ function PlayerActions() {
   const currentStage = GetCurrentStageData();
   return (
     <Box>
-      <Grid container direction="row">
+      <Grid container direction="row" rowSpacing={4}>
         <Grid
           container
           item
