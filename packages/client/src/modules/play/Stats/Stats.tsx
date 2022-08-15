@@ -7,7 +7,7 @@ export { Stats };
 function Stats() {
   return (
     <Box>
-      <Grid container direction="row">
+      <Grid container direction="row" rowSpacing={4}>
         <Grid
           item
           xs={12}
