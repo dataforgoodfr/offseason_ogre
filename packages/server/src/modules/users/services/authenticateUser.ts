@@ -5,7 +5,7 @@ import { User } from "../types";
 
 export { authenticateUser };
 
-async function authenticateUser(token: string): Promise<User> {
+async function authenticateUser(token = ""): Promise<User> {
   let email: string | undefined;
   try {
     const payload = verify(token);

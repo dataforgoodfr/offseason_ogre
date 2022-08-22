@@ -26,13 +26,18 @@ export {
   useLoadedPlay as usePlay,
   getResultsByStep,
   useResultsByUserId,
+  usePlayerActions,
 };
 
 interface IPlayContext {
   game: IGameWithTeams;
   updateGame: (update: Partial<IGame>) => void;
+  playerActions: PlayerActions[];
   updatePlayerActions: (
-    playerActions: { id: number; isPerformed: boolean }[]
+    update: {
+      isPerformed: boolean;
+      id: number;
+    }[]
   ) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
@@ -55,7 +60,12 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
     null
   );
-  const { socket } = useGameSocket({ gameId, setGameWithTeams });
+  const [playerActions, setPlayerActions] = useState<PlayerActions[]>([]);
+  const { socket } = useGameSocket({
+    gameId,
+    setGameWithTeams,
+    setPlayerActions,
+  });
 
   if (gameWithTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
@@ -70,14 +80,22 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updatePlayerActions = (
-    playerActions: { id: number; isPerformed: boolean }[]
+    playerActions: {
+      isPerformed: boolean;
+      id: number;
+    }[]
   ) => {
-    socket.emit("updatePlayerActions", { update: { playerActions } });
+    socket.emit("updatePlayerActions", { playerActions });
   };
 
   return (
     <PlayContext.Provider
-      value={{ game: gameWithTeams, updateGame, updatePlayerActions }}
+      value={{
+        game: gameWithTeams,
+        updateGame,
+        playerActions,
+        updatePlayerActions,
+      }}
     >
       {children}
     </PlayContext.Provider>
@@ -117,12 +135,33 @@ function useCurrentStep(): GameStep | null {
   return STEPS?.[game.step] || null;
 }
 
+function usePlayerActions() {
+  const { game, playerActions } = useLoadedPlay();
+
+  const playerActionsAtCurrentStep = playerActions.filter(
+    (pa) => pa.action.step === game.step
+  );
+
+  const actionPointsUsedAtCurrentStep = playerActionsAtCurrentStep.reduce(
+    (sum, pa) => (pa.isPerformed ? sum + pa.action.actionPointCost : sum),
+    0
+  );
+
+  return {
+    playerActions,
+    playerActionsAtCurrentStep,
+    actionPointsUsedAtCurrentStep,
+  };
+}
+
 function useGameSocket({
   gameId,
   setGameWithTeams,
+  setPlayerActions,
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
+  setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   useEffect(() => {
@@ -140,6 +179,13 @@ function useGameSocket({
       });
     });
 
+    newSocket.on(
+      "playerActionsUpdated",
+      ({ playerActions }: { playerActions: PlayerActions[] }) => {
+        setPlayerActions(playerActions);
+      }
+    );
+
     newSocket.on("connect", () => {
       newSocket.emit("joinGame", gameId);
     });
@@ -149,7 +195,7 @@ function useGameSocket({
     return () => {
       newSocket.disconnect();
     };
-  }, [gameId, setGameWithTeams]);
+  }, [gameId, setGameWithTeams, setPlayerActions]);
   return { socket };
 }
 

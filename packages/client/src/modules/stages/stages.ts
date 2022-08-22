@@ -11,6 +11,7 @@ interface Action {
   category?: string;
 }
 
+// TODO: à merger dans les objects STEPS (cf constants.ts)
 interface Stage {
   title: string;
   step: number;

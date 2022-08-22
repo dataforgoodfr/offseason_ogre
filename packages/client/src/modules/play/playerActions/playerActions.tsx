@@ -1,5 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import { Actions } from "./Actions";
+import { ValidateActions } from "./Validation";
 import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
 import { usePlay } from "../context/playContext";
 import { Stage, stages } from "../../stages";
@@ -18,15 +19,30 @@ function PlayerActions() {
     <Box>
       <Grid container direction="row">
         <Grid
+          container
           item
+          direction="column"
           xs={12}
           sm={3}
           sx={{
             pl: 1,
             pr: 1,
+            justifyContent: "space-between",
           }}
         >
-          <PlayerHeader />
+          <Grid item>
+            <PlayerHeader />
+          </Grid>
+          <Grid
+            item
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ValidateActions />
+          </Grid>
         </Grid>
         <Grid
           item

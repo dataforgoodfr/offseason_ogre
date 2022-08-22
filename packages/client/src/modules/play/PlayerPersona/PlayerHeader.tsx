@@ -22,7 +22,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
-import { IGame, ITeam, IUser } from "../../../utils/types";
+import { IGame, IGameWithTeams, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
 import {
   useCurrentStep,
@@ -213,12 +213,22 @@ function Actions() {
           mt: 2,
           width: "200px",
         }}
-        disabled={!game.isStepActive}
+        disabled={isActionButtonDisabled(game)}
       >
         <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> {currentStep?.label}
       </Button>
     </Box>
   );
+}
+
+function isActionButtonDisabled(game: IGameWithTeams): boolean {
+  if (game.isStepActive === false) {
+    return true;
+  }
+  if (game.step === 0) {
+    return true;
+  }
+  return false;
 }
 
 function ScoresLegendLayout({ children }: { children: any }) {

@@ -1,20 +1,19 @@
 import React from "react";
 import InfoIcon from "@mui/icons-material/Info";
-import { Box, Rating } from "@mui/material";
+import { Box, Rating, Typography, IconButton } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 
-import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
 
-import { useQuery } from "react-query";
-import axios from "axios";
-import { CircularProgress } from "@mui/material";
-import { usePlay } from "../context/playContext";
+import { actionHelpCards } from "../../actions";
+import { useState } from "react";
 import { PlayerActions } from "../../../utils/types";
+import { usePlay } from "../context/playContext";
+import { ActionHelpDialog } from "./HelpDialogs";
 
 export { Actions };
 
@@ -22,23 +21,22 @@ function Actions({ currentStage }: { currentStage: Stage }) {
   return (
     <PlayBox>
       <ActionsHeader currentStage={currentStage} />
-      <ActionsLayout step={currentStage.step} />
+      <ActionsLayout />
     </PlayBox>
   );
 }
 
-function ActionsLayout({ step }: { step: number }) {
-  const { game } = usePlay();
+function ActionsLayout() {
+  const { playerActions, updatePlayerActions } = usePlay();
 
-  const query = useQuery("actions", () => {
-    return axios.get<undefined, { data: { playerActions: PlayerActions[] } }>(
-      `/api/actions/me?step=${step}&gameId=${game.id}`
+  const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
+    updatePlayerActions(
+      playerActions.map((pa) => ({
+        id: pa.id,
+        isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,
+      }))
     );
-  });
-  if (query.isLoading) {
-    return <CircularProgress />;
-  }
-  const playerActions = query?.data?.data?.playerActions ?? [];
+  };
 
   return (
     <Box>
@@ -46,11 +44,16 @@ function ActionsLayout({ step }: { step: number }) {
         return (
           <ActionLayout
             key={playerAction.id}
-            playerActionId={playerAction.id}
-            title={playerAction.action.description}
-            financialCost={playerAction.action.financialCost}
-            actionPointCost={playerAction.action.actionPointCost}
-            isPerformed={playerAction.isPerformed}
+            playerAction={playerAction}
+            onPlayerActionChanged={(isPerformed) =>
+              handleActionChange(playerAction.id, isPerformed)
+            }
+            helpCardLink={
+              actionHelpCards.filter(
+                (actionHelpCard) =>
+                  actionHelpCard.name === playerAction.action.name
+              )[0].helpCardLink
+            }
           />
         );
       })}
@@ -65,32 +68,25 @@ const CustomCheckbox = styled(Checkbox)(() => ({
 }));
 
 function ActionLayout({
-  playerActionId,
-  title,
-  financialCost,
-  actionPointCost,
-  isPerformed,
+  playerAction,
+  onPlayerActionChanged,
+  helpCardLink,
 }: {
-  playerActionId: number;
-  title: string;
-  financialCost: number;
-  actionPointCost: number;
-  isPerformed: boolean;
+  playerAction: PlayerActions;
+  onPlayerActionChanged: (isPerformed: boolean) => void;
+  helpCardLink: string;
 }) {
-  const { updatePlayerActions } = usePlay();
+  const [openHelp, setOpenHelp] = useState(false);
 
-  const [checked, setChecked] = React.useState(isPerformed);
+  const handleClickOpenHelp = () => setOpenHelp(true);
+  const handleCloseHelp = () => setOpenHelp(false);
 
-  React.useEffect(() => {
-    setChecked(isPerformed);
-  }, []);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    updatePlayerActions([
-      { id: playerActionId, isPerformed: event.target.checked },
-    ]);
+  const handleActionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onPlayerActionChanged(event.target.checked);
   };
+
+  const helpMessage =
+    "Voici le lien vers une carte qui te permettra de mieux comprendre les implications de ce choix";
 
   return (
     <Box
@@ -102,11 +98,22 @@ function ActionLayout({
       }}
     >
       <Typography alignItems="center" display="flex" variant="h6">
-        <InfoIcon sx={{ mr: 1 }} />
-        {title}
+        <IconButton
+          aria-label="help with current step"
+          onClick={handleClickOpenHelp}
+        >
+          <InfoIcon sx={{ mr: 1, color: "white" }} />
+        </IconButton>
+        <ActionHelpDialog
+          open={openHelp}
+          handleClose={handleCloseHelp}
+          message={helpMessage}
+          helpCardLink={helpCardLink}
+        />
+        {playerAction.action.name}
         <CustomCheckbox
-          checked={checked}
-          onChange={handleChange}
+          checked={playerAction.isPerformed}
+          onChange={handleActionChange}
           inputProps={{ "aria-label": "controlled" }}
         />
       </Typography>
@@ -116,10 +123,10 @@ function ActionLayout({
           name="action-points-cost"
           readOnly
           max={3}
-          value={actionPointCost}
+          value={playerAction.action.actionPointCost}
         />
         <PaidIcon />
-        {`${financialCost}€/j`}
+        {`${playerAction.action.financialCost}€/j`}
       </Box>
     </Box>
   );

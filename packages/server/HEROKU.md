@@ -27,10 +27,3 @@
 # Link heroku with local repo
 
 `heroku git:remote -a atelierogre-staging`
-
-# Migrating & seeding Heroku DB woth sequelize
-
-- First login with heroku CLI
-- If you changed something in the code or in the migration/seeding files, make sure it has been uploaded on heroku (see section Deployment)
-- `heroku run sequelize db:migrate`
-- `heroku run sequelize db:seed:all`
