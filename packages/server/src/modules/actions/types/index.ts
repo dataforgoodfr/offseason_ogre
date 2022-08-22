@@ -13,5 +13,6 @@ interface PlayerActions {
   userId: number;
   gameId: number;
   actionId: number;
+  action: Action;
   isPerformed: boolean;
 }

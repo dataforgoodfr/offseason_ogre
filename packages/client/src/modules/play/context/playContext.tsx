@@ -31,6 +31,8 @@ interface IPlayContext {
       id: number;
     }[]
   ) => void;
+  actionPointsLimitExceeded: boolean;
+  setActionPointsLimitExceeded: (limitExceeded: boolean) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -53,10 +55,13 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     null
   );
   const [playerActions, setPlayerActions] = useState<PlayerActions[]>([]);
+  const [actionPointsLimitExceeded, setActionPointsLimitExceeded] =
+    useState<boolean>(false);
   const { socket } = useGameSocket({
     gameId,
     setGameWithTeams,
     setPlayerActions,
+    setActionPointsLimitExceeded,
   });
 
   if (gameWithTeams === null || socket === null) {
@@ -77,7 +82,11 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       id: number;
     }[]
   ) => {
-    socket.emit("updatePlayerActions", { playerActions });
+    socket.emit("updatePlayerActions", {
+      gameId,
+      step: gameWithTeams.step,
+      playerActions,
+    });
   };
 
   return (
@@ -87,6 +96,8 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         updateGame,
         playerActions,
         updatePlayerActions,
+        actionPointsLimitExceeded,
+        setActionPointsLimitExceeded,
       }}
     >
       {children}
@@ -157,6 +168,7 @@ function usePlayerActions() {
     playerActions,
     playerActionsAtCurrentStep,
     actionPointsUsedAtCurrentStep,
+    actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
   };
 }
 
@@ -164,10 +176,12 @@ function useGameSocket({
   gameId,
   setGameWithTeams,
   setPlayerActions,
+  setActionPointsLimitExceeded,
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
   setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
+  setActionPointsLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   useEffect(() => {
@@ -192,6 +206,10 @@ function useGameSocket({
       }
     );
 
+    newSocket.on("actionPointsLimitExceeded", () => {
+      setActionPointsLimitExceeded(true);
+    });
+
     newSocket.on("connect", () => {
       newSocket.emit("joinGame", gameId);
     });
@@ -201,7 +219,12 @@ function useGameSocket({
     return () => {
       newSocket.disconnect();
     };
-  }, [gameId, setGameWithTeams, setPlayerActions]);
+  }, [
+    gameId,
+    setGameWithTeams,
+    setPlayerActions,
+    setActionPointsLimitExceeded,
+  ]);
   return { socket };
 }
 

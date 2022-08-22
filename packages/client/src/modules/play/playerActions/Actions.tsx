@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "@mui/material/Button";
 import InfoIcon from "@mui/icons-material/Info";
 import { Box, Rating, Typography, IconButton } from "@mui/material";
 import PaidIcon from "@mui/icons-material/Paid";
@@ -11,8 +12,9 @@ import { Stage } from "../../stages";
 import { actionHelpCards } from "../../actions";
 import { useState } from "react";
 import { PlayerActions } from "../../../utils/types";
-import { usePlay } from "../context/playContext";
+import { usePlay, usePlayerActions } from "../context/playContext";
 import { ActionHelpDialog } from "./HelpDialogs";
+import { Dialog } from "../../common/components/Dialog";
 
 export { Actions };
 
@@ -26,9 +28,16 @@ function Actions({ currentStage }: { currentStage: Stage }) {
 }
 
 function ActionsLayout() {
-  const { playerActions, updatePlayerActions } = usePlay();
+  const {
+    playerActions,
+    updatePlayerActions,
+    actionPointsLimitExceeded,
+    setActionPointsLimitExceeded,
+  } = usePlay();
+  const { actionPointsAvailableAtCurrentStep } = usePlayerActions();
 
   const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
+    setActionPointsLimitExceeded(false);
     updatePlayerActions(
       playerActions.map((pa) => ({
         id: pa.id,
@@ -56,6 +65,33 @@ function ActionsLayout() {
           />
         );
       })}
+
+      <Dialog
+        open={actionPointsLimitExceeded}
+        handleClose={() => setActionPointsLimitExceeded(false)}
+        actions={
+          <>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => setActionPointsLimitExceeded(false)}
+            >
+              Fermer
+            </Button>
+          </>
+        }
+      >
+        <Typography>
+          Tu ne peux pas effectuer cette action car tu as dépassé le nombre
+          maximum de {actionPointsAvailableAtCurrentStep} points d'action
+          autorisé à ce tour.
+        </Typography>
+        <br />
+        <Typography>
+          Si tu n'es pas encore satisfait(e) de tes choix, tu peux les modifier
+          jusqu'à la fin du tour.
+        </Typography>
+      </Dialog>
     </Box>
   );
 }
