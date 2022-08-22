@@ -4,6 +4,7 @@ import { ValidateActions } from "./Validation";
 import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
 import { usePlay } from "../context/playContext";
 import { Stage, stages } from "../../stages";
+import { PlayerHeaderGrid } from "./PlayerHeaderGrid";
 
 export { PlayerActions, PlayerHeader };
 
@@ -17,33 +18,8 @@ function PlayerActions() {
   const currentStage = GetCurrentStageData();
   return (
     <Box>
-      <Grid container direction="row">
-        <Grid
-          container
-          item
-          direction="column"
-          xs={12}
-          sm={3}
-          sx={{
-            pl: 1,
-            pr: 1,
-            justifyContent: "space-between",
-          }}
-        >
-          <Grid item>
-            <PlayerHeader />
-          </Grid>
-          <Grid
-            item
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <ValidateActions />
-          </Grid>
-        </Grid>
+      <Grid container direction="row" rowSpacing={4}>
+        <PlayerHeaderGrid additionalActions={<ValidateActions />} />
         <Grid
           item
           xs={12}
