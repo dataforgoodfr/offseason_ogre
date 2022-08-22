@@ -4,26 +4,21 @@ import { PlayBox } from "../Components";
 import { EnergyButtons } from "../../common/components/EnergyButtons";
 import { MAX_NUMBER_STEPS } from "../constants";
 import _ from "lodash";
-import { getResultsByStep, usePlay } from "../context/playContext";
+import {
+  getResultsByStep,
+  usePlay,
+  usePlayerActions,
+} from "../context/playContext";
 import { sumFor } from "../../persona";
-import { ITeamWithPlayers, Player, PlayerActions } from "../../../utils/types";
-import { useAuth } from "../../auth/authProvider";
+import { PlayerActions } from "../../../utils/types";
 import { getPlayerValuesByStep } from "../utils/playerValues";
 
 export { StatsGraphs };
 
 function StatsGraphs() {
   const [step, setSelectedStep] = React.useState<number>();
-  const { game } = usePlay();
-  const { user } = useAuth();
 
-  const playerActions =
-    game.teams
-      .find((team: ITeamWithPlayers) =>
-        team.players.find((player: Player) => player.userId === user?.id)
-      )
-      ?.players.find((player: Player) => player.userId === user?.id)?.actions ||
-    [];
+  const { playerActions } = usePlayerActions();
 
   return (
     <PlayBox>

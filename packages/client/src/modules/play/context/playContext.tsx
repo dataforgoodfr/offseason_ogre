@@ -242,33 +242,33 @@ function computeResultsByStep(
 ): Persona {
   if (step === 0) {
     return persona;
-  } else if (playerActions && step === 1) {
-    const performedActions = playerActions
-      .filter(
-        (playerAction: PlayerActions) => playerAction.isPerformed === true
-      )
-      .map((playerAction: PlayerActions) => playerAction.action);
-
-    const costPerDay = performedActions
-      .map((action: Action) => action.financialCost)
-      .reduce((a, b) => a + b, 0);
-    const performedActionsNames = performedActions.map(
-      (action: Action) => action.name
-    );
-
-    const newConsumption = JSON.parse(JSON.stringify(persona.consumption)).map(
-      (consumption: ConsumptionDatum) => {
-        return computeConsumptionChoices(consumption, performedActionsNames);
-      }
-    );
-
-    return {
-      budget: persona.budget - costPerDay,
-      carbonFootprint: persona.carbonFootprint,
-      points: persona.points,
-      consumption: newConsumption,
-      production: persona.production,
-    };
   }
-  return persona;
+
+  const performedActions = playerActions
+    ?.filter(
+      (playerAction: PlayerActions) =>
+        playerAction.action.step <= step && playerAction.isPerformed === true
+    )
+    .map((playerAction: PlayerActions) => playerAction.action);
+
+  const costPerDay = performedActions
+    ?.map((action: Action) => action.financialCost)
+    .reduce((a, b) => a + b, 0);
+  const performedActionsNames = performedActions.map(
+    (action: Action) => action.name
+  );
+
+  const newConsumption = JSON.parse(JSON.stringify(persona.consumption)).map(
+    (consumption: ConsumptionDatum) => {
+      return computeConsumptionChoices(consumption, performedActionsNames);
+    }
+  );
+
+  return {
+    budget: persona.budget - costPerDay,
+    carbonFootprint: persona.carbonFootprint,
+    points: persona.points,
+    consumption: newConsumption,
+    production: persona.production,
+  };
 }

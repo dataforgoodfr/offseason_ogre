@@ -110,7 +110,7 @@ function ActionLayout({
           message={helpMessage}
           helpCardLink={helpCardLink}
         />
-        {playerAction.action.name}
+        {playerAction.action.description}
         <CustomCheckbox
           checked={playerAction.isPerformed}
           onChange={handleActionChange}

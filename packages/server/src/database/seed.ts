@@ -10,19 +10,27 @@ const actions = [...getActionInformation()] as Action[];
 async function seed() {
   await database.$connect();
 
-  await database.user.create({
-    data: {
-      email: "seeding@database.com",
-      isTeacher: false,
-      firstName: "Seeding",
-      lastName: "Master",
-      country: "FR",
-    },
-  });
+  try {
+    await database.user.create({
+      data: {
+        email: "seeding@database.com",
+        isTeacher: false,
+        firstName: "Seeding",
+        lastName: "Master",
+        country: "FR",
+      },
+    });
+  } catch {
+    console.log("Seeding user already exists");
+  }
 
-  await database.action.createMany({
-    data: actions,
-  });
+  try {
+    await database.action.createMany({
+      data: actions,
+    });
+  } catch {
+    console.log("Actions already exists");
+  }
 
   await database.$disconnect();
 }

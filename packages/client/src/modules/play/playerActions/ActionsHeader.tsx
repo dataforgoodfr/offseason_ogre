@@ -62,7 +62,7 @@ function ActionsHeader({ currentStage }: { currentStage: Stage }) {
 
 function ActionPoints() {
   const { actionPointsUsedAtCurrentStep } = usePlayerActions();
-  let currentStep = useCurrentStep();
+  const currentStep = useCurrentStep();
 
   return (
     <Box display="flex" alignItems="center" mt={1}>
