@@ -1,17 +1,17 @@
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { styled, Theme } from "@mui/material/styles";
 
-import { ThemeVariant } from "../../../../utils/theme";
+import { getStyledProps, ThemeVariant } from "../../../../utils/theme";
 
 interface CustomTextFieldProps {
   themeVariant?: ThemeVariant;
   variant?: TextFieldProps["variant"];
 }
 
-const CustomTextField = styled(TextField, {
-  shouldForwardProp: (prop) =>
-    !["themeVariant", "variant"].includes(prop as any),
-})<CustomTextFieldProps>(
+const CustomTextField = styled(
+  TextField,
+  getStyledProps("themeVariant", "variant")
+)<CustomTextFieldProps>(
   ({ theme, themeVariant = "dark", variant = "outlined" }) => {
     const commonStyle = {
       marginBottom: "1rem",

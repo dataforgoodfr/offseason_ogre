@@ -1,3 +1,3 @@
-import { PlayerActions } from "./playerActions";
+import { PlayerActions } from "./PlayerActions";
 
 export { PlayerActions };

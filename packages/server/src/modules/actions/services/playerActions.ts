@@ -53,38 +53,44 @@ async function getOrCreatePlayerActions(
   gameId: number,
   userId: number
 ): Promise<PlayerActions[]> {
-  const stepActions = await services.getMany();
-  const playerActionsCurrent = await getMany({
-    actionIds: stepActions.map((action) => action.id),
-    gameId,
-    userId,
-  });
+  try {
+    const stepActions = await services.getMany();
+    const playerActionsCurrent = await getMany({
+      actionIds: stepActions.map((action) => action.id),
+      gameId,
+      userId,
+    });
 
-  // Create player actions that are potentially missing.
-  const actionsById = stepActions.reduce((map, action) => {
-    map.set(action.id, action);
-    return map;
-  }, new Map<number, Action>());
+    // Create player actions that are potentially missing.
+    const actionsById = stepActions.reduce((map, action) => {
+      map.set(action.id, action);
+      return map;
+    }, new Map<number, Action>());
 
-  playerActionsCurrent.forEach((playerAction) =>
-    actionsById.delete(playerAction.actionId)
-  );
+    playerActionsCurrent.forEach((playerAction) =>
+      actionsById.delete(playerAction.actionId)
+    );
 
-  const createdPlayerActions = await Promise.all(
-    Array.from(actionsById).map(([_, action]) =>
-      create({
-        actionId: action.id,
-        gameId,
-        userId,
-      })
-    )
-  );
+    const createdPlayerActions = await Promise.all(
+      Array.from(actionsById).map(([_, action]) =>
+        create({
+          actionId: action.id,
+          gameId,
+          userId,
+        })
+      )
+    );
 
-  const playerActions = [...playerActionsCurrent, ...createdPlayerActions].sort(
-    (a, b) => a.id - b.id
-  );
+    const playerActions = [
+      ...playerActionsCurrent,
+      ...createdPlayerActions,
+    ].sort((a, b) => a.id - b.id);
 
-  return playerActions;
+    return playerActions;
+  } catch (err) {
+    console.error(err);
+    return [];
+  }
 }
 
 async function updatePlayerActions(
