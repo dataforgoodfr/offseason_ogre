@@ -33,21 +33,21 @@ function updatePlayerActions(socket: Socket) {
       cookies?.authentificationToken
     );
 
-    const playerActionsBeforeUpdate = await computePlayerActionsBeforeUpdate(
+    const lastChosenPlayerActions = await computeLastChosenPlayerActions(
       gameId,
       user.id,
       stepId,
       playerActionsUpdate
     );
 
-    if (!canUpdatePlayerActions(playerActionsBeforeUpdate, STEPS[stepId])) {
+    if (!canUpdatePlayerActions(lastChosenPlayerActions, STEPS[stepId])) {
       socket.emit("actionPointsLimitExceeded");
       return;
     }
 
     const playerActions = await playerActionsServices.updatePlayerActions(
       user.id,
-      playerActionsBeforeUpdate
+      lastChosenPlayerActions
     );
 
     socket.emit("playerActionsUpdated", {
@@ -56,7 +56,7 @@ function updatePlayerActions(socket: Socket) {
   });
 }
 
-async function computePlayerActionsBeforeUpdate(
+async function computeLastChosenPlayerActions(
   gameId: number,
   userId: number,
   step: number,
