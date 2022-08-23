@@ -27,11 +27,12 @@ import { PlayBox } from "../Components";
 import {
   useCurrentStep,
   useMyTeam,
-  usePersonaByUserId,
+  useResultsByUserId,
   usePlay,
 } from "../context/playContext";
 import { persona } from "../../persona/persona";
 import { sumAllValues } from "../../persona";
+import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerHeader, Header, Actions };
 
@@ -41,8 +42,10 @@ function PlayerHeader() {
 
   const userIds = user && user.id ? [user.id] : [];
 
-  const personaByUserId = usePersonaByUserId({ userIds });
-  const userPersona = user?.id ? personaByUserId[user.id] : persona;
+  const personaByUserId = useResultsByUserId({ userIds });
+  const userPersona = user?.id
+    ? getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
+    : persona;
 
   const myTeam = useMyTeam();
   if (user === null) {

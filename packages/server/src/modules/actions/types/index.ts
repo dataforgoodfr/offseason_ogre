@@ -2,8 +2,9 @@ export type { Action, PlayerActions };
 
 interface Action {
   id: number;
-  name: string;
+  description: string;
   step: number;
+  name: string;
   actionPointCost: number;
   financialCost: number;
 }

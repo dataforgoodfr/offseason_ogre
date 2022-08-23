@@ -1,4 +1,5 @@
 import { database } from ".";
+import { availableActions } from "../modules/actions/constants/actions";
 import { Action } from "../modules/actions/types";
 
 // eslint-disable-next-line no-console
@@ -9,19 +10,27 @@ const actions = [...getActionInformation()] as Action[];
 async function seed() {
   await database.$connect();
 
-  await database.user.create({
-    data: {
-      email: "seeding@database.com",
-      isTeacher: false,
-      firstName: "Seeding",
-      lastName: "Master",
-      country: "FR",
-    },
-  });
+  try {
+    await database.user.create({
+      data: {
+        email: "seeding@database.com",
+        isTeacher: false,
+        firstName: "Seeding",
+        lastName: "Master",
+        country: "FR",
+      },
+    });
+  } catch {
+    console.log("Seeding user already exists");
+  }
 
-  await database.action.createMany({
-    data: actions,
-  });
+  try {
+    await database.action.createMany({
+      data: actions,
+    });
+  } catch {
+    console.log("Actions already exists");
+  }
 
   await database.$disconnect();
 }
@@ -34,72 +43,90 @@ seed().then(() => {
 function getActionInformation(): Action[] {
   const actionsList = [
     {
-      name: "Réduire ses déplacements en avion de 50%",
+      description: "Réduire ses déplacements en avion de 50%",
+      name: availableActions.REDUCE_PLANE_HALF,
       actionPointCost: 2,
       financialCost: 0,
     },
     {
-      name: "Consommer local et de saison",
+      description: "Consommer local et de saison",
+      name: availableActions.LOCAL_CONSUMPTION,
       actionPointCost: 2,
       financialCost: 0,
     },
     {
-      name: "Acheter deux fois moins de vêtements et chaussures",
+      description: "Acheter deux fois moins de vêtements et chaussures",
+      name: availableActions.REDUCE_CLOTHING_HALF,
       actionPointCost: 2,
       financialCost: 0,
     },
     {
-      name: "Acheter moins d'équipements numériques et uniquement d'occasion",
+      description:
+        "Acheter moins d'équipements numériques et uniquement d'occasion",
+      name: availableActions.REDUCE_NUMERIC,
       actionPointCost: 2,
       financialCost: 0,
     },
     {
-      name: "Arrêter de consommer des produits laitiers (inutile si déjà végétalien)",
+      description:
+        "Arrêter de consommer des produits laitiers (inutile si déjà végétalien)",
+      name: availableActions.STOP_MILK,
       actionPointCost: 1,
       financialCost: 0,
     },
     {
-      name: "Arrêter de consommer des œufs (inutile si déjà végétalien)",
+      description: "Arrêter de consommer des œufs (inutile si déjà végétalien)",
+      name: availableActions.STOP_EGGS,
       actionPointCost: 1,
       financialCost: 0,
     },
     {
-      name: "Arrêter les boissons en cannette",
+      description: "Arrêter les boissons en cannette",
+      name: availableActions.STOP_CANS,
       actionPointCost: 1,
       financialCost: 0,
     },
     {
-      name: "Arrêter de consommer de la viande (inutile si déjà végétalien)",
+      description:
+        "Arrêter de consommer de la viande (inutile si déjà végétalien)",
+      name: availableActions.STOP_MEAT,
       actionPointCost: 2,
       financialCost: 0,
     },
     {
-      name: "Passer au zéro déchet alimentaire",
+      description: "Passer au zéro déchet alimentaire",
+      name: availableActions.ZERO_WASTE,
       actionPointCost: 2,
       financialCost: 0,
     },
     {
-      name: "Réduire ses déplacements en train de 50%",
+      description: "Réduire ses déplacements en train de 50%",
+      name: availableActions.REDUCE_TRAIN_HALF,
       actionPointCost: 1,
       financialCost: 0,
     },
     {
-      name: "Pratiquer l'éco-conduite",
+      description: "Pratiquer l'éco-conduite",
+      name: availableActions.ECO_DRIVING,
       actionPointCost: 1,
       financialCost: 0,
     },
     {
-      name: "Réduire ses déplacements en voiture de 20%",
+      description: "Réduire ses déplacements en voiture de 20%",
+      name: availableActions.REDUCE_CAR_20,
       actionPointCost: 2,
       financialCost: 0,
     },
     {
-      name: "Passer au véhicule électrique (laisser la valeur 0 si déjà équipé)",
+      description:
+        "Passer au véhicule électrique (laisser la valeur 0 si déjà équipé)",
+      name: availableActions.ELECTRIC_CAR,
       actionPointCost: 3,
       financialCost: 2.19,
     },
     {
-      name: "Garder sa voiture plus de 15 ans",
+      description: "Garder sa voiture plus de 15 ans",
+      name: availableActions.KEEP_CAR_15,
       actionPointCost: 3,
       financialCost: 0,
     },

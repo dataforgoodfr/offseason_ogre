@@ -3,11 +3,19 @@ import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch } from "react-router-dom";
-import { IGame, ITeamWithPlayers, PlayerActions } from "../../../utils/types";
+import {
+  Action,
+  IGame,
+  ITeamWithPlayers,
+  Player,
+  PlayerActions,
+} from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
 import { Persona, persona } from "../../persona/persona";
 import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
 import _ from "lodash";
+import { ConsumptionDatum } from "../../persona/consumption";
+import { computeConsumptionChoices } from "../utils/consumptionStep";
 
 export {
   PlayProvider,
@@ -16,8 +24,8 @@ export {
   useCurrentStep,
   useMyTeam,
   useLoadedPlay as usePlay,
-  usePersonaByStep,
-  usePersonaByUserId,
+  getResultsByStep,
+  useResultsByUserId,
   usePlayerActions,
 };
 
@@ -125,12 +133,6 @@ function useMyTeam(): ITeamWithPlayers | null {
   );
 }
 
-function usePersonaByStep(): Record<string, Persona> {
-  return Object.fromEntries(
-    _.range(0, MAX_NUMBER_STEPS).map((step) => [step, persona])
-  );
-}
-
 function useCurrentPersona() {
   return persona;
 }
@@ -142,14 +144,6 @@ function useCurrentStep(): GameStep | null {
   }
   const game = playValue.game;
   return STEPS?.[game.step] || null;
-}
-
-function usePersonaByUserId({
-  userIds,
-}: {
-  userIds: number[];
-}): Record<number, Persona> {
-  return Object.fromEntries(userIds.map((userId) => [userId, persona]));
 }
 
 function usePlayerActions() {
@@ -230,4 +224,74 @@ function useGameSocket({
 
 function usePlay() {
   return React.useContext<IPlayContext | null>(PlayContext);
+}
+
+function useResultsByUserId({
+  userIds,
+}: {
+  userIds: number[];
+}): Record<number, Record<number, Persona>> {
+  const { game: gameWithTeams } = useLoadedPlay();
+  return Object.fromEntries(
+    userIds.map((userId) => {
+      const playerActions = getPlayer(gameWithTeams, userId)?.actions;
+      return [userId, getResultsByStep(playerActions || [])];
+    })
+  );
+}
+
+function getPlayer(game: IGameWithTeams, userId: number) {
+  const playerTeam = game.teams.find((team: ITeamWithPlayers) =>
+    team.players.find((player: Player) => player.userId === userId)
+  );
+
+  return playerTeam?.players.find((player: Player) => player.userId === userId);
+}
+
+function getResultsByStep(
+  playerActions: PlayerActions[]
+): Record<number, Persona> {
+  return Object.fromEntries(
+    _.range(0, MAX_NUMBER_STEPS).map((step) => [
+      step,
+      computeResultsByStep(step, playerActions),
+    ])
+  );
+}
+
+function computeResultsByStep(
+  step: number,
+  playerActions: PlayerActions[]
+): Persona {
+  if (step === 0) {
+    return persona;
+  }
+
+  const performedActions = playerActions
+    ?.filter(
+      (playerAction: PlayerActions) =>
+        playerAction.action.step <= step && playerAction.isPerformed === true
+    )
+    .map((playerAction: PlayerActions) => playerAction.action);
+
+  const costPerDay = performedActions
+    ?.map((action: Action) => action.financialCost)
+    .reduce((a, b) => a + b, 0);
+  const performedActionsNames = performedActions.map(
+    (action: Action) => action.name
+  );
+
+  const newConsumption = JSON.parse(JSON.stringify(persona.consumption)).map(
+    (consumption: ConsumptionDatum) => {
+      return computeConsumptionChoices(consumption, performedActionsNames);
+    }
+  );
+
+  return {
+    budget: persona.budget - costPerDay,
+    carbonFootprint: persona.carbonFootprint,
+    points: persona.points,
+    consumption: newConsumption,
+    production: persona.production,
+  };
 }

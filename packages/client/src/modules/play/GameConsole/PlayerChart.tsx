@@ -2,7 +2,8 @@ import { Box } from "@mui/material";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
 import { sumFor } from "../../persona";
-import { usePersonaByUserId } from "../context/playContext";
+import { useResultsByUserId, usePlay } from "../context/playContext";
+import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerChart };
 
@@ -16,28 +17,36 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
 }
 
 function useBuildData({ team }: { team: ITeamWithPlayers }) {
+  const { game } = usePlay();
   const userIds = team.players.map(({ user }) => user.id);
-  const personaByUserId = usePersonaByUserId({ userIds });
+  const personaByUserId = useResultsByUserId({ userIds });
   const [firstPersona] = Object.values(personaByUserId); // TODO: I am not sure how production should be computed. Sum for all team members?
   return [
     ...team.players.map((player) => {
       const userId = player.user.id;
       const playerPersona = personaByUserId[userId];
+      const playerConsumption = getLastCompletedStepPlayerValues(
+        game,
+        playerPersona
+      ).consumption;
       return {
         name: buildName(player.user),
-        fossil: sumFor(playerPersona.consumption, "fossil"),
-        grey: sumFor(playerPersona.consumption, "grey"),
-        mixte: sumFor(playerPersona.consumption, "mixte"),
-        renewable: sumFor(playerPersona.consumption, "renewable"),
+        fossil: sumFor(playerConsumption, "fossil"),
+        grey: sumFor(playerConsumption, "grey"),
+        mixte: sumFor(playerConsumption, "mixte"),
+        renewable: sumFor(playerConsumption, "renewable"),
       };
     }),
     firstPersona
       ? {
           name: "Production",
-          hydroProduction: sumFor(firstPersona.production, "hydroProduction"),
-          nuclear: sumFor(firstPersona.production, "nuclear"),
+          hydroProduction: sumFor(
+            firstPersona[0].production,
+            "hydroProduction"
+          ),
+          nuclear: sumFor(firstPersona[0].production, "nuclear"),
           terrestrialProduction: sumFor(
-            firstPersona.production,
+            firstPersona[0].production,
             "terrestrialProduction"
           ),
         }

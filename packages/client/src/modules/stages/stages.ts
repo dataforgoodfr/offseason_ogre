@@ -5,6 +5,7 @@ type StageType = "consumption" | "production";
 
 interface Action {
   name: string;
+  description: string;
   actionPointCost: number;
   financialCost: number;
   category?: string;

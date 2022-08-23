@@ -7,4 +7,8 @@ export { router };
 const router = express.Router();
 
 router.get("/", asyncErrorHandler(controllers.getAllActionsController));
+router.get(
+  "/me",
+  asyncErrorHandler(controllers.getOrCreatePlayerActionsController)
+);
 router.get("/:step", asyncErrorHandler(controllers.getActionsController));

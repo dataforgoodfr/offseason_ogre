@@ -32,6 +32,7 @@ function DetailsEnergyBars({ persona }: { persona: Persona }) {
         height={550}
         data={persona.consumption.map((item) => ({
           ...item,
+          value: Math.round((item.value + Number.EPSILON) * 100) / 100,
           name: translateConsumptionName(item.name),
         }))}
         layout="vertical"
@@ -43,7 +44,7 @@ function DetailsEnergyBars({ persona }: { persona: Persona }) {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" unit="kWh" />
+        <XAxis type="number" domain={[0, 50]} unit="kWh" />
         <YAxis type="category" width={160} dataKey="name" />
         <Tooltip />
         <Bar dataKey="value" unit="kWh">

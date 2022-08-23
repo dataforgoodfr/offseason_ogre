@@ -1,0 +1,16 @@
+export const availableActions = {
+  REDUCE_PLANE_HALF: "reducePlaneHalf",
+  LOCAL_CONSUMPTION: "localConsumption",
+  REDUCE_CLOTHING_HALF: "reduceClothingHalf",
+  REDUCE_NUMERIC: "reduceNumeric",
+  STOP_MILK: "stopMilk",
+  STOP_EGGS: "stopEggs",
+  STOP_CANS: "stopCans",
+  STOP_MEAT: "stopMeat",
+  ZERO_WASTE: "zeroWaste",
+  REDUCE_TRAIN_HALF: "reduceTrainHalf",
+  ECO_DRIVING: "ecoDriving",
+  REDUCE_CAR_20: "reduceCar20",
+  ELECTRIC_CAR: "electricCar",
+  KEEP_CAR_15: "keepCar15",
+};

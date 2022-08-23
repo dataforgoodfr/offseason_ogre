@@ -12,6 +12,7 @@ import { Typography } from "../../common/components/Typography";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
 import { Stage } from "../../stages";
+
 import { actionHelpCards } from "../../actions";
 import { useState } from "react";
 import { PlayerActions } from "../../../utils/types";
@@ -151,7 +152,7 @@ function ActionLayout({
             message={helpMessage}
             helpCardLink={helpCardLink}
           />
-          {playerAction.action.name}
+          {playerAction.action.description}
         </Typography>
         <Box sx={{ gap: 2 }} display="flex" alignItems="center" mt={1}>
           <Box sx={{ gap: 1 }} display="flex" alignItems="center">
