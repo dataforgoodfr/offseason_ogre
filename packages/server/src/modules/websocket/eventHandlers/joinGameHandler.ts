@@ -18,11 +18,10 @@ function handleJoinGame(socket: Socket) {
     const user = await usersServices.authenticateUser(
       cookies?.authentificationToken
     );
-    const game = await gameServices.getDocument(gameId);
-    if (game?.teacherId === user.id) {
-      const playerActions =
-        await playerActionsServices.getOrCreatePlayerActions(gameId, user.id);
-      socket.emit("playerActionsUpdated", { playerActions });
-    }
+    const playerActions = await playerActionsServices.getOrCreatePlayerActions(
+      gameId,
+      user.id
+    );
+    socket.emit("playerActionsUpdated", { playerActions });
   });
 }
