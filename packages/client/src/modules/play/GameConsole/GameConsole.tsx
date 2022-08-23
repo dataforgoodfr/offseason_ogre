@@ -18,6 +18,7 @@ import { sumAllValues } from "../../persona";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 import { Persona } from "../../persona/persona";
+import { roundValue } from "../../common/utils";
 
 export { GameConsole };
 
@@ -105,9 +106,10 @@ function MeanStatsConsole() {
                 >
                   {" "}
                   <GroupsIcon />{" "}
-                  {`${team.name}:  ${
-                    teamsValues.find((t) => t.id === team.id)?.carbonFootprint
-                  }T/an`}
+                  {`${team.name}:  ${roundValue(
+                    teamsValues.find((t) => t.id === team.id)
+                      ?.carbonFootprint || 0
+                  )}T/an`}
                 </Typography>
               );
             })}
