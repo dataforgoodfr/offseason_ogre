@@ -19,7 +19,7 @@ function handleJoinGame(socket: Socket) {
       cookies?.authentificationToken
     );
     const game = await gameServices.getDocument(gameId);
-    if (game?.teacherId === user.id) {
+    if (game?.teacherId !== user.id) {
       const playerActions =
         await playerActionsServices.getOrCreatePlayerActions(gameId, user.id);
       socket.emit("playerActionsUpdated", { playerActions });

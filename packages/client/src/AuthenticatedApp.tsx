@@ -5,7 +5,7 @@ import { Game } from "./modules/games";
 import { GameConsole, MyGames } from "./modules/play";
 import { PlayerPersona } from "./modules/play";
 import { Stats } from "./modules/play/Stats";
-import { PlayerActions } from "./modules/play/playerActions";
+import { PlayerActions } from "./modules/play/playerActions/PlayerActions";
 import { Players } from "./modules/players";
 import { Settings, Teachers } from "./modules/teachers";
 import { Layout as AdministrationLayout } from "./modules/administration";
