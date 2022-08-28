@@ -8,6 +8,7 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
+import { roundValue } from "../common/utils";
 import { Persona } from "../persona/persona";
 import { translateConsumptionName } from "../translations";
 
@@ -32,7 +33,7 @@ function DetailsEnergyBars({ persona }: { persona: Persona }) {
         height={550}
         data={persona.consumption.map((item) => ({
           ...item,
-          value: Math.round((item.value + Number.EPSILON) * 100) / 100,
+          value: roundValue(item.value),
           name: translateConsumptionName(item.name),
         }))}
         layout="vertical"

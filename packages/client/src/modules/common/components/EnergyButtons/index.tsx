@@ -2,6 +2,7 @@ import { Box, Button, useTheme, Tooltip } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Persona } from "../../../persona/persona";
 import { translateConsumptionName } from "../../../translations";
+import { roundValue } from "../../utils";
 
 export { EnergyButtons };
 
@@ -49,9 +50,9 @@ function EnergyButtons({ persona }: { persona: Persona }) {
               {persona.consumption
                 .filter(({ type }) => type === energyTypes.type)
                 .map(({ name, value }) => {
-                  return `${translateConsumptionName(name)} : ${
-                    Math.round((value + Number.EPSILON) * 100) / 100
-                  } kWh `;
+                  return `${translateConsumptionName(name)} : ${roundValue(
+                    value
+                  )} kWh `;
                 })
                 .join("\n")}
             </div>

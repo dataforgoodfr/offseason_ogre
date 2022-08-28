@@ -58,6 +58,9 @@ function useStackedEnergyData(playerActions: PlayerActions[]) {
 
   const personaByStep = getResultsByStep(playerActions);
   return _.range(0, MAX_NUMBER_STEPS).map((step: number) => {
+    if (step > game.step || (step === game.step && game.isStepActive)) {
+      return {};
+    }
     const persona = getPlayerValuesByStep(step, game, personaByStep);
     return {
       name: step ? `Etape ${step}` : "Initial",
