@@ -27,8 +27,9 @@ let theme = createTheme({
       renewable: "#84BDF0",
     },
     production: {
-      offshore: "#4C677E",
-      terrestrial: "#8A8256",
+      hydroProduction: "#4C677E",
+      nuclear: "#f65574",
+      terrestrialProduction: "#8A8256",
     },
     actionValidation: {
       main: lightBlue,
@@ -90,6 +91,7 @@ interface EnergyPalette {
 }
 
 interface ProductionPalette {
-  offshore: string;
-  terrestrial: string;
+  hydroProduction: string;
+  nuclear: string;
+  terrestrialProduction: string;
 }

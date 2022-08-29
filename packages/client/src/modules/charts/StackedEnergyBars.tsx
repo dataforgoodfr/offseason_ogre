@@ -56,7 +56,7 @@ function StackedEnergyBars({
         />
         <Bar
           dataKey="hydroProduction"
-          fill={theme.palette.production.offshore}
+          fill={theme.palette.production.hydroProduction}
           barSize={25}
           name={translateLabel("hydroProduction")}
           stackId="a"
@@ -65,7 +65,7 @@ function StackedEnergyBars({
         <Bar
           dataKey="terrestrialProduction"
           stackId="a"
-          fill={theme.palette.production.terrestrial}
+          fill={theme.palette.production.terrestrialProduction}
           barSize={25}
           name={translateLabel("terrestrialProduction")}
           unit="kWh"
