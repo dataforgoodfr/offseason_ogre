@@ -167,7 +167,7 @@ function Header({
         </Card>
       </Grid>
       <Grid item sx={{ pl: 2 }} xs={8}>
-        <Typography variant="h6" sx={{ lineBreak: "anywhere" }}>
+        <Typography variant="h6">
           {user?.firstName} {user?.lastName}
         </Typography>
         <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
