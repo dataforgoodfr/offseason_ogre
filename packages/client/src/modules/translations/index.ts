@@ -1,4 +1,13 @@
-export { translateConsumptionName, translateProductionName };
+export { translateName };
+
+function translateName(type: string, value: string) {
+  if (type === "consumption") {
+    return translateConsumptionName(value);
+  } else if (type === "production") {
+    return translateProductionName(value);
+  }
+  return value;
+}
 
 function translateConsumptionName(value: string): string {
   const translationByValue = {
