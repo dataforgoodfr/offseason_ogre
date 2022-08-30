@@ -89,7 +89,6 @@ function useStackedEnergyData(playerActions: PlayerActions[]) {
   const { game } = usePlay();
 
   const personaByStep = getResultsByStep(playerActions);
-  // TODO - Mettre valeurs pour 0 puis build le reste du tableau
   const initialPersona = getPlayerValuesByStep(0, game, personaByStep);
   const initialValues = [
     {
