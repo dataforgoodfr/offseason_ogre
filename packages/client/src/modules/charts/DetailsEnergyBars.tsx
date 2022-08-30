@@ -19,7 +19,6 @@ function DetailsEnergyConsumptionBars({ persona }: { persona: Persona }) {
 }
 
 function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
-  const theme = useTheme();
   return DetailsEnergyBars("production", persona);
 }
 

@@ -3,8 +3,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Persona } from "../../../persona/persona";
 import { translateName } from "../../../translations";
 import { roundValue } from "../../utils";
-import { ConsumptionDatum } from "../../../persona/consumption";
-import { ProductionDatum } from "../../../persona/production";
 
 export { EnergyConsumptionButtons, EnergyProductionButtons };
 
