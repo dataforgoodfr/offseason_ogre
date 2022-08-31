@@ -8,8 +8,8 @@ import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
 import {
-  useCurrentPersona,
   useCurrentStep,
+  usePersona,
   usePlayerActions,
 } from "../context/playContext";
 import { Stage } from "../../stages";
@@ -19,10 +19,14 @@ import { CustomRating, HelpIconWrapper, Spacer } from "./ActionsHeader.styles";
 export { ActionsHeader };
 
 function ActionsHeader({ currentStage }: { currentStage: Stage }) {
-  const persona = useCurrentPersona();
+  const { latestPersona } = usePersona();
+
   const [openHelp, setOpenHelp] = useState(false);
+
   const handleClickOpenHelp = () => setOpenHelp(true);
+
   const handleCloseHelp = () => setOpenHelp(false);
+
   const helpMessage =
     "Tu peux utiliser tes points d’action pour réduire ta consommation. Tu en as un nombre limité, alors utilise-les à bon escient. Tu ne peux les utiliser que pour ce tour. Fais attention car certaines actions coûtent de l’argent en plus des points d’action.";
 
@@ -48,13 +52,13 @@ function ActionsHeader({ currentStage }: { currentStage: Stage }) {
           <PaidIcon />
           <Typography
             ml={1}
-          >{`Budget restant: ${persona.budget} €/j`}</Typography>
+          >{`Budget restant: ${latestPersona.budget} €/j`}</Typography>
         </Box>
         <Box display="flex" alignItems="center" mt={1}>
           <CloudIcon />
           <Typography
             ml={1}
-          >{`Bilan carbone: ${persona.carbonFootprint} kgCO2/an`}</Typography>
+          >{`Bilan carbone: ${latestPersona.carbonFootprint} kgCO2/an`}</Typography>
         </Box>
         <ActionPoints />
       </Box>
