@@ -100,11 +100,8 @@ function useStackedEnergyData(playerActions: PlayerActions[]) {
     },
     {
       name: "Initial",
-      hydroProduction: sumFor(initialPersona.production, "hydroProduction"),
-      terrestrialProduction: sumFor(
-        initialPersona.production,
-        "terrestrialProduction"
-      ),
+      offshore: sumFor(initialPersona.production, "offshore"),
+      terrestrial: sumFor(initialPersona.production, "terrestrial"),
     },
   ];
 
@@ -115,7 +112,7 @@ function useStackedEnergyData(playerActions: PlayerActions[]) {
     const persona = getPlayerValuesByStep(step, game, personaByStep);
     if (STEPS[step]?.type === "consumption") {
       return {
-        name: step ? `Etape ${step}` : "Initial",
+        name: step ? `Étape ${step}` : "Initial",
         renewable: sumFor(persona.consumption, "renewable"),
         fossil: sumFor(persona.consumption, "fossil"),
         mixte: sumFor(persona.consumption, "mixte"),
@@ -123,13 +120,10 @@ function useStackedEnergyData(playerActions: PlayerActions[]) {
       };
     } else {
       return {
-        name: step ? `Etape ${step}` : "Initial",
+        name: step ? `Étape ${step}` : "Initial",
         renewable: sumFor(persona.consumption, "renewable"),
-        hydroProduction: sumFor(initialPersona.production, "hydroProduction"),
-        terrestrialProduction: sumFor(
-          initialPersona.production,
-          "terrestrialProduction"
-        ),
+        offshore: sumFor(initialPersona.production, "offshore"),
+        terrestrial: sumFor(initialPersona.production, "terrestrial"),
       };
     }
   });

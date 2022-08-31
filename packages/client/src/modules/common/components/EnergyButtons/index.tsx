@@ -46,14 +46,14 @@ function EnergyProductionButtons({ persona }: { persona: Persona }) {
 
   const energies = [
     {
-      color: theme.palette.production.hydroProduction,
+      color: theme.palette.production.offshore,
       name: "Energie offshore",
-      type: "hydroProduction",
+      type: "offshore",
     },
     {
-      color: theme.palette.production.terrestrialProduction,
+      color: theme.palette.production.terrestrial,
       name: "Energies terrestre",
-      type: "terrestrialProduction",
+      type: "terrestrial",
     },
   ];
 

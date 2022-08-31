@@ -40,21 +40,15 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
     firstPersona
       ? {
           name: "Production",
-          hydroProduction: sumFor(
-            firstPersona[0].production,
-            "hydroProduction"
-          ),
+          offshore: sumFor(firstPersona[0].production, "offshore"),
           // nuclear: sumFor(firstPersona[0].production, "nuclear"),
-          terrestrialProduction: sumFor(
-            firstPersona[0].production,
-            "terrestrialProduction"
-          ),
+          terrestrial: sumFor(firstPersona[0].production, "terrestrial"),
         }
       : {
           name: "Production",
-          hydroProduction: 0,
+          offshore: 0,
           // nuclear: 0,
-          terrestrialProduction: 0,
+          terrestrial: 0,
         },
   ];
 }
