@@ -28,6 +28,7 @@ let theme = createTheme({
     },
     production: {
       offshore: "#4C677E",
+      nuclear: "#f65574",
       terrestrial: "#8A8256",
     },
     actionValidation: {
@@ -91,5 +92,6 @@ interface EnergyPalette {
 
 interface ProductionPalette {
   offshore: string;
+  nuclear: string;
   terrestrial: string;
 }

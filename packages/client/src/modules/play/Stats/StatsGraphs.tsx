@@ -1,8 +1,15 @@
 import React from "react";
-import { StackedEnergyBars, DetailsEnergyBars } from "../../charts";
+import {
+  StackedEnergyBars,
+  DetailsEnergyConsumptionBars,
+  DetailsEnergyProductionBars,
+} from "../../charts";
 import { PlayBox } from "../Components";
-import { EnergyButtons } from "../../common/components/EnergyButtons";
-import { MAX_NUMBER_STEPS } from "../constants";
+import {
+  EnergyConsumptionButtons,
+  EnergyProductionButtons,
+} from "../../common/components/EnergyButtons";
+import { MAX_NUMBER_STEPS, STEPS } from "../constants";
 import _ from "lodash";
 import {
   getResultsByStep,
@@ -16,7 +23,7 @@ import { getPlayerValuesByStep } from "../utils/playerValues";
 export { StatsGraphs };
 
 function StatsGraphs() {
-  const [step, setSelectedStep] = React.useState<number>();
+  const [bar, setSelectedBar] = React.useState<number>();
 
   const { playerActions } = usePlayerActions();
 
@@ -25,49 +32,100 @@ function StatsGraphs() {
       <StackedEnergyBars
         data={useStackedEnergyData(playerActions)}
         onClick={({ activeTooltipIndex }) => {
-          setSelectedStep(activeTooltipIndex);
+          setSelectedBar(activeTooltipIndex);
         }}
       />
-      {<StepDetails step={step} playerActions={playerActions} />}
+      {<StepDetails bar={bar} playerActions={playerActions} />}
     </PlayBox>
   );
 }
 
 function StepDetails({
-  step,
+  bar,
   playerActions,
 }: {
-  step: number | undefined;
+  bar: number | undefined;
   playerActions: PlayerActions[];
 }) {
   const { game } = usePlay();
 
   const personaByStep = getResultsByStep(playerActions);
-  if (typeof step === "undefined") return <></>;
+  if (typeof bar === "undefined") return <></>;
+  const step = bar === 0 || bar === 1 ? 0 : bar - 1;
+
   const persona = getPlayerValuesByStep(step, game, personaByStep);
-  return (
-    <>
-      <DetailsEnergyBars persona={persona} />
-      <EnergyButtons persona={persona} />
-    </>
-  );
+  if (step === 0 && bar === 0) {
+    return (
+      <>
+        <DetailsEnergyConsumptionBars persona={persona} />
+        <EnergyConsumptionButtons persona={persona} />
+      </>
+    );
+  } else if (step === 0 && bar === 1) {
+    return (
+      <>
+        <DetailsEnergyProductionBars persona={persona} />
+        <EnergyProductionButtons persona={persona} />
+      </>
+    );
+  } else if (STEPS[step]?.type === "consumption") {
+    return (
+      <>
+        <DetailsEnergyConsumptionBars persona={persona} />
+        <EnergyConsumptionButtons persona={persona} />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <DetailsEnergyProductionBars persona={persona} />
+        <EnergyProductionButtons persona={persona} />
+      </>
+    );
+  }
 }
 
 function useStackedEnergyData(playerActions: PlayerActions[]) {
   const { game } = usePlay();
 
   const personaByStep = getResultsByStep(playerActions);
-  return _.range(0, MAX_NUMBER_STEPS).map((step: number) => {
+  const initialPersona = getPlayerValuesByStep(0, game, personaByStep);
+  const initialValues = [
+    {
+      name: "Initial",
+      renewable: sumFor(initialPersona.consumption, "renewable"),
+      fossil: sumFor(initialPersona.consumption, "fossil"),
+      mixte: sumFor(initialPersona.consumption, "mixte"),
+      grey: sumFor(initialPersona.consumption, "grey"),
+    },
+    {
+      name: "Initial",
+      offshore: sumFor(initialPersona.production, "offshore"),
+      terrestrial: sumFor(initialPersona.production, "terrestrial"),
+    },
+  ];
+
+  const stepsDetails = _.range(1, MAX_NUMBER_STEPS).map((step: number) => {
     if (step > game.step || (step === game.step && game.isStepActive)) {
       return {};
     }
     const persona = getPlayerValuesByStep(step, game, personaByStep);
-    return {
-      name: step ? `Etape ${step}` : "Initial",
-      renewable: sumFor(persona.consumption, "renewable"),
-      fossil: sumFor(persona.consumption, "fossil"),
-      mixte: sumFor(persona.consumption, "mixte"),
-      grey: sumFor(persona.consumption, "grey"),
-    };
+    if (STEPS[step]?.type === "consumption") {
+      return {
+        name: step ? `Étape ${step}` : "Initial",
+        renewable: sumFor(persona.consumption, "renewable"),
+        fossil: sumFor(persona.consumption, "fossil"),
+        mixte: sumFor(persona.consumption, "mixte"),
+        grey: sumFor(persona.consumption, "grey"),
+      };
+    } else {
+      return {
+        name: step ? `Étape ${step}` : "Initial",
+        renewable: sumFor(persona.consumption, "renewable"),
+        offshore: sumFor(initialPersona.production, "offshore"),
+        terrestrial: sumFor(initialPersona.production, "terrestrial"),
+      };
+    }
   });
+  return [...initialValues, ...stepsDetails];
 }
