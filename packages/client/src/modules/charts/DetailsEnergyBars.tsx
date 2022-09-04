@@ -10,12 +10,27 @@ import {
 } from "recharts";
 import { roundValue } from "../common/utils";
 import { Persona } from "../persona/persona";
-import { translateConsumptionName } from "../translations";
+import { translateName } from "../translations";
 
-export { DetailsEnergyBars };
+export { DetailsEnergyConsumptionBars, DetailsEnergyProductionBars };
 
-function DetailsEnergyBars({ persona }: { persona: Persona }) {
+function DetailsEnergyConsumptionBars({ persona }: { persona: Persona }) {
+  return DetailsEnergyBars("consumption", persona);
+}
+
+function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
+  return DetailsEnergyBars("production", persona);
+}
+
+function DetailsEnergyBars(energyType: string, persona: Persona) {
   const theme = useTheme();
+  const personaValues =
+    energyType === "consumption" ? persona.consumption : persona.production;
+  const palette =
+    energyType === "consumption"
+      ? theme.palette.energy
+      : theme.palette.production;
+
   return (
     <Card
       sx={{
@@ -31,10 +46,10 @@ function DetailsEnergyBars({ persona }: { persona: Persona }) {
       <BarChart
         width={500}
         height={550}
-        data={persona.consumption.map((item) => ({
+        data={personaValues.map((item) => ({
           ...item,
           value: roundValue(item.value),
-          name: translateConsumptionName(item.name),
+          name: translateName(energyType, item.name),
         }))}
         layout="vertical"
         margin={{
@@ -49,11 +64,11 @@ function DetailsEnergyBars({ persona }: { persona: Persona }) {
         <YAxis type="category" width={160} dataKey="name" />
         <Tooltip />
         <Bar dataKey="value" unit="kWh">
-          {persona.consumption.map(({ name, type }) => {
+          {personaValues.map(({ name, type }) => {
             return (
               <Cell
                 key={`cell-${name}`}
-                fill={theme.palette.energy[type] || "blue"}
+                fill={(palette as any)[type] || "blue"}
               />
             );
           })}

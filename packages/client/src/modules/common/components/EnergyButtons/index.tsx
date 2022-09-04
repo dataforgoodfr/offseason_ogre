@@ -1,12 +1,18 @@
 import { Box, Button, useTheme, Tooltip } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Persona } from "../../../persona/persona";
-import { translateConsumptionName } from "../../../translations";
+import { translateName } from "../../../translations";
 import { roundValue } from "../../utils";
 
-export { EnergyButtons };
+export { EnergyConsumptionButtons, EnergyProductionButtons };
 
-function EnergyButtons({ persona }: { persona: Persona }) {
+interface EnergyType {
+  color: string;
+  name: string;
+  type: string;
+}
+
+function EnergyConsumptionButtons({ persona }: { persona: Persona }) {
   const theme = useTheme();
 
   const energies = [
@@ -32,6 +38,36 @@ function EnergyButtons({ persona }: { persona: Persona }) {
     },
   ];
 
+  return buildEnergyButtons("consumption", energies, persona);
+}
+
+function EnergyProductionButtons({ persona }: { persona: Persona }) {
+  const theme = useTheme();
+
+  const energies = [
+    {
+      color: theme.palette.production.offshore,
+      name: "Energie offshore",
+      type: "offshore",
+    },
+    {
+      color: theme.palette.production.terrestrial,
+      name: "Energies terrestre",
+      type: "terrestrial",
+    },
+  ];
+
+  return buildEnergyButtons("production", energies, persona);
+}
+
+function buildEnergyButtons(
+  stepType: string,
+  energies: EnergyType[],
+  persona: Persona
+) {
+  const personaValues: any =
+    stepType === "consumption" ? persona.consumption : persona.production;
+
   return (
     <Box
       sx={{
@@ -47,10 +83,12 @@ function EnergyButtons({ persona }: { persona: Persona }) {
           key={energyTypes.type}
           title={
             <div style={{ whiteSpace: "pre-line" }}>
-              {persona.consumption
-                .filter(({ type }) => type === energyTypes.type)
-                .map(({ name, value }) => {
-                  return `${translateConsumptionName(name)} : ${roundValue(
+              {personaValues
+                .filter(
+                  ({ type }: { type: string }) => type === energyTypes.type
+                )
+                .map(({ name, value }: { name: string; value: number }) => {
+                  return `${translateName(stepType, name)} : ${roundValue(
                     value
                   )} kWh `;
                 })
