@@ -6,9 +6,10 @@ import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
 import { MAX_ACTION_POINTS } from "../constants";
 import {
-  useCurrentPersona,
+  // useCurrentPersona,
   usePlay,
   useResultsByUserId,
+  // usePlayerActions,
 } from "../context/playContext";
 import { persona } from "../../persona/persona";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
@@ -34,7 +35,6 @@ interface IPlayer {
 
 function PlayerMini({ player }: { player: IPlayer }) {
   const { game } = usePlay();
-
   const results = useResultsByUserId({
     userIds: player ? [player.userId] : [],
   });
@@ -62,7 +62,12 @@ function PlayerMini({ player }: { player: IPlayer }) {
 }
 
 function ActionPoints() {
-  const personna = useCurrentPersona();
+  const { game } = usePlay();
+  const actions = game.teams[1].players[0].actions;
+  const actionPointsUsedAtCurrentStep = actions.reduce(
+    (sum, pa) => (pa.isPerformed ? sum + pa.action.actionPointCost : sum),
+    0
+  );
   return (
     <Box mt={2}>
       <Typography>Point d'actions</Typography>
@@ -73,7 +78,7 @@ function ActionPoints() {
         max={MAX_ACTION_POINTS}
         name="action-points"
         readOnly
-        value={personna.points}
+        value={actionPointsUsedAtCurrentStep}
       />
     </Box>
   );
