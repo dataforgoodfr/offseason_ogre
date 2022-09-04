@@ -5,6 +5,7 @@ import PaidIcon from "@mui/icons-material/Paid";
 import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
 import { MAX_ACTION_POINTS } from "../constants";
+import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
 import {
   // useCurrentPersona,
   usePlay,
@@ -12,6 +13,7 @@ import {
   // usePlayerActions,
 } from "../context/playContext";
 import { persona } from "../../persona/persona";
+import { PlayerActions } from "../../../utils/types";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerList };
@@ -31,6 +33,7 @@ interface IPlayer {
   teamId: number;
   userId: number;
   user: IUser;
+  actions: PlayerActions[];
 }
 
 function PlayerMini({ player }: { player: IPlayer }) {
@@ -41,6 +44,15 @@ function PlayerMini({ player }: { player: IPlayer }) {
   const userData = player
     ? getLastCompletedStepPlayerValues(game, results[player.userId])
     : persona;
+  const availableActionPoints = STEPS?.[game.step].availableActionPoints || 0;
+  const playerActionsAtCurrentStep = player.actions.filter(
+    (pa: PlayerActions) => pa.action.step === game.step
+  );
+  const actionPointsUsedAtCurrentStep = playerActionsAtCurrentStep.reduce(
+    (sum: number, pa: PlayerActions) =>
+      pa.isPerformed ? sum + pa.action.actionPointCost : sum,
+    0
+  );
   return (
     <PlayBox key={player.userId} mt={2}>
       <Typography variant="h5">{buildName(player.user)}</Typography>
@@ -56,18 +68,21 @@ function PlayerMini({ player }: { player: IPlayer }) {
           ml={1}
         >{`Bilan carbone: ${userData.carbonFootprint} kgCO2/an`}</Typography>
       </Box>
-      <ActionPoints />
+      <ActionPoints
+        actionPointsUsed={actionPointsUsedAtCurrentStep}
+        maxActionPoints={availableActionPoints}
+      />
     </PlayBox>
   );
 }
 
-function ActionPoints() {
-  const { game } = usePlay();
-  const actions = game.teams[1].players[0].actions;
-  const actionPointsUsedAtCurrentStep = actions.reduce(
-    (sum, pa) => (pa.isPerformed ? sum + pa.action.actionPointCost : sum),
-    0
-  );
+function ActionPoints({
+  actionPointsUsed,
+  maxActionPoints,
+}: {
+  actionPointsUsed: number;
+  maxActionPoints: number;
+}) {
   return (
     <Box mt={2}>
       <Typography>Point d'actions</Typography>
@@ -75,10 +90,10 @@ function ActionPoints() {
         emptyIcon={
           <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
         }
-        max={MAX_ACTION_POINTS}
+        max={maxActionPoints}
         name="action-points"
         readOnly
-        value={actionPointsUsedAtCurrentStep}
+        value={actionPointsUsed}
       />
     </Box>
   );
