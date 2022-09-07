@@ -27,25 +27,17 @@ import { PlayBox } from "../Components";
 import {
   useCurrentStep,
   useMyTeam,
-  useResultsByUserId,
   usePlay,
+  usePersona,
 } from "../context/playContext";
-import { persona } from "../../persona/persona";
 import { sumAllValues } from "../../persona";
-import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
   const { user } = useAuth();
   const { game } = usePlay();
-
-  const userIds = user && user.id ? [user.id] : [];
-
-  const personaByUserId = useResultsByUserId({ userIds });
-  const userPersona = user?.id
-    ? getLastCompletedStepPlayerValues(game, personaByUserId[user.id])
-    : persona;
+  const { currentPersona } = usePersona();
 
   const myTeam = useMyTeam();
   if (user === null) {
@@ -68,7 +60,7 @@ function PlayerHeader() {
         >
           <GameStepper step={game.step} />
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {userPersona.points || 0} <EmojiEventsRoundedIcon />
+            {currentPersona.points || 0} <EmojiEventsRoundedIcon />
           </Typography>
         </Grid>
         <Grid
@@ -82,18 +74,18 @@ function PlayerHeader() {
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <FactoryRoundedIcon sx={{ mr: 1 }} />{" "}
-            {sumAllValues(userPersona.production) || 0} kWh
+            {sumAllValues(currentPersona.production) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <ShoppingCartRoundedIcon sx={{ mr: 1 }} />{" "}
-            {sumAllValues(userPersona.consumption) || 0} kWh
+            {sumAllValues(currentPersona.consumption) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <PaidRoundedIcon sx={{ mr: 1 }} /> {userPersona.budget || 0} €/J
+            <PaidRoundedIcon sx={{ mr: 1 }} /> {currentPersona.budget || 0} €/J
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <WaterRoundedIcon sx={{ mr: 1 }} />{" "}
-            {userPersona.carbonFootprint || 0} T/an
+            {currentPersona.carbonFootprint || 0} T/an
           </Typography>
         </Grid>
         <Grid
