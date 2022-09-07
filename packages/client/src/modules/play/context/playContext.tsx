@@ -24,9 +24,9 @@ export {
   useCurrentStep,
   useMyTeam,
   useLoadedPlay as usePlay,
-  getResultsByStep,
   useResultsByUserId,
   usePlayerActions,
+  usePersona,
 };
 
 interface IPlayContext {
@@ -133,6 +133,8 @@ function useMyTeam(): ITeamWithPlayers | null {
   );
 }
 
+// @deprecated
+// TODO: remove and use `currentPersona` from `usePersona()` instead.
 function useCurrentPersona() {
   return persona;
 }
@@ -246,6 +248,39 @@ function getPlayer(game: IGameWithTeams, userId: number) {
   );
 
   return playerTeam?.players.find((player: Player) => player.userId === userId);
+}
+
+function usePersona() {
+  const { game } = useLoadedPlay();
+  const { playerActions } = usePlayerActions();
+
+  const personaBySteps = getResultsByStep(playerActions);
+
+  const getPersonaAtStep = (step: number) => {
+    let stepUsed = 0;
+    if (step >= game.step) {
+      stepUsed = game.step;
+    }
+    if (stepUsed === game.step && game.isStepActive) {
+      stepUsed -= 1;
+    }
+    stepUsed = Math.max(stepUsed, 0);
+
+    return personaBySteps[stepUsed];
+  };
+
+  const currentPersona = getPersonaAtStep(game.step);
+  const latestPersona = personaBySteps[game.step];
+
+  return {
+    personaBySteps,
+    /** Persona taking into account player's actions at latest validated step. */
+    currentPersona,
+    /** Persona taking into account latest player's actions, whether the step is active or not. */
+    latestPersona,
+    /** Persona taking into account player's actions at specified step. */
+    getPersonaAtStep,
+  };
 }
 
 function getResultsByStep(

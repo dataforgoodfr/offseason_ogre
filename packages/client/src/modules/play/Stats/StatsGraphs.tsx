@@ -11,13 +11,8 @@ import {
 } from "../../common/components/EnergyButtons";
 import { MAX_NUMBER_STEPS, STEPS } from "../constants";
 import _ from "lodash";
-import {
-  getResultsByStep,
-  usePlay,
-  usePlayerActions,
-} from "../context/playContext";
+import { usePersona, usePlay } from "../context/playContext";
 import { sumFor } from "../../persona";
-import { PlayerActions } from "../../../utils/types";
 import { getPlayerValuesByStep } from "../utils/playerValues";
 
 export { StatsGraphs };
@@ -25,35 +20,27 @@ export { StatsGraphs };
 function StatsGraphs() {
   const [bar, setSelectedBar] = React.useState<number>();
 
-  const { playerActions } = usePlayerActions();
-
   return (
     <PlayBox>
       <StackedEnergyBars
-        data={useStackedEnergyData(playerActions)}
+        data={useStackedEnergyData()}
         onClick={({ activeTooltipIndex }) => {
           setSelectedBar(activeTooltipIndex);
         }}
       />
-      {<StepDetails bar={bar} playerActions={playerActions} />}
+      {<StepDetails bar={bar} />}
     </PlayBox>
   );
 }
 
-function StepDetails({
-  bar,
-  playerActions,
-}: {
-  bar: number | undefined;
-  playerActions: PlayerActions[];
-}) {
+function StepDetails({ bar }: { bar: number | undefined }) {
   const { game } = usePlay();
+  const { personaBySteps } = usePersona();
 
-  const personaByStep = getResultsByStep(playerActions);
   if (typeof bar === "undefined") return <></>;
   const step = bar === 0 || bar === 1 ? 0 : bar - 1;
 
-  const persona = getPlayerValuesByStep(step, game, personaByStep);
+  const persona = getPlayerValuesByStep(step, game, personaBySteps);
   if (step === 0 && bar === 0) {
     return (
       <>
@@ -85,11 +72,11 @@ function StepDetails({
   }
 }
 
-function useStackedEnergyData(playerActions: PlayerActions[]) {
+function useStackedEnergyData() {
   const { game } = usePlay();
+  const { personaBySteps } = usePersona();
 
-  const personaByStep = getResultsByStep(playerActions);
-  const initialPersona = getPlayerValuesByStep(0, game, personaByStep);
+  const initialPersona = getPlayerValuesByStep(0, game, personaBySteps);
   const initialValues = [
     {
       name: "Initial",
@@ -109,7 +96,7 @@ function useStackedEnergyData(playerActions: PlayerActions[]) {
     if (step > game.step || (step === game.step && game.isStepActive)) {
       return {};
     }
-    const persona = getPlayerValuesByStep(step, game, personaByStep);
+    const persona = getPlayerValuesByStep(step, game, personaBySteps);
     if (STEPS[step]?.type === "consumption") {
       return {
         name: step ? `Étape ${step}` : "Initial",
