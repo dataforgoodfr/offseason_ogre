@@ -1,5 +1,13 @@
 import { StackedEnergyBars } from "./StackedEnergyBars";
 import { LineEvolution } from "./LineEvolution";
-import { DetailsEnergyBars } from "./DetailsEnergyBars";
+import {
+  DetailsEnergyConsumptionBars,
+  DetailsEnergyProductionBars,
+} from "./DetailsEnergyBars";
 
-export { StackedEnergyBars, LineEvolution, DetailsEnergyBars };
+export {
+  StackedEnergyBars,
+  LineEvolution,
+  DetailsEnergyConsumptionBars,
+  DetailsEnergyProductionBars,
+};
