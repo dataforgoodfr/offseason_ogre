@@ -95,6 +95,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       step: gameWithTeams.step,
       playerActions,
     });
+    updateGame({ step: gameWithTeams.step });
   };
 
   return (
@@ -199,6 +200,10 @@ function useGameSocket({
       "playerActionsUpdated",
       ({ playerActions }: { playerActions: PlayerActions[] }) => {
         setPlayerActions(playerActions);
+        setGameWithTeams((previous) => {
+          if (previous === null) return null;
+          return { ...previous };
+        });
       }
     );
 

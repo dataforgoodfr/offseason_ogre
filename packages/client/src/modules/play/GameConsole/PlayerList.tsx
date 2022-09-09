@@ -10,11 +10,13 @@ import {
   // useCurrentPersona,
   usePlay,
   useResultsByUserId,
-  // usePlayerActions,
+  usePlayerActions,
 } from "../context/playContext";
 import { persona } from "../../persona/persona";
 import { PlayerActions } from "../../../utils/types";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
+
+import { io, Socket } from "socket.io-client";
 
 export { PlayerList };
 
@@ -38,21 +40,27 @@ interface IPlayer {
 
 function PlayerMini({ player }: { player: IPlayer }) {
   const { game } = usePlay();
+
   const results = useResultsByUserId({
     userIds: player ? [player.userId] : [],
   });
+
   const userData = player
     ? getLastCompletedStepPlayerValues(game, results[player.userId])
     : persona;
+
   const availableActionPoints = STEPS?.[game.step].availableActionPoints || 0;
+
   const playerActionsAtCurrentStep = player.actions.filter(
     (pa: PlayerActions) => pa.action.step === game.step
   );
+
   const actionPointsUsedAtCurrentStep = playerActionsAtCurrentStep.reduce(
     (sum: number, pa: PlayerActions) =>
       pa.isPerformed ? sum + pa.action.actionPointCost : sum,
     0
   );
+
   return (
     <PlayBox key={player.userId} mt={2}>
       <Typography variant="h5">{buildName(player.user)}</Typography>
