@@ -34,7 +34,7 @@ model Players {
   user            User            @relation(fields: [userId], references: [id])
   userId          Int
   actions         PlayerActions[]
-  hasFinishedStep Boolean         @default(false)
+  hasFinishedStep Boolean         @default(true)
 
   @@id([userId, gameId])
 }
