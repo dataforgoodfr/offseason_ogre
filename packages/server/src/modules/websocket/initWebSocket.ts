@@ -13,10 +13,10 @@ function initWebSocket({ app }: { app: Express }) {
   const io = new Server(httpServer, {});
 
   io.on("connection", (socket) => {
-    handleJoinGame(socket);
-    handleUpdateGame(socket);
+    handleJoinGame(io, socket);
+    handleUpdateGame(io, socket);
     updatePlayerActions(io, socket);
-    handleUpdatePlayer(socket);
+    handleUpdatePlayer(io, socket);
   });
   return { httpServer };
 }

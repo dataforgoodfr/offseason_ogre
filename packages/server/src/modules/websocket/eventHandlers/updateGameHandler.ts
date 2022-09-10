@@ -1,12 +1,12 @@
-import { Socket } from "socket.io";
 import { z } from "zod";
+import { Server, Socket } from "../types";
 import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
 import { rooms } from "../constants";
 
 export { handleUpdateGame };
 
-function handleUpdateGame(socket: Socket) {
+function handleUpdateGame(io: Server, socket: Socket) {
   socket.on("updateGame", async (args: unknown) => {
     const schema = z.object({
       gameId: z.number(),
@@ -31,19 +31,17 @@ function handleUpdateGame(socket: Socket) {
     const stepSwitchedToInactive = wasStepActive && !game.isStepActive;
     if (stepSwitchedToActive) {
       await playersServices.updateMany(gameId, { hasFinishedStep: false });
-      socket
-        .to(rooms.players(gameId))
-        .emit("playerUpdated", { update: { hasFinishedStep: false } });
+      io.to(rooms.players(gameId)).emit("playerUpdated", {
+        update: { hasFinishedStep: false },
+      });
     } else if (stepSwitchedToInactive) {
       await playersServices.updateMany(gameId, { hasFinishedStep: true });
-      socket
-        .to(rooms.players(gameId))
-        .emit("playerUpdated", { update: { hasFinishedStep: true } });
+      io.to(rooms.players(gameId)).emit("playerUpdated", {
+        update: { hasFinishedStep: true },
+      });
     }
 
     game = await gameServices.getDocument(gameId);
-    socket.broadcast
-      .to(rooms.game(gameId))
-      .emit("gameUpdated", { update: game });
+    io.to(rooms.game(gameId)).emit("gameUpdated", { update: game });
   });
 }

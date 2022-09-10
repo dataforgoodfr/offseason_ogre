@@ -5,12 +5,12 @@ import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
 import { services as usersServices } from "../../users/services";
 import * as playerActionsServices from "../../actions/services/playerActions";
-import { Socket } from "../types";
+import { Server, Socket } from "../types";
 import { rooms } from "../constants";
 
 export { handleJoinGame };
 
-function handleJoinGame(socket: Socket) {
+function handleJoinGame(io: Server, socket: Socket) {
   socket.on("joinGame", async (rawGameId: unknown) => {
     const gameId = z.number().parse(rawGameId);
     socket.join(`${gameId}`);
