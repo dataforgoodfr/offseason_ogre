@@ -1,7 +1,7 @@
-import { Socket as SocketLib } from "socket.io";
+import { Server, Socket as SocketLib } from "socket.io";
 import { User } from "../users/types";
 
-export { Socket };
+export { Server, Socket };
 
 type ListenEvents = any;
 type EmitEvents = any;

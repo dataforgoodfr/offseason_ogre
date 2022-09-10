@@ -15,7 +15,7 @@ function initWebSocket({ app }: { app: Express }) {
   io.on("connection", (socket) => {
     handleJoinGame(socket);
     handleUpdateGame(socket);
-    updatePlayerActions(socket);
+    updatePlayerActions(io, socket);
     handleUpdatePlayer(socket);
   });
   return { httpServer };

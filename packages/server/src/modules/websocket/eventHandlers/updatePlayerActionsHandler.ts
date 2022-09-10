@@ -1,14 +1,16 @@
 import cookie from "cookie";
-import { Socket } from "socket.io";
 import { z } from "zod";
+import { Server, Socket } from "../types";
+import { services as gameServices } from "../../games/services";
 import { services as usersServices } from "../../users/services";
 import * as playerActionsServices from "../../actions/services/playerActions";
 import { GameStep, STEPS } from "../../../constants/steps";
 import { PlayerActions } from "../../actions/types";
+import { rooms } from "../constants";
 
 export { updatePlayerActions };
 
-function updatePlayerActions(socket: Socket) {
+function updatePlayerActions(io: Server, socket: Socket) {
   socket.on("updatePlayerActions", async (args: unknown) => {
     const schema = z.object({
       gameId: z.number(),
@@ -50,9 +52,12 @@ function updatePlayerActions(socket: Socket) {
       lastChosenPlayerActions
     );
 
+    const game = await gameServices.getDocument(gameId);
+
     socket.emit("playerActionsUpdated", {
       playerActions,
     });
+    io.to(rooms.teachers(gameId)).emit("gameUpdated", { update: game });
   });
 }
 

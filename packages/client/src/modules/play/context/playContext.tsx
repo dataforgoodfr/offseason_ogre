@@ -25,7 +25,7 @@ export {
   useCurrentStep,
   useMyTeam,
   useLoadedPlay as usePlay,
-  useResultsByUserId,
+  usePersonaByUserId,
   usePlayerActions,
   usePersona,
 };
@@ -112,7 +112,6 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       step: gameWithTeams.step,
       playerActions,
     });
-    updateGame({ step: gameWithTeams.step });
   };
 
   const updatePlayer = ({ hasFinishedStep }: { hasFinishedStep?: boolean }) => {
@@ -175,8 +174,19 @@ function useCurrentStep(): GameStep | null {
 function usePlayerActions() {
   const { game, playerActions } = useLoadedPlay();
 
+  return {
+    playerActions,
+    actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
+    ...computePlayerActionsStats(game.step, playerActions),
+  };
+}
+
+function computePlayerActionsStats(
+  currentStep: number,
+  playerActions: PlayerActions[]
+) {
   const playerActionsAtCurrentStep = playerActions.filter(
-    (pa) => pa.action.step === game.step
+    (pa) => pa.action.step === currentStep
   );
 
   const actionPointsUsedAtCurrentStep = playerActionsAtCurrentStep.reduce(
@@ -185,10 +195,8 @@ function usePlayerActions() {
   );
 
   return {
-    playerActions,
     playerActionsAtCurrentStep,
     actionPointsUsedAtCurrentStep,
-    actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
   };
 }
 
@@ -225,12 +233,8 @@ function useGameSocket({
 
     newSocket.on(
       "playerActionsUpdated",
-      ({ playerActions }: { playerActions: PlayerActions[] }) => {
+      ({ playerActions = [] }: { playerActions: PlayerActions[] }) => {
         setPlayerActions(playerActions.sort(sortBy("actionId", "asc")));
-        setGameWithTeams((previous) => {
-          if (previous === null) return null;
-          return { ...previous };
-        });
       }
     );
 
@@ -268,16 +272,22 @@ function usePlay() {
   return React.useContext<IPlayContext | null>(PlayContext);
 }
 
-function useResultsByUserId({
-  userIds,
-}: {
-  userIds: number[];
-}): Record<number, Record<number, Persona>> {
+function usePersonaByUserId(userIds: number): ReturnType<typeof buildPersona>;
+function usePersonaByUserId(
+  userIds: number[]
+): Record<number, ReturnType<typeof buildPersona>>;
+function usePersonaByUserId(userIds: number | number[]) {
   const { game: gameWithTeams } = useLoadedPlay();
+
+  if (typeof userIds === "number") {
+    const playerActions = getPlayer(gameWithTeams, userIds)?.actions || [];
+    return buildPersona(gameWithTeams, playerActions);
+  }
+
   return Object.fromEntries(
     userIds.map((userId) => {
-      const playerActions = getPlayer(gameWithTeams, userId)?.actions;
-      return [userId, getResultsByStep(playerActions || [])];
+      const playerActions = getPlayer(gameWithTeams, userId)?.actions || [];
+      return [userId, buildPersona(gameWithTeams, playerActions)];
     })
   );
 }
@@ -294,6 +304,10 @@ function usePersona() {
   const { game } = useLoadedPlay();
   const { playerActions } = usePlayerActions();
 
+  return buildPersona(game, playerActions);
+}
+
+function buildPersona(game: IGameWithTeams, playerActions: PlayerActions[]) {
   const personaBySteps = getResultsByStep(playerActions);
 
   const getPersonaAtStep = (step: number) => {
@@ -336,21 +350,21 @@ function getResultsByStep(
 
 function computeResultsByStep(
   step: number,
-  playerActions: PlayerActions[]
+  playerActions: PlayerActions[] = []
 ): Persona {
   if (step === 0) {
     return persona;
   }
 
   const performedActions = playerActions
-    ?.filter(
+    .filter(
       (playerAction: PlayerActions) =>
         playerAction.action.step <= step && playerAction.isPerformed === true
     )
     .map((playerAction: PlayerActions) => playerAction.action);
 
   const costPerDay = performedActions
-    ?.map((action: Action) => action.financialCost)
+    .map((action: Action) => action.financialCost)
     .reduce((a, b) => a + b, 0);
   const performedActionsNames = performedActions.map(
     (action: Action) => action.name
@@ -362,10 +376,15 @@ function computeResultsByStep(
     }
   );
 
+  const { actionPointsUsedAtCurrentStep } = computePlayerActionsStats(
+    step,
+    playerActions
+  );
+
   return {
     budget: persona.budget - costPerDay,
     carbonFootprint: persona.carbonFootprint,
-    points: persona.points,
+    points: actionPointsUsedAtCurrentStep,
     consumption: newConsumption,
     production: persona.production,
   };
