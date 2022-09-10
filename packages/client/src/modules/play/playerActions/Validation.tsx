@@ -1,6 +1,6 @@
 import { Box, Button } from "@mui/material";
-import { Dialog, DialogTitle, DialogActions } from "@mui/material";
 import { useState } from "react";
+import { Dialog } from "../../common/components/Dialog";
 import { usePlay } from "../context/playContext";
 
 export { ValidateActions };
@@ -35,20 +35,19 @@ function ValidateActions() {
 
       <Dialog
         open={open}
-        onClose={handleClose}
+        handleClose={handleClose}
+        content="Les choix ne seront plus modifiable, souhaites-tu valider tes choix ?"
+        actions={
+          <>
+            <Button onClick={handleClose}>Non</Button>
+            <Button onClick={handleFinishStep} autoFocus>
+              Oui
+            </Button>
+          </>
+        }
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          Valider les actions définitivement ?
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={handleClose}>Annuler</Button>
-          <Button onClick={handleFinishStep} autoFocus>
-            Continuer
-          </Button>
-        </DialogActions>
-      </Dialog>
+      />
     </Box>
   );
 }
