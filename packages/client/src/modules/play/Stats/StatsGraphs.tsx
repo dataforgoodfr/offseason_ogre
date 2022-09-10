@@ -14,8 +14,13 @@ import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumFor } from "../../persona";
 import { getPlayerValuesByStep } from "../utils/playerValues";
+import { IGame } from "../../../utils/types";
 
 export { StatsGraphs };
+
+function isNotFinishedStep(step: number, game: IGame) {
+  return step > game.step || (step === game.step && game.isStepActive);
+}
 
 function StatsGraphs() {
   const [bar, setSelectedBar] = React.useState<number>();
@@ -39,6 +44,8 @@ function StepDetails({ bar }: { bar: number | undefined }) {
 
   if (typeof bar === "undefined") return <></>;
   const step = bar === 0 || bar === 1 ? 0 : bar - 1;
+
+  if (isNotFinishedStep(step, game)) return <></>;
 
   const persona = getPlayerValuesByStep(step, game, personaBySteps);
   if (step === 0 && bar === 0) {
@@ -92,8 +99,11 @@ function useStackedEnergyData() {
     },
   ];
 
-  const stepsDetails = _.range(1, MAX_NUMBER_STEPS).map((step: number) => {
-    if (step > game.step || (step === game.step && game.isStepActive)) {
+  const stepsDetails = _.range(
+    1,
+    Math.min(game.step + 1, MAX_NUMBER_STEPS)
+  ).map((step: number) => {
+    if (isNotFinishedStep(step, game)) {
       return {};
     }
     const persona = getPlayerValuesByStep(step, game, personaBySteps);
@@ -108,7 +118,6 @@ function useStackedEnergyData() {
     } else {
       return {
         name: step ? `Étape ${step}` : "Initial",
-        renewable: sumFor(persona.consumption, "renewable"),
         offshore: sumFor(initialPersona.production, "offshore"),
         terrestrial: sumFor(initialPersona.production, "terrestrial"),
       };
