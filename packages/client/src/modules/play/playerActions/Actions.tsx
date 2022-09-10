@@ -33,12 +33,14 @@ function Actions({ currentStage }: { currentStage: Stage }) {
 
 function ActionsLayout() {
   const {
-    playerActions,
     updatePlayerActions,
     actionPointsLimitExceeded,
     setActionPointsLimitExceeded,
   } = usePlay();
-  const { actionPointsAvailableAtCurrentStep } = usePlayerActions();
+  const {
+    actionPointsAvailableAtCurrentStep,
+    playerActionsAtCurrentStep: playerActions,
+  } = usePlayerActions();
 
   const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
     setActionPointsLimitExceeded(false);
