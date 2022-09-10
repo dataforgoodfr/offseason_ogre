@@ -31,6 +31,7 @@ interface Player {
   userId: number;
   user: IUser;
   actions: PlayerActions[];
+  hasFinishedStep: boolean;
 }
 
 interface Action {
