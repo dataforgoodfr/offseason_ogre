@@ -16,6 +16,7 @@ import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
 import _ from "lodash";
 import { ConsumptionDatum } from "../../persona/consumption";
 import { computeConsumptionChoices } from "../utils/consumptionStep";
+import { sortBy } from "../../../lib/array";
 
 export {
   PlayProvider,
@@ -224,7 +225,7 @@ function useGameSocket({
     newSocket.on(
       "playerActionsUpdated",
       ({ playerActions }: { playerActions: PlayerActions[] }) => {
-        setPlayerActions(playerActions);
+        setPlayerActions(playerActions.sort(sortBy("actionId", "asc")));
       }
     );
 
@@ -253,6 +254,7 @@ function useGameSocket({
     setGameWithTeams,
     setPlayerActions,
     setActionPointsLimitExceeded,
+    setPlayer,
   ]);
   return { socket };
 }
