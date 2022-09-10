@@ -22,6 +22,7 @@ function handleJoinGame(io: Server, socket: Socket) {
       cookies?.authentificationToken
     );
 
+    socket.data.gameId = gameId;
     socket.data.user = user;
 
     const game = await gameServices.getDocument(gameId);
