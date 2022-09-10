@@ -1,13 +1,11 @@
-import { Box, Rating, Typography } from "@mui/material";
-import { ITeamWithPlayers, IUser } from "../../../utils/types";
+import { Box, Rating, Typography, useTheme } from "@mui/material";
+import { ITeamWithPlayers, IUser, Player } from "../../../utils/types";
 import { PlayBox } from "../Components";
-import PaidIcon from "@mui/icons-material/Paid";
-import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
 import { MAX_ACTION_POINTS } from "../constants";
 import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
 import {
-  // useCurrentPersona,
+  useCurrentPersona,
   usePlay,
   useResultsByUserId,
   usePlayerActions,
@@ -15,6 +13,7 @@ import {
 import { persona } from "../../persona/persona";
 import { PlayerActions } from "../../../utils/types";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
+import { Icon } from "../../common/components/Icon";
 
 import { io, Socket } from "socket.io-client";
 
@@ -30,16 +29,10 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
   );
 }
 
-interface IPlayer {
-  gameId: number;
-  teamId: number;
-  userId: number;
-  user: IUser;
-  actions: PlayerActions[];
-}
-
-function PlayerMini({ player }: { player: IPlayer }) {
+function PlayerMini({ player }: { player: Player }) {
   const { game } = usePlay();
+  const persona = useCurrentPersona();
+  const theme = useTheme();
 
   const results = useResultsByUserId({
     userIds: player ? [player.userId] : [],
@@ -63,47 +56,49 @@ function PlayerMini({ player }: { player: IPlayer }) {
 
   return (
     <PlayBox key={player.userId} mt={2}>
-      <Typography variant="h5">{buildName(player.user)}</Typography>
+      <Box display="flex" alignItems="center">
+        <Typography variant="h5">{buildName(player.user)}</Typography>
+        {player.hasFinishedStep ? (
+          <Icon
+            name="player-finished"
+            sx={{ ml: 1, color: theme.palette.secondary.main }}
+          />
+        ) : null}
+      </Box>
+
       <Box display="flex" alignItems="center" mt={2}>
-        <PaidIcon />
-        <Typography
-          ml={1}
-        >{`Budget restant: ${userData.budget} €/j`}</Typography>
+        <Icon name="budget" />
+        <Typography ml={1} width={150}>
+          Budget restant :
+        </Typography>
+        <Typography>{userData.budget} €/j</Typography>
       </Box>
       <Box display="flex" alignItems="center">
-        <CloudIcon />
-        <Typography
-          ml={1}
-        >{`Bilan carbone: ${userData.carbonFootprint} kgCO2/an`}</Typography>
+        <Icon name="carbon-footprint" />
+        <Typography ml={1} width={150}>
+          Bilan carbone :
+        </Typography>
+        <Typography>{userData.carbonFootprint} kgCO2/an</Typography>
       </Box>
-      <ActionPoints
-        actionPointsUsed={actionPointsUsedAtCurrentStep}
-        maxActionPoints={availableActionPoints}
-      />
+      <Box display="flex" alignItems="center">
+        <Icon name="action-points" />
+        <Typography ml={1} width={150}>
+          Point d'actions :
+        </Typography>
+        <Rating
+          emptyIcon={
+            <StarIcon
+              style={{ fill: "grey", opacity: 0.5 }}
+              fontSize="inherit"
+            />
+          }
+          max={MAX_ACTION_POINTS}
+          name="action-points"
+          readOnly
+          value={persona.points}
+        />
+      </Box>
     </PlayBox>
-  );
-}
-
-function ActionPoints({
-  actionPointsUsed,
-  maxActionPoints,
-}: {
-  actionPointsUsed: number;
-  maxActionPoints: number;
-}) {
-  return (
-    <Box mt={2}>
-      <Typography>Point d'actions</Typography>
-      <Rating
-        emptyIcon={
-          <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
-        }
-        max={maxActionPoints}
-        name="action-points"
-        readOnly
-        value={actionPointsUsed}
-      />
-    </Box>
   );
 }
 

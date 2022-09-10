@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import { handleJoinGame } from "./eventHandlers/joinGameHandler";
 import { handleUpdateGame } from "./eventHandlers/updateGameHandler";
 import { updatePlayerActions } from "./eventHandlers/updatePlayerActionsHandler";
+import { handleUpdatePlayer } from "./eventHandlers/updatePlayerHandler";
 
 export { initWebSocket };
 
@@ -15,6 +16,7 @@ function initWebSocket({ app }: { app: Express }) {
     handleJoinGame(socket);
     handleUpdateGame(socket);
     updatePlayerActions(socket);
+    handleUpdatePlayer(socket);
   });
   return { httpServer };
 }

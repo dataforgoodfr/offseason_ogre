@@ -1,6 +1,8 @@
 import { Socket } from "socket.io";
 import { z } from "zod";
 import { services as gameServices } from "../../games/services";
+import { services as playersServices } from "../../players/services";
+import { rooms } from "../constants";
 
 export { handleUpdateGame };
 
@@ -14,7 +16,34 @@ function handleUpdateGame(socket: Socket) {
       }),
     });
     const { gameId, update } = schema.parse(args);
-    await gameServices.update(gameId, update);
-    socket.broadcast.to(`${gameId}`).emit("gameUpdated", { gameId, update });
+
+    let game = await gameServices.getDocument(gameId);
+    if (!game) {
+      throw new Error(`Could not find game with id ${gameId}`);
+    }
+
+    const wasStepActive = game.isStepActive;
+    game = await gameServices.update(gameId, update);
+
+    socket.broadcast.to(rooms.game(gameId)).emit("gameUpdated", { update });
+
+    const stepSwitchedToActive = !wasStepActive && game.isStepActive;
+    const stepSwitchedToInactive = wasStepActive && !game.isStepActive;
+    if (stepSwitchedToActive) {
+      await playersServices.updateMany(gameId, { hasFinishedStep: false });
+      socket
+        .to(rooms.players(gameId))
+        .emit("playerUpdated", { update: { hasFinishedStep: false } });
+    } else if (stepSwitchedToInactive) {
+      await playersServices.updateMany(gameId, { hasFinishedStep: true });
+      socket
+        .to(rooms.players(gameId))
+        .emit("playerUpdated", { update: { hasFinishedStep: true } });
+    }
+
+    game = await gameServices.getDocument(gameId);
+    socket.broadcast
+      .to(rooms.game(gameId))
+      .emit("gameUpdated", { update: game });
   });
 }

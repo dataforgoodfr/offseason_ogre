@@ -12,14 +12,14 @@ import {
   usePersona,
   usePlayerActions,
 } from "../context/playContext";
-import { Stage } from "../../stages";
 import { StepHelpDialog } from "./HelpDialogs";
 import { CustomRating, HelpIconWrapper, Spacer } from "./ActionsHeader.styles";
 
 export { ActionsHeader };
 
-function ActionsHeader({ currentStage }: { currentStage: Stage }) {
+function ActionsHeader() {
   const { latestPersona } = usePersona();
+  const currentStep = useCurrentStep();
 
   const [openHelp, setOpenHelp] = useState(false);
 
@@ -36,7 +36,7 @@ function ActionsHeader({ currentStage }: { currentStage: Stage }) {
         <Box display="flex" alignItems="center">
           <ShoppingCartIcon />
           <Typography ml={1} mr={2} variant="h5">
-            {currentStage?.title}
+            {currentStep?.title}
           </Typography>
           <Spacer />
           <HelpIconWrapper>
