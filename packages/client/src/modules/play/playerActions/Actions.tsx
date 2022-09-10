@@ -11,7 +11,6 @@ import { Spacer } from "../../common/components/Spacer";
 import { Typography } from "../../common/components/Typography";
 import { PlayBox } from "../Components";
 import { ActionsHeader } from "./ActionsHeader";
-import { Stage } from "../../stages";
 
 import { actionHelpCards } from "../../actions";
 import { useState } from "react";
@@ -22,10 +21,10 @@ import { Dialog } from "../../common/components/Dialog";
 
 export { Actions };
 
-function Actions({ currentStage }: { currentStage: Stage }) {
+function Actions() {
   return (
     <PlayBox>
-      <ActionsHeader currentStage={currentStage} />
+      <ActionsHeader />
       <ActionsLayout />
     </PlayBox>
   );
