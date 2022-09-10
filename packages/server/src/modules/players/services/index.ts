@@ -10,6 +10,7 @@ export { services };
 const crudServices = {
   find,
   update,
+  updateMany,
 };
 
 const services = { ...crudServices };
@@ -53,4 +54,16 @@ async function update(
       team: true,
     },
   }) as unknown as Players;
+}
+
+async function updateMany(
+  gameId: number,
+  data: Partial<Omit<Model, "id">>
+): Promise<void> {
+  await model.updateMany({
+    where: {
+      gameId,
+    },
+    data,
+  });
 }

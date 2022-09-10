@@ -28,7 +28,7 @@ function handleJoinGame(socket: Socket) {
     const isPlayer = game?.teacherId !== user.id;
 
     if (isPlayer) {
-      socket.join(rooms.players);
+      socket.join(rooms.players(gameId));
       await playerActionsServices.getOrCreatePlayerActions(gameId, user.id);
 
       const player = await playersServices.find(gameId, user.id);
@@ -40,7 +40,7 @@ function handleJoinGame(socket: Socket) {
         },
       });
     } else {
-      socket.join(rooms.teachers);
+      socket.join(rooms.teachers(gameId));
     }
   });
 }
