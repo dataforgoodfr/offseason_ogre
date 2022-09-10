@@ -1,2 +1,2 @@
 -- AlterTable
-ALTER TABLE "Players" ADD COLUMN     "hasFinishedStep" BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE "Players" ADD COLUMN     "hasFinishedStep" BOOLEAN NOT NULL DEFAULT true;

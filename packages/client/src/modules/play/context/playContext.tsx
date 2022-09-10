@@ -73,7 +73,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     useState<boolean>(false);
   // TODO: move actionPointsLimitExceeded and playerActions to this state.
   const [player, setPlayer] = useState<PlayerState>({
-    hasFinishedStep: false,
+    hasFinishedStep: true,
   });
   const { socket } = useGameSocket({
     gameId,
