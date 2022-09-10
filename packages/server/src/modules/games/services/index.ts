@@ -27,7 +27,9 @@ async function getDocument(id: number): Promise<Model | null> {
             include: {
               user: true,
               actions: {
-                include: { action: true },
+                include: {
+                  action: true,
+                },
               },
             },
           },
