@@ -27,13 +27,14 @@ enum Status {
 }
 
 model Players {
-  game    Game            @relation(fields: [gameId], references: [id])
-  gameId  Int
-  team    Team            @relation(fields: [teamId], references: [id])
-  teamId  Int
-  user    User            @relation(fields: [userId], references: [id])
-  userId  Int
-  actions PlayerActions[]
+  game            Game            @relation(fields: [gameId], references: [id])
+  gameId          Int
+  team            Team            @relation(fields: [teamId], references: [id])
+  teamId          Int
+  user            User            @relation(fields: [userId], references: [id])
+  userId          Int
+  actions         PlayerActions[]
+  hasFinishedStep Boolean         @default(false)
 
   @@id([userId, gameId])
 }
