@@ -37,6 +37,7 @@ async function createController(request: Request, response: Response) {
     teacherId: response.locals.user.id,
     status: "draft",
     step: 0,
+    isStepActive: false,
     ...documentToCreate,
   });
   response.status(201).json({ data: newDocument });
