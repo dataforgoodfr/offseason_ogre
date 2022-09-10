@@ -1,35 +1,46 @@
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+import chunk from "lodash/chunk";
+
 import { database } from ".";
+import { safe } from "../lib/fp";
 import { availableActions } from "../modules/actions/constants/actions";
+import * as actionServices from "../modules/actions/services";
 import { Action } from "../modules/actions/types";
 
 // eslint-disable-next-line no-console
 console.log("Starting seeding...");
 
-const actions = [...getActionInformation()] as Action[];
-
 async function seed() {
   await database.$connect();
 
-  try {
-    await database.user.create({
-      data: {
-        email: "seeding@database.com",
-        isTeacher: false,
-        firstName: "Seeding",
-        lastName: "Master",
-        country: "FR",
-      },
-    });
-  } catch {
-    console.log("Seeding user already exists");
-  }
+  // Seed users.
+  const users = [
+    {
+      email: "seeding@database.com",
+      isTeacher: false,
+      firstName: "Seeding",
+      lastName: "Master",
+      country: "FR",
+    },
+  ];
+  await Promise.all(
+    users.map((user) =>
+      safe(async () => {
+        await database.user.create({ data: user });
+      })
+    )
+  );
 
-  try {
-    await database.action.createMany({
-      data: actions,
-    });
-  } catch {
-    console.log("Actions already exists");
+  // Seed actions.
+  for (const batch of chunk(getActionInformation())) {
+    await Promise.all(
+      batch.map((action) =>
+        safe(async () => {
+          await actionServices.updateOrCreate(action);
+        })
+      )
+    );
   }
 
   await database.$disconnect();
