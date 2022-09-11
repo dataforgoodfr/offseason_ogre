@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+import invariant from "tiny-invariant";
 import { z } from "zod";
 import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
@@ -17,18 +18,16 @@ function handleUpdateGame(socket: Socket) {
     });
     const { gameId, update } = schema.parse(args);
 
-    let game = await gameServices.getDocument(gameId);
-    if (!game) {
-      throw new Error(`Could not find game with id ${gameId}`);
-    }
+    const game = await gameServices.getDocument(gameId);
+    invariant(game, `Could not find game with id ${gameId}`);
 
-    const wasStepActive = game.isStepActive;
-    game = await gameServices.update(gameId, update);
+    const gameUpdated = await gameServices.update(gameId, update);
 
     socket.broadcast.to(rooms.game(gameId)).emit("gameUpdated", { update });
 
-    const stepSwitchedToActive = !wasStepActive && game.isStepActive;
-    const stepSwitchedToInactive = wasStepActive && !game.isStepActive;
+    const stepSwitchedToActive = !game.isStepActive && gameUpdated.isStepActive;
+    const stepSwitchedToInactive =
+      game.isStepActive && !gameUpdated.isStepActive;
     if (stepSwitchedToActive) {
       await playersServices.updateMany(gameId, { hasFinishedStep: false });
       socket

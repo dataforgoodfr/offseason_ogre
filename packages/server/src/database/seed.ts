@@ -37,7 +37,7 @@ async function seed() {
     await Promise.all(
       batch.map((action) =>
         safe(async () => {
-          await actionServices.updateOrCreate(action);
+          await actionServices.upsert(action);
         })
       )
     );

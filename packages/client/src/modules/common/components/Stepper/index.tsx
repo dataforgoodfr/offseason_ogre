@@ -16,7 +16,7 @@ const GameStepper = ({
   return (
     <Box {...props}>
       <Typography textAlign="center" {...typographyProps}>
-        {step === 0 ? "Situation initiale" : `Etape nº${step}`}
+        {step === 0 ? "Situation initiale" : `Étape nº${step}`}
       </Typography>
       <StyledStepper step={step} />
     </Box>

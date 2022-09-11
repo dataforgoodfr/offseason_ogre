@@ -16,6 +16,7 @@ const crudServices = {
 const services = { ...crudServices };
 
 async function find(gameId: number, userId: number): Promise<Players | null> {
+  // TODO: find a way to link Prisma typing with attributes included in `include` section.
   return model.findFirst({
     where: {
       gameId,
@@ -37,6 +38,7 @@ async function update(
   userId: number,
   document: Partial<Omit<Model, "id">>
 ): Promise<Players> {
+  // TODO: find a way to link Prisma typing with attributes included in `include` section.
   return model.update({
     where: {
       userId_gameId: {

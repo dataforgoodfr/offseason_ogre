@@ -80,7 +80,7 @@ function buildDataConsumption(
       team6: getConsumptionByTeamAndStep(5, 0) / teams[5]?.playerCount || 0,
     },
     {
-      name: "Etape 1",
+      name: "Étape 1",
       team1: getConsumptionByTeamAndStep(0, 1) / teams[0]?.playerCount || 0,
       team2: getConsumptionByTeamAndStep(1, 1) / teams[1]?.playerCount || 0,
       team3: getConsumptionByTeamAndStep(2, 1) / teams[2]?.playerCount || 0,
@@ -89,7 +89,7 @@ function buildDataConsumption(
       team6: getConsumptionByTeamAndStep(5, 1) / teams[5]?.playerCount || 0,
     },
     {
-      name: "Etape 3",
+      name: "Étape 3",
       team1: getConsumptionByTeamAndStep(0, 2) / teams[0]?.playerCount || 0,
       team2: getConsumptionByTeamAndStep(1, 2) / teams[1]?.playerCount || 0,
       team3: getConsumptionByTeamAndStep(2, 2) / teams[2]?.playerCount || 0,
@@ -127,13 +127,13 @@ function buildDataProd(teams: { id: number; production: number }[]) {
       team6: teams[5]?.production,
     },
     {
-      name: "Etape 2",
+      name: "Étape 2",
       team1: "200",
       team2: "300",
       team3: "321",
     },
     {
-      name: "Etape 4",
+      name: "Étape 4",
       team1: "590",
       team2: "321",
       team3: "459",

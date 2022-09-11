@@ -6,7 +6,7 @@ interface ProductionDatum {
   type: ProductionType;
   value: number;
 }
-type ProductionType = "hydroProduction" | "nuclear" | "terrestrialProduction";
+type ProductionType = "offshore" | "nuclear" | "terrestrial";
 
 const production = [
   ...getHydroEnergies(),
@@ -15,7 +15,7 @@ const production = [
 ] as ProductionDatum[];
 
 function getHydroEnergies(): (ProductionDatum & {
-  type: "hydroProduction";
+  type: "offshore";
 })[] {
   const energies = [
     { name: "geothermal", value: 0.005 },
@@ -26,25 +26,27 @@ function getHydroEnergies(): (ProductionDatum & {
   ];
   return energies.map((energie) => ({
     ...energie,
-    type: "hydroProduction",
+    type: "offshore",
   }));
 }
 
 function getNuclearEnergies(): (ProductionDatum & { type: "nuclear" })[] {
-  const energies = [
-    {
-      name: "nuclear",
-      value: 0,
-    },
-  ];
-  return energies.map((energie) => ({
-    ...energie,
-    type: "nuclear",
-  }));
+  return [];
+  // TODO - Nuclear not in V0
+  // const energies = [
+  //   {
+  //     name: "nuclear",
+  //     value: 0,
+  //   },
+  // ];
+  // return energies.map((energie) => ({
+  //   ...energie,
+  //   type: "nuclear",
+  // }));
 }
 
 function getTerrestrialEnergies(): (ProductionDatum & {
-  type: "terrestrialProduction";
+  type: "terrestrial";
 })[] {
   const energies = [
     { name: "biomass", value: 7.138 },
@@ -58,6 +60,6 @@ function getTerrestrialEnergies(): (ProductionDatum & {
   ];
   return energies.map((energie) => ({
     ...energie,
-    type: "terrestrialProduction",
+    type: "terrestrial",
   }));
 }
