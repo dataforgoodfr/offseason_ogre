@@ -16,6 +16,7 @@ import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
 import _ from "lodash";
 import { ConsumptionDatum } from "../../persona/consumption";
 import { computeConsumptionChoices } from "../utils/consumptionStep";
+import { sortBy } from "../../../lib/array";
 
 export {
   PlayProvider,
@@ -41,8 +42,14 @@ interface IPlayContext {
   ) => void;
   actionPointsLimitExceeded: boolean;
   setActionPointsLimitExceeded: (limitExceeded: boolean) => void;
+  player: PlayerState;
+  updatePlayer: (options: { hasFinishedStep?: boolean }) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
+
+interface PlayerState {
+  hasFinishedStep: boolean;
+}
 
 const PlayContext = React.createContext<IPlayContext | null>(null);
 
@@ -65,11 +72,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const [playerActions, setPlayerActions] = useState<PlayerActions[]>([]);
   const [actionPointsLimitExceeded, setActionPointsLimitExceeded] =
     useState<boolean>(false);
+  // TODO: move actionPointsLimitExceeded and playerActions to this state.
+  const [player, setPlayer] = useState<PlayerState>({
+    hasFinishedStep: true,
+  });
   const { socket } = useGameSocket({
     gameId,
+    player,
     setGameWithTeams,
     setPlayerActions,
     setActionPointsLimitExceeded,
+    setPlayer,
   });
 
   if (gameWithTeams === null || socket === null) {
@@ -90,11 +103,19 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       id: number;
     }[]
   ) => {
+    if (player.hasFinishedStep) {
+      return;
+    }
+
     socket.emit("updatePlayerActions", {
       gameId,
       step: gameWithTeams.step,
       playerActions,
     });
+  };
+
+  const updatePlayer = ({ hasFinishedStep }: { hasFinishedStep?: boolean }) => {
+    socket.emit("updatePlayer", { gameId, hasFinishedStep });
   };
 
   return (
@@ -106,6 +127,8 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         updatePlayerActions,
         actionPointsLimitExceeded,
         setActionPointsLimitExceeded,
+        player,
+        updatePlayer,
       }}
     >
       {children}
@@ -170,14 +193,18 @@ function usePlayerActions() {
 
 function useGameSocket({
   gameId,
+  player,
   setGameWithTeams,
   setPlayerActions,
   setActionPointsLimitExceeded,
+  setPlayer,
 }: {
   gameId: number;
+  player: PlayerState;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
   setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
   setActionPointsLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>;
+  setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   useEffect(() => {
@@ -198,13 +225,20 @@ function useGameSocket({
     newSocket.on(
       "playerActionsUpdated",
       ({ playerActions }: { playerActions: PlayerActions[] }) => {
-        setPlayerActions(playerActions);
+        setPlayerActions(playerActions.sort(sortBy("actionId", "asc")));
       }
     );
 
     newSocket.on("actionPointsLimitExceeded", () => {
       setActionPointsLimitExceeded(true);
     });
+
+    newSocket.on(
+      "playerUpdated",
+      ({ update }: { update: Partial<PlayerState> }) => {
+        setPlayer({ ...player, ...update });
+      }
+    );
 
     newSocket.on("connect", () => {
       newSocket.emit("joinGame", gameId);
@@ -216,10 +250,12 @@ function useGameSocket({
       newSocket.disconnect();
     };
   }, [
+    // TODO: add dependency `player` without creating a new socket on each `player` update.
     gameId,
     setGameWithTeams,
     setPlayerActions,
     setActionPointsLimitExceeded,
+    setPlayer,
   ]);
   return { socket };
 }

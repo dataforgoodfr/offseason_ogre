@@ -8,6 +8,7 @@ interface Game {
   status: status;
   teacherId: number;
   step: number;
+  isStepActive: boolean;
 }
 
 type status = "draft" | "ready";

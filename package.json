@@ -12,6 +12,8 @@
   "scripts": {
     "build": "yarn workspace ogre-client build && yarn workspace ogre-server build",
     "prepare": "husky install",
+    "client:dev": "yarn workspace ogre-client dev",
+    "server:dev": "yarn workspace ogre-server dev",
     "db:up": "yarn workspace ogre-server db:up",
     "db:down": "yarn workspace ogre-server db:down",
     "db:migrate": "yarn workspace ogre-server db:migrate",
