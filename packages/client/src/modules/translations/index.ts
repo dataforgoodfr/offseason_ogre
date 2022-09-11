@@ -1,4 +1,13 @@
-export { translateConsumptionName };
+export { translateName };
+
+function translateName(type: string, value: string) {
+  if (type === "consumption") {
+    return translateConsumptionName(value);
+  } else if (type === "production") {
+    return translateProductionName(value);
+  }
+  return value;
+}
 
 function translateConsumptionName(value: string): string {
   const translationByValue = {
@@ -19,6 +28,22 @@ function translateConsumptionName(value: string): string {
     plane: "Avion",
     servicePublic: "Service public",
     train: "Train",
+  };
+  return translationByValue[value as keyof typeof translationByValue] ?? value;
+}
+
+function translateProductionName(value: string): string {
+  const translationByValue = {
+    geothermal: "Géothermie",
+    hydroPower: "Hydroélectricité",
+    offshoreTurbine: "Eolien offshore",
+    tidal: "Marées",
+    wave: "Vagues",
+    biomass: "Biomasse solaire",
+    onshoreWindTurbine: "Eolien terrestre",
+    photovoltaicFarm: "Ferme solaire",
+    photovoltaicRoof: "Photovoltaïque toiture",
+    thermalSolar: "Solaire thermique",
   };
   return translationByValue[value as keyof typeof translationByValue] ?? value;
 }

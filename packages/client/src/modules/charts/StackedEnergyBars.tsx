@@ -55,19 +55,19 @@ function StackedEnergyBars({
           unit="kWh"
         />
         <Bar
-          dataKey="hydroProduction"
+          dataKey="offshore"
           fill={theme.palette.production.offshore}
           barSize={25}
-          name={translateLabel("hydroProduction")}
+          name={translateLabel("offshore")}
           stackId="a"
           unit="kWh"
         />
         <Bar
-          dataKey="terrestrialProduction"
+          dataKey="terrestrial"
           stackId="a"
           fill={theme.palette.production.terrestrial}
           barSize={25}
-          name={translateLabel("terrestrialProduction")}
+          name={translateLabel("terrestrial")}
           unit="kWh"
         />
         <Bar
@@ -88,8 +88,8 @@ function translateLabel(value: string): string {
     grey: "Energie grise",
     renewable: "Energie renouvelable",
     mixte: "Energie mixte",
-    hydroProduction: "Production offshore",
-    terrestrialProduction: "Production terrestre",
+    offshore: "Production offshore",
+    terrestrial: "Production terrestre",
   } as Record<string, string>;
   return translations[value] ?? "Unkown";
 }

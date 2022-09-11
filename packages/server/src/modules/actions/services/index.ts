@@ -4,7 +4,7 @@ import { database } from "../../../database";
 const model = database.action;
 type Model = Action;
 
-export { getAll, getMany, updateOrCreate };
+export { getAll, getMany, upsert };
 
 async function getAll(partial: Partial<Model> = {}): Promise<Model[]> {
   return model.findMany({ where: partial });
@@ -19,20 +19,14 @@ async function getMany(step?: number): Promise<Model[]> {
   return model.findMany({ where });
 }
 
-async function updateOrCreate(document: Model): Promise<Model> {
-  let entry: Model | null = null;
-  if (document.id) {
-    entry = await model.findFirst({ where: { id: document.id } });
-  }
-
-  const entryFound = !!entry;
-  entry = entry != null ? { ...entry, ...document } : (document as Model);
-
-  if (entryFound) {
-    entry = await model.update({ where: { id: entry.id }, data: entry });
-  } else {
-    entry = await model.create({ data: entry });
-  }
+async function upsert(document: Model): Promise<Model> {
+  const entry = await model.upsert({
+    where: {
+      id: document.id,
+    },
+    update: document,
+    create: document,
+  });
 
   return entry;
 }
