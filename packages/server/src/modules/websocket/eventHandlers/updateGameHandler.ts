@@ -40,9 +40,9 @@ function handleUpdateGame(socket: Socket) {
         .emit("playerUpdated", { update: { hasFinishedStep: true } });
     }
 
-    game = await gameServices.getDocument(gameId);
+    const gameLatestUpdate = await gameServices.getDocument(gameId);
     socket.broadcast
       .to(rooms.game(gameId))
-      .emit("gameUpdated", { update: game });
+      .emit("gameUpdated", { update: gameLatestUpdate });
   });
 }
