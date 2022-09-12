@@ -64,6 +64,8 @@ function Teams({
 }
 
 function Players({ teamWithPlayers }: { teamWithPlayers: ITeamWithPlayers }) {
+  const theme = useTheme();
+
   return (
     <Box display="flex" minHeight="24px">
       {teamWithPlayers.players.map(({ user, hasFinishedStep }) => {
@@ -71,7 +73,10 @@ function Players({ teamWithPlayers }: { teamWithPlayers: ITeamWithPlayers }) {
           <Tooltip key={user.id} title={`${user.firstName} ${user.lastName}`}>
             <div>
               {hasFinishedStep ? (
-                <Icon name="player-finished" />
+                <Icon
+                  name="player-finished"
+                  sx={{ color: theme.palette.secondary.main }}
+                />
               ) : (
                 <Icon name="player" />
               )}

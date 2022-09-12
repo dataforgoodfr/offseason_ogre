@@ -31,14 +31,14 @@ function Dialog({
     >
       <DialogContent>
         <CustomGrid>
-          <Grid item xs={12} md={2}>
+          <Grid item md={2}>
             <img
               style={{ border: "2px solid white", borderRadius: "5px" }}
               src="/sage.png"
               alt="sage"
             />
           </Grid>
-          <Grid item xs={12} md={10}>
+          <Grid item md={10}>
             {content || children}
           </Grid>
         </CustomGrid>

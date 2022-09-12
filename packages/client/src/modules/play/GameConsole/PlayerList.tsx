@@ -2,14 +2,7 @@ import { Box, Rating, Typography, useTheme } from "@mui/material";
 import { ITeamWithPlayers, IUser, Player } from "../../../utils/types";
 import { PlayBox } from "../Components";
 import StarIcon from "@mui/icons-material/Star";
-import { MAX_ACTION_POINTS } from "../constants";
-import {
-  useCurrentPersona,
-  usePlay,
-  useResultsByUserId,
-} from "../context/playContext";
-import { persona } from "../../persona/persona";
-import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
+import { usePersonaByUserId, useCurrentStep } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
 
 export { PlayerList };
@@ -25,16 +18,10 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
 }
 
 function PlayerMini({ player }: { player: Player }) {
-  const { game } = usePlay();
-  const personna = useCurrentPersona();
+  const currentStep = useCurrentStep();
   const theme = useTheme();
 
-  const results = useResultsByUserId({
-    userIds: player ? [player.userId] : [],
-  });
-  const userData = player
-    ? getLastCompletedStepPlayerValues(game, results[player.userId])
-    : persona;
+  const { latestPersona } = usePersonaByUserId(player.userId);
 
   return (
     <PlayBox key={player.userId} mt={2}>
@@ -53,14 +40,14 @@ function PlayerMini({ player }: { player: Player }) {
         <Typography ml={1} width={150}>
           Budget restant :
         </Typography>
-        <Typography>{userData.budget} €/j</Typography>
+        <Typography>{latestPersona.budget} €/j</Typography>
       </Box>
       <Box display="flex" alignItems="center">
         <Icon name="carbon-footprint" />
         <Typography ml={1} width={150}>
           Bilan carbone :
         </Typography>
-        <Typography>{userData.carbonFootprint} kgCO2/an</Typography>
+        <Typography>{latestPersona.carbonFootprint} kgCO2/an</Typography>
       </Box>
       <Box display="flex" alignItems="center">
         <Icon name="action-points" />
@@ -74,10 +61,10 @@ function PlayerMini({ player }: { player: Player }) {
               fontSize="inherit"
             />
           }
-          max={MAX_ACTION_POINTS}
+          max={currentStep?.availableActionPoints}
           name="action-points"
           readOnly
-          value={personna.points}
+          value={latestPersona.points}
         />
       </Box>
     </PlayBox>
