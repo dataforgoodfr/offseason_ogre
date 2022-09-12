@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { safe } from "../../../lib/fp";
+import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
+import { rooms } from "../constants";
 import { Socket } from "../types";
 
 export { handleUpdatePlayer };
@@ -39,7 +41,12 @@ async function handleUpdateHasFinishedStepSafely(
         hasFinishedStep,
       });
 
-      await socket.emit("playerUpdated", {
+      const game = await gameServices.getDocument(gameId);
+
+      socket.to(rooms.teachers(gameId)).emit("gameUpdated", {
+        update: game,
+      });
+      socket.emit("playerUpdated", {
         update: {
           hasFinishedStep,
         },

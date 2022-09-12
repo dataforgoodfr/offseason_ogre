@@ -23,9 +23,7 @@ function handleUpdateGame(socket: Socket) {
 
     const gameUpdated = await gameServices.update(gameId, update);
 
-    socket.broadcast
-      .to(rooms.game(gameId))
-      .emit("gameUpdated", { gameId, update });
+    socket.broadcast.to(rooms.game(gameId)).emit("gameUpdated", { update });
 
     const stepSwitchedToActive = !game.isStepActive && gameUpdated.isStepActive;
     const stepSwitchedToInactive =
@@ -41,5 +39,10 @@ function handleUpdateGame(socket: Socket) {
         .to(rooms.players(gameId))
         .emit("playerUpdated", { update: { hasFinishedStep: true } });
     }
+
+    const gameLatestUpdate = await gameServices.getDocument(gameId);
+    socket.broadcast
+      .to(rooms.game(gameId))
+      .emit("gameUpdated", { update: gameLatestUpdate });
   });
 }
