@@ -58,7 +58,7 @@ function TeamActionsHeader() {
               <Icon name="budget" />
               <Typography>Budget alloué restant :</Typography>
             </Box>
-            <Typography>{budgetRemaining.toFixed(1)} €/j</Typography>
+            <Typography>{budgetRemaining.toFixed(2)} €/j</Typography>
           </Box>
           <Box display="flex" alignItems="center">
             <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
@@ -135,7 +135,7 @@ function EnergyListItem({
       </Box>
 
       <Typography>
-        {stats.powerNeed.toFixed(0)} GW &amp; {stats.cost.toFixed(1)} €/j
+        {stats.powerNeed.toFixed(0)} GW &amp; {stats.cost.toFixed(2)} €/j
       </Typography>
     </Box>
   );
