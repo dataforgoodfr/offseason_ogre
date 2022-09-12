@@ -64,10 +64,10 @@ interface ProductionActionArea {
   min: number;
   max: number;
   credibilityThreshold: number;
-  credibilityDescription: string;
   areaEnergy: number;
   powerNeededKWh: number;
   lcoe: number;
+  currentYearPowerNeedGw: number;
 }
 
 interface ProductionActionPercentage {
@@ -76,10 +76,10 @@ interface ProductionActionPercentage {
   min: number;
   max: number;
   credibilityThreshold: number;
-  credibilityDescription: string;
   totalEnergy: number;
   powerNeededKWh: number;
   lcoe: number;
+  currentYearPowerNeedGw: number;
 }
 
 interface TeamAction {

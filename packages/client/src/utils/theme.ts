@@ -36,6 +36,10 @@ let theme = createTheme({
       contrastText: white,
       dark: "#0066ff",
     },
+    status: {
+      error: "#9d1d32",
+      success: "#2d793a",
+    },
   },
   variables: {
     headerHeight: {
@@ -55,6 +59,10 @@ declare module "@mui/material/styles" {
     energy: EnergyPalette;
     production: ProductionPalette;
     actionValidation: Partial<Palette["primary"]>;
+    status: {
+      error: string;
+      success: string;
+    };
   }
 
   interface CustomVariables {

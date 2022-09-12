@@ -1,4 +1,10 @@
-export { translateName };
+import translationFr from "./fr.json";
+
+export { t, translateName };
+
+function t(key: keyof typeof translationFr) {
+  return translationFr[key] || key;
+}
 
 function translateName(type: string, value: string) {
   if (type === "consumption") {

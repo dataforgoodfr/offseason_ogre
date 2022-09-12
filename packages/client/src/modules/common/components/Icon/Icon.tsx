@@ -1,9 +1,11 @@
 import Cloud from "@mui/icons-material/Cloud";
 import DirectionsBike from "@mui/icons-material/DirectionsBike";
+import DoneAll from "@mui/icons-material/DoneAll";
 import Factory from "@mui/icons-material/Factory";
 import FlashOn from "@mui/icons-material/FlashOn";
 import Groups from "@mui/icons-material/Groups";
 import HowToReg from "@mui/icons-material/HowToReg";
+import Info from "@mui/icons-material/Info";
 import Paid from "@mui/icons-material/Paid";
 import Person from "@mui/icons-material/Person";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
@@ -17,6 +19,8 @@ const ICONS = {
   budget: Paid,
   "carbon-footprint": Cloud,
   consumption: ShoppingCart,
+  "check-doubled": DoneAll,
+  information: Info,
   "player-finished": HowToReg,
   player: Person,
   power: FlashOn,
