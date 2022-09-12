@@ -1,10 +1,11 @@
 import { Box, Grid } from "@mui/material";
 import { Actions } from "./Actions";
-import { TeamActions } from "./TeamActions";
 import { ValidateActions } from "./Validation";
 import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
 import { PlayerHeaderGrid } from "./PlayerHeaderGrid";
 import { useCurrentStep } from "../context/playContext";
+import { PlayBox } from "../Components";
+import { TeamActionsHeader } from "./TeamActionsHeader";
 
 export { PlayerActionsPage, PlayerHeader };
 
@@ -57,7 +58,9 @@ function TeamActionsLayout() {
             pr: 1,
           }}
         >
-          <TeamActions />
+          <PlayBox>
+            <TeamActionsHeader />
+          </PlayBox>
         </Grid>
       </Grid>
     </Box>
