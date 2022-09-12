@@ -1,3 +1,4 @@
+import invariant from "tiny-invariant";
 import { z } from "zod";
 import { Server, Socket } from "../types";
 import { services as gameServices } from "../../games/services";
@@ -17,18 +18,16 @@ function handleUpdateGame(io: Server, socket: Socket) {
     });
     const { gameId, update } = schema.parse(args);
 
-    let game = await gameServices.getDocument(gameId);
-    if (!game) {
-      throw new Error(`Could not find game with id ${gameId}`);
-    }
+    const game = await gameServices.getDocument(gameId);
+    invariant(game, `Could not find game with id ${gameId}`);
 
-    const wasStepActive = game.isStepActive;
-    game = await gameServices.update(gameId, update);
+    const gameUpdated = await gameServices.update(gameId, update);
 
     socket.broadcast.to(rooms.game(gameId)).emit("gameUpdated", { update });
 
-    const stepSwitchedToActive = !wasStepActive && game.isStepActive;
-    const stepSwitchedToInactive = wasStepActive && !game.isStepActive;
+    const stepSwitchedToActive = !game.isStepActive && gameUpdated.isStepActive;
+    const stepSwitchedToInactive =
+      game.isStepActive && !gameUpdated.isStepActive;
     if (stepSwitchedToActive) {
       await playersServices.updateMany(gameId, { hasFinishedStep: false });
       io.to(rooms.players(gameId)).emit("playerUpdated", {
@@ -41,7 +40,7 @@ function handleUpdateGame(io: Server, socket: Socket) {
       });
     }
 
-    game = await gameServices.getDocument(gameId);
-    io.to(rooms.game(gameId)).emit("gameUpdated", { update: game });
+    const gameLatestUpdate = await gameServices.getDocument(gameId);
+    io.to(rooms.game(gameId)).emit("gameUpdated", { update: gameLatestUpdate });
   });
 }

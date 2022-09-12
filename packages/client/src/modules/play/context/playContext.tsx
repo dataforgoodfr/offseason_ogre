@@ -259,6 +259,7 @@ function useGameSocket({
       newSocket.disconnect();
     };
   }, [
+    // TODO: add dependency `player` without creating a new socket on each `player` update.
     gameId,
     setGameWithTeams,
     setPlayerActions,
