@@ -9,13 +9,15 @@ function Dialog({
   open,
   handleClose,
   children,
+  content,
   actions,
   ariaLabelledBy,
   ariaDescribedBy,
 }: {
   open: boolean;
   handleClose: () => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
+  content?: React.ReactNode;
   actions?: React.ReactNode;
   ariaLabelledBy?: string;
   ariaDescribedBy?: string;
@@ -37,7 +39,7 @@ function Dialog({
             />
           </Grid>
           <Grid item xs={12} md={10}>
-            {children}
+            {content || children}
           </Grid>
         </CustomGrid>
       </DialogContent>
