@@ -1,15 +1,18 @@
 import { Game } from "../modules/games/types";
+import { ProductionEnergyNames, ProductionEnergyUnit } from "../modules/play";
 import { User } from "../modules/users/types";
 
 export type {
   IGame,
+  IGameWithTeams,
   ITeam,
   ITeamWithPlayers,
   IUser,
-  Player,
   Action,
+  Player,
   PlayerActions,
-  IGameWithTeams,
+  ProductionAction,
+  TeamAction,
 };
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
@@ -51,4 +54,40 @@ interface PlayerActions {
   action: Action;
   actionId: number;
   isPerformed: boolean;
+}
+
+type ProductionAction = ProductionActionArea | ProductionActionPercentage;
+
+interface ProductionActionArea {
+  name: ProductionEnergyNames;
+  unit: "area";
+  min: number;
+  max: number;
+  credibilityThreshold: number;
+  credibilityDescription: string;
+  areaEnergy: number;
+  powerNeededKWh: number;
+  lcoe: number;
+}
+
+interface ProductionActionPercentage {
+  name: ProductionEnergyNames;
+  unit: "percentage";
+  min: number;
+  max: number;
+  credibilityThreshold: number;
+  credibilityDescription: string;
+  totalEnergy: number;
+  powerNeededKWh: number;
+  lcoe: number;
+}
+
+interface TeamAction {
+  /**
+   * Value chosen by the team.
+   * If action unit is `percentage`, value is in [0,100].
+   */
+  value: number;
+  isTouched: boolean;
+  action: ProductionAction;
 }

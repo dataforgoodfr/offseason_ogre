@@ -1,5 +1,6 @@
 import { Box, Grid } from "@mui/material";
 import { Actions } from "./Actions";
+import { TeamActions } from "./TeamActions";
 import { ValidateActions } from "./Validation";
 import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
 import { PlayerHeaderGrid } from "./PlayerHeaderGrid";
@@ -56,7 +57,7 @@ function TeamActionsLayout() {
             pr: 1,
           }}
         >
-          <Actions />
+          <TeamActions />
         </Grid>
       </Grid>
     </Box>
