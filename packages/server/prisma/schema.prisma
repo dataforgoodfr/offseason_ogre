@@ -51,11 +51,12 @@ model User {
 }
 
 model Team {
-  id      Int       @id @default(autoincrement())
-  game    Game      @relation(fields: [gameId], references: [id])
+  id      Int           @id @default(autoincrement())
+  game    Game          @relation(fields: [gameId], references: [id])
   gameId  Int
   name    String
   players Players[]
+  actions TeamActions[]
 
   @@unique([gameId, name], map: "Team_gameId_name_unique_constraint")
 }
@@ -80,4 +81,46 @@ model PlayerActions {
   isPerformed Boolean @default(false)
 
   @@unique([id, userId])
+}
+
+model ProductionAction {
+  id                     Int                  @id @default(autoincrement())
+  // TODO: type name when all production actions are listed.
+  name                   String               @unique
+  type                   ProductionActionType
+  order                  Int
+  step                   Int
+  helpCardLink           String
+  unit                   ProductionActionUnit
+  min                    Float
+  max                    Float
+  credibilityThreshold   Float
+  areaEnergy             Float?
+  totalEnergy            Float?
+  powerNeededKWh         Float
+  lcoe                   Float
+  currentYearPowerNeedGw Float
+  teamActions            TeamActions[]
+  defaultTeamValue       Float
+}
+
+enum ProductionActionType {
+  terrestrial
+}
+
+enum ProductionActionUnit {
+  area
+  percentage
+}
+
+model TeamActions {
+  id        Int              @id @default(autoincrement())
+  team      Team             @relation(fields: [teamId], references: [id])
+  teamId    Int
+  action    ProductionAction @relation(fields: [actionId], references: [id])
+  actionId  Int
+  value     Float
+  isTouched Boolean          @default(false)
+
+  @@unique([id, teamId])
 }
