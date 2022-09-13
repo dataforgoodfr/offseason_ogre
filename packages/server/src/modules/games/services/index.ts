@@ -20,7 +20,22 @@ export { services };
 async function getDocument(id: number): Promise<Model | null> {
   return model.findUnique({
     where: { id },
-    include: { teams: { include: { players: { include: { user: true } } } } },
+    include: {
+      teams: {
+        include: {
+          players: {
+            include: {
+              user: true,
+              actions: {
+                include: {
+                  action: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   });
 }
 

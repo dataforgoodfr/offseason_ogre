@@ -12,10 +12,10 @@ interface Persona {
   production: ProductionDatum[];
 }
 
-const persona = {
+const persona: Persona = {
   budget: 13.7,
   carbonFootprint: 32.73,
   points: 0,
   consumption,
   production,
-} as Persona;
+};

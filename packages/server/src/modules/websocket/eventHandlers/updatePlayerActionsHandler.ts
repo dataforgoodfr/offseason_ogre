@@ -1,14 +1,16 @@
-import cookie from "cookie";
-import { Socket } from "socket.io";
 import { z } from "zod";
-import { services as usersServices } from "../../users/services";
+import { Server, Socket } from "../types";
+import { services as gameServices } from "../../games/services";
+import { services as playersServices } from "../../players/services";
 import * as playerActionsServices from "../../actions/services/playerActions";
 import { GameStep, STEPS } from "../../../constants/steps";
 import { PlayerActions } from "../../actions/types";
+import { rooms } from "../constants";
+import { getSocketData } from "../utils";
 
 export { updatePlayerActions };
 
-function updatePlayerActions(socket: Socket) {
+function updatePlayerActions(io: Server, socket: Socket) {
   socket.on("updatePlayerActions", async (args: unknown) => {
     const schema = z.object({
       gameId: z.number(),
@@ -22,16 +24,21 @@ function updatePlayerActions(socket: Socket) {
         .min(1),
     });
 
-    const {
-      gameId,
-      step: stepId,
-      playerActions: playerActionsUpdate,
-    } = schema.parse(args);
+    const { step: stepId, playerActions: playerActionsUpdate } =
+      schema.parse(args);
 
-    const cookies = cookie.parse(socket.handshake.headers.cookie || "");
-    const user = await usersServices.authenticateUser(
-      cookies?.authentificationToken
-    );
+    const { gameId, user } = getSocketData(socket);
+
+    const player = await playersServices.find(gameId, user.id);
+    if (!player) {
+      throw new Error(
+        `Could not find player for gameId ${gameId} and userId ${user.id}`
+      );
+    }
+
+    if (player.hasFinishedStep) {
+      throw new Error(`Player has already finished the current step`);
+    }
 
     const lastChosenPlayerActions = await computeLastChosenPlayerActions(
       gameId,
@@ -50,9 +57,12 @@ function updatePlayerActions(socket: Socket) {
       lastChosenPlayerActions
     );
 
+    const game = await gameServices.getDocument(gameId);
+
     socket.emit("playerActionsUpdated", {
       playerActions,
     });
+    io.to(rooms.teachers(gameId)).emit("gameUpdated", { update: game });
   });
 }
 

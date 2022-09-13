@@ -1,17 +1,9 @@
-import { Box, Rating, Typography } from "@mui/material";
-import { ITeamWithPlayers, IUser } from "../../../utils/types";
+import { Box, Rating, Typography, useTheme } from "@mui/material";
+import { ITeamWithPlayers, IUser, Player } from "../../../utils/types";
 import { PlayBox } from "../Components";
-import PaidIcon from "@mui/icons-material/Paid";
-import CloudIcon from "@mui/icons-material/Cloud";
 import StarIcon from "@mui/icons-material/Star";
-import { MAX_ACTION_POINTS } from "../constants";
-import {
-  useCurrentPersona,
-  usePlay,
-  useResultsByUserId,
-} from "../context/playContext";
-import { persona } from "../../persona/persona";
-import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
+import { usePersonaByUserId, useCurrentStep } from "../context/playContext";
+import { Icon } from "../../common/components/Icon";
 
 export { PlayerList };
 
@@ -25,57 +17,57 @@ function PlayerList({ team }: { team: ITeamWithPlayers }) {
   );
 }
 
-interface IPlayer {
-  gameId: number;
-  teamId: number;
-  userId: number;
-  user: IUser;
-}
+function PlayerMini({ player }: { player: Player }) {
+  const currentStep = useCurrentStep();
+  const theme = useTheme();
 
-function PlayerMini({ player }: { player: IPlayer }) {
-  const { game } = usePlay();
+  const { latestPersona } = usePersonaByUserId(player.userId);
 
-  const results = useResultsByUserId({
-    userIds: player ? [player.userId] : [],
-  });
-  const userData = player
-    ? getLastCompletedStepPlayerValues(game, results[player.userId])
-    : persona;
   return (
     <PlayBox key={player.userId} mt={2}>
-      <Typography variant="h5">{buildName(player.user)}</Typography>
+      <Box display="flex" alignItems="center">
+        <Typography variant="h5">{buildName(player.user)}</Typography>
+        {player.hasFinishedStep ? (
+          <Icon
+            name="player-finished"
+            sx={{ ml: 1, color: theme.palette.secondary.main }}
+          />
+        ) : null}
+      </Box>
+
       <Box display="flex" alignItems="center" mt={2}>
-        <PaidIcon />
-        <Typography
-          ml={1}
-        >{`Budget restant: ${userData.budget} €/j`}</Typography>
+        <Icon name="budget" />
+        <Typography ml={1} width={150}>
+          Budget restant :
+        </Typography>
+        <Typography>{latestPersona.budget} €/j</Typography>
       </Box>
       <Box display="flex" alignItems="center">
-        <CloudIcon />
-        <Typography
-          ml={1}
-        >{`Bilan carbone: ${userData.carbonFootprint} kgCO2/an`}</Typography>
+        <Icon name="carbon-footprint" />
+        <Typography ml={1} width={150}>
+          Bilan carbone :
+        </Typography>
+        <Typography>{latestPersona.carbonFootprint} kgCO2/an</Typography>
       </Box>
-      <ActionPoints />
+      <Box display="flex" alignItems="center">
+        <Icon name="action-points" />
+        <Typography ml={1} width={150}>
+          Point d'actions :
+        </Typography>
+        <Rating
+          emptyIcon={
+            <StarIcon
+              style={{ fill: "grey", opacity: 0.5 }}
+              fontSize="inherit"
+            />
+          }
+          max={currentStep?.availableActionPoints}
+          name="action-points"
+          readOnly
+          value={latestPersona.points}
+        />
+      </Box>
     </PlayBox>
-  );
-}
-
-function ActionPoints() {
-  const personna = useCurrentPersona();
-  return (
-    <Box mt={2}>
-      <Typography>Point d'actions</Typography>
-      <Rating
-        emptyIcon={
-          <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
-        }
-        max={MAX_ACTION_POINTS}
-        name="action-points"
-        readOnly
-        value={personna.points}
-      />
-    </Box>
   );
 }
 
