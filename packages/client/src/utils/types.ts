@@ -1,5 +1,5 @@
 import { Game } from "../modules/games/types";
-import { ProductionEnergyNames, ProductionEnergyUnit } from "../modules/play";
+import { ProductionEnergyNames } from "../modules/play";
 import { User } from "../modules/users/types";
 
 export type {
@@ -66,6 +66,7 @@ interface ProductionActionArea {
   credibilityThreshold: number;
   credibilityDescription: string;
   areaEnergy: number;
+  // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
   powerNeededKWh: number;
   lcoe: number;
 }
@@ -78,6 +79,7 @@ interface ProductionActionPercentage {
   credibilityThreshold: number;
   credibilityDescription: string;
   totalEnergy: number;
+  // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
   powerNeededKWh: number;
   lcoe: number;
 }

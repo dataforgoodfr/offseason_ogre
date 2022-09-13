@@ -77,18 +77,8 @@ function getEnergy({
   type?: ProductionEnergyType;
   stepId?: GameStepId;
 } = {}): ProductionEnergy[] {
-  let energiesFiltered = energies;
-
-  if (type) {
-    energiesFiltered = energiesFiltered.filter(
-      (energy) => energy.type === type
-    );
-  }
-  if (stepId) {
-    energiesFiltered = energiesFiltered.filter(
-      (energy) => energy.stepId === stepId
-    );
-  }
-
-  return energiesFiltered.sort(sortBy("order", "asc"));
+  return energies
+    .filter((energy) => (!!type ? energy.type === type : true))
+    .filter((energy) => (!!stepId ? energy.stepId === stepId : true))
+    .sort(sortBy("order", "asc"));
 }
