@@ -5,11 +5,11 @@ import { Game } from "./modules/games";
 import { GameConsole, MyGames } from "./modules/play";
 import { PlayerPersona } from "./modules/play";
 import { Stats } from "./modules/play/Stats";
-import { PlayerActionsPage } from "./modules/play/playerActions";
 import { Players } from "./modules/players";
 import { Settings, Teachers } from "./modules/teachers";
 import { Layout as AdministrationLayout } from "./modules/administration";
 import { PlayLayout } from "./modules/play/PlayLayout";
+import { PlayerActionsPage } from "./modules/play/playerActions";
 
 export { AuthenticatedApp };
 

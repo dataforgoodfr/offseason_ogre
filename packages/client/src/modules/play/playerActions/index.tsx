@@ -1,3 +1,1 @@
-import { PlayerActionsPage } from "./PlayerActionsPage";
-
-export { PlayerActionsPage };
+export { PlayerActionsPage } from "./PlayerActionsPage";
