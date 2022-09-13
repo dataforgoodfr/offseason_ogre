@@ -10,7 +10,7 @@ import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 
 import { PlayBox } from "../Components";
-import { useResultsByUserId, usePlay } from "../context/playContext";
+import { usePersonaByUserId, usePlay } from "../context/playContext";
 import { useState } from "react";
 import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
@@ -148,7 +148,7 @@ function useTeamValues() {
   game.teams.map((team) =>
     team.players.map(({ user }) => userIds.push(user?.id))
   );
-  const personaByUserId = useResultsByUserId({ userIds });
+  const personaByUserId = usePersonaByUserId(userIds);
   return game.teams.map((team) => {
     return {
       id: team.id,

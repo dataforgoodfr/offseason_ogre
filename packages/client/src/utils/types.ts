@@ -1,5 +1,5 @@
 import { Game } from "../modules/games/types";
-import { ProductionEnergyNames, ProductionEnergyUnit } from "../modules/play";
+import { ProductionEnergyNames } from "../modules/play";
 import { User } from "../modules/users/types";
 
 export type {
@@ -34,6 +34,7 @@ interface Player {
   userId: number;
   user: IUser;
   actions: PlayerActions[];
+  hasFinishedStep: boolean;
 }
 
 interface Action {
@@ -65,6 +66,7 @@ interface ProductionActionArea {
   max: number;
   credibilityThreshold: number;
   areaEnergy: number;
+  // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
   powerNeededKWh: number;
   lcoe: number;
   currentYearPowerNeedGw: number;
@@ -77,6 +79,7 @@ interface ProductionActionPercentage {
   max: number;
   credibilityThreshold: number;
   totalEnergy: number;
+  // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
   powerNeededKWh: number;
   lcoe: number;
   currentYearPowerNeedGw: number;

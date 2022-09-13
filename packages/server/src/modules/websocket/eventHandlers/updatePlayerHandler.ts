@@ -1,17 +1,20 @@
 import { z } from "zod";
 import { safe } from "../../../lib/fp";
+import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
-import { Socket } from "../types";
+import { rooms } from "../constants";
+import { Server, Socket } from "../types";
 
 export { handleUpdatePlayer };
 
-function handleUpdatePlayer(socket: Socket) {
+function handleUpdatePlayer(io: Server, socket: Socket) {
   socket.on("updatePlayer", async (args: unknown) => {
-    await handleUpdateHasFinishedStepSafely(socket, args);
+    await handleUpdateHasFinishedStepSafely(io, socket, args);
   });
 }
 
 async function handleUpdateHasFinishedStepSafely(
+  io: Server,
   socket: Socket,
   args: unknown
 ) {
@@ -39,7 +42,12 @@ async function handleUpdateHasFinishedStepSafely(
         hasFinishedStep,
       });
 
-      await socket.emit("playerUpdated", {
+      const game = await gameServices.getDocument(gameId);
+
+      io.to(rooms.teachers(gameId)).emit("gameUpdated", {
+        update: game,
+      });
+      socket.emit("playerUpdated", {
         update: {
           hasFinishedStep,
         },

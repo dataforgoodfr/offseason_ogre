@@ -12,7 +12,9 @@ async function initState({ gameId }: { gameId: number }) {
             include: {
               user: true,
               actions: {
-                include: { action: true },
+                include: {
+                  action: true,
+                },
               },
             },
           },

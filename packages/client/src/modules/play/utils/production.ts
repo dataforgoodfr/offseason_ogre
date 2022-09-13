@@ -3,7 +3,9 @@ import { TeamAction } from "../../../utils/types";
 export { computeProductionEnergyStats };
 
 function computeProductionEnergyStats(teamAction: TeamAction) {
+  // TODO: see with Gregory for renaming (should be `power` instead)?
   const production = computeProduction(teamAction);
+  // TODO: see with Gregory for renaming (should be `production` instead)?
   const powerNeed = production * teamAction.action.powerNeededKWh;
   const cost = production * teamAction.action.lcoe;
   const isCredible = teamAction.value <= teamAction.action.credibilityThreshold;

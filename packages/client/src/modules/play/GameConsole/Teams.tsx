@@ -1,10 +1,10 @@
 import { Box, Grid, Tooltip, Typography, useTheme } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
 import { ITeamWithPlayers } from "../../../utils/types";
 import { PlayerList } from "./PlayerList";
 import { PlayerChart } from "./PlayerChart";
 import { PlayBox } from "../Components";
 import { usePlay } from "../context/playContext";
+import { Icon } from "../../common/components/Icon";
 
 export { TeamDetails, Teams };
 
@@ -64,12 +64,23 @@ function Teams({
 }
 
 function Players({ teamWithPlayers }: { teamWithPlayers: ITeamWithPlayers }) {
+  const theme = useTheme();
+
   return (
     <Box display="flex" minHeight="24px">
-      {teamWithPlayers.players.map(({ user }) => {
+      {teamWithPlayers.players.map(({ user, hasFinishedStep }) => {
         return (
           <Tooltip key={user.id} title={`${user.firstName} ${user.lastName}`}>
-            <PersonIcon />
+            <div>
+              {hasFinishedStep ? (
+                <Icon
+                  name="player-finished"
+                  sx={{ color: theme.palette.secondary.main }}
+                />
+              ) : (
+                <Icon name="player" />
+              )}
+            </div>
           </Tooltip>
         );
       })}
