@@ -22,6 +22,7 @@ type ProductionEnergy = {
   type: ProductionEnergyType;
   order: number;
   stepId: GameStepId;
+  helpCardLink: string;
 };
 
 type ProductionEnergyNames =
@@ -46,6 +47,8 @@ const energies: ProductionEnergy[] = [
     type: "terrestrial",
     order: 2,
     stepId: "production-1",
+    helpCardLink:
+      "https://drive.google.com/file/d/1uO9Y2oPLsDzs1Mjv1G1bSb8jSTTAynqL/view?usp=sharing",
   },
   {
     name: productionNames.onshoreWindTurbine,
@@ -53,6 +56,8 @@ const energies: ProductionEnergy[] = [
     type: "terrestrial",
     order: 1,
     stepId: "production-1",
+    helpCardLink:
+      "https://drive.google.com/file/d/1gx_7fGbfk3dp1oF1DUg8bNwAv-_JG2NZ/view?usp=sharing",
   },
   {
     name: productionNames.photovoltaicFarm,
@@ -60,6 +65,8 @@ const energies: ProductionEnergy[] = [
     type: "terrestrial",
     order: 5,
     stepId: "production-1",
+    helpCardLink:
+      "https://drive.google.com/file/d/1buRId_oFMdx1NxutSUJB-6ih-JMG8niV/view?usp=sharing",
   },
   {
     name: productionNames.photovoltaicRoof,
@@ -67,6 +74,8 @@ const energies: ProductionEnergy[] = [
     type: "terrestrial",
     order: 4,
     stepId: "production-1",
+    helpCardLink:
+      "https://drive.google.com/file/d/1fuvP46JtmQmKLeY43Iv-W0szE1Rmrajh/view?usp=sharing",
   },
   {
     name: productionNames.thermalSolar,
@@ -74,6 +83,8 @@ const energies: ProductionEnergy[] = [
     type: "terrestrial",
     order: 3,
     stepId: "production-1",
+    helpCardLink:
+      "https://drive.google.com/file/d/1Oj7bdAcLpdh97DDnepbtjPmWMWpG39Xn/view?usp=sharing",
   },
 ];
 

@@ -14,11 +14,15 @@ import { Icon } from "../../common/components/Icon";
 import { Slider } from "../../common/components/Slider";
 import { TEAM_ACTIONS_MOCKS } from "../constants/mocks";
 import { computeProductionEnergyStats } from "../utils/production";
+import { Dialog } from "../../common/components/Dialog";
 
 export { TeamActionsContent };
 
 function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
   const currentStep = useCurrentStep();
+
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
+  const [helpCardLink, setHelpCardLink] = useState("");
 
   const energiesToDisplay = getEnergy({ stepId: currentStep?.id });
   const energyNameToTeamActions = Object.fromEntries(
@@ -26,29 +30,94 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
   );
 
   return (
-    <Box style={style}>
-      <Accordion
-        options={energiesToDisplay.map((energy) =>
-          createTeamActionOption(energyNameToTeamActions[energy.name])
-        )}
+    <>
+      <Box style={style}>
+        <Accordion
+          options={energiesToDisplay.map((energy) =>
+            createTeamActionOption({
+              teamAction: energyNameToTeamActions[energy.name],
+              onOpenHelpCard: () => {
+                setHelpCardLink(energy.helpCardLink);
+                setOpenHelpDialog(true);
+              },
+            })
+          )}
+        />
+      </Box>
+
+      <Dialog
+        open={openHelpDialog}
+        handleClose={() => setOpenHelpDialog(false)}
+        content="Voici le lien vers une carte qui te donnera des informations sur le moyen de production pour t’aider dans l’arbitrage :"
+        actions={
+          <>
+            <Button
+              color="secondary"
+              variant="contained"
+              sx={{ border: 1, borderColor: "secondary" }}
+              component="a"
+              target="_blank"
+              href={helpCardLink}
+              onClick={() => setOpenHelpDialog(false)}
+              startIcon={<Icon name="open-in-new-tab" />}
+            >
+              Ouvrir la carte
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              sx={{ border: 1, borderColor: "secondary", mt: 1 }}
+              onClick={() => setOpenHelpDialog(false)}
+            >
+              Merci pour l'aide
+            </Button>
+          </>
+        }
       />
-    </Box>
+    </>
   );
 }
 
-function createTeamActionOption(teamAction: TeamAction) {
+function createTeamActionOption({
+  teamAction,
+  onOpenHelpCard,
+}: {
+  teamAction: TeamAction;
+  onOpenHelpCard: () => void;
+}) {
   return {
     key: teamAction.action.name,
     header: (
-      <Box display="flex" gap={1}>
-        <Icon name="information" />
-        <Typography>
-          {t(`production.energy.${teamAction.action.name}.accordion.title`)}
-        </Typography>
-      </Box>
+      <TeamActionOptionHeader
+        teamAction={teamAction}
+        onOpenHelpCard={onOpenHelpCard}
+      />
     ),
     content: <TeamActionOptionContent teamAction={teamAction} />,
   };
+}
+
+function TeamActionOptionHeader({
+  teamAction,
+  onOpenHelpCard,
+}: {
+  teamAction: TeamAction;
+  onOpenHelpCard: () => void;
+}) {
+  const handleOnOpenHelpCard = (e: React.MouseEvent<SVGSVGElement>) => {
+    e.stopPropagation();
+    onOpenHelpCard();
+  };
+
+  return (
+    <Box display="flex" gap={1}>
+      <Icon name="information" onClick={handleOnOpenHelpCard} />
+      <Typography>
+        {t(`production.energy.${teamAction.action.name}.accordion.title`)}
+      </Typography>
+    </Box>
+  );
 }
 
 function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {

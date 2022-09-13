@@ -6,6 +6,7 @@ import FlashOn from "@mui/icons-material/FlashOn";
 import Groups from "@mui/icons-material/Groups";
 import HowToReg from "@mui/icons-material/HowToReg";
 import Info from "@mui/icons-material/Info";
+import OpenInNew from "@mui/icons-material/OpenInNew";
 import Paid from "@mui/icons-material/Paid";
 import Person from "@mui/icons-material/Person";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
@@ -21,6 +22,7 @@ const ICONS = {
   consumption: ShoppingCart,
   "check-doubled": DoneAll,
   information: Info,
+  "open-in-new-tab": OpenInNew,
   "player-finished": HowToReg,
   player: Person,
   power: FlashOn,
