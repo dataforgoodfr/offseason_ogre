@@ -5,6 +5,7 @@ import { handleJoinGame } from "./eventHandlers/joinGameHandler";
 import { handleUpdateGame } from "./eventHandlers/updateGameHandler";
 import { updatePlayerActions } from "./eventHandlers/updatePlayerActionsHandler";
 import { handleUpdatePlayer } from "./eventHandlers/updatePlayerHandler";
+import { handleUpdateTeam } from "./eventHandlers/updateTeamHandler";
 
 export { initWebSocket };
 
@@ -17,6 +18,7 @@ function initWebSocket({ app }: { app: Express }) {
     handleUpdateGame(io, socket);
     updatePlayerActions(io, socket);
     handleUpdatePlayer(io, socket);
+    handleUpdateTeam(io, socket);
   });
   return { httpServer };
 }
