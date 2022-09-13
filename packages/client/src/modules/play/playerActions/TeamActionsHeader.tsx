@@ -4,30 +4,26 @@ import sumBy from "lodash/sumBy";
 import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
-import { useCurrentStep } from "../context/playContext";
+import { useCurrentStep, useTeamActions } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
-import { getEnergy, ProductionEnergy } from "../constants/production";
-import { computeProductionEnergyStats } from "../utils/production";
+import { computeTeamActionStats } from "../utils/production";
 import { TeamAction } from "../../../utils/types";
 import { Dialog } from "../../common/components/Dialog";
-import { TEAM_ACTIONS_MOCKS } from "../constants/mocks";
 import { HelpIconWrapper } from "./TeamActionsHeader.styles";
+import { t } from "../../translations";
 
 export { TeamActionsHeader };
 
 function TeamActionsHeader() {
   const currentStep = useCurrentStep();
+  const { teamActionsAtCurrentStep } = useTeamActions();
 
   const [openHelp, setOpenHelp] = useState(false);
 
-  const energiesToDisplay = getEnergy({ stepId: currentStep?.id });
-  const energyNameToTeamActions = Object.fromEntries(
-    TEAM_ACTIONS_MOCKS.map((teamAction) => [teamAction.action.name, teamAction])
-  );
   const energyNameToEnergyStats = Object.fromEntries(
-    TEAM_ACTIONS_MOCKS.map((teamAction) => [
+    teamActionsAtCurrentStep.map((teamAction) => [
       teamAction.action.name,
-      computeProductionEnergyStats(teamAction),
+      computeTeamActionStats(teamAction),
     ])
   );
 
@@ -70,11 +66,10 @@ function TeamActionsHeader() {
         </Box>
 
         <Box style={{ gap: "4px" }} display="flex" flexDirection="column">
-          {energiesToDisplay.map((energy) => (
+          {teamActionsAtCurrentStep.map((teamAction) => (
             <EnergyListItem
-              key={energy.name}
-              energy={energy}
-              teamAction={energyNameToTeamActions[energy.name]}
+              key={teamAction.action.name}
+              teamAction={teamAction}
             />
           ))}
         </Box>
@@ -105,16 +100,14 @@ function TeamActionsHeader() {
   );
 }
 
-function EnergyListItem({
-  energy,
-  teamAction,
-}: {
-  energy: ProductionEnergy;
-  teamAction: TeamAction;
-}) {
+function EnergyListItem({ teamAction }: { teamAction?: TeamAction }) {
   const theme = useTheme();
 
-  const stats = computeProductionEnergyStats(teamAction);
+  if (!teamAction) {
+    return null;
+  }
+
+  const stats = computeTeamActionStats(teamAction);
   const color = teamAction.isTouched ? theme.palette.secondary.main : "white";
 
   return (
@@ -131,7 +124,9 @@ function EnergyListItem({
         >
           {!stats.isCredible && <Icon name="warning" sx={{ fontSize: 22 }} />}
         </div>
-        <Typography>{energy.label} :</Typography>
+        <Typography>
+          {t(`production.energy.${teamAction.action.name}.name`)} :
+        </Typography>
       </Box>
 
       <Typography>

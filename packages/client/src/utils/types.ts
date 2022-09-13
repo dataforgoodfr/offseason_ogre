@@ -1,5 +1,5 @@
 import { Game } from "../modules/games/types";
-import { ProductionEnergyNames } from "../modules/play";
+import { productionNames } from "../modules/play";
 import { User } from "../modules/users/types";
 
 export type {
@@ -12,6 +12,9 @@ export type {
   Player,
   PlayerActions,
   ProductionAction,
+  ProductionActionNames,
+  ProductionActionType,
+  ProductionActionUnit,
   TeamAction,
 };
 
@@ -21,6 +24,7 @@ type IGame = Game;
 interface ITeam {
   id: number;
   name: string;
+  actions: TeamAction[];
 }
 type ITeamWithPlayers = ITeam & {
   players: Player[];
@@ -59,38 +63,51 @@ interface PlayerActions {
 
 type ProductionAction = ProductionActionArea | ProductionActionPercentage;
 
-interface ProductionActionArea {
-  name: ProductionEnergyNames;
-  unit: "area";
+interface ProductionActionCommon {
+  id: number;
+  name: ProductionActionNames;
+  type: ProductionActionType;
+  order: number;
+  step: number;
+  helpCardLink: string;
   min: number;
   max: number;
   credibilityThreshold: number;
-  areaEnergy: number;
   // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
   powerNeededKWh: number;
   lcoe: number;
   currentYearPowerNeedGw: number;
+  defaultTeamValue: number;
 }
 
-interface ProductionActionPercentage {
-  name: ProductionEnergyNames;
-  unit: "percentage";
-  min: number;
-  max: number;
-  credibilityThreshold: number;
-  totalEnergy: number;
-  // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
-  powerNeededKWh: number;
-  lcoe: number;
-  currentYearPowerNeedGw: number;
+interface ProductionActionArea extends ProductionActionCommon {
+  unit: "area";
+  areaEnergy: number;
+  totalEnergy: null;
 }
+
+interface ProductionActionPercentage extends ProductionActionCommon {
+  unit: "percentage";
+  areaEnergy: null;
+  totalEnergy: number;
+}
+
+type ProductionActionType = "terrestrial";
+
+type ProductionActionNames =
+  typeof productionNames[keyof typeof productionNames];
+
+type ProductionActionUnit = "area" | "percentage";
 
 interface TeamAction {
+  id: number;
+  teamId: number;
+  actionId: number;
+  action: ProductionAction;
   /**
    * Value chosen by the team.
    * If action unit is `percentage`, value is in [0,100].
    */
   value: number;
   isTouched: boolean;
-  action: ProductionAction;
 }
