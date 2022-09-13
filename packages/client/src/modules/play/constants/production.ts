@@ -1,7 +1,12 @@
 import { sortBy } from "../../../lib/array";
 import { GameStepId } from "./steps";
 
-export { energies, getEnergy, productionNames };
+export {
+  CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW,
+  energies,
+  getEnergy,
+  productionNames,
+};
 export type {
   ProductionEnergy,
   ProductionEnergyNames,
@@ -31,6 +36,8 @@ const productionNames = {
   photovoltaicRoof: "photovoltaicRoof",
   thermalSolar: "thermalSolar",
 } as const;
+
+const CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW = 79.52;
 
 const energies: ProductionEnergy[] = [
   {

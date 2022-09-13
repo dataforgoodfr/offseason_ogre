@@ -65,11 +65,11 @@ interface ProductionActionArea {
   min: number;
   max: number;
   credibilityThreshold: number;
-  credibilityDescription: string;
   areaEnergy: number;
   // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
   powerNeededKWh: number;
   lcoe: number;
+  currentYearPowerNeedGw: number;
 }
 
 interface ProductionActionPercentage {
@@ -78,11 +78,11 @@ interface ProductionActionPercentage {
   min: number;
   max: number;
   credibilityThreshold: number;
-  credibilityDescription: string;
   totalEnergy: number;
   // TODO: see with Gregory for renaming (should be `productionPerKwh` instead)?
   powerNeededKWh: number;
   lcoe: number;
+  currentYearPowerNeedGw: number;
 }
 
 interface TeamAction {
