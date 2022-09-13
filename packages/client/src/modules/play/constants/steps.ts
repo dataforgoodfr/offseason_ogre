@@ -1,4 +1,4 @@
-import { ProductionEnergyType } from "./production";
+import { ProductionActionType } from "../../../utils/types";
 
 export { MAX_NUMBER_STEPS, MAX_ACTION_POINTS, STEPS };
 export type { GameStepType, GameStepId, GameStep };
@@ -25,7 +25,7 @@ type GameStep = {
   type: GameStepType;
   availableActionPoints?: number;
   budgetAdvised?: number;
-  energyType?: ProductionEnergyType;
+  energyType?: ProductionActionType;
 };
 
 const STEPS: readonly GameStep[] = [
