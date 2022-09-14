@@ -1,4 +1,3 @@
-import sum from "lodash/sum";
 import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
@@ -12,13 +11,11 @@ import {
   TeamAction,
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
-import { Persona, persona } from "../../persona/persona";
-import { GameStep, MAX_NUMBER_STEPS, STEPS } from "../constants";
-import _ from "lodash";
-import { ConsumptionDatum } from "../../persona/consumption";
-import { computeConsumptionChoices } from "../utils/consumptionStep";
+import { persona } from "../../persona/persona";
+import { GameStep, STEPS } from "../constants";
 import { sortBy } from "../../../lib/array";
-import { computeTeamActionStats } from "../utils/production";
+import { buildPersona } from "../utils/persona";
+import { computePlayerActionsStats } from "../utils/playerActions";
 
 export {
   PlayProvider,
@@ -207,25 +204,6 @@ function usePlayerActions() {
   };
 }
 
-function computePlayerActionsStats(
-  currentStep: number,
-  playerActions: PlayerActions[]
-) {
-  const playerActionsAtCurrentStep = playerActions.filter(
-    (pa) => pa.action.step === currentStep
-  );
-
-  const actionPointsUsedAtCurrentStep = playerActionsAtCurrentStep.reduce(
-    (sum, pa) => (pa.isPerformed ? sum + pa.action.actionPointCost : sum),
-    0
-  );
-
-  return {
-    playerActionsAtCurrentStep,
-    actionPointsUsedAtCurrentStep,
-  };
-}
-
 function useTeamActions() {
   const { game, player } = useLoadedPlay();
 
@@ -359,104 +337,4 @@ function usePersona() {
   const { playerActions } = usePlayerActions();
 
   return buildPersona(game, playerActions, player.teamActions);
-}
-
-function buildPersona(
-  game: IGameWithTeams,
-  playerActions: PlayerActions[],
-  teamActions: TeamAction[]
-) {
-  const personaBySteps = getResultsByStep(playerActions, teamActions);
-
-  const getPersonaAtStep = (step: number) => {
-    let stepUsed = 0;
-    if (step >= game.step) {
-      stepUsed = game.step;
-    }
-    if (stepUsed === game.step && game.isStepActive) {
-      stepUsed -= 1;
-    }
-    stepUsed = Math.max(stepUsed, 0);
-
-    return personaBySteps[stepUsed];
-  };
-
-  const currentPersona = getPersonaAtStep(game.step);
-  const latestPersona = personaBySteps[game.step];
-
-  return {
-    personaBySteps,
-    /** Persona taking into account player's actions at latest validated step. */
-    currentPersona,
-    /** Persona taking into account latest player's actions, whether the step is active or not. */
-    latestPersona,
-    /** Persona taking into account player's actions at specified step. */
-    getPersonaAtStep,
-  };
-}
-
-function getResultsByStep(
-  playerActions: PlayerActions[],
-  teamActions: TeamAction[]
-): Record<number, Persona> {
-  return Object.fromEntries(
-    _.range(0, MAX_NUMBER_STEPS).map((step) => [
-      step,
-      computeResultsByStep(step, playerActions, teamActions),
-    ])
-  );
-}
-
-function computeResultsByStep(
-  step: number,
-  playerActions: PlayerActions[] = [],
-  teamActions: TeamAction[] = []
-): Persona {
-  if (step === 0) {
-    return persona;
-  }
-
-  const performedPlayerActions = playerActions.filter(
-    (playerAction: PlayerActions) =>
-      playerAction.action.step <= step && playerAction.isPerformed === true
-  );
-  const performedTeamActions = teamActions.filter(
-    (teamAction: TeamAction) => teamAction.action.step <= step
-  );
-
-  const playerActionsCost = sum(
-    performedPlayerActions.map(
-      (playerAction: PlayerActions) => playerAction.action.financialCost
-    )
-  );
-  const teamActionsCost = sum(
-    performedTeamActions.map(
-      (teamAction: TeamAction) => computeTeamActionStats(teamAction).cost
-    )
-  );
-  const costPerDay = playerActionsCost + teamActionsCost;
-
-  const performedActionsNames = performedPlayerActions.map(
-    (playerAction: PlayerActions) => playerAction.action.name
-  );
-
-  // TODO: Deep freeze `persona.consumption`.
-  const newConsumption = JSON.parse(JSON.stringify(persona.consumption)).map(
-    (consumption: ConsumptionDatum) => {
-      return computeConsumptionChoices(consumption, performedActionsNames);
-    }
-  );
-
-  const { actionPointsUsedAtCurrentStep } = computePlayerActionsStats(
-    step,
-    playerActions
-  );
-
-  return {
-    budget: persona.budget - costPerDay,
-    carbonFootprint: persona.carbonFootprint,
-    points: actionPointsUsedAtCurrentStep,
-    consumption: newConsumption,
-    production: persona.production,
-  };
 }
