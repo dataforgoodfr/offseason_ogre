@@ -1,6 +1,13 @@
-import { ProductionActionType } from "../../../utils/types";
+import { IGame, ProductionActionType } from "../../../utils/types";
 
-export { MAX_NUMBER_STEPS, MAX_ACTION_POINTS, STEPS };
+export {
+  MAX_NUMBER_STEPS,
+  MAX_ACTION_POINTS,
+  STEPS,
+  getCurrentStep,
+  getStepId,
+  isStepOfType,
+};
 export type { GameStepType, GameStepId, GameStep };
 
 const MAX_NUMBER_STEPS = 7;
@@ -96,3 +103,17 @@ const STEPS: readonly GameStep[] = [
     budgetAdvised: 4,
   },
 ] as const;
+
+function getCurrentStep(game: IGame) {
+  return Math.max(game.isStepActive ? game.step - 1 : game.step, 0);
+}
+
+function getStepId(step: number): GameStepId | undefined {
+  return STEPS[step]?.id;
+}
+
+function isStepOfType(step: number, type: GameStepType) {
+  // Initial step is both considered a step of "consumption" and "production".
+  // TODO: consider last step as both a step of "consumption" and "production".
+  return step === 0 || STEPS[step]?.type === type;
+}

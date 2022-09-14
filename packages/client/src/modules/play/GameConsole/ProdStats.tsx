@@ -1,35 +1,39 @@
-import { Typography, Grid, Box } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 import { LineEvolution } from "../../charts";
 import { PlayBox } from "../Components";
-import FactoryRoundedIcon from "@mui/icons-material/FactoryRounded";
-import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
+import { Typography } from "../../common/components/Typography";
+import { Icon } from "../../common/components/Icon";
+import { t } from "../../translations";
+import { getStepId } from "../constants";
 
 export { ConsumptionStats, ProductionStats };
 
-function ConsumptionStats(
-  consumption: {
-    id: number;
-    consumption: { step: number; consumption: number }[];
+function ConsumptionStats({
+  data,
+}: {
+  data: {
+    teamIdx: number;
+    stepToData: { [key: number]: number };
     playerCount: number;
-  }[]
-) {
+  }[];
+}) {
   return (
     <PlayBox mt={2}>
       <Grid container>
         <Grid item xs={12}>
           <Typography
             display="flex"
+            alignItems="center"
+            justifyContent="center"
             variant="h5"
-            sx={{ textAlign: "center", fontSize: "1em" }}
           >
-            {" "}
-            <ShoppingCartRoundedIcon sx={{ height: "auto", mr: 2 }} />{" "}
-            Comparaison de l'évolution des consommations entre équipes
+            <Icon sx={{ mr: 1 }} name="consumption" />
+            Évolution des consommations entre équipes
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
-            <LineEvolution data={buildDataConsumption(consumption)} />
+            <LineEvolution data={buildGraphData(data)} />
           </Box>
         </Grid>
       </Grid>
@@ -37,24 +41,32 @@ function ConsumptionStats(
   );
 }
 
-function ProductionStats(production: { id: number; production: number }[]) {
+function ProductionStats({
+  data,
+}: {
+  data: {
+    teamIdx: number;
+    stepToData: { [key: number]: number };
+    playerCount: number;
+  }[];
+}) {
   return (
     <PlayBox mt={2}>
       <Grid container>
         <Grid item xs={12}>
           <Typography
             display="flex"
+            alignItems="center"
+            justifyContent="center"
             variant="h5"
-            sx={{ textAlign: "center", fontSize: "1em" }}
           >
-            {" "}
-            <FactoryRoundedIcon sx={{ height: "auto", mr: 2 }} /> Comparaison de
-            l'évolution des productions entre équipes{" "}
+            <Icon sx={{ mr: 1 }} name="production" /> Évolution des productions
+            entre équipes
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
-            <LineEvolution data={buildDataProd(production)} />
+            <LineEvolution data={buildGraphData(data)} />
           </Box>
         </Grid>
       </Grid>
@@ -62,87 +74,29 @@ function ProductionStats(production: { id: number; production: number }[]) {
   );
 }
 
-function buildDataConsumption(
-  teams: {
-    id: number;
-    consumption: { step: number; consumption: number }[];
+function buildGraphData(
+  data: {
+    teamIdx: number;
+    stepToData: { [key: number]: number };
     playerCount: number;
   }[]
 ) {
-  return [
-    {
-      name: "Situation initiale",
-      team1: getConsumptionByTeamAndStep(0, 0) / teams[0]?.playerCount || 0,
-      team2: getConsumptionByTeamAndStep(1, 0) / teams[1]?.playerCount || 0,
-      team3: getConsumptionByTeamAndStep(2, 0) / teams[2]?.playerCount || 0,
-      team4: getConsumptionByTeamAndStep(3, 0) / teams[3]?.playerCount || 0,
-      team5: getConsumptionByTeamAndStep(4, 0) / teams[4]?.playerCount || 0,
-      team6: getConsumptionByTeamAndStep(5, 0) / teams[5]?.playerCount || 0,
-    },
-    {
-      name: "Étape 1",
-      team1: getConsumptionByTeamAndStep(0, 1) / teams[0]?.playerCount || 0,
-      team2: getConsumptionByTeamAndStep(1, 1) / teams[1]?.playerCount || 0,
-      team3: getConsumptionByTeamAndStep(2, 1) / teams[2]?.playerCount || 0,
-      team4: getConsumptionByTeamAndStep(3, 1) / teams[3]?.playerCount || 0,
-      team5: getConsumptionByTeamAndStep(4, 1) / teams[4]?.playerCount || 0,
-      team6: getConsumptionByTeamAndStep(5, 1) / teams[5]?.playerCount || 0,
-    },
-    {
-      name: "Étape 3",
-      team1: getConsumptionByTeamAndStep(0, 2) / teams[0]?.playerCount || 0,
-      team2: getConsumptionByTeamAndStep(1, 2) / teams[1]?.playerCount || 0,
-      team3: getConsumptionByTeamAndStep(2, 2) / teams[2]?.playerCount || 0,
-      team4: getConsumptionByTeamAndStep(3, 2) / teams[3]?.playerCount || 0,
-      team5: getConsumptionByTeamAndStep(4, 2) / teams[4]?.playerCount || 0,
-      team6: getConsumptionByTeamAndStep(5, 2) / teams[5]?.playerCount || 0,
-    },
-    {
-      name: "Final",
-      team1: getConsumptionByTeamAndStep(0, 2) / teams[0]?.playerCount || 0,
-      team2: getConsumptionByTeamAndStep(1, 2) / teams[1]?.playerCount || 0,
-      team3: getConsumptionByTeamAndStep(2, 2) / teams[2]?.playerCount || 0,
-      team4: getConsumptionByTeamAndStep(3, 2) / teams[3]?.playerCount || 0,
-      team5: getConsumptionByTeamAndStep(4, 2) / teams[4]?.playerCount || 0,
-      team6: getConsumptionByTeamAndStep(5, 2) / teams[5]?.playerCount || 0,
-    },
-  ];
+  const steps = Object.keys(data[0]?.stepToData || {})
+    .map((step) => parseInt(step, 10))
+    .sort((stepA, stepB) => stepA - stepB);
 
-  function getConsumptionByTeamAndStep(teamId: number, step: number) {
-    return (
-      teams[teamId]?.consumption?.find((v) => v.step === step)?.consumption || 0
+  return steps.map((step) => {
+    const columnLabel = t(`step.${getStepId(step) || "not-found"}.name` as any);
+    const columnLines = Object.fromEntries(
+      data.map((datum) => [
+        `line${datum.teamIdx + 1}`,
+        datum.stepToData[step] || 0,
+      ])
     );
-  }
-}
 
-function buildDataProd(teams: { id: number; production: number }[]) {
-  return [
-    {
-      name: "Situation initiale",
-      team1: teams[0]?.production,
-      team2: teams[1]?.production,
-      team3: teams[2]?.production,
-      team4: teams[3]?.production,
-      team5: teams[4]?.production,
-      team6: teams[5]?.production,
-    },
-    {
-      name: "Étape 2",
-      team1: "200",
-      team2: "300",
-      team3: "321",
-    },
-    {
-      name: "Étape 4",
-      team1: "590",
-      team2: "321",
-      team3: "459",
-    },
-    {
-      name: "Final",
-      team1: "590",
-      team2: "321",
-      team3: "459",
-    },
-  ];
+    return {
+      name: columnLabel,
+      ...columnLines,
+    };
+  });
 }

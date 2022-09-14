@@ -9,10 +9,27 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import max from "lodash/max";
+import range from "lodash/range";
 
 export { LineEvolution };
 
-function LineEvolution({ data }: { data: any[] }) {
+const LINE_COLORS = ["blue", "orange", "green", "red", "purple", "brown"];
+
+interface LineEvolutionDatum {
+  name: string;
+  // Data keys start from `line1`.
+  [key: `line${number}`]: number | string;
+}
+
+function LineEvolution({ data }: { data: LineEvolutionDatum[] }) {
+  const lineCount =
+    max(
+      Object.keys(data[0] || {})
+        .filter((key) => key.startsWith("line"))
+        .map((key) => parseInt(key.replace("line", "")))
+    ) || 0;
+
   return (
     <Card
       sx={{
@@ -29,12 +46,15 @@ function LineEvolution({ data }: { data: any[] }) {
           <YAxis name="kWh/j" domain={[0, 750]} />
           <Tooltip />
           <Legend />
-          <Line dataKey="team1" stroke="blue" name="Equipe 1" unit="kWh" />
-          <Line dataKey="team2" stroke="orange" name="Equipe 2" unit="kWh" />
-          <Line dataKey="team3" stroke="green" name="Equipe 3" unit="kWh" />
-          <Line dataKey="team4" stroke="red" name="Equipe 4" unit="kWh" />
-          <Line dataKey="team5" stroke="purple" name="Equipe 5" unit="kWh" />
-          <Line dataKey="team6" stroke="brown" name="Equipe 6" unit="kWh" />
+          {range(0, lineCount).map((idx) => (
+            <Line
+              key={idx}
+              dataKey={`line${idx + 1}`}
+              stroke={LINE_COLORS[idx % lineCount]}
+              name={`Équipe ${idx + 1}`}
+              unit="kWh"
+            />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </Card>
