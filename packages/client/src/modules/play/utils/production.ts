@@ -1,6 +1,7 @@
 import { TeamAction } from "../../../utils/types";
+import { Persona } from "../../persona/persona";
 
-export { computeTeamActionStats };
+export { computeNewProductionData, computeTeamActionStats };
 
 function computeTeamActionStats(teamAction: TeamAction) {
   // TODO: see with Gregory for renaming (should be `power` instead)?
@@ -29,4 +30,29 @@ function computeProduction(teamAction: TeamAction): number {
   throw new Error(
     `Energy unit ${(teamAction.action as any).unit} not supported`
   );
+}
+
+function computeNewProductionData(
+  performedTeamActions: TeamAction[],
+  persona: Persona
+) {
+  const productionNameToNewProduction = Object.fromEntries(
+    performedTeamActions
+      .map((teamAction) => ({
+        name: teamAction.action.name,
+        type: teamAction.action.type,
+        value: computeTeamActionStats(teamAction).production,
+      }))
+      .map((production) => [production.name, production])
+  );
+  const productionNameToProduction = Object.fromEntries(
+    persona.production.map((production) => [production.name, production])
+  );
+
+  const newProduction = Object.values({
+    ...productionNameToProduction,
+    ...productionNameToNewProduction,
+  });
+
+  return newProduction;
 }

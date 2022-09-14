@@ -106,7 +106,7 @@ function useStackedEnergyData() {
     if (isNotFinishedStep(step, game)) {
       return {};
     }
-    const persona = getPlayerValuesByStep(step, game, personaBySteps);
+    const persona = personaBySteps[step];
     if (STEPS[step]?.type === "consumption") {
       return {
         name: step ? `Étape ${step}` : "Initial",
@@ -118,8 +118,8 @@ function useStackedEnergyData() {
     } else {
       return {
         name: step ? `Étape ${step}` : "Initial",
-        offshore: sumFor(initialPersona.production, "offshore"),
-        terrestrial: sumFor(initialPersona.production, "terrestrial"),
+        offshore: sumFor(persona.production, "offshore"),
+        terrestrial: sumFor(persona.production, "terrestrial"),
       };
     }
   });

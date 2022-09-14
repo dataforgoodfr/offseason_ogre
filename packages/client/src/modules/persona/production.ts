@@ -1,3 +1,5 @@
+import { productionNames } from "../play/constants";
+
 export { production };
 export type { ProductionDatum, ProductionType };
 
@@ -49,14 +51,11 @@ function getTerrestrialEnergies(): (ProductionDatum & {
   type: "terrestrial";
 })[] {
   const energies = [
-    { name: "biomass", value: 7.138 },
-    {
-      name: "onshoreWindTurbine",
-      value: 2.084,
-    },
-    { name: "photovoltaicFarm", value: 0.307 },
-    { name: "photovoltaicRoof", value: 0.251 },
-    { name: "thermalSolar", value: 0.107 },
+    { name: productionNames.biomass, value: 7.138 },
+    { name: productionNames.onshoreWindTurbine, value: 2.084 },
+    { name: productionNames.photovoltaicFarm, value: 0.307 },
+    { name: productionNames.photovoltaicRoof, value: 0.251 },
+    { name: productionNames.thermalSolar, value: 0.107 },
   ];
   return energies.map((energie) => ({
     ...energie,

@@ -3,6 +3,7 @@ import { Persona } from "../../persona/persona";
 
 export { getLastCompletedStepPlayerValues, getPlayerValuesByStep };
 
+// TODO: use `usePersonaByUserId`/`usePersona` instead.
 function getLastCompletedStepPlayerValues(
   game: IGame,
   personaByStep: Record<number, Persona>
@@ -16,6 +17,7 @@ function getLastCompletedStepPlayerValues(
   return personaByStep[game.step];
 }
 
+// TODO: use `usePersonaByUserId`/`usePersona` instead.
 function getPlayerValuesByStep(
   step: number,
   game: IGame,
