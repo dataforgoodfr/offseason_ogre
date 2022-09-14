@@ -52,7 +52,7 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
               />
             </PlayBox>
           )}
-          <PlayerChart team={team} displayLatestProductionData />
+          <PlayerChart team={team} />
         </Box>
       </Box>
     </PlayBox>

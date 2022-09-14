@@ -7,36 +7,20 @@ import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerChart };
 
-function PlayerChart({
-  team,
-  displayLatestProductionData = false,
-}: {
-  team: ITeamWithPlayers;
-  displayLatestProductionData?: boolean;
-}) {
-  const data = useBuildData({ team, displayLatestProductionData });
+function PlayerChart({ team }: { team: ITeamWithPlayers }) {
+  const data = useBuildData({ team });
   return (
-    <Box>
+    <Box p={2} pl={4}>
       <StackedEnergyBars data={data} />
     </Box>
   );
 }
 
-function useBuildData({
-  team,
-  displayLatestProductionData,
-}: {
-  team: ITeamWithPlayers;
-  displayLatestProductionData: boolean;
-}) {
+function useBuildData({ team }: { team: ITeamWithPlayers }) {
   const { game } = usePlay();
   const userIds = team.players.map(({ user }) => user.id);
   const personaByUserId = usePersonaByUserId(userIds);
   const [firstPersona] = Object.values(personaByUserId); // TODO: I am not sure how production should be computed. Sum for all team members?
-
-  const personaForProduction = displayLatestProductionData
-    ? firstPersona.latestPersona
-    : firstPersona.currentPersona;
 
   return [
     ...team.players.map((player) => {
@@ -54,12 +38,15 @@ function useBuildData({
         renewable: sumFor(playerConsumption, "renewable"),
       };
     }),
-    personaForProduction
+    firstPersona
       ? {
           name: "Production",
-          offshore: sumFor(personaForProduction.production, "offshore"),
-          // nuclear: sumFor(personaForProduction.production, "nuclear"),
-          terrestrial: sumFor(personaForProduction.production, "terrestrial"),
+          offshore: sumFor(firstPersona.currentPersona.production, "offshore"),
+          // nuclear: sumFor(firstPersona.currentPersona.production, "nuclear"),
+          terrestrial: sumFor(
+            firstPersona.currentPersona.production,
+            "terrestrial"
+          ),
         }
       : {
           name: "Production",
