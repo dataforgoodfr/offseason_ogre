@@ -5,12 +5,12 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
-import { connectToDatase } from "./database";
+import { connectToDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
 
 const app = express();
 
-connectToDatase();
+connectToDatase().then(seed);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse JSON bodies (as sent by API clients)

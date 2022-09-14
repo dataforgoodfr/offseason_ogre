@@ -1,11 +1,25 @@
+import { database } from "..";
 import { getStepIndexById } from "../../constants/steps";
 import { productionActionNames } from "../../modules/productionActions/constants";
 import { ProductionAction } from "../../modules/productionActions/types";
+import { Seed } from "../types";
 
-export { getProductionActionsSeed };
+export { seed };
 
-function getProductionActionsSeed(): ProductionAction[] {
-  const productionActionsList = [
+const seed: Seed<ProductionAction> = {
+  seeder: (productionAction) =>
+    database.productionAction.upsert({
+      where: {
+        id: productionAction.id,
+      },
+      update: productionAction,
+      create: productionAction,
+    }),
+  data: getProductionActionsData(),
+};
+
+function getProductionActionsData(): ProductionAction[] {
+  const productionActions = [
     {
       name: productionActionNames.BIOMASS,
       type: "terrestrial",
@@ -98,7 +112,7 @@ function getProductionActionsSeed(): ProductionAction[] {
     },
   ] as const;
 
-  return productionActionsList.map((action, index) => ({
+  return productionActions.map((action, index) => ({
     id: index,
     ...action,
   }));
