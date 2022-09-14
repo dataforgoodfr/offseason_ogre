@@ -7,20 +7,36 @@ import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerChart };
 
-function PlayerChart({ team }: { team: ITeamWithPlayers }) {
-  const data = useBuildData({ team });
+function PlayerChart({
+  team,
+  displayLatestProductionData = false,
+}: {
+  team: ITeamWithPlayers;
+  displayLatestProductionData?: boolean;
+}) {
+  const data = useBuildData({ team, displayLatestProductionData });
   return (
-    <Box p={2} pl={4}>
+    <Box>
       <StackedEnergyBars data={data} />
     </Box>
   );
 }
 
-function useBuildData({ team }: { team: ITeamWithPlayers }) {
+function useBuildData({
+  team,
+  displayLatestProductionData,
+}: {
+  team: ITeamWithPlayers;
+  displayLatestProductionData: boolean;
+}) {
   const { game } = usePlay();
   const userIds = team.players.map(({ user }) => user.id);
   const personaByUserId = usePersonaByUserId(userIds);
   const [firstPersona] = Object.values(personaByUserId); // TODO: I am not sure how production should be computed. Sum for all team members?
+
+  const personaForProduction = displayLatestProductionData
+    ? firstPersona.latestPersona
+    : firstPersona.currentPersona;
 
   return [
     ...team.players.map((player) => {
@@ -38,15 +54,12 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
         renewable: sumFor(playerConsumption, "renewable"),
       };
     }),
-    firstPersona
+    personaForProduction
       ? {
           name: "Production",
-          offshore: sumFor(firstPersona.currentPersona.production, "offshore"),
-          // nuclear: sumFor(firstPersona.currentPersona.production, "nuclear"),
-          terrestrial: sumFor(
-            firstPersona.currentPersona.production,
-            "terrestrial"
-          ),
+          offshore: sumFor(personaForProduction.production, "offshore"),
+          // nuclear: sumFor(personaForProduction.production, "nuclear"),
+          terrestrial: sumFor(personaForProduction.production, "terrestrial"),
         }
       : {
           name: "Production",
