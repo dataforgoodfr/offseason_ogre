@@ -3,7 +3,7 @@ import HelpIcon from "@mui/icons-material/Help";
 import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
-import {  useTeamActions } from "../context/playContext";
+import { useTeamActions } from "../context/playContext";
 import { Dialog } from "../../common/components/Dialog";
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 
