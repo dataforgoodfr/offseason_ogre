@@ -22,8 +22,8 @@ function buildPersona(
   const personaBySteps = getResultsByStep(playerActions, teamActions);
 
   const getPersonaAtStep = (step: number) => {
-    let stepUsed = 0;
-    if (step >= game.step) {
+    let stepUsed = step;
+    if (stepUsed >= game.step) {
       stepUsed = game.step;
     }
     if (stepUsed === game.step && game.isStepActive) {
