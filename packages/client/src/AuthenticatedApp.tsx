@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./modules/auth/authProvider";
 import { Games } from "./modules/games";
 import { Game } from "./modules/games";
-import { GameConsole, MyGames } from "./modules/play";
+import { GameConsoleView, MyGames } from "./modules/play";
 import { PlayerPersona } from "./modules/play";
 import { Stats } from "./modules/play/Stats";
 import { Players } from "./modules/players";
@@ -38,7 +38,7 @@ function AuthenticatedApp() {
           path="games/:id/persona/actions"
           element={<PlayerActionsPage />}
         />
-        <Route path="games/:id/console" element={<GameConsole />} />
+        <Route path="games/:id/console" element={<GameConsoleView />} />
         <Route path="" element={<Navigate to="my-games" />} />
         <Route path="*" element={<Navigate to="my-games" />} />
       </Route>

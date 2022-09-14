@@ -1,3 +1,1 @@
-import { GameConsole } from "./GameConsole";
-
-export { GameConsole };
+export { GameConsoleView } from "./GameConsoleView";

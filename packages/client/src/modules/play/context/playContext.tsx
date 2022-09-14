@@ -16,6 +16,7 @@ import { GameStep, STEPS } from "../constants";
 import { sortBy } from "../../../lib/array";
 import { buildPersona } from "../utils/persona";
 import { computePlayerActionsStats } from "../utils/playerActions";
+import { computeTeamActionsStats } from "../utils/teamActions";
 
 export {
   PlayProvider,
@@ -207,16 +208,8 @@ function usePlayerActions() {
 function useTeamActions() {
   const { game, player } = useLoadedPlay();
 
-  const teamActionsAtCurrentStep = player.teamActions
-    .filter((teamAction) => teamAction.action.step === game.step)
-    .sort(
-      (teamActionA, teamActionB) =>
-        teamActionA.action.order - teamActionB.action.order
-    );
-
   return {
-    teamActions: player.teamActions,
-    teamActionsAtCurrentStep,
+    ...computeTeamActionsStats(game.step, player.teamActions),
   };
 }
 

@@ -1,4 +1,6 @@
+import Cancel from "@mui/icons-material/Cancel";
 import Cloud from "@mui/icons-material/Cloud";
+import CheckCircle from "@mui/icons-material/CheckCircle";
 import DirectionsBike from "@mui/icons-material/DirectionsBike";
 import DoneAll from "@mui/icons-material/DoneAll";
 import Factory from "@mui/icons-material/Factory";
@@ -20,8 +22,10 @@ const ICONS = {
   budget: Paid,
   "carbon-footprint": Cloud,
   consumption: ShoppingCart,
+  "check-circle": CheckCircle,
   "check-doubled": DoneAll,
   information: Info,
+  "mark-circle": Cancel,
   "open-in-new-tab": OpenInNew,
   "player-finished": HowToReg,
   player: Person,
