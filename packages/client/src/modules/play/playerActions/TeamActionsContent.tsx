@@ -226,7 +226,7 @@ function ValidateTeamAction({
       flexDirection="column"
     >
       {stats.isCredible ? (
-        <Typography>Votre Hypothèse est crédible</Typography>
+        <Typography>Votre hypothèse est crédible</Typography>
       ) : (
         <>
           <Typography>Votre hypothèse n’est pas crédible :</Typography>
