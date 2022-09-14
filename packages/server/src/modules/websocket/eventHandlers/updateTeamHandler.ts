@@ -35,12 +35,12 @@ async function handleUpdateTeamActionsSafely(
           .min(1),
       });
 
-      let { teamActions: teamActionsUpdate } = schema.parse(args);
+      const { teamActions: teamActionsUpdate } = schema.parse(args);
       const { gameId, user } = getSocketData(socket);
 
       const { game, player } = await checkCanUpdateTeamActions(gameId, user.id);
 
-      teamActionsUpdate = await filterValidTeamActionsUpdate(
+      const validTeamActionsUpdate = await filterValidTeamActionsUpdate(
         game.step,
         player.teamId,
         teamActionsUpdate
@@ -48,7 +48,7 @@ async function handleUpdateTeamActionsSafely(
 
       const teamActions = await teamActionsServices.updateTeamActions(
         player.teamId,
-        teamActionsUpdate.map((update) => ({
+        validTeamActionsUpdate.map((update) => ({
           id: update.id,
           value: update.value,
           isTouched: true,

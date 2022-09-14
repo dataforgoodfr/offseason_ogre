@@ -440,6 +440,7 @@ function computeResultsByStep(
     (playerAction: PlayerActions) => playerAction.action.name
   );
 
+  // TODO: Deep freeze `persona.consumption`.
   const newConsumption = JSON.parse(JSON.stringify(persona.consumption)).map(
     (consumption: ConsumptionDatum) => {
       return computeConsumptionChoices(consumption, performedActionsNames);

@@ -1,4 +1,4 @@
-import { ProductionAction, TeamActions } from "@prisma/client";
+import { TeamActions } from "@prisma/client";
 import invariant from "tiny-invariant";
 import { database } from "../../../database";
 import * as productionActionsServices from "../../productionActions/services";
@@ -20,7 +20,7 @@ async function create({
     `Could not find production action with id ${actionId}`
   );
 
-  const document = model.create({
+  return model.create({
     data: {
       actionId,
       teamId,
@@ -30,7 +30,6 @@ async function create({
       action: true,
     },
   });
-  return document;
 }
 
 async function getMany({
@@ -42,56 +41,41 @@ async function getMany({
   actionIds?: number[];
   teamId: number;
 }) {
-  const where: any = {};
-  if (ids) {
-    where.id = {
-      in: ids,
-    };
-  }
-  if (actionIds) {
-    where.actionId = {
-      in: actionIds,
-    };
-  }
-  where.teamId = teamId;
-
-  const documents = model.findMany({
-    where,
+  return model.findMany({
+    where: {
+      ...(actionIds ? { actionId: { in: actionIds } } : {}),
+      ...(ids ? { id: { in: ids } } : {}),
+      teamId,
+    },
     include: {
       action: true,
     },
   });
-  return documents;
 }
 
 async function getOrCreateTeamActions(teamId: number) {
   try {
-    const stepProductionActions = await productionActionsServices.getMany();
-    const teamActionsCurrent = await getMany({
-      actionIds: stepProductionActions.map((action) => action.id),
+    const prodActions = await productionActionsServices.getMany();
+    const currentTeamActions = await getMany({
+      actionIds: prodActions.map((action) => action.id),
       teamId,
     });
 
     // Create team actions that are potentially missing.
-    const idToProductionAction = stepProductionActions.reduce((map, action) => {
-      map.set(action.id, action);
-      return map;
-    }, new Map<number, ProductionAction>());
-
-    teamActionsCurrent.forEach((playerAction) =>
-      idToProductionAction.delete(playerAction.actionId)
+    const prodActionIdToIsLinked = Object.fromEntries(
+      currentTeamActions.map((teamAction) => [teamAction.action.id, true])
     );
-
-    const createdTeamActions = await Promise.all(
-      Array.from(idToProductionAction).map(([_, action]) =>
+    const creatingTeamActions = prodActions
+      .filter((prodAction) => !prodActionIdToIsLinked[prodAction.id])
+      .map((prodAction) =>
         create({
-          actionId: action.id,
+          actionId: prodAction.id,
           teamId,
         })
-      )
-    );
+      );
+    const createdTeamActions = await Promise.all(creatingTeamActions);
 
-    const teamActions = [...teamActionsCurrent, ...createdTeamActions].sort(
+    const teamActions = [...currentTeamActions, ...createdTeamActions].sort(
       (a, b) => a.id - b.id
     );
 
@@ -127,7 +111,5 @@ async function updateTeamActions(
     )
   );
 
-  const updatedPlayerActions = await getOrCreateTeamActions(teamId);
-
-  return updatedPlayerActions;
+  return getOrCreateTeamActions(teamId);
 }
