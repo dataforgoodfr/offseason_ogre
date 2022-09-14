@@ -1,14 +1,27 @@
-export type GameStepType = "consumption" | "production";
+export { STEPS, getStepIndexById };
+export type { GameStep, GameStepId, GameStepType };
 
-export type GameStep = {
-  id: string;
+type GameStepType = "consumption" | "production";
+
+type GameStep = {
+  id: GameStepId;
   title: string;
   label: string;
   type: GameStepType;
   availableActionPoints?: number;
 };
 
-export const STEPS: GameStep[] = [
+type GameStepId =
+  | "consumption-1"
+  | "consumption-2"
+  | "consumption-3"
+  | "initial-situation"
+  | "production-1"
+  | "production-2"
+  | "production-3"
+  | "production-4";
+
+const STEPS: readonly GameStep[] = [
   {
     id: "initial-situation",
     title: "Situation initiale",
@@ -61,4 +74,8 @@ export const STEPS: GameStep[] = [
     label: "Choix prod 4",
     type: "production",
   },
-];
+] as const;
+
+function getStepIndexById(id: GameStepId): number {
+  return STEPS.findIndex((step) => step.id === id);
+}

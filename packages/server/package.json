@@ -26,6 +26,7 @@
     "db:up": "docker-compose up -d",
     "db:down": "docker-compose down",
     "db:deploy": "npx prisma migrate deploy",
+    "db:format": "npx prisma format",
     "db:migrate": "npx prisma migrate dev",
     "db:seed": "npx ts-node ./src/database/seed.ts",
     "db:studio": "npx prisma studio",

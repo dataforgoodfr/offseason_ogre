@@ -6,7 +6,9 @@ import { database } from ".";
 import { safe } from "../lib/fp";
 import { availableActions } from "../modules/actions/constants/actions";
 import * as actionServices from "../modules/actions/services";
+import * as productionActionsServices from "../modules/productionActions/services";
 import { Action } from "../modules/actions/types";
+import { getProductionActionsSeed } from "./seeds/productionActions";
 
 // eslint-disable-next-line no-console
 console.log("Starting seeding...");
@@ -38,6 +40,17 @@ async function seed() {
       batch.map((action) =>
         safe(async () => {
           await actionServices.upsert(action);
+        })
+      )
+    );
+  }
+
+  // Seed production actions.
+  for (const batch of chunk(getProductionActionsSeed())) {
+    await Promise.all(
+      batch.map((action) =>
+        safe(async () => {
+          await productionActionsServices.upsert(action);
         })
       )
     );

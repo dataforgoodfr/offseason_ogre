@@ -3,6 +3,7 @@ import { z } from "zod";
 import { Server, Socket } from "../types";
 import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
+import * as teamActionsServices from "../../teamActions/services";
 import { rooms } from "../constants";
 
 export { handleUpdateGame };
@@ -23,22 +24,33 @@ function handleUpdateGame(io: Server, socket: Socket) {
 
     const gameUpdated = await gameServices.update(gameId, update);
 
-    socket.broadcast.to(rooms.game(gameId)).emit("gameUpdated", { update });
+    io.to(rooms.game(gameId)).emit("gameUpdated", { update });
 
     const stepSwitchedToActive = !game.isStepActive && gameUpdated.isStepActive;
     const stepSwitchedToInactive =
       game.isStepActive && !gameUpdated.isStepActive;
+
+    const teamIds = gameUpdated.teams.map((team) => team.id);
+    const teamActions = await Promise.all(
+      teamIds.map((teamId) =>
+        teamActionsServices.getOrCreateTeamActions(teamId)
+      )
+    );
+    let hasFinishedStep: boolean | undefined;
     if (stepSwitchedToActive) {
-      await playersServices.updateMany(gameId, { hasFinishedStep: false });
-      io.to(rooms.players(gameId)).emit("playerUpdated", {
-        update: { hasFinishedStep: false },
-      });
+      hasFinishedStep = false;
     } else if (stepSwitchedToInactive) {
-      await playersServices.updateMany(gameId, { hasFinishedStep: true });
-      io.to(rooms.players(gameId)).emit("playerUpdated", {
-        update: { hasFinishedStep: true },
-      });
+      hasFinishedStep = true;
     }
+
+    if (hasFinishedStep != null) {
+      await playersServices.updateMany(gameId, { hasFinishedStep });
+    }
+    teamIds.forEach((teamId, index) => {
+      io.to(rooms.team(gameId, teamId)).emit("playerUpdated", {
+        update: { hasFinishedStep, teamActions: teamActions[index] },
+      });
+    });
 
     const gameLatestUpdate = await gameServices.getDocument(gameId);
     io.to(rooms.game(gameId)).emit("gameUpdated", { update: gameLatestUpdate });

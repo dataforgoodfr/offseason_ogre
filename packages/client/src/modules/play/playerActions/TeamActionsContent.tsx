@@ -6,42 +6,40 @@ import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
 import { TeamAction } from "../../../utils/types";
-import { useCurrentStep } from "../context/playContext";
+import { usePlay, useTeamActions } from "../context/playContext";
 import { Accordion } from "../../common/components/Accordion";
-import { CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW, getEnergy } from "../constants";
+import { CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW } from "../constants";
 import { t } from "../../translations";
 import { Icon } from "../../common/components/Icon";
 import { Slider } from "../../common/components/Slider";
-import { TEAM_ACTIONS_MOCKS } from "../constants/mocks";
-import { computeProductionEnergyStats } from "../utils/production";
+import { computeTeamActionStats } from "../utils/production";
 import { Dialog } from "../../common/components/Dialog";
 
 export { TeamActionsContent };
 
 function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
-  const currentStep = useCurrentStep();
+  const { teamActionsAtCurrentStep } = useTeamActions();
 
   const [openHelpDialog, setOpenHelpDialog] = useState(false);
   const [helpCardLink, setHelpCardLink] = useState("");
-
-  const energiesToDisplay = getEnergy({ stepId: currentStep?.id });
-  const energyNameToTeamActions = Object.fromEntries(
-    TEAM_ACTIONS_MOCKS.map((teamAction) => [teamAction.action.name, teamAction])
-  );
 
   return (
     <>
       <Box style={style}>
         <Accordion
-          options={energiesToDisplay.map((energy) =>
-            createTeamActionOption({
-              teamAction: energyNameToTeamActions[energy.name],
-              onOpenHelpCard: () => {
-                setHelpCardLink(energy.helpCardLink);
-                setOpenHelpDialog(true);
-              },
-            })
-          )}
+          options={teamActionsAtCurrentStep
+            .map((teamAction) =>
+              createTeamActionOption({
+                teamAction,
+                onOpenHelpCard: () => {
+                  setHelpCardLink(teamAction.action.helpCardLink);
+                  setOpenHelpDialog(true);
+                },
+              })
+            )
+            .filter((option): option is NonNullable<typeof option> =>
+              Boolean(option)
+            )}
         />
       </Box>
 
@@ -86,6 +84,10 @@ function createTeamActionOption({
   teamAction: TeamAction;
   onOpenHelpCard: () => void;
 }) {
+  if (!teamAction) {
+    return null;
+  }
+
   return {
     key: teamAction.action.name,
     header: (
@@ -121,7 +123,20 @@ function TeamActionOptionHeader({
 }
 
 function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
+  const { updateTeam } = usePlay();
+
   const [value, setValue] = useState(teamAction.value);
+
+  const handleValidateTeamChoice = () => {
+    updateTeam({
+      teamActions: [
+        {
+          id: teamAction.id,
+          value: value,
+        },
+      ],
+    });
+  };
 
   const handleChange = (value: number) => {
     setValue(value);
@@ -131,7 +146,7 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
     teamAction.action.unit === "percentage" ? `${value}%` : `${value} m²`;
 
   const localTeamAction = { ...teamAction, value };
-  const localStats = computeProductionEnergyStats(localTeamAction);
+  const localStats = computeTeamActionStats(localTeamAction);
   const productionShare =
     teamAction.action.currentYearPowerNeedGw /
     CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW;
@@ -185,7 +200,7 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
 
       <ValidateTeamAction
         teamAction={localTeamAction}
-        onValidateTeamChoice={() => {}}
+        onValidateTeamChoice={handleValidateTeamChoice}
       />
     </Box>
   );
@@ -200,7 +215,7 @@ function ValidateTeamAction({
 }) {
   const theme = useTheme();
 
-  const stats = computeProductionEnergyStats(teamAction);
+  const stats = computeTeamActionStats(teamAction);
 
   const backgroundColor = stats.isCredible
     ? theme.palette.status.success

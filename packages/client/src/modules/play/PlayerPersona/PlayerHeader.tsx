@@ -37,7 +37,7 @@ export { PlayerHeader, Header, Actions };
 function PlayerHeader() {
   const { user } = useAuth();
   const { game } = usePlay();
-  const { currentPersona } = usePersona();
+  const { currentPersona, latestPersona } = usePersona();
 
   const myTeam = useMyTeam();
   if (user === null) {
@@ -81,7 +81,8 @@ function PlayerHeader() {
             {sumAllValues(currentPersona.consumption) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <PaidRoundedIcon sx={{ mr: 1 }} /> {currentPersona.budget || 0} €/J
+            <PaidRoundedIcon sx={{ mr: 1 }} />{" "}
+            {(latestPersona.budget || 0).toFixed(2)} €/J
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <WaterRoundedIcon sx={{ mr: 1 }} />{" "}

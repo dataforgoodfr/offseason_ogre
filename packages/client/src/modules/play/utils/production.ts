@@ -1,8 +1,8 @@
 import { TeamAction } from "../../../utils/types";
 
-export { computeProductionEnergyStats };
+export { computeTeamActionStats };
 
-function computeProductionEnergyStats(teamAction: TeamAction) {
+function computeTeamActionStats(teamAction: TeamAction) {
   // TODO: see with Gregory for renaming (should be `power` instead)?
   const production = computeProduction(teamAction);
   // TODO: see with Gregory for renaming (should be `production` instead)?
