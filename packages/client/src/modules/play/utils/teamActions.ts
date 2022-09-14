@@ -1,8 +1,8 @@
 import { TeamAction } from "../../../utils/types";
 
-export { computeTeamActionsStats };
+export { getTeamActionsAtCurrentStep };
 
-function computeTeamActionsStats(
+function getTeamActionsAtCurrentStep(
   currentStep: number,
   teamActions: TeamAction[]
 ) {
@@ -13,8 +13,5 @@ function computeTeamActionsStats(
         teamActionA.action.order - teamActionB.action.order
     );
 
-  return {
-    teamActions,
-    teamActionsAtCurrentStep,
-  };
+  return teamActionsAtCurrentStep;
 }

@@ -4,7 +4,7 @@ import { PlayBox } from "../Components";
 import { useCurrentStep, usePlay } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
 import { Typography } from "../../common/components/Typography";
-import { computeTeamActionsStats } from "../utils/teamActions";
+import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 
 export { TeamConsoleHeader };
 
@@ -59,7 +59,7 @@ function TeamProduction({
   const { game } = usePlay();
   const theme = useTheme();
 
-  const { teamActionsAtCurrentStep } = computeTeamActionsStats(
+  const teamActionsAtCurrentStep = getTeamActionsAtCurrentStep(
     game.step,
     team.actions
   );

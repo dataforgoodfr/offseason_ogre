@@ -12,6 +12,7 @@ import OpenInNew from "@mui/icons-material/OpenInNew";
 import Paid from "@mui/icons-material/Paid";
 import Person from "@mui/icons-material/Person";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
+import Star from "@mui/icons-material/Star";
 import Warning from "@mui/icons-material/Warning";
 import { SvgIconProps } from "@mui/material";
 
@@ -31,6 +32,7 @@ const ICONS = {
   player: Person,
   power: FlashOn,
   production: Factory,
+  star: Star,
   team: Groups,
   warning: Warning,
 } as const;

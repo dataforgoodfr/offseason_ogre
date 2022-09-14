@@ -16,7 +16,7 @@ import { GameStep, STEPS } from "../constants";
 import { sortBy } from "../../../lib/array";
 import { buildPersona } from "../utils/persona";
 import { computePlayerActionsStats } from "../utils/playerActions";
-import { computeTeamActionsStats } from "../utils/teamActions";
+import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 
 export {
   PlayProvider,
@@ -209,7 +209,11 @@ function useTeamActions() {
   const { game, player } = useLoadedPlay();
 
   return {
-    ...computeTeamActionsStats(game.step, player.teamActions),
+    teamActions: player.teamActions,
+    teamActionsAtCurrentStep: getTeamActionsAtCurrentStep(
+      game.step,
+      player.teamActions
+    ),
   };
 }
 
