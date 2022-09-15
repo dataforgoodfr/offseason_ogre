@@ -1,11 +1,6 @@
 import { Box, IconButton } from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import PaidIcon from "@mui/icons-material/Paid";
-import CloudIcon from "@mui/icons-material/Cloud";
-import StarIcon from "@mui/icons-material/Star";
 import { useState } from "react";
-
 import { Typography } from "../../common/components/Typography";
 import {
   useCurrentStep,
@@ -13,11 +8,16 @@ import {
   usePlayerActions,
 } from "../context/playContext";
 import { StepHelpDialog } from "./HelpDialogs";
+import { Icon } from "../../common/components/Icon";
+import { formatBudget, formatCarbonFootprint } from "../../../lib/formatter";
 import {
+  DashboardItem,
   CustomRating,
   HelpIconWrapper,
   Spacer,
+  MediaQuery,
 } from "./PlayerActionsHeader.styles";
+import { t } from "../../translations";
 
 export { PlayerActionsHeader };
 
@@ -36,11 +36,11 @@ function PlayerActionsHeader() {
 
   return (
     <>
-      <Box mt={2} mb={2}>
-        <Box display="flex" alignItems="center">
-          <ShoppingCartIcon />
-          <Typography ml={1} mr={2} variant="h5">
-            {currentStep?.title}
+      <Box display="flex" flexDirection="column" gap={3}>
+        <Box display="flex" alignItems="center" gap={1}>
+          <Icon name="consumption" />
+          <Typography variant="h5">
+            {t(`step.${currentStep?.id}.title` as any)}
           </Typography>
           <Spacer />
           <HelpIconWrapper>
@@ -52,19 +52,32 @@ function PlayerActionsHeader() {
             </IconButton>
           </HelpIconWrapper>
         </Box>
-        <Box display="flex" alignItems="center" mt={1}>
-          <PaidIcon />
-          <Typography
-            ml={1}
-          >{`Budget restant: ${latestPersona.budget} €/j`}</Typography>
+
+        <Box style={{ gap: "4px" }} display="flex" flexDirection="column">
+          <DashboardItem>
+            <Box display="flex" gap={1}>
+              <Icon name="budget" />
+              <Typography>Budget restant :</Typography>
+            </Box>
+            <Typography>{formatBudget(latestPersona.budget)} €/j</Typography>
+          </DashboardItem>
+          <DashboardItem>
+            <Box display="flex" gap={1}>
+              <Icon name="carbon-footprint" />
+              <Typography>Bilan carbone :</Typography>
+            </Box>
+            <Typography>
+              {formatCarbonFootprint(latestPersona.carbonFootprint)} kgCO2/an
+            </Typography>
+          </DashboardItem>
+          <DashboardItem>
+            <Box display="flex" gap={1}>
+              <Icon name="action-points" />
+              <Typography>Points d'action utilisés :</Typography>
+            </Box>
+            <ActionPoints />
+          </DashboardItem>
         </Box>
-        <Box display="flex" alignItems="center" mt={1}>
-          <CloudIcon />
-          <Typography
-            ml={1}
-          >{`Bilan carbone: ${latestPersona.carbonFootprint} kgCO2/an`}</Typography>
-        </Box>
-        <ActionPoints />
       </Box>
 
       <StepHelpDialog
@@ -80,18 +93,21 @@ function ActionPoints() {
   const { actionPointsUsedAtCurrentStep } = usePlayerActions();
   const currentStep = useCurrentStep();
 
+  const availableActionPoints = currentStep?.availableActionPoints ?? 0;
+
   return (
-    <Box display="flex" alignItems="center" mt={1}>
-      <Typography>PA utilisés:</Typography>
+    <MediaQuery>
       <CustomRating
-        emptyIcon={
-          <StarIcon style={{ fill: "grey", opacity: 0.5 }} fontSize="inherit" />
-        }
-        max={currentStep?.availableActionPoints ?? 0}
+        className="up-sm"
+        emptyIcon={<Icon style={{ fill: "grey", opacity: 0.5 }} name="star" />}
+        max={availableActionPoints}
         name="action-points"
         readOnly
         value={actionPointsUsedAtCurrentStep}
       />
-    </Box>
+      <Typography className="down-sm">
+        {actionPointsUsedAtCurrentStep}/{availableActionPoints}{" "}
+      </Typography>
+    </MediaQuery>
   );
 }
