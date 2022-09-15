@@ -87,7 +87,6 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   });
   const { socket } = useGameSocket({
     gameId,
-    player,
     setGameWithTeams,
     setPlayerActions,
     setActionPointsLimitExceeded,
@@ -219,14 +218,12 @@ function useTeamActions() {
 
 function useGameSocket({
   gameId,
-  player,
   setGameWithTeams,
   setPlayerActions,
   setActionPointsLimitExceeded,
   setPlayer,
 }: {
   gameId: number;
-  player: PlayerState;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
   setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
   setActionPointsLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>;
@@ -262,7 +259,7 @@ function useGameSocket({
     newSocket.on(
       "playerUpdated",
       ({ update }: { update: Partial<PlayerState> }) => {
-        setPlayer({ ...player, ...update });
+        setPlayer((previous) => ({ ...previous, ...update }));
       }
     );
 
@@ -276,7 +273,6 @@ function useGameSocket({
       newSocket.disconnect();
     };
   }, [
-    // TODO: add dependency `player` without creating a new socket on each `player` update.
     gameId,
     setGameWithTeams,
     setPlayerActions,

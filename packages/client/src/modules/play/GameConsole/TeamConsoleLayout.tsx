@@ -10,12 +10,12 @@ function TeamConsoleLayout() {
   const { game } = usePlay();
 
   const [selectedTeamId, setSelectedTeamId] = useState<number>(
-    game.teams[0].id
+    game.teams[0]?.id
   );
 
   const selectedTeam = game.teams.find(({ id }) => id === selectedTeamId);
 
-  if (!selectedTeam) return <></>;
+  if (!selectedTeamId || !selectedTeam) return <></>;
 
   return (
     <Box>
