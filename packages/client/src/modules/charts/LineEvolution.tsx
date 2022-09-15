@@ -9,7 +9,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import max from "lodash/max";
 import range from "lodash/range";
 
 export { LineEvolution };
@@ -24,11 +23,9 @@ interface LineEvolutionDatum {
 
 function LineEvolution({ data }: { data: LineEvolutionDatum[] }) {
   const lineCount =
-    max(
-      Object.keys(data[0] || {})
-        .filter((key) => key.startsWith("line"))
-        .map((key) => parseInt(key.replace("line", "")))
-    ) || 0;
+    Object.keys(data[0] || {})
+      .filter((key) => key.startsWith("line"))
+      .map((key) => parseInt(key.replace("line", ""))).length || 0;
 
   return (
     <Card
