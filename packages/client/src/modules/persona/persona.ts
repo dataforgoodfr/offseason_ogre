@@ -8,7 +8,7 @@ interface Persona {
   budget: number;
   carbonFootprint: number;
   points: number;
-  consumption: ConsumptionDatum[];
+  consumption: readonly ConsumptionDatum[];
   production: ProductionDatum[];
 }
 

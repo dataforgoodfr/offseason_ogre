@@ -33,4 +33,4 @@ const availableActions = {
   HOUSE_UNPLUNG_APPLIANCES_ON_STANDBY: "houseUnplungAppliancesOnStandby",
   HOUSE_UNPLUNG_CHARGERS: "houseUnplungChargers",
   TRANSPORT_STOP_PLANE: "transportStopPlane",
-};
+} as const;

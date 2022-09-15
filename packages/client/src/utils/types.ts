@@ -54,7 +54,7 @@ interface Action {
   players: PlayerActions[];
 }
 
-type ActionNames = keyof typeof availableActions;
+type ActionNames = typeof availableActions[keyof typeof availableActions];
 
 interface PlayerActions {
   id: number;

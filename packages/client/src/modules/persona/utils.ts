@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 export function sumFor<T extends { type: string; value: number }>(
-  array: T[],
+  array: readonly T[],
   type: string
 ) {
   return _.sumBy(
@@ -11,7 +11,7 @@ export function sumFor<T extends { type: string; value: number }>(
 }
 
 export function sumAllValues<T extends { type: string; value: number }>(
-  array: T[]
+  array: readonly T[]
 ) {
   return _.sumBy(array, "value").toFixed(2);
 }
