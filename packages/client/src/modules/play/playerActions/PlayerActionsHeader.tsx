@@ -13,11 +13,15 @@ import {
   usePlayerActions,
 } from "../context/playContext";
 import { StepHelpDialog } from "./HelpDialogs";
-import { CustomRating, HelpIconWrapper, Spacer } from "./ActionsHeader.styles";
+import {
+  CustomRating,
+  HelpIconWrapper,
+  Spacer,
+} from "./PlayerActionsHeader.styles";
 
-export { ActionsHeader };
+export { PlayerActionsHeader };
 
-function ActionsHeader() {
+function PlayerActionsHeader() {
   const { latestPersona } = usePersona();
   const currentStep = useCurrentStep();
 

@@ -9,8 +9,6 @@ import { styled } from "@mui/material/styles";
 import { theme } from "../../../utils/theme";
 import { Spacer } from "../../common/components/Spacer";
 import { Typography } from "../../common/components/Typography";
-import { PlayBox } from "../Components";
-import { ActionsHeader } from "./ActionsHeader";
 
 import { actionHelpCards } from "../../actions";
 import { useState } from "react";
@@ -19,18 +17,9 @@ import { usePlay, usePlayerActions } from "../context/playContext";
 import { ActionHelpDialog } from "./HelpDialogs";
 import { Dialog } from "../../common/components/Dialog";
 
-export { Actions };
+export { PlayerActionsContent };
 
-function Actions() {
-  return (
-    <PlayBox>
-      <ActionsHeader />
-      <ActionsLayout />
-    </PlayBox>
-  );
-}
-
-function ActionsLayout() {
+function PlayerActionsContent() {
   const {
     updatePlayerActions,
     actionPointsLimitExceeded,
