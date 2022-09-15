@@ -39,7 +39,7 @@ function PlayerActionsLayout() {
             pr: 1,
           }}
         >
-          <PlayBox>
+          <PlayBox display="flex" flexDirection="column" gap={4}>
             <PlayerActionsHeader />
             <PlayerActionsContent />
           </PlayBox>

@@ -6,11 +6,9 @@ import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 
-import { theme } from "../../../utils/theme";
 import { Spacer } from "../../common/components/Spacer";
 import { Typography } from "../../common/components/Typography";
 
-import { actionHelpCards } from "../../actions";
 import { useState } from "react";
 import { PlayerActions } from "../../../utils/types";
 import { usePlay, usePlayerActions } from "../context/playContext";
@@ -50,12 +48,7 @@ function PlayerActionsContent() {
             onPlayerActionChanged={(isPerformed) =>
               handleActionChange(playerAction.id, isPerformed)
             }
-            helpCardLink={
-              actionHelpCards.filter(
-                (actionHelpCard) =>
-                  actionHelpCard.name === playerAction.action.name
-              )[0].helpCardLink
-            }
+            helpCardLink={playerAction.action.helpCardLink}
           />
         );
       })}
@@ -124,7 +117,7 @@ function ActionLayout({
         marginBottom: 2,
         padding: 1,
         borderRadius: 1,
-        border: `3px solid ${theme.palette.secondary.main}`,
+        border: `2px solid white`,
       }}
     >
       <Box>
