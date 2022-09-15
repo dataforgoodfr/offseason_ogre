@@ -66,6 +66,7 @@ model Action {
   name            String          @unique
   description     String          @default("")
   step            Int
+  helpCardLink    String          @default("")
   actionPointCost Int
   financialCost   Float
   players         PlayerActions[]
