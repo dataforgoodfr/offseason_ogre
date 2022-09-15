@@ -3,6 +3,7 @@ import Cloud from "@mui/icons-material/Cloud";
 import CheckCircle from "@mui/icons-material/CheckCircle";
 import DirectionsBike from "@mui/icons-material/DirectionsBike";
 import DoneAll from "@mui/icons-material/DoneAll";
+import EmojiEvents from "@mui/icons-material/EmojiEvents";
 import Factory from "@mui/icons-material/Factory";
 import FlashOn from "@mui/icons-material/FlashOn";
 import Groups from "@mui/icons-material/Groups";
@@ -34,6 +35,7 @@ const ICONS = {
   production: Factory,
   star: Star,
   team: Groups,
+  trophy: EmojiEvents,
   warning: Warning,
 } as const;
 

@@ -103,7 +103,7 @@ function EnergyListItem({ teamAction }: { teamAction?: TeamAction }) {
       </Box>
 
       <Typography>
-        {formatProductionGw(stats.powerNeed)} GW &amp;{" "}
+        {formatProductionGw(stats.powerNeedGw)} GW &amp;{" "}
         {formatBudget(stats.cost)} €/j
       </Typography>
     </Box>
