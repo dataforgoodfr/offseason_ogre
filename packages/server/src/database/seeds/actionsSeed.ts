@@ -21,7 +21,10 @@ function getActionsData(): Action[] {
   return [
     ...getActionsDataForConsumptionStep1(),
     ...getActionsDataForConsumptionStep2(),
-  ];
+  ].map((action, index) => ({
+    ...action,
+    id: index,
+  }));
 }
 
 function getActionsDataForConsumptionStep1(): Action[] {
