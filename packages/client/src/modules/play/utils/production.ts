@@ -5,15 +5,15 @@ export { computeNewProductionData, computeTeamActionStats };
 
 function computeTeamActionStats(teamAction: TeamAction) {
   // TODO: see with Gregory for renaming (should be `power` instead)?
-  const production = computeProduction(teamAction);
+  const productionKwh = computeProduction(teamAction);
   // TODO: see with Gregory for renaming (should be `production` instead)?
-  const powerNeed = production * teamAction.action.powerNeededKWh;
-  const cost = production * teamAction.action.lcoe;
+  const powerNeedGw = productionKwh * teamAction.action.powerNeededKWh;
+  const cost = productionKwh * teamAction.action.lcoe;
   const isCredible = teamAction.value <= teamAction.action.credibilityThreshold;
 
   return {
-    production,
-    powerNeed,
+    productionKwh,
+    powerNeedGw,
     cost,
     isCredible,
   };
@@ -41,7 +41,7 @@ function computeNewProductionData(
       .map((teamAction) => ({
         name: teamAction.action.name,
         type: teamAction.action.type,
-        value: computeTeamActionStats(teamAction).production,
+        value: computeTeamActionStats(teamAction).productionKwh,
       }))
       .map((production) => [production.name, production])
   );

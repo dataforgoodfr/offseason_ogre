@@ -191,7 +191,7 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
         <Icon name="player" />
         <Typography>
           Mon hypothèse pour 2050 :{" "}
-          <strong>{formatProductionGw(localStats.powerNeed)}</strong> GW &amp;
+          <strong>{formatProductionGw(localStats.powerNeedGw)}</strong> GW &amp;
           Coût : {formatBudget(localStats.cost)} €/j
         </Typography>
       </Box>
