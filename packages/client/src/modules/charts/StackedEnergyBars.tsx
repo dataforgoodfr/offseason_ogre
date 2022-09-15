@@ -1,6 +1,13 @@
-import React from "react";
 import { Card, useTheme } from "@mui/material";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 
 export { StackedEnergyBars };
@@ -27,57 +34,59 @@ function StackedEnergyBars({
         mb: 1,
       }}
     >
-      <BarChart width={500} height={500} data={data} onClick={onClick}>
-        <XAxis dataKey="name" />
-        <YAxis name="kWh/j" domain={[0, 300]} />
-        <Tooltip />
-        <Legend />
-        <Bar
-          barSize={25}
-          dataKey="renewable"
-          fill={theme.palette.energy.renewable}
-          name={translateLabel("renewable")}
-          stackId="a"
-          unit="kWh"
-        />
-        <Bar
-          dataKey="mixte"
-          fill={theme.palette.energy.mixte}
-          name={translateLabel("mixte")}
-          stackId="a"
-          unit="kWh"
-        />
-        <Bar
-          dataKey="fossil"
-          fill={theme.palette.energy.fossil}
-          stackId="a"
-          name={translateLabel("fossil")}
-          unit="kWh"
-        />
-        <Bar
-          dataKey="offshore"
-          fill={theme.palette.production.offshore}
-          barSize={25}
-          name={translateLabel("offshore")}
-          stackId="a"
-          unit="kWh"
-        />
-        <Bar
-          dataKey="terrestrial"
-          stackId="a"
-          fill={theme.palette.production.terrestrial}
-          barSize={25}
-          name={translateLabel("terrestrial")}
-          unit="kWh"
-        />
-        <Bar
-          dataKey="grey"
-          stackId="a"
-          fill={theme.palette.energy.grey}
-          unit="kWh"
-          name={translateLabel("grey")}
-        />
-      </BarChart>
+      <ResponsiveContainer width="100%" height={500}>
+        <BarChart data={data} onClick={onClick}>
+          <XAxis dataKey="name" />
+          <YAxis name="kWh/j" domain={[0, 300]} />
+          <Tooltip />
+          <Legend />
+          <Bar
+            barSize={25}
+            dataKey="renewable"
+            fill={theme.palette.energy.renewable}
+            name={translateLabel("renewable")}
+            stackId="a"
+            unit="kWh"
+          />
+          <Bar
+            dataKey="mixte"
+            fill={theme.palette.energy.mixte}
+            name={translateLabel("mixte")}
+            stackId="a"
+            unit="kWh"
+          />
+          <Bar
+            dataKey="fossil"
+            fill={theme.palette.energy.fossil}
+            stackId="a"
+            name={translateLabel("fossil")}
+            unit="kWh"
+          />
+          <Bar
+            dataKey="offshore"
+            fill={theme.palette.production.offshore}
+            barSize={25}
+            name={translateLabel("offshore")}
+            stackId="a"
+            unit="kWh"
+          />
+          <Bar
+            dataKey="terrestrial"
+            stackId="a"
+            fill={theme.palette.production.terrestrial}
+            barSize={25}
+            name={translateLabel("terrestrial")}
+            unit="kWh"
+          />
+          <Bar
+            dataKey="grey"
+            stackId="a"
+            fill={theme.palette.energy.grey}
+            unit="kWh"
+            name={translateLabel("grey")}
+          />
+        </BarChart>
+      </ResponsiveContainer>
     </Card>
   );
 }

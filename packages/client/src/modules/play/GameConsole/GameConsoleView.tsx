@@ -12,17 +12,17 @@ import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import { PlayBox } from "../Components";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
 import { useState } from "react";
-import { Teams, TeamDetails } from "./Teams";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
 import { sumAllValues } from "../../persona";
 import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 import { Persona } from "../../persona/persona";
 import { roundValue } from "../../common/utils";
+import { TeamConsoleLayout } from "./TeamConsoleLayout";
 
-export { GameConsole };
+export { GameConsoleView };
 
-function GameConsole() {
+function GameConsoleView() {
   return <GameConsoleContent />;
 }
 
@@ -34,7 +34,7 @@ function GameConsoleContent() {
         selectedScreen={selectedScreen}
         setSelectedScreen={setSelectedScreen}
       />
-      {selectedScreen === "Teams" ? <TeamsConsole /> : null}
+      {selectedScreen === "Teams" ? <TeamConsoleLayout /> : null}
       {selectedScreen === "Mean Stats" ? <MeanStatsConsole /> : null}
     </>
   );
@@ -149,6 +149,7 @@ function useTeamValues() {
     team.players.map(({ user }) => userIds.push(user?.id))
   );
   const personaByUserId = usePersonaByUserId(userIds);
+  // TODO: fix stats screen.
   return game.teams.map((team) => {
     return {
       id: team.id,
@@ -239,24 +240,6 @@ function getFinishedStep(game: IGame, step: number) {
     (game.step === step && !game.isStepActive)
     ? step
     : step - 1;
-}
-
-function TeamsConsole() {
-  const { game } = usePlay();
-  const firstTeamId = game.teams[0].id;
-  const [selectedTeamId, setSelectedTeamId] = useState<number>(firstTeamId);
-  const selectedTeam = game.teams.find(({ id }) => id === selectedTeamId);
-  if (!selectedTeam) return <></>;
-
-  return (
-    <Box>
-      <Teams
-        selectedTeamId={selectedTeamId}
-        setSelectedTeamId={setSelectedTeamId}
-      />
-      <TeamDetails team={selectedTeam} />
-    </Box>
-  );
 }
 
 function Header(props: any) {

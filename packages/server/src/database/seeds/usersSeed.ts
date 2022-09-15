@@ -61,6 +61,13 @@ function getUsersData(): User[] {
       country: "FR",
     },
     {
+      email: "grandeur.energies@gmail.com",
+      isTeacher: true,
+      firstName: "Gregory",
+      lastName: "Kotnarovsky",
+      country: "FR",
+    },
+    {
       email: "guilhem.valentin@insidegroup.fr",
       isTeacher: true,
       firstName: "Guilhem",

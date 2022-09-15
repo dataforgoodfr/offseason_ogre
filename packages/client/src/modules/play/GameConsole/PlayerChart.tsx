@@ -10,7 +10,7 @@ export { PlayerChart };
 function PlayerChart({ team }: { team: ITeamWithPlayers }) {
   const data = useBuildData({ team });
   return (
-    <Box p={2} pl={4}>
+    <Box>
       <StackedEnergyBars data={data} />
     </Box>
   );

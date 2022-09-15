@@ -8,12 +8,12 @@ import { Typography } from "../../common/components/Typography";
 import { TeamAction } from "../../../utils/types";
 import { usePlay, useTeamActions } from "../context/playContext";
 import { Accordion } from "../../common/components/Accordion";
-import { CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW } from "../constants";
 import { t } from "../../translations";
 import { Icon } from "../../common/components/Icon";
 import { Slider } from "../../common/components/Slider";
 import { computeTeamActionStats } from "../utils/production";
 import { Dialog } from "../../common/components/Dialog";
+import { formatBudget, formatProductionGw } from "../../../lib/formatter";
 
 export { TeamActionsContent };
 
@@ -142,21 +142,19 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
     setValue(value);
   };
 
-  const labelFormatter = (value: number) =>
-    teamAction.action.unit === "percentage" ? `${value}%` : `${value} m²`;
+  const actionUnit = teamAction.action.unit === "percentage" ? "%" : " m²";
+  const labelFormatter = (value: number) => `${value}${actionUnit}`;
 
   const localTeamAction = { ...teamAction, value };
   const localStats = computeTeamActionStats(localTeamAction);
-  const productionShare =
-    teamAction.action.currentYearPowerNeedGw /
-    CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW;
 
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Typography>
         Puissance installée en France en 2022 :{" "}
-        {teamAction.action.currentYearPowerNeedGw.toFixed(2)} GW soit{" "}
-        {productionShare.toFixed(2)}%
+        {formatProductionGw(teamAction.action.currentYearPowerNeedGw)} GW soit{" "}
+        {teamAction.action.defaultTeamValue}
+        {actionUnit}
       </Typography>
 
       <Box
@@ -193,8 +191,8 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
         <Icon name="player" />
         <Typography>
           Mon hypothèse pour 2050 :{" "}
-          <strong>{localStats.powerNeed.toFixed(0)}</strong> GW &amp; Coût :{" "}
-          {localStats.cost.toFixed(2)} €/j
+          <strong>{formatProductionGw(localStats.powerNeed)}</strong> GW &amp;
+          Coût : {formatBudget(localStats.cost)} €/j
         </Typography>
       </Box>
 

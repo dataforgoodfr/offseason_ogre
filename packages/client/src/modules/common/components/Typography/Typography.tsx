@@ -4,6 +4,12 @@ import { styled } from "@mui/material/styles";
 export { Typography };
 
 const Typography = styled(TypographyMui)(({ theme }) => ({
+  "&:is(h4)": {
+    fontSize: 22,
+  },
+  "&:is(h5)": {
+    fontSize: 18,
+  },
   [theme.breakpoints.down("sm")]: {
     "&:is(h5)": {
       fontSize: 18,

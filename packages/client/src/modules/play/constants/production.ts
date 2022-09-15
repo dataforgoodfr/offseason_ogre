@@ -1,4 +1,4 @@
-export { CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW, productionNames };
+export { productionNames };
 
 const productionNames = {
   biomass: "biomass",
@@ -7,5 +7,3 @@ const productionNames = {
   photovoltaicRoof: "photovoltaicRoof",
   thermalSolar: "thermalSolar",
 } as const;
-
-const CURRENT_YEAR_COUNTRY_POWER_NEED_IN_GW = 79.52;
