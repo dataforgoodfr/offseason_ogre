@@ -22,7 +22,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "plane",
-        factor: 0.5,
+        update: (value) => value * 0.5,
       }),
     ],
   },
@@ -32,7 +32,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "plane",
-        factor: 0,
+        update: (value) => value * 0,
       }),
     ],
   },
@@ -42,12 +42,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyOther",
-        term: -5.4,
+        update: (value) => value - 5.4,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyTransport",
-        term: -1.2,
+        update: (value) => value - 1.2,
       }),
     ],
   },
@@ -57,12 +57,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyOther",
-        term: -5.4,
+        update: (value) => value - 5.4,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyTransport",
-        term: -1.2,
+        update: (value) => value - 1.2,
       }),
     ],
   },
@@ -72,7 +72,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyNumeric",
-        term: -3,
+        update: (value) => value - 3,
       }),
     ],
   },
@@ -82,7 +82,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "mixte",
         name: "food",
-        term: -1.5,
+        update: (value) => value - 1.5,
       }),
     ],
   },
@@ -92,7 +92,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "mixte",
         name: "food",
-        term: -1,
+        update: (value) => value - 1,
       }),
     ],
   },
@@ -102,7 +102,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "mixte",
         name: "food",
-        term: -4,
+        update: (value) => value - 4,
       }),
     ],
   },
@@ -112,7 +112,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "mixte",
         name: "food",
-        term: -4,
+        update: (value) => value - 4,
       }),
     ],
   },
@@ -122,7 +122,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "train",
-        factor: 0.5,
+        update: (value) => value * 0.5,
       }),
     ],
   },
@@ -132,7 +132,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyNumeric",
-        term: -0.9675,
+        update: (value) => value - 0.9675,
       }),
     ],
   },
@@ -142,17 +142,19 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "noCarbonHeating",
-        // If player had already installed efficient system before the game, then use initial value of `renewable/noCarbonHeating`.
-        // Else use initial value of `fossil/fossilHeating`.
-        set:
-          matrix["renewable"]["noCarbonHeating"].value ||
-          matrix["fossil"]["fossilHeating"].value,
-        factor: 0.4,
+        update: () => {
+          // If player had already installed efficient system before the game, then use initial value of `renewable/noCarbonHeating`.
+          // Else use initial value of `fossil/fossilHeating`.
+          const baseValue =
+            matrix["renewable"]["noCarbonHeating"].value ||
+            matrix["fossil"]["fossilHeating"].value;
+          return baseValue * 0.4;
+        },
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilHeating",
-        factor: 0,
+        update: (value) => value * 0,
       }),
     ],
   },
@@ -162,12 +164,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilHeating",
-        factor: 0.75,
+        update: (value) => value * 0.75,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "noCarbonHeating",
-        factor: 0.75,
+        update: (value) => value * 0.75,
       }),
     ],
   },
@@ -177,12 +179,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilHeating",
-        factor: 0.75,
+        update: (value) => value * 0.75,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "noCarbonHeating",
-        factor: 0.75,
+        update: (value) => value * 0.75,
       }),
     ],
   },
@@ -192,12 +194,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilHeating",
-        factor: 0.9,
+        update: (value) => value * 0.9,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "noCarbonHeating",
-        factor: 0.9,
+        update: (value) => value * 0.9,
       }),
     ],
   },
@@ -207,12 +209,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilHeating",
-        factor: 0.8,
+        update: (value) => value * 0.8,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "noCarbonHeating",
-        factor: 0.8,
+        update: (value) => value * 0.8,
       }),
     ],
   },
@@ -222,12 +224,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilHeating",
-        factor: 0.86,
+        update: (value) => value * 0.86,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "noCarbonHeating",
-        factor: 0.86,
+        update: (value) => value * 0.86,
       }),
     ],
   },
@@ -237,12 +239,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilHeating",
-        factor: 0.5,
+        update: (value) => value * 0.5,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "noCarbonHeating",
-        factor: 0.5,
+        update: (value) => value * 0.5,
       }),
     ],
   },
@@ -252,7 +254,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "airConditionning",
-        factor: 0,
+        update: (value) => value * 0,
       }),
     ],
   },
@@ -262,7 +264,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "light",
-        factor: 0.5,
+        update: (value) => value * 0.5,
       }),
     ],
   },
@@ -272,7 +274,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "cleanCook",
-        term: -0.7,
+        update: (value) => value - 0.7,
       }),
     ],
   },
@@ -282,7 +284,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "cleanCook",
-        term: -3.82,
+        update: (value) => value - 3.82,
       }),
     ],
   },
@@ -292,7 +294,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "brownGoods",
-        term: -0.6,
+        update: (value) => value - 0.6,
       }),
     ],
   },
@@ -302,7 +304,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "brownGoods",
-        term: -0.01,
+        update: (value) => value - 0.01,
       }),
     ],
   },
@@ -320,21 +322,24 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "electricCar",
-        // If player had already switched to electric car before the game, then use initial value of `renewable/electricCar`.
-        // Else use initial value of `fossil/fossilCar`.
-        set:
-          matrix["renewable"]["electricCar"].value ||
-          matrix["fossil"]["fossilCar"].value,
+        update: () => {
+          // If player had already switched to electric car before the game, then use initial value of `renewable/electricCar`.
+          // Else use initial value of `fossil/fossilCar`.
+          const baseValue =
+            matrix["renewable"]["electricCar"].value ||
+            matrix["fossil"]["fossilCar"].value;
+          return baseValue;
+        },
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilCar",
-        factor: 0,
+        update: (value) => value * 0,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyCar",
-        factor: 1.2,
+        update: (value) => value * 1.2,
       }),
     ],
   },
@@ -344,12 +349,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilCar",
-        factor: 0.9,
+        update: (value) => value * 0.9,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "electricCar",
-        factor: 0.9,
+        update: (value) => value * 0.9,
       }),
     ],
   },
@@ -359,12 +364,12 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "fossil",
         name: "fossilCar",
-        factor: 0.8,
+        update: (value) => value * 0.8,
       }),
       (matrix: ConsumptionMatrix) => ({
         type: "renewable",
         name: "electricCar",
-        factor: 0.8,
+        update: (value) => value * 0.8,
       }),
     ],
   },
@@ -374,7 +379,7 @@ const consumptionConfig: {
       (matrix: ConsumptionMatrix) => ({
         type: "grey",
         name: "greyCar",
-        term: -28,
+        update: (value) => value - 28,
       }),
     ],
   },
@@ -382,14 +387,12 @@ const consumptionConfig: {
 
 type ConsumptionConfig = {
   order: number;
-  impacts: ConsumptionConfigGetImpact[];
+  impacts: ConsumptionConfigUpdate[];
 };
-type ConsumptionConfigGetImpact = (matrix: ConsumptionMatrix) => {
+type ConsumptionConfigUpdate = (matrix: ConsumptionMatrix) => {
   type: ConsumptionType;
   name: ConsumptionName;
-  factor?: number;
-  term?: number;
-  set?: number;
+  update: (value: number) => number;
 };
 
 function computeNewConsumptionData(
@@ -423,16 +426,16 @@ function computeConsumption(
     }
 
     config.impacts.forEach((getImpact) =>
-      computeConsumptionImpact(consumptionMatrix, getImpact)
+      applyConsumptionImpact(consumptionMatrix, getImpact)
     );
   });
 }
 
-function computeConsumptionImpact(
+function applyConsumptionImpact(
   consumptionMatrix: ConsumptionMatrix,
-  getImpact: ConsumptionConfigGetImpact
+  getImpact: ConsumptionConfigUpdate
 ) {
-  const { type, name, factor, term, set } = getImpact(consumptionMatrix);
+  const { type, name, update } = getImpact(consumptionMatrix);
   const target = consumptionMatrix[type]?.[name];
 
   if (!target) {
@@ -442,19 +445,7 @@ function computeConsumptionImpact(
     return;
   }
 
-  let targetValue = target.value;
-
-  if (set != null) {
-    targetValue = set;
-  }
-
-  if (factor != null) {
-    targetValue *= factor;
-  } else if (term != null) {
-    targetValue += term;
-  }
-
-  consumptionMatrix[type][name].value = Math.max(targetValue, 0);
+  consumptionMatrix[type][name].value = Math.max(update(target.value), 0);
 }
 
 type ConsumptionMatrix = Record<
