@@ -1,5 +1,6 @@
 import { Game } from "../modules/games/types";
 import { productionNames } from "../modules/play";
+import { availableActions } from "../modules/play/playerActions/constants/actions";
 import { User } from "../modules/users/types";
 
 export type {
@@ -9,6 +10,7 @@ export type {
   ITeamWithPlayers,
   IUser,
   Action,
+  ActionNames,
   Player,
   PlayerActions,
   ProductionAction,
@@ -43,13 +45,16 @@ interface Player {
 
 interface Action {
   id: number;
-  name: string;
+  name: ActionNames;
   description: string;
   step: number;
+  helpCardLink: string;
   actionPointCost: number;
   financialCost: number;
   players: PlayerActions[];
 }
+
+type ActionNames = typeof availableActions[keyof typeof availableActions];
 
 interface PlayerActions {
   id: number;

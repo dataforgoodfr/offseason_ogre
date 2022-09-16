@@ -1,5 +1,4 @@
 import { Box, Grid, useTheme } from "@mui/material";
-import { Actions } from "./Actions";
 import { ValidateActions } from "./Validation";
 import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
 import { PlayerHeaderGrid } from "./PlayerHeaderGrid";
@@ -7,6 +6,8 @@ import { useCurrentStep } from "../context/playContext";
 import { PlayBox } from "../Components";
 import { TeamActionsHeader } from "./TeamActionsHeader";
 import { TeamActionsContent } from "./TeamActionsContent";
+import { PlayerActionsContent } from "./PlayerActionsContent";
+import { PlayerActionsHeader } from "./PlayerActionsHeader";
 
 export { PlayerActionsPage, PlayerHeader };
 
@@ -38,7 +39,10 @@ function PlayerActionsLayout() {
             pr: 1,
           }}
         >
-          <Actions />
+          <PlayBox display="flex" flexDirection="column" gap={4}>
+            <PlayerActionsHeader />
+            <PlayerActionsContent />
+          </PlayBox>
         </Grid>
       </Grid>
     </Box>

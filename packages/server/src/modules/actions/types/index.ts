@@ -4,6 +4,7 @@ interface Action {
   id: number;
   description: string;
   step: number;
+  helpCardLink: string;
   name: string;
   actionPointCost: number;
   financialCost: number;

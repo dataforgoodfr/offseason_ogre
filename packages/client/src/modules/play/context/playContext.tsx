@@ -11,7 +11,7 @@ import {
   TeamAction,
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
-import { persona } from "../../persona/persona";
+import { persona as basePersona } from "../../persona/persona";
 import { GameStep, STEPS } from "../constants";
 import { sortBy } from "../../../lib/array";
 import { buildPersona } from "../utils/persona";
@@ -21,7 +21,6 @@ import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 export {
   PlayProvider,
   RootPlayProvider,
-  useCurrentPersona,
   useCurrentStep,
   useMyTeam,
   useLoadedPlay as usePlay,
@@ -179,12 +178,6 @@ function useMyTeam(): ITeamWithPlayers | null {
   );
 }
 
-// @deprecated
-// TODO: remove and use `currentPersona` from `usePersona()` instead.
-function useCurrentPersona() {
-  return persona;
-}
-
 function useCurrentStep(): GameStep | null {
   const playValue = usePlay();
   if (!playValue) {
@@ -297,6 +290,7 @@ function usePersonaByUserId(userIds: number | number[]) {
     const { team, player } = getUserTeamAndPlayer(gameWithTeams, userIds);
     return buildPersona(
       gameWithTeams,
+      basePersona,
       player?.actions || [],
       team?.actions || []
     );
@@ -307,7 +301,12 @@ function usePersonaByUserId(userIds: number | number[]) {
       const { team, player } = getUserTeamAndPlayer(gameWithTeams, userId);
       return [
         userId,
-        buildPersona(gameWithTeams, player?.actions || [], team?.actions || []),
+        buildPersona(
+          gameWithTeams,
+          basePersona,
+          player?.actions || [],
+          team?.actions || []
+        ),
       ];
     })
   );
@@ -329,5 +328,5 @@ function usePersona() {
   const { game, player } = useLoadedPlay();
   const { playerActions } = usePlayerActions();
 
-  return buildPersona(game, playerActions, player.teamActions);
+  return buildPersona(game, basePersona, playerActions, player.teamActions);
 }

@@ -9,7 +9,7 @@ import {
   EnergyConsumptionButtons,
   EnergyProductionButtons,
 } from "../../common/components/EnergyButtons";
-import { MAX_NUMBER_STEPS, STEPS } from "../constants";
+import { getCurrentStep, STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumFor } from "../../persona";
@@ -99,29 +99,25 @@ function useStackedEnergyData() {
     },
   ];
 
-  const stepsDetails = _.range(
-    1,
-    Math.min(game.step + 1, MAX_NUMBER_STEPS)
-  ).map((step: number) => {
-    if (isNotFinishedStep(step, game)) {
-      return {};
+  const stepsDetails = _.range(1, getCurrentStep(game) + 1).map(
+    (step: number) => {
+      const persona = personaBySteps[step];
+      if (STEPS[step]?.type === "consumption") {
+        return {
+          name: step ? `Étape ${step}` : "Initial",
+          renewable: sumFor(persona.consumption, "renewable"),
+          fossil: sumFor(persona.consumption, "fossil"),
+          mixte: sumFor(persona.consumption, "mixte"),
+          grey: sumFor(persona.consumption, "grey"),
+        };
+      } else {
+        return {
+          name: step ? `Étape ${step}` : "Initial",
+          offshore: sumFor(persona.production, "offshore"),
+          terrestrial: sumFor(persona.production, "terrestrial"),
+        };
+      }
     }
-    const persona = personaBySteps[step];
-    if (STEPS[step]?.type === "consumption") {
-      return {
-        name: step ? `Étape ${step}` : "Initial",
-        renewable: sumFor(persona.consumption, "renewable"),
-        fossil: sumFor(persona.consumption, "fossil"),
-        mixte: sumFor(persona.consumption, "mixte"),
-        grey: sumFor(persona.consumption, "grey"),
-      };
-    } else {
-      return {
-        name: step ? `Étape ${step}` : "Initial",
-        offshore: sumFor(persona.production, "offshore"),
-        terrestrial: sumFor(persona.production, "terrestrial"),
-      };
-    }
-  });
+  );
   return [...initialValues, ...stepsDetails];
 }

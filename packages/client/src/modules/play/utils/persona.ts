@@ -5,10 +5,9 @@ import {
   PlayerActions,
   TeamAction,
 } from "../../../utils/types";
-import { ConsumptionDatum } from "../../persona/consumption";
-import { persona, Persona } from "../../persona/persona";
+import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
-import { computeConsumptionChoices } from "./consumptionStep";
+import { computeNewConsumptionData } from "./consumption";
 import { computePlayerActionsStats } from "./playerActions";
 import { computeNewProductionData, computeTeamActionStats } from "./production";
 
@@ -16,10 +15,15 @@ export { buildPersona };
 
 function buildPersona(
   game: IGameWithTeams,
+  basePersona: Persona,
   playerActions: PlayerActions[],
   teamActions: TeamAction[]
 ) {
-  const personaBySteps = getResultsByStep(playerActions, teamActions);
+  const personaBySteps = getResultsByStep(
+    basePersona,
+    playerActions,
+    teamActions
+  );
 
   const getPersonaAtStep = (step: number) => {
     let stepUsed = step;
@@ -49,24 +53,26 @@ function buildPersona(
 }
 
 function getResultsByStep(
+  basePersona: Persona,
   playerActions: PlayerActions[],
   teamActions: TeamAction[]
 ): Record<number, Persona> {
   return Object.fromEntries(
     range(0, MAX_NUMBER_STEPS).map((step) => [
       step,
-      computeResultsByStep(step, playerActions, teamActions),
+      computeResultsByStep(basePersona, step, playerActions, teamActions),
     ])
   );
 }
 
 function computeResultsByStep(
+  basePersona: Persona,
   step: number,
   playerActions: PlayerActions[] = [],
   teamActions: TeamAction[] = []
 ): Persona {
   if (step === 0) {
-    return persona;
+    return basePersona;
   }
 
   const performedPlayerActions = playerActions.filter(
@@ -93,14 +99,15 @@ function computeResultsByStep(
     (playerAction: PlayerActions) => playerAction.action.name
   );
 
-  // TODO: Deep freeze `persona.consumption`.
-  const newConsumption = JSON.parse(JSON.stringify(persona.consumption)).map(
-    (consumption: ConsumptionDatum) => {
-      return computeConsumptionChoices(consumption, performedActionsNames);
-    }
+  const newConsumption = computeNewConsumptionData(
+    basePersona,
+    performedActionsNames
   );
 
-  const newProduction = computeNewProductionData(performedTeamActions, persona);
+  const newProduction = computeNewProductionData(
+    performedTeamActions,
+    basePersona
+  );
 
   const { actionPointsUsedAtCurrentStep } = computePlayerActionsStats(
     step,
@@ -108,8 +115,8 @@ function computeResultsByStep(
   );
 
   return {
-    budget: persona.budget - costPerDay,
-    carbonFootprint: persona.carbonFootprint,
+    budget: basePersona.budget - costPerDay,
+    carbonFootprint: basePersona.carbonFootprint,
     points: actionPointsUsedAtCurrentStep,
     consumption: newConsumption,
     production: newProduction,

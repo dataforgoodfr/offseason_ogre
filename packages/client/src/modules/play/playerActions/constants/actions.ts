@@ -1,4 +1,6 @@
-export const availableActions = {
+export { availableActions };
+
+const availableActions = {
   REDUCE_PLANE_HALF: "reducePlaneHalf",
   LOCAL_CONSUMPTION: "localConsumption",
   REDUCE_CLOTHING_HALF: "reduceClothingHalf",
@@ -13,4 +15,22 @@ export const availableActions = {
   REDUCE_CAR_20: "reduceCar20",
   ELECTRIC_CAR: "electricCar",
   KEEP_CAR_15: "keepCar15",
-};
+  CONSUMPTION_SORT_WASTE: "consumptionSortWaste",
+  DIGITAL_REDUCE_INTERNET_HALF: "digitalReduceInternetHalf",
+  HOUSE_INSULATE_WALLS: "houseInsulateWalls",
+  HOUSE_INSULATE_ROOF: "houseInsulateRoof",
+  HOUSE_CHANGE_WOODWORK_WINDOWS: "houseChangeWoodworkWindows",
+  HOUSE_19_DEGREES_MAX: "house19DegreesMax",
+  HOUSE_REDUCE_SIZE_HALF: "houseReduceSizeHalf",
+  HOUSE_INSTALL_EFFICIENT_VENTILATION_SYSTEM:
+    "houseInstallEfficientVentilationSystem",
+  HOUSE_INSTALL_EFFICIENT_ELECTRIC_WOOD_HEATING_SYSTEM:
+    "houseInstallEfficientElectricWoodHeatingSystem",
+  HOUSE_STOP_AIR_CONDITIONING: "houseStopAirConditioning",
+  HOUSE_ONLY_LEDS: "houseOnlyLeds",
+  HOUSE_ONE_SHOWER_5_MINUTES_MAX: "houseOneShower5MinutesMax",
+  HOUSE_EFFICIENT_HOUSEHOLD_APPLIANCES: "houseEfficientHouseholdAppliances",
+  HOUSE_UNPLUNG_APPLIANCES_ON_STANDBY: "houseUnplungAppliancesOnStandby",
+  HOUSE_UNPLUNG_CHARGERS: "houseUnplungChargers",
+  TRANSPORT_STOP_PLANE: "transportStopPlane",
+} as const;
