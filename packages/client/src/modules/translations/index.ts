@@ -39,17 +39,5 @@ function translateConsumptionName(value: string): string {
 }
 
 function translateProductionName(value: string): string {
-  const translationByValue = {
-    geothermal: "Géothermie",
-    hydroPower: "Hydroélectricité",
-    offshoreTurbine: "Eolien offshore",
-    tidal: "Marées",
-    wave: "Vagues",
-    biomass: "Biomasse solaire",
-    onshoreWindTurbine: "Eolien terrestre",
-    photovoltaicFarm: "Ferme solaire",
-    photovoltaicRoof: "Photovoltaïque toiture",
-    thermalSolar: "Solaire thermique",
-  };
-  return translationByValue[value as keyof typeof translationByValue] ?? value;
+  return t(`production.energy.${value}.graph.name` as any);
 }

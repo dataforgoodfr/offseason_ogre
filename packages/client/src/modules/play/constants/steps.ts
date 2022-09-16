@@ -67,12 +67,10 @@ const STEPS: readonly GameStep[] = [
   },
   {
     id: "production-2",
-    title: "Choix de production 2",
+    title: "Choix de production 2 - Production aquatique",
     label: "Choix prod 2",
     type: "production",
-    // TODO: adapt energy type.
-    energyType: "terrestrial",
-    // TODO: adapt advised budget.
+    energyType: "offshore",
     budgetAdvised: 4,
   },
   {
