@@ -8,9 +8,14 @@ import { sumAllValues } from "../../persona";
 import { IGame, ITeamWithPlayers } from "../../../utils/types";
 import { Typography } from "../../common/components/Typography";
 import { Icon } from "../../common/components/Icon";
-import { formatBudget, formatCarbonFootprint } from "../../../lib/formatter";
+import {
+  formatBudget,
+  formatCarbonFootprint,
+  formatPoints,
+} from "../../../lib/formatter";
 import { Spacer } from "../../common/components/Spacer";
 import { GameStepType, getCurrentStep, isStepOfType } from "../constants";
+import { mean } from "../../../lib/math";
 
 export { StatsConsole };
 
@@ -66,7 +71,9 @@ function StatsConsole() {
                 <Icon name="team" />
                 <Typography>{team.name}</Typography>
                 <Spacer />
-                <Typography>{teamIdToTeamValues[team.id].points}</Typography>
+                <Typography>
+                  {formatPoints(teamIdToTeamValues[team.id].points)}
+                </Typography>
               </Box>
             ))}
           </PlayBox>
@@ -131,39 +138,37 @@ function useTeamValues() {
   );
   const personaByUserId = usePersonaByUserId(userIds);
 
-  return game.teams.map((team) => {
-    return {
-      id: team.id,
-      playerCount: team.players.length,
-      points: sum(
-        team.players.map(
-          ({ userId }) => personaByUserId[userId].currentPersona.points
-        )
-      ),
-      budget: sum(
-        team.players.map(
-          ({ userId }) => personaByUserId[userId].currentPersona.budget
-        )
-      ),
-      carbonFootprint: sum(
-        team.players.map(
-          ({ userId }) => personaByUserId[userId].currentPersona.carbonFootprint
-        )
-      ),
-      stepToConsumption: buildStepToData(
-        "consumption",
-        game,
-        team,
-        personaByUserId
-      ),
-      stepToProduction: buildStepToData(
-        "production",
-        game,
-        team,
-        personaByUserId
-      ),
-    };
-  });
+  return game.teams.map((team) => ({
+    id: team.id,
+    playerCount: team.players.length,
+    points: mean(
+      team.players.map(
+        ({ userId }) => personaByUserId[userId].currentPersona.points
+      )
+    ),
+    budget: mean(
+      team.players.map(
+        ({ userId }) => personaByUserId[userId].currentPersona.budget
+      )
+    ),
+    carbonFootprint: mean(
+      team.players.map(
+        ({ userId }) => personaByUserId[userId].currentPersona.carbonFootprint
+      )
+    ),
+    stepToConsumption: buildStepToData(
+      "consumption",
+      game,
+      team,
+      personaByUserId
+    ),
+    stepToProduction: buildStepToData(
+      "production",
+      game,
+      team,
+      personaByUserId
+    ),
+  }));
 }
 
 function buildStepToData(

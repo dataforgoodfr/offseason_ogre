@@ -103,9 +103,12 @@ model ProductionAction {
   currentYearPowerNeedGw Float
   teamActions            TeamActions[]
   defaultTeamValue       Float
+  isPlayable             Boolean              @default(false)
 }
 
 enum ProductionActionType {
+  offshore
+  nuclear
   terrestrial
 }
 

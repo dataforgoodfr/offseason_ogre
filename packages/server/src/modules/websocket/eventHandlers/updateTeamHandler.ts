@@ -104,10 +104,12 @@ async function filterValidTeamActionsUpdate(
     teamId,
   });
   const teamActionIdToUpdatable = Object.fromEntries(
-    teamActions.map((teamAction) => [
-      teamAction.id,
-      teamAction.action.step === currentStep,
-    ])
+    teamActions
+      .filter(
+        (teamAction) =>
+          teamAction.action.step === currentStep && teamAction.action.isPlayable
+      )
+      .map((teamAction) => [teamAction.id, true])
   );
 
   return teamActionsUpdate.filter(

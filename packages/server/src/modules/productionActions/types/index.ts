@@ -25,6 +25,7 @@ interface ProductionActionCommon {
   lcoe: number;
   currentYearPowerNeedGw: number;
   defaultTeamValue: number;
+  isPlayable: boolean;
 }
 
 interface ProductionActionArea extends ProductionActionCommon {
@@ -41,5 +42,5 @@ interface ProductionActionPercentage extends ProductionActionCommon {
 
 type ProductionActionNames =
   typeof productionActionNames[keyof typeof productionActionNames];
-type ProductionActionType = "terrestrial";
+type ProductionActionType = "offshore" | "nuclear" | "terrestrial";
 type ProductionActionUnit = "area" | "percentage";
