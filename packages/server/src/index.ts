@@ -1,5 +1,6 @@
+import "source-map-support/register";
 import path from "path";
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -7,6 +8,7 @@ import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
+import { logger } from "./logger";
 
 const app = express();
 
@@ -49,13 +51,11 @@ app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
 
 const { httpServer } = initWebSocket({ app });
 httpServer.listen(port, () => {
-  // eslint-disable-next-line no-console
-  console.log(`app listening on port ${port}!`);
+  logger.info(`app listening on port ${port}!`);
 });
 
 process.on("SIGTERM", () => {
-  // eslint-disable-next-line no-console
-  console.log("SIGTERM received");
+  logger.info("SIGTERM received");
   process.exit();
 });
 

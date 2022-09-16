@@ -15,7 +15,9 @@
     "lodash": "^4.17.21",
     "pg": "^8.7.1",
     "socket.io": "^4.5.1",
+    "source-map-support": "^0.5.21",
     "tiny-invariant": "^1.2.0",
+    "winston": "^3.8.2",
     "zod": "^3.14.2"
   },
   "license": "MIT",
