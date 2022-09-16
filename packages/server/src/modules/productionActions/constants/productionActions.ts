@@ -2,6 +2,7 @@ export { productionActionNames };
 
 const productionActionNames = {
   BIOMASS: "biomass",
+  GEOTHERMAL: "geothermal",
   HYDRAULIC: "hydraulic",
   OFF_SHORE_WIND_TURBINE: "offshoreWindTurbine",
   ON_SHORE_WIND_TURBINE: "onshoreWindTurbine",

@@ -21,11 +21,11 @@ function getHydroEnergies(): (ProductionDatum & {
   type: "offshore";
 })[] {
   const energies = [
-    { name: "geothermal", value: 0.005 },
-    { name: productionNames.hydraulic, value: 2.67 },
-    { name: productionNames.offshoreWindTurbine, value: 0.4 },
-    { name: productionNames.tidal, value: 0.02226 },
-    { name: productionNames.wave, value: 0.000167 },
+    { name: productionNames.GEOTHERMAL, value: 0.0054 },
+    { name: productionNames.HYDRAULIC, value: 2.67 },
+    { name: productionNames.OFF_SHORE_WIND_TURBINE, value: 0.4 },
+    { name: productionNames.TIDAL, value: 0.02226 },
+    { name: productionNames.WAVE, value: 0.000167 },
   ];
   return energies.map((energie) => ({
     ...energie,
@@ -52,11 +52,11 @@ function getTerrestrialEnergies(): (ProductionDatum & {
   type: "terrestrial";
 })[] {
   const energies = [
-    { name: productionNames.biomass, value: 7.14 },
-    { name: productionNames.onshoreWindTurbine, value: 2.08 },
-    { name: productionNames.photovoltaicFarm, value: 0.31 },
-    { name: productionNames.photovoltaicRoof, value: 0.25 },
-    { name: productionNames.thermalSolar, value: 0.11 },
+    { name: productionNames.BIOMASS, value: 7.14 },
+    { name: productionNames.ON_SHORE_WIND_TURBINE, value: 2.08 },
+    { name: productionNames.PHOTOVOLTAIC_FARM, value: 0.31 },
+    { name: productionNames.PHOTOVOLTAIC_ROOF, value: 0.25 },
+    { name: productionNames.THERMAL_SOLAR, value: 0.11 },
   ];
   return energies.map((energie) => ({
     ...energie,
