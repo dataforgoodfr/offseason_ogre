@@ -57,7 +57,7 @@ async function getOrCreatePlayerActionsController(
   );
 
   const createdPlayerActions = await Promise.all(
-    Array.from(actionsById).map(([_, action]) =>
+    Array.from(actionsById).map(([, action]) =>
       playerActionsServices.create({
         actionId: action.id,
         gameId,

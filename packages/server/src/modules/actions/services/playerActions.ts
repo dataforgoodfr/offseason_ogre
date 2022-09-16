@@ -1,6 +1,7 @@
 import { Action, PlayerActions } from "../types";
 import { database } from "../../../database";
 import * as services from "./index";
+import { logger } from "../../../logger";
 
 const model = database.playerActions;
 type Model = PlayerActions;
@@ -72,7 +73,7 @@ async function getOrCreatePlayerActions(
     );
 
     const createdPlayerActions = await Promise.all(
-      Array.from(actionsById).map(([_, action]) =>
+      Array.from(actionsById).map(([, action]) =>
         create({
           actionId: action.id,
           gameId,
@@ -88,7 +89,7 @@ async function getOrCreatePlayerActions(
 
     return playerActions;
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return [];
   }
 }

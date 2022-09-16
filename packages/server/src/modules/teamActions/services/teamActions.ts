@@ -1,6 +1,7 @@
 import { TeamActions } from "@prisma/client";
 import invariant from "tiny-invariant";
 import { database } from "../../../database";
+import { logger } from "../../../logger";
 import * as productionActionsServices from "../../productionActions/services";
 
 const model = database.teamActions;
@@ -81,7 +82,7 @@ async function getOrCreateTeamActions(teamId: number) {
 
     return teamActions;
   } catch (err) {
-    console.error(err);
+    logger.error(err);
     return [];
   }
 }

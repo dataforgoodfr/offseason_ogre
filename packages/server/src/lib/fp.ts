@@ -1,5 +1,8 @@
+import { logger } from "../logger";
+
 /* eslint-disable consistent-return */
-export const safe = async <F extends () => any | Promise<any>>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const safe = async <F extends () => any>(
   fn: F,
   { errorMsg, logError }: { errorMsg?: string; logError?: boolean } = {}
 ): Promise<ReturnType<F> | void> => {
@@ -8,7 +11,7 @@ export const safe = async <F extends () => any | Promise<any>>(
     return res;
   } catch (err) {
     if (logError) {
-      console.error(errorMsg || err);
+      logger.error(errorMsg || err);
     }
   }
 };
