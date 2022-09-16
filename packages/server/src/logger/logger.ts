@@ -1,16 +1,17 @@
+/* eslint-disable no-console */
 export { logger };
 
 const logger = {
-  log: (...args: any) => {
+  log: (...args: any[]) => {
     console.log(...args);
   },
-  info: (...args: any) => {
+  info: (...args: any[]) => {
     console.log(...args);
   },
-  warn: (...args: any) => {
+  warn: (...args: any[]) => {
     console.warn(...args);
   },
-  error: (...args: any) => {
+  error: (...args: any[]) => {
     console.error(...args);
   },
 };
