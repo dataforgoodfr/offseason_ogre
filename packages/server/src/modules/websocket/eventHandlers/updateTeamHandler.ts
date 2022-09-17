@@ -7,14 +7,17 @@ import { services as playersServices } from "../../players/services";
 import * as teamActionsServices from "../../teamActions/services";
 import { rooms } from "../constants";
 import { Server, Socket } from "../types";
-import { getSocketData } from "../utils";
+import { getSocketData, wrapHandler } from "../utils";
 
 export { handleUpdateTeam };
 
 function handleUpdateTeam(io: Server, socket: Socket) {
-  socket.on("updateTeam", async (args: unknown) => {
-    await handleUpdateTeamActionsSafely(io, socket, args);
-  });
+  socket.on(
+    "updateTeam",
+    wrapHandler(async (args: unknown) => {
+      await handleUpdateTeamActionsSafely(io, socket, args);
+    })
+  );
 }
 
 async function handleUpdateTeamActionsSafely(

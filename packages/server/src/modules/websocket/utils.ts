@@ -1,7 +1,11 @@
+/* eslint-disable no-param-reassign */
+import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+import { safe } from "../../lib/fp";
+import { setSessionItem, startSession } from "../../lib/session";
 import { Socket, SocketData } from "./types";
 
-export { getSocketData };
+export { getSocketData, wrapHandler };
 
 function getSocketData(socket: Socket): SocketData {
   const userSchema = z.object({
@@ -13,4 +17,30 @@ function getSocketData(socket: Socket): SocketData {
     isTeacher: z.boolean(),
   });
   return z.object({ gameId: z.number(), user: userSchema }).parse(socket.data);
+}
+
+type SocketHandler = (...args: any[]) => Promise<any>;
+
+function wrapHandler(handler: SocketHandler) {
+  return setRequestId(runSafely(handler));
+}
+
+function runSafely(handler: SocketHandler) {
+  return async (...args: any[]) => {
+    await safe(
+      async () => {
+        await handler(...args);
+      },
+      { logError: true }
+    );
+  };
+}
+
+function setRequestId(handler: SocketHandler) {
+  return async (...args: any[]) => {
+    startSession(async () => {
+      setSessionItem("requestId", uuidv4());
+      await handler(...args);
+    });
+  };
 }
