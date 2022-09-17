@@ -7,10 +7,14 @@ import { User } from "../users/types";
 
 export { AuthProvider, useAuth };
 
-const AuthContext = React.createContext<{
+interface IAuthContext {
   user: null | User;
-}>({ user: null });
-const useAuth = () => React.useContext<{ user: null | User }>(AuthContext);
+}
+
+const AuthContext = React.createContext<IAuthContext>({
+  user: null,
+});
+const useAuth = () => React.useContext<IAuthContext>(AuthContext);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
@@ -26,23 +30,29 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       onSuccess: (data) => {
         setUser(data?.data?.user || null);
       },
+      onError: () => {
+        setUser(null);
+      },
     }
   );
 
-  const theme = useTheme();
-
   if (isLoading) {
-    return (
-      <div
-        className="min-h-screen flex"
-        style={{ backgroundColor: theme.palette.primary.main }}
-      >
-        <CircularProgress color="secondary" sx={{ margin: "auto" }} />
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+  );
+}
+
+function Loading() {
+  const theme = useTheme();
+  return (
+    <div
+      className="min-h-screen flex"
+      style={{ backgroundColor: theme.palette.primary.main }}
+    >
+      <CircularProgress color="secondary" sx={{ margin: "auto" }} />
+    </div>
   );
 }

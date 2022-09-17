@@ -18,7 +18,7 @@ function UnauthenticatedApp() {
           <Route path="/" element={<MagicLink />} />
           <Route path="/magic-link" element={<MagicLink />} />
           <Route path="/signup" element={<Signup />} />
-          <Route path="" element={<Navigate replace to="/" />} />
+          <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>
       </div>
     </div>
