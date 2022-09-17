@@ -46,7 +46,6 @@ app.get("*", (_request: Request, response: Response) => {
   );
 });
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use(logError);
 
 const { httpServer } = initWebSocket({ app });
