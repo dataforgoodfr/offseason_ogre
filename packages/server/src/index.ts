@@ -9,7 +9,7 @@ import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
 import { logger } from "./logger";
-import { setRequestId } from "./middlewares";
+import { logError, setRequestId } from "./middlewares";
 
 const app = express();
 
@@ -47,9 +47,7 @@ app.get("*", (_request: Request, response: Response) => {
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-app.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
-  handleError(err, res);
-});
+app.use(logError);
 
 const { httpServer } = initWebSocket({ app });
 httpServer.listen(port, () => {
@@ -62,10 +60,3 @@ process.on("SIGTERM", () => {
 });
 
 export default app;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleError(err: any, res: Response) {
-  res
-    .status(err.statusCode || 500)
-    .send({ message: err.message || "Unkown error" }); // TODO: remove stack when on PROD.
-}
