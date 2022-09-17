@@ -9,31 +9,29 @@ export { AuthProvider, useAuth };
 
 const AuthContext = React.createContext<{
   user: null | User;
-  refetchUser: () => Promise<void>;
-}>({ user: null, refetchUser: () => Promise.resolve() });
-const useAuth = () =>
-  React.useContext<{ user: null | User; refetchUser: () => Promise<void> }>(
-    AuthContext
-  );
+}>({ user: null });
+const useAuth = () => React.useContext<{ user: null | User }>(AuthContext);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
 
-  const query = useQuery("logged-user", () => {
-    return axios.get<any, { data: { user: null | User } }>(
-      "/api/users/logged-user"
-    );
-  });
-
-  React.useEffect(() => {
-    if (query.isSuccess) {
-      setUser(query.data?.data?.user || null);
+  const { isLoading } = useQuery(
+    "logged-user",
+    () => {
+      return axios.get<any, { data: { user: null | User } }>(
+        "/api/users/logged-user"
+      );
+    },
+    {
+      onSuccess: (data) => {
+        setUser(data?.data?.user || null);
+      },
     }
-  }, [query]);
+  );
 
   const theme = useTheme();
 
-  if (query.isLoading) {
+  if (isLoading) {
     return (
       <div
         className="min-h-screen flex"
@@ -44,13 +42,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
-  const refetchUser = async () => {
-    await query.refetch();
-  };
-
   return (
-    <AuthContext.Provider value={{ user, refetchUser }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }

@@ -2,7 +2,7 @@ import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 import { ErrorAlert, SuccessAlert } from "../alert";
 import FormInput from "../common/components/FormInput";
@@ -13,7 +13,8 @@ import { getCountryByCode } from "../signup/components/SelectCountry";
 export { Settings };
 
 function Settings(): JSX.Element {
-  const { user, refetchUser } = useAuth();
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
   let { control, handleSubmit } = useForm({
     defaultValues: {
       firstName: user?.firstName || "",
@@ -33,7 +34,7 @@ function Settings(): JSX.Element {
     },
     {
       onSuccess: async () => {
-        await refetchUser();
+        queryClient.invalidateQueries("logged-user");
       },
     }
   );
