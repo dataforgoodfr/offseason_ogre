@@ -9,6 +9,7 @@ import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
 import { logger } from "./logger";
+import { setRequestId } from "./middlewares";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cors());
 
 const port = process.env.PORT || 8080;
 
+app.use(setRequestId);
 app.use("/api", apiRouter);
 
 // Serve the front.

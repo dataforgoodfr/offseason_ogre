@@ -4,13 +4,17 @@ import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
 import { rooms } from "../constants";
 import { Server, Socket } from "../types";
+import { wrapHandler } from "../utils";
 
 export { handleUpdatePlayer };
 
 function handleUpdatePlayer(io: Server, socket: Socket) {
-  socket.on("updatePlayer", async (args: unknown) => {
-    await handleUpdateHasFinishedStepSafely(io, socket, args);
-  });
+  socket.on(
+    "updatePlayer",
+    wrapHandler(async (args: unknown) => {
+      await handleUpdateHasFinishedStepSafely(io, socket, args);
+    })
+  );
 }
 
 async function handleUpdateHasFinishedStepSafely(

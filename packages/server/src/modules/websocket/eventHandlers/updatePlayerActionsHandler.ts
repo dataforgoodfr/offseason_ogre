@@ -6,64 +6,67 @@ import * as playerActionsServices from "../../actions/services/playerActions";
 import { GameStep, STEPS } from "../../../constants/steps";
 import { PlayerActions } from "../../actions/types";
 import { rooms } from "../constants";
-import { getSocketData } from "../utils";
+import { getSocketData, wrapHandler } from "../utils";
 
 export { updatePlayerActions };
 
 function updatePlayerActions(io: Server, socket: Socket) {
-  socket.on("updatePlayerActions", async (args: unknown) => {
-    const schema = z.object({
-      gameId: z.number(),
-      step: z.number(),
-      playerActions: z
-        .object({
-          id: z.number(),
-          isPerformed: z.boolean(),
-        })
-        .array()
-        .min(1),
-    });
+  socket.on(
+    "updatePlayerActions",
+    wrapHandler(async (args: unknown) => {
+      const schema = z.object({
+        gameId: z.number(),
+        step: z.number(),
+        playerActions: z
+          .object({
+            id: z.number(),
+            isPerformed: z.boolean(),
+          })
+          .array()
+          .min(1),
+      });
 
-    const { step: stepId, playerActions: playerActionsUpdate } =
-      schema.parse(args);
+      const { step: stepId, playerActions: playerActionsUpdate } =
+        schema.parse(args);
 
-    const { gameId, user } = getSocketData(socket);
+      const { gameId, user } = getSocketData(socket);
 
-    const player = await playersServices.find(gameId, user.id);
-    if (!player) {
-      throw new Error(
-        `Could not find player for gameId ${gameId} and userId ${user.id}`
+      const player = await playersServices.find(gameId, user.id);
+      if (!player) {
+        throw new Error(
+          `Could not find player for gameId ${gameId} and userId ${user.id}`
+        );
+      }
+
+      if (player.hasFinishedStep) {
+        throw new Error(`Player has already finished the current step`);
+      }
+
+      const lastChosenPlayerActions = await computeLastChosenPlayerActions(
+        gameId,
+        user.id,
+        stepId,
+        playerActionsUpdate
       );
-    }
 
-    if (player.hasFinishedStep) {
-      throw new Error(`Player has already finished the current step`);
-    }
+      if (!canUpdatePlayerActions(lastChosenPlayerActions, STEPS[stepId])) {
+        socket.emit("actionPointsLimitExceeded");
+        return;
+      }
 
-    const lastChosenPlayerActions = await computeLastChosenPlayerActions(
-      gameId,
-      user.id,
-      stepId,
-      playerActionsUpdate
-    );
+      const playerActions = await playerActionsServices.updatePlayerActions(
+        user.id,
+        lastChosenPlayerActions
+      );
 
-    if (!canUpdatePlayerActions(lastChosenPlayerActions, STEPS[stepId])) {
-      socket.emit("actionPointsLimitExceeded");
-      return;
-    }
+      const game = await gameServices.getDocument(gameId);
 
-    const playerActions = await playerActionsServices.updatePlayerActions(
-      user.id,
-      lastChosenPlayerActions
-    );
-
-    const game = await gameServices.getDocument(gameId);
-
-    socket.emit("playerActionsUpdated", {
-      playerActions,
-    });
-    io.to(rooms.teachers(gameId)).emit("gameUpdated", { update: game });
-  });
+      socket.emit("playerActionsUpdated", {
+        playerActions,
+      });
+      io.to(rooms.teachers(gameId)).emit("gameUpdated", { update: game });
+    })
+  );
 }
 
 async function computeLastChosenPlayerActions(
