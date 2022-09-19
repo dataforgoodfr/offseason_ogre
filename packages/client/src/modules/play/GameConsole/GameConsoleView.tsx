@@ -41,7 +41,7 @@ function Header(props: any) {
       : `Lancer l'étape ${nextStepNumber}`;
   const stopStepLabel =
     currentStepNumber === STEPS.length - 1
-      ? "Terminer la partie"
+      ? "Clôturer l'atelier"
       : `Terminer l'étape ${currentStepNumber}`;
 
   const startStep = () => {

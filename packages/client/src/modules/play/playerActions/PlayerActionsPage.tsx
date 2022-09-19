@@ -6,6 +6,7 @@ import { useCurrentStep } from "../context/playContext";
 import { PlayBox } from "../Components";
 import { TeamActionsHeader } from "./TeamActionsHeader";
 import { TeamActionsContent } from "./TeamActionsContent";
+import { SynthesisContent } from "./SynthesisContent";
 import { PlayerActionsContent } from "./PlayerActionsContent";
 import { PlayerActionsHeader } from "./PlayerActionsHeader";
 
@@ -18,10 +19,37 @@ function PlayerActionsPage() {
     return null;
   }
 
+  if (currentStep.id === "final-situation") {
+    return <SynthesisLayout />;
+  }
+
   return currentStep.type === "production" ? (
     <TeamActionsLayout />
   ) : (
     <PlayerActionsLayout />
+  );
+}
+
+function SynthesisLayout() {
+  return (
+    <Box>
+      <Grid container direction="row" rowSpacing={4}>
+        <PlayerHeaderGrid />
+        <Grid
+          item
+          xs={12}
+          sm={9}
+          sx={{
+            pl: 1,
+            pr: 1,
+          }}
+        >
+          <PlayBox display="flex" flexDirection="column" gap={4}>
+            <SynthesisContent />
+          </PlayBox>
+        </Grid>
+      </Grid>
+    </Box>
   );
 }
 

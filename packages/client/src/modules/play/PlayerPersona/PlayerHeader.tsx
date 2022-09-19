@@ -12,14 +12,6 @@ import {
   useTheme,
 } from "@mui/material";
 import { Link, useParams } from "react-router-dom";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
-import FactoryRoundedIcon from "@mui/icons-material/FactoryRounded";
-import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
-import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
-import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
-import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
-import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { IGame, IGameWithTeams, ITeam, IUser } from "../../../utils/types";
@@ -31,6 +23,7 @@ import {
   usePersona,
 } from "../context/playContext";
 import { sumAllValues } from "../../persona";
+import { Icon } from "../../common/components/Icon";
 
 export { PlayerHeader, Header, Actions };
 
@@ -60,7 +53,7 @@ function PlayerHeader() {
         >
           <GameStepper step={game.step} />
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {currentPersona.points || 0} <EmojiEventsRoundedIcon />
+            {currentPersona.points || 0} <Icon name="emoji-events" />
           </Typography>
         </Grid>
         <Grid
@@ -73,19 +66,19 @@ function PlayerHeader() {
           }}
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <FactoryRoundedIcon sx={{ mr: 1 }} />{" "}
+            <Icon name="factory" sx={{ mr: 1 }} />{" "}
             {sumAllValues(currentPersona.production) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <ShoppingCartRoundedIcon sx={{ mr: 1 }} />{" "}
+            <Icon name="shopping" sx={{ mr: 1 }} />{" "}
             {sumAllValues(currentPersona.consumption) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <PaidRoundedIcon sx={{ mr: 1 }} />{" "}
+            <Icon name="paid" sx={{ mr: 1 }} />{" "}
             {(latestPersona.budget || 0).toFixed(2)} €/J
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <WaterRoundedIcon sx={{ mr: 1 }} />{" "}
+            <Icon name="water" sx={{ mr: 1 }} />{" "}
             {currentPersona.carbonFootprint || 0} T/an
           </Typography>
         </Grid>
@@ -103,22 +96,22 @@ function PlayerHeader() {
             {
               <Box>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <FactoryRoundedIcon sx={{ mr: 1 }} />
+                  <Icon name="factory" sx={{ mr: 1 }} />
                   <br />
                   Production en kiloWattheures
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <ShoppingCartRoundedIcon sx={{ mr: 1 }} />
+                  <Icon name="shopping" sx={{ mr: 1 }} />
                   <br />
                   Consommation en kiloWattheures
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <PaidRoundedIcon sx={{ mr: 1 }} />
+                  <Icon name="paid" sx={{ mr: 1 }} />
                   <br />
                   Budget en euro à dépenser par jour
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <WaterRoundedIcon sx={{ mr: 1 }} />
+                  <Icon name="water" sx={{ mr: 1 }} />
                   <br />
                   CO2 produit en Tonnes par an
                 </Typography>
@@ -195,7 +188,7 @@ function Actions() {
           width: "200px",
         }}
       >
-        <BarChartRoundedIcon sx={{ mr: 1 }} /> Statistiques
+        <Icon name="bar-chart" sx={{ mr: 1 }} /> Statistiques
       </Button>
       <Button
         component={Link}
@@ -208,7 +201,18 @@ function Actions() {
         }}
         disabled={isActionButtonDisabled(game)}
       >
-        <VideogameAssetRoundedIcon sx={{ mr: 1 }} /> {currentStep?.label}
+        {currentStep?.id !== "final-situation" && (
+          <>
+            <Icon name="videogame-controller" sx={{ mr: 1 }} />
+            {currentStep?.label}
+          </>
+        )}
+        {currentStep?.id === "final-situation" && (
+          <>
+            <Icon name="synthesis" sx={{ mr: 1 }} />
+            {currentStep?.label}
+          </>
+        )}
       </Button>
     </Box>
   );
@@ -234,7 +238,7 @@ function ScoresLegendLayout({ children }: { children: any }) {
       }}
     >
       <AccordionSummary
-        expandIcon={<ArrowForwardIosIcon />}
+        expandIcon={<Icon name="arrow-forward" />}
         aria-controls="infobh-content"
         id="infobh-header"
         sx={{
