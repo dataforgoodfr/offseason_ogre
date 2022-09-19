@@ -35,11 +35,11 @@ function Header(props: any) {
   const currentStepNumber = game.step;
 
   const startStepLabel =
-    nextStepNumber === 6
+    nextStepNumber === STEPS.length - 1
       ? "Lancer la synthèse"
       : `Lancer l'étape ${nextStepNumber}`;
   const stopStepLabel =
-    currentStepNumber === 6
+    currentStepNumber === STEPS.length - 1
       ? "Terminer la partie"
       : `Terminer l'étape ${currentStepNumber}`;
 

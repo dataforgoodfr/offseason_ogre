@@ -63,7 +63,7 @@ function EnergyProductionButtons({ persona }: { persona: Persona }) {
     energies.push({
       color: theme.palette.production.nuclear,
       name: "Nucléaire",
-      type: "nuclea",
+      type: "nuclear",
     });
   }
 
