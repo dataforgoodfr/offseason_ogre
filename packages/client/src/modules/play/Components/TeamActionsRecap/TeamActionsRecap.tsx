@@ -10,6 +10,7 @@ import { TeamAction } from "../../../../utils/types";
 import { t } from "../../../translations";
 import { HelpIconWrapper } from "./TeamActionsRecap.styles";
 import { formatBudget, formatProductionGw } from "../../../../lib/formatter";
+import { GameStepId } from "../../constants";
 
 export { TeamActionsRecap };
 
@@ -31,6 +32,13 @@ function TeamActionsRecap({
     ])
   );
 
+  function budgetWording(stepId: GameStepId): string {
+    if (stepId === "production-3") {
+      return "Budget restant :";
+    }
+    return "Budget conseillé restant :";
+  }
+
   const energyStats = Object.values(energyNameToEnergyStats);
   const budgetRemaining =
     (currentStep?.budgetAdvised || 0) - sumBy(energyStats, "cost");
@@ -49,7 +57,9 @@ function TeamActionsRecap({
           <Box display="flex" alignItems="center">
             <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
               <Icon name="budget" />
-              <Typography>Budget alloué restant :</Typography>
+              <Typography>
+                {budgetWording(currentStep?.id || "initial-situation")}
+              </Typography>
             </Box>
             <Typography>{formatBudget(budgetRemaining)} €/j</Typography>
           </Box>

@@ -6,6 +6,7 @@ export {
   STEPS,
   getCurrentStep,
   getStepId,
+  getStepIndexById,
   isStepOfType,
 };
 export type { GameStepType, GameStepId, GameStep };
@@ -94,6 +95,10 @@ function getCurrentStep(game: IGame) {
 
 function getStepId(step: number): GameStepId | undefined {
   return STEPS[step]?.id;
+}
+
+function getStepIndexById(id: GameStepId): number {
+  return STEPS.findIndex((step) => step.id === id);
 }
 
 function isStepOfType(step: number, type: GameStepType) {

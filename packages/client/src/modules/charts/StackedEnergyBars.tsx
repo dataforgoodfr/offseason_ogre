@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
+import { hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 
 export { StackedEnergyBars };
@@ -87,7 +88,7 @@ function StackedEnergyBars({
             unit="kWh"
             name={translateLabel("grey")}
           />
-          {game.step >= 5 && (
+          {hasNuclear(game) && (
             <Bar
               dataKey="nuclear"
               stackId="a"
