@@ -58,7 +58,7 @@ function getResultsByStep(
   teamActions: TeamAction[]
 ): Record<number, Persona> {
   return Object.fromEntries(
-    range(0, MAX_NUMBER_STEPS).map((step) => [
+    range(0, MAX_NUMBER_STEPS + 1).map((step) => [
       step,
       computeResultsByStep(basePersona, step, playerActions, teamActions),
     ])

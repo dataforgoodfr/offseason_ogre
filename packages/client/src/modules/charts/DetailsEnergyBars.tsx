@@ -10,6 +10,9 @@ import {
 } from "recharts";
 import { roundValue } from "../common/utils";
 import { Persona } from "../persona/persona";
+import { ProductionDatum } from "../persona/production";
+import { productionNames } from "../play";
+import { usePlay } from "../play/context/playContext";
 import { translateName } from "../translations";
 
 export { DetailsEnergyConsumptionBars, DetailsEnergyProductionBars };
@@ -22,10 +25,25 @@ function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
   return DetailsEnergyBars("production", persona);
 }
 
+function getPersonaValues(energyType: string, persona: Persona, step: number) {
+  if (energyType === "consumption") {
+    return persona.consumption;
+  }
+
+  if (step < 5) {
+    return persona.production.filter(
+      (prod: ProductionDatum) => prod.type !== productionNames.NUCLEAR
+    );
+  }
+  return persona.production;
+}
+
 function DetailsEnergyBars(energyType: string, persona: Persona) {
   const theme = useTheme();
-  const personaValues =
-    energyType === "consumption" ? persona.consumption : persona.production;
+  const { game } = usePlay();
+
+  const personaValues = getPersonaValues(energyType, persona, game.step);
+
   const palette =
     energyType === "consumption"
       ? theme.palette.energy

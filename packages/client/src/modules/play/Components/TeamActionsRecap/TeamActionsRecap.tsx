@@ -34,7 +34,7 @@ function TeamActionsRecap({
   const energyStats = Object.values(energyNameToEnergyStats);
   const budgetRemaining =
     (currentStep?.budgetAdvised || 0) - sumBy(energyStats, "cost");
-  const powerInstalledInGw = sumBy(energyStats, "powerNeed");
+  const powerInstalledInGw = sumBy(energyStats, "powerNeedGw");
 
   return (
     <Box display="flex" flexDirection="column" gap={3}>
@@ -45,13 +45,15 @@ function TeamActionsRecap({
       </Box>
 
       <Box style={{ gap: "4px" }} display="flex" flexDirection="column">
-        <Box display="flex" alignItems="center">
-          <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
-            <Icon name="budget" />
-            <Typography>Budget alloué restant :</Typography>
+        {currentStep?.budgetAdvised && (
+          <Box display="flex" alignItems="center">
+            <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
+              <Icon name="budget" />
+              <Typography>Budget alloué restant :</Typography>
+            </Box>
+            <Typography>{formatBudget(budgetRemaining)} €/j</Typography>
           </Box>
-          <Typography>{formatBudget(budgetRemaining)} €/j</Typography>
-        </Box>
+        )}
         <Box display="flex" alignItems="center">
           <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
             <Icon name="power" />

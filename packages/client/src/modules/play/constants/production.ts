@@ -11,4 +11,5 @@ const productionNames = {
   THERMAL_SOLAR: "thermalSolar",
   TIDAL: "tidal",
   WAVE: "wave",
+  NUCLEAR: "nuclear",
 } as const;

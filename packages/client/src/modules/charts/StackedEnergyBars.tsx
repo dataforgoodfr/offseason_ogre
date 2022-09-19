@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
+import { usePlay } from "../play/context/playContext";
 
 export { StackedEnergyBars };
 
@@ -20,6 +21,7 @@ function StackedEnergyBars({
   onClick?: CategoricalChartFunc;
 }) {
   const theme = useTheme();
+  const { game } = usePlay();
 
   return (
     <Card
@@ -85,6 +87,15 @@ function StackedEnergyBars({
             unit="kWh"
             name={translateLabel("grey")}
           />
+          {game.step >= 5 && (
+            <Bar
+              dataKey="nuclear"
+              stackId="a"
+              fill={theme.palette.production.nuclear}
+              unit="kWh"
+              name={translateLabel("nuclear")}
+            />
+          )}
         </BarChart>
       </ResponsiveContainer>
     </Card>
@@ -99,6 +110,7 @@ function translateLabel(value: string): string {
     mixte: "Energie mixte",
     offshore: "Production offshore",
     terrestrial: "Production terrestre",
+    nuclear: "Nucléaire",
   } as Record<string, string>;
   return translations[value] ?? "Unkown";
 }

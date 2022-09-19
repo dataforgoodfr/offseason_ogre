@@ -40,7 +40,7 @@ function LineEvolution({ data }: { data: LineEvolutionDatum[] }) {
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis name="kWh/j" domain={[0, 750]} />
+          <YAxis name="kWh/j" domain={[0, 500]} />
           <Tooltip />
           <Legend />
           {range(0, lineCount).map((idx) => (

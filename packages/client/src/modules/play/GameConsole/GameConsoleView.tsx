@@ -34,8 +34,14 @@ function Header(props: any) {
   const nextStepNumber = game.step + 1;
   const currentStepNumber = game.step;
 
-  const startStepLabel = `Lancer l'étape ${nextStepNumber}`;
-  const stopStepLabel = `Terminer l'étape ${currentStepNumber}`;
+  const startStepLabel =
+    nextStepNumber === 6
+      ? "Lancer la synthèse"
+      : `Lancer l'étape ${nextStepNumber}`;
+  const stopStepLabel =
+    currentStepNumber === 6
+      ? "Terminer la partie"
+      : `Terminer l'étape ${currentStepNumber}`;
 
   const startStep = () => {
     updateGame({ step: game.step + 1, isStepActive: true });
