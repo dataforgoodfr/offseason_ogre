@@ -8,7 +8,7 @@ const seed: Seed<User> = {
   seeder: (user: User) =>
     database.user.upsert({
       where: {
-        id: user.id,
+        email: user.email,
       },
       update: user,
       create: user,
