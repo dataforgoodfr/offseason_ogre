@@ -3,13 +3,14 @@ import sumBy from "lodash/sumBy";
 import React from "react";
 
 import { Typography } from "../../../common/components/Typography";
-import { useCurrentStep, usePlay } from "../../context/playContext";
+import { useCurrentStep } from "../../context/playContext";
 import { Icon } from "../../../common/components/Icon";
 import { computeTeamActionStats } from "../../utils/production";
 import { TeamAction } from "../../../../utils/types";
 import { t } from "../../../translations";
 import { HelpIconWrapper } from "./TeamActionsRecap.styles";
 import { formatBudget, formatProductionGw } from "../../../../lib/formatter";
+import { GameStepId } from "../../constants";
 
 export { TeamActionsRecap };
 
@@ -23,7 +24,6 @@ function TeamActionsRecap({
   helper?: React.ReactNode;
 }) {
   const currentStep = useCurrentStep();
-  const { game } = usePlay();
 
   const energyNameToEnergyStats = Object.fromEntries(
     teamActions.map((teamAction) => [
@@ -32,8 +32,8 @@ function TeamActionsRecap({
     ])
   );
 
-  function budgetWording(step: number): string {
-    if (step === 5) {
+  function budgetWording(stepId: GameStepId): string {
+    if (stepId === "production-3") {
       return "Budget restant :";
     }
     return "Budget conseillé restant :";
@@ -56,7 +56,9 @@ function TeamActionsRecap({
         <Box display="flex" alignItems="center">
           <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
             <Icon name="budget" />
-            <Typography>{budgetWording(game.step)}</Typography>
+            <Typography>
+              {budgetWording(currentStep?.id || "initial-situation")}
+            </Typography>
           </Box>
           <Typography>{formatBudget(budgetRemaining)} €/j</Typography>
         </Box>
