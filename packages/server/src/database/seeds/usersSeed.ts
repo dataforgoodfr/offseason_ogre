@@ -4,8 +4,8 @@ import { Seed } from "../types";
 
 export { seed };
 
-const seed: Seed<User> = {
-  seeder: (user: User) =>
+const seed: Seed<Omit<User, "id">> = {
+  seeder: (user: Omit<User, "id">) =>
     database.user.upsert({
       where: {
         email: user.email,
@@ -16,7 +16,7 @@ const seed: Seed<User> = {
   data: getUsersData(),
 };
 
-function getUsersData(): User[] {
+function getUsersData(): Omit<User, "id">[] {
   const users = [
     {
       email: "seeding@database.com",
@@ -111,8 +111,5 @@ function getUsersData(): User[] {
     },
   ];
 
-  return users.map((user, index) => ({
-    id: index + 9900,
-    ...user,
-  }));
+  return users;
 }
