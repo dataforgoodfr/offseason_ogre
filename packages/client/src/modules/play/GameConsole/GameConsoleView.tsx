@@ -9,6 +9,7 @@ import { PlayBox } from "../Components";
 import { usePlay } from "../context/playContext";
 import { TeamConsoleLayout } from "./TeamConsoleLayout";
 import { StatsConsole } from "./StatsConsole";
+import { STEPS } from "../constants";
 
 export { GameConsoleView };
 
