@@ -20,5 +20,4 @@ const setRequestId = (req: Request, res: Response, next: NextFunction) => {
     setSessionItem("requestId", requestId);
     next();
   });
-  next();
 };
