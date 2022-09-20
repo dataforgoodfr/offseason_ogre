@@ -9,6 +9,7 @@ import { PlayBox } from "../Components";
 import { usePlay } from "../context/playContext";
 import { TeamConsoleLayout } from "./TeamConsoleLayout";
 import { StatsConsole } from "./StatsConsole";
+import { STEPS } from "../constants";
 
 export { GameConsoleView };
 
@@ -34,8 +35,14 @@ function Header(props: any) {
   const nextStepNumber = game.step + 1;
   const currentStepNumber = game.step;
 
-  const startStepLabel = `Lancer l'étape ${nextStepNumber}`;
-  const stopStepLabel = `Terminer l'étape ${currentStepNumber}`;
+  const startStepLabel =
+    nextStepNumber === STEPS.length - 1
+      ? "Lancer la synthèse"
+      : `Lancer l'étape ${nextStepNumber}`;
+  const stopStepLabel =
+    currentStepNumber === STEPS.length - 1
+      ? "Terminer la partie"
+      : `Terminer l'étape ${currentStepNumber}`;
 
   const startStep = () => {
     updateGame({ step: game.step + 1, isStepActive: true });

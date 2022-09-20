@@ -11,6 +11,7 @@ function signInController(req: Request, res: Response): void {
   const querySchema = z.object({
     token: z.string(),
   });
+
   const { token } = querySchema.parse(req.query);
   if (!token) {
     res.status(401).end();

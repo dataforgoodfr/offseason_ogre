@@ -1,6 +1,6 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
-export type { ThemeVariant };
+export type { ThemeVariant, EnergyPalette, ProductionPalette };
 export { theme };
 
 type ThemeVariant = "light" | "dark" | "system";
@@ -28,7 +28,7 @@ let theme = createTheme({
     },
     production: {
       offshore: "#4C677E",
-      nuclear: "#f65574",
+      nuclear: "#F65574",
       terrestrial: "#8A8256",
     },
     actionValidation: {

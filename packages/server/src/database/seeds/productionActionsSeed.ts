@@ -22,6 +22,7 @@ function getProductionActionsData(): ProductionAction[] {
   return [
     ...getProductionActionsDataForProductionStep1(),
     ...getProductionActionsDataForProductionStep2(),
+    ...getProductionActionsDataForProductionStep3(),
   ].map((action, index) => ({
     ...action,
     id: index,
@@ -226,5 +227,34 @@ function getProductionActionsDataForProductionStep2(): ProductionAction[] {
     ...action,
     id: index,
     step: getStepIndexById("production-2"),
+  }));
+}
+
+function getProductionActionsDataForProductionStep3(): ProductionAction[] {
+  const productionActions = [
+    {
+      name: productionActionNames.NUCLEAR,
+      type: "nuclear",
+      unit: "percentage",
+      min: 0,
+      max: 1000,
+      credibilityThreshold: 200,
+      areaEnergy: null,
+      totalEnergy: 16.06,
+      powerNeededKWh: 3.82,
+      lcoe: 0.095,
+      order: 1,
+      helpCardLink:
+        "https://drive.google.com/file/d/1266O8HqYV6QwbfZH_MeYVIWsre_KnGBf/view?usp=sharing",
+      currentYearPowerNeedGw: 61.4,
+      defaultTeamValue: 100,
+      isPlayable: true,
+    },
+  ] as const;
+
+  return productionActions.map((action, index) => ({
+    ...action,
+    id: index,
+    step: getStepIndexById("production-3"),
   }));
 }

@@ -8,29 +8,51 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
-import { roundValue } from "../common/utils";
+import { EnergyPalette, ProductionPalette } from "../../utils/theme";
+import { hasNuclear, roundValue } from "../common/utils";
+import { ConsumptionDatum } from "../persona/consumption";
 import { Persona } from "../persona/persona";
+import { ProductionDatum } from "../persona/production";
+import { productionNames } from "../play";
+import { usePlay } from "../play/context/playContext";
 import { translateName } from "../translations";
 
 export { DetailsEnergyConsumptionBars, DetailsEnergyProductionBars };
 
 function DetailsEnergyConsumptionBars({ persona }: { persona: Persona }) {
-  return DetailsEnergyBars("consumption", persona);
+  const theme = useTheme();
+  return DetailsEnergyBars(
+    "consumption",
+    persona.consumption,
+    theme.palette.energy
+  );
 }
 
 function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
-  return DetailsEnergyBars("production", persona);
+  const theme = useTheme();
+  const { game } = usePlay();
+
+  const personaValues = persona.production.filter(
+    ({ type }: ProductionDatum) => {
+      if (!hasNuclear(game) && type === productionNames.NUCLEAR) {
+        return false;
+      }
+      return true;
+    }
+  );
+
+  return DetailsEnergyBars(
+    "production",
+    personaValues,
+    theme.palette.production
+  );
 }
 
-function DetailsEnergyBars(energyType: string, persona: Persona) {
-  const theme = useTheme();
-  const personaValues =
-    energyType === "consumption" ? persona.consumption : persona.production;
-  const palette =
-    energyType === "consumption"
-      ? theme.palette.energy
-      : theme.palette.production;
-
+function DetailsEnergyBars(
+  energyType: string,
+  personaValues: readonly ConsumptionDatum[] | ProductionDatum[],
+  color: EnergyPalette | ProductionPalette
+) {
   return (
     <Card
       sx={{
@@ -68,7 +90,7 @@ function DetailsEnergyBars(energyType: string, persona: Persona) {
             return (
               <Cell
                 key={`cell-${name}`}
-                fill={(palette as any)[type] || "blue"}
+                fill={(color as any)[type] || "blue"}
               />
             );
           })}

@@ -34,18 +34,16 @@ function getHydroEnergies(): (ProductionDatum & {
 }
 
 function getNuclearEnergies(): (ProductionDatum & { type: "nuclear" })[] {
-  return [];
-  // TODO - Nuclear not in V0
-  // const energies = [
-  //   {
-  //     name: "nuclear",
-  //     value: 0,
-  //   },
-  // ];
-  // return energies.map((energie) => ({
-  //   ...energie,
-  //   type: "nuclear",
-  // }));
+  const energies = [
+    {
+      name: productionNames.NUCLEAR,
+      value: 0,
+    },
+  ];
+  return energies.map((energie) => ({
+    ...energie,
+    type: "nuclear",
+  }));
 }
 
 function getTerrestrialEnergies(): (ProductionDatum & {

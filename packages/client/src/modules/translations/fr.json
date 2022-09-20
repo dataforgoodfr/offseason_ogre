@@ -59,20 +59,22 @@
   "production.energy.wave.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'énergie houlomotrice (10 GW) selon le scénario 100% EnR de l'ADEME.",
   "production.energy.wave.graph.name": "Vagues",
 
+  "production.energy.nuclear.name": "Nucléaire",
+  "production.energy.nuclear.accordion.title": "Nucléaire",
+  "production.energy.nuclear.accordion.label-slider": "Comparaison par rapport à l'existant (installation actuelle = 100%)",
+  "production.energy.nuclear.value.not-credible": "Votre hypothèse dépasse largement les scénarios RTE en matière de capacité installée en 2050.",
+  "production.energy.nuclear.graph.name": "Nucléaire",
+
   "step.consumption-1.name": "Étape 1",
   "step.consumption-1.title": "Choix de consommation 1",
   "step.consumption-2.name": "Étape 3",
   "step.consumption-2.title": "Choix de consommation 2",
-  "step.consumption-3.name": "Étape 5",
-  "step.consumption-3.title": "Choix de consommation 3",
   "step.initial-situation.name": "Situation initiale",
   "step.initial-situation.title": "Situation initiale",
   "step.production-1.name": "Étape 2",
   "step.production-1.title": "Choix de production 1",
   "step.production-2.name": "Étape 4",
   "step.production-2.title": "Choix de production 2",
-  "step.production-3.name": "Étape 6",
-  "step.production-3.title": "Choix de production 3",
-  "step.production-4.name": "Étape 7",
-  "step.production-4.title": "Choix de production 4"
+  "step.production-3.name": "Étape 5",
+  "step.production-3.title": "Choix de production 3"
 }

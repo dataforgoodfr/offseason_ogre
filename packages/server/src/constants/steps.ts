@@ -14,12 +14,11 @@ type GameStep = {
 type GameStepId =
   | "consumption-1"
   | "consumption-2"
-  | "consumption-3"
   | "initial-situation"
+  | "final-situation"
   | "production-1"
   | "production-2"
-  | "production-3"
-  | "production-4";
+  | "production-3";
 
 const STEPS: readonly GameStep[] = [
   {
@@ -56,23 +55,17 @@ const STEPS: readonly GameStep[] = [
     type: "production",
   },
   {
-    id: "consumption-3",
-    title: "Choix de consommation 3",
-    label: "Choix conso 3",
-    availableActionPoints: 12,
-    type: "consumption",
-  },
-  {
     id: "production-3",
     title: "Choix de production 3",
     label: "Choix prod 3",
     type: "production",
   },
   {
-    id: "production-4",
-    title: "Choix de production 4",
-    label: "Choix prod 4",
-    type: "production",
+    id: "final-situation",
+    title: "Situation finale",
+    label: "Synthèse",
+    availableActionPoints: 0,
+    type: "consumption",
   },
 ] as const;
 

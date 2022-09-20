@@ -6,11 +6,12 @@ export {
   STEPS,
   getCurrentStep,
   getStepId,
+  getStepIndexById,
   isStepOfType,
 };
 export type { GameStepType, GameStepId, GameStep };
 
-const MAX_NUMBER_STEPS = 7;
+const MAX_NUMBER_STEPS = 6;
 const MAX_ACTION_POINTS = 10;
 
 type GameStepType = "consumption" | "production";
@@ -18,12 +19,11 @@ type GameStepType = "consumption" | "production";
 type GameStepId =
   | "consumption-1"
   | "consumption-2"
-  | "consumption-3"
   | "initial-situation"
   | "production-1"
   | "production-2"
   | "production-3"
-  | "production-4";
+  | "final-situation";
 
 type GameStep = {
   id: GameStepId;
@@ -74,31 +74,18 @@ const STEPS: readonly GameStep[] = [
     budgetAdvised: 4,
   },
   {
-    id: "consumption-3",
-    title: "Choix de consommation 3",
-    label: "Choix conso 3",
-    availableActionPoints: 12,
-    type: "consumption",
-  },
-  {
     id: "production-3",
     title: "Choix de production 3",
     label: "Choix prod 3",
     type: "production",
-    // TODO: adapt energy type.
-    energyType: "terrestrial",
-    // TODO: adapt advised budget.
-    budgetAdvised: 4,
+    energyType: "nuclear",
   },
   {
-    id: "production-4",
-    title: "Choix de production 4",
-    label: "Choix prod 4",
-    type: "production",
-    // TODO: adapt energy type.
-    energyType: "terrestrial",
-    // TODO: adapt advised budget.
-    budgetAdvised: 4,
+    id: "final-situation",
+    title: "Situation finale",
+    label: "Synthèse",
+    availableActionPoints: 0,
+    type: "consumption",
   },
 ] as const;
 
@@ -108,6 +95,10 @@ function getCurrentStep(game: IGame) {
 
 function getStepId(step: number): GameStepId | undefined {
   return STEPS[step]?.id;
+}
+
+function getStepIndexById(id: GameStepId): number {
+  return STEPS.findIndex((step) => step.id === id);
 }
 
 function isStepOfType(step: number, type: GameStepType) {

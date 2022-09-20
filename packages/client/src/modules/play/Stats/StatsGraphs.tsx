@@ -95,6 +95,7 @@ function useStackedEnergyData() {
     {
       name: "Initial",
       offshore: sumFor(initialPersona.production, "offshore"),
+      nuclear: sumFor(initialPersona.production, "nuclear"),
       terrestrial: sumFor(initialPersona.production, "terrestrial"),
     },
   ];
@@ -114,6 +115,7 @@ function useStackedEnergyData() {
         return {
           name: step ? `Étape ${step}` : "Initial",
           offshore: sumFor(persona.production, "offshore"),
+          nuclear: sumFor(persona.production, "nuclear"),
           terrestrial: sumFor(persona.production, "terrestrial"),
         };
       }
