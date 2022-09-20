@@ -169,6 +169,11 @@ function Actions() {
   const { game } = usePlay();
   const currentStep = useCurrentStep();
 
+  const iconName =
+    currentStep?.id !== "final-situation"
+      ? "videogame-controller"
+      : "synthesis";
+
   return (
     <Box
       sx={{
@@ -201,18 +206,8 @@ function Actions() {
         }}
         disabled={isActionButtonDisabled(game)}
       >
-        {currentStep?.id !== "final-situation" && (
-          <>
-            <Icon name="videogame-controller" sx={{ mr: 1 }} />
-            {currentStep?.label}
-          </>
-        )}
-        {currentStep?.id === "final-situation" && (
-          <>
-            <Icon name="synthesis" sx={{ mr: 1 }} />
-            {currentStep?.label}
-          </>
-        )}
+        <Icon name={iconName} sx={{ mr: 1 }} />
+        {currentStep?.label}
       </Button>
     </Box>
   );
