@@ -51,12 +51,13 @@ model User {
 }
 
 model Team {
-  id      Int           @id @default(autoincrement())
-  game    Game          @relation(fields: [gameId], references: [id])
-  gameId  Int
-  name    String
-  players Players[]
-  actions TeamActions[]
+  id           Int           @id @default(autoincrement())
+  game         Game          @relation(fields: [gameId], references: [id])
+  gameId       Int
+  name         String
+  scenarioName String        @default("")
+  players      Players[]
+  actions      TeamActions[]
 
   @@unique([gameId, name], map: "Team_gameId_name_unique_constraint")
 }

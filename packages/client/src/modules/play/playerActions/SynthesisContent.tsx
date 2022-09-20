@@ -1,166 +1,133 @@
-import React from "react";
 import Button from "@mui/material/Button";
-import InfoIcon from "@mui/icons-material/Info";
-import { Box, Rating, IconButton } from "@mui/material";
-import PaidIcon from "@mui/icons-material/Paid";
-import Checkbox from "@mui/material/Checkbox";
-import { styled } from "@mui/material/styles";
-
-import { Spacer } from "../../common/components/Spacer";
-import { Typography } from "../../common/components/Typography";
-
+import { Box, IconButton } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
-import { PlayerActions } from "../../../utils/types";
-import { usePlay, usePlayerActions } from "../context/playContext";
-import { ActionHelpDialog } from "./HelpDialogs";
+import { DateTime } from "luxon";
+import { Typography } from "../../common/components/Typography";
+import { useMyTeam, usePlay, useTeamValues } from "../context/playContext";
+import { Icon } from "../../common/components/Icon";
 import { Dialog } from "../../common/components/Dialog";
+import { ScenarioNameTextField } from "./SynthesisContent.styles";
+import { emphasizeText } from "../../common/utils";
 
-export { SynthesisContent };
+export { SynthesisScenarioName, SynthesisBudget, SynthesisCarbon };
 
-function SynthesisContent() {
-  const {
-    updatePlayerActions,
-    actionPointsLimitExceeded,
-    setActionPointsLimitExceeded,
-  } = usePlay();
-  const {
-    actionPointsAvailableAtCurrentStep,
-    playerActionsAtCurrentStep: playerActions,
-  } = usePlayerActions();
+function SynthesisScenarioName() {
+  const theme = useTheme();
+  const team = useMyTeam();
 
-  const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
-    setActionPointsLimitExceeded(false);
-    updatePlayerActions(
-      playerActions.map((pa) => ({
-        id: pa.id,
-        isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,
-      }))
-    );
+  const { updateScenarioName } = usePlay();
+
+  const [value, setValue] = useState(team?.scenarioName);
+  const [openHelp, setOpenHelp] = useState(false);
+
+  const handleValidateScenarioName = () => {
+    updateScenarioName({ teamId: team?.id, scenarioName: value });
+  };
+
+  const handleChange = (e: any) => {
+    setValue(e.target.value);
   };
 
   return (
-    <Box>
-      {playerActions.map((playerAction) => {
-        return (
-          <ActionLayout
-            key={playerAction.id}
-            playerAction={playerAction}
-            onPlayerActionChanged={(isPerformed) =>
-              handleActionChange(playerAction.id, isPerformed)
-            }
-            helpCardLink={playerAction.action.helpCardLink}
-          />
-        );
-      })}
-
-      <Dialog
-        open={actionPointsLimitExceeded}
-        handleClose={() => setActionPointsLimitExceeded(false)}
-        actions={
+    <Box display="flex" flexDirection="column" width="80%" gap={3}>
+      <Typography sx={{ fontSize: "20px", fontWeight: "600" }}>
+        <Icon name="team" /> Nom du scénario
+        <IconButton
+          aria-label="help with current step"
+          onClick={() => setOpenHelp(true)}
+        >
+          <Icon name="helper" sx={{ color: "white" }} />
+        </IconButton>
+        <Dialog open={openHelp} handleClose={() => setOpenHelp(false)}>
           <>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => setActionPointsLimitExceeded(false)}
-            >
-              Fermer
-            </Button>
+            <Typography>
+              Donnez un nom à votre scénario pour le futur énergétique de la
+              France.
+            </Typography>
+            <br />
+            <Typography>
+              Veuillez choisir une personne qui éditera le nom pour l’ensemble
+              de l'équipe.
+            </Typography>
           </>
-        }
+        </Dialog>
+      </Typography>
+      <ScenarioNameTextField
+        sx={{ textAlign: "center" }}
+        id="outlined-basic"
+        label="Nom du scénario"
+        variant="outlined"
+        value={value}
+        onChange={handleChange}
+      />
+      <Button
+        sx={{
+          textAlign: "center",
+          border: `2px solid ${theme.palette.secondary.main}`,
+        }}
+        color="primary"
+        variant="contained"
+        onClick={handleValidateScenarioName}
+        type="button"
       >
-        <Typography>
-          Tu ne peux pas effectuer cette action car tu as dépassé le nombre
-          maximum de {actionPointsAvailableAtCurrentStep} points d'action
-          autorisé à ce tour.
-        </Typography>
-        <br />
-        <Typography>
-          Si tu n'es pas encore satisfait(e) de tes choix, tu peux les modifier
-          jusqu'à la fin du tour.
-        </Typography>
-      </Dialog>
+        <Icon name="check-doubled" />
+        <Typography ml={1}>Valider pour l'équipe</Typography>
+      </Button>
     </Box>
   );
 }
 
-const CustomCheckbox = styled(Checkbox)(() => ({
-  path: {
-    color: "#C4C4C4",
-  },
-}));
+function SynthesisBudget() {
+  const team = useMyTeam();
+  const teamValues = useTeamValues();
+  const teamBudget = teamValues.find((t) => t.id === team?.id)?.budget || 0;
+  const daysTo2050 = Math.round(
+    DateTime.fromISO("2050-01-01T12:00").diff(DateTime.now(), ["days"]).days
+  );
 
-function ActionLayout({
-  playerAction,
-  onPlayerActionChanged,
-  helpCardLink,
-}: {
-  playerAction: PlayerActions;
-  onPlayerActionChanged: (isPerformed: boolean) => void;
-  helpCardLink: string;
-}) {
-  const [openHelp, setOpenHelp] = useState(false);
-
-  const handleClickOpenHelp = () => setOpenHelp(true);
-  const handleCloseHelp = () => setOpenHelp(false);
-
-  const handleActionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onPlayerActionChanged(event.target.checked);
-  };
-
-  const helpMessage =
-    "Voici le lien vers une carte qui te permettra de mieux comprendre les implications de ce choix";
+  const budgetSpentPersonal = (13.7 - teamBudget) * daysTo2050;
+  const budgetSpentTotal = budgetSpentPersonal * 0.0065;
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        marginBottom: 2,
-        padding: 1,
-        borderRadius: 1,
-        border: `2px solid white`,
-      }}
-    >
-      <Box>
-        <Typography alignItems="center" display="flex" variant="h6">
-          <IconButton
-            aria-label="help with current step"
-            sx={{ paddingLeft: 0 }}
-            onClick={handleClickOpenHelp}
-          >
-            <InfoIcon sx={{ marginRight: 1, color: "white" }} />
-          </IconButton>
-          <ActionHelpDialog
-            open={openHelp}
-            handleClose={handleCloseHelp}
-            message={helpMessage}
-            helpCardLink={helpCardLink}
-          />
-          {playerAction.action.description}
-        </Typography>
-        <Box sx={{ gap: 2 }} display="flex" alignItems="center" mt={1}>
-          <Box sx={{ gap: 1 }} display="flex" alignItems="center">
-            Coût :
-            <Rating
-              name="action-points-cost"
-              readOnly
-              max={3}
-              value={playerAction.action.actionPointCost}
-            />
-          </Box>
-          <Box sx={{ gap: 1 }} display="flex" alignItems="center">
-            <PaidIcon />
-            {`${playerAction.action.financialCost}€/j`}
-          </Box>
-        </Box>
-      </Box>
+    <Box display="flex" flexDirection="column" gap={3}>
+      <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
+        <Icon name="bill" /> Synthèse du budget
+      </Typography>
+      <Typography sx={{ fontSize: "14px" }} ml={4}>
+        En moyenne, vous aurez dépensé{" "}
+        {emphasizeText(budgetSpentPersonal.toFixed(0))} € par personne d'ici
+        2050
+      </Typography>
+      <Typography sx={{ fontSize: "14px" }} ml={4}>
+        Ce qui représente un coût total de{" "}
+        {emphasizeText(budgetSpentTotal.toFixed(0))} md€ pour la France entre
+        2020 et 2050
+      </Typography>
+    </Box>
+  );
+}
 
-      <Spacer />
+function SynthesisCarbon() {
+  const team = useMyTeam();
+  const teamValues = useTeamValues();
+  const carbonFootprintPersonal =
+    (teamValues.find((t) => t.id === team?.id)?.carbonFootprint || 0) * 0.365;
+  const carbonFootprintReduction = (1 - carbonFootprintPersonal / 11.9) * 100;
 
-      <CustomCheckbox
-        checked={playerAction.isPerformed}
-        onChange={handleActionChange}
-        inputProps={{ "aria-label": "controlled" }}
-      />
+  return (
+    <Box display="flex" flexDirection="column" gap={3}>
+      <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
+        <Icon name="water" /> Bilan carbone
+      </Typography>
+      <Typography sx={{ fontSize: "14px" }} ml={4}>
+        Suite à vos choix l'empreinte carbone est de{" "}
+        {emphasizeText(carbonFootprintPersonal.toFixed(1))} tonnes/an/personne
+      </Typography>
+      <Typography sx={{ fontSize: "14px" }} ml={4}>
+        Ce qui correspond à une {emphasizeText("baisse")} de{" "}
+        {emphasizeText(carbonFootprintReduction.toFixed(1))}%
+      </Typography>
     </Box>
   );
 }

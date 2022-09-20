@@ -1,11 +1,7 @@
 import { Box, Grid, useTheme } from "@mui/material";
-import range from "lodash/range";
-import sum from "lodash/sum";
 import { PlayBox } from "../Components";
-import { usePersonaByUserId, usePlay } from "../context/playContext";
+import { usePlay, useTeamValues } from "../context/playContext";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
-import { sumAllValues } from "../../persona";
-import { IGame, ITeamWithPlayers } from "../../../utils/types";
 import { Typography } from "../../common/components/Typography";
 import { Icon } from "../../common/components/Icon";
 import {
@@ -14,8 +10,6 @@ import {
   formatPoints,
 } from "../../../lib/formatter";
 import { Spacer } from "../../common/components/Spacer";
-import { GameStepType, getCurrentStep, isStepOfType } from "../constants";
-import { mean } from "../../../lib/math";
 
 export { StatsConsole };
 
@@ -86,7 +80,7 @@ function StatsConsole() {
             alignItems="center"
           >
             <Typography mb={1} variant="h5">
-              <Icon sx={{ mr: 1 }} name="carbon-footprint" /> CO2 (T/an)
+              <Icon sx={{ mr: 1 }} name="carbon-footprint" /> CO2 (kg/j)
             </Typography>
             {game.teams.map((team) => (
               <Box key={team.id} display="flex" gap={1} alignSelf="stretch">
@@ -97,7 +91,7 @@ function StatsConsole() {
                   {formatCarbonFootprint(
                     teamIdToTeamValues[team.id].carbonFootprint || 0
                   )}{" "}
-                  T/an
+                  kg/j
                 </Typography>
               </Box>
             ))}
@@ -111,7 +105,7 @@ function StatsConsole() {
             alignItems="center"
           >
             <Typography mb={1} variant="h5">
-              <Icon sx={{ mr: 1 }} name="budget" /> Budget (€/J)
+              <Icon sx={{ mr: 1 }} name="budget" /> Budget (€/j)
             </Typography>
             {game.teams.map((team) => (
               <Box key={team.id} display="flex" gap={1} alignSelf="stretch">
@@ -119,7 +113,7 @@ function StatsConsole() {
                 <Typography>{team.name}</Typography>
                 <Spacer />
                 <Typography>
-                  {formatBudget(teamIdToTeamValues[team.id].budget)} €/J
+                  {formatBudget(teamIdToTeamValues[team.id].budget)} €/j
                 </Typography>
               </Box>
             ))}
@@ -127,84 +121,5 @@ function StatsConsole() {
         </Grid>
       </Grid>
     </Box>
-  );
-}
-
-function useTeamValues() {
-  const { game } = usePlay();
-  const userIds: number[] = [];
-  game.teams.map((team) =>
-    team.players.map(({ user }) => userIds.push(user?.id))
-  );
-  const personaByUserId = usePersonaByUserId(userIds);
-
-  return game.teams.map((team) => ({
-    id: team.id,
-    playerCount: team.players.length,
-    points: mean(
-      team.players.map(
-        ({ userId }) => personaByUserId[userId].currentPersona.points
-      )
-    ),
-    budget: mean(
-      team.players.map(
-        ({ userId }) => personaByUserId[userId].currentPersona.budget
-      )
-    ),
-    carbonFootprint: mean(
-      team.players.map(
-        ({ userId }) => personaByUserId[userId].currentPersona.carbonFootprint
-      )
-    ),
-    stepToConsumption: buildStepToData(
-      "consumption",
-      game,
-      team,
-      personaByUserId
-    ),
-    stepToProduction: buildStepToData(
-      "production",
-      game,
-      team,
-      personaByUserId
-    ),
-  }));
-}
-
-function buildStepToData(
-  dataType: GameStepType,
-  game: IGame,
-  team: ITeamWithPlayers,
-  personaByUserId: ReturnType<typeof usePersonaByUserId>
-) {
-  return Object.fromEntries(
-    range(0, getCurrentStep(game) + 1)
-      .filter((step) => isStepOfType(step, dataType))
-      .map((step: number) => [
-        step,
-        buildStepData(dataType, step, team, personaByUserId),
-      ])
-  );
-}
-
-function buildStepData(
-  dataType: GameStepType,
-  step: number,
-  team: ITeamWithPlayers,
-  personaByUserId: ReturnType<typeof usePersonaByUserId>
-) {
-  const scaleFactor = dataType === "consumption" ? team.players.length || 1 : 1;
-
-  return (
-    sum(
-      team.players
-        .map(
-          ({ user }) =>
-            personaByUserId[user.id].getPersonaAtStep(step)[dataType]
-        )
-        .map((data) =>
-          parseInt(sumAllValues(data as { type: string; value: number }[]))
-        )
-    ) / scaleFactor
   );
 }

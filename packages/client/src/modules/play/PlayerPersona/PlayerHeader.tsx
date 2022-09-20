@@ -75,11 +75,11 @@ function PlayerHeader() {
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <Icon name="paid" sx={{ mr: 1 }} />{" "}
-            {(latestPersona.budget || 0).toFixed(2)} €/J
+            {(latestPersona.budget || 0).toFixed(2)} €/j
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <Icon name="water" sx={{ mr: 1 }} />{" "}
-            {currentPersona.carbonFootprint || 0} T/an
+            {currentPersona.carbonFootprint || 0} kg/j
           </Typography>
         </Grid>
         <Grid
@@ -113,7 +113,7 @@ function PlayerHeader() {
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
                   <Icon name="water" sx={{ mr: 1 }} />
                   <br />
-                  CO2 produit en Tonnes par an
+                  CO2 produit en kilogrammes par jour
                 </Typography>
               </Box>
             }

@@ -5,6 +5,7 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
+import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
 
 import Cancel from "@mui/icons-material/Cancel";
 import Cloud from "@mui/icons-material/Cloud";
@@ -16,6 +17,7 @@ import Factory from "@mui/icons-material/Factory";
 import FlashOn from "@mui/icons-material/FlashOn";
 import Groups from "@mui/icons-material/Groups";
 import HowToReg from "@mui/icons-material/HowToReg";
+import HelpIcon from "@mui/icons-material/Help";
 import Info from "@mui/icons-material/Info";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import Paid from "@mui/icons-material/Paid";
@@ -31,12 +33,17 @@ export { Icon };
 
 const ICONS = {
   "action-points": DirectionsBike,
-  budget: Paid,
+  "arrow-forward": ArrowForwardIosIcon,
   "bar-chart": BarChartRoundedIcon,
+  bill: PaymentsRoundedIcon,
+  budget: Paid,
   "carbon-footprint": Cloud,
-  consumption: ShoppingCart,
   "check-circle": CheckCircle,
   "check-doubled": DoneAll,
+  consumption: ShoppingCart,
+  "emoji-events": EmojiEventsRoundedIcon,
+  factory: FactoryRoundedIcon,
+  helper: HelpIcon,
   information: Info,
   "mark-circle": Cancel,
   "open-in-new-tab": OpenInNew,
@@ -46,16 +53,13 @@ const ICONS = {
   power: FlashOn,
   production: Factory,
   shopping: ShoppingCartRoundedIcon,
-  factory: FactoryRoundedIcon,
-  "emoji-events": EmojiEventsRoundedIcon,
-  "arrow-forward": ArrowForwardIosIcon,
   star: Star,
+  synthesis: AutoGraphRoundedIcon,
   team: Groups,
   trophy: EmojiEvents,
   "videogame-controller": VideogameAssetRoundedIcon,
   water: WaterRoundedIcon,
   warning: Warning,
-  synthesis: AutoGraphRoundedIcon,
 } as const;
 
 interface IconProps extends SvgIconProps {

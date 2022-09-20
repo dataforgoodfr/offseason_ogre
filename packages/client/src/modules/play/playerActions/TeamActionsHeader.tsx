@@ -1,11 +1,11 @@
 import { IconButton } from "@mui/material";
-import HelpIcon from "@mui/icons-material/Help";
 import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
 import { useTeamActions } from "../context/playContext";
 import { Dialog } from "../../common/components/Dialog";
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
+import { Icon } from "../../common/components/Icon";
 
 export { TeamActionsHeader };
 
@@ -23,7 +23,7 @@ function TeamActionsHeader() {
             aria-label="help with current step"
             onClick={() => setOpenHelp(true)}
           >
-            <HelpIcon sx={{ color: "white" }} />
+            <Icon name="helper" sx={{ color: "white" }} />
           </IconButton>
         }
       />

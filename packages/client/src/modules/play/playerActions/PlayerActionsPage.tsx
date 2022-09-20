@@ -6,7 +6,11 @@ import { useCurrentStep } from "../context/playContext";
 import { PlayBox } from "../Components";
 import { TeamActionsHeader } from "./TeamActionsHeader";
 import { TeamActionsContent } from "./TeamActionsContent";
-import { SynthesisContent } from "./SynthesisContent";
+import {
+  SynthesisScenarioName,
+  SynthesisBudget,
+  SynthesisCarbon,
+} from "./SynthesisContent";
 import { PlayerActionsContent } from "./PlayerActionsContent";
 import { PlayerActionsHeader } from "./PlayerActionsHeader";
 
@@ -45,7 +49,9 @@ function SynthesisLayout() {
           }}
         >
           <PlayBox display="flex" flexDirection="column" gap={4}>
-            <SynthesisContent />
+            <SynthesisScenarioName />
+            <SynthesisBudget />
+            <SynthesisCarbon />
           </PlayBox>
         </Grid>
       </Grid>
