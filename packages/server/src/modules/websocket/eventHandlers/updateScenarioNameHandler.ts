@@ -49,8 +49,8 @@ async function handleUpdateHasFinishedStepSafely(
       );
 
       const game = await gameServices.getDocument(gameId);
-      io.to(rooms.team(gameId, updatedTeam.id)).emit("playerUpdated", {
-        update: { team: { scenarioName } },
+      io.to(rooms.team(gameId, updatedTeam.id)).emit("teamUpdated", {
+        update: { scenarioName },
       });
       io.to(rooms.teachers(gameId)).emit("gameUpdated", {
         update: game,

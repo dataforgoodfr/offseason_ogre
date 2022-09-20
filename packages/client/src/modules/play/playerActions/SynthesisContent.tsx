@@ -68,6 +68,7 @@ function SynthesisScenarioName() {
         }}
         color="primary"
         variant="contained"
+        disabled={!value}
         onClick={handleValidateScenarioName}
         type="button"
       >

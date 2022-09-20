@@ -72,6 +72,10 @@ interface PlayerState {
   teamActions: TeamAction[];
 }
 
+interface TeamState {
+  scenarioName: string;
+}
+
 const PlayContext = React.createContext<IPlayContext | null>(null);
 
 function RootPlayProvider({ children }: { children: React.ReactNode }) {
@@ -98,12 +102,16 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     hasFinishedStep: true,
     teamActions: [],
   });
+  const [team, setTeam] = useState<TeamState>({
+    scenarioName: "",
+  });
   const { socket } = useGameSocket({
     gameId,
     setGameWithTeams,
     setPlayerActions,
     setActionPointsLimitExceeded,
     setPlayer,
+    setTeam,
   });
 
   if (gameWithTeams === null || socket === null) {
@@ -319,12 +327,14 @@ function useGameSocket({
   setPlayerActions,
   setActionPointsLimitExceeded,
   setPlayer,
+  setTeam,
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
   setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
   setActionPointsLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>;
   setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
+  setTeam: React.Dispatch<React.SetStateAction<TeamState>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   useEffect(() => {
@@ -360,6 +370,13 @@ function useGameSocket({
       }
     );
 
+    newSocket.on(
+      "teamUpdated",
+      ({ update }: { update: Partial<TeamState> }) => {
+        setTeam((previous) => ({ ...previous, ...update }));
+      }
+    );
+
     newSocket.on("connect", () => {
       newSocket.emit("joinGame", gameId);
     });
@@ -375,6 +392,7 @@ function useGameSocket({
     setPlayerActions,
     setActionPointsLimitExceeded,
     setPlayer,
+    setTeam,
   ]);
   return { socket };
 }
