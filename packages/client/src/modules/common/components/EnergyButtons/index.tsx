@@ -2,7 +2,7 @@ import { Box, Button, useTheme, Tooltip } from "@mui/material";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { Persona } from "../../../persona/persona";
 import { translateName } from "../../../translations";
-import { roundValue } from "../../utils";
+import { hasNuclear, roundValue } from "../../utils";
 import { usePlay } from "../../../play/context/playContext";
 
 export { EnergyConsumptionButtons, EnergyProductionButtons };
@@ -59,7 +59,7 @@ function EnergyProductionButtons({ persona }: { persona: Persona }) {
     },
   ];
 
-  if (game.step >= 5) {
+  if (hasNuclear(game)) {
     energies.push({
       color: theme.palette.production.nuclear,
       name: "Nucléaire",

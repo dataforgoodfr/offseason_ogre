@@ -1,6 +1,6 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
-export type { ThemeVariant };
+export type { ThemeVariant, EnergyPalette, ProductionPalette };
 export { theme };
 
 type ThemeVariant = "light" | "dark" | "system";

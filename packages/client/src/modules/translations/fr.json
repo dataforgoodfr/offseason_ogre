@@ -61,7 +61,7 @@
 
   "production.energy.nuclear.name": "Nucléaire",
   "production.energy.nuclear.accordion.title": "Nucléaire",
-  "production.energy.nuclear.accordion.label-slider": "Comparaison par rapport à l'existant (100% = installation actuelle)",
+  "production.energy.nuclear.accordion.label-slider": "Comparaison par rapport à l'existant (installation actuelle = 100%)",
   "production.energy.nuclear.value.not-credible": "Votre hypothèse dépasse largement les scénarios RTE en matière de capacité installée en 2050.",
   "production.energy.nuclear.graph.name": "Nucléaire",
 

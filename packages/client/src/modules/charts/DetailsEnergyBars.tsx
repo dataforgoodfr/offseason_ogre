@@ -8,7 +8,9 @@ import {
   Tooltip,
   Cell,
 } from "recharts";
-import { roundValue } from "../common/utils";
+import { EnergyPalette, ProductionPalette } from "../../utils/theme";
+import { hasNuclear, roundValue } from "../common/utils";
+import { ConsumptionDatum } from "../persona/consumption";
 import { Persona } from "../persona/persona";
 import { ProductionDatum } from "../persona/production";
 import { productionNames } from "../play";
@@ -18,37 +20,39 @@ import { translateName } from "../translations";
 export { DetailsEnergyConsumptionBars, DetailsEnergyProductionBars };
 
 function DetailsEnergyConsumptionBars({ persona }: { persona: Persona }) {
-  return DetailsEnergyBars("consumption", persona);
+  const theme = useTheme();
+  return DetailsEnergyBars(
+    "consumption",
+    persona.consumption,
+    theme.palette.energy
+  );
 }
 
 function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
-  return DetailsEnergyBars("production", persona);
-}
-
-function getPersonaValues(energyType: string, persona: Persona, step: number) {
-  if (energyType === "consumption") {
-    return persona.consumption;
-  }
-
-  if (step < 5) {
-    return persona.production.filter(
-      (prod: ProductionDatum) => prod.type !== productionNames.NUCLEAR
-    );
-  }
-  return persona.production;
-}
-
-function DetailsEnergyBars(energyType: string, persona: Persona) {
   const theme = useTheme();
   const { game } = usePlay();
 
-  const personaValues = getPersonaValues(energyType, persona, game.step);
+  const personaValues = persona.production.filter(
+    ({ type }: ProductionDatum) => {
+      if (!hasNuclear(game) && type === productionNames.NUCLEAR) {
+        return false;
+      }
+      return true;
+    }
+  );
 
-  const palette =
-    energyType === "consumption"
-      ? theme.palette.energy
-      : theme.palette.production;
+  return DetailsEnergyBars(
+    "production",
+    personaValues,
+    theme.palette.production
+  );
+}
 
+function DetailsEnergyBars(
+  energyType: string,
+  personaValues: readonly ConsumptionDatum[] | ProductionDatum[],
+  color: EnergyPalette | ProductionPalette
+) {
   return (
     <Card
       sx={{
@@ -86,7 +90,7 @@ function DetailsEnergyBars(energyType: string, persona: Persona) {
             return (
               <Cell
                 key={`cell-${name}`}
-                fill={(palette as any)[type] || "blue"}
+                fill={(color as any)[type] || "blue"}
               />
             );
           })}
