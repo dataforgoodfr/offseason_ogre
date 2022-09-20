@@ -2,13 +2,14 @@ import Button from "@mui/material/Button";
 import { Box, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
-import { DateTime } from "luxon";
 import { Typography } from "../../common/components/Typography";
 import { useMyTeam, usePlay, useTeamValues } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
 import { Dialog } from "../../common/components/Dialog";
 import { ScenarioNameTextField } from "./SynthesisContent.styles";
 import { emphasizeText } from "../../common/utils";
+import { synthesisConstants } from "./constants/synthesis";
+import { differenceInDays } from "date-fns";
 
 export { SynthesisScenarioName, SynthesisBudget, SynthesisCarbon };
 
@@ -68,6 +69,7 @@ function SynthesisScenarioName() {
         }}
         color="primary"
         variant="contained"
+        disabled={!value}
         onClick={handleValidateScenarioName}
         type="button"
       >
@@ -83,11 +85,14 @@ function SynthesisBudget() {
   const teamValues = useTeamValues();
   const teamBudget = teamValues.find((t) => t.id === team?.id)?.budget || 0;
   const daysTo2050 = Math.round(
-    DateTime.fromISO("2050-01-01T12:00").diff(DateTime.now(), ["days"]).days
+    differenceInDays(new Date("01/01/2050"), new Date())
   );
 
-  const budgetSpentPersonal = (13.7 - teamBudget) * daysTo2050;
-  const budgetSpentTotal = budgetSpentPersonal * 0.0065;
+  const budgetSpentPersonal =
+    (synthesisConstants.INITIAL_AVAILABLE_BUDGET - teamBudget) * daysTo2050;
+  const budgetSpentTotalFrance =
+    (budgetSpentPersonal * synthesisConstants.FRANCE_POPULATION) /
+    synthesisConstants.MILLIARD;
 
   return (
     <Box display="flex" flexDirection="column" gap={3}>
@@ -101,8 +106,8 @@ function SynthesisBudget() {
       </Typography>
       <Typography sx={{ fontSize: "14px" }} ml={4}>
         Ce qui représente un coût total de{" "}
-        {emphasizeText(budgetSpentTotal.toFixed(0))} md€ pour la France entre
-        2020 et 2050
+        {emphasizeText(budgetSpentTotalFrance.toFixed(0))} md€ pour la France
+        entre 2020 et 2050
       </Typography>
     </Box>
   );
@@ -112,13 +117,19 @@ function SynthesisCarbon() {
   const team = useMyTeam();
   const teamValues = useTeamValues();
   const carbonFootprintPersonal =
-    (teamValues.find((t) => t.id === team?.id)?.carbonFootprint || 0) * 0.365;
-  const carbonFootprintReduction = (1 - carbonFootprintPersonal / 11.9) * 100;
+    (teamValues.find((t) => t.id === team?.id)?.carbonFootprint || 0) *
+    synthesisConstants.DAYS_IN_YEAR *
+    synthesisConstants.KG_TO_TON;
+  const carbonFootprintReduction =
+    (1 -
+      carbonFootprintPersonal /
+        synthesisConstants.OILGRE_PERSONA_CARBON_FOOTPRINT) *
+    100;
 
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
-        <Icon name="water" /> Bilan carbone
+        <Icon name="carbon-footprint" /> Bilan carbone
       </Typography>
       <Typography sx={{ fontSize: "14px" }} ml={4}>
         Suite à vos choix l'empreinte carbone est de{" "}

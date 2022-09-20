@@ -6,7 +6,7 @@ type Model = Team;
 
 export { services };
 
-const crudServices = { create, getMany, get, updateScenarioName };
+const crudServices = { create, getMany, get, update };
 
 const services = { ...crudServices };
 
@@ -24,14 +24,12 @@ async function get(id: number): Promise<Model | null> {
   return model.findUnique({ where: { id } });
 }
 
-async function updateScenarioName(
+async function update(
   teamId: number,
-  scenarioName: string
+  document: Partial<Omit<Model, "id">>
 ): Promise<Model> {
   return model.update({
     where: { id: teamId },
-    data: {
-      scenarioName,
-    },
+    data: document,
   });
 }

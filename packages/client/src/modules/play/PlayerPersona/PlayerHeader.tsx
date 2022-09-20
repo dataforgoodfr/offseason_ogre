@@ -53,7 +53,7 @@ function PlayerHeader() {
         >
           <GameStepper step={game.step} />
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {currentPersona.points || 0} <Icon name="emoji-events" />
+            {currentPersona.points || 0} <Icon name="trophy" />
           </Typography>
         </Grid>
         <Grid
@@ -66,19 +66,19 @@ function PlayerHeader() {
           }}
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="factory" sx={{ mr: 1 }} />{" "}
+            <Icon name="production" sx={{ mr: 1 }} />{" "}
             {sumAllValues(currentPersona.production) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="shopping" sx={{ mr: 1 }} />{" "}
+            <Icon name="consumption" sx={{ mr: 1 }} />{" "}
             {sumAllValues(currentPersona.consumption) || 0} kWh
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="paid" sx={{ mr: 1 }} />{" "}
+            <Icon name="budget" sx={{ mr: 1 }} />{" "}
             {(latestPersona.budget || 0).toFixed(2)} €/j
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="water" sx={{ mr: 1 }} />{" "}
+            <Icon name="carbon-footprint" sx={{ mr: 1 }} />{" "}
             {currentPersona.carbonFootprint || 0} kg/j
           </Typography>
         </Grid>
@@ -96,22 +96,22 @@ function PlayerHeader() {
             {
               <Box>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="factory" sx={{ mr: 1 }} />
+                  <Icon name="production" sx={{ mr: 1 }} />
                   <br />
                   Production en kiloWattheures
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="shopping" sx={{ mr: 1 }} />
+                  <Icon name="consumption" sx={{ mr: 1 }} />
                   <br />
                   Consommation en kiloWattheures
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="paid" sx={{ mr: 1 }} />
+                  <Icon name="budget" sx={{ mr: 1 }} />
                   <br />
                   Budget en euro à dépenser par jour
                 </Typography>
                 <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="water" sx={{ mr: 1 }} />
+                  <Icon name="carbon-footprint" sx={{ mr: 1 }} />
                   <br />
                   CO2 produit en kilogrammes par jour
                 </Typography>

@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { safe } from "../../../lib/fp";
 import { services as gameServices } from "../../games/services";
 import { services as teamServices } from "../../teams/services";
 import { rooms } from "../constants";
@@ -22,40 +21,33 @@ async function handleUpdateHasFinishedStepSafely(
   socket: Socket,
   args: unknown
 ) {
-  await safe(
-    async () => {
-      const schema = z.object({
-        gameId: z.number(),
-        teamId: z.number(),
-        scenarioName: z.string(),
-      });
-      const { gameId, teamId, scenarioName } = schema.parse(args);
+  const schema = z.object({
+    gameId: z.number(),
+    teamId: z.number(),
+    scenarioName: z.string(),
+  });
+  const { gameId, teamId, scenarioName } = schema.parse(args);
 
-      const { user } = socket.data;
-      if (!user) {
-        throw new Error(`User not authenticated`);
-      }
+  const { user } = socket.data;
+  if (!user) {
+    throw new Error(`User not authenticated`);
+  }
 
-      const team = await teamServices.get(teamId);
-      if (!team) {
-        throw new Error(
-          `Could not find team for gameId ${gameId} and teamId ${teamId}`
-        );
-      }
+  const team = await teamServices.get(teamId);
+  if (!team) {
+    throw new Error(
+      `Could not find team for gameId ${gameId} and teamId ${teamId}`
+    );
+  }
 
-      const updatedTeam = await teamServices.updateScenarioName(
-        teamId,
-        scenarioName
-      );
+  const updatedTeam = await teamServices.update(teamId, { scenarioName });
 
-      const game = await gameServices.getDocument(gameId);
-      io.to(rooms.team(gameId, updatedTeam.id)).emit("playerUpdated", {
-        update: { team: { scenarioName } },
-      });
-      io.to(rooms.teachers(gameId)).emit("gameUpdated", {
-        update: game,
-      });
-    },
-    { logError: true }
-  );
+  const game = await gameServices.getDocument(gameId);
+
+  io.to(rooms.teachers(gameId)).emit("gameUpdated", {
+    update: game,
+  });
+  io.to(rooms.team(gameId, updatedTeam.id)).emit("gameUpdated", {
+    update: game,
+  });
 }

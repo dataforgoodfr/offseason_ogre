@@ -1,9 +1,4 @@
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import EmojiEventsRoundedIcon from "@mui/icons-material/EmojiEventsRounded";
-import FactoryRoundedIcon from "@mui/icons-material/FactoryRounded";
-import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
-import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
-import WaterRoundedIcon from "@mui/icons-material/WaterRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
 
@@ -41,24 +36,19 @@ const ICONS = {
   "check-circle": CheckCircle,
   "check-doubled": DoneAll,
   consumption: ShoppingCart,
-  "emoji-events": EmojiEventsRoundedIcon,
-  factory: FactoryRoundedIcon,
   helper: HelpIcon,
   information: Info,
   "mark-circle": Cancel,
   "open-in-new-tab": OpenInNew,
   "player-finished": HowToReg,
-  paid: PaidRoundedIcon,
   player: Person,
   power: FlashOn,
   production: Factory,
-  shopping: ShoppingCartRoundedIcon,
   star: Star,
   synthesis: AutoGraphRoundedIcon,
   team: Groups,
   trophy: EmojiEvents,
   "videogame-controller": VideogameAssetRoundedIcon,
-  water: WaterRoundedIcon,
   warning: Warning,
 } as const;
 
