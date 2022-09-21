@@ -10,7 +10,7 @@ import { ScenarioNameTextField } from "./SynthesisContent.styles";
 import { emphasizeText } from "../../common/utils";
 import { synthesisConstants } from "./constants/synthesis";
 import { differenceInDays } from "date-fns";
-import { persona as initialPersona, persona } from "../../persona/persona";
+import { persona as initialPersona } from "../../persona/persona";
 
 export { SynthesisScenarioName, SynthesisBudget, SynthesisCarbon };
 
