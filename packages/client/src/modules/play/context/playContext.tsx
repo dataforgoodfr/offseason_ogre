@@ -59,9 +59,6 @@ interface IPlayContext {
       id: number;
       value: number;
     }[];
-  }) => void;
-  updateScenarioName: (options: {
-    teamId?: number;
     scenarioName?: string;
   }) => void;
 }
@@ -139,27 +136,20 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     socket.emit("updatePlayer", { gameId, hasFinishedStep });
   };
 
-  const updateScenarioName = ({
-    teamId,
-    scenarioName,
-  }: {
-    teamId?: number;
-    scenarioName?: string;
-  }) => {
-    socket.emit("updateScenarioName", { gameId, teamId, scenarioName });
-  };
-
   const updateTeam = ({
     teamActions,
+    scenarioName,
   }: {
     teamActions?: {
       id: number;
       value: number;
     }[];
+    scenarioName?: string;
   }) => {
     socket.emit("updateTeam", {
       step: gameWithTeams.step,
       teamActions,
+      scenarioName,
     });
   };
 
@@ -175,7 +165,6 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         player,
         updatePlayer,
         updateTeam,
-        updateScenarioName,
       }}
     >
       {children}

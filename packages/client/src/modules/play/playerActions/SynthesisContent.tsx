@@ -10,6 +10,7 @@ import { ScenarioNameTextField } from "./SynthesisContent.styles";
 import { emphasizeText } from "../../common/utils";
 import { synthesisConstants } from "./constants/synthesis";
 import { differenceInDays } from "date-fns";
+import { persona as initialPersona, persona } from "../../persona/persona";
 
 export { SynthesisScenarioName, SynthesisBudget, SynthesisCarbon };
 
@@ -17,13 +18,13 @@ function SynthesisScenarioName() {
   const theme = useTheme();
   const team = useMyTeam();
 
-  const { updateScenarioName } = usePlay();
+  const { updateTeam } = usePlay();
 
   const [value, setValue] = useState(team?.scenarioName);
   const [openHelp, setOpenHelp] = useState(false);
 
   const handleValidateScenarioName = () => {
-    updateScenarioName({ teamId: team?.id, scenarioName: value });
+    updateTeam({ scenarioName: value });
   };
 
   const handleChange = (e: any) => {
@@ -88,8 +89,7 @@ function SynthesisBudget() {
     differenceInDays(new Date("01/01/2050"), new Date())
   );
 
-  const budgetSpentPersonal =
-    (synthesisConstants.INITIAL_AVAILABLE_BUDGET - teamBudget) * daysTo2050;
+  const budgetSpentPersonal = (initialPersona.budget - teamBudget) * daysTo2050;
   const budgetSpentTotalFrance =
     (budgetSpentPersonal * synthesisConstants.FRANCE_POPULATION) /
     synthesisConstants.MILLIARD;
@@ -120,11 +120,14 @@ function SynthesisCarbon() {
     (teamValues.find((t) => t.id === team?.id)?.carbonFootprint || 0) *
     synthesisConstants.DAYS_IN_YEAR *
     synthesisConstants.KG_TO_TON;
+
+  const initialCarbonFootprint =
+    initialPersona.carbonFootprint *
+    synthesisConstants.DAYS_IN_YEAR *
+    synthesisConstants.KG_TO_TON;
+
   const carbonFootprintReduction =
-    (1 -
-      carbonFootprintPersonal /
-        synthesisConstants.OILGRE_PERSONA_CARBON_FOOTPRINT) *
-    100;
+    (1 - carbonFootprintPersonal / initialCarbonFootprint) * 100;
 
   return (
     <Box display="flex" flexDirection="column" gap={3}>
