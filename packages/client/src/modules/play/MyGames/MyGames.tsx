@@ -90,16 +90,15 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {currentGames.length > 0 &&
-        buildGameList(games, "Ateliers en cours", "ready")}
-      {draftGames.length > 0 &&
-        buildGameList(games, "Prochains ateliers", "draft")}
+        buildGameList(currentGames, "Ateliers en cours")}
+      {draftGames.length > 0 && buildGameList(draftGames, "Prochains ateliers")}
       {finishedGames.length > 0 &&
-        buildGameList(games, "Ateliers terminés", "finished")}
+        buildGameList(finishedGames, "Ateliers terminés")}
     </Box>
   );
 }
 
-function buildGameList(games: IGame[], title: string, status: string) {
+function buildGameList(games: IGame[], title: string) {
   return (
     <>
       <Box>
@@ -108,11 +107,9 @@ function buildGameList(games: IGame[], title: string, status: string) {
         </Typography>
       </Box>
       <Box>
-        {games
-          .filter((game) => game.status === status)
-          .map((game) => (
-            <GameItem key={game.id} game={game} />
-          ))}
+        {games.map((game) => (
+          <GameItem key={game.id} game={game} />
+        ))}
       </Box>
     </>
   );
