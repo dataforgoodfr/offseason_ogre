@@ -19,6 +19,7 @@ function TeamConsoleHeader({
   const currentStep = useCurrentStep();
 
   const isProductionStep = currentStep?.type === "production";
+  const isSynthesisStep = currentStep?.id === "final-situation";
 
   return (
     <Grid container justifyContent="space-between" mt={2}>
@@ -33,6 +34,11 @@ function TeamConsoleHeader({
           >
             {isProductionStep ? (
               <TeamProduction
+                team={team}
+                isSelected={team.id === selectedTeamId}
+              />
+            ) : isSynthesisStep ? (
+              <TeamSynthesis
                 team={team}
                 isSelected={team.id === selectedTeamId}
               />
@@ -149,6 +155,60 @@ function TeamConsumption({
             </Tooltip>
           );
         })}
+      </Box>
+    </PlayBox>
+  );
+}
+
+function TeamSynthesis({
+  team,
+  isSelected,
+}: {
+  team: ITeamWithPlayers;
+  isSelected: boolean;
+}) {
+  const theme = useTheme();
+
+  const hasScenarioName = !!team.scenarioName;
+
+  const borderColor = isSelected ? theme.palette.secondary.main : "white";
+  const textColor =
+    isSelected || hasScenarioName ? theme.palette.secondary.main : "white";
+
+  return (
+    <PlayBox
+      display="flex"
+      flexDirection="column"
+      borderColor={borderColor}
+      color={textColor}
+      gap={1}
+    >
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        gap={1}
+        minHeight="24px"
+      >
+        {hasScenarioName ? (
+          <Icon name="check-circle" sx={{ width: 18 }} />
+        ) : (
+          <Icon name="mark-circle" sx={{ width: 18 }} />
+        )}
+        <Typography textAlign="center" variant="h5">
+          {team.name}
+        </Typography>
+      </Box>
+
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        gap={1}
+        minHeight="24px"
+      >
+        <Icon name="team" />
+        <Typography>{hasScenarioName ? 1 : 0}/1</Typography>
       </Box>
     </PlayBox>
   );

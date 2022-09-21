@@ -12,6 +12,8 @@ import { Typography } from "../../common/components/Typography";
 import { formatBudget, formatCarbonFootprint } from "../../../lib/formatter";
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
+import { sumAllValues } from "../../persona";
+import { SynthesisRecap } from "../Components/Synthesis";
 
 export { TeamConsoleContent };
 
@@ -20,22 +22,26 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
   const currentStep = useCurrentStep();
 
   const isProductionStep = currentStep?.type === "production";
+  const isSynthesisStep = currentStep?.id === "final-situation";
 
   const teamActionsAtCurrentStep = getTeamActionsAtCurrentStep(
     game.step,
     team.actions
   );
-  const PlayerComponent = isProductionStep
-    ? PlayerProduction
-    : PlayerConsumption;
+  const PlayerComponent = getPlayerComponent(isProductionStep, isSynthesisStep);
 
   return (
     <PlayBox display="flex" flexDirection="column" gap={3} mt={2} pt={3}>
-      <Typography
-        display="flex"
-        justifyContent="center"
-        variant="h4"
-      >{`Détails ${team.name}`}</Typography>
+      <Typography display="flex" justifyContent="center" variant="h4">
+        {`Détails ${team.name}`}{" "}
+        {team.scenarioName ? ` - ${team.scenarioName}` : ""}
+      </Typography>
+
+      {isSynthesisStep && (
+        <PlayBox>
+          <SynthesisRecap team={team} />
+        </PlayBox>
+      )}
 
       <Box display="grid" gap={2} gridTemplateColumns="1fr 1fr">
         <Box display="flex" flexDirection="column" gap={2}>
@@ -53,6 +59,76 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
             </PlayBox>
           )}
           <PlayerChart team={team} />
+        </Box>
+      </Box>
+    </PlayBox>
+  );
+}
+
+function getPlayerComponent(
+  isProductionStep: boolean,
+  isSynthesisStep: boolean
+) {
+  if (isProductionStep) {
+    return PlayerProduction;
+  } else if (isSynthesisStep) {
+    return PlayerSynthesis;
+  }
+  return PlayerConsumption;
+}
+
+function PlayerSynthesis({ player }: { player: Player }) {
+  const { latestPersona } = usePersonaByUserId(player.userId);
+
+  return (
+    <PlayBox key={player.userId}>
+      <Box display="flex" alignItems="center">
+        <Typography variant="h5">{buildName(player.user)}</Typography>
+      </Box>
+      <Box display="flex" justifyContent="space-evenly" alignItems="center">
+        <Box
+          display="flex"
+          alignItems="center"
+          sx={{ fontSize: "12px", fontWeight: "400", mt: 2 }}
+        >
+          <Icon name="carbon-footprint" sx={{ mr: 1 }} />
+          <Box
+            display="flex"
+            alignItems="center"
+            sx={{ fontSize: "12px", fontWeight: "400" }}
+          >
+            {formatCarbonFootprint(latestPersona.carbonFootprint || 0)} kg/j
+          </Box>
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          sx={{ fontSize: "12px", fontWeight: "400", mt: 2 }}
+        >
+          <Icon name="production" sx={{ mr: 1 }} />
+          <Box display="flex" alignItems="center">
+            {sumAllValues(latestPersona.production) || 0} kWh
+          </Box>
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          sx={{ fontSize: "12px", fontWeight: "400", mt: 2 }}
+        >
+          <Icon name="consumption" sx={{ mr: 1 }} />
+          <Box display="flex" alignItems="center">
+            {sumAllValues(latestPersona.consumption) || 0} kWh
+          </Box>
+        </Box>
+        <Box
+          display="flex"
+          alignItems="center"
+          sx={{ fontSize: "12px", fontWeight: "400", mt: 2 }}
+        >
+          <Icon name="budget" sx={{ mr: 1 }} />
+          <Box display="flex" alignItems="center">
+            {formatBudget(latestPersona.budget || 0)} €/j
+          </Box>
         </Box>
       </Box>
     </PlayBox>

@@ -10,6 +10,10 @@ import {
   formatPoints,
 } from "../../../lib/formatter";
 import { Spacer } from "../../common/components/Spacer";
+import { STEPS } from "../constants";
+import { synthesisConstants } from "../playerActions/constants/synthesis";
+import { persona as initialPersona } from "../../persona/persona";
+import { getDaysTo2050 } from "../utils/time";
 
 export { StatsConsole };
 
@@ -21,6 +25,39 @@ function StatsConsole() {
   const teamIdToTeamValues = Object.fromEntries(
     teamsValues.map((teamValues) => [teamValues.id, teamValues])
   );
+
+  const isSynthesisStep = game.step === STEPS.length - 1;
+
+  const smallScreenSize = isSynthesisStep ? 2.5 : 3;
+  const budgetUnit = isSynthesisStep ? "Mrd€" : "€/j";
+  const carbonFootprintUnit = isSynthesisStep ? "T/an" : "kg/j";
+
+  function computeBudget(isSynthesisStep: boolean, budget: number) {
+    if (isSynthesisStep) {
+      const budgetSpentTotalFrance =
+        ((initialPersona.budget - budget) *
+          getDaysTo2050() *
+          synthesisConstants.FRANCE_POPULATION) /
+        synthesisConstants.MILLIARD;
+
+      return formatBudget(budgetSpentTotalFrance);
+    }
+    return formatBudget(budget);
+  }
+
+  function computeCarbonFootprint(
+    isSynthesisStep: boolean,
+    carbonFootprint: number
+  ) {
+    if (isSynthesisStep) {
+      return formatCarbonFootprint(
+        carbonFootprint *
+          synthesisConstants.DAYS_IN_YEAR *
+          synthesisConstants.KG_TO_TON
+      );
+    }
+    return formatCarbonFootprint(carbonFootprint);
+  }
 
   return (
     <Box>
@@ -46,7 +83,7 @@ function StatsConsole() {
       </Grid>
 
       <Grid container justifyContent="center">
-        <Grid item sx={{ m: 1 }} xs={4} sm={3}>
+        <Grid item sx={{ m: 1 }} xs={11} sm={smallScreenSize}>
           <PlayBox
             sx={{ m: 2, py: 1, px: 2 }}
             display="flex"
@@ -72,7 +109,28 @@ function StatsConsole() {
             ))}
           </PlayBox>
         </Grid>
-        <Grid item sx={{ m: 1 }} xs={4} sm={3}>
+        {isSynthesisStep && (
+          <Grid item sx={{ m: 1 }} xs={11} sm={3.5}>
+            <PlayBox
+              sx={{ m: 2, py: 1, px: 2 }}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+            >
+              <Typography mb={1} variant="h5">
+                Nom du scénario
+              </Typography>
+              {game.teams.map((team) => (
+                <Box key={team.id} display="flex" gap={1} alignSelf="stretch">
+                  <Icon name="team" />
+                  <Typography>{team.name}</Typography>
+                  <Typography>{team.scenarioName}</Typography>
+                </Box>
+              ))}
+            </PlayBox>
+          </Grid>
+        )}
+        <Grid item sx={{ m: 1 }} xs={11} sm={smallScreenSize}>
           <PlayBox
             sx={{ m: 2, py: 1, px: 2 }}
             display="flex"
@@ -80,7 +138,8 @@ function StatsConsole() {
             alignItems="center"
           >
             <Typography mb={1} variant="h5">
-              <Icon sx={{ mr: 1 }} name="carbon-footprint" /> CO2 (kg/j)
+              <Icon sx={{ mr: 1 }} name="carbon-footprint" /> CO2 (
+              {carbonFootprintUnit})
             </Typography>
             {game.teams.map((team) => (
               <Box key={team.id} display="flex" gap={1} alignSelf="stretch">
@@ -88,16 +147,16 @@ function StatsConsole() {
                 <Typography>{team.name}</Typography>
                 <Spacer />
                 <Typography>
-                  {formatCarbonFootprint(
+                  {computeCarbonFootprint(
+                    isSynthesisStep,
                     teamIdToTeamValues[team.id].carbonFootprint || 0
                   )}{" "}
-                  kg/j
                 </Typography>
               </Box>
             ))}
           </PlayBox>
         </Grid>
-        <Grid item sx={{ m: 1 }} xs={4} sm={3}>
+        <Grid item sx={{ m: 1 }} xs={11} sm={smallScreenSize}>
           <PlayBox
             sx={{ m: 2, py: 1, px: 2 }}
             display="flex"
@@ -105,7 +164,7 @@ function StatsConsole() {
             alignItems="center"
           >
             <Typography mb={1} variant="h5">
-              <Icon sx={{ mr: 1 }} name="budget" /> Budget (€/j)
+              <Icon sx={{ mr: 1 }} name="budget" /> Budget ({budgetUnit})
             </Typography>
             {game.teams.map((team) => (
               <Box key={team.id} display="flex" gap={1} alignSelf="stretch">
@@ -113,7 +172,10 @@ function StatsConsole() {
                 <Typography>{team.name}</Typography>
                 <Spacer />
                 <Typography>
-                  {formatBudget(teamIdToTeamValues[team.id].budget)} €/j
+                  {computeBudget(
+                    isSynthesisStep,
+                    teamIdToTeamValues[team.id].budget
+                  )}
                 </Typography>
               </Box>
             ))}
