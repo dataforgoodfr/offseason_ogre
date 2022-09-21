@@ -26,6 +26,7 @@ type IGame = Game;
 interface ITeam {
   id: number;
   name: string;
+  scenarioName: string;
   actions: TeamAction[];
 }
 type ITeamWithPlayers = ITeam & {

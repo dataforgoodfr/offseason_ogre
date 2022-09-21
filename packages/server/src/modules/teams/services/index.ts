@@ -4,9 +4,15 @@ import { database } from "../../../database";
 const model = database.team;
 type Model = Team;
 
-export { create, getMany, get };
+export { services };
 
-async function create(document: Omit<Model, "id">): Promise<Model> {
+const crudServices = { create, getMany, get, update };
+
+const services = { ...crudServices };
+
+async function create(
+  document: Omit<Model, "id" | "scenarioName">
+): Promise<Model> {
   return model.create({ data: document });
 }
 
@@ -16,4 +22,14 @@ async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {
 
 async function get(id: number): Promise<Model | null> {
   return model.findUnique({ where: { id } });
+}
+
+async function update(
+  teamId: number,
+  document: Partial<Omit<Model, "id">>
+): Promise<Model> {
+  return model.update({
+    where: { id: teamId },
+    data: document,
+  });
 }

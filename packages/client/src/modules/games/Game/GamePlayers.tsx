@@ -23,6 +23,7 @@ interface Team {
   id: number;
   gameId: number;
   name: string;
+  scenarioName: string;
 }
 
 export { GamePlayers };

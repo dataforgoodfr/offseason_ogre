@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import * as services from "../services";
+import { services } from "../services";
 
 export { getTeamsController, getTeamController };
 

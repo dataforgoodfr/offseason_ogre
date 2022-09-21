@@ -1,5 +1,5 @@
 import { database } from "../../../database";
-import * as teamServices from "../../teams/services";
+import { services as teamServices } from "../../teams/services";
 import { Game } from "../types";
 import { initState } from "./initState";
 import { register } from "./register";

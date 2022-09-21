@@ -12,17 +12,27 @@ import {
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
 import { persona as basePersona } from "../../persona/persona";
-import { GameStep, STEPS } from "../constants";
+import {
+  GameStep,
+  GameStepType,
+  getCurrentStep,
+  isStepOfType,
+  STEPS,
+} from "../constants";
 import { sortBy } from "../../../lib/array";
 import { buildPersona } from "../utils/persona";
 import { computePlayerActionsStats } from "../utils/playerActions";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
+import { mean } from "../../../lib/math";
+import { range, sum } from "lodash";
+import { sumAllValues } from "../../persona";
 
 export {
   PlayProvider,
   RootPlayProvider,
   useCurrentStep,
   useMyTeam,
+  useTeamValues,
   useLoadedPlay as usePlay,
   usePersonaByUserId,
   usePlayerActions,
@@ -49,6 +59,7 @@ interface IPlayContext {
       id: number;
       value: number;
     }[];
+    scenarioName?: string;
   }) => void;
 }
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
@@ -127,15 +138,18 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
 
   const updateTeam = ({
     teamActions,
+    scenarioName,
   }: {
     teamActions?: {
       id: number;
       value: number;
     }[];
+    scenarioName?: string;
   }) => {
     socket.emit("updateTeam", {
       step: gameWithTeams.step,
       teamActions,
+      scenarioName,
     });
   };
 
@@ -175,6 +189,85 @@ function useMyTeam(): ITeamWithPlayers | null {
     gameWithTeams.teams.find((team) =>
       team.players.some((player) => player.userId === user.id)
     ) ?? null
+  );
+}
+
+function useTeamValues() {
+  const { game } = useLoadedPlay();
+  const userIds: number[] = [];
+  game.teams.map((team) =>
+    team.players.map(({ user }) => userIds.push(user?.id))
+  );
+  const personaByUserId = usePersonaByUserId(userIds);
+
+  return game.teams.map((team) => ({
+    id: team.id,
+    playerCount: team.players.length,
+    points: mean(
+      team.players.map(
+        ({ userId }) => personaByUserId[userId].currentPersona.points
+      )
+    ),
+    budget: mean(
+      team.players.map(
+        ({ userId }) => personaByUserId[userId].currentPersona.budget
+      )
+    ),
+    carbonFootprint: mean(
+      team.players.map(
+        ({ userId }) => personaByUserId[userId].currentPersona.carbonFootprint
+      )
+    ),
+    stepToConsumption: buildStepToData(
+      "consumption",
+      game,
+      team,
+      personaByUserId
+    ),
+    stepToProduction: buildStepToData(
+      "production",
+      game,
+      team,
+      personaByUserId
+    ),
+  }));
+}
+
+function buildStepToData(
+  dataType: GameStepType,
+  game: IGame,
+  team: ITeamWithPlayers,
+  personaByUserId: ReturnType<typeof usePersonaByUserId>
+) {
+  return Object.fromEntries(
+    range(0, getCurrentStep(game) + 1)
+      .filter((step) => isStepOfType(step, dataType))
+      .map((step: number) => [
+        step,
+        buildStepData(dataType, step, team, personaByUserId),
+      ])
+  );
+}
+
+function buildStepData(
+  dataType: GameStepType,
+  step: number,
+  team: ITeamWithPlayers,
+  personaByUserId: ReturnType<typeof usePersonaByUserId>
+) {
+  const scaleFactor = dataType === "consumption" ? team.players.length || 1 : 1;
+
+  return (
+    sum(
+      team.players
+        .map(
+          ({ user }) =>
+            personaByUserId[user.id].getPersonaAtStep(step)[dataType]
+        )
+        .map((data) =>
+          parseInt(sumAllValues(data as { type: string; value: number }[]))
+        )
+    ) / scaleFactor
   );
 }
 

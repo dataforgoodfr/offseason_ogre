@@ -4,6 +4,7 @@ import { z } from "zod";
 import { safe } from "../../../lib/fp";
 import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
+import { services as teamServices } from "../../teams/services";
 import * as teamActionsServices from "../../teamActions/services";
 import { rooms } from "../constants";
 import { Server, Socket } from "../types";
@@ -15,12 +16,12 @@ function handleUpdateTeam(io: Server, socket: Socket) {
   socket.on(
     "updateTeam",
     wrapHandler(async (args: unknown) => {
-      await handleUpdateTeamActionsSafely(io, socket, args);
+      await handleUpdateTeamSafely(io, socket, args);
     })
   );
 }
 
-async function handleUpdateTeamActionsSafely(
+async function handleUpdateTeamSafely(
   io: Server,
   socket: Socket,
   args: unknown
@@ -35,33 +36,61 @@ async function handleUpdateTeamActionsSafely(
             value: z.number(),
           })
           .array()
-          .min(1),
+          .min(1)
+          .optional(),
+        scenarioName: z.string().optional(),
       });
 
-      const { teamActions: teamActionsUpdate } = schema.parse(args);
+      const { teamActions: teamActionsUpdate, scenarioName } =
+        schema.parse(args);
       const { gameId, user } = getSocketData(socket);
 
-      const { game, player } = await checkCanUpdateTeamActions(gameId, user.id);
+      const { game, player } = await getPlayerAndGame(gameId, user.id);
 
-      const validTeamActionsUpdate = await filterValidTeamActionsUpdate(
-        game.step,
-        player.teamId,
-        teamActionsUpdate
-      );
+      if (teamActionsUpdate && teamActionsUpdate.length !== 0) {
+        const areUpdatable = !player.hasFinishedStep && game?.isStepActive;
+        invariant(
+          areUpdatable,
+          `Player can't update team actions when current step is finished or inactive`
+        );
 
-      const teamActions = await teamActionsServices.updateTeamActions(
-        player.teamId,
-        validTeamActionsUpdate.map((update) => ({
-          id: update.id,
-          value: update.value,
-          isTouched: true,
-        }))
-      );
+        const validTeamActionsUpdate = await filterValidTeamActionsUpdate(
+          game.step,
+          player.teamId,
+          teamActionsUpdate
+        );
+
+        const teamActions = await teamActionsServices.updateTeamActions(
+          player.teamId,
+          validTeamActionsUpdate.map((update) => ({
+            id: update.id,
+            value: update.value,
+            isTouched: true,
+          }))
+        );
+
+        io.to(rooms.team(gameId, player.teamId)).emit("playerUpdated", {
+          update: { teamActions },
+        });
+      }
+
+      if (scenarioName) {
+        const updatedTeam = await teamServices.update(player.teamId, {
+          scenarioName,
+        });
+        io.to(rooms.team(gameId, updatedTeam.id)).emit("gameUpdated", {
+          update: game,
+        });
+      }
 
       const gameLatestUpdate = await gameServices.getDocument(gameId);
-      io.to(rooms.team(gameId, player.teamId)).emit("playerUpdated", {
-        update: { teamActions },
-      });
+
+      if (scenarioName) {
+        io.to(rooms.team(gameId, player.teamId)).emit("gameUpdated", {
+          update: gameLatestUpdate,
+        });
+      }
+
       io.to(rooms.teachers(gameId)).emit("gameUpdated", {
         update: gameLatestUpdate,
       });
@@ -70,7 +99,7 @@ async function handleUpdateTeamActionsSafely(
   );
 }
 
-async function checkCanUpdateTeamActions(
+async function getPlayerAndGame(
   gameId: number,
   userId: number
 ): Promise<{ game: Game; player: Players }> {
@@ -82,12 +111,6 @@ async function checkCanUpdateTeamActions(
   invariant(
     player,
     `Could not find player for gameId ${gameId} and userId ${userId}`
-  );
-
-  const areUpdatable = !player.hasFinishedStep && game?.isStepActive;
-  invariant(
-    areUpdatable,
-    `Player can't update team actions when current step is finished or inactive`
   );
 
   return { game, player };
