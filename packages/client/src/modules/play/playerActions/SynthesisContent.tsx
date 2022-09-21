@@ -10,7 +10,7 @@ import { ScenarioNameTextField } from "./SynthesisContent.styles";
 import { emphasizeText } from "../../common/utils";
 import { synthesisConstants } from "./constants/synthesis";
 import { differenceInDays } from "date-fns";
-import { persona as initialPersona, persona } from "../../persona/persona";
+import { persona as initialPersona } from "../../persona/persona";
 
 export { SynthesisScenarioName, SynthesisBudget, SynthesisCarbon };
 
@@ -20,6 +20,7 @@ function SynthesisScenarioName() {
 
   const { updateTeam } = usePlay();
 
+  const [savedTeam, setSavedTeam] = useState(team?.scenarioName);
   const [value, setValue] = useState(team?.scenarioName);
   const [openHelp, setOpenHelp] = useState(false);
 
@@ -30,6 +31,11 @@ function SynthesisScenarioName() {
   const handleChange = (e: any) => {
     setValue(e.target.value);
   };
+
+  if (savedTeam !== team?.scenarioName) {
+    setValue(team?.scenarioName);
+    setSavedTeam(team?.scenarioName);
+  }
 
   return (
     <Box display="flex" flexDirection="column" width="80%" gap={3}>
