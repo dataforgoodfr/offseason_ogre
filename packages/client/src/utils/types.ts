@@ -90,7 +90,7 @@ interface ProductionActionCommon {
   powerNeededKWh: number;
   lcoe: number;
   currentYearPowerNeedGw: number;
-  pointsIntervals: readonly PointsInterval[];
+  pointsIntervals: PointsInterval[];
   defaultTeamValue: number;
   isPlayable: boolean;
 }
