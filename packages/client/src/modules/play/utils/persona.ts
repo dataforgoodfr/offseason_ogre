@@ -132,10 +132,10 @@ function computeResultsByStep(
   );
 
   return {
-    budget: basePersona.budget - costPerDay,
+    budget,
+    points,
     carbonFootprint: basePersona.carbonFootprint,
     actionPoints: actionPointsUsedAtCurrentStep,
-    points: points,
     consumption: newConsumption,
     production: newProduction,
   };

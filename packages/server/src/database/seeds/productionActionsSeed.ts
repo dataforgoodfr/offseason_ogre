@@ -2,7 +2,10 @@ import { PointsInterval } from "@prisma/client";
 import { database } from "..";
 import { GameStepId, getStepIndexById } from "../../constants/steps";
 import { productionActionNames } from "../../modules/productionActions/constants";
-import { ProductionAction } from "../../modules/productionActions/types";
+import {
+  ProductionAction,
+  ProductionActionSeed,
+} from "../../modules/productionActions/types";
 import { Seed } from "../types";
 
 export { seed, pointsIntervalSeed };
@@ -60,7 +63,9 @@ function getPointsIntervalData() {
 
 function getProductionActionsDataForProductionStep1(): {
   actions: ProductionAction[];
-  points: any[];
+  points: (Omit<PointsInterval, "productionActionId"> & {
+    actionName: string;
+  })[];
 } {
   const productionActions = [
     {
@@ -219,7 +224,9 @@ function getProductionActionsDataForProductionStep1(): {
 
 function getProductionActionsDataForProductionStep2(): {
   actions: ProductionAction[];
-  points: any[];
+  points: (Omit<PointsInterval, "productionActionId"> & {
+    actionName: string;
+  })[];
 } {
   const productionActions = [
     {
@@ -366,7 +373,9 @@ function getProductionActionsDataForProductionStep2(): {
 
 function getProductionActionsDataForProductionStep3(): {
   actions: ProductionAction[];
-  points: any[];
+  points: (Omit<PointsInterval, "productionActionId"> & {
+    actionName: string;
+  })[];
 } {
   const productionActions = [
     {
@@ -418,10 +427,17 @@ function getActions(productionActions: readonly any[], stepId: GameStepId) {
   });
 }
 
-function getPointsIntervals(productionActions: readonly any[]) {
+function getPointsIntervals(
+  productionActions: readonly ProductionActionSeed[]
+) {
   return productionActions
     .flatMap(({ pointsInterval, name }) =>
-      pointsInterval.map((pi: any) => ({ ...pi, actionName: name }))
+      pointsInterval.map(
+        (pi: Omit<PointsInterval, "id" | "productionActionId">) => ({
+          ...pi,
+          actionName: name,
+        })
+      )
     )
     .map((pointsInterval, index) => ({ ...pointsInterval, id: index }));
 }

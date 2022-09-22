@@ -6,9 +6,14 @@ export type {
   ProductionActionType,
   ProductionActionUnit,
   PointsInterval,
+  ProductionActionSeed,
 };
 
 type ProductionAction = ProductionActionArea | ProductionActionPercentage;
+
+type ProductionActionSeed = Omit<ProductionAction, "id" | "step"> & {
+  pointsInterval: readonly Omit<PointsInterval, "id">[];
+};
 
 interface ProductionActionCommon {
   id: number;

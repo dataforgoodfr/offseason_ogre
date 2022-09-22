@@ -3,10 +3,7 @@ import { pointsValues } from "../constants";
 export { computeBudgetPoints, computeCO2Points };
 
 function computeBudgetPoints(budget: number) {
-  if (
-    budget > pointsValues.BAD_BUDGET_MIN &&
-    budget <= pointsValues.BAD_BUDGET_MAX
-  ) {
+  if (budget <= pointsValues.BAD_BUDGET_MAX) {
     return pointsValues.BAD_BUDGET_POINTS;
   }
   if (
