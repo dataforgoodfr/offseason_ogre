@@ -48,7 +48,11 @@ function Header(props: any) {
     updateGame({ step: game.step + 1, isStepActive: true });
   };
   const stopStep = () => {
-    updateGame({ isStepActive: false });
+    if (game.step === STEPS.length - 1) {
+      updateGame({ isStepActive: false, status: "finished" });
+    } else {
+      updateGame({ isStepActive: false });
+    }
   };
 
   return (
@@ -76,15 +80,17 @@ function Header(props: any) {
           <GameStepper step={game.step} typographyProps={{ variant: "h5" }} />
         </Grid>
         <Grid item sx={{ margin: "auto" }} xs={3}>
-          <Button
-            variant="contained"
-            color={"secondary"}
-            sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-            onClick={game.isStepActive ? stopStep : startStep}
-          >
-            {game.isStepActive ? stopStepLabel : startStepLabel}
-            <ArrowForwardIcon />
-          </Button>
+          {game.status !== "finished" && (
+            <Button
+              variant="contained"
+              color={"secondary"}
+              sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
+              onClick={game.isStepActive ? stopStep : startStep}
+            >
+              {game.isStepActive ? stopStepLabel : startStepLabel}
+              <ArrowForwardIcon />
+            </Button>
+          )}
         </Grid>
       </Grid>
     </PlayBox>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
-import { useMatch } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import {
   IGame,
   ITeamWithPlayers,
@@ -344,6 +344,7 @@ function useGameSocket({
   setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     const newSocket = io();
 
@@ -355,6 +356,9 @@ function useGameSocket({
     newSocket.on("gameUpdated", ({ update }: { update: Partial<IGame> }) => {
       setGameWithTeams((previous) => {
         if (previous === null) return null;
+        if (previous.status !== "finished" && update.status === "finished") {
+          navigate("/");
+        }
         return { ...previous, ...update };
       });
     });
