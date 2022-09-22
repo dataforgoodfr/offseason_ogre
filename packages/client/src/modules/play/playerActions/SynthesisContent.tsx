@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { Box, IconButton } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Typography } from "../../common/components/Typography";
 import { useMyTeam, usePlay, useTeamValues } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
@@ -10,7 +10,7 @@ import { ScenarioNameTextField } from "./SynthesisContent.styles";
 import { emphasizeText } from "../../common/utils";
 import { synthesisConstants } from "./constants/synthesis";
 import { differenceInDays } from "date-fns";
-import { persona as initialPersona, persona } from "../../persona/persona";
+import { persona as initialPersona } from "../../persona/persona";
 
 export { SynthesisScenarioName, SynthesisBudget, SynthesisCarbon };
 
@@ -20,16 +20,18 @@ function SynthesisScenarioName() {
 
   const { updateTeam } = usePlay();
 
-  const [value, setValue] = useState(team?.scenarioName);
+  const [localName, setLocalName] = useState(team?.scenarioName);
   const [openHelp, setOpenHelp] = useState(false);
 
   const handleValidateScenarioName = () => {
-    updateTeam({ scenarioName: value });
+    updateTeam({ scenarioName: localName });
   };
 
   const handleChange = (e: any) => {
-    setValue(e.target.value);
+    setLocalName(e.target.value);
   };
+
+  useEffect(() => setLocalName(team?.scenarioName), [team?.scenarioName]);
 
   return (
     <Box display="flex" flexDirection="column" width="80%" gap={3}>
@@ -60,7 +62,7 @@ function SynthesisScenarioName() {
         id="outlined-basic"
         label="Nom du scénario"
         variant="outlined"
-        value={value}
+        value={localName}
         onChange={handleChange}
       />
       <Button
@@ -70,7 +72,7 @@ function SynthesisScenarioName() {
         }}
         color="primary"
         variant="contained"
-        disabled={!value}
+        disabled={!localName}
         onClick={handleValidateScenarioName}
         type="button"
       >
