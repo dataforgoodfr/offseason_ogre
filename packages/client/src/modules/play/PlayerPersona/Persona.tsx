@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { PlayBox } from "../Components";
+import { getOilgrePersonaDetails } from "./description";
 
 export { Persona };
 
@@ -26,22 +27,22 @@ function Persona() {
         Mes caractéristiques
       </Typography>
       <AccordionLayout title="Général" TitleIcon={PersonPinRoundedIcon}>
-        <Typography>Caractéristiques.</Typography>
+        <Typography> {getOilgrePersonaDetails("general")} </Typography>
       </AccordionLayout>
       <AccordionLayout title="Déplacement" TitleIcon={DirectionsCarRoundedIcon}>
-        <Typography>Caractéristiques.</Typography>
+        <Typography> {getOilgrePersonaDetails("travel")} </Typography>
       </AccordionLayout>
       <AccordionLayout title="Logement" TitleIcon={HomeRoundedIcon}>
-        <Typography>Caractéristiques.</Typography>
+        <Typography> {getOilgrePersonaDetails("housing")} </Typography>
       </AccordionLayout>
       <AccordionLayout title="Alimentation" TitleIcon={LunchDiningRoundedIcon}>
-        <Typography>Caractéristiques.</Typography>
+        <Typography> {getOilgrePersonaDetails("food")} </Typography>
       </AccordionLayout>
       <AccordionLayout title="Numérique" TitleIcon={ComputerRoundedIcon}>
-        <Typography>Caractéristiques.</Typography>
+        <Typography> {getOilgrePersonaDetails("numeric")} </Typography>
       </AccordionLayout>
       <AccordionLayout title="Textile" TitleIcon={DryCleaningRoundedIcon}>
-        <Typography>Caractéristiques.</Typography>
+        <Typography> {getOilgrePersonaDetails("clothing")} </Typography>
       </AccordionLayout>
     </PlayBox>
   );
