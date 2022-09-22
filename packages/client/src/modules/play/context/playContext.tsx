@@ -214,12 +214,12 @@ function useTeamValues() {
       )
     ),
     budgetSpent: mean(
-      team?.players.map(({ userId }) => {
-        const persona = personaByUserId[userId];
-        return (
-          persona.getPersonaAtStep(0).budget - persona.currentPersona.budget
-        );
-      })
+      team?.players
+        .map(({ userId }) => personaByUserId[userId])
+        .map(
+          (persona) =>
+            persona.getPersonaAtStep(0).budget - persona.currentPersona.budget
+        )
     ),
     carbonFootprint: mean(
       team.players.map(
@@ -227,15 +227,15 @@ function useTeamValues() {
       )
     ),
     carbonFootprintReduction: mean(
-      team?.players.map(({ userId }) => {
-        const persona = personaByUserId[userId];
-        return (
-          (1 -
-            persona.currentPersona.carbonFootprint /
-              persona.getPersonaAtStep(0).carbonFootprint) *
-          100
-        );
-      })
+      team?.players
+        .map(({ userId }) => personaByUserId[userId])
+        .map(
+          (persona) =>
+            (1 -
+              persona.currentPersona.carbonFootprint /
+                persona.getPersonaAtStep(0).carbonFootprint) *
+            100
+        )
     ),
     stepToConsumption: buildStepToData(
       "consumption",
