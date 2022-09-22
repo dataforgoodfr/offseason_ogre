@@ -35,6 +35,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1o8og6uawrINEJKj55vndLjxSnHBTO731/view?usp=sharing",
       actionPointCost: 2,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -43,6 +44,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1314uo7ir07rpqAsz7fCfyTCXmjip69Jn/view?usp=sharing",
       actionPointCost: 2,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -51,6 +53,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1c00purj7qEyHKZcGNdqOxDqXM_Koxhbq/view?usp=sharing",
       actionPointCost: 2,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -60,6 +63,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1_CEiKPAlSqnRrwHCM_J19O-ucwg6hluV/view?usp=sharing",
       actionPointCost: 2,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -69,6 +73,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1Ivyl3ZtLYPJL6qlEgRqFPj3gbq5aL4m7/view?usp=sharing",
       actionPointCost: 1,
+      points: 100,
       financialCost: 0,
     },
     {
@@ -77,6 +82,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1YZ31Sc048Gz4YPl9WZ3BTh81LFSR1nkP/view?usp=sharing",
       actionPointCost: 1,
+      points: 100,
       financialCost: 0,
     },
     {
@@ -85,6 +91,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1FTlgA5K4Oj529DaC9WEMhcjea6vxIB4d/view?usp=sharing",
       actionPointCost: 1,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -94,6 +101,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/10vFPVtlJaQByCi1LJNLiZUoKQwAnpGfM/view?usp=sharing",
       actionPointCost: 2,
+      points: 100,
       financialCost: 0,
     },
     {
@@ -102,6 +110,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1Ll9VaqNQpYss9hbjzVwQHNPel-3w1HsL/view?usp=sharing",
       actionPointCost: 2,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -110,6 +119,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1qIn1WGJ3vmx0f1X26Q6tRbmdrrUYqo4r/view?usp=sharing",
       actionPointCost: 1,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -118,6 +128,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1dU53aruZq6HOL1HobmJPokV51aeejw5G/view",
       actionPointCost: 1,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -126,6 +137,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1hLnapQjnsYWg8sKRufi1fi4izn_UFXEI/view",
       actionPointCost: 2,
+      points: 300,
       financialCost: 0,
     },
     {
@@ -135,6 +147,8 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1g4PS6TGYgDnsVlZwgCu38u6FUbTZle1l/view",
       actionPointCost: 3,
+      points: 0,
+
       financialCost: 2.19,
     },
     {
@@ -143,6 +157,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1RKoo_seg5pyQf0YDLIYLGtNOnu_eEHI0/view?usp=sharing",
       actionPointCost: 3,
+      points: 0,
       financialCost: 0,
     },
   ];
@@ -161,6 +176,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1ZNHdRR52nVwGm8LJICkxqbZ2yZ9rilg5/view?usp=sharing",
       actionPointCost: 1,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -169,6 +185,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/11wD5YIsyjyrLfjnJOPwhHHMrmQnJs2VC/view?usp=sharing",
       actionPointCost: 3,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -177,6 +194,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/12ZMvTij4dQCkUmLVcZP6AcqcIRVdGVT1/view?usp=sharing",
       actionPointCost: 1,
+      points: 300,
       financialCost: 1.78,
     },
     {
@@ -185,6 +203,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1Vv7RkWoNiv-j0itAiWf38vEmlzFGKulv/view?usp=sharing",
       actionPointCost: 1,
+      points: 300,
       financialCost: 0.89,
     },
     {
@@ -193,6 +212,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1mpuu02kOdBCglW9Vdn3_zyhKAaouyV6b/view?usp=sharing",
       actionPointCost: 1,
+      points: 300,
       financialCost: 0.69,
     },
     {
@@ -201,6 +221,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1jtcNJZlbHSHEFM94ELdycJ05775PpyOU/view?usp=sharing",
       actionPointCost: 1,
+      points: 300,
       financialCost: 0.57,
     },
     {
@@ -209,6 +230,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1xJoKdThri7juZW4yPIC-g54xrQTo4433/view?usp=sharing",
       actionPointCost: 1,
+      points: 200,
       financialCost: 2.85,
     },
     {
@@ -217,6 +239,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1VcnnafKco94LCDcNyyd9QNB7IaeqQ3OP/view?usp=sharing",
       actionPointCost: 2,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -225,6 +248,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/17CnmJ-zIRsyV_J3TNoHra7NhC9OBczv-/view?usp=sharing",
       actionPointCost: 3,
+      points: 200,
       financialCost: 0,
     },
     {
@@ -233,6 +257,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1kf5EYmAD0rTNxkA-OjlyEd4_Z1kLhdZB/view?usp=sharing",
       actionPointCost: 2,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -241,6 +266,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1NPLf-pbYnhUqM3cR57KcSYA9k-ciXnAC/view?usp=sharing",
       actionPointCost: 1,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -249,6 +275,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1uPLfQs7Wc5ZDnJmpN4qyIKSbrgxcQwUt/view?usp=sharing",
       actionPointCost: 1,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -257,6 +284,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1DuJneNccDyjg_QtA7Btui-tUwdmfFd01/view?usp=sharing",
       actionPointCost: 2,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -265,6 +293,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1I582L5SFo1p4Hi5fT954E5QdloHy4eVK/view?usp=sharing",
       actionPointCost: 2,
+      points: 100,
       financialCost: 0,
     },
     {
@@ -273,6 +302,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1wxUkBc9s7Bvjwu-6l0RfM6y7jLoqfGmZ/view?usp=sharing",
       actionPointCost: 1,
+      points: 0,
       financialCost: 0,
     },
     {
@@ -281,6 +311,7 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1xElUTrG69kqOfQJmZ7lFVhb-7UNiKdzq/view?usp=sharing",
       actionPointCost: 1,
+      points: 0,
       financialCost: 0,
     },
   ];

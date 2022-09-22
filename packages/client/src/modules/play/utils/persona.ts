@@ -95,6 +95,18 @@ function computeResultsByStep(
   );
   const costPerDay = playerActionsCost + teamActionsCost;
 
+  const playerActionsPoints = sum(
+    performedPlayerActions.map(
+      (playerAction: PlayerActions) => playerAction.action.points
+    )
+  );
+  const teamActionsPoints = sum(
+    performedTeamActions.map(
+      (teamAction: TeamAction) => computeTeamActionStats(teamAction).points
+    )
+  );
+  const points = playerActionsPoints + teamActionsPoints;
+
   const performedActionsNames = performedPlayerActions.map(
     (playerAction: PlayerActions) => playerAction.action.name
   );
@@ -117,7 +129,8 @@ function computeResultsByStep(
   return {
     budget: basePersona.budget - costPerDay,
     carbonFootprint: basePersona.carbonFootprint,
-    points: actionPointsUsedAtCurrentStep,
+    actionPoints: actionPointsUsedAtCurrentStep,
+    points: points,
     consumption: newConsumption,
     production: newProduction,
   };

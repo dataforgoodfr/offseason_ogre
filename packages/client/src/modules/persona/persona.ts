@@ -7,6 +7,7 @@ export type { Persona };
 interface Persona {
   budget: number;
   carbonFootprint: number;
+  actionPoints: number;
   points: number;
   consumption: readonly ConsumptionDatum[];
   production: ProductionDatum[];
@@ -15,7 +16,8 @@ interface Persona {
 const persona: Persona = {
   budget: 13.7,
   carbonFootprint: 32.73,
-  points: 0,
+  actionPoints: 0,
+  points: 8500,
   consumption,
   production,
 };

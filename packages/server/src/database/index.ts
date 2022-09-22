@@ -2,7 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { performSeed } from "./utils";
 import { seed as usersSeed } from "./seeds/usersSeed";
 import { seed as actionsSeed } from "./seeds/actionsSeed";
-import { seed as productionActionsSeed } from "./seeds/productionActionsSeed";
+import {
+  seed as productionActionsSeed,
+  pointsIntervalSeed,
+} from "./seeds/productionActionsSeed";
 import { logger } from "../logger";
 
 const prismaClient = new PrismaClient();
@@ -27,5 +30,6 @@ async function seed() {
   await performSeed(usersSeed);
   await performSeed(actionsSeed);
   await performSeed(productionActionsSeed);
+  await performSeed(pointsIntervalSeed);
   logger.info("Database seeded successfully");
 }

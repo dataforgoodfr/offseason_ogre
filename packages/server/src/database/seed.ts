@@ -1,7 +1,10 @@
 import { database } from ".";
 import { seed as usersSeed } from "./seeds/usersSeed";
 import { seed as actionsSeed } from "./seeds/actionsSeed";
-import { seed as productionActionsSeed } from "./seeds/productionActionsSeed";
+import {
+  seed as productionActionsSeed,
+  pointsIntervalSeed,
+} from "./seeds/productionActionsSeed";
 import { performSeed } from "./utils";
 
 // eslint-disable-next-line no-console
@@ -13,6 +16,7 @@ async function seed() {
   await performSeed(usersSeed);
   await performSeed(actionsSeed);
   await performSeed(productionActionsSeed);
+  await performSeed(pointsIntervalSeed);
 
   await database.$disconnect();
 }

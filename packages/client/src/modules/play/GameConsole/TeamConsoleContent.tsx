@@ -138,7 +138,7 @@ function PlayerConsumption({ player }: { player: Player }) {
           max={currentStep?.availableActionPoints}
           name="action-points"
           readOnly
-          value={latestPersona.points}
+          value={latestPersona.actionPoints}
         />
       </Box>
     </PlayBox>

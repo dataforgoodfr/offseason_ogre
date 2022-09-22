@@ -8,6 +8,7 @@ interface Action {
   name: string;
   actionPointCost: number;
   financialCost: number;
+  points: number;
 }
 
 interface PlayerActions {
