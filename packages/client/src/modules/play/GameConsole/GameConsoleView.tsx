@@ -50,8 +50,9 @@ function Header(props: any) {
   const stopStep = () => {
     if (game.step === STEPS.length - 1) {
       updateGame({ isStepActive: false, status: "finished" });
+    } else {
+      updateGame({ isStepActive: false });
     }
-    updateGame({ isStepActive: false });
   };
 
   return (
