@@ -31,10 +31,14 @@ function StatsConsole() {
   const budgetUnit = isSynthesisStep ? "Mrd€" : "€/j";
   const carbonFootprintUnit = isSynthesisStep ? "T/an" : "kg/j";
 
-  function computeBudget(isSynthesisStep: boolean, budget: number) {
+  function computeBudget(
+    isSynthesisStep: boolean,
+    budget: number,
+    budgetSpent: number
+  ) {
     if (isSynthesisStep) {
       const budgetSpentTotalFrance =
-        (budget * getDaysTo2050() * synthesisConstants.FRANCE_POPULATION) /
+        (budgetSpent * getDaysTo2050() * synthesisConstants.FRANCE_POPULATION) /
         synthesisConstants.MILLIARD;
 
       return formatBudget(budgetSpentTotalFrance);
@@ -171,6 +175,7 @@ function StatsConsole() {
                 <Typography>
                   {computeBudget(
                     isSynthesisStep,
+                    teamIdToTeamValues[team.id].budget,
                     teamIdToTeamValues[team.id].budgetSpent
                   )}
                 </Typography>
