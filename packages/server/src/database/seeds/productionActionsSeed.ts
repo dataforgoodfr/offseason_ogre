@@ -420,9 +420,8 @@ function getActions(productionActions: readonly any[], stepId: GameStepId) {
 
 function getPointsIntervals(productionActions: readonly any[]) {
   return productionActions
-    .map(({ pointsInterval, name }) =>
+    .flatMap(({ pointsInterval, name }) =>
       pointsInterval.map((pi: any) => ({ ...pi, actionName: name }))
     )
-    .flat()
     .map((pointsInterval, index) => ({ ...pointsInterval, id: index }));
 }
