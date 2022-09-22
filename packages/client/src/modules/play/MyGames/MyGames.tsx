@@ -20,6 +20,7 @@ import {
   GameItemHost,
   JoinGameInputWrapper,
 } from "./styles";
+import { IGame } from "../../../utils/types";
 
 export { MyGames };
 
@@ -82,12 +83,35 @@ function MyGamesList() {
 
   const games = query?.data?.data?.games ?? [];
 
+  const draftGames = games.filter((game) => game.status === "draft");
+  const currentGames = games.filter((game) => game.status === "ready");
+  const finishedGames = games.filter((game) => game.status === "finished");
+
   return (
     <Box sx={{ mt: 4 }}>
-      {games.map((game) => (
-        <GameItem key={game.id} game={game} />
-      ))}
+      {currentGames.length > 0 &&
+        buildGameList(currentGames, "Ateliers en cours")}
+      {draftGames.length > 0 && buildGameList(draftGames, "Prochains ateliers")}
+      {finishedGames.length > 0 &&
+        buildGameList(finishedGames, "Ateliers terminés")}
     </Box>
+  );
+}
+
+function buildGameList(games: IGame[], title: string) {
+  return (
+    <>
+      <Box>
+        <Typography textAlign={"center"} variant="h5" color="secondary" mt={6}>
+          {title}
+        </Typography>
+      </Box>
+      <Box>
+        {games.map((game) => (
+          <GameItem key={game.id} game={game} />
+        ))}
+      </Box>
+    </>
   );
 }
 

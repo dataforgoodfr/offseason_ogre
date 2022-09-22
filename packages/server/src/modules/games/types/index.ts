@@ -11,4 +11,4 @@ interface Game {
   isStepActive: boolean;
 }
 
-type status = "draft" | "ready";
+type status = "draft" | "ready" | "finished";
