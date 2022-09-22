@@ -102,7 +102,5 @@ function getStepIndexById(id: GameStepId): number {
 }
 
 function isStepOfType(step: number, type: GameStepType) {
-  // Initial step is both considered a step of "consumption" and "production".
-  // TODO: consider last step as both a step of "consumption" and "production".
-  return step === 0 || STEPS[step]?.type === type;
+  return step === 0 || step === STEPS.length - 1 || STEPS[step]?.type === type;
 }
