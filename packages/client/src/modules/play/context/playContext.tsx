@@ -200,7 +200,7 @@ function useTeamValues() {
   );
   const personaByUserId = usePersonaByUserId(userIds);
 
-  return game.teams.map((team) => ({
+  const teamValues = game.teams.map((team) => ({
     id: team.id,
     playerCount: team.players.length,
     points: mean(
@@ -213,10 +213,29 @@ function useTeamValues() {
         ({ userId }) => personaByUserId[userId].currentPersona.budget
       )
     ),
+    budgetSpent: mean(
+      team?.players
+        .map(({ userId }) => personaByUserId[userId])
+        .map(
+          (persona) =>
+            persona.getPersonaAtStep(0).budget - persona.currentPersona.budget
+        )
+    ),
     carbonFootprint: mean(
       team.players.map(
         ({ userId }) => personaByUserId[userId].currentPersona.carbonFootprint
       )
+    ),
+    carbonFootprintReduction: mean(
+      team?.players
+        .map(({ userId }) => personaByUserId[userId])
+        .map(
+          (persona) =>
+            (1 -
+              persona.currentPersona.carbonFootprint /
+                persona.getPersonaAtStep(0).carbonFootprint) *
+            100
+        )
     ),
     stepToConsumption: buildStepToData(
       "consumption",
@@ -231,6 +250,15 @@ function useTeamValues() {
       personaByUserId
     ),
   }));
+
+  const getTeamById = (id: number | undefined) => {
+    return teamValues.find((t) => t.id === id);
+  };
+
+  return {
+    teamValues: teamValues,
+    getTeamById,
+  };
 }
 
 function buildStepToData(
