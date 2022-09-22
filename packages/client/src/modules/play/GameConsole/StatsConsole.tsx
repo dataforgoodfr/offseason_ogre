@@ -12,18 +12,17 @@ import {
 import { Spacer } from "../../common/components/Spacer";
 import { STEPS } from "../constants";
 import { synthesisConstants } from "../playerActions/constants/synthesis";
-import { persona as initialPersona } from "../../persona/persona";
-import { getDaysTo2050 } from "../utils/time";
+import { getDaysTo2050 } from "../../../lib/time";
 
 export { StatsConsole };
 
 function StatsConsole() {
   const { game } = usePlay();
-  const teamsValues = useTeamValues();
+  const { teamValues } = useTeamValues();
   const theme = useTheme();
 
   const teamIdToTeamValues = Object.fromEntries(
-    teamsValues.map((teamValues) => [teamValues.id, teamValues])
+    teamValues.map((value) => [value.id, value])
   );
 
   const isSynthesisStep = game.step === STEPS.length - 1;
@@ -35,9 +34,7 @@ function StatsConsole() {
   function computeBudget(isSynthesisStep: boolean, budget: number) {
     if (isSynthesisStep) {
       const budgetSpentTotalFrance =
-        ((initialPersona.budget - budget) *
-          getDaysTo2050() *
-          synthesisConstants.FRANCE_POPULATION) /
+        (budget * getDaysTo2050() * synthesisConstants.FRANCE_POPULATION) /
         synthesisConstants.MILLIARD;
 
       return formatBudget(budgetSpentTotalFrance);
@@ -64,7 +61,7 @@ function StatsConsole() {
       <Grid container justifyContent="space-between">
         <Grid item xs={11} sm={5.75}>
           <ConsumptionStats
-            data={teamsValues.map((team, idx) => ({
+            data={teamValues.map((team, idx) => ({
               teamIdx: idx,
               stepToData: team.stepToConsumption,
               playerCount: team.playerCount,
@@ -73,7 +70,7 @@ function StatsConsole() {
         </Grid>
         <Grid item xs={11} sm={5.75}>
           <ProductionStats
-            data={teamsValues.map((team, idx) => ({
+            data={teamValues.map((team, idx) => ({
               teamIdx: idx,
               stepToData: team.stepToProduction,
               playerCount: team.playerCount,
@@ -174,7 +171,7 @@ function StatsConsole() {
                 <Typography>
                   {computeBudget(
                     isSynthesisStep,
-                    teamIdToTeamValues[team.id].budget
+                    teamIdToTeamValues[team.id].budgetSpent
                   )}
                 </Typography>
               </Box>

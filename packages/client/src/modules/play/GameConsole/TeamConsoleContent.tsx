@@ -69,10 +69,10 @@ function getPlayerComponent(
   isProductionStep: boolean,
   isSynthesisStep: boolean
 ) {
-  if (isProductionStep) {
-    return PlayerProduction;
-  } else if (isSynthesisStep) {
+  if (isSynthesisStep) {
     return PlayerSynthesis;
+  } else if (isProductionStep) {
+    return PlayerProduction;
   }
   return PlayerConsumption;
 }

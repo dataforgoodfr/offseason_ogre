@@ -2,43 +2,32 @@ import { Box, Typography } from "@mui/material";
 import { formatCarbonFootprint } from "../../../../lib/formatter";
 import { emphasizeText } from "../../../common/utils";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
-import { persona as initialPersona } from "../../../persona/persona";
 import { Icon } from "../../../common/components/Icon";
 import { useTeamValues } from "../../context/playContext";
 import { ITeamWithPlayers } from "../../../../utils/types";
-import { getDaysTo2050 } from "../../utils/time";
+import { getDaysTo2050 } from "../../../../lib/time";
 
 export { SynthesisRecap, SynthesisBudget, SynthesisCarbon };
 
 function SynthesisRecap({ team }: { team: ITeamWithPlayers }) {
-  const teamsValues = useTeamValues();
-  const teamIdToTeamValues = Object.fromEntries(
-    teamsValues.map((teamValues) => [teamValues.id, teamValues])
-  );
-
-  const teamBudget = teamIdToTeamValues[team.id].budget;
-  const teamCarbonFootprintInKgPerDay =
-    teamIdToTeamValues[team.id].carbonFootprint;
-
-  const teamCarbonFootprintInTonPerYear =
-    teamCarbonFootprintInKgPerDay *
-    synthesisConstants.DAYS_IN_YEAR *
-    synthesisConstants.KG_TO_TON;
-
   return (
     <Box>
-      <SynthesisBudget budget={teamBudget} />
+      <SynthesisBudget team={team} />
       <Box mt={3}>
-        <SynthesisCarbon carbonFootprint={teamCarbonFootprintInTonPerYear} />
+        <SynthesisCarbon team={team} />
       </Box>
     </Box>
   );
 }
 
-function SynthesisBudget({ budget }: { budget: number }) {
+function SynthesisBudget({ team }: { team: ITeamWithPlayers | null }) {
   const daysTo2050 = getDaysTo2050();
+  const { getTeamById } = useTeamValues();
+  const teamValues = getTeamById(team?.id);
 
-  const budgetSpentPersonal = (initialPersona.budget - budget) * daysTo2050;
+  const budget = teamValues?.budgetSpent || 0;
+
+  const budgetSpentPersonal = budget * daysTo2050;
   const budgetSpentTotalFrance =
     (budgetSpentPersonal * synthesisConstants.FRANCE_POPULATION) /
     synthesisConstants.MILLIARD;
@@ -46,7 +35,7 @@ function SynthesisBudget({ budget }: { budget: number }) {
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
-        <Icon name="bill" /> Synthèse du budget
+        <Icon name="budget" /> Synthèse du budget
       </Typography>
       <Typography sx={{ fontSize: "14px" }} ml={4}>
         En moyenne, vous aurez dépensé{" "}
@@ -62,14 +51,16 @@ function SynthesisBudget({ budget }: { budget: number }) {
   );
 }
 
-function SynthesisCarbon({ carbonFootprint }: { carbonFootprint: number }) {
-  const initialCarbonFootprint =
-    initialPersona.carbonFootprint *
+function SynthesisCarbon({ team }: { team: ITeamWithPlayers | null }) {
+  const { getTeamById } = useTeamValues();
+  const teamValues = getTeamById(team?.id);
+  const teamCarbonFootprintInKgPerDay = teamValues?.carbonFootprint || 0;
+  const carbonFootprintReduction = teamValues?.carbonFootprintReduction || 0;
+
+  const teamCarbonFootprintInTonPerYear =
+    teamCarbonFootprintInKgPerDay *
     synthesisConstants.DAYS_IN_YEAR *
     synthesisConstants.KG_TO_TON;
-
-  const carbonFootprintReduction =
-    (1 - carbonFootprint / initialCarbonFootprint) * 100;
 
   return (
     <Box display="flex" flexDirection="column" gap={3}>
@@ -78,7 +69,7 @@ function SynthesisCarbon({ carbonFootprint }: { carbonFootprint: number }) {
       </Typography>
       <Typography sx={{ fontSize: "14px" }} ml={4}>
         Suite à vos choix l'empreinte carbone est de{" "}
-        {emphasizeText(formatCarbonFootprint(carbonFootprint))}{" "}
+        {emphasizeText(formatCarbonFootprint(teamCarbonFootprintInTonPerYear))}{" "}
         tonnes/an/personne
       </Typography>
       <Typography sx={{ fontSize: "14px" }} ml={4}>

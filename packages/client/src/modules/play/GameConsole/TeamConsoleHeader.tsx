@@ -32,13 +32,13 @@ function TeamConsoleHeader({
             sx={{ cursor: "pointer" }}
             xs={2}
           >
-            {isProductionStep ? (
-              <TeamProduction
+            {isSynthesisStep ? (
+              <TeamSynthesis
                 team={team}
                 isSelected={team.id === selectedTeamId}
               />
-            ) : isSynthesisStep ? (
-              <TeamSynthesis
+            ) : isProductionStep ? (
+              <TeamProduction
                 team={team}
                 isSelected={team.id === selectedTeamId}
               />

@@ -1,6 +1,5 @@
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
-import PaymentsRoundedIcon from "@mui/icons-material/PaymentsRounded";
 
 import Cancel from "@mui/icons-material/Cancel";
 import Cloud from "@mui/icons-material/Cloud";
@@ -30,7 +29,6 @@ const ICONS = {
   "action-points": DirectionsBike,
   "arrow-forward": ArrowForwardIosIcon,
   "bar-chart": BarChartRoundedIcon,
-  bill: PaymentsRoundedIcon,
   budget: Paid,
   "carbon-footprint": Cloud,
   "check-circle": CheckCircle,

@@ -2,18 +2,13 @@ import { Box, Grid, useTheme } from "@mui/material";
 import { ValidateActions } from "./Validation";
 import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
 import { PlayerHeaderGrid } from "./PlayerHeaderGrid";
-import {
-  useCurrentStep,
-  useMyTeam,
-  useTeamValues,
-} from "../context/playContext";
+import { useCurrentStep, useMyTeam } from "../context/playContext";
 import { PlayBox } from "../Components";
 import { TeamActionsHeader } from "./TeamActionsHeader";
 import { TeamActionsContent } from "./TeamActionsContent";
 import { SynthesisScenarioName } from "./SynthesisContent";
 import { PlayerActionsContent } from "./PlayerActionsContent";
 import { PlayerActionsHeader } from "./PlayerActionsHeader";
-import { synthesisConstants } from "./constants/synthesis";
 import { SynthesisBudget, SynthesisCarbon } from "../Components/Synthesis";
 
 export { PlayerActionsPage, PlayerHeader };
@@ -38,13 +33,6 @@ function PlayerActionsPage() {
 
 function SynthesisLayout() {
   const team = useMyTeam();
-  const teamValues = useTeamValues();
-
-  const teamBudget = teamValues.find((t) => t.id === team?.id)?.budget || 0;
-  const carbonFootprintPersonal =
-    (teamValues.find((t) => t.id === team?.id)?.carbonFootprint || 0) *
-    synthesisConstants.DAYS_IN_YEAR *
-    synthesisConstants.KG_TO_TON;
 
   return (
     <Box>
@@ -61,8 +49,8 @@ function SynthesisLayout() {
         >
           <PlayBox display="flex" flexDirection="column" gap={4}>
             <SynthesisScenarioName />
-            <SynthesisBudget budget={teamBudget} />
-            <SynthesisCarbon carbonFootprint={carbonFootprintPersonal} />
+            <SynthesisBudget team={team} />
+            <SynthesisCarbon team={team} />
           </PlayBox>
         </Grid>
       </Grid>
