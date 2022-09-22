@@ -1,5 +1,6 @@
 import { TeamAction } from "../../../utils/types";
 import { Persona } from "../../persona/persona";
+import { ProductionDatum } from "../../persona/production";
 
 export { computeNewProductionData, computeTeamActionStats };
 
@@ -55,7 +56,7 @@ function computeNewProductionData(
     persona.production.map((production) => [production.name, production])
   );
 
-  const newProduction = Object.values({
+  const newProduction: ProductionDatum[] = Object.values({
     ...productionNameToProduction,
     ...productionNameToNewProduction,
   });

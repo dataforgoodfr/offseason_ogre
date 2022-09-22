@@ -1,5 +1,5 @@
 import { ProductionActionType } from "../../utils/types";
-import { productionNames } from "../play/constants";
+import { productionConstants } from "../play/constants";
 
 export { production };
 export type { ProductionDatum };
@@ -21,11 +21,11 @@ function getHydroEnergies(): (ProductionDatum & {
   type: "offshore";
 })[] {
   const energies = [
-    { name: productionNames.GEOTHERMAL, value: 0.0054 },
-    { name: productionNames.HYDRAULIC, value: 2.67 },
-    { name: productionNames.OFF_SHORE_WIND_TURBINE, value: 0.4 },
-    { name: productionNames.TIDAL, value: 0.02226 },
-    { name: productionNames.WAVE, value: 0.000167 },
+    { name: productionConstants.GEOTHERMAL.name, value: 0.0054 },
+    { name: productionConstants.HYDRAULIC.name, value: 2.67 },
+    { name: productionConstants.OFF_SHORE_WIND_TURBINE.name, value: 0.4 },
+    { name: productionConstants.TIDAL.name, value: 0.02226 },
+    { name: productionConstants.WAVE.name, value: 0.000167 },
   ];
   return energies.map((energie) => ({
     ...energie,
@@ -36,7 +36,7 @@ function getHydroEnergies(): (ProductionDatum & {
 function getNuclearEnergies(): (ProductionDatum & { type: "nuclear" })[] {
   const energies = [
     {
-      name: productionNames.NUCLEAR,
+      name: productionConstants.NUCLEAR.name,
       value: 0,
     },
   ];
@@ -50,11 +50,11 @@ function getTerrestrialEnergies(): (ProductionDatum & {
   type: "terrestrial";
 })[] {
   const energies = [
-    { name: productionNames.BIOMASS, value: 7.14 },
-    { name: productionNames.ON_SHORE_WIND_TURBINE, value: 2.08 },
-    { name: productionNames.PHOTOVOLTAIC_FARM, value: 0.31 },
-    { name: productionNames.PHOTOVOLTAIC_ROOF, value: 0.25 },
-    { name: productionNames.THERMAL_SOLAR, value: 0.11 },
+    { name: productionConstants.BIOMASS.name, value: 7.14 },
+    { name: productionConstants.ON_SHORE_WIND_TURBINE.name, value: 2.08 },
+    { name: productionConstants.PHOTOVOLTAIC_FARM.name, value: 0.31 },
+    { name: productionConstants.PHOTOVOLTAIC_ROOF.name, value: 0.25 },
+    { name: productionConstants.THERMAL_SOLAR.name, value: 0.11 },
   ];
   return energies.map((energie) => ({
     ...energie,

@@ -22,7 +22,7 @@ import { t } from "../../translations";
 export { PlayerActionsHeader };
 
 function PlayerActionsHeader() {
-  const { latestPersona } = usePersona();
+  const { latestPersona, currentPersona } = usePersona();
   const currentStep = useCurrentStep();
 
   const [openHelp, setOpenHelp] = useState(false);
@@ -67,7 +67,7 @@ function PlayerActionsHeader() {
               <Typography>Bilan carbone :</Typography>
             </Box>
             <Typography>
-              {formatCarbonFootprint(latestPersona.carbonFootprint)} kgCO2/an
+              {formatCarbonFootprint(currentPersona.carbonFootprint)} kgCO2/j
             </Typography>
           </DashboardItem>
           <DashboardItem>

@@ -60,7 +60,7 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
 }
 
 function PlayerProduction({ player }: { player: Player }) {
-  const { latestPersona } = usePersonaByUserId(player.userId);
+  const { latestPersona, currentPersona } = usePersonaByUserId(player.userId);
 
   return (
     <PlayBox key={player.userId}>
@@ -81,7 +81,7 @@ function PlayerProduction({ player }: { player: Player }) {
           Bilan carbone :
         </Typography>
         <Typography>
-          {formatCarbonFootprint(latestPersona.carbonFootprint)} kgCO2/an
+          {formatCarbonFootprint(currentPersona.carbonFootprint)} kgCO2/j
         </Typography>
       </Box>
     </PlayBox>
@@ -92,7 +92,7 @@ function PlayerConsumption({ player }: { player: Player }) {
   const currentStep = useCurrentStep();
   const theme = useTheme();
 
-  const { latestPersona } = usePersonaByUserId(player.userId);
+  const { latestPersona, currentPersona } = usePersonaByUserId(player.userId);
 
   return (
     <PlayBox key={player.userId}>
@@ -119,7 +119,7 @@ function PlayerConsumption({ player }: { player: Player }) {
           Bilan carbone :
         </Typography>
         <Typography>
-          {formatCarbonFootprint(latestPersona.carbonFootprint)} kgCO2/an
+          {formatCarbonFootprint(currentPersona.carbonFootprint)} kgCO2/j
         </Typography>
       </Box>
       <Box display="flex" alignItems="center">

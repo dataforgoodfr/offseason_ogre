@@ -24,6 +24,11 @@ import {
 } from "../context/playContext";
 import { sumAllValues } from "../../persona";
 import { Icon } from "../../common/components/Icon";
+import {
+  formatPoints,
+  formatBudget,
+  formatCarbonFootprint,
+} from "../../../lib/formatter";
 
 export { PlayerHeader, Header, Actions };
 
@@ -53,7 +58,7 @@ function PlayerHeader() {
         >
           <GameStepper step={game.step} />
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {currentPersona.points || 0} <Icon name="trophy" />
+            {formatPoints(currentPersona.points || 0)} <Icon name="trophy" />
           </Typography>
         </Grid>
         <Grid
@@ -75,11 +80,11 @@ function PlayerHeader() {
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <Icon name="budget" sx={{ mr: 1 }} />{" "}
-            {(latestPersona.budget || 0).toFixed(2)} €/j
+            {formatBudget(latestPersona.budget || 0)} €/j
           </Typography>
           <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
             <Icon name="carbon-footprint" sx={{ mr: 1 }} />{" "}
-            {currentPersona.carbonFootprint || 0} kg/j
+            {formatCarbonFootprint(currentPersona.carbonFootprint || 0)} kg/j
           </Typography>
         </Grid>
         <Grid
