@@ -17,8 +17,7 @@ type ProductionActionSeed = Omit<ProductionAction, "id" | "step"> & {
 
 interface ProductionActionCommon {
   id: number;
-  // TODO: type name when all production actions are listed.
-  name: string;
+  name: ProductionActionNames;
   type: ProductionActionType;
   order: number;
   step: number;
