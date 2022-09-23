@@ -181,9 +181,7 @@ function sortTeams(gameWithTeams: IGameWithTeams | null) {
   if (gameWithTeams !== null) {
     return {
       ...gameWithTeams,
-      teams: gameWithTeams?.teams.sort(
-        (a: ITeamWithPlayers, b: ITeamWithPlayers) => a.id - b.id
-      ),
+      teams: [...(gameWithTeams?.teams ?? [])].sort(sortBy("id", "asc")),
     };
   }
   return null;
