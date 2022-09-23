@@ -145,7 +145,7 @@ function computeResultsByStep(
   return {
     budget,
     points,
-    carbonFootprint: basePersona.carbonFootprint,
+    carbonFootprint,
     actionPoints: actionPointsUsedAtCurrentStep,
     consumption: newConsumption,
     production: newProduction,
