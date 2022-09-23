@@ -153,10 +153,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const gameWithSortedTeams = {
+    ...gameWithTeams,
+    teams: gameWithTeams.teams.sort(
+      (a: ITeamWithPlayers, b: ITeamWithPlayers) => a.id - b.id
+    ),
+  };
+
   return (
     <PlayContext.Provider
       value={{
-        game: gameWithTeams,
+        game: gameWithSortedTeams,
         updateGame,
         playerActions,
         updatePlayerActions,
@@ -353,15 +360,18 @@ function useGameSocket({
       setGameWithTeams(gameWithTeams);
     });
 
-    newSocket.on("gameUpdated", ({ update }: { update: Partial<IGame> }) => {
-      setGameWithTeams((previous) => {
-        if (previous === null) return null;
-        if (previous.status !== "finished" && update.status === "finished") {
-          navigate("/");
-        }
-        return { ...previous, ...update };
-      });
-    });
+    newSocket.on(
+      "gameUpdated",
+      ({ update }: { update: Partial<IGameWithTeams> }) => {
+        setGameWithTeams((previous) => {
+          if (previous === null) return null;
+          if (previous.status !== "finished" && update.status === "finished") {
+            navigate("/");
+          }
+          return { ...previous, ...update };
+        });
+      }
+    );
 
     newSocket.on(
       "playerActionsUpdated",
