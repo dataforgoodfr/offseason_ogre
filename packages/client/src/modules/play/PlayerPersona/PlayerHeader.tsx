@@ -24,7 +24,11 @@ import {
 } from "../context/playContext";
 import { sumAllValues } from "../../persona";
 import { Icon } from "../../common/components/Icon";
-import { formatBudget, formatCarbonFootprint } from "../../../lib/formatter";
+import {
+  formatPoints,
+  formatBudget,
+  formatCarbonFootprint,
+} from "../../../lib/formatter";
 
 export { PlayerHeader, Header, Actions };
 
@@ -54,7 +58,7 @@ function PlayerHeader() {
         >
           <GameStepper step={game.step} />
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {currentPersona.points || 0} <Icon name="trophy" />
+            {formatPoints(currentPersona.points || 0)} <Icon name="trophy" />
           </Typography>
         </Grid>
         <Grid

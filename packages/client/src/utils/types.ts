@@ -1,5 +1,5 @@
 import { Game } from "../modules/games/types";
-import { productionNames } from "../modules/play";
+import { productionActionNames } from "../modules/play";
 import { availableActions } from "../modules/play/playerActions/constants/actions";
 import { User } from "../modules/users/types";
 
@@ -109,8 +109,7 @@ interface ProductionActionPercentage extends ProductionActionCommon {
 
 type ProductionActionType = "offshore" | "nuclear" | "terrestrial";
 
-type ProductionActionNames =
-  typeof productionNames[keyof typeof productionNames];
+type ProductionActionNames = typeof productionActionNames[number];
 
 type ProductionActionUnit = "area" | "percentage";
 

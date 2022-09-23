@@ -7,6 +7,10 @@ import {
 } from "../../../utils/types";
 import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
+import {
+  computeCarbonFootprint,
+  computeCarbonProductionElectricMix,
+} from "./carbonFootprint";
 import { computeNewConsumptionData } from "./consumption";
 import { computePlayerActionsStats } from "./playerActions";
 import { computeBudgetPoints, computeCO2Points } from "./points";
@@ -129,6 +133,13 @@ function computeResultsByStep(
   const { actionPointsUsedAtCurrentStep } = computePlayerActionsStats(
     step,
     playerActions
+  );
+
+  const carbonProductionElectricMix =
+    computeCarbonProductionElectricMix(newProduction);
+  const carbonFootprint = computeCarbonFootprint(
+    carbonProductionElectricMix,
+    newConsumption
   );
 
   return {

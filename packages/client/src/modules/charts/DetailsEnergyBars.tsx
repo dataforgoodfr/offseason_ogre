@@ -13,7 +13,7 @@ import { hasNuclear, roundValue } from "../common/utils";
 import { ConsumptionDatum } from "../persona/consumption";
 import { Persona } from "../persona/persona";
 import { ProductionDatum } from "../persona/production";
-import { productionNames } from "../play";
+import { productionConstants } from "../play";
 import { usePlay } from "../play/context/playContext";
 import { translateName } from "../translations";
 
@@ -34,7 +34,7 @@ function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
 
   const personaValues = persona.production.filter(
     ({ type }: ProductionDatum) => {
-      if (!hasNuclear(game) && type === productionNames.NUCLEAR) {
+      if (!hasNuclear(game) && type === productionConstants.NUCLEAR.name) {
         return false;
       }
       return true;
