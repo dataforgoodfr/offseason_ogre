@@ -53,7 +53,7 @@ interface Action {
   actionPointCost: number;
   financialCost: number;
   points: number;
-  players: PlayerActions[];
+  playerActions: PlayerActions[];
 }
 
 type ActionNames = typeof availableActions[keyof typeof availableActions];
