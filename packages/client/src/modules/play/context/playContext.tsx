@@ -377,7 +377,11 @@ function useGameSocket({
           if (previous.status !== "finished" && update.status === "finished") {
             navigate("/play");
           }
-          if (pathname.endsWith("actions")) {
+          if (
+            previous.isStepActive &&
+            !update.isStepActive &&
+            pathname.endsWith("actions")
+          ) {
             navigate(`/play/games/${previous.id}/persona`);
           }
           return { ...previous, ...update };
