@@ -9,6 +9,7 @@ import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
 import { computeNewConsumptionData } from "./consumption";
 import { computePlayerActionsStats } from "./playerActions";
+import { computeBudgetPoints, computeCO2Points } from "./points";
 import { computeNewProductionData, computeTeamActionStats } from "./production";
 
 export { buildPersona };
@@ -94,6 +95,22 @@ function computeResultsByStep(
     )
   );
   const costPerDay = playerActionsCost + teamActionsCost;
+  const budget = basePersona.budget - costPerDay;
+
+  const playerPoints = sum(
+    performedPlayerActions.map(
+      (playerAction: PlayerActions) => playerAction.action.points
+    )
+  );
+  const teamPoints = sum(
+    performedTeamActions.map(
+      (teamAction: TeamAction) => computeTeamActionStats(teamAction).points
+    )
+  );
+
+  const budgetPoints = computeBudgetPoints(budget);
+  const co2Points = computeCO2Points(basePersona.carbonFootprint);
+  const points = playerPoints + teamPoints + budgetPoints + co2Points;
 
   const performedActionsNames = performedPlayerActions.map(
     (playerAction: PlayerActions) => playerAction.action.name
@@ -115,9 +132,10 @@ function computeResultsByStep(
   );
 
   return {
-    budget: basePersona.budget - costPerDay,
+    budget,
+    points,
     carbonFootprint: basePersona.carbonFootprint,
-    points: actionPointsUsedAtCurrentStep,
+    actionPoints: actionPointsUsedAtCurrentStep,
     consumption: newConsumption,
     production: newProduction,
   };

@@ -9,12 +9,18 @@ function computeTeamActionStats(teamAction: TeamAction) {
   // TODO: see with Gregory for renaming (should be `production` instead)?
   const powerNeedGw = productionKwh * teamAction.action.powerNeededKWh;
   const cost = productionKwh * teamAction.action.lcoe;
+  const points =
+    teamAction.action.pointsIntervals?.find(
+      ({ min, max }) => min < teamAction.value && teamAction.value <= max
+    )?.points || 0;
+
   const isCredible = teamAction.value <= teamAction.action.credibilityThreshold;
 
   return {
     productionKwh,
     powerNeedGw,
     cost,
+    points,
     isCredible,
   };
 }

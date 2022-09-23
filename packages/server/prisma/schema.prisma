@@ -71,6 +71,7 @@ model Action {
   helpCardLink    String          @default("")
   actionPointCost Int
   financialCost   Float
+  points          Int             @default(0)
   players         PlayerActions[]
 }
 
@@ -103,6 +104,7 @@ model ProductionAction {
   powerNeededKWh         Float
   lcoe                   Float
   currentYearPowerNeedGw Float
+  pointsIntervals        PointsInterval[]
   teamActions            TeamActions[]
   defaultTeamValue       Float
   isPlayable             Boolean              @default(false)
@@ -117,6 +119,15 @@ enum ProductionActionType {
 enum ProductionActionUnit {
   area
   percentage
+}
+
+model PointsInterval {
+  id                 Int               @id @default(autoincrement())
+  min                Float
+  max                Float
+  points             Int
+  ProductionAction   ProductionAction? @relation(fields: [productionActionId], references: [id])
+  productionActionId Int?
 }
 
 model TeamActions {

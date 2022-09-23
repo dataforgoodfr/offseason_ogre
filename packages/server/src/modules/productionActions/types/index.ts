@@ -5,9 +5,15 @@ export type {
   ProductionActionNames,
   ProductionActionType,
   ProductionActionUnit,
+  PointsInterval,
+  ProductionActionSeed,
 };
 
 type ProductionAction = ProductionActionArea | ProductionActionPercentage;
+
+type ProductionActionSeed = Omit<ProductionAction, "id" | "step"> & {
+  pointsInterval: readonly Omit<PointsInterval, "id">[];
+};
 
 interface ProductionActionCommon {
   id: number;
@@ -26,6 +32,13 @@ interface ProductionActionCommon {
   currentYearPowerNeedGw: number;
   defaultTeamValue: number;
   isPlayable: boolean;
+}
+
+interface PointsInterval {
+  id: number;
+  min: number;
+  max: number;
+  points: number;
 }
 
 interface ProductionActionArea extends ProductionActionCommon {

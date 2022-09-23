@@ -52,6 +52,7 @@ interface Action {
   helpCardLink: string;
   actionPointCost: number;
   financialCost: number;
+  points: number;
   players: PlayerActions[];
 }
 
@@ -69,6 +70,12 @@ interface PlayerActions {
 
 type ProductionAction = ProductionActionArea | ProductionActionPercentage;
 
+interface PointsInterval {
+  min: number;
+  max: number;
+  points: number;
+}
+
 interface ProductionActionCommon {
   id: number;
   name: ProductionActionNames;
@@ -83,6 +90,7 @@ interface ProductionActionCommon {
   powerNeededKWh: number;
   lcoe: number;
   currentYearPowerNeedGw: number;
+  pointsIntervals: PointsInterval[];
   defaultTeamValue: number;
   isPlayable: boolean;
 }

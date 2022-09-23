@@ -1,10 +1,14 @@
+import { PointsInterval } from "@prisma/client";
 import { database } from "..";
-import { getStepIndexById } from "../../constants/steps";
+import { GameStepId, getStepIndexById } from "../../constants/steps";
 import { productionActionNames } from "../../modules/productionActions/constants";
-import { ProductionAction } from "../../modules/productionActions/types";
+import {
+  ProductionAction,
+  ProductionActionSeed,
+} from "../../modules/productionActions/types";
 import { Seed } from "../types";
 
-export { seed };
+export { seed, pointsIntervalSeed };
 
 const seed: Seed<ProductionAction> = {
   seeder: (productionAction) =>
@@ -18,18 +22,51 @@ const seed: Seed<ProductionAction> = {
   data: getProductionActionsData(),
 };
 
+const pointsIntervalSeed: Seed<PointsInterval> = {
+  seeder: (pointsInterval) =>
+    database.pointsInterval.upsert({
+      where: {
+        id: pointsInterval.id,
+      },
+      update: pointsInterval,
+      create: pointsInterval,
+    }),
+  data: getPointsIntervalData(),
+};
+
 function getProductionActionsData(): ProductionAction[] {
   return [
-    ...getProductionActionsDataForProductionStep1(),
-    ...getProductionActionsDataForProductionStep2(),
-    ...getProductionActionsDataForProductionStep3(),
+    ...getProductionActionsDataForProductionStep1().actions,
+    ...getProductionActionsDataForProductionStep2().actions,
+    ...getProductionActionsDataForProductionStep3().actions,
   ].map((action, index) => ({
     ...action,
     id: index,
   }));
 }
 
-function getProductionActionsDataForProductionStep1(): ProductionAction[] {
+function getPointsIntervalData() {
+  const productionActions = getProductionActionsData();
+  return [
+    ...getProductionActionsDataForProductionStep1().points,
+    ...getProductionActionsDataForProductionStep2().points,
+    ...getProductionActionsDataForProductionStep3().points,
+  ].map(({ min, max, points, actionName }, index) => ({
+    min,
+    max,
+    points,
+    productionActionId:
+      productionActions?.find((action) => action.name === actionName)?.id || 0,
+    id: index,
+  }));
+}
+
+function getProductionActionsDataForProductionStep1(): {
+  actions: ProductionAction[];
+  points: (Omit<PointsInterval, "productionActionId"> & {
+    actionName: string;
+  })[];
+} {
   const productionActions = [
     {
       name: productionActionNames.BIOMASS,
@@ -47,6 +84,13 @@ function getProductionActionsDataForProductionStep1(): ProductionAction[] {
         "https://drive.google.com/file/d/1uO9Y2oPLsDzs1Mjv1G1bSb8jSTTAynqL/view?usp=sharing",
       currentYearPowerNeedGw: 21.42,
       defaultTeamValue: 10.11,
+      pointsInterval: [
+        {
+          min: 0,
+          max: 25,
+          points: 1500,
+        },
+      ],
       isPlayable: true,
     },
     {
@@ -65,6 +109,18 @@ function getProductionActionsDataForProductionStep1(): ProductionAction[] {
         "https://drive.google.com/file/d/1gx_7fGbfk3dp1oF1DUg8bNwAv-_JG2NZ/view?usp=sharing",
       currentYearPowerNeedGw: 17.05,
       defaultTeamValue: 0.51,
+      pointsInterval: [
+        {
+          min: 1,
+          max: 3,
+          points: 1500,
+        },
+        {
+          min: 3,
+          max: 6,
+          points: 750,
+        },
+      ],
       isPlayable: true,
     },
     {
@@ -83,6 +139,18 @@ function getProductionActionsDataForProductionStep1(): ProductionAction[] {
         "https://drive.google.com/file/d/1buRId_oFMdx1NxutSUJB-6ih-JMG8niV/view?usp=sharing",
       currentYearPowerNeedGw: 5.53,
       defaultTeamValue: 1.28,
+      pointsInterval: [
+        {
+          min: 2,
+          max: 5,
+          points: 1000,
+        },
+        {
+          min: 5,
+          max: 10,
+          points: 500,
+        },
+      ],
       isPlayable: true,
     },
     {
@@ -101,6 +169,18 @@ function getProductionActionsDataForProductionStep1(): ProductionAction[] {
         "https://drive.google.com/file/d/1fuvP46JtmQmKLeY43Iv-W0szE1Rmrajh/view?usp=sharing",
       currentYearPowerNeedGw: 4.53,
       defaultTeamValue: 0.38,
+      pointsInterval: [
+        {
+          min: 2,
+          max: 11,
+          points: 1000,
+        },
+        {
+          min: 11,
+          max: 32,
+          points: 500,
+        },
+      ],
       isPlayable: true,
     },
     {
@@ -119,18 +199,35 @@ function getProductionActionsDataForProductionStep1(): ProductionAction[] {
         "https://drive.google.com/file/d/1Oj7bdAcLpdh97DDnepbtjPmWMWpG39Xn/view?usp=sharing",
       currentYearPowerNeedGw: 1.93,
       defaultTeamValue: 0.08,
+      pointsInterval: [
+        {
+          min: 3,
+          max: 6,
+          points: 1500,
+        },
+        {
+          min: 6,
+          max: 8,
+          points: 750,
+        },
+      ],
       isPlayable: true,
     },
   ] as const;
 
-  return productionActions.map((action, index) => ({
-    ...action,
-    id: index,
-    step: getStepIndexById("production-1"),
-  }));
+  const actions = getActions(productionActions, "production-1");
+
+  const points = getPointsIntervals(productionActions);
+
+  return { actions, points };
 }
 
-function getProductionActionsDataForProductionStep2(): ProductionAction[] {
+function getProductionActionsDataForProductionStep2(): {
+  actions: ProductionAction[];
+  points: (Omit<PointsInterval, "productionActionId"> & {
+    actionName: string;
+  })[];
+} {
   const productionActions = [
     {
       name: productionActionNames.HYDRAULIC,
@@ -147,6 +244,7 @@ function getProductionActionsDataForProductionStep2(): ProductionAction[] {
       helpCardLink: "",
       currentYearPowerNeedGw: 25.51,
       defaultTeamValue: 100,
+      pointsInterval: [],
       isPlayable: false,
     },
     {
@@ -165,6 +263,13 @@ function getProductionActionsDataForProductionStep2(): ProductionAction[] {
         "https://drive.google.com/file/d/18JUYq-sToYw9Nbr8HpLAylKnHsiU3zQ7/view?usp=sharing",
       currentYearPowerNeedGw: 0.0152,
       defaultTeamValue: 0.49,
+      pointsInterval: [
+        {
+          min: 1,
+          max: 6,
+          points: 1000,
+        },
+      ],
       isPlayable: true,
     },
     {
@@ -183,6 +288,18 @@ function getProductionActionsDataForProductionStep2(): ProductionAction[] {
         "https://drive.google.com/file/d/1F1QYdy321llo8QiEEwwlM4xMlM0IFxaL/view?usp=sharing",
       currentYearPowerNeedGw: 3.3,
       defaultTeamValue: 0.28,
+      pointsInterval: [
+        {
+          min: 1,
+          max: 3,
+          points: 1500,
+        },
+        {
+          min: 3,
+          max: 6,
+          points: 750,
+        },
+      ],
       isPlayable: true,
     },
     {
@@ -201,6 +318,18 @@ function getProductionActionsDataForProductionStep2(): ProductionAction[] {
         "https://drive.google.com/file/d/1zbCSipobSdAa2-43ytpU7VU2zUcB659u/view?usp=sharing",
       currentYearPowerNeedGw: 0.2405,
       defaultTeamValue: 0.197,
+      pointsInterval: [
+        {
+          min: 0.5,
+          max: 3,
+          points: 1000,
+        },
+        {
+          min: 3,
+          max: 12,
+          points: 500,
+        },
+      ],
       isPlayable: true,
     },
     {
@@ -219,18 +348,35 @@ function getProductionActionsDataForProductionStep2(): ProductionAction[] {
         "https://drive.google.com/file/d/1gfeb6hjWG0IIimKpHtjJ_91h38hw2T4I/view?usp=sharing",
       currentYearPowerNeedGw: 0.00045,
       defaultTeamValue: 0.00347,
+      pointsInterval: [
+        {
+          min: 1,
+          max: 30,
+          points: 1000,
+        },
+        {
+          min: 30,
+          max: 81,
+          points: 500,
+        },
+      ],
       isPlayable: true,
     },
   ] as const;
 
-  return productionActions.map((action, index) => ({
-    ...action,
-    id: index,
-    step: getStepIndexById("production-2"),
-  }));
+  const actions = getActions(productionActions, "production-2");
+
+  const points = getPointsIntervals(productionActions);
+
+  return { actions, points };
 }
 
-function getProductionActionsDataForProductionStep3(): ProductionAction[] {
+function getProductionActionsDataForProductionStep3(): {
+  actions: ProductionAction[];
+  points: (Omit<PointsInterval, "productionActionId"> & {
+    actionName: string;
+  })[];
+} {
   const productionActions = [
     {
       name: productionActionNames.NUCLEAR,
@@ -248,13 +394,50 @@ function getProductionActionsDataForProductionStep3(): ProductionAction[] {
         "https://drive.google.com/file/d/1266O8HqYV6QwbfZH_MeYVIWsre_KnGBf/view?usp=sharing",
       currentYearPowerNeedGw: 61.4,
       defaultTeamValue: 100,
+      pointsInterval: [
+        {
+          min: 0,
+          max: 120,
+          points: 1000,
+        },
+        {
+          min: 200,
+          max: 99999,
+          points: -500,
+        },
+      ],
       isPlayable: true,
     },
   ] as const;
 
-  return productionActions.map((action, index) => ({
-    ...action,
-    id: index,
-    step: getStepIndexById("production-3"),
-  }));
+  const actions = getActions(productionActions, "production-3");
+  const points = getPointsIntervals(productionActions);
+
+  return { actions, points };
+}
+
+function getActions(productionActions: readonly any[], stepId: GameStepId) {
+  return productionActions.map((action, index) => {
+    const { pointsInterval, ...actionWithoutPoints } = action;
+    return {
+      ...actionWithoutPoints,
+      id: index,
+      step: getStepIndexById(stepId),
+    };
+  });
+}
+
+function getPointsIntervals(
+  productionActions: readonly ProductionActionSeed[]
+) {
+  return productionActions
+    .flatMap(({ pointsInterval, name }) =>
+      pointsInterval.map(
+        (pi: Omit<PointsInterval, "id" | "productionActionId">) => ({
+          ...pi,
+          actionName: name,
+        })
+      )
+    )
+    .map((pointsInterval, index) => ({ ...pointsInterval, id: index }));
 }
