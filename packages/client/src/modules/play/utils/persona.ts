@@ -31,15 +31,8 @@ function buildPersona(
   );
 
   const getPersonaAtStep = (step: number) => {
-    let stepUsed = step;
-    if (stepUsed >= game.step) {
-      stepUsed = game.step;
-    }
-    if (stepUsed === game.step && game.isStepActive) {
-      stepUsed -= 1;
-    }
-    stepUsed = Math.max(stepUsed, 0);
-
+    const stepUsed =
+      step > game.lastFinishedStep ? game.lastFinishedStep : step;
     return personaBySteps[stepUsed];
   };
 

@@ -9,7 +9,7 @@ import {
   EnergyConsumptionButtons,
   EnergyProductionButtons,
 } from "../../common/components/EnergyButtons";
-import { getCurrentStep, STEPS } from "../constants";
+import { STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumFor } from "../../persona";
@@ -19,7 +19,7 @@ import { IGame } from "../../../utils/types";
 export { StatsGraphs };
 
 function isNotFinishedStep(step: number, game: IGame) {
-  return step > game.step || (step === game.step && game.isStepActive);
+  return step > game.lastFinishedStep;
 }
 
 function StatsGraphs() {
@@ -100,7 +100,7 @@ function useStackedEnergyData() {
     },
   ];
 
-  const stepsDetails = _.range(1, getCurrentStep(game) + 1).map(
+  const stepsDetails = _.range(1, game.lastFinishedStep + 1).map(
     (step: number) => {
       const persona = personaBySteps[step];
       if (STEPS[step]?.type === "consumption") {

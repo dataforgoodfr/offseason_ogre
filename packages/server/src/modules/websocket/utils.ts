@@ -3,9 +3,10 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { safe } from "../../lib/fp";
 import { setSessionItem, startSession } from "../../lib/session";
+import { Game } from "../games/types";
 import { Socket, SocketData } from "./types";
 
-export { getSocketData, wrapHandler };
+export { getSocketData, wrapHandler, hasFinishedStep };
 
 function getSocketData(socket: Socket): SocketData {
   const userSchema = z.object({
@@ -43,4 +44,8 @@ function setRequestId(handler: SocketHandler) {
       await handler(...args);
     });
   };
+}
+
+function hasFinishedStep(game: Partial<Game>) {
+  return game?.step === game?.lastFinishedStep;
 }

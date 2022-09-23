@@ -5,7 +5,7 @@ import { services as gameServices } from "../../games/services";
 import { services as playersServices } from "../../players/services";
 import * as teamActionsServices from "../../teamActions/services";
 import { rooms } from "../constants";
-import { wrapHandler } from "../utils";
+import { hasFinishedStep, wrapHandler } from "../utils";
 
 export { handleUpdateGame };
 
@@ -17,7 +17,7 @@ function handleUpdateGame(io: Server, socket: Socket) {
         gameId: z.number(),
         update: z.object({
           step: z.number().optional(),
-          isStepActive: z.boolean().optional(),
+          lastFinishedStep: z.number().optional(),
           status: z.enum(["ready", "draft", "finished"]).optional(),
         }),
       });
@@ -30,30 +30,27 @@ function handleUpdateGame(io: Server, socket: Socket) {
 
       io.to(rooms.game(gameId)).emit("gameUpdated", { update });
 
-      const stepSwitchedToActive =
-        !game.isStepActive && gameUpdated.isStepActive;
-      const stepSwitchedToInactive =
-        game.isStepActive && !gameUpdated.isStepActive;
-
       const teamIds = gameUpdated.teams.map((team) => team.id);
       const teamActions = await Promise.all(
         teamIds.map((teamId) =>
           teamActionsServices.getOrCreateTeamActions(teamId)
         )
       );
-      let hasFinishedStep: boolean | undefined;
-      if (stepSwitchedToActive) {
-        hasFinishedStep = false;
-      } else if (stepSwitchedToInactive) {
-        hasFinishedStep = true;
-      }
 
-      if (hasFinishedStep != null) {
-        await playersServices.updateMany(gameId, { hasFinishedStep });
+      const hasGameFinishedStep = hasFinishedStep(gameUpdated);
+      const hasPreviousGameFinishedStep = hasFinishedStep(gameUpdated);
+
+      if (hasPreviousGameFinishedStep !== hasGameFinishedStep) {
+        await playersServices.updateMany(gameId, {
+          hasFinishedStep: hasGameFinishedStep,
+        });
       }
       teamIds.forEach((teamId, index) => {
         io.to(rooms.team(gameId, teamId)).emit("playerUpdated", {
-          update: { hasFinishedStep, teamActions: teamActions[index] },
+          update: {
+            hasFinishedStep: hasGameFinishedStep,
+            teamActions: teamActions[index],
+          },
         });
       });
 

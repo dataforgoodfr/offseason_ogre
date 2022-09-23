@@ -12,13 +12,7 @@ import {
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
 import { persona as basePersona } from "../../persona/persona";
-import {
-  GameStep,
-  GameStepType,
-  getCurrentStep,
-  isStepOfType,
-  STEPS,
-} from "../constants";
+import { GameStep, GameStepType, isStepOfType, STEPS } from "../constants";
 import { sortBy } from "../../../lib/array";
 import { buildPersona } from "../utils/persona";
 import { computePlayerActionsStats } from "../utils/playerActions";
@@ -26,6 +20,7 @@ import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { mean } from "../../../lib/math";
 import { range, sum } from "lodash";
 import { sumAllValues } from "../../persona";
+import { hasFinishedStep } from "../../games/utils";
 
 export {
   PlayProvider,
@@ -283,7 +278,7 @@ function buildStepToData(
   personaByUserId: ReturnType<typeof usePersonaByUserId>
 ) {
   return Object.fromEntries(
-    range(0, getCurrentStep(game) + 1)
+    range(0, game.lastFinishedStep + 1)
       .filter((step) => isStepOfType(step, dataType))
       .map((step: number) => [
         step,
@@ -378,8 +373,8 @@ function useGameSocket({
             navigate("/play");
           }
           if (
-            previous.isStepActive &&
-            !update.isStepActive &&
+            hasFinishedStep(update) &&
+            !hasFinishedStep(previous) &&
             pathname.endsWith("actions")
           ) {
             navigate(`/play/games/${previous.id}/persona`);

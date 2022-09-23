@@ -8,17 +8,17 @@ datasource db {
 }
 
 model Game {
-  id           Int       @id @default(autoincrement())
-  date         DateTime
-  description  String    @default("")
-  name         String
-  players      Players[]
-  teacher      User      @relation("TaughtGames", fields: [teacherId], references: [id])
-  teacherId    Int
-  teams        Team[]
-  status       Status    @default(draft)
-  step         Int       @default(0)
-  isStepActive Boolean   @default(false)
+  id               Int       @id @default(autoincrement())
+  date             DateTime
+  description      String    @default("")
+  name             String
+  players          Players[]
+  teacher          User      @relation("TaughtGames", fields: [teacherId], references: [id])
+  teacherId        Int
+  teams            Team[]
+  status           Status    @default(draft)
+  step             Int       @default(0)
+  lastFinishedStep Int   @default(0)
 }
 
 enum Status {

@@ -3,7 +3,6 @@ import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
 import { sumFor } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
-import { getLastCompletedStepPlayerValues } from "../utils/playerValues";
 
 export { PlayerChart };
 
@@ -26,10 +25,9 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
     ...team.players.map((player) => {
       const userId = player.user.id;
       const personaBySteps = personaByUserId[userId]!.personaBySteps;
-      const playerConsumption = getLastCompletedStepPlayerValues(
-        game,
-        personaBySteps
-      ).consumption;
+      const playerConsumption =
+        personaBySteps[game.lastFinishedStep].consumption;
+
       return {
         name: buildName(player.user),
         fossil: sumFor(playerConsumption, "fossil"),

@@ -5,6 +5,6 @@ export interface Game {
   name: string;
   status: string;
   step: number;
-  isStepActive: boolean;
+  lastFinishedStep: number;
   teacherId: number;
 }
