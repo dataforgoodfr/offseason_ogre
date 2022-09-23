@@ -2,17 +2,14 @@ import { Box, Grid, useTheme } from "@mui/material";
 import { ValidateActions } from "./Validation";
 import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
 import { PlayerHeaderGrid } from "./PlayerHeaderGrid";
-import { useCurrentStep } from "../context/playContext";
+import { useCurrentStep, useMyTeam } from "../context/playContext";
 import { PlayBox } from "../Components";
 import { TeamActionsHeader } from "./TeamActionsHeader";
 import { TeamActionsContent } from "./TeamActionsContent";
-import {
-  SynthesisScenarioName,
-  SynthesisBudget,
-  SynthesisCarbon,
-} from "./SynthesisContent";
+import { SynthesisScenarioName } from "./SynthesisContent";
 import { PlayerActionsContent } from "./PlayerActionsContent";
 import { PlayerActionsHeader } from "./PlayerActionsHeader";
+import { SynthesisBudget, SynthesisCarbon } from "../Components/Synthesis";
 
 export { PlayerActionsPage, PlayerHeader };
 
@@ -35,6 +32,8 @@ function PlayerActionsPage() {
 }
 
 function SynthesisLayout() {
+  const team = useMyTeam();
+
   return (
     <Box>
       <Grid container direction="row" rowSpacing={4}>
@@ -50,8 +49,8 @@ function SynthesisLayout() {
         >
           <PlayBox display="flex" flexDirection="column" gap={4}>
             <SynthesisScenarioName />
-            <SynthesisBudget />
-            <SynthesisCarbon />
+            <SynthesisBudget team={team} />
+            <SynthesisCarbon team={team} />
           </PlayBox>
         </Grid>
       </Grid>
