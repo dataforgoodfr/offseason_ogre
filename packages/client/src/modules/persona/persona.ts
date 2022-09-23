@@ -17,7 +17,7 @@ const persona: Persona = {
   budget: 13.7,
   carbonFootprint: 32.73,
   actionPoints: 0,
-  points: 8500,
+  points: 0,
   consumption,
   production,
 };
