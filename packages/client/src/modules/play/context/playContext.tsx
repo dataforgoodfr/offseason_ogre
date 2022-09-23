@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
@@ -103,7 +103,12 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     setPlayer,
   });
 
-  if (gameWithTeams === null || socket === null) {
+  const gameWithSortedTeams = useMemo(
+    () => sortTeams(gameWithTeams),
+    [gameWithTeams]
+  );
+
+  if (gameWithSortedTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
 
@@ -127,7 +132,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
 
     socket.emit("updatePlayerActions", {
       gameId,
-      step: gameWithTeams.step,
+      step: gameWithSortedTeams.step,
       playerActions,
     });
   };
@@ -147,17 +152,10 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     scenarioName?: string;
   }) => {
     socket.emit("updateTeam", {
-      step: gameWithTeams.step,
+      step: gameWithSortedTeams.step,
       teamActions,
       scenarioName,
     });
-  };
-
-  const gameWithSortedTeams = {
-    ...gameWithTeams,
-    teams: gameWithTeams.teams.sort(
-      (a: ITeamWithPlayers, b: ITeamWithPlayers) => a.id - b.id
-    ),
   };
 
   return (
@@ -177,6 +175,18 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       {children}
     </PlayContext.Provider>
   );
+}
+
+function sortTeams(gameWithTeams: IGameWithTeams | null) {
+  if (gameWithTeams !== null) {
+    return {
+      ...gameWithTeams,
+      teams: gameWithTeams?.teams.sort(
+        (a: ITeamWithPlayers, b: ITeamWithPlayers) => a.id - b.id
+      ),
+    };
+  }
+  return null;
 }
 
 function useLoadedPlay(): IPlayContext {
