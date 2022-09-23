@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
@@ -103,7 +103,12 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     setPlayer,
   });
 
-  if (gameWithTeams === null || socket === null) {
+  const gameWithSortedTeams = useMemo(
+    () => sortTeams(gameWithTeams),
+    [gameWithTeams]
+  );
+
+  if (gameWithSortedTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
 
@@ -127,7 +132,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
 
     socket.emit("updatePlayerActions", {
       gameId,
-      step: gameWithTeams.step,
+      step: gameWithSortedTeams.step,
       playerActions,
     });
   };
@@ -147,7 +152,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     scenarioName?: string;
   }) => {
     socket.emit("updateTeam", {
-      step: gameWithTeams.step,
+      step: gameWithSortedTeams.step,
       teamActions,
       scenarioName,
     });
@@ -156,7 +161,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   return (
     <PlayContext.Provider
       value={{
-        game: gameWithTeams,
+        game: gameWithSortedTeams,
         updateGame,
         playerActions,
         updatePlayerActions,
@@ -170,6 +175,16 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       {children}
     </PlayContext.Provider>
   );
+}
+
+function sortTeams(gameWithTeams: IGameWithTeams | null) {
+  if (gameWithTeams !== null) {
+    return {
+      ...gameWithTeams,
+      teams: [...(gameWithTeams?.teams ?? [])].sort(sortBy("id", "asc")),
+    };
+  }
+  return null;
 }
 
 function useLoadedPlay(): IPlayContext {
@@ -353,15 +368,18 @@ function useGameSocket({
       setGameWithTeams(gameWithTeams);
     });
 
-    newSocket.on("gameUpdated", ({ update }: { update: Partial<IGame> }) => {
-      setGameWithTeams((previous) => {
-        if (previous === null) return null;
-        if (previous.status !== "finished" && update.status === "finished") {
-          navigate("/");
-        }
-        return { ...previous, ...update };
-      });
-    });
+    newSocket.on(
+      "gameUpdated",
+      ({ update }: { update: Partial<IGameWithTeams> }) => {
+        setGameWithTeams((previous) => {
+          if (previous === null) return null;
+          if (previous.status !== "finished" && update.status === "finished") {
+            navigate("/");
+          }
+          return { ...previous, ...update };
+        });
+      }
+    );
 
     newSocket.on(
       "playerActionsUpdated",
