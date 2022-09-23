@@ -10,6 +10,7 @@ import { usePlay } from "../context/playContext";
 import { TeamConsoleLayout } from "./TeamConsoleLayout";
 import { StatsConsole } from "./StatsConsole";
 import { STEPS } from "../constants";
+import { hasFinishedStep } from "../../games/utils";
 
 export { GameConsoleView };
 
@@ -45,13 +46,16 @@ function Header(props: any) {
       : `Terminer l'étape ${currentStepNumber}`;
 
   const startStep = () => {
-    updateGame({ step: game.step + 1, isStepActive: true });
+    updateGame({ step: game.step + 1 });
   };
   const stopStep = () => {
     if (game.step === STEPS.length - 1) {
-      updateGame({ isStepActive: false, status: "finished" });
+      updateGame({
+        lastFinishedStep: game.lastFinishedStep + 1,
+        status: "finished",
+      });
     } else {
-      updateGame({ isStepActive: false });
+      updateGame({ lastFinishedStep: game.lastFinishedStep + 1 });
     }
   };
 
@@ -85,9 +89,9 @@ function Header(props: any) {
               variant="contained"
               color={"secondary"}
               sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-              onClick={game.isStepActive ? stopStep : startStep}
+              onClick={!hasFinishedStep(game) ? stopStep : startStep}
             >
-              {game.isStepActive ? stopStepLabel : startStepLabel}
+              {!hasFinishedStep(game) ? stopStepLabel : startStepLabel}
               <ArrowForwardIcon />
             </Button>
           )}

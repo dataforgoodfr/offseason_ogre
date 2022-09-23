@@ -8,7 +8,7 @@ import { services as teamServices } from "../../teams/services";
 import * as teamActionsServices from "../../teamActions/services";
 import { rooms } from "../constants";
 import { Server, Socket } from "../types";
-import { getSocketData, wrapHandler } from "../utils";
+import { getSocketData, hasFinishedStep, wrapHandler } from "../utils";
 
 export { handleUpdateTeam };
 
@@ -48,7 +48,7 @@ async function handleUpdateTeamSafely(
       const { game, player } = await getPlayerAndGame(gameId, user.id);
 
       if (teamActionsUpdate && teamActionsUpdate.length !== 0) {
-        const areUpdatable = !player.hasFinishedStep && game?.isStepActive;
+        const areUpdatable = !player.hasFinishedStep && !hasFinishedStep(game);
         invariant(
           areUpdatable,
           `Player can't update team actions when current step is finished or inactive`

@@ -29,6 +29,7 @@ import {
   formatBudget,
   formatCarbonFootprint,
 } from "../../../lib/formatter";
+import { hasFinishedStep } from "../../games/utils";
 
 export { PlayerHeader, Header, Actions };
 
@@ -219,13 +220,7 @@ function Actions() {
 }
 
 function isActionButtonDisabled(game: IGameWithTeams): boolean {
-  if (game.isStepActive === false) {
-    return true;
-  }
-  if (game.step === 0) {
-    return true;
-  }
-  return false;
+  return game.step === 0 || hasFinishedStep(game);
 }
 
 function ScoresLegendLayout({ children }: { children: any }) {

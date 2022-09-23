@@ -1,10 +1,9 @@
-import { IGame, ProductionActionType } from "../../../utils/types";
+import { ProductionActionType } from "../../../utils/types";
 
 export {
   MAX_NUMBER_STEPS,
   MAX_ACTION_POINTS,
   STEPS,
-  getCurrentStep,
   getStepId,
   getStepIndexById,
   isStepOfType,
@@ -88,10 +87,6 @@ const STEPS: readonly GameStep[] = [
     type: "consumption",
   },
 ] as const;
-
-function getCurrentStep(game: IGame) {
-  return Math.max(game.isStepActive ? game.step - 1 : game.step, 0);
-}
 
 function getStepId(step: number): GameStepId | undefined {
   return STEPS[step]?.id;
