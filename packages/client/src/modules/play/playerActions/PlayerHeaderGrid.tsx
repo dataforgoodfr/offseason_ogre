@@ -18,7 +18,7 @@ function PlayerHeaderGrid({
       className="player-actions-header"
       container
       item
-      direction="column"
+      direction="row"
       xs={12}
       sm={3}
       sx={{
@@ -33,9 +33,8 @@ function PlayerHeaderGrid({
       <Grid
         item
         sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          ml: "auto",
+          mr: "auto",
         }}
       >
         {additionalActions}
