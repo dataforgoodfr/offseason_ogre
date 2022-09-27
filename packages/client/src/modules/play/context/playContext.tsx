@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
-import { useMatch, useNavigate, useLocation } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 import {
   IGame,
   ITeamWithPlayers,
@@ -20,7 +20,6 @@ import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { mean } from "../../../lib/math";
 import { range, sum } from "lodash";
 import { sumAllValues } from "../../persona";
-import { hasFinishedStep } from "../../games/utils";
 
 export {
   PlayProvider,
@@ -37,6 +36,7 @@ export {
 
 interface IPlayContext {
   game: IGameWithTeams;
+  isStepFinished: boolean;
   updateGame: (update: Partial<IGame>) => void;
   playerActions: PlayerActions[];
   updatePlayerActions: (
@@ -157,6 +157,8 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     <PlayContext.Provider
       value={{
         game: gameWithSortedTeams,
+        isStepFinished:
+          gameWithSortedTeams.step === gameWithSortedTeams.lastFinishedStep,
         updateGame,
         playerActions,
         updatePlayerActions,
@@ -355,7 +357,6 @@ function useGameSocket({
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
-  const { pathname } = useLocation();
   useEffect(() => {
     const newSocket = io();
 
@@ -372,10 +373,10 @@ function useGameSocket({
           if (previous.status !== "finished" && update.status === "finished") {
             navigate("/play");
           }
+
           if (
-            hasFinishedStep(update) &&
-            !hasFinishedStep(previous) &&
-            pathname.endsWith("actions")
+            update.lastFinishedStep &&
+            update.lastFinishedStep !== previous.lastFinishedStep
           ) {
             navigate(`/play/games/${previous.id}/persona`);
           }
@@ -417,7 +418,6 @@ function useGameSocket({
     setPlayerActions,
     setActionPointsLimitExceeded,
     setPlayer,
-    pathname,
   ]);
   return { socket };
 }

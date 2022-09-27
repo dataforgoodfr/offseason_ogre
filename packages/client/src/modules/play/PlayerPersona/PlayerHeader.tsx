@@ -14,7 +14,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
-import { IGame, IGameWithTeams, ITeam, IUser } from "../../../utils/types";
+import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
 import {
   useCurrentStep,
@@ -29,7 +29,6 @@ import {
   formatBudget,
   formatCarbonFootprint,
 } from "../../../lib/formatter";
-import { hasFinishedStep } from "../../games/utils";
 
 export { PlayerHeader, Header, Actions };
 
@@ -172,7 +171,7 @@ function Header({
 
 function Actions() {
   const gameId = useGameId();
-  const { game } = usePlay();
+  const { game, isStepFinished } = usePlay();
   const currentStep = useCurrentStep();
 
   const iconName =
@@ -210,17 +209,13 @@ function Actions() {
           mt: 2,
           width: "200px",
         }}
-        disabled={isActionButtonDisabled(game)}
+        disabled={game.step === 0 || isStepFinished}
       >
         <Icon name={iconName} sx={{ mr: 1 }} />
         {currentStep?.label}
       </Button>
     </Box>
   );
-}
-
-function isActionButtonDisabled(game: IGameWithTeams): boolean {
-  return game.step === 0 || hasFinishedStep(game);
 }
 
 function ScoresLegendLayout({ children }: { children: any }) {
