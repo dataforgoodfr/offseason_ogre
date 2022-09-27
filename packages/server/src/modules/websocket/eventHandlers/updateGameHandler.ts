@@ -38,7 +38,7 @@ function handleUpdateGame(io: Server, socket: Socket) {
       );
 
       const hasGameFinishedStep = hasFinishedStep(gameUpdated);
-      const hasPreviousGameFinishedStep = hasFinishedStep(gameUpdated);
+      const hasPreviousGameFinishedStep = hasFinishedStep(game);
 
       if (hasPreviousGameFinishedStep !== hasGameFinishedStep) {
         await playersServices.updateMany(gameId, {

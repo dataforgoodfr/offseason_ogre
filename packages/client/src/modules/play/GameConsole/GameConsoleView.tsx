@@ -10,7 +10,6 @@ import { usePlay } from "../context/playContext";
 import { TeamConsoleLayout } from "./TeamConsoleLayout";
 import { StatsConsole } from "./StatsConsole";
 import { STEPS } from "../constants";
-import { hasFinishedStep } from "../../games/utils";
 
 export { GameConsoleView };
 
@@ -30,7 +29,7 @@ function GameConsoleView() {
 
 function Header(props: any) {
   const { selectedScreen, setSelectedScreen } = props;
-  const { game, updateGame } = usePlay();
+  const { game, isStepFinished, updateGame } = usePlay();
   const theme = useTheme();
 
   const nextStepNumber = game.step + 1;
@@ -89,9 +88,9 @@ function Header(props: any) {
               variant="contained"
               color={"secondary"}
               sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-              onClick={!hasFinishedStep(game) ? stopStep : startStep}
+              onClick={!isStepFinished ? stopStep : startStep}
             >
-              {!hasFinishedStep(game) ? stopStepLabel : startStepLabel}
+              {!isStepFinished ? stopStepLabel : startStepLabel}
               <ArrowForwardIcon />
             </Button>
           )}
