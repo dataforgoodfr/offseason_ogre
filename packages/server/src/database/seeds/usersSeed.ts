@@ -82,7 +82,7 @@ function getUsersData(): Omit<User, "id">[] {
       country: "FR",
     },
     {
-      email: "louissanna@gmail.com",
+      email: "louis.sanna@gmail.com",
       isTeacher: true,
       firstName: "Louis",
       lastName: "Sanna",
