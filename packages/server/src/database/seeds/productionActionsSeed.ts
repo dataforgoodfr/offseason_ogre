@@ -10,6 +10,10 @@ import { Seed } from "../types";
 
 export { seed, pointsIntervalSeed };
 
+type ProductionActionWithPointInterval = ProductionAction & {
+  pointsInterval: PointsInterval[];
+};
+
 const seed: Seed<ProductionAction> = {
   seeder: (productionAction) =>
     database.productionAction.upsert({
@@ -213,7 +217,7 @@ function getProductionActionsDataForProductionStep1(): {
       ],
       isPlayable: true,
     },
-  ] as const;
+  ] as ProductionActionWithPointInterval[];
 
   const actions = getActions(productionActions, "production-1");
 
@@ -362,7 +366,7 @@ function getProductionActionsDataForProductionStep2(): {
       ],
       isPlayable: true,
     },
-  ] as const;
+  ] as ProductionActionWithPointInterval[];
 
   const actions = getActions(productionActions, "production-2");
 
@@ -408,7 +412,7 @@ function getProductionActionsDataForProductionStep3(): {
       ],
       isPlayable: true,
     },
-  ] as const;
+  ] as ProductionActionWithPointInterval[];
 
   const actions = getActions(productionActions, "production-3");
   const points = getPointsIntervals(productionActions);
@@ -416,8 +420,12 @@ function getProductionActionsDataForProductionStep3(): {
   return { actions, points };
 }
 
-function getActions(productionActions: readonly any[], stepId: GameStepId) {
+function getActions(
+  productionActions: ProductionActionWithPointInterval[],
+  stepId: GameStepId
+) {
   return productionActions.map((action, index) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { pointsInterval, ...actionWithoutPoints } = action;
     return {
       ...actionWithoutPoints,

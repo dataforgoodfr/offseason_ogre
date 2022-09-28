@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import { logger } from "../logger";
 import {
   BusinessError,
@@ -9,12 +9,7 @@ export { logError };
 
 const isProd = process.env.NODE_ENV === "production";
 
-const logError = (
-  err: Error,
-  _: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const logError = (err: Error, _: Request, res: Response) => {
   logger.error(err);
 
   if (err instanceof BusinessError) {
@@ -23,12 +18,12 @@ const logError = (
       code: err.code,
       ...(!isProd ? { stack: err.stack } : {}),
     });
-  } else {
-    const businessError = createBusinessError("UNEXPECTED");
-    res.status(500).send({
-      message: businessError.message,
-      code: businessError.code,
-      ...(!isProd ? { stack: err.stack } : {}),
-    });
+    return;
   }
+  const businessError = createBusinessError("UNEXPECTED");
+  res.status(500).send({
+    message: businessError.message,
+    code: businessError.code,
+    ...(!isProd ? { stack: err.stack } : {}),
+  });
 };

@@ -418,6 +418,7 @@ function useGameSocket({
     setPlayerActions,
     setActionPointsLimitExceeded,
     setPlayer,
+    navigate,
   ]);
   return { socket };
 }
