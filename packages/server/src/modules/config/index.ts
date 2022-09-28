@@ -13,7 +13,7 @@ function getOrigin(): string | undefined {
     return process.env.ORIGIN;
   }
   if (process.env.NODE_ENV === "production") {
-    return "https://atelierogre-production.herokuapp.com/";
+    return "https://atelierogre-production.herokuapp.com";
   }
   if (process.env.NODE_ENV === "staging") {
     return "https://atelierogre-staging.herokuapp.com";
