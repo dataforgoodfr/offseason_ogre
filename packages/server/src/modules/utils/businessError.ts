@@ -3,17 +3,32 @@ import _ from "lodash";
 export { businessErrors, BusinessError, createBusinessError };
 
 const businessErrors = {
+  GAME_ALREADY_STARTED: "GAME_ALREADY_STARTED",
+  GAME_NOT_FOUND: "GAME_NOT_FOUND",
+  USER_ALREADY_JOINED_GAME: "USER_ALREADY_JOINED_GAME",
   UNEXPECTED: "UNEXPECTED",
 } as const;
 
 const errorsConfig = {
+  GAME_ALREADY_STARTED: {
+    message: "Can't join game that already started",
+  },
+  GAME_NOT_FOUND: {
+    message: "Could not find game with id {id}",
+  },
+  USER_ALREADY_JOINED_GAME: {
+    message: "User {userId} already joined game {gameId}",
+  },
   UNEXPECTED: {
     message: "An unexpected error occured",
   },
 } as const;
 
 interface ErrorInterpolations {
-  UNEXPECTED: number;
+  GAME_ALREADY_STARTED: undefined;
+  GAME_NOT_FOUND: { id: number };
+  USER_ALREADY_JOINED_GAME: { userId: number; gameId: number };
+  UNEXPECTED: undefined;
 }
 
 type ErrorCode = typeof businessErrors[keyof typeof businessErrors];
