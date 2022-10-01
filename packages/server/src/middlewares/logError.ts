@@ -13,15 +13,16 @@ const logError = (err: Error, _: Request, res: Response) => {
   logger.error(err);
 
   if (err instanceof BusinessError) {
-    res.status(400).send({
+    res.status(400).json({
       message: err.message,
       code: err.code,
       ...(!isProd ? { stack: err.stack } : {}),
     });
     return;
   }
+
   const businessError = createBusinessError("UNEXPECTED");
-  res.status(500).send({
+  res.status(500).json({
     message: businessError.message,
     code: businessError.code,
     ...(!isProd ? { stack: err.stack } : {}),
