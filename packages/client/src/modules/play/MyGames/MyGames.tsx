@@ -21,6 +21,8 @@ import {
   JoinGameInputWrapper,
 } from "./styles";
 import { IGame } from "../../../utils/types";
+import { handleApiError } from "../../../utils/request";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { MyGames };
 
@@ -121,6 +123,7 @@ function JoinGame() {
       gameId: 0,
     },
   });
+  const { t } = useTranslation();
 
   const queryClient = useQueryClient();
 
@@ -159,7 +162,18 @@ function JoinGame() {
           </Button>
         </JoinGameInputWrapper>
       </form>
-      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
+      {mutation.isError && (
+        <ErrorAlert
+          message={handleApiError(mutation.error, {
+            GAME_ALREADY_STARTED: () =>
+              t("message.error.register.GAME_ALREADY_STARTED"),
+            GAME_NOT_FOUND: () => t("message.error.register.GAME_NOT_FOUND"),
+            USER_ALREADY_JOINED_GAME: () =>
+              t("message.error.register.USER_ALREADY_JOINED_GAME"),
+            default: () => t("message.error.global.UNEXPECTED"),
+          })}
+        />
+      )}
       {mutation.isSuccess && <SuccessAlert />}
     </CustomPaper>
   );
