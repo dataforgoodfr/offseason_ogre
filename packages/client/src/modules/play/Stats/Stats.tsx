@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import { PlayerHeaderGrid } from "../playerActions/PlayerHeaderGrid";
+import { PlayerHeaderGrid } from "../PlayerPersona";
 import { StatsGraphs } from "./StatsGraphs";
 
 export { Stats };

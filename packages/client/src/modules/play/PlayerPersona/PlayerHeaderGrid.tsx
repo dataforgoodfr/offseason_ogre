@@ -16,9 +16,6 @@ function PlayerHeaderGrid({
   return (
     <CustomGrid
       className="player-actions-header"
-      container
-      item
-      direction="row"
       xs={12}
       sm={3}
       sx={{
