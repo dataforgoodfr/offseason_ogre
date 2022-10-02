@@ -1,13 +1,12 @@
 import _ from "lodash";
 
-export { businessErrors, BusinessError, createBusinessError };
+export { BusinessError, createBusinessError };
 
-const businessErrors = {
-  GAME_ALREADY_STARTED: "GAME_ALREADY_STARTED",
-  GAME_NOT_FOUND: "GAME_NOT_FOUND",
-  USER_ALREADY_JOINED_GAME: "USER_ALREADY_JOINED_GAME",
-  UNEXPECTED: "UNEXPECTED",
-} as const;
+type ErrorCode =
+  | "GAME_ALREADY_STARTED"
+  | "GAME_NOT_FOUND"
+  | "USER_ALREADY_JOINED_GAME"
+  | "UNEXPECTED";
 
 const errorsConfig = {
   GAME_ALREADY_STARTED: {
@@ -31,10 +30,8 @@ interface ErrorInterpolations {
   UNEXPECTED: undefined;
 }
 
-type ErrorCode = typeof businessErrors[keyof typeof businessErrors];
-
 class BusinessError extends Error {
-  public readonly code: ErrorCode = businessErrors.UNEXPECTED;
+  public readonly code: ErrorCode = "UNEXPECTED";
 
   constructor(errorCodeOrMessage: ErrorCode | string, interpolations?: any) {
     const errorMessage = getErrorMessage(errorCodeOrMessage, interpolations);
@@ -44,7 +41,7 @@ class BusinessError extends Error {
     this.name = this.constructor.name;
     this.code = isErrorCode(errorCodeOrMessage)
       ? errorCodeOrMessage
-      : businessErrors.UNEXPECTED;
+      : "UNEXPECTED";
   }
 }
 
