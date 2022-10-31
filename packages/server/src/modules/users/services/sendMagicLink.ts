@@ -3,12 +3,13 @@ import sendGridMail from "@sendgrid/mail";
 import { sign } from "../../tokens";
 import { getApiOrigin } from "../../config";
 import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
+import { createBusinessError } from "../../utils/businessError";
 
 export { sendMagicLink };
 
 async function sendMagicLink(email: string) {
   if (!(await isMailAlreadyUsed(email))) {
-    throw new Error("Pas d'utilisateur avec cet email");
+    throw createBusinessError("USER_DOES_NOT_EXIST", { email });
   }
   const origin = getApiOrigin();
   const token = signMagicToken(email);
