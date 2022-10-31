@@ -105,8 +105,12 @@ function computeResultsByStep(
     )
   );
 
-  const budgetPoints = computeBudgetPoints(budget);
-  const co2Points = computeCO2Points(basePersona.carbonFootprint);
+  const budgetPoints =
+    step >= MAX_NUMBER_STEPS - 1 ? computeBudgetPoints(budget) : 0;
+  const co2Points =
+    step >= MAX_NUMBER_STEPS - 1
+      ? computeCO2Points(basePersona.carbonFootprint)
+      : 0;
   const points = playerPoints + teamPoints + budgetPoints + co2Points;
 
   const performedActionsNames = performedPlayerActions.map(

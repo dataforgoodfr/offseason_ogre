@@ -125,7 +125,9 @@ function StatsConsole() {
                 <Box key={team.id} display="flex" gap={1} alignSelf="stretch">
                   <Icon name="team" />
                   <Typography>{team.name}</Typography>
-                  <Typography>{team.scenarioName}</Typography>
+                  <Typography sx={{ lineBreak: "anywhere" }}>
+                    {team.scenarioName}
+                  </Typography>
                 </Box>
               ))}
             </PlayBox>

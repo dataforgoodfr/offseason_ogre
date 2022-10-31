@@ -3,12 +3,16 @@ import _ from "lodash";
 export { BusinessError, createBusinessError };
 
 type ErrorCode =
+  | "USER_DOES_NOT_EXIST"
   | "GAME_ALREADY_STARTED"
   | "GAME_NOT_FOUND"
   | "USER_ALREADY_JOINED_GAME"
   | "UNEXPECTED";
 
 const errorsConfig = {
+  USER_DOES_NOT_EXIST: {
+    message: "User with email {email} does not exist.",
+  },
   GAME_ALREADY_STARTED: {
     message: "Can't join game that already started",
   },
@@ -24,6 +28,7 @@ const errorsConfig = {
 } as const;
 
 interface ErrorInterpolations {
+  USER_DOES_NOT_EXIST: { email: string };
   GAME_ALREADY_STARTED: undefined;
   GAME_NOT_FOUND: { id: number };
   USER_ALREADY_JOINED_GAME: { userId: number; gameId: number };

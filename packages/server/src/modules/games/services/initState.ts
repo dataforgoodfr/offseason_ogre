@@ -20,7 +20,11 @@ async function initState({ gameId }: { gameId: number }) {
           },
           actions: {
             include: {
-              action: true,
+              action: {
+                include: {
+                  pointsIntervals: true,
+                },
+              },
             },
           },
         },

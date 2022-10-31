@@ -35,7 +35,11 @@ async function getDocument(id: number): Promise<Model | null> {
           },
           actions: {
             include: {
-              action: true,
+              action: {
+                include: {
+                  pointsIntervals: true,
+                },
+              },
             },
           },
         },

@@ -18,7 +18,7 @@ import { buildPersona } from "../utils/persona";
 import { computePlayerActionsStats } from "../utils/playerActions";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { mean } from "../../../lib/math";
-import { range, sum } from "lodash";
+import { range } from "lodash";
 import { sumAllValues } from "../../persona";
 
 export {
@@ -295,19 +295,14 @@ function buildStepData(
   team: ITeamWithPlayers,
   personaByUserId: ReturnType<typeof usePersonaByUserId>
 ) {
-  const scaleFactor = dataType === "consumption" ? team.players.length || 1 : 1;
-
-  return (
-    sum(
-      team.players
-        .map(
-          ({ user }) =>
-            personaByUserId[user.id].getPersonaAtStep(step)[dataType]
-        )
-        .map((data) =>
-          parseInt(sumAllValues(data as { type: string; value: number }[]))
-        )
-    ) / scaleFactor
+  return mean(
+    team.players
+      .map(
+        ({ user }) => personaByUserId[user.id].getPersonaAtStep(step)[dataType]
+      )
+      .map((data) =>
+        parseInt(sumAllValues(data as { type: string; value: number }[]))
+      )
   );
 }
 
