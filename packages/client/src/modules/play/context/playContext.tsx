@@ -20,6 +20,7 @@ import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { mean } from "../../../lib/math";
 import { range } from "lodash";
 import { sumAllValues } from "../../persona";
+import { NO_TEAM } from "../../common/constants/teams";
 
 export {
   PlayProvider,
@@ -179,7 +180,7 @@ function sortTeams(gameWithTeams: IGameWithTeams | null) {
     return {
       ...gameWithTeams,
       teams: [...(gameWithTeams?.teams ?? [])]
-        .filter(({ name }) => name !== "Aucune équipe")
+        .filter(({ name }) => name !== NO_TEAM)
         .sort(sortBy("id", "asc")),
     };
   }

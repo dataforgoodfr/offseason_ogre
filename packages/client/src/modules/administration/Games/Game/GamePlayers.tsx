@@ -14,36 +14,25 @@ import {
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
 import { IGame } from "../../../../utils/types";
 import { useState } from "react";
-
-interface Team {
-  id: number;
-  gameId: number;
-  name: string;
-  scenarioName: string;
-}
+import {
+  usePlayers,
+  getTeamQueryPath,
+  useTeams,
+  Team,
+} from "./services/queries";
+import { useGameId } from "./utils";
 
 export { GamePlayers };
 
 function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const gameId = useGameId();
 
-  const playersQuery = useQuery(`/api/games/${gameId}/players`, () => {
-    return axios.get<undefined, { data: { players: any[] } }>(
-      `/api/games/${gameId}/players`
-    );
-  });
-
-  const teamQueryPath = `/api/teams?${new URLSearchParams({
-    gameId: `${gameId}`,
-  })}`;
-
-  const teamQuery = useQuery(teamQueryPath, () => {
-    return axios.get<undefined, { data: { teams: Team[] } }>(teamQueryPath);
-  });
+  const playersQuery = usePlayers(gameId);
+  const teamQueryPath = getTeamQueryPath(gameId);
+  const teamQuery = useTeams(teamQueryPath);
 
   const queryClient = useQueryClient();
   const changeTeamMutation = useMutation<
@@ -235,11 +224,4 @@ function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
       </Dialog>
     </>
   );
-}
-
-function useGameId() {
-  const { id } = useParams();
-  if (!id) throw new Error("game id must be defined");
-  const gameId = +id;
-  return gameId;
 }

@@ -1,4 +1,5 @@
 import { database } from "../../../database";
+import { NO_TEAM } from "../../teams/constants/teams";
 import { services as teamServices } from "../../teams/services";
 import { Game } from "../types";
 import { initState } from "./initState";
@@ -22,7 +23,7 @@ async function getDocument(id: number): Promise<Model | null> {
     where: { id },
     include: {
       teams: {
-        where: { showInGame: true },
+        where: { isDeleted: false },
         include: {
           players: {
             include: {
@@ -55,7 +56,7 @@ async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {
 
 async function create(document: Omit<Model, "id">): Promise<Model> {
   const game = await model.create({ data: document });
-  await teamServices.create({ gameId: game.id, name: "Aucune équipe" });
+  await teamServices.create({ gameId: game.id, name: NO_TEAM });
   return game;
 }
 

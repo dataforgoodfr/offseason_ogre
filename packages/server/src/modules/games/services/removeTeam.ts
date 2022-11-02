@@ -1,4 +1,5 @@
 import { database } from "../../../database";
+import { NO_TEAM } from "../../teams/constants/teams";
 
 export { removeTeam };
 
@@ -10,7 +11,7 @@ async function removeTeam({
   teamId: number;
 }) {
   const noTeamId = (
-    await database.team.findFirst({ where: { gameId, name: "Aucune équipe" } })
+    await database.team.findFirst({ where: { gameId, name: NO_TEAM } })
   )?.id;
   await database.players.updateMany({
     where: { teamId },
@@ -19,6 +20,6 @@ async function removeTeam({
 
   await database.team.update({
     where: { id: teamId },
-    data: { showInGame: false },
+    data: { isDeleted: true },
   });
 }
