@@ -79,7 +79,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     <Box style={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
-        columns={buidColumns({ game, teams })}
+        columns={buildColumns({ game, teams })}
         disableSelectionOnClick
         pageSize={10}
         rowsPerPageOptions={[10]}
@@ -106,7 +106,7 @@ interface Row {
   teamId: number;
 }
 
-function buidColumns({
+function buildColumns({
   game,
   teams,
 }: {
