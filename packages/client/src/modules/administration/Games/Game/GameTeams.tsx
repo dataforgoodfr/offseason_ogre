@@ -15,18 +15,13 @@ import {
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
 import { IGame } from "../../../../utils/types";
 import { useState } from "react";
 import { TeamTextField } from "./GameTeams.styles";
-
-interface Team {
-  id: number;
-  gameId: number;
-  name: string;
-  scenarioName: string;
-}
+import { NO_TEAM } from "../../../common/constants/teams";
+import { usePlayers, getTeamQueryPath, useTeams } from "./services/queries";
+import { useGameId } from "./utils";
 
 export { GameTeams };
 
@@ -35,19 +30,9 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
 
   const [teamsQuantity, setTeamsQuantity] = useState<number>(1);
 
-  const playersQuery = useQuery(`/api/games/${gameId}/players`, () => {
-    return axios.get<undefined, { data: { players: any[] } }>(
-      `/api/games/${gameId}/players`
-    );
-  });
-
-  const teamQueryPath = `/api/teams?${new URLSearchParams({
-    gameId: `${gameId}`,
-  })}`;
-
-  const teamQuery = useQuery(teamQueryPath, () => {
-    return axios.get<undefined, { data: { teams: Team[] } }>(teamQueryPath);
-  });
+  const playersQuery = usePlayers(gameId);
+  const teamQueryPath = getTeamQueryPath(gameId);
+  const teamQuery = useTeams(teamQueryPath);
 
   const queryClient = useQueryClient();
 
@@ -192,7 +177,7 @@ function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
       type: "actions",
       width: 80,
       getActions: (params: GridRowParams<Row>) =>
-        params.row.name !== "Aucune équipe"
+        params.row.name !== NO_TEAM
           ? [<DeleteActionCellItem params={params} />]
           : [],
     },
@@ -252,11 +237,4 @@ function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
       </Dialog>
     </>
   );
-}
-
-function useGameId() {
-  const { id } = useParams();
-  if (!id) throw new Error("game id must be defined");
-  const gameId = +id;
-  return gameId;
 }

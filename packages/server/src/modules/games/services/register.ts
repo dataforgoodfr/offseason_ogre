@@ -1,5 +1,6 @@
 import { database } from "../../../database";
 import { logger } from "../../../logger";
+import { NO_TEAM } from "../../teams/constants/teams";
 import { createBusinessError } from "../../utils/businessError";
 import { services as gameServices } from "./index";
 
@@ -22,7 +23,7 @@ async function register({
   }
 
   const noTeam = await database.team.findUnique({
-    where: { gameId_name: { gameId, name: "Aucune équipe" } },
+    where: { gameId_name: { gameId, name: NO_TEAM } },
     rejectOnNotFound: true,
   });
 
