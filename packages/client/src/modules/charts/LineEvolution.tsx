@@ -13,7 +13,22 @@ import range from "lodash/range";
 
 export { LineEvolution };
 
-const LINE_COLORS = ["blue", "orange", "green", "red", "purple", "brown"];
+const LINE_COLORS = [
+  "#6929c4",
+  "#1192e8",
+  "#005d5d",
+  "#9f1853",
+  "#fa4d56",
+  "#570408",
+  "#198038",
+  "#002d9c",
+  "#ee538b",
+  "#b28600",
+  "#009d9a",
+  "#012749",
+  "#8a3800",
+  "#a56eff",
+];
 
 interface LineEvolutionDatum {
   name: string;

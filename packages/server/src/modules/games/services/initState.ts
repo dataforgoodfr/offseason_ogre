@@ -7,6 +7,7 @@ async function initState({ gameId }: { gameId: number }) {
     where: { id: gameId },
     include: {
       teams: {
+        where: { showInGame: true },
         include: {
           players: {
             include: {

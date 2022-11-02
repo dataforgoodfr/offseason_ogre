@@ -7,6 +7,8 @@ import { getPlayers } from "../services/getPlayers";
 import { registerController } from "./registerController";
 import { dateSchema } from "./types";
 import { removePlayerController } from "./removePlayerController";
+import { removeTeamController } from "./removeTeamController";
+import { putPlayersInTeamsController } from "./putPlayersInTeamsController";
 
 const crudController = {
   createController,
@@ -15,8 +17,10 @@ const crudController = {
   getGame,
   getPlayedGamesController,
   getPlayersController,
+  putPlayersInTeamsController,
   registerController,
   removePlayerController,
+  removeTeamController,
   updateGame,
 };
 const controllers = {

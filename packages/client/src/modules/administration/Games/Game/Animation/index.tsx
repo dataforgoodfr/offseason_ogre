@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { IGame, ITeamWithPlayers } from "../../../../utils/types";
+import { IGame, ITeamWithPlayers } from "../../../../../utils/types";
 import Launch from "./Launch";
 
 export { Animation };

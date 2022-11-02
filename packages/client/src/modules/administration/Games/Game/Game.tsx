@@ -10,10 +10,11 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { GameInfo } from "./GameInfo";
-import { IGame } from "../../../utils/types";
-import { ITeamWithPlayers } from "../../../utils/types";
+import { IGame } from "../../../../utils/types";
+import { ITeamWithPlayers } from "../../../../utils/types";
 import { GamePlayers } from "./GamePlayers";
 import { Animation } from "./Animation";
+import { GameTeams } from "./GameTeams";
 
 export { Game };
 
@@ -38,7 +39,7 @@ function Game() {
         </Typography>
         <GeneralInfo game={game} />
         <Players game={game} />
-        <Preparation />
+        <Preparation game={game} />
         <AnimationAccordion game={game} />
       </Box>
     </>
@@ -61,10 +62,10 @@ function Players({ game }: { game: IGame }) {
   );
 }
 
-function Preparation() {
+function Preparation({ game }: { game: IGame }) {
   return (
     <AccordionLayout title="Préparation">
-      {<Typography>Préparation.</Typography>}
+      {game && <GameTeams game={game} />}
     </AccordionLayout>
   );
 }

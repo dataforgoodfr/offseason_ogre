@@ -59,6 +59,7 @@ model Team {
   scenarioName String        @default("")
   players      Players[]
   actions      TeamActions[]
+  showInGame   Boolean       @default(true)
 
   @@unique([gameId, name], map: "Team_gameId_name_unique_constraint")
 }

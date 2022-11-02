@@ -23,8 +23,8 @@ import {
 } from "@mui/material";
 import React, { Fragment } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { LoggedUser } from "../auth";
-import { useAuth } from "../auth/authProvider";
+import { LoggedUser } from "../../auth";
+import { useAuth } from "../../auth/authProvider";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
 
 const drawerWidth: number = 240;

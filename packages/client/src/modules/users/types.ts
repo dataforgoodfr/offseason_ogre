@@ -1,4 +1,4 @@
-import { Game } from "../games/types";
+import { Game } from "../administration/Games/types";
 
 export type { User };
 

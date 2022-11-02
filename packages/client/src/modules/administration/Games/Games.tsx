@@ -10,7 +10,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { ErrorAlert, SuccessAlert } from "../alert";
+import { ErrorAlert, SuccessAlert } from "../../alert";
 
 export { Games };
 
