@@ -6,7 +6,7 @@ export function asyncErrorHandler(
 ) {
   return (request: Request, response: Response, next: NextFunction): void => {
     Promise.resolve(fn(request, response, next)).catch((err) => {
-      logError(err, request, response);
+      logError(err, request, response, next);
     });
   };
 }

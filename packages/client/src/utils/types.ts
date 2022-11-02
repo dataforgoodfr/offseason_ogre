@@ -1,4 +1,4 @@
-import { Game } from "../modules/games/types";
+import { Game } from "../modules/administration/Games/types";
 import { productionActionNames } from "../modules/play";
 import { availableActions } from "../modules/play/playerActions/constants/actions";
 import { User } from "../modules/users/types";

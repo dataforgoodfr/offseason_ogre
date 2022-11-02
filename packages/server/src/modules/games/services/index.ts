@@ -22,6 +22,7 @@ async function getDocument(id: number): Promise<Model | null> {
     where: { id },
     include: {
       teams: {
+        where: { showInGame: true },
         include: {
           players: {
             include: {
@@ -54,11 +55,7 @@ async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {
 
 async function create(document: Omit<Model, "id">): Promise<Model> {
   const game = await model.create({ data: document });
-  await teamServices.create({ gameId: game.id, name: "Equipe 1" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 2" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 3" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 4" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 5" });
+  await teamServices.create({ gameId: game.id, name: "Aucune équipe" });
   return game;
 }
 

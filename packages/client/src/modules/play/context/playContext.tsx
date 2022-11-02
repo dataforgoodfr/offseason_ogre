@@ -178,7 +178,9 @@ function sortTeams(gameWithTeams: IGameWithTeams | null) {
   if (gameWithTeams !== null) {
     return {
       ...gameWithTeams,
-      teams: [...(gameWithTeams?.teams ?? [])].sort(sortBy("id", "asc")),
+      teams: [...(gameWithTeams?.teams ?? [])]
+        .filter(({ name }) => name !== "Aucune équipe")
+        .sort(sortBy("id", "asc")),
     };
   }
   return null;

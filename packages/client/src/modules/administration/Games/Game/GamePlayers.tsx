@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
-import { IGame } from "../../../utils/types";
+import { IGame } from "../../../../utils/types";
 import { useState } from "react";
 
 interface Team {
@@ -36,9 +36,11 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
       `/api/games/${gameId}/players`
     );
   });
+
   const teamQueryPath = `/api/teams?${new URLSearchParams({
     gameId: `${gameId}`,
   })}`;
+
   const teamQuery = useQuery(teamQueryPath, () => {
     return axios.get<undefined, { data: { teams: Team[] } }>(teamQueryPath);
   });
@@ -68,7 +70,9 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
 
   const rows = players.map(({ playedGames, ...player }) => ({
     ...player,
-    teamId: playedGames[0].team.id,
+    teamId:
+      playedGames.find(({ gameId: gId }: { gameId: number }) => gId === gameId)
+        ?.team.id || 0,
   }));
 
   return (

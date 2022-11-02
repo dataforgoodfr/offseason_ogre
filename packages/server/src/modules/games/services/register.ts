@@ -17,16 +17,12 @@ async function register({
   if (!game) {
     throw createBusinessError("GAME_NOT_FOUND", { id: gameId });
   }
-  if (game.status === "ready") {
+  if (game.status !== "draft") {
     throw createBusinessError("GAME_ALREADY_STARTED");
   }
 
-  const team1 = await database.team.findUnique({
-    where: { gameId_name: { gameId, name: "Equipe 1" } },
-    rejectOnNotFound: true,
-  });
-  const team2 = await database.team.findUnique({
-    where: { gameId_name: { gameId, name: "Equipe 2" } },
+  const noTeam = await database.team.findUnique({
+    where: { gameId_name: { gameId, name: "Aucune équipe" } },
     rejectOnNotFound: true,
   });
 
@@ -35,7 +31,7 @@ async function register({
       data: {
         gameId,
         userId,
-        teamId: Math.random() > 0.5 ? team1.id : team2.id,
+        teamId: noTeam.id,
       },
     });
   } catch (err) {

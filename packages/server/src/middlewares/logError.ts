@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { logger } from "../logger";
 import {
   BusinessError,
@@ -9,7 +9,12 @@ export { logError };
 
 const isProd = process.env.NODE_ENV === "production";
 
-const logError = (err: Error, _: Request, res: Response) => {
+const logError = (
+  err: Error,
+  _: Request,
+  res: Response,
+  next: NextFunction
+) => {
   logger.error(err);
 
   if (err instanceof BusinessError) {

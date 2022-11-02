@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
 
-export { getTeamsController, getTeamController };
+export { getTeamsController, getTeamController, createTeamsController };
 
 async function getTeamsController(request: Request, response: Response) {
   const querySchema = z.object({
@@ -20,4 +20,14 @@ async function getTeamController(request: Request, response: Response) {
   const { teamId } = querySchema.parse(request.params);
   const teams = await services.get(teamId);
   response.status(200).json({ teams });
+}
+
+async function createTeamsController(request: Request, response: Response) {
+  const bodySchema = z.object({
+    gameId: z.number(),
+    quantity: z.number(),
+  });
+  const { gameId, quantity } = bodySchema.parse(request.body);
+  await services.createMany(gameId, quantity);
+  response.status(200).json({});
 }

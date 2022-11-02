@@ -4,11 +4,11 @@ import axios, { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 
-import { ErrorAlert, SuccessAlert } from "../alert";
-import FormInput from "../common/components/FormInput";
-import { User } from "../users/types";
-import { useAuth } from "../auth/authProvider";
-import { getCountryByCode } from "../signup/components/SelectCountry";
+import { ErrorAlert, SuccessAlert } from "../../alert";
+import FormInput from "../../common/components/FormInput";
+import { User } from "../../users/types";
+import { useAuth } from "../../auth/authProvider";
+import { getCountryByCode } from "../../signup/components/SelectCountry";
 
 export { Settings };
 

@@ -1,15 +1,21 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./modules/auth/authProvider";
-import { Games } from "./modules/games";
-import { Game } from "./modules/games";
-import { GameConsoleView, MyGames } from "./modules/play";
-import { PlayerPersona } from "./modules/play";
-import { Stats } from "./modules/play/Stats";
-import { Players } from "./modules/players";
-import { Settings, Teachers } from "./modules/teachers";
-import { Layout as AdministrationLayout } from "./modules/administration";
-import { PlayLayout } from "./modules/play/PlayLayout";
-import { PlayerActionsPage } from "./modules/play/playerActions";
+import {
+  Players,
+  Games,
+  Game,
+  Layout as AdministrationLayout,
+  Settings,
+  Teachers,
+} from "./modules/administration";
+import {
+  GameConsoleView,
+  MyGames,
+  PlayerPersona,
+  PlayLayout,
+  PlayerActionsPage,
+  Stats,
+} from "./modules/play";
 
 export { AuthenticatedApp };
 

@@ -10,8 +10,8 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
-import { IGame, ITeamWithPlayers } from "../../../../utils/types";
-import { SuccessAlert } from "../../../alert";
+import { IGame, ITeamWithPlayers } from "../../../../../utils/types";
+import { SuccessAlert } from "../../../../alert";
 import { useNavigate } from "react-router-dom";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
