@@ -601,6 +601,29 @@ describe("consumtion", () => {
           ],
         },
       },
+      {
+        name: `should handle actions on grey energy`,
+        setup: {
+          consumption: [
+            { type: "grey", name: "greyOther", value: 20 },
+            { type: "grey", name: "greyTransport", value: 20 },
+            { type: "grey", name: "greyNumeric", value: 20 },
+          ],
+          performedActions: [
+            availableActions.LOCAL_CONSUMPTION,
+            availableActions.REDUCE_CLOTHING_HALF,
+            availableActions.REDUCE_NUMERIC,
+            availableActions.DIGITAL_REDUCE_INTERNET_HALF,
+          ],
+        },
+        expected: {
+          consumptionData: [
+            { type: "grey", name: "greyOther", value: 9.2 },
+            { type: "grey", name: "greyTransport", value: 17.6 },
+            { type: "grey", name: "greyNumeric", value: 16.0325 },
+          ],
+        },
+      },
     ];
 
     runTests(TESTS);
