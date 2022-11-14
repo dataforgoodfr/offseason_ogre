@@ -24,6 +24,7 @@ import {
   Team,
 } from "./services/queries";
 import { useGameId } from "./utils";
+import { hasGameStarted } from "../utils";
 
 export { GamePlayers };
 
@@ -149,7 +150,7 @@ function buildTeamColumns({
     flex: 1,
     minWidth: 160,
   } as GridColumns<Row>[0];
-  if (game.status !== "draft") {
+  if (!hasGameStarted(game.status)) {
     return [baseTeamColumn];
   }
   return [
@@ -162,7 +163,7 @@ function buildTeamColumns({
 }
 
 function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
-  if (game.status !== "draft") {
+  if (!hasGameStarted(game.status)) {
     return [];
   }
   return [

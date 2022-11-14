@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { IGame, ITeamWithPlayers } from "../../../../../utils/types";
 import { SuccessAlert } from "../../../../alert";
 import { useNavigate } from "react-router-dom";
+import { hasGameStarted } from "../../utils";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -40,7 +41,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   const mutation = useMutation<Response, { message: string }, any>(
     (status: boolean) => {
       const path = `/api/games/${game.id}`;
-      return axios.put(path, { status: "ready" });
+      return axios.put(path, { status: "playing" });
     },
     {
       onSuccess: () => {
@@ -51,7 +52,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   );
 
   const launchGame = () => {
-    if (game.status === "draft") {
+    if (hasGameStarted(game.status)) {
       mutation.mutate({ status: true });
     }
     setOpen(false);
@@ -62,7 +63,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
       {mutation.isSuccess && <SuccessAlert />}
       <Button
         onClick={() => {
-          game.status === "draft"
+          hasGameStarted(game.status)
             ? handleClickOpen()
             : navigate(`/play/games/${game.id}/console`);
         }}
@@ -70,7 +71,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
         color="secondary"
       >
         <RocketLaunchIcon sx={{ height: "1rem" }} />
-        {game.status === "draft" ? "Animer" : "Rejoindre"}
+        {hasGameStarted(game.status) ? "Animer" : "Rejoindre"}
       </Button>
       <Dialog
         open={open}

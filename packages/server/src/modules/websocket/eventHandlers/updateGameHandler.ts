@@ -18,7 +18,7 @@ function handleUpdateGame(io: Server, socket: Socket) {
         update: z.object({
           step: z.number().optional(),
           lastFinishedStep: z.number().optional(),
-          status: z.enum(["ready", "draft", "finished"]).optional(),
+          status: z.enum(["ready", "draft", "playing", "finished"]).optional(),
         }),
       });
       const { gameId, update } = schema.parse(args);

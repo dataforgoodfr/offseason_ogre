@@ -84,7 +84,7 @@ async function updateGame(request: Request, response: Response) {
     description: z.string().optional(),
     date: dateSchema.optional(),
     name: z.string().optional(),
-    status: z.enum(["draft", "ready", "finished"]).optional(),
+    status: z.enum(["draft", "ready", "playing", "finished"]).optional(),
   });
 
   const { id } = paramsSchema.parse(request.params);
