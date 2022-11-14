@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
-import { useGameId } from "./utils";
 import { BackArrow } from "./common/BackArrow";
 import { AccordionLayout } from "../common/AccordionLayout";
 
