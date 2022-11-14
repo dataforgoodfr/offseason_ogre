@@ -18,7 +18,7 @@ async function register({
   if (!game) {
     throw createBusinessError("GAME_NOT_FOUND", { id: gameId });
   }
-  if (game.status !== "draft") {
+  if (game.status === "playing" || game.status === "finished") {
     throw createBusinessError("GAME_ALREADY_STARTED");
   }
 

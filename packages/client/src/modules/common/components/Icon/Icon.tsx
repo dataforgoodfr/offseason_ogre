@@ -1,4 +1,5 @@
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 import Cancel from "@mui/icons-material/Cancel";
@@ -16,6 +17,7 @@ import Info from "@mui/icons-material/Info";
 import OpenInNew from "@mui/icons-material/OpenInNew";
 import Paid from "@mui/icons-material/Paid";
 import Person from "@mui/icons-material/Person";
+import SettingsSuggestIcon from "@mui/icons-material/SettingsSuggest";
 import ShoppingCart from "@mui/icons-material/ShoppingCart";
 import Star from "@mui/icons-material/Star";
 import VideogameAssetRoundedIcon from "@mui/icons-material/VideogameAssetRounded";
@@ -27,6 +29,7 @@ export { Icon };
 
 const ICONS = {
   "action-points": DirectionsBike,
+  "access-time": AccessTimeIcon,
   "arrow-forward": ArrowForwardIosIcon,
   "bar-chart": BarChartRoundedIcon,
   budget: Paid,
@@ -42,6 +45,7 @@ const ICONS = {
   player: Person,
   power: FlashOn,
   production: Factory,
+  settings: SettingsSuggestIcon,
   star: Star,
   synthesis: AutoGraphRoundedIcon,
   team: Groups,

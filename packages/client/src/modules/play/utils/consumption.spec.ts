@@ -16,7 +16,7 @@ interface Test {
 }
 
 const runTests = (tests: Test[]) => {
-  tests.forEach((test) => {
+  tests.forEach((test: Test) => {
     it(test.name, () => {
       const consumption: ConsumptionDatum[] = test.setup
         .consumption as ConsumptionDatum[];

@@ -22,6 +22,7 @@ import { TeamTextField } from "./GameTeams.styles";
 import { NO_TEAM } from "../../../common/constants/teams";
 import { usePlayers, getTeamQueryPath, useTeams } from "./services/queries";
 import { useGameId } from "./utils";
+import { hasGameStarted } from "../utils";
 
 export { GameTeams };
 
@@ -103,7 +104,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
           experimentalFeatures={{ newEditingApi: true }}
         />
       </Box>
-      {game.status === "draft" && (
+      {!hasGameStarted(game.status) && (
         <>
           <Grid
             container
@@ -168,7 +169,7 @@ function buildColumns({ game }: { game: IGame }): GridColumns<Row> {
 }
 
 function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
-  if (game.status !== "draft") {
+  if (hasGameStarted(game.status)) {
     return [];
   }
   return [

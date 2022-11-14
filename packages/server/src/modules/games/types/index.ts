@@ -11,4 +11,4 @@ interface Game {
   lastFinishedStep: number;
 }
 
-type status = "draft" | "ready" | "finished";
+type status = "draft" | "ready" | "playing" | "finished";

@@ -24,6 +24,7 @@ model Game {
 enum Status {
   draft
   ready
+  playing
   finished
 }
 
