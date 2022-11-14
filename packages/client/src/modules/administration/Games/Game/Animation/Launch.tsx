@@ -52,7 +52,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   );
 
   const launchGame = () => {
-    if (hasGameStarted(game.status)) {
+    if (!hasGameStarted(game.status)) {
       mutation.mutate({ status: true });
     }
     setOpen(false);
@@ -63,7 +63,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
       {mutation.isSuccess && <SuccessAlert />}
       <Button
         onClick={() => {
-          hasGameStarted(game.status)
+          !hasGameStarted(game.status)
             ? handleClickOpen()
             : navigate(`/play/games/${game.id}/console`);
         }}
@@ -71,7 +71,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
         color="secondary"
       >
         <RocketLaunchIcon sx={{ height: "1rem" }} />
-        {hasGameStarted(game.status) ? "Animer" : "Rejoindre"}
+        {!hasGameStarted(game.status) ? "Animer" : "Rejoindre"}
       </Button>
       <Dialog
         open={open}

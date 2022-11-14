@@ -1,5 +1,5 @@
 export const hasGameStarted = (status: string) => {
-  if (["draft", "ready"].indexOf(status) > -1) {
+  if (["draft", "ready"].includes(status)) {
     return false;
   }
   return true;
