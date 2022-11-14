@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { Grid, Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { useGameId } from "./utils";
 import { BackArrow } from "./common/BackArrow";
@@ -8,8 +7,6 @@ import { AccordionLayout } from "../common/AccordionLayout";
 export { PersonalizationForm };
 
 function PersonalizationForm() {
-  const gameId = useGameId();
-
   return (
     <CustomContainer maxWidth="lg">
       <BackArrow />
