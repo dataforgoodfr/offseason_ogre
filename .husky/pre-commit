@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+CI=true yarn workspace ogre-client test
+
 yarn workspace ogre-client lint
 yarn workspace ogre-client prettier:check
+
 yarn workspace ogre-server lint
 yarn workspace ogre-server prettier:check
