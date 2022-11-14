@@ -150,7 +150,7 @@ function buildTeamColumns({
     flex: 1,
     minWidth: 160,
   } as GridColumns<Row>[0];
-  if (!hasGameStarted(game.status)) {
+  if (hasGameStarted(game.status)) {
     return [baseTeamColumn];
   }
   return [
@@ -163,7 +163,7 @@ function buildTeamColumns({
 }
 
 function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
-  if (!hasGameStarted(game.status)) {
+  if (hasGameStarted(game.status)) {
     return [];
   }
   return [

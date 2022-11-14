@@ -16,6 +16,8 @@ import {
   PlayerActionsPage,
   Stats,
 } from "./modules/play";
+import { PersonalizationChoice } from "./modules/play/Personalization";
+import { PersonalizationForm } from "./modules/play/Personalization/PersonalizationForm";
 
 export { AuthenticatedApp };
 
@@ -40,6 +42,18 @@ function AuthenticatedApp() {
         <Route path="games/:id" element={<PlayerPersona />} />
         <Route path="games/:id/persona" element={<PlayerPersona />} />
         <Route path="games/:id/persona/stats" element={<Stats />} />
+        <Route
+          path="games/:id/personalize"
+          element={<PersonalizationChoice />}
+        />
+        <Route
+          path="games/:id/personalize/choice"
+          element={<PersonalizationChoice />}
+        />
+        <Route
+          path="games/:id/personalize/form"
+          element={<PersonalizationForm />}
+        />
         <Route
           path="games/:id/persona/actions"
           element={<PlayerActionsPage />}

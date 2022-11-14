@@ -60,7 +60,7 @@ function GameItem({ game }: any) {
               component={Link}
               color="secondary"
               variant="contained"
-              to={`/play/games/${game.id}/personalize/choices`}
+              to={`/play/games/${game.id}/personalize/choice`}
               sx={{ ml: "auto" }}
             >
               <Icon name="settings" sx={{ mr: 2 }} />
