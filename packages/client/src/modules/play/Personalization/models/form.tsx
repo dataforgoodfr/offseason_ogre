@@ -1,5 +1,5 @@
 import { range } from "lodash";
-import { buildChoices } from "../utils";
+import { buildChoices } from "../utils/choices";
 
 export interface PersoForm {
   profileNumberAdults: number;

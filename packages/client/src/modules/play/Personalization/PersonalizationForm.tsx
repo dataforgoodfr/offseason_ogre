@@ -1,4 +1,4 @@
-import { Button, Grid, Typography, useTheme } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { BackArrow } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
@@ -7,6 +7,7 @@ import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
 import { formSections, formValues, PersoForm } from "./models/form";
 import { Icon } from "../../common/components/Icon";
 import { AccordionLayout } from "../common/AccordionLayout";
+import { fulfillsConditions, isSectionValid } from "./utils/formValidation";
 
 export { PersonalizationForm };
 
@@ -32,8 +33,6 @@ function PersonalizationForm() {
     },
   });
 
-  const theme = useTheme();
-
   const buildFormLine = (question: any) => {
     return (
       <QuestionLine container direction="row" justifyContent="space-between">
@@ -57,41 +56,15 @@ function PersonalizationForm() {
     );
   };
 
-  const compare = (condition: any) => {
-    if (condition.operator === ">") {
-      return watch(condition.question) > condition.value;
-    }
-    if (condition.operator === "<") {
-      return watch(condition.question) < condition.value;
-    }
-    if (condition.operator === "=") {
-      return watch(condition.question) === condition.value;
-    }
-    return false;
-  };
-
-  const fulfillsConditions = (question: any) => {
-    if (!question.conditions) {
-      return true;
-    }
-    return question.conditions.every((condition: any) => compare(condition));
-  };
-
   const buildFormSection = (section: string) => {
     return (
       <Grid container direction="column">
         {formValues
           .filter((question: any) => question.type === section)
-          .filter((question: any) => fulfillsConditions(question))
+          .filter((question: any) => fulfillsConditions(watch, question))
           .map((value: any) => buildFormLine(value))}
       </Grid>
     );
-  };
-
-  const isSectionValid = (sectionName: string) => {
-    return formValues
-      .filter((question: any) => question.type === sectionName)
-      .every((question: any) => watch(question.name) !== undefined);
   };
 
   const onSubmit = () => {
@@ -114,7 +87,7 @@ function PersonalizationForm() {
           const AccordionComponent = AccordionLayout;
           return (
             <AccordionComponent
-              valid={isSectionValid(value.name)}
+              valid={isSectionValid(formValues, watch, value.name)}
               title={value.title}
               titleIcon={value.titleIcon}
             >
