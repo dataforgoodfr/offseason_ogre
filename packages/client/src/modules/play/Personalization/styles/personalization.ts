@@ -32,11 +32,7 @@ export const ChoiceText = styled(Typography)(({ theme }) => ({
 
 export const ChoiceButton = styled(Button)(({ theme }) => ({
   display: "flex",
-  width: "50%",
   ml: "auto",
   margin: "20px auto 10px auto",
   padding: theme.spacing(2),
-  [theme.breakpoints.down("sm")]: {
-    width: "85%",
-  },
 })) as typeof Button;
