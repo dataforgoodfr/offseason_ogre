@@ -6,9 +6,3 @@ export const useGameId = () => {
   const gameId = +id;
   return gameId;
 };
-
-export const buildChoices = (array: string[] | number[]) => {
-  return array.map((value: string | number) => {
-    return { value: value, description: value };
-  });
-};

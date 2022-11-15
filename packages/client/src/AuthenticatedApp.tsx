@@ -18,6 +18,7 @@ import {
 } from "./modules/play";
 import { PersonalizationChoice } from "./modules/play/Personalization";
 import { PersonalizationForm } from "./modules/play/Personalization/PersonalizationForm";
+import { PersonalizationPredefinedPersona } from "./modules/play/Personalization/PersonalizationPredefinedPersona";
 
 export { AuthenticatedApp };
 
@@ -53,6 +54,10 @@ function AuthenticatedApp() {
         <Route
           path="games/:id/personalize/form"
           element={<PersonalizationForm />}
+        />
+        <Route
+          path="games/:id/personalize/oilgre"
+          element={<PersonalizationPredefinedPersona />}
         />
         <Route
           path="games/:id/persona/actions"

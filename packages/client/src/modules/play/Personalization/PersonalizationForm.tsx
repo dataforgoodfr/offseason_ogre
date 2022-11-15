@@ -6,47 +6,83 @@ import { QuestionLine, QuestionText } from "./styles/form";
 import { useForm } from "react-hook-form";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
 import { formSections, formValues, PersoForm } from "./models/form";
+import { Icon } from "../../common/components/Icon";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
-  const { control, getValues, handleSubmit } = useForm<PersoForm, any>({
+  const { control, getValues, handleSubmit, watch } = useForm<PersoForm, any>({
     defaultValues: {
-      profileNumberAdults: 1,
-      profileCarEnergy: "Essence",
-      profileCarConsumption: 0,
-      profileCarDistanceAlone: 0,
-      profileCarDistanceHoushold: 0,
-      profileCarAge: "Entre 10 et 15 ans",
-      profileCarDistanceCarsharing: 0,
-      profileHeatPump: false,
-      profileACRoomNb: 0,
-      profileACDaysNb: 0,
-      profileShowerNumber: 1,
-      profileShowerTime: "5-10 minutes",
-      profileEatingVegetables: false,
-      profileEatingDairies: false,
-      profileEatingEggs: false,
-      profileEatingMeat: false,
+      // profileNumberAdults: 1,
+      // profileCarEnergy: "Essence",
+      // profileCarConsumption: 0,
+      // profileCarDistanceAlone: 0,
+      // profileCarDistanceHoushold: 0,
+      // profileCarAge: "Entre 10 et 15 ans",
+      // profileCarDistanceCarsharing: 0,
+      // profileHeatPump: false,
+      // profileACRoomNb: 0,
+      // profileACDaysNb: 0,
+      // profileShowerNumber: 1,
+      // profileShowerTime: "5 à 10 minutes",
+      // profileEatingVegetables: false,
+      // profileEatingDairies: false,
+      // profileEatingEggs: false,
+      // profileEatingMeat: false,
     },
   });
 
-  const buildFormLine = (value: any) => {
+  const buildFormLine = (question: any) => {
     return (
       <QuestionLine container direction="row" justifyContent="space-between">
-        <QuestionText>{value.description}</QuestionText>
-        {value.inputType === "free" && value.valueType === "number" && (
-          <PersoFormNumberInput control={control} name={value.name} />
+        <QuestionText>
+          {" "}
+          {question.icon && <Icon name={question.icon} sx={{ mr: 1 }} />}
+          {question.description}
+        </QuestionText>
+        {question.inputType === "free" && question.valueType === "number" && (
+          <PersoFormNumberInput control={control} name={question.name} />
         )}
-        {value.inputType === "list" && (
+        {question.inputType === "list" && (
           <PersoFormInputList
             control={control}
-            name={value.name}
-            options={value.options}
-            type={value.valueType}
+            name={question.name}
+            options={question.options}
+            type={question.valueType}
           />
         )}
       </QuestionLine>
+    );
+  };
+
+  const compare = (condition: any) => {
+    if (condition.operator === ">") {
+      return watch(condition.question) > condition.value;
+    }
+    if (condition.operator === "<") {
+      return watch(condition.question) < condition.value;
+    }
+    if (condition.operator === "=") {
+      return watch(condition.question) === condition.value;
+    }
+    return false;
+  };
+
+  const fulfillsConditions = (question: any) => {
+    if (!question.conditions) {
+      return true;
+    }
+    return question.conditions.every((condition: any) => compare(condition));
+  };
+
+  const buildFormSection = (section: string) => {
+    return (
+      <Grid container direction="column">
+        {formValues
+          .filter((question: any) => question.type === section)
+          .filter((question: any) => fulfillsConditions(question))
+          .map((value: any) => buildFormLine(value))}
+      </Grid>
     );
   };
 
@@ -66,49 +102,25 @@ function PersonalizationForm() {
       </Typography>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <AccordionLayout title="Général" titleIcon="player-pin">
-          <Grid container direction="column">
-            {formValues
-              .filter((values: any) => values.type === formSections.GENERAL)
-              .map((value: any) => buildFormLine(value))}
-          </Grid>
+          {buildFormSection(formSections.GENERAL)}
         </AccordionLayout>
         <AccordionLayout title="Déplacement" titleIcon="car">
-          <Grid container direction="column">
-            {formValues
-              .filter((values: any) => values.type === formSections.TRANSPORT)
-              .map((value: any) => buildFormLine(value))}
-          </Grid>
+          {buildFormSection(formSections.TRANSPORT)}
         </AccordionLayout>
         <AccordionLayout title="Logement" titleIcon="house">
-          <Grid container direction="column">
-            {formValues
-              .filter((values: any) => values.type === formSections.HOUSING)
-              .map((value: any) => buildFormLine(value))}
-          </Grid>
+          {buildFormSection(formSections.HOUSING)}
         </AccordionLayout>
         <AccordionLayout
           title="Habitudes dans le logement"
           titleIcon="microwave"
         >
-          <Grid container direction="column">
-            {formValues
-              .filter((values: any) => values.type === formSections.HABITS)
-              .map((value: any) => buildFormLine(value))}
-          </Grid>
+          {buildFormSection(formSections.HABITS)}
         </AccordionLayout>
         <AccordionLayout title="Alimentation" titleIcon="food">
-          <Grid container direction="column">
-            {formValues
-              .filter((values: any) => values.type === formSections.FOOD)
-              .map((value: any) => buildFormLine(value))}
-          </Grid>
+          {buildFormSection(formSections.FOOD)}
         </AccordionLayout>
         <AccordionLayout title="Numérique" titleIcon="computer">
-          <Grid container direction="column">
-            {formValues
-              .filter((values: any) => values.type === formSections.NUMERIC)
-              .map((value: any) => buildFormLine(value))}
-          </Grid>
+          {buildFormSection(formSections.NUMERIC)}
         </AccordionLayout>
         <Button color="secondary" variant="contained" type="submit">
           Envoyer

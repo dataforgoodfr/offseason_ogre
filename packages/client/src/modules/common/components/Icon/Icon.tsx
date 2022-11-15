@@ -29,11 +29,13 @@ import { SvgIconProps } from "@mui/material";
 import PersonPinRounded from "@mui/icons-material/PersonPinRounded";
 import {
   Computer,
+  ConnectingAirports,
   DirectionsCar,
   DryCleaning,
   Home,
   LunchDining,
   Microwave,
+  Train,
 } from "@mui/icons-material";
 
 export { Icon };
@@ -59,6 +61,7 @@ const ICONS = {
   "mark-circle": Cancel,
   microwave: Microwave,
   "open-in-new-tab": OpenInNew,
+  plane: ConnectingAirports,
   "player-finished": HowToReg,
   player: Person,
   "player-add": PersonAddIcon,
@@ -69,6 +72,7 @@ const ICONS = {
   star: Star,
   synthesis: AutoGraphRoundedIcon,
   team: Groups,
+  train: Train,
   trophy: EmojiEvents,
   "videogame-controller": VideogameAssetRoundedIcon,
   warning: Warning,
