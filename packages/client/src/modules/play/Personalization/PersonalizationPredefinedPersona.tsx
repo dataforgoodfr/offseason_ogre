@@ -7,6 +7,7 @@ import {
 import { BackArrow } from "./common/BackArrow";
 import { AccordionLayout } from "../common/AccordionLayout";
 import { getOilgrePersonaDetails } from "../PlayerPersona/description";
+import { formSections } from "./models/form";
 
 export { PersonalizationPredefinedPersona };
 
@@ -32,24 +33,14 @@ function PersonalizationPredefinedPersona() {
           </Grid>
         </Grid>
       </CentralContainer>
-      <AccordionLayout title="Général" titleIcon="player-pin">
-        <Typography> {getOilgrePersonaDetails("general")} </Typography>
-      </AccordionLayout>
-      <AccordionLayout title="Déplacement" titleIcon="car">
-        <Typography> {getOilgrePersonaDetails("travel")} </Typography>
-      </AccordionLayout>
-      <AccordionLayout title="Logement" titleIcon="house">
-        <Typography> {getOilgrePersonaDetails("housing")} </Typography>
-      </AccordionLayout>
-      <AccordionLayout title="Alimentation" titleIcon="food">
-        <Typography> {getOilgrePersonaDetails("food")} </Typography>
-      </AccordionLayout>
-      <AccordionLayout title="Numérique" titleIcon="computer">
-        <Typography> {getOilgrePersonaDetails("numeric")} </Typography>
-      </AccordionLayout>
-      <AccordionLayout title="Habitudes de consommation" titleIcon="microwave">
-        <Typography> {getOilgrePersonaDetails("clothing")} </Typography>
-      </AccordionLayout>
+      {Object.entries(formSections).map((section: any) => {
+        const [_, value] = section;
+        return (
+          <AccordionLayout title={value.title} titleIcon={value.titleIcon}>
+            <Typography> {getOilgrePersonaDetails(value.name)} </Typography>
+          </AccordionLayout>
+        );
+      })}
     </CustomContainer>
   );
 }

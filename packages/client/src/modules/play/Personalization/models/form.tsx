@@ -112,7 +112,7 @@ export const formSections = {
     titleIcon: "microwave",
   },
   FOOD: { name: "food", title: "Alimentation", titleIcon: "food" },
-  NUMERIC: { name: "numeric", title: "Général", titleIcon: "computer" },
+  NUMERIC: { name: "numeric", title: "Numérique", titleIcon: "computer" },
 };
 
 const getGeneralQuestions = () => {
