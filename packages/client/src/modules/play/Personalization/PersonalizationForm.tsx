@@ -122,9 +122,9 @@ function PersonalizationForm() {
             </AccordionComponent>
           );
         })}
-        <Button color="secondary" variant="contained" type="submit">
+        {/* <Button color="secondary" variant="contained" type="submit">
           Envoyer
-        </Button>
+        </Button> */}
       </form>
     </CustomContainer>
   );
