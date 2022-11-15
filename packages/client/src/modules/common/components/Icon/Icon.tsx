@@ -33,6 +33,7 @@ import {
   DryCleaning,
   Home,
   LunchDining,
+  Microwave,
 } from "@mui/icons-material";
 
 export { Icon };
@@ -56,6 +57,7 @@ const ICONS = {
   house: Home,
   information: Info,
   "mark-circle": Cancel,
+  microwave: Microwave,
   "open-in-new-tab": OpenInNew,
   "player-finished": HowToReg,
   player: Person,
