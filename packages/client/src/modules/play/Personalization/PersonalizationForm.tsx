@@ -14,7 +14,7 @@ function PersonalizationForm() {
         color="secondary"
         sx={{ textAlign: "center", mb: 4 }}
       >
-        Personaliser mon profil
+        Personnaliser mon profil
       </Typography>
       <AccordionLayout title="Général" titleIcon="player-pin">
         <Typography> Général </Typography>

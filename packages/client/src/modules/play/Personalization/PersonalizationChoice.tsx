@@ -7,7 +7,7 @@ import {
   ChoiceButton,
 } from "./styles/personalization";
 import { Icon } from "../../common/components/Icon";
-import { useGameId } from "./utils";
+import { useGameId } from "./hooks/useGameId";
 import { BackArrow } from "./common/BackArrow";
 
 export { PersonalizationChoice };
