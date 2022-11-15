@@ -5,14 +5,14 @@ export const QuestionLine = styled(Grid)(({ theme }) => ({
   marginTop: theme.spacing(2),
   marginBottom: theme.spacing(2),
   alignItems: "center",
-  padding: "0 2% 0 2%",
+  padding: "0 20px 0 20px",
 }));
 
 export const QuestionText = styled(Typography)(({ theme }) => ({
   maxWidth: "75%",
   marginBottom: theme.spacing(2),
   alignItems: "center",
-  padding: "0 2% 0 2%",
+  padding: "0 20px 0 20px",
 }));
 
 export const PersoTextField = styled(TextField)(({ theme }) => ({

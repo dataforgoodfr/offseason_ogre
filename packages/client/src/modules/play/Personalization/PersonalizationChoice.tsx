@@ -94,8 +94,8 @@ function PersonalizationChoice() {
               <img
                 style={{
                   height: "32px",
-                  marginLeft: "2%",
-                  marginRight: "2%",
+                  marginLeft: "10px",
+                  marginRight: "10px",
                   borderRadius: "5px",
                 }}
                 src="/avatar.png"
