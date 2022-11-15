@@ -1,36 +1,38 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography, useTheme } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { BackArrow } from "./common/BackArrow";
-import { AccordionLayout } from "../common/AccordionLayout";
 import { QuestionLine, QuestionText } from "./styles/form";
 import { useForm } from "react-hook-form";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
 import { formSections, formValues, PersoForm } from "./models/form";
 import { Icon } from "../../common/components/Icon";
+import { AccordionLayout } from "../common/AccordionLayout";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
   const { control, getValues, handleSubmit, watch } = useForm<PersoForm, any>({
     defaultValues: {
-      // profileNumberAdults: 1,
-      // profileCarEnergy: "Essence",
-      // profileCarConsumption: 0,
-      // profileCarDistanceAlone: 0,
-      // profileCarDistanceHoushold: 0,
-      // profileCarAge: "Entre 10 et 15 ans",
-      // profileCarDistanceCarsharing: 0,
-      // profileHeatPump: false,
-      // profileACRoomNb: 0,
-      // profileACDaysNb: 0,
-      // profileShowerNumber: 1,
-      // profileShowerTime: "5 à 10 minutes",
-      // profileEatingVegetables: false,
-      // profileEatingDairies: false,
-      // profileEatingEggs: false,
-      // profileEatingMeat: false,
+      profileNumberAdults: 1,
+      profileCarEnergy: "Essence",
+      profileCarConsumption: 0,
+      profileCarDistanceAlone: 0,
+      profileCarDistanceHoushold: 0,
+      profileCarAge: "Entre 10 et 15 ans",
+      profileCarDistanceCarsharing: 0,
+      profileHeatPump: false,
+      profileACRoomNb: 0,
+      profileACDaysNb: 0,
+      profileShowerNumber: 1,
+      profileShowerTime: "5 à 10 minutes",
+      profileEatingVegetables: false,
+      profileEatingDairies: false,
+      profileEatingEggs: false,
+      profileEatingMeat: false,
     },
   });
+
+  const theme = useTheme();
 
   const buildFormLine = (question: any) => {
     return (
@@ -86,6 +88,12 @@ function PersonalizationForm() {
     );
   };
 
+  const isSectionValid = (sectionName: string) => {
+    return formValues
+      .filter((question: any) => question.type === sectionName)
+      .every((question: any) => watch(question.name) !== undefined);
+  };
+
   const onSubmit = () => {
     console.log("submit", getValues());
   };
@@ -101,27 +109,19 @@ function PersonalizationForm() {
         Personnaliser mon profil
       </Typography>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <AccordionLayout title="Général" titleIcon="player-pin">
-          {buildFormSection(formSections.GENERAL)}
-        </AccordionLayout>
-        <AccordionLayout title="Déplacement" titleIcon="car">
-          {buildFormSection(formSections.TRANSPORT)}
-        </AccordionLayout>
-        <AccordionLayout title="Logement" titleIcon="house">
-          {buildFormSection(formSections.HOUSING)}
-        </AccordionLayout>
-        <AccordionLayout
-          title="Habitudes dans le logement"
-          titleIcon="microwave"
-        >
-          {buildFormSection(formSections.HABITS)}
-        </AccordionLayout>
-        <AccordionLayout title="Alimentation" titleIcon="food">
-          {buildFormSection(formSections.FOOD)}
-        </AccordionLayout>
-        <AccordionLayout title="Numérique" titleIcon="computer">
-          {buildFormSection(formSections.NUMERIC)}
-        </AccordionLayout>
+        {Object.entries(formSections).map((section: any) => {
+          const [key, value] = section;
+          const AccordionComponent = AccordionLayout;
+          return (
+            <AccordionComponent
+              valid={isSectionValid(value.name)}
+              title={value.title}
+              titleIcon={value.titleIcon}
+            >
+              {buildFormSection(value.name)}
+            </AccordionComponent>
+          );
+        })}
         <Button color="secondary" variant="contained" type="submit">
           Envoyer
         </Button>

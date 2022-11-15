@@ -103,12 +103,16 @@ export const booleanChoice = [
 ];
 
 export const formSections = {
-  GENERAL: "general",
-  TRANSPORT: "transport",
-  HOUSING: "housing",
-  HABITS: "habits",
-  FOOD: "food",
-  NUMERIC: "numeric",
+  GENERAL: { name: "general", title: "Général", titleIcon: "player-pin" },
+  TRANSPORT: { name: "transport", title: "Déplacement", titleIcon: "car" },
+  HOUSING: { name: "housing", title: "Logement", titleIcon: "house" },
+  HABITS: {
+    name: "habits",
+    title: "Habitudes de consommation",
+    titleIcon: "microwave",
+  },
+  FOOD: { name: "food", title: "Alimentation", titleIcon: "food" },
+  NUMERIC: { name: "numeric", title: "Général", titleIcon: "computer" },
 };
 
 const getGeneralQuestions = () => {
@@ -130,7 +134,7 @@ const getGeneralQuestions = () => {
     },
   ];
   return generalQuestions.map((question: any) => ({
-    type: formSections.GENERAL,
+    type: formSections.GENERAL.name,
     ...question,
   }));
 };
@@ -220,7 +224,7 @@ const getTransportQuestions = () => {
     },
   ];
   return transportQuestions.map((question: any) => ({
-    type: formSections.TRANSPORT,
+    type: formSections.TRANSPORT.name,
     ...question,
   }));
 };
@@ -313,7 +317,7 @@ const getHousingQuestions = () => {
     },
   ];
   return housingQuestions.map((question: any) => ({
-    type: formSections.HOUSING,
+    type: formSections.HOUSING.name,
     ...question,
   }));
 };
@@ -321,7 +325,6 @@ const getHousingQuestions = () => {
 const getHabitsQuestions = () => {
   const habitsQuestions = [
     {
-      type: formSections.HABITS,
       description: "Prenez-vous des bains ou des douches ?",
       name: "profileShowerBath",
       inputType: "list",
@@ -329,7 +332,6 @@ const getHabitsQuestions = () => {
       options: showerBath,
     },
     {
-      type: formSections.HABITS,
       description:
         "En moyenne, combien de fois par jour prenez-vous une douche ?",
       name: "profileShowerNumber",
@@ -341,7 +343,6 @@ const getHabitsQuestions = () => {
       options: buildChoices(range(1, 11)),
     },
     {
-      type: formSections.HABITS,
       description: "En moyenne, combien de temps dure une douche ?",
       name: "profileShowerTime",
       conditions: [
@@ -352,7 +353,6 @@ const getHabitsQuestions = () => {
       options: showerTimes,
     },
     {
-      type: formSections.HABITS,
       description: "Utilisez-vous une bouilloire pour chauffer l'eau ?",
       name: "profileCookingKettle",
       inputType: "list",
@@ -360,7 +360,6 @@ const getHabitsQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.HABITS,
       description:
         "En moyenne, combien de temps par jour utilisez-vous vos plaques de cuisson ? (indiquer 0,5 pour 30 minutes)",
       name: "profileCookingPlateTime",
@@ -368,7 +367,6 @@ const getHabitsQuestions = () => {
       valueType: "number",
     },
     {
-      type: formSections.HABITS,
       description:
         "En moyenne, combien de temps par jour utilisez-vous votre four ? (indiquer 0,5 pour 30 minutes, 1 pour une heure, ...)",
       name: "profileCookingOvenTime",
@@ -376,7 +374,6 @@ const getHabitsQuestions = () => {
       valueType: "number",
     },
     {
-      type: formSections.HABITS,
       description:
         "En moyenne, combien de temps par jour utilisez-vous votre lave-linge? (indiquer 0,5 pour 30 minutes, 1 pour une heure, ...)",
       name: "profileCleaningWashingTime",
@@ -384,7 +381,6 @@ const getHabitsQuestions = () => {
       valueType: "number",
     },
     {
-      type: formSections.HABITS,
       description:
         "En moyenne, combien de temps par jour utilisez-vous votre sèche-linge ? (indiquer 0,5 pour 30 minutes ou 0 si vous n'en avez pas)",
       name: "profileCleaningDryerTime",
@@ -392,16 +388,13 @@ const getHabitsQuestions = () => {
       valueType: "number",
     },
     {
-      type: formSections.HABITS,
       description:
         "En moyenne, combien de temps par jour utilisez-vous votre lave-vaisselle ? (indiquer 0,5 pour 30 minutes ou 0 si vous n'en avez pas)",
       name: "profileCleaningDishwasherTime",
-      inputType: "list",
-      valueType: "string",
-      options: showerBath,
+      inputType: "free",
+      valueType: "number",
     },
     {
-      type: formSections.HABITS,
       description: "Combien de réfrigérateurs possédez-vous ?",
       name: "profileRefrigeratorNumber",
       inputType: "list",
@@ -409,7 +402,6 @@ const getHabitsQuestions = () => {
       options: buildChoices(range(0, 11)),
     },
     {
-      type: formSections.HABITS,
       description: "Combien de congélateurs possédez-vous ?",
       name: "profileFreezerNumber",
       inputType: "list",
@@ -417,7 +409,6 @@ const getHabitsQuestions = () => {
       options: buildChoices(range(0, 11)),
     },
     {
-      type: formSections.HABITS,
       description: "Quel est votre système d'éclairage ?",
       name: "profileLightingSystem",
       inputType: "list",
@@ -426,7 +417,7 @@ const getHabitsQuestions = () => {
     },
   ];
   return habitsQuestions.map((question: any) => ({
-    type: formSections.HABITS,
+    type: formSections.HABITS.name,
     ...question,
   }));
 };
@@ -434,7 +425,6 @@ const getHabitsQuestions = () => {
 const getFoodQuestions = () => {
   const foodQuestions = [
     {
-      type: formSections.FOOD,
       description: "Êtes-vous végétalien (vegan) ?",
       name: "profileEatingVegan",
       inputType: "list",
@@ -442,7 +432,6 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.FOOD,
       description: "Consommez-vous des fruits et des légumes ?",
       name: "profileEatingVegetables",
       conditions: [
@@ -453,7 +442,6 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.FOOD,
       description: "Consommez-vous des produits laitiers ?",
       name: "profileEatingDairies",
       conditions: [
@@ -464,7 +452,6 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.FOOD,
       description: "Consommez-vous des oeufs ?",
       name: "profileEatingEggs",
       conditions: [
@@ -475,7 +462,6 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.FOOD,
       description: "Consommez-vous de la viande ?",
       name: "profileEatingMeat",
       conditions: [
@@ -486,7 +472,6 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.FOOD,
       description:
         "En moyenne, combien de boissons en canette consommez-vous par jour ?",
       name: "profileEatingTinDrink",
@@ -494,7 +479,6 @@ const getFoodQuestions = () => {
       valueType: "number",
     },
     {
-      type: formSections.FOOD,
       description: "Achetez-vous uniquement des produits sans emballage ?",
       name: "profileEatingZeroWaste",
       inputType: "list",
@@ -502,7 +486,6 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.FOOD,
       description: "Consommez-vous uniquement des produits locaux et de saison",
       name: "profileEatingLocal",
       inputType: "list",
@@ -510,7 +493,6 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.FOOD,
       description: "Combien avez-vous de chats ?",
       name: "profileEatingCatNumber",
       inputType: "list",
@@ -518,7 +500,6 @@ const getFoodQuestions = () => {
       options: buildChoices(range(0, 11)),
     },
     {
-      type: formSections.FOOD,
       description: "Combien avez-vous de chiens ?",
       name: "profileEatingDogNumber",
       inputType: "list",
@@ -526,7 +507,6 @@ const getFoodQuestions = () => {
       options: buildChoices(range(0, 11)),
     },
     {
-      type: formSections.FOOD,
       description: "Avez-vous un cheval ?",
       name: "profileEatingHorse",
       inputType: "list",
@@ -535,7 +515,7 @@ const getFoodQuestions = () => {
     },
   ];
   return foodQuestions.map((question: any) => ({
-    type: formSections.FOOD,
+    type: formSections.FOOD.name,
     ...question,
   }));
 };
@@ -543,7 +523,6 @@ const getFoodQuestions = () => {
 const getNumericQuestions = () => {
   const numericQuestions = [
     {
-      type: formSections.NUMERIC,
       description:
         "Avez-vous au moins un équipement numérique par personne dans le foyer ?",
       name: "profileNumericEquipment",
@@ -552,7 +531,6 @@ const getNumericQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.NUMERIC,
       description: "En moyenne, passez-vous plus de 2h par jour sur Internet ?",
       name: "profileNumericWebTimeDay",
       inputType: "list",
@@ -560,7 +538,6 @@ const getNumericQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.NUMERIC,
       description:
         "En moyenne, regardez-vous plus d'une heure de vidéos par jour ?",
       name: "profileNumericVideoTimeDay",
@@ -569,7 +546,6 @@ const getNumericQuestions = () => {
       options: booleanChoice,
     },
     {
-      type: formSections.NUMERIC,
       description:
         "En moyenne, achetez-vous plus de 600€ de vêtements et chaussures par an ?",
       name: "profileClothingQuantity",
@@ -579,7 +555,7 @@ const getNumericQuestions = () => {
     },
   ];
   return numericQuestions.map((question: any) => ({
-    type: formSections.NUMERIC,
+    type: formSections.NUMERIC.name,
     ...question,
   }));
 };
