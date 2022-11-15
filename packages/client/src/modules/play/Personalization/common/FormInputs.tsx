@@ -1,7 +1,7 @@
 import { ExpandMoreRounded } from "@mui/icons-material";
 import { MenuItem } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
-import { PersoForm } from "../models/form";
+import { DropdownOption, PersoForm } from "../models/form";
 import { PersoTextField, PersoSelectTextField } from "../styles/form";
 
 export { PersoFormNumberInput, PersoFormInputList };
@@ -22,6 +22,7 @@ const PersoFormNumberInput = ({
           {...field}
           onChange={(e) => field.onChange(parseInt(e.target.value))}
           type="number"
+          InputProps={{ inputProps: { min: 0 } }}
           required
         />
       )}
@@ -37,7 +38,7 @@ const PersoFormInputList = ({
 }: {
   control: Control<PersoForm, any>;
   name: keyof PersoForm;
-  options: { value: any; description: any }[];
+  options: DropdownOption[];
   type: string;
 }) => {
   return (

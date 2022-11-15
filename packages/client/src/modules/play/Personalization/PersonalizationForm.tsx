@@ -4,8 +4,8 @@ import { BackArrow } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
 import { useForm } from "react-hook-form";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
-import { formSections, formValues, PersoForm } from "./models/form";
-import { Icon } from "../../common/components/Icon";
+import { formSections, formValues, PersoForm, Question } from "./models/form";
+import { Icon, IconName } from "../../common/components/Icon";
 import { AccordionLayout } from "../common/AccordionLayout";
 import { fulfillsConditions, isSectionValid } from "./utils/formValidation";
 
@@ -33,25 +33,35 @@ function PersonalizationForm() {
     },
   });
 
-  const buildFormLine = (question: any) => {
+  const getComponentType = (question: Question) => {
+    if (question.inputType === "free" && question.valueType === "number") {
+      return <PersoFormNumberInput control={control} name={question.name} />;
+    }
+
+    if (question.inputType === "list" && question.options) {
+      return (
+        <PersoFormInputList
+          control={control}
+          name={question.name}
+          options={question.options}
+          type={question.valueType}
+        />
+      );
+    }
+    throw new Error("Unsupported question type");
+  };
+
+  const buildFormLine = (question: Question) => {
     return (
       <QuestionLine container direction="row" justifyContent="space-between">
         <QuestionText>
           {" "}
-          {question.icon && <Icon name={question.icon} sx={{ mr: 1 }} />}
+          {question.icon && (
+            <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
+          )}
           {question.description}
         </QuestionText>
-        {question.inputType === "free" && question.valueType === "number" && (
-          <PersoFormNumberInput control={control} name={question.name} />
-        )}
-        {question.inputType === "list" && (
-          <PersoFormInputList
-            control={control}
-            name={question.name}
-            options={question.options}
-            type={question.valueType}
-          />
-        )}
+        {getComponentType(question)}
       </QuestionLine>
     );
   };
@@ -60,8 +70,8 @@ function PersonalizationForm() {
     return (
       <Grid container direction="column">
         {formValues
-          .filter((question: any) => question.type === section)
-          .filter((question: any) => fulfillsConditions(watch, question))
+          .filter((question: Question) => question.type === section)
+          .filter((question: Question) => fulfillsConditions(watch, question))
           .map((value: any) => buildFormLine(value))}
       </Grid>
     );
