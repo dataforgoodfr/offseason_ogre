@@ -83,16 +83,15 @@ function PersonalizationForm() {
       </Typography>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         {Object.entries(formSections).map((section: any) => {
-          const [key, value] = section;
-          const AccordionComponent = AccordionLayout;
+          const [_, value] = section;
           return (
-            <AccordionComponent
+            <AccordionLayout
               valid={isSectionValid(formValues, watch, value.name)}
               title={value.title}
               titleIcon={value.titleIcon}
             >
               {buildFormSection(value.name)}
-            </AccordionComponent>
+            </AccordionLayout>
           );
         })}
         {/* <Button color="secondary" variant="contained" type="submit">
