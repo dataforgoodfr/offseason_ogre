@@ -10,7 +10,11 @@ export const BackArrow = () => {
         color="secondary"
         variant="contained"
         to={`/play/games`}
-        sx={{ ml: "auto", margin: "2% 0 5% 0", padding: "1% 2% 1% 2%" }}
+        sx={{
+          ml: "auto",
+          margin: "15px 0 35px 0",
+          padding: "10px 20px 10px 20px",
+        }}
       >
         <Icon name="arrow-back" sx={{ mr: 1 }} />
         Retour

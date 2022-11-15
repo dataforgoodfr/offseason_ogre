@@ -62,7 +62,7 @@ function PersonalizationForm() {
         color="secondary"
         sx={{ textAlign: "center", mb: 4 }}
       >
-        Personaliser mon profil
+        Personnaliser mon profil
       </Typography>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <AccordionLayout title="Général" titleIcon="player-pin">

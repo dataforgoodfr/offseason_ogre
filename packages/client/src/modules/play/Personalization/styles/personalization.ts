@@ -10,7 +10,7 @@ export const CustomContainer = styled(Container)(({ theme }) => ({
 }));
 
 export const CentralContainer = styled(Container)(({ theme }) => ({
-  width: "80%",
+  maxWidth: "80%",
   margin: `${theme.spacing(4)} auto ${theme.spacing(4)} auto !important`,
   padding: theme.spacing(4),
   backgroundColor: theme.palette.primary.main,
@@ -26,16 +26,13 @@ export const ChoiceText = styled(Typography)(({ theme }) => ({
   textAlign: "left",
   [theme.breakpoints.down("sm")]: {
     textAlign: "center",
-    paddingTop: "5%",
+    paddingTop: theme.spacing(2),
   },
 }));
 
 export const ChoiceButton = styled(Button)(({ theme }) => ({
-  width: "50%",
+  display: "flex",
   ml: "auto",
-  margin: "5% auto 5% auto",
-  padding: "5%",
-  [theme.breakpoints.down("sm")]: {
-    width: "85%",
-  },
+  margin: "20px auto 10px auto",
+  padding: theme.spacing(2),
 })) as typeof Button;
