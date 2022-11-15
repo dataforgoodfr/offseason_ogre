@@ -18,7 +18,7 @@ model Game {
   teams            Team[]
   status           Status    @default(draft)
   step             Int       @default(0)
-  lastFinishedStep Int   @default(0)
+  lastFinishedStep Int       @default(0)
 }
 
 enum Status {
@@ -35,6 +35,8 @@ model Players {
   teamId          Int
   user            User            @relation(fields: [userId], references: [id])
   userId          Int
+  profile         Profile?        @relation(fields: [profileId], references: [id])
+  profileId       Int?
   actions         PlayerActions[]
   hasFinishedStep Boolean         @default(true)
 
@@ -63,6 +65,90 @@ model Team {
   isDeleted    Boolean       @default(false)
 
   @@unique([gameId, name], map: "Team_gameId_name_unique_constraint")
+}
+
+model Profile {
+  id                Int             @id @default(autoincrement())
+  player            Players[]
+  personalization   Personalization @relation(fields: [personalizationId], references: [id])
+  personalizationId Int
+  status            ProfileStatus   @default(draft)
+}
+
+enum ProfileStatus {
+  draft
+  submitted
+  pendingValidation
+  validated
+}
+
+model Personalization {
+  id                     Int                 @id @default(autoincrement())
+  personalizationType    PersonalizationType
+  personalizationName    PersonalizationName
+  numberAdults           Int
+  numberKids             Int
+  car                    Boolean
+  carEnergy              String              @default("Essence")
+  carConsumption         Float               @default(0)
+  carDistanceAlone       Float               @default(0)
+  carDistanceHoushold    Float               @default(0)
+  carAge                 String              @default("Entre 10 et 15 ans")
+  carDistanceCarsharing  Float               @default(0)
+  planeDistance          Float
+  trainDistance          Float
+  houseType              String
+  houseSurface           Float
+  heatingEnergy          String
+  heatingConsumption     Float
+  heatingInvoice         Float
+  heatPump               Boolean             @default(false)
+  heatingTemperature     Boolean
+  airConditionning       Boolean
+  aCRoomNb               Int                 @default(0)
+  aCDaysNb               Float               @default(0)
+  showerBath             String
+  showerNumber           Int                 @default(1)
+  showerTime             String              @default("5 à 10 minutes")
+  cookingKettle          Boolean
+  cookingPlateTime       Float
+  cookingOvenTime        Float
+  cleaningWashingTime    Float
+  cleaningDryerTime      Float
+  cleaningDishwasherTime Float
+  refrigeratorNumber     Int
+  freezerNumber          Int
+  lightingSystem         String
+  eatingVegan            Boolean
+  eatingVegetables       Boolean             @default(false)
+  eatingDairies          Boolean             @default(false)
+  eatingEggs             Boolean             @default(false)
+  eatingMeat             Boolean             @default(false)
+  eatingTinDrink         Float
+  eatingZeroWaste        Boolean
+  eatingLocal            Boolean
+  eatingCatNumber        Int
+  eatingDogNumber        Int
+  eatingHorse            Boolean
+  numericEquipment       Boolean
+  numericWebTimeDay      Boolean
+  numericVideoTimeDay    Boolean
+  clothingQuantity       Boolean
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+  Profile                Profile[]
+
+  @@unique([personalizationType, personalizationName, createdAt], map: "personalization_persona_unique_constraint")
+}
+
+enum PersonalizationType {
+  form
+  predefinedPersona
+}
+
+enum PersonalizationName {
+  form
+  oilgre
 }
 
 model Action {
@@ -122,7 +208,7 @@ enum ProductionActionName {
   thermalSolar
   tidal
   wave
-  nuclear  
+  nuclear
 }
 
 enum ProductionActionType {

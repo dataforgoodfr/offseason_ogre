@@ -9,6 +9,7 @@ import { dateSchema } from "./types";
 import { removePlayerController } from "./removePlayerController";
 import { removeTeamController } from "./removeTeamController";
 import { putPlayersInTeamsController } from "./putPlayersInTeamsController";
+import { updateProfileController } from "./updateProfileController";
 
 const crudController = {
   createController,
@@ -22,6 +23,7 @@ const crudController = {
   removePlayerController,
   removeTeamController,
   updateGame,
+  updateProfileController,
 };
 const controllers = {
   ...crudController,

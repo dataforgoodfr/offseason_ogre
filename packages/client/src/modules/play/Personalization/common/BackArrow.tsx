@@ -4,7 +4,7 @@ import { Icon } from "../../../common/components/Icon";
 
 export const BackArrow = () => {
   return (
-    <Grid item display="flex" xs={2}>
+    <Grid item display="flex">
       <Button
         component={Link}
         color="secondary"

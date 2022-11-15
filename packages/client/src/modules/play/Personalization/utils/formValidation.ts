@@ -27,5 +27,10 @@ export const isSectionValid = (
 ) => {
   return formValues
     .filter((question: any) => question.type === sectionName)
-    .every((question: any) => watch(question.name) !== undefined);
+    .every((question: any) => {
+      if (fulfillsConditions(watch, question)) {
+        return watch(question.name) !== undefined;
+      }
+      return true;
+    });
 };

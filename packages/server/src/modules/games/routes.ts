@@ -29,3 +29,8 @@ router.post(
   asyncErrorHandler(controllers.removeTeamController)
 );
 router.put("/:id", asyncErrorHandler(controllers.updateGame));
+
+router.post(
+  "/:gameId/personalize/:userId",
+  asyncErrorHandler(controllers.updateProfileController)
+);

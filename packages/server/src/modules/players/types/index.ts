@@ -7,6 +7,7 @@ interface Players {
   teamId: number;
   userId: number;
   hasFinishedStep: boolean;
+  profileId: number | null;
   team: Team;
   actions: PlayerActions;
 }

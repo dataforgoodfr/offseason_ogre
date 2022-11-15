@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Container, Grid, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { BackArrow } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
@@ -8,30 +8,34 @@ import { formSections, formValues, PersoForm } from "./models/form";
 import { Icon } from "../../common/components/Icon";
 import { AccordionLayout } from "../common/AccordionLayout";
 import { fulfillsConditions, isSectionValid } from "./utils/formValidation";
+import axios from "axios";
+import { useQueryClient, useMutation } from "react-query";
+import { SuccessAlert, ErrorAlert } from "../../alert";
+import { useGameId } from "./hooks/useGameId";
+import { useAuth } from "../../auth/authProvider";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
   const { control, getValues, handleSubmit, watch } = useForm<PersoForm, any>({
-    defaultValues: {
-      profileNumberAdults: 1,
-      profileCarEnergy: "Essence",
-      profileCarConsumption: 0,
-      profileCarDistanceAlone: 0,
-      profileCarDistanceHoushold: 0,
-      profileCarAge: "Entre 10 et 15 ans",
-      profileCarDistanceCarsharing: 0,
-      profileHeatPump: false,
-      profileACRoomNb: 0,
-      profileACDaysNb: 0,
-      profileShowerNumber: 1,
-      profileShowerTime: "5 à 10 minutes",
-      profileEatingVegetables: false,
-      profileEatingDairies: false,
-      profileEatingEggs: false,
-      profileEatingMeat: false,
-    },
+    defaultValues: {},
   });
+
+  const queryClient = useQueryClient();
+  const gameId = useGameId();
+  const { user } = useAuth();
+
+  const mutation = useMutation<Response, { message: string }>(
+    () => {
+      return axios.post(
+        `/api/games/${gameId}/personalize/${user?.id}`,
+        getValues()
+      );
+    },
+    {
+      onSuccess: () => console.log("yay"),
+    }
+  );
 
   const buildFormLine = (question: any) => {
     return (
@@ -71,9 +75,32 @@ function PersonalizationForm() {
     console.log("submit", getValues());
   };
 
+  const saveDraft = () => {
+    mutation.mutate();
+  };
+
   return (
     <CustomContainer maxWidth="lg">
-      <BackArrow />
+      {mutation.isSuccess && <SuccessAlert />}
+      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
+      <Grid container direction="row" justifyContent="space-between">
+        <BackArrow />
+        <Grid item display="flex">
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => saveDraft()}
+            sx={{
+              mr: "auto",
+              margin: "15px 0 35px 0",
+              padding: "10px 20px 10px 20px",
+            }}
+          >
+            <Icon name="settings" sx={{ mr: 1 }} />
+            Sauvegarder le brouillon
+          </Button>
+        </Grid>
+      </Grid>
       <Typography
         variant="h5"
         color="secondary"
