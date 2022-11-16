@@ -17,6 +17,7 @@ const PersoFormNumberInput = ({
     <Controller
       control={control}
       name={name}
+      defaultValue={""}
       render={({ field }) => (
         <PersoTextField
           {...field}

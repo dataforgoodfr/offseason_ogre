@@ -1,8 +1,4 @@
-import {
-  Personalization,
-  PersonalizationName,
-  PersonalizationType,
-} from "@prisma/client";
+import { Personalization, PersonalizationName } from "@prisma/client";
 import { database } from "..";
 import { Seed } from "../types";
 
@@ -12,10 +8,9 @@ const seed: Seed<Omit<Personalization, "id" | "updatedAt">> = {
   seeder: (persona: Omit<Personalization, "id" | "updatedAt">) =>
     database.personalization.upsert({
       where: {
-        personalizationType_personalizationName_createdAt: {
-          personalizationType: persona.personalizationType,
+        origin_personalizationName: {
+          origin: persona.origin,
           personalizationName: persona.personalizationName,
-          createdAt: new Date("01-01-1970"),
         },
       },
       update: persona,
@@ -27,7 +22,7 @@ const seed: Seed<Omit<Personalization, "id" | "updatedAt">> = {
 function getPersonaData(): Omit<Personalization, "id" | "updatedAt">[] {
   const persona = [
     {
-      personalizationType: "predefinedPersona" as PersonalizationType,
+      origin: "system",
       personalizationName: "oilgre" as PersonalizationName,
       numberAdults: 2,
       numberKids: 2,

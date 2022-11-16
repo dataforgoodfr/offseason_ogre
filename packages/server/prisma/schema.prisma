@@ -36,7 +36,7 @@ model Players {
   user            User            @relation(fields: [userId], references: [id])
   userId          Int
   profile         Profile?        @relation(fields: [profileId], references: [id])
-  profileId       Int?
+  profileId       Int?            @unique
   actions         PlayerActions[]
   hasFinishedStep Boolean         @default(true)
 
@@ -69,7 +69,7 @@ model Team {
 
 model Profile {
   id                Int             @id @default(autoincrement())
-  player            Players[]
+  player            Players[]       
   personalization   Personalization @relation(fields: [personalizationId], references: [id])
   personalizationId Int
   status            ProfileStatus   @default(draft)
@@ -84,7 +84,7 @@ enum ProfileStatus {
 
 model Personalization {
   id                     Int                 @id @default(autoincrement())
-  personalizationType    PersonalizationType
+  origin                 String             
   personalizationName    PersonalizationName
   numberAdults           Int?
   numberKids             Int?
@@ -138,12 +138,7 @@ model Personalization {
   updatedAt              DateTime            @updatedAt
   Profile                Profile[]
 
-  @@unique([personalizationType, personalizationName, createdAt], map: "personalization_persona_unique_constraint")
-}
-
-enum PersonalizationType {
-  form
-  predefinedPersona
+  @@unique([origin, personalizationName], map: "personalization_persona_unique_constraint")
 }
 
 enum PersonalizationName {

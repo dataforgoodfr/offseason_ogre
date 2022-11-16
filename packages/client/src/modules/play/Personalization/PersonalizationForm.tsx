@@ -41,7 +41,8 @@ function PersonalizationForm() {
     reset,
     watch,
     formState: { isDirty },
-  } = useForm<PersoForm, any>({
+  } = useForm<PersoForm, Record<string, any>>({
+    shouldUnregister: false,
     defaultValues: useMemo(() => {
       return profile.personalization;
     }, [profile]),
@@ -56,7 +57,7 @@ function PersonalizationForm() {
         return { [key]: val === null ? undefined : val };
       });
     reset(Object.assign({}, ...values));
-  }, [profile]);
+  }, [profile, reset]);
 
   const { user } = useAuth();
 
@@ -122,7 +123,7 @@ function PersonalizationForm() {
         userId: user?.id,
         update: {
           ...getNonNullValues(),
-          personalizationType: "form",
+          origin: `player_${user?.id}`,
           personalizationName: "form",
         },
       });

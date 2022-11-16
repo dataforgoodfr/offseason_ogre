@@ -16,7 +16,7 @@ function handleUpdateProfile(io: Server, socket: Socket) {
         gameId: z.number(),
         userId: z.number(),
         update: z.object({
-          personalizationType: z.string(),
+          origin: z.string(),
           personalizationName: z.string(),
           numberAdults: z.number().optional(),
           numberKids: z.number().optional(),
