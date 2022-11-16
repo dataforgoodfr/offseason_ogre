@@ -29,6 +29,11 @@ async function find(gameId: number, userId: number): Promise<Players | null> {
         },
       },
       team: true,
+      profile: {
+        include: {
+          personalization: true,
+        },
+      },
     },
   }) as unknown as Players;
 }

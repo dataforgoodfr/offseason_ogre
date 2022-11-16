@@ -1,61 +1,90 @@
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { useEffect, useMemo } from "react";
+import { Button, Grid, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { BackArrow } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
 import { useForm } from "react-hook-form";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
-import { formSections, formValues, PersoForm } from "./models/form";
-import { Icon } from "../../common/components/Icon";
+import {
+  formSections,
+  formValues,
+  PersoForm,
+  persoFormInputs,
+  Question,
+} from "./models/form";
+import { Icon, IconName } from "../../common/components/Icon";
 import { AccordionLayout } from "../common/AccordionLayout";
 import { fulfillsConditions, isSectionValid } from "./utils/formValidation";
-import axios from "axios";
-import { useQueryClient, useMutation } from "react-query";
-import { SuccessAlert, ErrorAlert } from "../../alert";
-import { useGameId } from "./hooks/useGameId";
 import { useAuth } from "../../auth/authProvider";
+import { usePlay } from "../context/playContext";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
-  const { control, getValues, handleSubmit, watch } = useForm<PersoForm, any>({
-    defaultValues: {},
+  const { profile, updateProfile } = usePlay();
+
+  const { control, getValues, handleSubmit, reset, watch } = useForm<
+    PersoForm,
+    any
+  >({
+    defaultValues: useMemo(() => {
+      return profile.personalization;
+    }, [profile]),
   });
 
-  const queryClient = useQueryClient();
-  const gameId = useGameId();
+  useEffect(() => {
+    const values = Object.entries(profile?.personalization || {})
+      .filter((property: any) => {
+        const [key, _] = property;
+        return persoFormInputs.includes(key);
+      })
+      .map((property: any) => {
+        const [key, val] = property;
+        return { [key]: val === null ? undefined : val };
+      });
+    reset(Object.assign({}, ...values));
+  }, [profile]);
+
   const { user } = useAuth();
 
-  const mutation = useMutation<Response, { message: string }>(
-    () => {
-      return axios.post(
-        `/api/games/${gameId}/personalize/${user?.id}`,
-        getValues()
-      );
-    },
-    {
-      onSuccess: () => console.log("yay"),
-    }
-  );
+  const getNonNullValues = () => {
+    return Object.fromEntries(
+      Object.entries(getValues()).filter((response: any) => {
+        const [_, value] = response;
+        return value !== null && value !== undefined;
+      })
+    );
+  };
 
-  const buildFormLine = (question: any) => {
+  const getComponentType = (question: Question) => {
+    if (question.inputType === "free" && question.valueType === "number") {
+      return <PersoFormNumberInput control={control} name={question.name} />;
+    }
+
+    if (question.inputType === "list" && question.options) {
+      return (
+        <PersoFormInputList
+          control={control}
+          name={question.name}
+          options={question.options}
+          type={question.valueType}
+        />
+      );
+    }
+    throw new Error("Unsupported question type");
+  };
+
+  const buildFormLine = (question: Question) => {
     return (
       <QuestionLine container direction="row" justifyContent="space-between">
         <QuestionText>
           {" "}
-          {question.icon && <Icon name={question.icon} sx={{ mr: 1 }} />}
+          {question.icon && (
+            <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
+          )}
           {question.description}
         </QuestionText>
-        {question.inputType === "free" && question.valueType === "number" && (
-          <PersoFormNumberInput control={control} name={question.name} />
-        )}
-        {question.inputType === "list" && (
-          <PersoFormInputList
-            control={control}
-            name={question.name}
-            options={question.options}
-            type={question.valueType}
-          />
-        )}
+        {getComponentType(question)}
       </QuestionLine>
     );
   };
@@ -64,8 +93,8 @@ function PersonalizationForm() {
     return (
       <Grid container direction="column">
         {formValues
-          .filter((question: any) => question.type === section)
-          .filter((question: any) => fulfillsConditions(watch, question))
+          .filter((question: Question) => question.type === section)
+          .filter((question: Question) => fulfillsConditions(watch, question))
           .map((value: any) => buildFormLine(value))}
       </Grid>
     );
@@ -76,13 +105,20 @@ function PersonalizationForm() {
   };
 
   const saveDraft = () => {
-    mutation.mutate();
+    if (user) {
+      updateProfile({
+        userId: user?.id,
+        update: {
+          ...getNonNullValues(),
+          personalizationType: "form",
+          personalizationName: "form",
+        },
+      });
+    }
   };
 
   return (
     <CustomContainer maxWidth="lg">
-      {mutation.isSuccess && <SuccessAlert />}
-      {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       <Grid container direction="row" justifyContent="space-between">
         <BackArrow />
         <Grid item display="flex">
@@ -121,9 +157,6 @@ function PersonalizationForm() {
             </AccordionLayout>
           );
         })}
-        {/* <Button color="secondary" variant="contained" type="submit">
-          Envoyer
-        </Button> */}
       </form>
     </CustomContainer>
   );

@@ -35,6 +35,7 @@ function handleJoinGame(io: Server, socket: Socket) {
 
       if (isPlayer) {
         const player = await playersServices.find(gameId, user.id);
+        console.log(player?.profile);
         invariant(
           player,
           `Could not find player with game id ${gameId} and user id ${user.id}`
@@ -54,6 +55,9 @@ function handleJoinGame(io: Server, socket: Socket) {
             hasFinishedStep: player?.hasFinishedStep,
             teamActions,
           },
+        });
+        socket.emit("profileUpdated", {
+          update: player.profile,
         });
       } else {
         socket.join(rooms.teachers(gameId));

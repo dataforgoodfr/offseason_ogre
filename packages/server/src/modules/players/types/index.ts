@@ -1,4 +1,4 @@
-import { Team, PlayerActions } from "@prisma/client";
+import { Team, PlayerActions, Profile } from "@prisma/client";
 
 export type { Players };
 
@@ -9,5 +9,6 @@ interface Players {
   hasFinishedStep: boolean;
   profileId: number | null;
   team: Team;
+  profile: Profile;
   actions: PlayerActions;
 }

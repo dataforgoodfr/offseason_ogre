@@ -1,5 +1,6 @@
 export const buildChoices = (array: string[] | number[]) => {
-  return array.map((value: string | number) => {
+  const sortedArray = typeof array[0] === "string" ? array.sort() : array;
+  return sortedArray.map((value: string | number) => {
     return { value: value, description: value };
   });
 };

@@ -50,6 +50,8 @@ interface IPlayContext {
   setActionPointsLimitExceeded: (limitExceeded: boolean) => void;
   player: PlayerState;
   updatePlayer: (options: { hasFinishedStep?: boolean }) => void;
+  profile: any;
+  updateProfile: (options: { userId: number; update: any }) => void;
   updateTeam: (update: {
     teamActions?: {
       id: number;
@@ -77,7 +79,7 @@ function RootPlayProvider({ children }: { children: React.ReactNode }) {
 
 function PlayProvider({ children }: { children: React.ReactNode }) {
   const match = useMatch(`play/games/:gameId/*`);
-  if (!match) throw new Error("Provider use ouside of game play.");
+  if (!match) throw new Error("Provider use outside of game play.");
   const gameId = +(match.params.gameId as string);
 
   const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
@@ -91,12 +93,14 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     hasFinishedStep: true,
     teamActions: [],
   });
+  const [profile, setProfile] = useState<any>({});
   const { socket } = useGameSocket({
     gameId,
     setGameWithTeams,
     setPlayerActions,
     setActionPointsLimitExceeded,
     setPlayer,
+    setProfile,
   });
 
   const gameWithSortedTeams = useMemo(
@@ -137,6 +141,16 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     socket.emit("updatePlayer", { gameId, hasFinishedStep });
   };
 
+  const updateProfile = ({
+    userId,
+    update,
+  }: {
+    userId: number;
+    update: any;
+  }) => {
+    socket.emit("updateProfile", { gameId, userId, update });
+  };
+
   const updateTeam = ({
     teamActions,
     scenarioName,
@@ -167,6 +181,8 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         setActionPointsLimitExceeded,
         player,
         updatePlayer,
+        profile,
+        updateProfile,
         updateTeam,
       }}
     >
@@ -346,12 +362,14 @@ function useGameSocket({
   setPlayerActions,
   setActionPointsLimitExceeded,
   setPlayer,
+  setProfile,
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
   setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
   setActionPointsLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>;
   setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
+  setProfile: React.Dispatch<React.SetStateAction<any>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
@@ -401,6 +419,10 @@ function useGameSocket({
       }
     );
 
+    newSocket.on("profileUpdated", ({ update }: { update: Partial<any> }) => {
+      setProfile((previous: any) => ({ ...previous, ...update }));
+    });
+
     newSocket.on("connect", () => {
       newSocket.emit("joinGame", gameId);
     });
@@ -416,6 +438,7 @@ function useGameSocket({
     setPlayerActions,
     setActionPointsLimitExceeded,
     setPlayer,
+    setProfile,
     navigate,
   ]);
   return { socket };

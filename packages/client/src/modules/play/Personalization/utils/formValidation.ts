@@ -1,3 +1,5 @@
+import { Question } from "../models/form";
+
 const compare = (watch: any, condition: any) => {
   if (condition.operator === ">") {
     return watch(condition.question) > condition.value;
@@ -11,7 +13,7 @@ const compare = (watch: any, condition: any) => {
   return false;
 };
 
-export const fulfillsConditions = (watch: any, question: any) => {
+export const fulfillsConditions = (watch: any, question: Question) => {
   if (!question.conditions) {
     return true;
   }
@@ -26,10 +28,12 @@ export const isSectionValid = (
   sectionName: string
 ) => {
   return formValues
-    .filter((question: any) => question.type === sectionName)
-    .every((question: any) => {
+    .filter((question: Question) => question.type === sectionName)
+    .every((question: Question) => {
       if (fulfillsConditions(watch, question)) {
-        return watch(question.name) !== undefined;
+        return (
+          watch(question.name) !== undefined && watch(question.name) !== null
+        );
       }
       return true;
     });

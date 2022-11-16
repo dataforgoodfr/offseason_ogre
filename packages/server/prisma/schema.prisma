@@ -86,54 +86,54 @@ model Personalization {
   id                     Int                 @id @default(autoincrement())
   personalizationType    PersonalizationType
   personalizationName    PersonalizationName
-  numberAdults           Int
-  numberKids             Int
-  car                    Boolean
-  carEnergy              String              @default("Essence")
-  carConsumption         Float               @default(0)
-  carDistanceAlone       Float               @default(0)
-  carDistanceHoushold    Float               @default(0)
-  carAge                 String              @default("Entre 10 et 15 ans")
-  carDistanceCarsharing  Float               @default(0)
-  planeDistance          Float
-  trainDistance          Float
-  houseType              String
-  houseSurface           Float
-  heatingEnergy          String
-  heatingConsumption     Float
-  heatingInvoice         Float
-  heatPump               Boolean             @default(false)
-  heatingTemperature     Boolean
-  airConditionning       Boolean
-  aCRoomNb               Int                 @default(0)
-  aCDaysNb               Float               @default(0)
-  showerBath             String
-  showerNumber           Int                 @default(1)
-  showerTime             String              @default("5 à 10 minutes")
-  cookingKettle          Boolean
-  cookingPlateTime       Float
-  cookingOvenTime        Float
-  cleaningWashingTime    Float
-  cleaningDryerTime      Float
-  cleaningDishwasherTime Float
-  refrigeratorNumber     Int
-  freezerNumber          Int
-  lightingSystem         String
-  eatingVegan            Boolean
-  eatingVegetables       Boolean             @default(false)
-  eatingDairies          Boolean             @default(false)
-  eatingEggs             Boolean             @default(false)
-  eatingMeat             Boolean             @default(false)
-  eatingTinDrink         Float
-  eatingZeroWaste        Boolean
-  eatingLocal            Boolean
-  eatingCatNumber        Int
-  eatingDogNumber        Int
-  eatingHorse            Boolean
-  numericEquipment       Boolean
-  numericWebTimeDay      Boolean
-  numericVideoTimeDay    Boolean
-  clothingQuantity       Boolean
+  numberAdults           Int?
+  numberKids             Int?
+  car                    Boolean?
+  carEnergy              String?              @default("Essence")
+  carConsumption         Float?               @default(0)
+  carDistanceAlone       Float?               @default(0)
+  carDistanceHoushold    Float?               @default(0)
+  carAge                 String?              @default("Entre 10 et 15 ans")
+  carDistanceCarsharing  Float?               @default(0)
+  planeDistance          Float?
+  trainDistance          Float?
+  houseType              String?
+  houseSurface           Float?
+  heatingEnergy          String?
+  heatingConsumption     Float?
+  heatingInvoice         Float?
+  heatPump               Boolean?             @default(false)
+  heatingTemperature     Boolean?
+  airConditionning       Boolean?
+  aCRoomNb               Int?                 @default(0)
+  aCDaysNb               Float?               @default(0)
+  showerBath             String?
+  showerNumber           Int?                 @default(1)
+  showerTime             String?              @default("5 à 10 minutes")
+  cookingKettle          Boolean?
+  cookingPlateTime       Float?
+  cookingOvenTime        Float?
+  cleaningWashingTime    Float?
+  cleaningDryerTime      Float?
+  cleaningDishwasherTime Float?
+  refrigeratorNumber     Int?
+  freezerNumber          Int?
+  lightingSystem         String?
+  eatingVegan            Boolean?
+  eatingVegetables       Boolean?             @default(false)
+  eatingDairies          Boolean?             @default(false)
+  eatingEggs             Boolean?             @default(false)
+  eatingMeat             Boolean?             @default(false)
+  eatingTinDrink         Float?
+  eatingZeroWaste        Boolean?
+  eatingLocal            Boolean?
+  eatingCatNumber        Int?
+  eatingDogNumber        Int?
+  eatingHorse            Boolean?
+  numericEquipment       Boolean?
+  numericWebTimeDay      Boolean?
+  numericVideoTimeDay    Boolean?
+  clothingQuantity       Boolean?
   createdAt              DateTime            @default(now())
   updatedAt              DateTime            @updatedAt
   Profile                Profile[]

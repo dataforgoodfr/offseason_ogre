@@ -6,6 +6,7 @@ interface Players {
   gameId: number;
   userId: number;
   teamId: number;
+  profileId: number;
 }
 
 interface User {
