@@ -1,7 +1,11 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Grid, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
-import { BackArrow } from "./common/BackArrow";
+import {
+  BackArrow,
+  BackArrowWithValidation,
+  ValidationDialog,
+} from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
 import { useForm } from "react-hook-form";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
@@ -17,16 +21,31 @@ import { AccordionLayout } from "../common/AccordionLayout";
 import { fulfillsConditions, isSectionValid } from "./utils/formValidation";
 import { useAuth } from "../../auth/authProvider";
 import { usePlay } from "../context/playContext";
+import { useGameId } from "./hooks/useGameId";
+import { isNotEmpty } from "./utils/choices";
+import { useNavigate } from "react-router-dom";
+import { Dialog } from "../../common/components/Dialog";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
+  const navigate = useNavigate();
+  const gameId = useGameId();
   const { profile, updateProfile } = usePlay();
 
-  const { control, getValues, handleSubmit, reset, watch } = useForm<
-    PersoForm,
-    any
-  >({
+  const [open, setOpen] = useState(false);
+  const dialogContent = {
+    warningMessage: `Il semble que vous n’ayez pas sauvegardé votre formulaire. Etes-vous sur de vouloir revenir en arrière ? Vous perdrez l’ensemble de vos réponses aux questions du formulaire si vous validez le retour`,
+  };
+
+  const {
+    control,
+    getValues,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { isDirty },
+  } = useForm<PersoForm, any>({
     defaultValues: useMemo(() => {
       return profile.personalization;
     }, [profile]),
@@ -34,12 +53,10 @@ function PersonalizationForm() {
 
   useEffect(() => {
     const values = Object.entries(profile?.personalization || {})
-      .filter((property: any) => {
-        const [key, _] = property;
+      .filter(([key, _]: [string, any]) => {
         return persoFormInputs.includes(key);
       })
-      .map((property: any) => {
-        const [key, val] = property;
+      .map(([key, val]: [string, any]) => {
         return { [key]: val === null ? undefined : val };
       });
     reset(Object.assign({}, ...values));
@@ -49,10 +66,9 @@ function PersonalizationForm() {
 
   const getNonNullValues = () => {
     return Object.fromEntries(
-      Object.entries(getValues()).filter((response: any) => {
-        const [_, value] = response;
-        return value !== null && value !== undefined;
-      })
+      Object.entries(getValues()).filter(([_, value]: [string, any]) =>
+        isNotEmpty(value)
+      )
     );
   };
 
@@ -95,7 +111,7 @@ function PersonalizationForm() {
         {formValues
           .filter((question: Question) => question.type === section)
           .filter((question: Question) => fulfillsConditions(watch, question))
-          .map((value: any) => buildFormLine(value))}
+          .map((question: Question) => buildFormLine(question))}
       </Grid>
     );
   };
@@ -120,7 +136,43 @@ function PersonalizationForm() {
   return (
     <CustomContainer maxWidth="lg">
       <Grid container direction="row" justifyContent="space-between">
-        <BackArrow />
+        {!isDirty && (
+          <BackArrow path={`/play/games/${gameId}/personalize/choice`} />
+        )}
+        {isDirty && (
+          <>
+            <BackArrowWithValidation handleClickOpen={() => setOpen(true)} />
+            <Dialog
+              open={open}
+              handleClose={() => setOpen(false)}
+              content={dialogContent.warningMessage}
+              actions={
+                <>
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    sx={{ border: 1, borderColor: "secondary" }}
+                    onClick={() =>
+                      navigate(`/play/games/${gameId}/personalize/choice`)
+                    }
+                  >
+                    Oui
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                    sx={{ border: 1, borderColor: "secondary", mt: 1 }}
+                    onClick={() => setOpen(false)}
+                  >
+                    Non
+                  </Button>
+                </>
+              }
+            />
+          </>
+        )}
+
         <Grid item display="flex">
           <Button
             color="secondary"
@@ -145,18 +197,15 @@ function PersonalizationForm() {
         Personnaliser mon profil
       </Typography>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        {Object.entries(formSections).map((section: any) => {
-          const [_, value] = section;
-          return (
-            <AccordionLayout
-              valid={isSectionValid(formValues, watch, value.name)}
-              title={value.title}
-              titleIcon={value.titleIcon}
-            >
-              {buildFormSection(value.name)}
-            </AccordionLayout>
-          );
-        })}
+        {Object.entries(formSections).map(([_, value]: [string, any]) => (
+          <AccordionLayout
+            valid={isSectionValid(formValues, watch, value.name)}
+            title={value.title}
+            titleIcon={value.titleIcon}
+          >
+            {buildFormSection(value.name)}
+          </AccordionLayout>
+        ))}
       </form>
     </CustomContainer>
   );

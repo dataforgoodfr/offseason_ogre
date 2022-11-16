@@ -8,13 +8,16 @@ import { BackArrow } from "./common/BackArrow";
 import { AccordionLayout } from "../common/AccordionLayout";
 import { getOilgrePersonaDetails } from "../PlayerPersona/description";
 import { formSections } from "./models/form";
+import { useGameId } from "./hooks/useGameId";
 
 export { PersonalizationPredefinedPersona };
 
 function PersonalizationPredefinedPersona() {
+  const gameId = useGameId();
+
   return (
     <CustomContainer maxWidth="lg">
-      <BackArrow />
+      <BackArrow path={`/play/games/${gameId}/personalize/choice`} />
       <CentralContainer>
         <Grid container direction="row">
           <Grid item xs={12} sm={2}>
@@ -33,14 +36,11 @@ function PersonalizationPredefinedPersona() {
           </Grid>
         </Grid>
       </CentralContainer>
-      {Object.entries(formSections).map((section: any) => {
-        const [_, value] = section;
-        return (
-          <AccordionLayout title={value.title} titleIcon={value.titleIcon}>
-            <Typography> {getOilgrePersonaDetails(value.name)} </Typography>
-          </AccordionLayout>
-        );
-      })}
+      {Object.entries(formSections).map(([_, value]: [string, any]) => (
+        <AccordionLayout title={value.title} titleIcon={value.titleIcon}>
+          <Typography> {getOilgrePersonaDetails(value.name)} </Typography>
+        </AccordionLayout>
+      ))}
     </CustomContainer>
   );
 }
