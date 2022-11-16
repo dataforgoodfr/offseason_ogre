@@ -86,17 +86,16 @@ function PersonalizationChoice() {
             sm={6}
           >
             <ChoiceButton
+              component={Link}
               color="secondary"
               variant="contained"
-              component="a"
-              target="_blank"
-              href="https://drive.google.com/file/d/1pPVQt3EoKUmNwwB89Qde1OHAByEWSArd/view?usp=sharing"
+              to={`/play/games/${gameId}/personalize/oilgre`}
             >
               <img
                 style={{
                   height: "32px",
-                  marginLeft: "2%",
-                  marginRight: "2%",
+                  marginLeft: "10px",
+                  marginRight: "10px",
                   borderRadius: "5px",
                 }}
                 src="/avatar.png"

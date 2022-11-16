@@ -106,3 +106,5 @@ dist
 
 # tsc built
 built
+
+.DS_Store

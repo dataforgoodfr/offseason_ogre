@@ -11,10 +11,12 @@ export const AccordionLayout = ({
   children,
   title,
   titleIcon,
+  valid = false,
 }: {
   children: JSX.Element;
   title: string;
   titleIcon: IconName;
+  valid?: boolean;
 }) => {
   const theme = useTheme();
 
@@ -39,11 +41,23 @@ export const AccordionLayout = ({
             transform: "rotate(90deg)",
           },
           "& .MuiAccordionSummary-content": {
+            color: valid ? theme.palette.primary.contrastText : "white",
+          },
+          "& .MuiAccordionSummary-content.Mui-expanded": {
             color: "white",
+          },
+          "& .validIcon": {
+            display: "flex",
+          },
+          "& .MuiAccordionSummary-content.Mui-expanded .validIcon": {
+            display: "none",
           },
         }}
       >
         <Typography alignItems="center" display="flex" variant="h6">
+          {valid && (
+            <Icon className="validIcon" name="check-circle" sx={{ mr: 2 }} />
+          )}
           {titleIcon && <Icon name={titleIcon} sx={{ mr: 1 }} />}
           {title}
         </Typography>

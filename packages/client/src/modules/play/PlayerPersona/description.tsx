@@ -6,7 +6,7 @@ export { getOilgrePersonaDetails };
 function getOilgrePersonaDetails(type: string) {
   if (type === "general") {
     return <GeneralPersonaDetails />;
-  } else if (type === "travel") {
+  } else if (type === "transport") {
     return <TravelPersonaDetails />;
   } else if (type === "housing") {
     return <HousingPersonaDetails />;
@@ -14,8 +14,8 @@ function getOilgrePersonaDetails(type: string) {
     return <FoodPersonaDetails />;
   } else if (type === "numeric") {
     return <NumericPersonaDetails />;
-  } else if (type === "clothing") {
-    return <ClothingPersonaDetails />;
+  } else if (type === "habits") {
+    return <HabitsPersonaDetails />;
   }
 }
 
@@ -137,7 +137,7 @@ function NumericPersonaDetails() {
   );
 }
 
-function ClothingPersonaDetails() {
+function HabitsPersonaDetails() {
   return (
     <>
       <Box mt={1}>J'aime être bien sapé et à la mode, et pour ça:</Box>
