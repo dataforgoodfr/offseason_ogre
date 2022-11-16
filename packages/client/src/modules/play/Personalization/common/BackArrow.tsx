@@ -1,12 +1,4 @@
-import {
-  Grid,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Icon } from "../../../common/components/Icon";
 
@@ -52,46 +44,5 @@ export const BackArrowWithValidation = ({
         Retour
       </Button>
     </Grid>
-  );
-};
-
-export const ValidationDialog = ({
-  open,
-  handleClose,
-  title,
-  warningMessage,
-  navigate,
-  path,
-}: {
-  open: boolean;
-  handleClose: () => void;
-  title: string;
-  warningMessage: string;
-  navigate: any;
-  path: string;
-}) => {
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText
-          id="alert-dialog-warning"
-          sx={{ color: "red", mb: 2 }}
-        >
-          {warningMessage}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Non</Button>
-        <Button onClick={() => navigate(path)} autoFocus>
-          Oui
-        </Button>
-      </DialogActions>
-    </Dialog>
   );
 };

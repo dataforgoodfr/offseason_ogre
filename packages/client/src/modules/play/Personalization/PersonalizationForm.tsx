@@ -1,11 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Grid, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
-import {
-  BackArrow,
-  BackArrowWithValidation,
-  ValidationDialog,
-} from "./common/BackArrow";
+import { BackArrow, BackArrowWithValidation } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
 import { useForm } from "react-hook-form";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
