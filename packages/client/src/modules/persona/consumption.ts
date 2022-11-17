@@ -1,21 +1,23 @@
 import { deepFreeze } from "../../lib/array";
-import {
-  consumptionGrey,
-  DAYS_IN_YEAR,
-  heatingEnergyCoeffs,
-  lightingConstants,
-  numericEquipment,
-  transportCoeffs,
-  whiteProductsConstants,
-} from "../common/constants/consumption";
+import { consumptionGrey } from "./consumption/constants";
 import { carbonPerKwh } from "../play/constants/consumption";
 import {
-  carAges,
-  carEnergies,
-  houseEnergies,
-  lighting,
-  showerTimes,
-} from "../play/Personalization/models/form";
+  getAirConditionningConsumption,
+  getBrownGoodsConsumption,
+  getCleanCookConsumption,
+  getElectricCarConsumption,
+  getFoodConsumption,
+  getFossilCarConsumption,
+  getFossilHeatingConsumption,
+  getGreyCarConsumption,
+  getGreyNumericConsumption,
+  getGreyOther,
+  getGreyTransport,
+  getLightConsumption,
+  getNoCarbonHeatingConsumption,
+  getPlaneConsumption,
+  getTrainConsumption,
+} from "./consumption/computing";
 
 export { getConsumptionFromProfile };
 export type { ConsumptionDatum, ConsumptionName, ConsumptionType };
@@ -48,63 +50,33 @@ type ConsumptionName =
 type ConsumptionType = "fossil" | "grey" | "mixte" | "renewable";
 type CarbonProduction = "electric" | "fossil";
 
-const computeConsumption = (
-  profile: any,
-  heatingConsumptionInvoiceCoeff: number
-) => {
+const getConsumptionFromProfile = (profile: any) => {
   return deepFreeze([
-    ...getFossilEnergies(profile, heatingConsumptionInvoiceCoeff),
+    ...getFossilEnergies(profile),
     ...getGreyEnergies(profile),
     ...getMixteEnergies(profile),
-    ...getRenewableEnergies(profile, heatingConsumptionInvoiceCoeff),
+    ...getRenewableEnergies(profile),
   ]) as readonly ConsumptionDatum[];
 };
 
 function getFossilEnergies(
-  profile: any,
-  heatingConsumptionInvoiceCoeff: number
+  profile: any
 ): (ConsumptionDatum & { type: "fossil" })[] {
   const energies = [
     {
       name: "fossilCar",
       carbonProductionPerKwh: carbonPerKwh.FOSSIL_CAR,
-      value: [
-        carEnergies.DIESEL,
-        carEnergies.GPL,
-        carEnergies.HYBRIDE,
-      ].includes(profile.carEnergy)
-        ? (((profile.carDistanceAlone / DAYS_IN_YEAR +
-            profile.carDistanceHoushold /
-              (DAYS_IN_YEAR * (profile.numberAdults + profile.numberKids))) *
-            profile.carConsumption) /
-            100 +
-            (profile.carDistanceCarsharing *
-              transportCoeffs.MEAN_FOSSIL_CAR_CONSUMPTION) /
-              100 /
-              DAYS_IN_YEAR) *
-          10
-        : 0,
+      value: getFossilCarConsumption(profile),
     },
     {
       name: "fossilHeating",
       carbonProductionPerKwh: carbonPerKwh.FOSSIL_HEATING,
-      value: [houseEnergies.FIOUL, houseEnergies.GAZ].includes(
-        profile.heatingEnergy
-      )
-        ? profile.heatingInvoice === 0
-          ? profile.heatingConsumption / (DAYS_IN_YEAR * profile.numberAdults)
-          : profile.heatingConsumption === 0
-          ? heatingConsumptionInvoiceCoeff /
-            (DAYS_IN_YEAR * profile.numberAdults)
-          : (heatingConsumptionInvoiceCoeff + profile.heatingConsumption) /
-            2 /
-            (DAYS_IN_YEAR * profile.numberAdults)
-        : 0,
+      value: getFossilHeatingConsumption(profile),
     },
     {
       name: "plane",
       carbonProductionPerKwh: carbonPerKwh.PLANE,
-      value: (profile.planeDistance / 365) * transportCoeffs.PLANE,
+      value: getPlaneConsumption(profile),
     },
   ] as const;
   return energies.map((energie) => ({
@@ -114,78 +86,34 @@ function getFossilEnergies(
   }));
 }
 
-function getRenewableEnergies(
-  profile: any,
-  heatingConsumptionInvoiceCoeff: number
-): (ConsumptionDatum & {
+function getRenewableEnergies(profile: any): (ConsumptionDatum & {
   type: "renewable";
 })[] {
-  const whiteProductsCoeff =
-    (profile.cookingKettle ? whiteProductsConstants.COOKING_KETTLE : 0) +
-    profile.cookingPlateTime * whiteProductsConstants.COOKING_PLATE +
-    profile.cookingOvenTime * whiteProductsConstants.COOKING_OVEN +
-    0.396 +
-    profile.cleaningWashingTime * whiteProductsConstants.CLEANING_WASHING +
-    profile.cleaningDryerTime * whiteProductsConstants.CLEANING_DRYER +
-    profile.cleaningDishwasherTime *
-      whiteProductsConstants.CLEANING_DISHWASHER +
-    profile.refrigeratorNumber * whiteProductsConstants.REFRIGERATOR +
-    profile.freezerNumber * whiteProductsConstants.FREEZER;
-
-  const showerBathCoeff =
-    profile.showerBath === "Bains"
-      ? 5
-      : profile.showerNumber * getShowerTimeCoeff(profile.showerTime) * 2.8;
-
   const energies = [
     {
       name: "airConditionning",
-      value: profile.airConditionning
-        ? (profile.aCRoomNb * profile.aCDaysNb * 0.6 * 12) / DAYS_IN_YEAR
-        : 0,
+      value: getAirConditionningConsumption(profile),
     },
     {
       name: "brownGoods",
-      value: profile.numericEquipment
-        ? numericEquipment.YES
-        : numericEquipment.NO,
+      value: getBrownGoodsConsumption(profile),
     },
-    { name: "cleanCook", value: whiteProductsCoeff + showerBathCoeff },
+    { name: "cleanCook", value: getCleanCookConsumption(profile) },
     {
       name: "electricCar",
-      value:
-        profile.carEnergy === carEnergies.ELECTRICITE
-          ? (profile.carDistanceAlone / DAYS_IN_YEAR +
-              profile.carDistanceHoushold /
-                (DAYS_IN_YEAR * (profile.numberAdults + profile.numberKids)) +
-              profile.carDistanceCarsharing / DAYS_IN_YEAR) *
-            transportCoeffs.ELECTRIC_CAR
-          : 0,
+      value: getElectricCarConsumption(profile),
     },
     {
       name: "light",
-      value:
-        profile.lightingSystem === lighting.AMPOULES_LED
-          ? lightingConstants.LED
-          : lightingConstants.OTHER,
+      value: getLightConsumption(profile),
     },
     {
       name: "noCarbonHeating",
-      value: [houseEnergies.BOIS, houseEnergies.ELECTRICITE].includes(
-        profile.heatingEnergy
-      )
-        ? (profile.heatingInvoice === 0
-            ? profile.heatingConsumption
-            : profile.heatingConsumption === 0
-            ? heatingConsumptionInvoiceCoeff
-            : (heatingConsumptionInvoiceCoeff + profile.heatingConsumption) /
-              2) /
-          (DAYS_IN_YEAR * profile.numberAdults)
-        : 0,
+      value: getNoCarbonHeatingConsumption(profile),
     },
     {
       name: "train",
-      value: (profile.trainDistance / DAYS_IN_YEAR) * transportCoeffs.TRAIN,
+      value: getTrainConsumption(profile),
     },
   ] as const;
   return energies.map((energie) => ({
@@ -201,18 +129,7 @@ function getMixteEnergies(
   const energies = [
     {
       name: "food",
-      value:
-        (profile.eatingVegan ? 1.5 : 0) +
-        (profile.eatingVegetables ? 1.5 : 0) +
-        (profile.eatingDairies ? 1.5 : 0) +
-        (profile.eatingEggs ? 1 : 0) +
-        (profile.eatingMeat ? 4 : 0) +
-        profile.eatingTinDrink * 0.6 +
-        (profile.eatingZeroWaste ? 0 : 4) +
-        profile.eatingCatNumber * 2 +
-        profile.eatingDogNumber * 9 +
-        (profile.eatingHorse ? 17 : 0) +
-        2.9,
+      value: getFoodConsumption(profile),
     },
   ] as const;
   return energies.map((energie) => ({
@@ -229,11 +146,7 @@ function getGreyEnergies(
     {
       name: "greyCar",
       carbonProductionPerKwh: carbonPerKwh.GREY_CAR,
-      value:
-        consumptionGrey.CAR *
-        (profile.car ? 1 : 0) *
-        (profile.carEnergy === carEnergies.ELECTRICITE ? 1.2 : 1) *
-        getCarAgeCoeff(profile.carAge),
+      value: getGreyCarConsumption(profile),
     },
     {
       name: "greyHouse",
@@ -243,31 +156,17 @@ function getGreyEnergies(
     {
       name: "greyNumeric",
       carbonProductionPerKwh: carbonPerKwh.GREY_NUMERIC,
-      value:
-        consumptionGrey.NUMERIC_EQUIPMENT *
-          (profile.numericEquipment ? 1.5 : 1) *
-          1.5 +
-        3 *
-          (profile.numericWebTimeDay ? 1.15 : 1) *
-          (profile.numericVideoTimeDay ? 1.15 : 1),
+      value: getGreyNumericConsumption(profile),
     },
     {
       name: "greyOther",
       carbonProductionPerKwh: carbonPerKwh.GREY_OTHER,
-      value:
-        consumptionGrey.OTHER *
-        (1 -
-          (profile.eatingLocal ? 0.15 : 0) -
-          (profile.clothingQuantity ? 0 : 0.15)),
+      value: getGreyOther(profile),
     },
     {
       name: "greyTransport",
       carbonProductionPerKwh: carbonPerKwh.GREY_TRANSPORT,
-      value:
-        consumptionGrey.TRANSPORT *
-        (1 -
-          (profile.eatingLocal ? 0.1 : 0) -
-          (profile.clothingQuantity ? 0 : 0.1)),
+      value: getGreyTransport(profile),
     },
     {
       name: "servicePublic",
@@ -281,49 +180,3 @@ function getGreyEnergies(
     type: "grey",
   }));
 }
-
-const getHeatingEneryCoeff = (energy: string) => {
-  if (energy === houseEnergies.GAZ) {
-    return heatingEnergyCoeffs.GAZ;
-  } else if (energy === houseEnergies.FIOUL) {
-    return heatingEnergyCoeffs.FIOUL;
-  } else if (energy === houseEnergies.BOIS) {
-    return heatingEnergyCoeffs.BOIS;
-  } else if (energy === houseEnergies.ELECTRICITE) {
-    return heatingEnergyCoeffs.ELECTRICITE;
-  }
-  throw new Error(`Invalid profile value for heating energy: ${energy}`);
-};
-
-const getShowerTimeCoeff = (time: string) => {
-  if (time === showerTimes.MOINS_5) {
-    return 0.5;
-  } else if (time === showerTimes.CINQ_DIX) {
-    return 0.75;
-  } else if (time === showerTimes.DIX_QUINZE) {
-    return 1.25;
-  } else if (time === showerTimes.PLUS_15) {
-    return 2;
-  }
-  throw new Error(`Invalid profile value for shower time: ${time}`);
-};
-
-const getCarAgeCoeff = (carAge: string) => {
-  if (carAge === carAges.MOINS_5) {
-    return 3;
-  } else if (carAge === carAges.CINQ_DIX) {
-    return 0.75;
-  } else if (carAge === carAges.DIX_QUINZE) {
-    return 1.25;
-  } else if (carAge === carAges.PLUS_15) {
-    return 2;
-  }
-  throw new Error(`Invalid profile value for car age: ${carAge}`);
-};
-
-const getConsumptionFromProfile = (profile: any) => {
-  const heatingConsumptionInvoiceCoeff =
-    profile.heatingInvoice / getHeatingEneryCoeff(profile.heatingEnergy);
-
-  return computeConsumption(profile, heatingConsumptionInvoiceCoeff);
-};

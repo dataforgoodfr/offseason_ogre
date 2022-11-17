@@ -1,5 +1,4 @@
 import { Personalization, Players as PlayersPrisma } from "@prisma/client";
-import { cp } from "fs";
 import { database } from "../../../database";
 import { Players } from "../types";
 
