@@ -125,50 +125,67 @@ export interface Question {
   options?: DropdownOption[];
 }
 
-export const carEnergyChoice = buildChoices([
-  "Diesel",
-  "Electricité",
-  "Essence",
-  "GPL",
-  "Hybride",
-  "Autre",
-]);
+export const carEnergies = {
+  DIESEL: "Diesel",
+  ELECTRICITE: "Electricité",
+  ESSENCE: "Essence",
+  GPL: "GPL",
+  HYBRIDE: "Hybride",
+  AUTRE: "Autre",
+};
 
-export const carAgeChoice = buildChoices([
-  "Moins de 5 ans",
-  "Entre 5 et 10 ans",
-  "Entre 10 et 15 ans",
-  "Plus de 15 ans",
-]);
+export const carAges = {
+  MOINS_5: "Moins de 5 ans",
+  CINQ_DIX: "Entre 5 et 10 ans",
+  DIX_QUINZE: "Entre 10 et 15 ans",
+  PLUS_15: "Plus de 15 ans",
+};
 
-export const houseType = buildChoices([
-  "Appartement",
-  "Maison individuelle",
-  "Maison mitoyenne",
-  "Studio (1 pièce)",
-]);
+export const houseTypes = {
+  APPARTMENT: "Appartement",
+  INDIVIDUAL: "Maison individuelle",
+  MITOYENNE: "Maison mitoyenne",
+  STUDIO: "Studio (1 pièce)",
+};
 
-export const houseEnergy = buildChoices([
-  "Bois",
-  "Electricité",
-  "Fioul",
-  "Gaz",
-]);
+export const houseEnergies = {
+  BOIS: "Bois",
+  ELECTRICITE: "Electricité",
+  FIOUL: "Fioul",
+  GAZ: "Gaz",
+};
 
-export const showerBath = buildChoices(["Bains", "Douches"]);
+export const cleaning = {
+  BAINS: "Bains",
+  DOUCHES: "Douches",
+};
 
-export const lightingSystem = buildChoices([
-  "Ampoules basse consommation",
-  "Ampoules classiques et halogènes",
-  "Ampoules LED",
-]);
+export const lighting = {
+  AMPOULES_BASSE_CONSOMMATION: "Ampoules basse consommation",
+  AMPOULES_CLASSIQUES: "Ampoules classiques et halogènes",
+  AMPOULES_LED: "Ampoules LED",
+};
 
-export const showerTimes = buildChoices([
-  "Moins de 5 minutes",
-  "5 à 10 minutes",
-  "10 à 15 minutes",
-  "Plus de 15 minutes",
-]);
+export const showerTimes = {
+  MOINS_5: "Moins de 5 minutes",
+  CINQ_DIX: "5 à 10 minutes",
+  DIX_QUINZE: "10 à 15 minutes",
+  PLUS_15: "Plus de 15 minutes",
+};
+
+export const carEnergyChoice = buildChoices(Object.values(carEnergies));
+
+export const carAgeChoice = buildChoices(Object.values(carAges));
+
+export const houseTypeChoices = buildChoices(Object.values(houseTypes));
+
+export const houseEnergyChoices = buildChoices(Object.values(houseEnergies));
+
+export const showerBathChoices = buildChoices(Object.values(cleaning));
+
+export const lightingSystemChoices = buildChoices(Object.values(lighting));
+
+export const showerTimesChoices = buildChoices(Object.values(showerTimes));
 
 export const booleanChoice = [
   { value: true, description: "Oui" },
@@ -309,7 +326,7 @@ const getHousingQuestions = () => {
       name: "houseType" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: houseType,
+      options: houseTypeChoices,
     },
     {
       description: `Quelle est la surface de votre logement (en m${"\u00b2"}) ?`,
@@ -322,7 +339,7 @@ const getHousingQuestions = () => {
       name: "heatingEnergy" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: houseEnergy,
+      options: houseEnergyChoices,
     },
     {
       description:
@@ -346,7 +363,7 @@ const getHousingQuestions = () => {
         {
           question: "heatingEnergy",
           operator: "=",
-          value: "Electricité",
+          value: houseEnergies.ELECTRICITE,
         },
       ],
       inputType: "list",
@@ -402,13 +419,15 @@ const getHabitsQuestions = () => {
       name: "showerBath" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: showerBath,
+      options: showerBathChoices,
     },
     {
       description:
         "En moyenne, combien de fois par jour prenez-vous une douche ?",
       name: "showerNumber" as keyof PersoForm,
-      conditions: [{ question: "showerBath", operator: "=", value: "Douches" }],
+      conditions: [
+        { question: "showerBath", operator: "=", value: cleaning.DOUCHES },
+      ],
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(1, 11)),
@@ -416,10 +435,12 @@ const getHabitsQuestions = () => {
     {
       description: "En moyenne, combien de temps dure une douche ?",
       name: "showerTime" as keyof PersoForm,
-      conditions: [{ question: "showerBath", operator: "=", value: "Douches" }],
+      conditions: [
+        { question: "showerBath", operator: "=", value: cleaning.DOUCHES },
+      ],
       inputType: "list",
       valueType: "string",
-      options: showerTimes,
+      options: showerTimesChoices,
     },
     {
       description: "Utilisez-vous une bouilloire pour chauffer l'eau ?",
@@ -482,7 +503,7 @@ const getHabitsQuestions = () => {
       name: "lightingSystem" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: lightingSystem,
+      options: lightingSystemChoices,
     },
   ];
   return habitsQuestions.map((question: Omit<Question, "type">) => ({

@@ -1,7 +1,7 @@
-import { consumption, ConsumptionDatum } from "./consumption";
+import { ConsumptionDatum, getConsumptionFromProfile } from "./consumption";
 import { production, ProductionDatum } from "./production";
 
-export { persona };
+export { buildInitialPersona };
 export type { Persona };
 
 interface Persona {
@@ -13,11 +13,17 @@ interface Persona {
   production: ProductionDatum[];
 }
 
-const persona: Persona = {
-  budget: 13.7,
-  carbonFootprint: 32.73,
-  actionPoints: 0,
-  points: 0,
-  consumption,
-  production,
+const buildInitialPersona: (profile: any) => Persona = (profile: any) => {
+  const consumption = getConsumptionFromProfile(profile);
+
+  const persona: Persona = {
+    budget: 13.7,
+    carbonFootprint: 32.73,
+    actionPoints: 0,
+    points: 0,
+    consumption,
+    production,
+  };
+
+  return persona;
 };

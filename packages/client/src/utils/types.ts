@@ -40,6 +40,7 @@ interface Player {
   teamId: number;
   userId: number;
   user: IUser;
+  profile: any;
   actions: PlayerActions[];
   hasFinishedStep: boolean;
 }
