@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { services as playersServices } from "../../players/services";
 import { changeTeamController } from "./changeTeamController";
 import { getPlayedGames } from "../services/getPlayedGames";
 import { getPlayers } from "../services/getPlayers";
@@ -9,6 +10,7 @@ import { dateSchema } from "./types";
 import { removePlayerController } from "./removePlayerController";
 import { removeTeamController } from "./removeTeamController";
 import { putPlayersInTeamsController } from "./putPlayersInTeamsController";
+import { getDefault } from "../services/personalization";
 
 const crudController = {
   createController,
@@ -85,11 +87,16 @@ async function updateGame(request: Request, response: Response) {
     date: dateSchema.optional(),
     name: z.string().optional(),
     status: z.enum(["draft", "ready", "playing", "finished"]).optional(),
+    setProfiles: z.boolean().optional(),
   });
 
   const { id } = paramsSchema.parse(request.params);
-  const update = bodySchema.parse(request.body);
+  const { setProfiles, ...update } = bodySchema.parse(request.body);
 
+  if (setProfiles) {
+    const defaultPersonalization = await getDefault();
+    await playersServices.setDefaultProfiles(id, defaultPersonalization);
+  }
   const document = await services.update(id, update);
   response.status(200).json({ document });
 }
