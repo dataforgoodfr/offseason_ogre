@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { performSeed } from "./utils";
 import { seed as usersSeed } from "./seeds/usersSeed";
+import { seed as personaSeed } from "./seeds/personaSeed";
 import { seed as actionsSeed } from "./seeds/actionsSeed";
 import {
   seed as productionActionsSeed,
@@ -28,6 +29,7 @@ async function disconnectFromDatase() {
 async function seed() {
   logger.info("Seeding database");
   await performSeed(usersSeed);
+  await performSeed(personaSeed);
   await performSeed(actionsSeed);
   await performSeed(productionActionsSeed);
   await performSeed(pointsIntervalSeed);

@@ -17,7 +17,7 @@ function PersonalizationChoice() {
 
   return (
     <CustomContainer maxWidth="lg">
-      <BackArrow />
+      <BackArrow path={`/play/games/`} />
       <Typography variant="h5" color="secondary" sx={{ textAlign: "center" }}>
         Préparer l'atelier
       </Typography>

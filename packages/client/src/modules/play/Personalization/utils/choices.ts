@@ -4,3 +4,7 @@ export const buildChoices = (array: string[] | number[]) => {
     return { value: value, description: value };
   });
 };
+
+export const isNotEmpty = (value: any) => {
+  return value !== null && value !== undefined && value !== "";
+};

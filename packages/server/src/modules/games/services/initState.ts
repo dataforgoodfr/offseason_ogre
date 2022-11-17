@@ -17,6 +17,11 @@ async function initState({ gameId }: { gameId: number }) {
                   action: true,
                 },
               },
+              profile: {
+                include: {
+                  personalization: true,
+                },
+              },
             },
           },
           actions: {

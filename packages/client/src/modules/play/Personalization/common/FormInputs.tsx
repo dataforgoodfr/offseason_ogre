@@ -17,6 +17,7 @@ const PersoFormNumberInput = ({
     <Controller
       control={control}
       name={name}
+      defaultValue={""}
       render={({ field }) => (
         <PersoTextField
           {...field}
@@ -45,6 +46,7 @@ const PersoFormInputList = ({
     <Controller
       control={control}
       name={name}
+      defaultValue={""}
       render={({ field }) => (
         <PersoSelectTextField
           select
@@ -58,7 +60,7 @@ const PersoFormInputList = ({
             IconComponent: ExpandMoreRounded,
           }}
         >
-          {options.map((option: any) => (
+          {options.map((option: { value: any; description: any }) => (
             <MenuItem value={option.value}> {option.description} </MenuItem>
           ))}
         </PersoSelectTextField>

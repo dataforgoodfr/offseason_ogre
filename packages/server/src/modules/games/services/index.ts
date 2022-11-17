@@ -33,6 +33,11 @@ async function getDocument(id: number): Promise<Model | null> {
                   action: true,
                 },
               },
+              profile: {
+                include: {
+                  personalization: true,
+                },
+              },
             },
           },
           actions: {

@@ -55,6 +55,9 @@ function handleJoinGame(io: Server, socket: Socket) {
             teamActions,
           },
         });
+        socket.emit("profileUpdated", {
+          update: player.profile,
+        });
       } else {
         socket.join(rooms.teachers(gameId));
       }

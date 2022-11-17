@@ -15,5 +15,6 @@ interface Players {
   gameId: number;
   teamId: number;
   userId: number;
+  profileId: number | null;
   team: Team;
 }

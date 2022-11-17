@@ -1,4 +1,5 @@
-import { Question } from "../models/form";
+import { Condition, Question } from "../models/form";
+import { isNotEmpty } from "./choices";
 
 const compare = (watch: any, condition: any) => {
   if (condition.operator === ">") {
@@ -17,17 +18,22 @@ export const fulfillsConditions = (watch: any, question: Question) => {
   if (!question.conditions) {
     return true;
   }
-  return question.conditions.every((condition: any) =>
+  return question.conditions.every((condition: Condition) =>
     compare(watch, condition)
   );
 };
 
 export const isSectionValid = (
-  formValues: any,
+  formValues: Question[],
   watch: any,
   sectionName: string
 ) => {
   return formValues
     .filter((question: Question) => question.type === sectionName)
-    .every((question: Question) => watch(question.name) !== undefined);
+    .every((question: Question) => {
+      if (fulfillsConditions(watch, question)) {
+        return isNotEmpty(watch(question.name));
+      }
+      return true;
+    });
 };
