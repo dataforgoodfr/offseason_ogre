@@ -9,6 +9,7 @@ import {
 import {
   DataGrid,
   GridActionsCellItem,
+  GridCellParams,
   GridColumns,
   GridRowParams,
 } from "@mui/x-data-grid";
@@ -25,6 +26,8 @@ import {
 } from "./services/queries";
 import { useGameId } from "./utils";
 import { hasGameStarted } from "../utils";
+import { Icon } from "../../../common/components/Icon";
+import { DataGridBox } from "./GameTeams.styles";
 
 export { GamePlayers };
 
@@ -58,15 +61,19 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const players = playersQuery?.data?.data?.players ?? [];
   const teams = teamQuery?.data?.data?.teams ?? [];
 
-  const rows = players.map(({ playedGames, ...player }) => ({
-    ...player,
-    teamId:
-      playedGames.find(({ gameId: gId }: { gameId: number }) => gId === gameId)
-        ?.team.id || 0,
-  }));
+  const rows = players.map(({ playedGames, ...player }) => {
+    const currentGame = playedGames.find(
+      ({ gameId: gId }: { gameId: number }) => gId === gameId
+    );
+    return {
+      ...player,
+      teamId: currentGame?.team.id || 0,
+      formStatus: currentGame?.profile?.status || "draft",
+    };
+  });
 
   return (
-    <Box style={{ height: 500, width: "100%" }}>
+    <DataGridBox>
       <DataGrid
         rows={rows}
         columns={buildColumns({ game, teams })}
@@ -84,7 +91,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
           return newRow;
         }}
       />
-    </Box>
+    </DataGridBox>
   );
 }
 
@@ -121,8 +128,62 @@ function buildColumns({
       minWidth: 250,
     },
     ...buildTeamColumns({ game, teams }),
+    ...buildFormColumns({ game, teams }),
     ...buildActionColumns({ game }),
   ];
+}
+
+function buildFormColumns({
+  game,
+  teams,
+}: {
+  game: IGame;
+  teams: Team[];
+}): GridColumns<Row> {
+  const baseTeamColumn = {
+    editable: false,
+    field: "formStatus",
+    headerName: "Statut du formulaire",
+    cellClassName: (params: GridCellParams<string>) => {
+      if (params.value === "draft") return "form-draft";
+      if (params.value === "validated") return "form-validated";
+      return "form-to-validate";
+    },
+    renderCell: ({ value, field, api }) => {
+      if (value === "draft") {
+        return (
+          <>
+            <Icon name="mark-circle" sx={{ mr: 1 }} /> Brouillon
+          </>
+        );
+      }
+      if (value === "validated") {
+        return (
+          <>
+            <Icon name="check-circle" sx={{ mr: 1 }} /> Validé{" "}
+          </>
+        );
+      } else {
+        return (
+          <>
+            <Icon name="settings" sx={{ mr: 1 }} /> A valider{" "}
+          </>
+        );
+      }
+    },
+    flex: 1,
+    minWidth: 160,
+  } as GridColumns<Row>[0];
+  if (hasGameStarted(game.status)) {
+    return [baseTeamColumn];
+  }
+  return [
+    {
+      ...baseTeamColumn,
+      editable: true,
+      type: "singleSelect",
+    },
+  ] as GridColumns<Row>;
 }
 
 function buildTeamColumns({
