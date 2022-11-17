@@ -1,7 +1,7 @@
-import { TextField } from "@mui/material";
+import { Box, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-export { TeamTextField };
+export { TeamTextField, DataGridBox };
 
 const TeamTextField = styled(TextField)(({ theme }) => ({
   "& label": {
@@ -28,3 +28,16 @@ const TeamTextField = styled(TextField)(({ theme }) => ({
     color: theme.palette.secondary.contrastText,
   },
 })) as typeof TextField;
+
+const DataGridBox = styled(Box)(({ theme }) => ({
+  height: 500,
+  width: "100%",
+  "& .form-validated": {
+    backgroundColor: "green",
+    color: "white",
+  },
+  "& .form-to-validate": {
+    backgroundColor: "red",
+    color: "white",
+  },
+}));
