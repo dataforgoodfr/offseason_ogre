@@ -1,12 +1,9 @@
-import { Personalization, Profile } from "@prisma/client";
+import { Personalization } from "@prisma/client";
 import { database } from "../../../database";
 
 export { update, create, getDefault };
 
-async function update(
-  personalizationId: number,
-  personalization: Personalization
-) {
+async function update(personalizationId: number, personalization: any) {
   return database.personalization.update({
     where: { id: personalizationId },
     data: personalization,
@@ -24,7 +21,7 @@ async function getDefault(): Promise<Personalization> {
   }) as unknown as Personalization;
 }
 
-async function create(personalization: Personalization) {
+async function create(personalization: any) {
   return database.personalization.create({
     data: personalization,
   });
