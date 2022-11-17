@@ -41,7 +41,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   const mutation = useMutation<Response, { message: string }, any>(
     () => {
       const path = `/api/games/${game.id}`;
-      return axios.put(path, { setProfiles: true, status: "playing" });
+      return axios.put(path, { status: "playing" });
     },
     {
       onSuccess: () => {

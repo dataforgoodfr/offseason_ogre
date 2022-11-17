@@ -87,13 +87,12 @@ async function updateGame(request: Request, response: Response) {
     date: dateSchema.optional(),
     name: z.string().optional(),
     status: z.enum(["draft", "ready", "playing", "finished"]).optional(),
-    setProfiles: z.boolean().optional(),
   });
 
   const { id } = paramsSchema.parse(request.params);
-  const { setProfiles, ...update } = bodySchema.parse(request.body);
+  const update = bodySchema.parse(request.body);
 
-  if (setProfiles) {
+  if (update?.status === "playing") {
     const defaultPersonalization = await getDefault();
     await playersServices.setDefaultProfiles(id, defaultPersonalization);
   }

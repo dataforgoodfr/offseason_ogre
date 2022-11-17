@@ -1,3 +1,4 @@
+import { PersoForm } from "../play/Personalization/models/form";
 import { ConsumptionDatum, getConsumptionFromProfile } from "./consumption";
 import { production, ProductionDatum } from "./production";
 
@@ -13,7 +14,9 @@ interface Persona {
   production: ProductionDatum[];
 }
 
-const buildInitialPersona: (profile: any) => Persona = (profile: any) => {
+const buildInitialPersona: (profile: PersoForm) => Persona = (
+  profile: PersoForm
+) => {
   const consumption = getConsumptionFromProfile(profile);
 
   const persona: Persona = {

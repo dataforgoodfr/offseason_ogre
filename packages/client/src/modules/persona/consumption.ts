@@ -18,6 +18,7 @@ import {
   getPlaneConsumption,
   getTrainConsumption,
 } from "./consumption/computing";
+import { PersoForm } from "../play/Personalization/models/form";
 
 export { getConsumptionFromProfile };
 export type { ConsumptionDatum, ConsumptionName, ConsumptionType };
@@ -50,7 +51,7 @@ type ConsumptionName =
 type ConsumptionType = "fossil" | "grey" | "mixte" | "renewable";
 type CarbonProduction = "electric" | "fossil";
 
-const getConsumptionFromProfile = (profile: any) => {
+const getConsumptionFromProfile = (profile: PersoForm) => {
   return deepFreeze([
     ...getFossilEnergies(profile),
     ...getGreyEnergies(profile),
@@ -60,7 +61,7 @@ const getConsumptionFromProfile = (profile: any) => {
 };
 
 function getFossilEnergies(
-  profile: any
+  profile: PersoForm
 ): (ConsumptionDatum & { type: "fossil" })[] {
   const energies = [
     {
@@ -86,7 +87,7 @@ function getFossilEnergies(
   }));
 }
 
-function getRenewableEnergies(profile: any): (ConsumptionDatum & {
+function getRenewableEnergies(profile: PersoForm): (ConsumptionDatum & {
   type: "renewable";
 })[] {
   const energies = [
@@ -124,7 +125,7 @@ function getRenewableEnergies(profile: any): (ConsumptionDatum & {
 }
 
 function getMixteEnergies(
-  profile: any
+  profile: PersoForm
 ): (ConsumptionDatum & { type: "mixte" })[] {
   const energies = [
     {
@@ -140,7 +141,7 @@ function getMixteEnergies(
 }
 
 function getGreyEnergies(
-  profile: any
+  profile: PersoForm
 ): (ConsumptionDatum & { type: "grey" })[] {
   const energies = [
     {

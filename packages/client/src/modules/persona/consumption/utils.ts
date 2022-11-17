@@ -3,6 +3,7 @@ import {
   showerTimes,
   carAges,
   cleaning,
+  PersoForm,
 } from "../../play/Personalization/models/form";
 import {
   DAYS_IN_YEAR,
@@ -11,7 +12,7 @@ import {
 } from "./constants";
 
 export const getHeatingConsumption = (
-  profile: any,
+  profile: PersoForm,
   heatingConsumptionInvoiceCoeff: number
 ) => {
   const { heatingInvoice, heatingConsumption, numberAdults } = profile;
@@ -29,7 +30,7 @@ export const getHeatingConsumption = (
   );
 };
 
-export const getHeatingConsumptionInvoiceCoeff = (profile: any) => {
+export const getHeatingConsumptionInvoiceCoeff = (profile: PersoForm) => {
   const { heatingInvoice, heatingEnergy } = profile;
   return heatingInvoice / getHeatingEnergyCoeff(heatingEnergy);
 };
@@ -73,7 +74,7 @@ export const getCarAgeCoeff = (carAge: string) => {
   throw new Error(`Invalid profile value for car age: ${carAge}`);
 };
 
-export const getWhiteProductsCoeff = (profile: any) => {
+export const getWhiteProductsCoeff = (profile: PersoForm) => {
   const {
     cookingKettle,
     cookingPlateTime,
@@ -103,7 +104,7 @@ export const getWhiteProductsCoeff = (profile: any) => {
   return result.reduce((a, b) => a + b, 0);
 };
 
-export const getShowerBathCoeff = (profile: any) => {
+export const getShowerBathCoeff = (profile: PersoForm) => {
   const { showerBath, showerNumber, showerTime } = profile;
   if (showerBath === cleaning.BAINS) {
     return 5;
