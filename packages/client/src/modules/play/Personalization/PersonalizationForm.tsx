@@ -87,9 +87,14 @@ function PersonalizationForm() {
     throw new Error("Unsupported question type");
   };
 
-  const buildFormLine = (question: Question) => {
+  const buildFormLine = (question: Question, display: boolean) => {
     return (
-      <QuestionLine container direction="row" justifyContent="space-between">
+      <QuestionLine
+        container
+        sx={{ display: display ? "flex" : "none" }}
+        direction="row"
+        justifyContent="space-between"
+      >
         <QuestionText>
           {" "}
           {question.icon && (
@@ -107,8 +112,10 @@ function PersonalizationForm() {
       <Grid container direction="column">
         {formValues
           .filter((question: Question) => question.type === section)
-          .filter((question: Question) => fulfillsConditions(watch, question))
-          .map((question: Question) => buildFormLine(question))}
+          // https://github.com/react-hook-form/react-hook-form/issues/1990
+          .map((question: Question) =>
+            buildFormLine(question, fulfillsConditions(watch, question))
+          )}
       </Grid>
     );
   };
@@ -123,7 +130,7 @@ function PersonalizationForm() {
         userId: user?.id,
         update: {
           ...getNonNullValues(),
-          origin: `player_${user?.id}`,
+          origin: `player_${user?.id}_${gameId}`,
           personalizationName: "form",
         },
       });
