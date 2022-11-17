@@ -128,19 +128,13 @@ function buildColumns({
       minWidth: 250,
     },
     ...buildTeamColumns({ game, teams }),
-    ...buildFormColumns({ game, teams }),
+    ...buildFormColumns(),
     ...buildActionColumns({ game }),
   ];
 }
 
-function buildFormColumns({
-  game,
-  teams,
-}: {
-  game: IGame;
-  teams: Team[];
-}): GridColumns<Row> {
-  const baseTeamColumn = {
+function buildFormColumns(): GridColumns<Row> {
+  const baseFormColumn = {
     editable: false,
     field: "formStatus",
     headerName: "Statut du formulaire",
@@ -149,7 +143,7 @@ function buildFormColumns({
       if (params.value === "validated") return "form-validated";
       return "form-to-validate";
     },
-    renderCell: ({ value, field, api }) => {
+    renderCell: ({ value }) => {
       if (value === "draft") {
         return (
           <>
@@ -174,16 +168,7 @@ function buildFormColumns({
     flex: 1,
     minWidth: 160,
   } as GridColumns<Row>[0];
-  if (hasGameStarted(game.status)) {
-    return [baseTeamColumn];
-  }
-  return [
-    {
-      ...baseTeamColumn,
-      editable: true,
-      type: "singleSelect",
-    },
-  ] as GridColumns<Row>;
+  return [baseFormColumn];
 }
 
 function buildTeamColumns({

@@ -32,10 +32,6 @@ const TeamTextField = styled(TextField)(({ theme }) => ({
 const DataGridBox = styled(Box)(({ theme }) => ({
   height: 500,
   width: "100%",
-  "& .form-draft": {
-    backgroundColor: "white",
-    color: "black",
-  },
   "& .form-validated": {
     backgroundColor: "green",
     color: "white",
