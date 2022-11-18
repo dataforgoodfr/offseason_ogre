@@ -1,5 +1,6 @@
 import { Typography, FormControlLabel, Checkbox, Button } from "@mui/material";
 import { Dialog } from "../../../common/components/Dialog";
+import { useNavigate } from "react-router-dom";
 
 const ValidateDialogContent = ({
   rgpdCheckbox,
@@ -40,15 +41,15 @@ export const BackArrowDialog = ({
   backArrowDialogOpen,
   setBackArrowDialogOpen,
   backArrowDialogContent,
-  navigate,
   gameId,
 }: {
   backArrowDialogOpen: boolean;
   setBackArrowDialogOpen: (value: boolean) => void;
   backArrowDialogContent: { warningMessage: string };
-  navigate: any;
   gameId: number;
 }) => {
+  const navigate = useNavigate();
+
   return (
     <Dialog
       open={backArrowDialogOpen}

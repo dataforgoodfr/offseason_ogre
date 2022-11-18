@@ -14,18 +14,20 @@ import {
 } from "./models/form";
 import { Icon, IconName } from "../../common/components/Icon";
 import { AccordionLayout } from "../common/AccordionLayout";
-import { fulfillsConditions, isSectionValid } from "./utils/formValidation";
+import {
+  fulfillsConditions,
+  getOrigin,
+  isSectionValid,
+} from "./utils/formValidation";
 import { useAuth } from "../../auth/authProvider";
 import { usePlay } from "../context/playContext";
 import { useGameId } from "./hooks/useGameId";
 import { isNotEmpty } from "./utils/choices";
-import { useNavigate } from "react-router-dom";
 import { BackArrowDialog, ValidationDialog } from "./common/Dialogs";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
-  const navigate = useNavigate();
   const gameId = useGameId();
   const { profile, updateProfile } = usePlay();
 
@@ -134,7 +136,7 @@ function PersonalizationForm() {
         update: {
           ...getNonNullValues(),
           profileStatus: "pendingValidation",
-          origin: `player_${user?.id}_${gameId}`,
+          origin: getOrigin(user?.id, gameId),
           personalizationName: "form",
         },
       });
@@ -148,7 +150,7 @@ function PersonalizationForm() {
         update: {
           ...getNonNullValues(),
           profileStatus: "draft",
-          origin: `player_${user?.id}_${gameId}`,
+          origin: getOrigin(user?.id, gameId),
           personalizationName: "form",
         },
       });
@@ -171,7 +173,6 @@ function PersonalizationForm() {
                 backArrowDialogOpen={backArrowDialogOpen}
                 setBackArrowDialogOpen={setBackArrowDialogOpen}
                 backArrowDialogContent={backArrowDialogContent}
-                navigate={navigate}
                 gameId={gameId}
               />
             </>
