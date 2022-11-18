@@ -1,4 +1,4 @@
-import { Players as PlayersPrisma } from "@prisma/client";
+import { Personalization, Players as PlayersPrisma } from "@prisma/client";
 import { database } from "../../../database";
 import { Players } from "../types";
 
@@ -11,6 +11,7 @@ const crudServices = {
   find,
   update,
   updateMany,
+  setDefaultProfiles,
 };
 
 const services = { ...crudServices };
@@ -61,6 +62,55 @@ async function update(
       team: true,
     },
   }) as unknown as Players;
+}
+
+async function setDefaultProfiles(
+  gameId: number,
+  defaultPersonalization: Personalization
+): Promise<void> {
+  const playersWithoutProfiles = await model.findMany({
+    where: {
+      OR: [
+        {
+          gameId,
+          profileId: null,
+        },
+        {
+          gameId,
+          profile: {
+            status: {
+              not: {
+                equals: "validated",
+              },
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      profile: true,
+    },
+  });
+
+  return playersWithoutProfiles.forEach(async (player: any) => {
+    const profile = await database.profile.create({
+      data: {
+        personalizationId: defaultPersonalization.id,
+        status: "validated",
+      },
+    });
+    await model.update({
+      where: {
+        userId_gameId: {
+          gameId,
+          userId: player.userId,
+        },
+      },
+      data: {
+        profileId: profile.id,
+      },
+    });
+  });
 }
 
 async function updateMany(

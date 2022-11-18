@@ -39,7 +39,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
 
   const navigate = useNavigate();
   const mutation = useMutation<Response, { message: string }, any>(
-    (status: boolean) => {
+    () => {
       const path = `/api/games/${game.id}`;
       return axios.put(path, { status: "playing" });
     },

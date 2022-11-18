@@ -11,7 +11,6 @@ import {
   TeamAction,
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
-import { persona as basePersona } from "../../persona/persona";
 import { GameStep, GameStepType, isStepOfType, STEPS } from "../constants";
 import { sortBy } from "../../../lib/array";
 import { buildPersona } from "../utils/persona";
@@ -21,6 +20,7 @@ import { mean } from "../../../lib/math";
 import { range } from "lodash";
 import { sumAllValues } from "../../persona";
 import { NO_TEAM } from "../../common/constants/teams";
+import { buildInitialPersona } from "../../persona/persona";
 
 export {
   PlayProvider,
@@ -457,9 +457,10 @@ function usePersonaByUserId(userIds: number | number[]) {
 
   if (typeof userIds === "number") {
     const { team, player } = getUserTeamAndPlayer(gameWithTeams, userIds);
+    const initialPersona = buildInitialPersona(player?.profile.personalization);
     return buildPersona(
       gameWithTeams,
-      basePersona,
+      initialPersona,
       player?.actions || [],
       team?.actions || []
     );
@@ -468,11 +469,14 @@ function usePersonaByUserId(userIds: number | number[]) {
   return Object.fromEntries(
     userIds.map((userId) => {
       const { team, player } = getUserTeamAndPlayer(gameWithTeams, userId);
+      const initialPersona = buildInitialPersona(
+        player?.profile.personalization
+      );
       return [
         userId,
         buildPersona(
           gameWithTeams,
-          basePersona,
+          initialPersona,
           player?.actions || [],
           team?.actions || []
         ),
@@ -495,7 +499,10 @@ function getUserTeamAndPlayer(game: IGameWithTeams, userId: number) {
 
 function usePersona() {
   const { game, player } = useLoadedPlay();
+  const { user } = useAuth();
+  const profile = user && getUserTeamAndPlayer(game, user.id)?.player?.profile;
   const { playerActions } = usePlayerActions();
+  const initialPersona = buildInitialPersona(profile.personalization);
 
-  return buildPersona(game, basePersona, playerActions, player.teamActions);
+  return buildPersona(game, initialPersona, playerActions, player.teamActions);
 }
