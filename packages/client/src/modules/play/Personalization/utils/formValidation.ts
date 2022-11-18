@@ -40,3 +40,7 @@ export const isSectionValid = (
       return true;
     });
 };
+
+export const getOrigin = (userId: number, gameId: number) => {
+  return `player_${userId}_${gameId}`;
+};
