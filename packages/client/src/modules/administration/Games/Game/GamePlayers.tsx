@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   CircularProgress,
   Dialog,
@@ -68,7 +67,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     return {
       ...player,
       teamId: currentGame?.team.id || 0,
-      formStatus: currentGame?.profile?.status || "draft",
+      formStatus: currentGame?.profile?.status || "Non rempli",
     };
   });
 
@@ -139,15 +138,15 @@ function buildFormColumns(): GridColumns<Row> {
     field: "formStatus",
     headerName: "Statut du formulaire",
     cellClassName: (params: GridCellParams<string>) => {
-      if (params.value === "draft") return "form-draft";
+      if (params.value === "pendingValidation") return "form-to-validate";
       if (params.value === "validated") return "form-validated";
-      return "form-to-validate";
+      return "form-draft";
     },
     renderCell: ({ value }) => {
       if (value === "draft") {
         return (
           <>
-            <Icon name="mark-circle" sx={{ mr: 1 }} /> Brouillon
+            <Icon name="draft" sx={{ mr: 1 }} /> Brouillon
           </>
         );
       }
@@ -157,13 +156,19 @@ function buildFormColumns(): GridColumns<Row> {
             <Icon name="check-circle" sx={{ mr: 1 }} /> Validé{" "}
           </>
         );
-      } else {
+      }
+      if (value === "pendingValidation") {
         return (
           <>
-            <Icon name="settings" sx={{ mr: 1 }} /> A valider{" "}
+            <Icon name="settings" sx={{ mr: 1 }} /> En attente de validation{" "}
           </>
         );
       }
+      return (
+        <>
+          <Icon name="mark-circle" sx={{ mr: 1 }} /> Non rempli
+        </>
+      );
     },
     flex: 1,
     minWidth: 160,

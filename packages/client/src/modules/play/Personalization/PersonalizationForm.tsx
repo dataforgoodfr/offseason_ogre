@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Grid, Tooltip, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { BackArrow, BackArrowWithValidation } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
@@ -20,7 +20,7 @@ import { usePlay } from "../context/playContext";
 import { useGameId } from "./hooks/useGameId";
 import { isNotEmpty } from "./utils/choices";
 import { useNavigate } from "react-router-dom";
-import { Dialog } from "../../common/components/Dialog";
+import { BackArrowDialog, ValidationDialog } from "./common/Dialogs";
 
 export { PersonalizationForm };
 
@@ -29,8 +29,10 @@ function PersonalizationForm() {
   const gameId = useGameId();
   const { profile, updateProfile } = usePlay();
 
-  const [open, setOpen] = useState(false);
-  const dialogContent = {
+  const [validateDialogOpen, setValidateDialogOpen] = useState(false);
+  const [rgpdCheckbox, setRgpdCheckbox] = useState(false);
+  const [backArrowDialogOpen, setBackArrowDialogOpen] = useState(false);
+  const backArrowDialogContent = {
     warningMessage: `Il semble que vous n’ayez pas sauvegardé votre formulaire. Etes-vous sur de vouloir revenir en arrière ? Vous perdrez l’ensemble de vos réponses aux questions du formulaire si vous validez le retour`,
   };
 
@@ -120,8 +122,23 @@ function PersonalizationForm() {
     );
   };
 
+  const isFormValid = () =>
+    Object.entries(formSections).every(([_, value]: [string, any]) =>
+      isSectionValid(formValues, watch, value.name)
+    );
+
   const onSubmit = () => {
-    console.log("submit", getValues());
+    if (user && isFormValid()) {
+      updateProfile({
+        userId: user?.id,
+        update: {
+          ...getNonNullValues(),
+          profileStatus: "pendingValidation",
+          origin: `player_${user?.id}_${gameId}`,
+          personalizationName: "form",
+        },
+      });
+    }
   };
 
   const saveDraft = () => {
@@ -130,6 +147,7 @@ function PersonalizationForm() {
         userId: user?.id,
         update: {
           ...getNonNullValues(),
+          profileStatus: "draft",
           origin: `player_${user?.id}_${gameId}`,
           personalizationName: "form",
         },
@@ -139,68 +157,83 @@ function PersonalizationForm() {
 
   return (
     <CustomContainer maxWidth="lg">
-      <Grid container direction="row" justifyContent="space-between">
-        {!isDirty && (
-          <BackArrow path={`/play/games/${gameId}/personalize/choice`} />
-        )}
-        {isDirty && (
-          <>
-            <BackArrowWithValidation handleClickOpen={() => setOpen(true)} />
-            <Dialog
-              open={open}
-              handleClose={() => setOpen(false)}
-              content={dialogContent.warningMessage}
-              actions={
-                <>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    sx={{ border: 1, borderColor: "secondary" }}
-                    onClick={() =>
-                      navigate(`/play/games/${gameId}/personalize/choice`)
-                    }
-                  >
-                    Oui
-                  </Button>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                    sx={{ border: 1, borderColor: "secondary", mt: 1 }}
-                    onClick={() => setOpen(false)}
-                  >
-                    Non
-                  </Button>
-                </>
-              }
-            />
-          </>
-        )}
-
-        <Grid item display="flex">
-          <Button
-            color="secondary"
-            variant="contained"
-            onClick={() => saveDraft()}
-            sx={{
-              mr: "auto",
-              margin: "15px 0 35px 0",
-              padding: "10px 20px 10px 20px",
-            }}
-          >
-            <Icon name="settings" sx={{ mr: 1 }} />
-            Sauvegarder le brouillon
-          </Button>
-        </Grid>
-      </Grid>
-      <Typography
-        variant="h5"
-        color="secondary"
-        sx={{ textAlign: "center", mb: 4 }}
-      >
-        Personnaliser mon profil
-      </Typography>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        <Grid container direction="row" justifyContent="space-between">
+          {!isDirty && (
+            <BackArrow path={`/play/games/${gameId}/personalize/choice`} />
+          )}
+          {isDirty && (
+            <>
+              <BackArrowWithValidation
+                handleClickOpen={() => setBackArrowDialogOpen(true)}
+              />
+              <BackArrowDialog
+                backArrowDialogOpen={backArrowDialogOpen}
+                setBackArrowDialogOpen={setBackArrowDialogOpen}
+                backArrowDialogContent={backArrowDialogContent}
+                navigate={navigate}
+                gameId={gameId}
+              />
+            </>
+          )}
+
+          <Grid item display="flex">
+            <Button
+              color="secondary"
+              variant="contained"
+              onClick={() => saveDraft()}
+              sx={{
+                mr: "auto",
+                margin: "15px 0 35px 0",
+                padding: "10px 20px 10px 20px",
+              }}
+            >
+              <Icon name="settings" sx={{ mr: 1 }} />
+              Sauvegarder le brouillon
+            </Button>
+          </Grid>
+          <Grid item display="flex">
+            <Tooltip
+              placement="left-start"
+              title={
+                !isFormValid()
+                  ? "Le formulaire doit être complet pour pouvoir être validé."
+                  : ""
+              }
+            >
+              <span>
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => setValidateDialogOpen(true)}
+                  disabled={!isFormValid()}
+                  sx={{
+                    mr: "auto",
+                    margin: "15px 0 35px 0",
+                    padding: "10px 20px 10px 20px",
+                  }}
+                >
+                  <Icon name="check-doubled" sx={{ mr: 1 }} />
+                  Valider le formulaire
+                </Button>
+              </span>
+            </Tooltip>
+            <ValidationDialog
+              validateDialogOpen={validateDialogOpen}
+              setValidateDialogOpen={setValidateDialogOpen}
+              rgpdCheckbox={rgpdCheckbox}
+              setRgpdCheckbox={setRgpdCheckbox}
+              onSubmit={onSubmit}
+            />
+          </Grid>
+        </Grid>
+        <Typography
+          variant="h5"
+          color="secondary"
+          sx={{ textAlign: "center", mb: 4 }}
+        >
+          Personnaliser mon profil
+        </Typography>
         {Object.entries(formSections).map(([_, value]: [string, any]) => (
           <AccordionLayout
             valid={isSectionValid(formValues, watch, value.name)}

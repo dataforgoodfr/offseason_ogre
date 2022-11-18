@@ -11,6 +11,9 @@ const compare = (watch: any, condition: any) => {
   if (condition.operator === "=") {
     return watch(condition.question) === condition.value;
   }
+  if (condition.operator === "!=") {
+    return watch(condition.question) !== condition.value;
+  }
   return false;
 };
 

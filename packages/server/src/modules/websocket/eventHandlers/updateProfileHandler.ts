@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProfileStatus } from "@prisma/client";
 import { Server, Socket } from "../types";
 import { services as playersServices } from "../../players/services";
 import { services as profileServices } from "../../profiles/services";
@@ -16,6 +17,7 @@ function handleUpdateProfile(io: Server, socket: Socket) {
         gameId: z.number(),
         userId: z.number(),
         update: z.object({
+          profileStatus: z.string(),
           origin: z.string(),
           personalizationName: z.string(),
           numberAdults: z.number().optional(),
@@ -69,18 +71,22 @@ function handleUpdateProfile(io: Server, socket: Socket) {
         }),
       });
 
-      const { gameId, userId, update: profileData } = schema.parse(args);
+      const { gameId, userId, update: updateData } = schema.parse(args);
 
       const player = await playersServices.find(gameId, userId);
+      const { profileStatus, ...personalizationData } = updateData;
 
       if (player?.profileId && player?.profile.personalizationId) {
         const personalizationId = player?.profile.personalizationId;
-        await update(personalizationId, profileData);
+        await update(personalizationId, personalizationData);
+        await profileServices.update(player?.profileId, {
+          status: profileStatus as ProfileStatus,
+        });
       } else {
-        const personalization = await create(profileData);
+        const personalization = await create(personalizationData);
         const profile = await profileServices.create({
           personalizationId: personalization.id,
-          status: "draft",
+          status: profileStatus as ProfileStatus,
         });
         await playersServices.update(gameId, userId, {
           profileId: profile?.id,
