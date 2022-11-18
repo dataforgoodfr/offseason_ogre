@@ -67,7 +67,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     return {
       ...player,
       teamId: currentGame?.team.id || 0,
-      formStatus: currentGame?.profile?.status || "Non rempli",
+      formStatus: currentGame?.profile?.status || "noProfile",
     };
   });
 
