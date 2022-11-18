@@ -77,7 +77,6 @@ model Profile {
 
 enum ProfileStatus {
   draft
-  submitted
   pendingValidation
   validated
 }

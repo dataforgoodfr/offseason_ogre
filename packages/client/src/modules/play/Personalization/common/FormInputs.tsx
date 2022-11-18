@@ -21,7 +21,7 @@ const PersoFormNumberInput = ({
       render={({ field }) => (
         <PersoTextField
           {...field}
-          onChange={(e) => field.onChange(parseInt(e.target.value))}
+          onChange={(e) => field.onChange(parseFloat(e.target.value))}
           type="number"
           InputProps={{ inputProps: { min: 0 } }}
           required

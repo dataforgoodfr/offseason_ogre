@@ -253,7 +253,14 @@ const getTransportQuestions = () => {
       description:
         "Quelle est la consommation moyenne, en litres pour 100km, de ce véhicule ?",
       name: "carConsumption" as keyof PersoForm,
-      conditions: [{ question: "car", operator: "=", value: true }],
+      conditions: [
+        { question: "car", operator: "=", value: true },
+        {
+          question: "carEnergy",
+          operator: "!=",
+          value: carEnergies.ELECTRICITE,
+        },
+      ],
       inputType: "free",
       valueType: "number",
     },
