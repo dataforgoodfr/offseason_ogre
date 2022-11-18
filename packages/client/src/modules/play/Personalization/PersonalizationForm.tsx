@@ -15,6 +15,7 @@ import {
 import { Icon, IconName } from "../../common/components/Icon";
 import { AccordionLayout } from "../common/AccordionLayout";
 import {
+  formBlockText,
   fulfillsConditions,
   getOrigin,
   isSectionValid,
@@ -183,11 +184,7 @@ function PersonalizationForm() {
   return (
     <CustomContainer maxWidth="lg">
       {(query.isLoading || (game && game?.status !== "draft")) && (
-        <ErrorAlert
-          message={
-            "La modification du formulaire a été bloquée par l'animateur car le délai a été dépassé."
-          }
-        />
+        <ErrorAlert message={formBlockText} />
       )}
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Grid container direction="row" justifyContent="space-between">

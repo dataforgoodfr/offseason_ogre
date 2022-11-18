@@ -12,6 +12,7 @@ import { BackArrow } from "./common/BackArrow";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { ErrorAlert } from "../../alert";
+import { formBlockText } from "./utils/formValidation";
 
 export { PersonalizationChoice };
 
@@ -28,11 +29,7 @@ function PersonalizationChoice() {
   return (
     <CustomContainer maxWidth="lg">
       {(query.isLoading || (game && game?.status !== "draft")) && (
-        <ErrorAlert
-          message={
-            "La modification du formulaire a été bloquée par l'animateur car le délai a été dépassé."
-          }
-        />
+        <ErrorAlert message={formBlockText} />
       )}
       <BackArrow path={`/play/games/`} />
       <Typography variant="h5" color="secondary" sx={{ textAlign: "center" }}>
