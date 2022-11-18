@@ -12,6 +12,10 @@ router.get(
   asyncErrorHandler(controllers.getPlayedGamesController)
 );
 router.get("/:id", asyncErrorHandler(controllers.getGame));
+router.get(
+  "/:id/validate",
+  asyncErrorHandler(controllers.validateProfilesController)
+);
 router.get("/:id/players", asyncErrorHandler(controllers.getPlayersController));
 router.put(
   "/:id/players/order",

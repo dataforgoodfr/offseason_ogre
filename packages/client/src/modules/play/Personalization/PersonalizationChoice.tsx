@@ -9,14 +9,31 @@ import {
 import { Icon } from "../../common/components/Icon";
 import { useGameId } from "./hooks/useGameId";
 import { BackArrow } from "./common/BackArrow";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { ErrorAlert } from "../../alert";
 
 export { PersonalizationChoice };
 
 function PersonalizationChoice() {
   const gameId = useGameId();
 
+  const query = useQuery(`/api/games/${gameId}`, () => {
+    return axios.get<undefined, { data: { document: any } }>(
+      `/api/games/${gameId}`
+    );
+  });
+  const game = query?.data?.data?.document ?? [];
+
   return (
     <CustomContainer maxWidth="lg">
+      {(query.isLoading || (game && game?.status !== "draft")) && (
+        <ErrorAlert
+          message={
+            "La modification du formulaire a été bloquée par l'animateur car le délai a été dépassé."
+          }
+        />
+      )}
       <BackArrow path={`/play/games/`} />
       <Typography variant="h5" color="secondary" sx={{ textAlign: "center" }}>
         Préparer l'atelier
@@ -64,6 +81,7 @@ function PersonalizationChoice() {
               component={Link}
               color="secondary"
               variant="contained"
+              disabled={query.isLoading || (game && game?.status !== "draft")}
               to={`/play/games/${gameId}/personalize/form`}
             >
               <Icon name="player-add" sx={{ mr: 1 }} />
