@@ -1,4 +1,4 @@
-import { Condition, Question } from "../models/form";
+import { Condition, formSections, formValues, Question } from "../models/form";
 import { isNotEmpty } from "./choices";
 
 const compare = (watch: any, condition: any) => {
@@ -43,4 +43,17 @@ export const isSectionValid = (
 
 export const getOrigin = (userId: number, gameId: number) => {
   return `player_${userId}_${gameId}`;
+};
+
+export const isFormValid = (watch: any) =>
+  Object.entries(formSections).every(([_, value]: [string, any]) =>
+    isSectionValid(formValues, watch, value.name)
+  );
+
+export const getNonNullValues = (values: any) => {
+  return Object.fromEntries(
+    Object.entries(values).filter(([_, value]: [string, any]) =>
+      isNotEmpty(value)
+    )
+  );
 };

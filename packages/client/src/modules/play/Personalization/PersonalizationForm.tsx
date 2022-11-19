@@ -13,17 +13,18 @@ import {
   Question,
 } from "./models/form";
 import { Icon, IconName } from "../../common/components/Icon";
-import { AccordionLayout } from "../common/AccordionLayout";
 import {
   fulfillsConditions,
   getOrigin,
+  isFormValid,
   isSectionValid,
+  getNonNullValues,
 } from "./utils/formValidation";
 import { useAuth } from "../../auth/authProvider";
 import { usePlay } from "../context/playContext";
 import { useGameId } from "./hooks/useGameId";
-import { isNotEmpty } from "./utils/choices";
 import { BackArrowDialog, ValidationDialog } from "./common/Dialogs";
+import { Accordion } from "../../common/components/Accordion";
 
 export { PersonalizationForm };
 
@@ -64,14 +65,6 @@ function PersonalizationForm() {
   }, [profile, reset]);
 
   const { user } = useAuth();
-
-  const getNonNullValues = () => {
-    return Object.fromEntries(
-      Object.entries(getValues()).filter(([_, value]: [string, any]) =>
-        isNotEmpty(value)
-      )
-    );
-  };
 
   const getComponentType = (question: Question) => {
     if (question.inputType === "free" && question.valueType === "number") {
@@ -124,17 +117,12 @@ function PersonalizationForm() {
     );
   };
 
-  const isFormValid = () =>
-    Object.entries(formSections).every(([_, value]: [string, any]) =>
-      isSectionValid(formValues, watch, value.name)
-    );
-
   const onSubmit = () => {
-    if (user && isFormValid()) {
+    if (user && isFormValid(watch)) {
       updateProfile({
         userId: user?.id,
         update: {
-          ...getNonNullValues(),
+          ...getNonNullValues(getValues()),
           profileStatus: "pendingValidation",
           origin: getOrigin(user?.id, gameId),
           personalizationName: "form",
@@ -148,7 +136,7 @@ function PersonalizationForm() {
       updateProfile({
         userId: user?.id,
         update: {
-          ...getNonNullValues(),
+          ...getNonNullValues(getValues()),
           profileStatus: "draft",
           origin: getOrigin(user?.id, gameId),
           personalizationName: "form",
@@ -197,7 +185,7 @@ function PersonalizationForm() {
             <Tooltip
               placement="left-start"
               title={
-                !isFormValid()
+                !isFormValid(watch)
                   ? "Le formulaire doit être complet pour pouvoir être validé."
                   : ""
               }
@@ -207,7 +195,7 @@ function PersonalizationForm() {
                   color="secondary"
                   variant="contained"
                   onClick={() => setValidateDialogOpen(true)}
-                  disabled={!isFormValid()}
+                  disabled={!isFormValid(watch)}
                   sx={{
                     mr: "auto",
                     margin: "15px 0 35px 0",
@@ -235,15 +223,34 @@ function PersonalizationForm() {
         >
           Personnaliser mon profil
         </Typography>
-        {Object.entries(formSections).map(([_, value]: [string, any]) => (
-          <AccordionLayout
-            valid={isSectionValid(formValues, watch, value.name)}
-            title={value.title}
-            titleIcon={value.titleIcon}
-          >
-            {buildFormSection(value.name)}
-          </AccordionLayout>
-        ))}
+        <Accordion
+          options={Object.entries(formSections).map(
+            ([_, value]: [string, any]) => {
+              const valid = isSectionValid(formValues, watch, value.name);
+              return {
+                key: value.name,
+                header: (
+                  <Typography alignItems="center" display="flex" variant="h6">
+                    {valid && (
+                      <Icon
+                        className="validIcon"
+                        name="check-circle"
+                        sx={{ mr: 2 }}
+                      />
+                    )}
+                    {value.titleIcon && (
+                      <Icon name={value.titleIcon} sx={{ mr: 1 }} />
+                    )}
+                    {value.title}
+                  </Typography>
+                ),
+                content: buildFormSection(value.name),
+                valid: valid,
+                themeVariation: "orange",
+              };
+            }
+          )}
+        />
       </form>
     </CustomContainer>
   );
