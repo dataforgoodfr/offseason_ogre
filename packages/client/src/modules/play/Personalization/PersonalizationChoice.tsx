@@ -28,7 +28,7 @@ function PersonalizationChoice() {
 
   return (
     <CustomContainer maxWidth="lg">
-      {(query.isLoading || (game && game?.status !== "draft")) && (
+      {game && game?.status !== "draft" && (
         <ErrorAlert message={formBlockText} />
       )}
       <BackArrow path={`/play/games/`} />
