@@ -29,16 +29,19 @@ function SuccessAlert() {
 
 function AlertSnackbar({
   renderAlert,
+  alertPosition = "default",
 }: {
   renderAlert: (
     onClose: (event: React.SyntheticEvent<Element, Event>) => void
   ) => JSX.Element;
+  alertPosition?: string;
 }) {
+  const position = choosePosition(alertPosition);
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const onClose = () => setIsOpen(false);
   return (
     <Snackbar
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      anchorOrigin={position}
       autoHideDuration={6000}
       onClose={onClose}
       open={isOpen}
@@ -46,4 +49,11 @@ function AlertSnackbar({
       {renderAlert(onClose)}
     </Snackbar>
   );
+}
+
+function choosePosition(position: string) {
+  if (position === "top") {
+    return { vertical: "top" as const, horizontal: "center" as const };
+  }
+  return { vertical: "bottom" as const, horizontal: "right" as const };
 }

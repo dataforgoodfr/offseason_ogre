@@ -1,7 +1,8 @@
 import { Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { getOilgrePersonaDetails } from "./description";
-import { AccordionLayout } from "../common/AccordionLayout";
+import { Accordion } from "../../common/components/Accordion";
+import { Icon } from "../../common/components/Icon";
 import { formSections } from "../Personalization/models/form";
 
 export { Persona };
@@ -12,14 +13,25 @@ function Persona() {
       <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
         Mes caractéristiques
       </Typography>
-      {Object.entries(formSections).map((section: any) => {
-        const [_, value] = section;
-        return (
-          <AccordionLayout title={value.title} titleIcon={value.titleIcon}>
-            <Typography> {getOilgrePersonaDetails(value.name)} </Typography>
-          </AccordionLayout>
-        );
-      })}
+      <Accordion
+        options={Object.entries(formSections).map(
+          ([_, value]: [string, any]) => {
+            return {
+              key: value.name,
+              header: (
+                <Typography alignItems="center" display="flex" variant="h6">
+                  {value.titleIcon && (
+                    <Icon name={value.titleIcon} sx={{ mr: 1 }} />
+                  )}
+                  {value.title}
+                </Typography>
+              ),
+              content: getOilgrePersonaDetails(value.name),
+              themeVariation: "orange",
+            };
+          }
+        )}
+      />
     </PlayBox>
   );
 }
