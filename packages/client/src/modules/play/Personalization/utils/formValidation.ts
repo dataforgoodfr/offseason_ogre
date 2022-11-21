@@ -1,28 +1,46 @@
-import { Condition, formSections, formValues, Question } from "../models/form";
+import {
+  Condition,
+  formSections,
+  formValues,
+  PersoForm,
+  Question,
+} from "../models/form";
 import { isNotEmpty } from "./choices";
 
-const compare = (watch: any, condition: any) => {
+const compare = (currentValue: any, condition: any) => {
   if (condition.operator === ">") {
-    return watch(condition.question) > condition.value;
+    return currentValue > condition.value;
   }
   if (condition.operator === "<") {
-    return watch(condition.question) < condition.value;
+    return currentValue < condition.value;
   }
   if (condition.operator === "=") {
-    return watch(condition.question) === condition.value;
+    return currentValue === condition.value;
   }
   if (condition.operator === "!=") {
-    return watch(condition.question) !== condition.value;
+    return currentValue !== condition.value;
   }
   return false;
 };
 
-export const fulfillsConditions = (watch: any, question: Question) => {
+export const fulfillsConditionsForm = (watch: any, question: Question) => {
   if (!question.conditions) {
     return true;
   }
   return question.conditions.every((condition: Condition) =>
-    compare(watch, condition)
+    compare(watch(condition.question), condition)
+  );
+};
+
+export const fulfillsConditionsDescription = (
+  profile: PersoForm,
+  question: Question
+) => {
+  if (!question.conditions) {
+    return true;
+  }
+  return question.conditions.every((condition: Condition) =>
+    compare(profile[condition.question as keyof PersoForm], condition)
   );
 };
 
@@ -34,7 +52,7 @@ export const isSectionValid = (
   return formValues
     .filter((question: Question) => question.type === sectionName)
     .every((question: Question) => {
-      if (fulfillsConditions(watch, question)) {
+      if (fulfillsConditionsForm(watch, question)) {
         return isNotEmpty(watch(question.name));
       }
       return true;

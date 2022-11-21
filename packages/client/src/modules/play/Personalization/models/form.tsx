@@ -575,7 +575,8 @@ const getFoodQuestions = () => {
       options: booleanChoice,
     },
     {
-      description: "Consommez-vous uniquement des produits locaux et de saison",
+      description:
+        "Consommez-vous uniquement des produits locaux et de saison ?",
       name: "eatingLocal" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",

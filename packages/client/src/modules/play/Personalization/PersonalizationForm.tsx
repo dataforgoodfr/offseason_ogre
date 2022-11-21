@@ -15,7 +15,7 @@ import {
 import { Icon, IconName } from "../../common/components/Icon";
 import {
   formBlockText,
-  fulfillsConditions,
+  fulfillsConditionsForm,
   getOrigin,
   isFormValid,
   isSectionValid,
@@ -123,7 +123,7 @@ function PersonalizationForm() {
           .filter((question: Question) => question.type === section)
           // https://github.com/react-hook-form/react-hook-form/issues/1990
           .map((question: Question) =>
-            buildFormLine(question, fulfillsConditions(watch, question))
+            buildFormLine(question, fulfillsConditionsForm(watch, question))
           )}
       </Grid>
     );
