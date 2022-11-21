@@ -1,4 +1,4 @@
-import { Grid, Typography, useTheme } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { PlayBox } from "../Components";
 import { Accordion } from "../../common/components/Accordion";
 import { Icon, IconName } from "../../common/components/Icon";
