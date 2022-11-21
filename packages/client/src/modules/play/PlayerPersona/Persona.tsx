@@ -8,7 +8,7 @@ import {
   PersoForm,
   Question,
 } from "../Personalization/models/form";
-import { fulfillsConditionsDescription } from "../Personalization/utils/formValidation";
+import { fulfillsConditions } from "../Personalization/utils/formValidation";
 import { usePlay } from "../context/playContext";
 import { QuestionLine, QuestionText } from "../Personalization/styles/form";
 import { DescriptionValue } from "./Persona.styles";
@@ -50,7 +50,7 @@ function Persona() {
           formValues
             .filter((question: Question) => question.type === section)
             .filter((question: Question) =>
-              fulfillsConditionsDescription(personalization, question)
+              fulfillsConditions(personalization, question)
             )
             .map((question: Question) =>
               buildDescriptionLine(

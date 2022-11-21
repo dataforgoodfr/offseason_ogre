@@ -123,6 +123,7 @@ export interface Question {
   inputType: string;
   valueType: string;
   options?: DropdownOption[];
+  defaultValue?: boolean | string | number;
 }
 
 export const carEnergies = {
@@ -131,7 +132,6 @@ export const carEnergies = {
   ESSENCE: "Essence",
   GPL: "GPL",
   HYBRIDE: "Hybride",
-  AUTRE: "Autre",
 };
 
 export const carAges = {
@@ -213,6 +213,7 @@ const getGeneralQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(1, 11)),
+      defaultValue: 1,
     },
     {
       description:
@@ -221,6 +222,7 @@ const getGeneralQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(0, 11)),
+      defaultValue: 0,
     },
   ];
   return generalQuestions.map((question: Omit<Question, "type">) => ({
@@ -238,6 +240,7 @@ const getTransportQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       icon: "car",
@@ -247,6 +250,7 @@ const getTransportQuestions = () => {
       inputType: "list",
       valueType: "string",
       options: carEnergyChoice,
+      defaultValue: carEnergies.ESSENCE,
     },
     {
       icon: "car",
@@ -263,6 +267,7 @@ const getTransportQuestions = () => {
       ],
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       icon: "car",
@@ -272,6 +277,7 @@ const getTransportQuestions = () => {
       conditions: [{ question: "car", operator: "=", value: true }],
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       icon: "car",
@@ -284,6 +290,7 @@ const getTransportQuestions = () => {
       ],
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       icon: "car",
@@ -294,6 +301,7 @@ const getTransportQuestions = () => {
       inputType: "list",
       valueType: "string",
       options: carAgeChoice,
+      defaultValue: carAges.DIX_QUINZE,
     },
     {
       description:
@@ -302,6 +310,7 @@ const getTransportQuestions = () => {
       conditions: [{ question: "car", operator: "=", value: false }],
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       icon: "plane",
@@ -310,6 +319,7 @@ const getTransportQuestions = () => {
       name: "planeDistance" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       icon: "train",
@@ -318,6 +328,7 @@ const getTransportQuestions = () => {
       name: "trainDistance" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
   ];
   return transportQuestions.map((question: Omit<Question, "type">) => ({
@@ -334,12 +345,14 @@ const getHousingQuestions = () => {
       inputType: "list",
       valueType: "string",
       options: houseTypeChoices,
+      defaultValue: houseTypes.APPARTMENT,
     },
     {
       description: `Quelle est la surface de votre logement (en m${"\u00b2"}) ?`,
       name: "houseSurface" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 1,
     },
     {
       description: "Quelle est l'énergie principale de chauffage ?",
@@ -347,6 +360,7 @@ const getHousingQuestions = () => {
       inputType: "list",
       valueType: "string",
       options: houseEnergyChoices,
+      defaultValue: houseEnergies.FIOUL,
     },
     {
       description:
@@ -354,6 +368,7 @@ const getHousingQuestions = () => {
       name: "heatingConsumption" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description:
@@ -361,6 +376,7 @@ const getHousingQuestions = () => {
       name: "heatingInvoice" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description:
@@ -376,6 +392,7 @@ const getHousingQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "Votre température de confort est-elle supérieure à 19°C ?",
@@ -383,6 +400,7 @@ const getHousingQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "Utilisez-vous un système de climatisation ?",
@@ -390,6 +408,7 @@ const getHousingQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description:
@@ -401,6 +420,7 @@ const getHousingQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(0, 11)),
+      defaultValue: 0,
     },
     {
       description:
@@ -411,6 +431,7 @@ const getHousingQuestions = () => {
       ],
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
   ];
   return housingQuestions.map((question: Omit<Question, "type">) => ({
@@ -427,6 +448,7 @@ const getHabitsQuestions = () => {
       inputType: "list",
       valueType: "string",
       options: showerBathChoices,
+      defaultValue: cleaning.DOUCHES,
     },
     {
       description:
@@ -438,6 +460,7 @@ const getHabitsQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(1, 11)),
+      defaultValue: 1,
     },
     {
       description: "En moyenne, combien de temps dure une douche ?",
@@ -448,6 +471,7 @@ const getHabitsQuestions = () => {
       inputType: "list",
       valueType: "string",
       options: showerTimesChoices,
+      defaultValue: showerTimes.CINQ_DIX,
     },
     {
       description: "Utilisez-vous une bouilloire pour chauffer l'eau ?",
@@ -455,6 +479,7 @@ const getHabitsQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description:
@@ -462,6 +487,7 @@ const getHabitsQuestions = () => {
       name: "cookingPlateTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description:
@@ -469,6 +495,7 @@ const getHabitsQuestions = () => {
       name: "cookingOvenTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description:
@@ -476,6 +503,7 @@ const getHabitsQuestions = () => {
       name: "cleaningWashingTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description:
@@ -483,6 +511,7 @@ const getHabitsQuestions = () => {
       name: "cleaningDryerTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description:
@@ -490,6 +519,7 @@ const getHabitsQuestions = () => {
       name: "cleaningDishwasherTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description: "Combien de réfrigérateurs possédez-vous ?",
@@ -497,6 +527,7 @@ const getHabitsQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(0, 11)),
+      defaultValue: 0,
     },
     {
       description: "Combien de congélateurs possédez-vous ?",
@@ -504,6 +535,7 @@ const getHabitsQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(0, 11)),
+      defaultValue: 0,
     },
     {
       description: "Quel est votre système d'éclairage ?",
@@ -511,6 +543,7 @@ const getHabitsQuestions = () => {
       inputType: "list",
       valueType: "string",
       options: lightingSystemChoices,
+      defaultValue: lighting.AMPOULES_CLASSIQUES,
     },
   ];
   return habitsQuestions.map((question: Omit<Question, "type">) => ({
@@ -527,6 +560,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "Consommez-vous des fruits et des légumes ?",
@@ -535,6 +569,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "Consommez-vous des produits laitiers ?",
@@ -543,6 +578,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "Consommez-vous des oeufs ?",
@@ -551,6 +587,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "Consommez-vous de la viande ?",
@@ -559,6 +596,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description:
@@ -566,6 +604,7 @@ const getFoodQuestions = () => {
       name: "eatingTinDrink" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
+      defaultValue: 0,
     },
     {
       description: "Achetez-vous uniquement des produits sans emballage ?",
@@ -573,6 +612,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description:
@@ -581,6 +621,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "Combien avez-vous de chats ?",
@@ -588,6 +629,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(0, 11)),
+      defaultValue: 0,
     },
     {
       description: "Combien avez-vous de chiens ?",
@@ -595,6 +637,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "number",
       options: buildChoices(range(0, 11)),
+      defaultValue: 0,
     },
     {
       description: "Avez-vous un cheval ?",
@@ -602,6 +645,7 @@ const getFoodQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
   ];
   return foodQuestions.map((question: Omit<Question, "type">) => ({
@@ -619,6 +663,7 @@ const getNumericQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description: "En moyenne, passez-vous plus de 2h par jour sur Internet ?",
@@ -626,6 +671,7 @@ const getNumericQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description:
@@ -634,6 +680,7 @@ const getNumericQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
     {
       description:
@@ -642,6 +689,7 @@ const getNumericQuestions = () => {
       inputType: "list",
       valueType: "boolean",
       options: booleanChoice,
+      defaultValue: false,
     },
   ];
   return numericQuestions.map((question: Omit<Question, "type">) => ({

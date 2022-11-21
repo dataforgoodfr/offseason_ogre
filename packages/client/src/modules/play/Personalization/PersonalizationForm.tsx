@@ -171,7 +171,7 @@ function PersonalizationForm() {
 
   return (
     <CustomContainer maxWidth="lg">
-      {game && game?.status !== "draft" && (
+      {game && game.status !== "draft" && (
         <ErrorAlert alertPosition="top" message={formBlockText} />
       )}
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>

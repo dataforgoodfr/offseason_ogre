@@ -24,6 +24,7 @@ import {
 
 export const getFossilCarConsumption = (profile: PersoForm) => {
   const {
+    car,
     carEnergy,
     numberAdults,
     numberKids,
@@ -32,6 +33,15 @@ export const getFossilCarConsumption = (profile: PersoForm) => {
     carDistanceHoushold,
     carDistanceCarsharing,
   } = profile;
+
+  if (!car) {
+    return (
+      ((carDistanceCarsharing * transportCoeffs.MEAN_FOSSIL_CAR_CONSUMPTION) /
+        DAYS_IN_YEAR) *
+      10
+    );
+  }
+
   if (
     ![carEnergies.DIESEL, carEnergies.GPL, carEnergies.HYBRIDE].includes(
       carEnergy
@@ -47,7 +57,6 @@ export const getFossilCarConsumption = (profile: PersoForm) => {
       carConsumption) /
       100 +
       (carDistanceCarsharing * transportCoeffs.MEAN_FOSSIL_CAR_CONSUMPTION) /
-        100 /
         DAYS_IN_YEAR) *
     10
   );

@@ -32,10 +32,7 @@ export const fulfillsConditionsForm = (watch: any, question: Question) => {
   );
 };
 
-export const fulfillsConditionsDescription = (
-  profile: PersoForm,
-  question: Question
-) => {
+export const fulfillsConditions = (profile: PersoForm, question: Question) => {
   if (!question.conditions) {
     return true;
   }
