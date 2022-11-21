@@ -59,6 +59,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
     },
     {
       onSuccess: () => {
+        queryClient.invalidateQueries(`/api/games/${gameId}`);
         queryClient.invalidateQueries(`/api/games/${gameId}/players`);
         queryClient.invalidateQueries(teamQueryPath);
       },
