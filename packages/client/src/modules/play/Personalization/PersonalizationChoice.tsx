@@ -29,7 +29,7 @@ function PersonalizationChoice() {
   return (
     <CustomContainer maxWidth="lg">
       {game && game?.status !== "draft" && (
-        <ErrorAlert message={formBlockText} />
+        <ErrorAlert alertPosition="top" message={formBlockText} />
       )}
       <BackArrow path={`/play/games/`} />
       <Typography variant="h5" color="secondary" sx={{ textAlign: "center" }}>

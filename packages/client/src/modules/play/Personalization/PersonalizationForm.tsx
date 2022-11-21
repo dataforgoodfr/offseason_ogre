@@ -133,7 +133,7 @@ function PersonalizationForm() {
 
   const formatValidateTitle = (game: IGame) => {
     if (!canSave(game)) {
-      return "La modification du formulaire a été bloquée par l'animateur car l'atelier va bientôt démarrer.";
+      return formBlockText;
     }
     if (!isFormValid(watch)) {
       return "Le formulaire doit être complet pour pouvoir être validé.";
@@ -171,8 +171,8 @@ function PersonalizationForm() {
 
   return (
     <CustomContainer maxWidth="lg">
-      {(query.isLoading || (game && game?.status !== "draft")) && (
-        <ErrorAlert message={formBlockText} />
+      {game && game?.status !== "draft" && (
+        <ErrorAlert alertPosition="top" message={formBlockText} />
       )}
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Grid container direction="row" justifyContent="space-between">

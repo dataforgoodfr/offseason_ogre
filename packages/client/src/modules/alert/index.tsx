@@ -3,9 +3,16 @@ import { useState } from "react";
 
 export { ErrorAlert, SuccessAlert, AlertSnackbar };
 
-function ErrorAlert({ message }: { message: string }) {
+function ErrorAlert({
+  message,
+  alertPosition = "default",
+}: {
+  message: string;
+  alertPosition?: string;
+}) {
   return (
     <AlertSnackbar
+      alertPosition={alertPosition}
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="error" variant="filled">
           {message}
@@ -15,9 +22,14 @@ function ErrorAlert({ message }: { message: string }) {
   );
 }
 
-function SuccessAlert() {
+function SuccessAlert({
+  alertPosition = "default",
+}: {
+  alertPosition?: string;
+}) {
   return (
     <AlertSnackbar
+      alertPosition={alertPosition}
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="success" variant="filled">
           Succès
