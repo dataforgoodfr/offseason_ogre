@@ -5,10 +5,11 @@ import {
   CustomContainer,
 } from "./styles/personalization";
 import { BackArrow } from "./common/BackArrow";
-import { AccordionLayout } from "../common/AccordionLayout";
 import { getOilgrePersonaDetails } from "../PlayerPersona/description";
 import { formSections } from "./models/form";
 import { useGameId } from "./hooks/useGameId";
+import { Accordion } from "../../common/components/Accordion";
+import { Icon } from "../../common/components/Icon";
 
 export { PersonalizationPredefinedPersona };
 
@@ -36,11 +37,25 @@ function PersonalizationPredefinedPersona() {
           </Grid>
         </Grid>
       </CentralContainer>
-      {Object.entries(formSections).map(([_, value]: [string, any]) => (
-        <AccordionLayout title={value.title} titleIcon={value.titleIcon}>
-          <Typography> {getOilgrePersonaDetails(value.name)} </Typography>
-        </AccordionLayout>
-      ))}
+      <Accordion
+        options={Object.entries(formSections).map(
+          ([_, value]: [string, any]) => {
+            return {
+              key: value.name,
+              header: (
+                <Typography alignItems="center" display="flex" variant="h6">
+                  {value.titleIcon && (
+                    <Icon name={value.titleIcon} sx={{ mr: 1 }} />
+                  )}
+                  {value.title}
+                </Typography>
+              ),
+              content: getOilgrePersonaDetails(value.name),
+              themeVariation: "orange",
+            };
+          }
+        )}
+      />
     </CustomContainer>
   );
 }

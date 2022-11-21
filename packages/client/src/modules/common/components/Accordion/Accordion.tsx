@@ -12,6 +12,8 @@ interface AccordionProps {
     key: string;
     header: React.ReactNode;
     content: React.ReactNode;
+    themeVariation?: string;
+    valid?: boolean;
   }[];
 }
 
@@ -33,11 +35,13 @@ function Accordion({ options }: AccordionProps) {
           key={option.key}
           expanded={expanded === getPanelName(idx)}
           onChange={handleExpandPanel(getPanelName(idx))}
+          themeVariation={option.themeVariation || "default"}
         >
           <AccordionSummaryStyled
             className={`accordion__item-${getPanelName(idx)}__summary`}
             aria-controls={`${getPanelName(idx)}-content`}
             id={`${getPanelName(idx)}-header`}
+            valid={option.valid || false}
           >
             {option.header}
           </AccordionSummaryStyled>
