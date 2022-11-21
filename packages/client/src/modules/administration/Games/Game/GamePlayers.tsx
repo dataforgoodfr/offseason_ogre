@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
+  Grid,
 } from "@mui/material";
 import {
   DataGrid,
@@ -53,6 +54,29 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     }
   );
 
+  const blockForms = useMutation<Response, { message: string }, any>(
+    (block: boolean) => {
+      const path = `/api/games/${game.id}`;
+      return axios.put(path, { status: `${block ? "ready" : "draft"}` });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`/api/games/${gameId}`);
+      },
+    }
+  );
+
+  const validateForms = useMutation<Response, { message: string }>(
+    () => {
+      return axios.get(`/api/games/${game.id}/validate`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
+      },
+    }
+  );
+
   if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
   }
@@ -72,25 +96,54 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
   });
 
   return (
-    <DataGridBox>
-      <DataGrid
-        rows={rows}
-        columns={buildColumns({ game, teams })}
-        disableSelectionOnClick
-        pageSize={10}
-        rowsPerPageOptions={[10]}
-        experimentalFeatures={{ newEditingApi: true }}
-        processRowUpdate={(newRow, oldRow) => {
-          if (newRow.teamId !== oldRow.teamId) {
-            changeTeamMutation.mutate({
-              teamId: newRow.teamId,
-              userId: newRow.id,
-            });
-          }
-          return newRow;
-        }}
-      />
-    </DataGridBox>
+    <>
+      {!hasGameStarted(game.status) && (
+        <>
+          <Grid
+            container
+            alignItems="center"
+            sx={{ float: "right", pb: 2, pt: 2 }}
+          >
+            <Button
+              onClick={() => blockForms.mutate(game && game.status !== "ready")}
+              variant="contained"
+              sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
+            >
+              <Icon name="lock" sx={{ mr: 2 }} />{" "}
+              {`${
+                game && game.status !== "ready" ? "Verrouiller" : "Déverouiller"
+              } les formulaires`}
+            </Button>
+            <Button
+              onClick={() => validateForms.mutate()}
+              variant="contained"
+              sx={{ marginRight: "auto", ml: 2, height: "80%" }}
+            >
+              Valider les formulaires
+            </Button>
+          </Grid>
+        </>
+      )}
+      <DataGridBox>
+        <DataGrid
+          rows={rows}
+          columns={buildColumns({ game, teams })}
+          disableSelectionOnClick
+          pageSize={10}
+          rowsPerPageOptions={[10]}
+          experimentalFeatures={{ newEditingApi: true }}
+          processRowUpdate={(newRow, oldRow) => {
+            if (newRow.teamId !== oldRow.teamId) {
+              changeTeamMutation.mutate({
+                teamId: newRow.teamId,
+                userId: newRow.id,
+              });
+            }
+            return newRow;
+          }}
+        />
+      </DataGridBox>
+    </>
   );
 }
 

@@ -14,6 +14,7 @@ import {
 } from "./models/form";
 import { Icon, IconName } from "../../common/components/Icon";
 import {
+  formBlockText,
   fulfillsConditions,
   getOrigin,
   isFormValid,
@@ -24,6 +25,10 @@ import { useAuth } from "../../auth/authProvider";
 import { usePlay } from "../context/playContext";
 import { useGameId } from "./hooks/useGameId";
 import { BackArrowDialog, ValidationDialog } from "./common/Dialogs";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { IGame } from "../../../utils/types";
+import { ErrorAlert } from "../../alert";
 import { Accordion } from "../../common/components/Accordion";
 
 export { PersonalizationForm };
@@ -31,6 +36,13 @@ export { PersonalizationForm };
 function PersonalizationForm() {
   const gameId = useGameId();
   const { profile, updateProfile } = usePlay();
+
+  const query = useQuery(`/api/games/${gameId}`, () => {
+    return axios.get<undefined, { data: { document: any } }>(
+      `/api/games/${gameId}`
+    );
+  });
+  const game = query?.data?.data?.document ?? [];
 
   const [validateDialogOpen, setValidateDialogOpen] = useState(false);
   const [rgpdCheckbox, setRgpdCheckbox] = useState(false);
@@ -117,6 +129,18 @@ function PersonalizationForm() {
     );
   };
 
+  const canSave = (game: IGame) => game && game.status === "draft";
+
+  const formatValidateTitle = (game: IGame) => {
+    if (!canSave(game)) {
+      return formBlockText;
+    }
+    if (!isFormValid(watch)) {
+      return "Le formulaire doit être complet pour pouvoir être validé.";
+    }
+    return "";
+  };
+
   const onSubmit = () => {
     if (user && isFormValid(watch)) {
       updateProfile({
@@ -147,6 +171,9 @@ function PersonalizationForm() {
 
   return (
     <CustomContainer maxWidth="lg">
+      {game && game?.status !== "draft" && (
+        <ErrorAlert alertPosition="top" message={formBlockText} />
+      )}
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <Grid container direction="row" justifyContent="space-between">
           {!isDirty && (
@@ -170,6 +197,7 @@ function PersonalizationForm() {
             <Button
               color="secondary"
               variant="contained"
+              disabled={!canSave(game)}
               onClick={() => saveDraft()}
               sx={{
                 mr: "auto",
@@ -182,20 +210,13 @@ function PersonalizationForm() {
             </Button>
           </Grid>
           <Grid item display="flex">
-            <Tooltip
-              placement="left-start"
-              title={
-                !isFormValid(watch)
-                  ? "Le formulaire doit être complet pour pouvoir être validé."
-                  : ""
-              }
-            >
+            <Tooltip placement="left-start" title={formatValidateTitle(game)}>
               <span>
                 <Button
                   color="secondary"
                   variant="contained"
                   onClick={() => setValidateDialogOpen(true)}
-                  disabled={!isFormValid(watch)}
+                  disabled={!canSave(game) || !isFormValid(watch)}
                   sx={{
                     mr: "auto",
                     margin: "15px 0 35px 0",

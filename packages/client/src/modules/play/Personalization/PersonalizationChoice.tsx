@@ -9,14 +9,28 @@ import {
 import { Icon } from "../../common/components/Icon";
 import { useGameId } from "./hooks/useGameId";
 import { BackArrow } from "./common/BackArrow";
+import axios from "axios";
+import { useQuery } from "react-query";
+import { ErrorAlert } from "../../alert";
+import { formBlockText } from "./utils/formValidation";
 
 export { PersonalizationChoice };
 
 function PersonalizationChoice() {
   const gameId = useGameId();
 
+  const query = useQuery(`/api/games/${gameId}`, () => {
+    return axios.get<undefined, { data: { document: any } }>(
+      `/api/games/${gameId}`
+    );
+  });
+  const game = query?.data?.data?.document ?? [];
+
   return (
     <CustomContainer maxWidth="lg">
+      {game && game?.status !== "draft" && (
+        <ErrorAlert alertPosition="top" message={formBlockText} />
+      )}
       <BackArrow path={`/play/games/`} />
       <Typography variant="h5" color="secondary" sx={{ textAlign: "center" }}>
         Préparer l'atelier
@@ -64,6 +78,7 @@ function PersonalizationChoice() {
               component={Link}
               color="secondary"
               variant="contained"
+              disabled={query.isLoading || (game && game?.status !== "draft")}
               to={`/play/games/${gameId}/personalize/form`}
             >
               <Icon name="player-add" sx={{ mr: 1 }} />

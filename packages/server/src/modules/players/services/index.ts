@@ -12,6 +12,7 @@ const crudServices = {
   update,
   updateMany,
   setDefaultProfiles,
+  validateProfiles,
 };
 
 const services = { ...crudServices };
@@ -110,6 +111,32 @@ async function setDefaultProfiles(
         profileId: profile.id,
       },
     });
+  });
+}
+
+async function validateProfiles(gameId: number): Promise<void> {
+  const playersToValidate = await model.findMany({
+    where: {
+      gameId,
+      profile: {
+        status: {
+          equals: "pendingValidation",
+        },
+      },
+    },
+  });
+
+  return playersToValidate.forEach(async (player: PlayersPrisma) => {
+    if (player.profileId) {
+      await database.profile.update({
+        where: {
+          id: player.profileId,
+        },
+        data: {
+          status: "validated",
+        },
+      });
+    }
   });
 }
 

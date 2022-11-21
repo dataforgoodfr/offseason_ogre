@@ -45,6 +45,9 @@ export const getOrigin = (userId: number, gameId: number) => {
   return `player_${userId}_${gameId}`;
 };
 
+export const formBlockText =
+  "La modification du formulaire a été bloquée par l'animateur car le délai a été dépassé.";
+
 export const isFormValid = (watch: any) =>
   Object.entries(formSections).every(([_, value]: [string, any]) =>
     isSectionValid(formValues, watch, value.name)

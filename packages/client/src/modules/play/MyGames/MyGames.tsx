@@ -111,8 +111,8 @@ function MyGamesList() {
 
   const games = query?.data?.data?.games ?? [];
 
-  const draftGames = games.filter(
-    (game) => game.status === "draft" || game.status === "ready"
+  const draftGames = games.filter((game) =>
+    ["draft", "ready"].includes(game.status)
   );
   const currentGames = games.filter((game) => game.status === "playing");
   const finishedGames = games.filter((game) => game.status === "finished");
