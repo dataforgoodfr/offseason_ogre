@@ -8,7 +8,14 @@ function getPlayers({ gameId }: { gameId: number }) {
     include: {
       playedGames: {
         where: { gameId },
-        include: { team: true, profile: true },
+        include: {
+          team: true,
+          profile: {
+            include: {
+              personalization: true,
+            },
+          },
+        },
       },
     },
   });

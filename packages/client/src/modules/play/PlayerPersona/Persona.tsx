@@ -12,19 +12,17 @@ import { fulfillsConditions } from "../Personalization/utils/formValidation";
 import { usePlay } from "../context/playContext";
 import { QuestionLine, QuestionText } from "../Personalization/styles/form";
 import { DescriptionValue } from "./Persona.styles";
+import { formatBooleanValue } from "../../../utils/format";
 
 export { Persona };
 
 function Persona() {
   const formatValue = (value: any) => {
-    if (value === true) {
-      return "Oui";
-    } else if (value === false) {
-      return "Non";
+    if (typeof value === "boolean") {
+      return formatBooleanValue(value);
     }
     return value;
   };
-
   const buildDescriptionLine = (value: any, question: Question) => {
     return (
       <QuestionLine container direction="row" justifyContent="space-between">
