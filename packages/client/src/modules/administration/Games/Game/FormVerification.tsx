@@ -69,8 +69,6 @@ function FormVerification({
           rows={rows}
           columns={buildColumns()}
           disableSelectionOnClick
-          // pageSize={10}
-          // rowsPerPageOptions={[10]}
           experimentalFeatures={{ newEditingApi: true }}
           //   processRowUpdate={(newRow, oldRow) => {
           //     if (newRow.teamId !== oldRow.teamId) {
