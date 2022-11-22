@@ -432,7 +432,6 @@ function computeNewConsumptionData(
     "calculatedValues"
   );
 
-  console.log(intermediateValues);
   return getConsumptionFromProfile(fullPersonalization, intermediateValues);
 }
 

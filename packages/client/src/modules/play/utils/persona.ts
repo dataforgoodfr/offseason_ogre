@@ -134,8 +134,6 @@ function computeResultsByStep(
     personalization
   );
 
-  console.log(newConsumption);
-
   const newProduction = computeNewProductionData(
     performedTeamActions,
     basePersona

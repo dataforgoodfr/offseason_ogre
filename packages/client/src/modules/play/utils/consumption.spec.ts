@@ -28,7 +28,7 @@ const runTests = (tests: Test[]) => {
           [question.name]: question.defaultValue,
         }))
       );
-      console.log(defaultPersonalization);
+
       const personalization: PersoForm = {
         ...defaultPersonalization,
         ...test.setup.personalization,
@@ -39,7 +39,6 @@ const runTests = (tests: Test[]) => {
         performedActions,
         personalization
       );
-      console.log(newData);
 
       test.expected.consumptionData.forEach(({ type, name, value }) => {
         expect(
