@@ -5,8 +5,10 @@ import {
   PlayerActions,
   TeamAction,
 } from "../../../utils/types";
+import { ConsumptionDatum } from "../../persona/consumption";
 import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
+import { PersoForm } from "../Personalization/models/form";
 import {
   computeCarbonFootprint,
   computeCarbonProductionElectricMix,
@@ -20,11 +22,13 @@ export { buildPersona };
 
 function buildPersona(
   game: IGameWithTeams,
+  personalization: PersoForm,
   basePersona: Persona,
   playerActions: PlayerActions[],
   teamActions: TeamAction[]
 ) {
   const personaBySteps = getResultsByStep(
+    personalization,
     basePersona,
     playerActions,
     teamActions
@@ -51,6 +55,7 @@ function buildPersona(
 }
 
 function getResultsByStep(
+  personalization: PersoForm,
   basePersona: Persona,
   playerActions: PlayerActions[],
   teamActions: TeamAction[]
@@ -58,12 +63,19 @@ function getResultsByStep(
   return Object.fromEntries(
     range(0, MAX_NUMBER_STEPS + 1).map((step) => [
       step,
-      computeResultsByStep(basePersona, step, playerActions, teamActions),
+      computeResultsByStep(
+        personalization,
+        basePersona,
+        step,
+        playerActions,
+        teamActions
+      ),
     ])
   );
 }
 
 function computeResultsByStep(
+  personalization: PersoForm,
   basePersona: Persona,
   step: number,
   playerActions: PlayerActions[] = [],
@@ -118,9 +130,11 @@ function computeResultsByStep(
   );
 
   const newConsumption = computeNewConsumptionData(
-    basePersona,
-    performedActionsNames
+    performedActionsNames,
+    personalization
   );
+
+  console.log(newConsumption);
 
   const newProduction = computeNewProductionData(
     performedTeamActions,
@@ -136,7 +150,7 @@ function computeResultsByStep(
     computeCarbonProductionElectricMix(newProduction);
   const carbonFootprint = computeCarbonFootprint(
     carbonProductionElectricMix,
-    newConsumption
+    newConsumption as ConsumptionDatum[]
   );
 
   return {

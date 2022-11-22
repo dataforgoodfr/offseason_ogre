@@ -109,5 +109,6 @@ export const getShowerBathCoeff = (profile: PersoForm) => {
   if (showerBath === cleaning.BAINS) {
     return 5;
   }
+  console.log(profile);
   return showerNumber * getShowerTimeCoeff(showerTime) * 2.8;
 };

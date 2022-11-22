@@ -1,385 +1,398 @@
 import cloneDeep from "lodash/cloneDeep";
-import flatten from "lodash/flatten";
-import groupBy from "lodash/groupBy";
-import map from "lodash/map";
 import { ActionNames } from "../../../utils/types";
+import { fillPersonalization } from "../../persona";
+import { getConsumptionFromProfile } from "../../persona/consumption";
+import { computeIntermediateValues } from "../../persona/consumption/computing";
 import {
-  ConsumptionDatum,
-  ConsumptionName,
-  ConsumptionType,
-} from "../../persona/consumption";
-import { Persona } from "../../persona/persona";
+  carAges,
+  carEnergies,
+  cleaning,
+  houseEnergies,
+  IntermediateValues,
+  lighting,
+  PersoForm,
+  showerTimes,
+} from "../Personalization/models/form";
 import { availableActions } from "../playerActions/constants/actions";
 
 export { computeNewConsumptionData };
+
+interface ImpactMatrix {
+  personalization: PersoForm;
+  calculatedValues?: IntermediateValues;
+}
 
 const consumptionConfig: {
   [k in ActionNames]: ConsumptionConfig;
 } = {
   [availableActions.REDUCE_PLANE_HALF]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "plane",
-        update: (value) => value * 0.5,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "planeDistance",
+        update: (value: number) => value * 0.5,
       }),
     ],
   },
   [availableActions.TRANSPORT_STOP_PLANE]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "plane",
-        update: (value) => value * 0,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "planeDistance",
+        update: (value: number) => 0,
       }),
     ],
   },
   [availableActions.LOCAL_CONSUMPTION]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyOther",
-        update: (value) => value - 5.4,
-      }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyTransport",
-        update: (value) => value - 1.2,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "eatingLocal",
+        update: (value: number) => true,
       }),
     ],
   },
   [availableActions.REDUCE_CLOTHING_HALF]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyOther",
-        update: (value) => value - 5.4,
-      }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyTransport",
-        update: (value) => value - 1.2,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "clothingQuantity",
+        update: (value: number) => false,
       }),
     ],
   },
   [availableActions.REDUCE_NUMERIC]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyNumeric",
-        update: (value) => value - 3,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "numericEquipment",
+        update: (value: number) => false,
       }),
     ],
   },
   [availableActions.STOP_MILK]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "mixte",
-        name: "food",
-        update: (value) => value - 1.5,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "eatingDairies",
+        update: (value: number) => false,
       }),
     ],
   },
   [availableActions.STOP_EGGS]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "mixte",
-        name: "food",
-        update: (value) => value - 1,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "eatingEggs",
+        update: (value: number) => false,
       }),
     ],
   },
   [availableActions.STOP_MEAT]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "mixte",
-        name: "food",
-        update: (value) => value - 4,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "eatingMeat",
+        update: (value: number) => false,
       }),
     ],
   },
   [availableActions.ZERO_WASTE]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "mixte",
-        name: "food",
-        update: (value) => value - 4,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "eatingZeroWaste",
+        update: (value: number) => true,
       }),
     ],
   },
   [availableActions.REDUCE_TRAIN_HALF]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "train",
-        update: (value) => value * 0.5,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "trainDistance",
+        update: (value: number) => value * 0.5,
       }),
     ],
   },
   [availableActions.DIGITAL_REDUCE_INTERNET_HALF]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyNumeric",
-        update: (value) => value - 0.9675,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "numericWebTimeDay",
+        update: (value: number) => false,
+      }),
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "numericVideoTimeDay",
+        update: (value: number) => false,
       }),
     ],
   },
   [availableActions.HOUSE_INSTALL_EFFICIENT_ELECTRIC_WOOD_HEATING_SYSTEM]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "noCarbonHeating",
-        update: () => {
-          // If player had already installed efficient system before the game, then use initial value of `renewable/noCarbonHeating`.
-          // Else use initial value of `fossil/fossilHeating`.
-          const baseValue =
-            matrix["renewable"]["noCarbonHeating"].value ||
-            matrix["fossil"]["fossilHeating"].value;
-          return baseValue * 0.4;
-        },
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "heatingConsumptionInvoiceCoeff",
+        update: (value: number) => value * 0.4,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilHeating",
-        update: (value) => value * 0,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingConsumption",
+        update: (value: number) => value * 0.4,
+      }),
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingEnergy",
+        update: (value: number) => houseEnergies.ELECTRICITE,
       }),
     ],
   },
   [availableActions.HOUSE_INSULATE_WALLS]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilHeating",
-        update: (value) => value * 0.75,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "heatingConsumptionInvoiceCoeff",
+        update: (value: number) => value * 0.75,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "noCarbonHeating",
-        update: (value) => value * 0.75,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingConsumption",
+        update: (value: number) => value * 0.75,
       }),
     ],
   },
   [availableActions.HOUSE_INSULATE_ROOF]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilHeating",
-        update: (value) => value * 0.75,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "heatingConsumptionInvoiceCoeff",
+        update: (value: number) => value * 0.75,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "noCarbonHeating",
-        update: (value) => value * 0.75,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingConsumption",
+        update: (value: number) => value * 0.75,
       }),
     ],
   },
   [availableActions.HOUSE_CHANGE_WOODWORK_WINDOWS]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilHeating",
-        update: (value) => value * 0.9,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "heatingConsumptionInvoiceCoeff",
+        update: (value: number) => value * 0.9,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "noCarbonHeating",
-        update: (value) => value * 0.9,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingConsumption",
+        update: (value: number) => value * 0.9,
       }),
     ],
   },
   [availableActions.HOUSE_INSTALL_EFFICIENT_VENTILATION_SYSTEM]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilHeating",
-        update: (value) => value * 0.8,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "heatingConsumptionInvoiceCoeff",
+        update: (value: number) => value * 0.8,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "noCarbonHeating",
-        update: (value) => value * 0.8,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingConsumption",
+        update: (value: number) => value * 0.8,
       }),
     ],
   },
   [availableActions.HOUSE_19_DEGREES_MAX]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilHeating",
-        update: (value) => value * 0.86,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "heatingConsumptionInvoiceCoeff",
+        update: (value: number) =>
+          inputMatrix.personalization.heatingTemperature ? value * 0.86 : value,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "noCarbonHeating",
-        update: (value) => value * 0.86,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingConsumption",
+        update: (value: number) =>
+          inputMatrix.personalization.heatingTemperature ? value * 0.86 : value,
       }),
     ],
   },
   [availableActions.HOUSE_REDUCE_SIZE_HALF]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilHeating",
-        update: (value) => value * 0.5,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "heatingConsumptionInvoiceCoeff",
+        update: (value: number) => value * 0.5,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "noCarbonHeating",
-        update: (value) => value * 0.5,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "heatingConsumption",
+        update: (value: number) => value * 0.5,
       }),
     ],
   },
   [availableActions.HOUSE_STOP_AIR_CONDITIONING]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
         name: "airConditionning",
-        update: (value) => value * 0,
+        update: (value: number) => false,
       }),
     ],
   },
   [availableActions.HOUSE_ONLY_LEDS]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "light",
-        update: (value) => value * 0.5,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "lightingSystem",
+        update: (value: number) => lighting.AMPOULES_LED,
       }),
     ],
   },
   [availableActions.HOUSE_ONE_SHOWER_5_MINUTES_MAX]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "cleanCook",
-        update: (value) => value - 0.7,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "showerBath",
+        update: (value: number) => cleaning.DOUCHES,
+      }),
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "showerNumber",
+        update: (value: number) => 1,
+      }),
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "showerTime",
+        update: (value: number) => showerTimes.MOINS_5,
       }),
     ],
   },
   [availableActions.HOUSE_EFFICIENT_HOUSEHOLD_APPLIANCES]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "cleanCook",
-        update: (value) => value - 3.82,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "whiteProductsCoeff",
+        update: (value: number) => value * 0.75,
       }),
     ],
   },
   [availableActions.HOUSE_UNPLUNG_APPLIANCES_ON_STANDBY]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "brownGoods",
-        update: (value) => value - 0.6,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "brownGoodsCoeff",
+        update: (value: number) => value + 0.6,
       }),
     ],
   },
   [availableActions.HOUSE_UNPLUNG_CHARGERS]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "brownGoods",
-        update: (value) => value - 0.01,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "calculatedValues",
+        name: "brownGoodsCoeff",
+        update: (value: number) => value + 0.01,
       }),
     ],
   },
   [availableActions.STOP_CANS]: {
     order: 1,
-    impacts: [],
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "eatingTinDrink",
+        update: (value: number) => 0,
+      }),
+    ],
   },
   [availableActions.CONSUMPTION_SORT_WASTE]: {
     order: 1,
-    impacts: [],
+    profileImpacts: [],
   },
   [availableActions.ELECTRIC_CAR]: {
     order: 1,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "electricCar",
-        update: () => {
-          // If player had already switched to electric car before the game, then use initial value of `renewable/electricCar`.
-          // Else use initial value of `fossil/fossilCar`.
-          const baseValue =
-            matrix["renewable"]["electricCar"].value ||
-            matrix["fossil"]["fossilCar"].value;
-          return baseValue;
-        },
-      }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilCar",
-        update: (value) => value * 0,
-      }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyCar",
-        update: (value) => value * 1.2,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carEnergy",
+        update: (value: number) => carEnergies.ELECTRICITE,
       }),
     ],
   },
   [availableActions.ECO_DRIVING]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilCar",
-        update: (value) => value * 0.9,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carDistanceAlone",
+        update: (value: number) => value * 0.9,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "electricCar",
-        update: (value) => value * 0.9,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carDistanceCarsharing",
+        update: (value: number) => value * 0.9,
+      }),
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carDistanceHoushold",
+        update: (value: number) => value * 0.9,
       }),
     ],
   },
   [availableActions.REDUCE_CAR_20]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "fossil",
-        name: "fossilCar",
-        update: (value) => value * 0.8,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carDistanceAlone",
+        update: (value: number) => value * 0.8,
       }),
-      (matrix: ConsumptionMatrix) => ({
-        type: "renewable",
-        name: "electricCar",
-        update: (value) => value * 0.8,
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carDistanceCarsharing",
+        update: (value: number) => value * 0.8,
+      }),
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carDistanceHoushold",
+        update: (value: number) => value * 0.8,
       }),
     ],
   },
   [availableActions.KEEP_CAR_15]: {
     order: 2,
-    impacts: [
-      (matrix: ConsumptionMatrix) => ({
-        type: "grey",
-        name: "greyCar",
-        update: (value) => value - 28,
+    profileImpacts: [
+      (inputMatrix: ImpactMatrix) => ({
+        type: "personalization",
+        name: "carAge",
+        update: (value: number) => carAges.PLUS_15,
       }),
     ],
   },
@@ -387,30 +400,46 @@ const consumptionConfig: {
 
 type ConsumptionConfig = {
   order: number;
-  impacts: ConsumptionConfigUpdate[];
+  profileImpacts: ConsumptionUpdate[];
 };
-type ConsumptionConfigUpdate = (matrix: ConsumptionMatrix) => {
-  type: ConsumptionType;
-  name: ConsumptionName;
-  update: (value: number) => number;
+
+type ConsumptionUpdate = (inputMatrix: ImpactMatrix) => {
+  type: keyof ImpactMatrix;
+  name: keyof PersoForm | keyof IntermediateValues;
+  update: (value: any) => any;
 };
 
 function computeNewConsumptionData(
-  basePersona: Persona,
-  performedActionsNames: ActionNames[]
+  performedActionsNames: ActionNames[],
+  personalization: PersoForm
 ) {
-  const consumptionMatrix = buildConsumptionMatrix(
-    cloneDeep(basePersona.consumption)
+  const newPersonalization = cloneDeep(personalization);
+
+  computeConsumption(
+    { personalization: newPersonalization },
+    performedActionsNames,
+    "personalization"
+  );
+  const fullPersonalization = fillPersonalization(newPersonalization);
+
+  const intermediateValues = computeIntermediateValues(fullPersonalization);
+  computeConsumption(
+    {
+      personalization: newPersonalization,
+      calculatedValues: intermediateValues,
+    },
+    performedActionsNames,
+    "calculatedValues"
   );
 
-  computeConsumption(consumptionMatrix, performedActionsNames);
-
-  return flattenConsumptionMatrix(consumptionMatrix);
+  console.log(intermediateValues);
+  return getConsumptionFromProfile(fullPersonalization, intermediateValues);
 }
 
 function computeConsumption(
-  consumptionMatrix: ConsumptionMatrix,
-  performedActionsNames: ActionNames[]
+  inputMatrix: ImpactMatrix,
+  performedActionsNames: ActionNames[],
+  impactType: keyof ImpactMatrix
 ) {
   const performedActionsNamesSorted = performedActionsNames.sort(
     (actionNameA, actionNameB) =>
@@ -425,53 +454,45 @@ function computeConsumption(
       return;
     }
 
-    config.impacts.forEach((getImpact) =>
-      applyConsumptionImpact(consumptionMatrix, getImpact)
-    );
+    config.profileImpacts.forEach((getImpact) => {
+      const { type } = getImpact(inputMatrix);
+      if (impactType === type) {
+        applyPersonalizationImpact(inputMatrix, getImpact);
+      }
+    });
   });
 }
 
-function applyConsumptionImpact(
-  consumptionMatrix: ConsumptionMatrix,
-  getImpact: ConsumptionConfigUpdate
+function applyPersonalizationImpact(
+  inputMatrix: ImpactMatrix,
+  getImpact: ConsumptionUpdate
 ) {
-  const { type, name, update } = getImpact(consumptionMatrix);
-  const target = consumptionMatrix[type]?.[name];
+  const { type, name, update } = getImpact(inputMatrix);
+  if (type === "calculatedValues" && inputMatrix.calculatedValues) {
+    if (
+      inputMatrix.calculatedValues[name as keyof IntermediateValues] === null
+    ) {
+      console.error(`Could not find personalization value with name ${name}`);
+      return;
+    }
 
-  if (!target) {
-    console.error(
-      `Could not find consumption for type ${type} and name ${name}`
-    );
-    return;
+    Object.assign(inputMatrix.calculatedValues, {
+      [name]: update(
+        inputMatrix.calculatedValues
+          ? inputMatrix.calculatedValues[name as keyof IntermediateValues]
+          : undefined
+      ),
+    });
   }
 
-  consumptionMatrix[type][name].value = Math.max(update(target.value), 0);
-}
+  if (type === "personalization") {
+    if (inputMatrix.personalization[name as keyof PersoForm] === null) {
+      console.error(`Could not find personalization value with name ${name}`);
+      return;
+    }
 
-type ConsumptionMatrix = Record<
-  ConsumptionType,
-  Record<ConsumptionName, ConsumptionDatum>
->;
-
-function buildConsumptionMatrix(consumptionData: readonly ConsumptionDatum[]) {
-  return Object.fromEntries(
-    map(groupBy(consumptionData, "type"), (consumptionByType, type) => [
-      type,
-      Object.fromEntries(
-        map(groupBy(consumptionByType, "name"), (consumptionByName, name) => [
-          name,
-          consumptionByName[0],
-        ])
-      ),
-    ])
-    // Typing required since `groupBy` is not correctly typed.
-  ) as unknown as ConsumptionMatrix;
-}
-
-function flattenConsumptionMatrix(consumptionMatrix: ConsumptionMatrix) {
-  return flatten(
-    map(consumptionMatrix, (consumptionsByType) =>
-      map(consumptionsByType, (consumptionsByName) => consumptionsByName)
-    )
-  );
+    Object.assign(inputMatrix.personalization, {
+      [name]: update(inputMatrix.personalization[name as keyof PersoForm]),
+    });
+  }
 }

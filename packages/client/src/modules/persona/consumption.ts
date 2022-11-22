@@ -18,7 +18,10 @@ import {
   getPlaneConsumption,
   getTrainConsumption,
 } from "./consumption/computing";
-import { PersoForm } from "../play/Personalization/models/form";
+import {
+  IntermediateValues,
+  PersoForm,
+} from "../play/Personalization/models/form";
 
 export { getConsumptionFromProfile };
 export type { ConsumptionDatum, ConsumptionName, ConsumptionType };
@@ -51,17 +54,21 @@ type ConsumptionName =
 type ConsumptionType = "fossil" | "grey" | "mixte" | "renewable";
 type CarbonProduction = "electric" | "fossil";
 
-const getConsumptionFromProfile = (profile: PersoForm) => {
+const getConsumptionFromProfile = (
+  profile: PersoForm,
+  intermediateValues: IntermediateValues
+) => {
   return deepFreeze([
-    ...getFossilEnergies(profile),
+    ...getFossilEnergies(profile, intermediateValues),
     ...getGreyEnergies(profile),
     ...getMixteEnergies(profile),
-    ...getRenewableEnergies(profile),
+    ...getRenewableEnergies(profile, intermediateValues),
   ]) as readonly ConsumptionDatum[];
 };
 
 function getFossilEnergies(
-  profile: PersoForm
+  profile: PersoForm,
+  intermediateValues: IntermediateValues
 ): (ConsumptionDatum & { type: "fossil" })[] {
   const energies = [
     {
@@ -72,7 +79,7 @@ function getFossilEnergies(
     {
       name: "fossilHeating",
       carbonProductionPerKwh: carbonPerKwh.FOSSIL_HEATING,
-      value: getFossilHeatingConsumption(profile),
+      value: getFossilHeatingConsumption(profile, intermediateValues),
     },
     {
       name: "plane",
@@ -87,7 +94,10 @@ function getFossilEnergies(
   }));
 }
 
-function getRenewableEnergies(profile: PersoForm): (ConsumptionDatum & {
+function getRenewableEnergies(
+  profile: PersoForm,
+  intermediateValues: IntermediateValues
+): (ConsumptionDatum & {
   type: "renewable";
 })[] {
   const energies = [
@@ -97,9 +107,9 @@ function getRenewableEnergies(profile: PersoForm): (ConsumptionDatum & {
     },
     {
       name: "brownGoods",
-      value: getBrownGoodsConsumption(profile),
+      value: getBrownGoodsConsumption(profile, intermediateValues),
     },
-    { name: "cleanCook", value: getCleanCookConsumption(profile) },
+    { name: "cleanCook", value: getCleanCookConsumption(intermediateValues) },
     {
       name: "electricCar",
       value: getElectricCarConsumption(profile),
@@ -110,7 +120,7 @@ function getRenewableEnergies(profile: PersoForm): (ConsumptionDatum & {
     },
     {
       name: "noCarbonHeating",
-      value: getNoCarbonHeatingConsumption(profile),
+      value: getNoCarbonHeatingConsumption(profile, intermediateValues),
     },
     {
       name: "train",

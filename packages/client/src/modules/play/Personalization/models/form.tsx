@@ -126,6 +126,13 @@ export interface Question {
   defaultValue?: boolean | string | number;
 }
 
+export interface IntermediateValues {
+  whiteProductsCoeff: number;
+  showerBathCoeff: number;
+  brownGoodsCoeff: number;
+  heatingConsumptionInvoiceCoeff: number;
+}
+
 export const carEnergies = {
   DIESEL: "Diesel",
   ELECTRICITE: "Electricité",
