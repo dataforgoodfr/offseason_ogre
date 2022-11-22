@@ -56,9 +56,12 @@ export const getFossilCarConsumption = (profile: PersoForm) => {
   }
 
   if (
-    ![carEnergies.DIESEL, carEnergies.GPL, carEnergies.HYBRIDE].includes(
-      carEnergy
-    )
+    ![
+      carEnergies.DIESEL,
+      carEnergies.GPL,
+      carEnergies.HYBRIDE,
+      carEnergies.ESSENCE,
+    ].includes(carEnergy)
   ) {
     return 0;
   }
@@ -224,6 +227,7 @@ export const getGreyCarConsumption = (profile: PersoForm) => {
   if (!car) {
     return 0;
   }
+
   return (
     consumptionGrey.CAR *
     (carEnergy === carEnergies.ELECTRICITE ? 1.2 : 1) *

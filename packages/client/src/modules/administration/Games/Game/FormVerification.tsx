@@ -37,6 +37,14 @@ function FormVerification({
     }
   );
 
+  const computeCoeff = (personalization: PersoForm) => {
+    const formattedPersonalization = fillPersonalization(personalization);
+    const intermediateValues = computeIntermediateValues(
+      formattedPersonalization
+    );
+    return intermediateValues.heatingConsumptionInvoiceCoeff;
+  };
+
   const rows = players
     .map(({ playedGames, ...player }) => {
       const currentGame = playedGames.find(
@@ -44,12 +52,9 @@ function FormVerification({
       );
 
       const personalization: PersoForm = currentGame?.profile?.personalization;
-      const formattedPersonalization = fillPersonalization(personalization);
-      const intermediateValues = computeIntermediateValues(
-        formattedPersonalization
-      );
-      const heatingConsumptionInvoiceCoeff =
-        intermediateValues.heatingConsumptionInvoiceCoeff;
+      const heatingConsumptionInvoiceCoeff = personalization
+        ? computeCoeff(personalization)
+        : 0;
 
       return {
         ...currentGame?.profile?.personalization,

@@ -65,11 +65,11 @@ export const getCarAgeCoeff = (carAge: string) => {
   if (carAge === carAges.MOINS_5) {
     return 3;
   } else if (carAge === carAges.CINQ_DIX) {
-    return 0.75;
-  } else if (carAge === carAges.DIX_QUINZE) {
-    return 1.25;
-  } else if (carAge === carAges.PLUS_15) {
     return 2;
+  } else if (carAge === carAges.DIX_QUINZE) {
+    return 1;
+  } else if (carAge === carAges.PLUS_15) {
+    return 1;
   }
   throw new Error(`Invalid profile value for car age: ${carAge}`);
 };
