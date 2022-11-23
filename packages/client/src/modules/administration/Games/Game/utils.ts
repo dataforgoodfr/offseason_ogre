@@ -58,8 +58,6 @@ export const numericParser = (value: number) => {
 
 export const isCredible = (fieldName: keyof PersoForm, row: Row) => {
   const question = formValues.find((q: Question) => q.name === fieldName);
-  console.log("question", question);
-  console.log("credibility", question?.credibilityConditions);
   if (!question || !question.credibilityConditions) {
     return true;
   }
@@ -70,7 +68,6 @@ export const isCredible = (fieldName: keyof PersoForm, row: Row) => {
 };
 
 export const getCellCredibility = (fieldName: keyof PersoForm, row: Row) => {
-  console.log(fieldName, row);
   if (!isCredible(fieldName, row)) {
     return "not-credible-cell";
   }

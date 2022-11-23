@@ -93,8 +93,6 @@ function FormVerification({
     return row;
   });
 
-  console.log(updatedRows);
-
   return (
     <VerificationContainer show={openFormValidation}>
       <DataGridBox sx={{ backgroundColor: "white", color: "black" }}>
