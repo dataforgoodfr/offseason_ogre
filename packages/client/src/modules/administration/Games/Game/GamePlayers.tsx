@@ -206,14 +206,14 @@ function buildFormColumns(): GridColumns<Row> {
       if (value === "validated") {
         return (
           <>
-            <Icon name="check-circle" sx={{ mr: 1 }} /> Validé{" "}
+            <Icon name="check-circle" sx={{ mr: 1 }} /> Validé
           </>
         );
       }
       if (value === "pendingValidation") {
         return (
           <>
-            <Icon name="settings" sx={{ mr: 1 }} /> En attente de validation{" "}
+            <Icon name="settings" sx={{ mr: 1 }} /> En attente de validation
           </>
         );
       }

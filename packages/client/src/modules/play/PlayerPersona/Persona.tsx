@@ -29,7 +29,6 @@ function Persona() {
     return (
       <QuestionLine container direction="row" justifyContent="space-between">
         <QuestionText>
-          {" "}
           {question.icon && (
             <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
           )}
@@ -42,13 +41,13 @@ function Persona() {
 
   const buildDescriptionSection = (
     personalization: PersoForm,
-    section: string
+    questionType: string
   ) => {
     return (
       <Grid container direction="column">
         {personalization &&
           formValues
-            .filter((question: Question) => question.type === section)
+            .filter((question: Question) => question.type === questionType)
             .filter((question: Question) =>
               fulfillsConditionsDescription(personalization, question)
             )
