@@ -1,4 +1,3 @@
-import { profile } from "console";
 import { useParams } from "react-router-dom";
 import {
   Condition,

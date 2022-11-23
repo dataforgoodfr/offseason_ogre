@@ -16,6 +16,10 @@ router.get(
   "/:id/validate",
   asyncErrorHandler(controllers.validateProfilesController)
 );
+router.post(
+  "/:id/forms/update",
+  asyncErrorHandler(controllers.updateProfilesController)
+);
 router.get("/:id/players", asyncErrorHandler(controllers.getPlayersController));
 router.put(
   "/:id/players/order",

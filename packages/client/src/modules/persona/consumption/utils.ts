@@ -32,7 +32,11 @@ export const getHeatingConsumption = (
 
 export const getHeatingConsumptionInvoiceCoeff = (profile: PersoForm) => {
   const { heatingInvoice, heatingEnergy } = profile;
-  return heatingInvoice / getHeatingEnergyCoeff(heatingEnergy);
+  return (
+    parseFloat(
+      (heatingInvoice / getHeatingEnergyCoeff(heatingEnergy))?.toFixed(2)
+    ) || 0
+  );
 };
 
 const getHeatingEnergyCoeff = (energy: string) => {

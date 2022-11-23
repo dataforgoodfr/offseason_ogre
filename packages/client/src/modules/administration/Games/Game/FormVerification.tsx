@@ -28,6 +28,7 @@ import {
   numericParser,
   useGameId,
 } from "./utils";
+import { getNonNullValues } from "../../../play/Personalization/utils/formValidation";
 
 export { FormVerification };
 
@@ -38,7 +39,7 @@ function FormVerification({
   openFormValidation: boolean;
   setOpenFormValidation: (value: boolean) => void;
 }): JSX.Element {
-  const [updatedRows, setUpdatedRows] = useState<Row[]>([]);
+  const [updatedRows, setUpdatedRows] = useState<FormattedRow[]>([]);
   const gameId = useGameId();
   const playersQuery = usePlayers(gameId);
   const players = playersQuery?.data?.data?.players ?? [];
@@ -47,6 +48,25 @@ function FormVerification({
   const validateForms = useMutation<Response, { message: string }>(
     () => {
       return axios.get(`/api/games/${gameId}/validate`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
+      },
+    }
+  );
+
+  const updatePersonalizations = useMutation<Response, { message: string }>(
+    () => {
+      const newRows = updatedRows.map(
+        ({
+          name,
+          formStatus,
+          heatingConsumptionInvoiceCoeff,
+          ...personalization
+        }: FormattedRow) => ({ ...getNonNullValues(personalization) })
+      );
+      return axios.post(`/api/games/${gameId}/forms/update`, newRows);
     },
     {
       onSuccess: () => {
@@ -69,14 +89,8 @@ function FormVerification({
         ({ gameId: gId }: { gameId: number }) => gId === gameId
       );
 
-      const personalization: PersoForm = currentGame?.profile?.personalization;
-      const heatingConsumptionInvoiceCoeff = personalization
-        ? computeCoeff(personalization)
-        : 0;
-
       return {
         ...currentGame?.profile?.personalization,
-        heatingConsumptionInvoiceCoeff,
         name: `${player.firstName} ${player.lastName}`,
         formStatus: currentGame?.profile?.status || "noProfile",
       };
@@ -85,26 +99,38 @@ function FormVerification({
       ["pendingValidation", "validated"].includes(formStatus)
     );
 
-  const lastVersionRows = rows.map((row: Row) => {
-    const newRow = updatedRows.find((uRow: Row) => uRow.id === row.id);
-    if (newRow) {
-      row = Object.assign(row, newRow);
-    }
-    return row;
-  });
+  const formattedRows = rows
+    .map((row: FormattedRow): FormattedRow => {
+      const newRow = updatedRows.find(
+        (uRow: FormattedRow) => uRow.id === row.id
+      );
+      return newRow ? Object.assign(row, newRow) : row;
+    })
+    .map(({ name, formStatus, ...personalization }: FormattedRow) => {
+      const heatingConsumptionInvoiceCoeff = personalization
+        ? computeCoeff(personalization)
+        : 0;
+
+      return {
+        ...personalization,
+        name,
+        heatingConsumptionInvoiceCoeff,
+        formStatus,
+      };
+    });
 
   return (
     <VerificationContainer show={openFormValidation}>
       <DataGridBox sx={{ backgroundColor: "white", color: "black" }}>
         <DataGrid
           sx={{ textAlign: "center" }}
-          rows={lastVersionRows}
+          rows={formattedRows}
           columns={buildColumns()}
           disableSelectionOnClick
           experimentalFeatures={{ newEditingApi: true }}
           processRowUpdate={(newRow, oldRow) => {
             const updatedRowIndex = updatedRows.findIndex(
-              (row: Row) => row.id === newRow.id
+              (row: FormattedRow) => row.id === newRow.id
             );
             if (updatedRowIndex > -1) {
               setUpdatedRows([
@@ -136,6 +162,7 @@ function FormVerification({
         </Button>
         <Button
           onClick={() => {
+            updatePersonalizations.mutate();
             validateForms.mutate();
             setOpenFormValidation(false);
           }}
@@ -155,7 +182,14 @@ export type Row = PersoForm & {
   lastName: string;
 };
 
-function buildColumns(): GridColumns<Row> {
+export type FormattedRow = PersoForm & {
+  id: number;
+  name: string;
+  formStatus: string;
+  heatingConsumptionInvoiceCoeff?: number;
+};
+
+function buildColumns(): GridColumns<FormattedRow> {
   return [
     {
       field: "name",
