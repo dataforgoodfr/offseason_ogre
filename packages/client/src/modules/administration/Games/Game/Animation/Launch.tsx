@@ -25,12 +25,12 @@ const hasTeamWithTooManyPlayers = (
 
 const hasPlayersWithoutTeam = (teams: ITeamWithPlayers[]) => {
   const noTeamPlayers = teams.find(
-    (team: ITeamWithPlayers) => (team.name = NO_TEAM)
+    (team: ITeamWithPlayers) => team.name === NO_TEAM
   )?.players;
   return noTeamPlayers && noTeamPlayers?.length > 0;
 };
 
-const hasPlayersWithUnvalidatedForm = (players: any[], gameId: number) => {
+const getPlayersWithUnvalidatedFormCount = (players: any[], gameId: number) => {
   return players
     .map(({ playedGames }) => {
       const currentGame = playedGames.find(
@@ -57,7 +57,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
       id: p.id,
       playedGames: p.playedGames,
     })) ?? [];
-  const playersWithUnvalidatedForms = hasPlayersWithUnvalidatedForm(
+  const playersWithUnvalidatedForms = getPlayersWithUnvalidatedFormCount(
     players,
     game.id
   );
@@ -93,7 +93,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
     setSuccessDialogOpen(false);
   };
 
-  const launchGameButton = () => {
+  const handleLaunchGame = () => {
     if (!hasGameStarted(game.status)) {
       if (playersWithoutTeams || playersWithUnvalidatedForms > 0) {
         return setErrorDialogOpen(true);
@@ -108,7 +108,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
       {mutation.isSuccess && <SuccessAlert />}
       <Button
         disabled={playersQuery.isLoading}
-        onClick={launchGameButton}
+        onClick={handleLaunchGame}
         variant="contained"
         color="secondary"
       >
@@ -121,9 +121,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
         actions={
           <>
             <Button onClick={() => setSuccessDialogOpen(false)}>Annuler</Button>
-            <Button onClick={launchGame} autoFocus>
-              Continuer
-            </Button>
+            <Button onClick={launchGame}>Continuer</Button>
           </>
         }
       >
