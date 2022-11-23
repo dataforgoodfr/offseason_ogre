@@ -124,6 +124,7 @@ export interface Question {
   valueType: string;
   options?: DropdownOption[];
   defaultValue?: boolean | string | number;
+  credibilityConditions?: Condition[];
 }
 
 export interface IntermediateValues {
@@ -221,6 +222,9 @@ const getGeneralQuestions = () => {
       valueType: "number",
       options: buildChoices(range(1, 11)),
       defaultValue: 1,
+      credibilityConditions: [
+        { question: "numberAdults", operator: ">", value: 2 },
+      ],
     },
     {
       description:
@@ -230,6 +234,9 @@ const getGeneralQuestions = () => {
       valueType: "number",
       options: buildChoices(range(0, 11)),
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "numberKids", operator: ">", value: 4 },
+      ],
     },
   ];
   return generalQuestions.map((question: Omit<Question, "type">) => ({
@@ -248,6 +255,7 @@ const getTransportQuestions = () => {
       valueType: "boolean",
       options: booleanChoice,
       defaultValue: false,
+      credibilityConditions: [{ question: "car", operator: "=", value: false }],
     },
     {
       icon: "car",
@@ -258,6 +266,13 @@ const getTransportQuestions = () => {
       valueType: "string",
       options: carEnergyChoice,
       defaultValue: carEnergies.ESSENCE,
+      credibilityConditions: [
+        {
+          question: "carEnergy",
+          operator: "=",
+          value: carEnergies.ELECTRICITE,
+        },
+      ],
     },
     {
       icon: "car",
@@ -275,6 +290,9 @@ const getTransportQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "carConsumption", operator: ">=", value: 15 },
+      ],
     },
     {
       icon: "car",
@@ -285,6 +303,9 @@ const getTransportQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "carDistanceAlone", operator: ">=", value: 50000 },
+      ],
     },
     {
       icon: "car",
@@ -298,6 +319,9 @@ const getTransportQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "carDistanceHoushold", operator: ">=", value: 25000 },
+      ],
     },
     {
       icon: "car",
@@ -309,6 +333,9 @@ const getTransportQuestions = () => {
       valueType: "string",
       options: carAgeChoice,
       defaultValue: carAges.DIX_QUINZE,
+      credibilityConditions: [
+        { question: "carAge", operator: "=", value: carAges.PLUS_15 },
+      ],
     },
     {
       description:
@@ -318,6 +345,9 @@ const getTransportQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "carDistanceCarsharing", operator: "=", value: 0 },
+      ],
     },
     {
       icon: "plane",
@@ -327,6 +357,9 @@ const getTransportQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "planeDistance", operator: ">=", value: 100000 },
+      ],
     },
     {
       icon: "train",
@@ -336,6 +369,9 @@ const getTransportQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "trainDistance", operator: ">=", value: 30000 },
+      ],
     },
   ];
   return transportQuestions.map((question: Omit<Question, "type">) => ({
@@ -360,6 +396,9 @@ const getHousingQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 1,
+      credibilityConditions: [
+        { question: "houseSurface", operator: ">", value: 250 },
+      ],
     },
     {
       description: "Quelle est l'énergie principale de chauffage ?",
@@ -368,6 +407,9 @@ const getHousingQuestions = () => {
       valueType: "string",
       options: houseEnergyChoices,
       defaultValue: houseEnergies.FIOUL,
+      credibilityConditions: [
+        { question: "heatingEnergy", operator: "=", value: houseEnergies.BOIS },
+      ],
     },
     {
       description:
@@ -384,6 +426,10 @@ const getHousingQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "heatingInvoice", operator: ">=", value: 3000 },
+        { question: "heatingInvoice", operator: "<", value: 200 },
+      ],
     },
     {
       description:
@@ -428,6 +474,9 @@ const getHousingQuestions = () => {
       valueType: "number",
       options: buildChoices(range(0, 11)),
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "aCRoomNb", operator: ">", value: 5 },
+      ],
     },
     {
       description:
@@ -439,6 +488,9 @@ const getHousingQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "aCDaysNb", operator: ">", value: 365 },
+      ],
     },
   ];
   return housingQuestions.map((question: Omit<Question, "type">) => ({
@@ -456,6 +508,9 @@ const getHabitsQuestions = () => {
       valueType: "string",
       options: showerBathChoices,
       defaultValue: cleaning.DOUCHES,
+      credibilityConditions: [
+        { question: "showerBath", operator: "=", value: cleaning.BAINS },
+      ],
     },
     {
       description:
@@ -468,6 +523,9 @@ const getHabitsQuestions = () => {
       valueType: "number",
       options: buildChoices(range(1, 11)),
       defaultValue: 1,
+      credibilityConditions: [
+        { question: "showerBath", operator: ">", value: 2 },
+      ],
     },
     {
       description: "En moyenne, combien de temps dure une douche ?",
@@ -495,6 +553,9 @@ const getHabitsQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "cookingPlateTime", operator: ">", value: 2 },
+      ],
     },
     {
       description:
@@ -503,6 +564,9 @@ const getHabitsQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "cookingOvenTime", operator: ">", value: 2 },
+      ],
     },
     {
       description:
@@ -511,6 +575,9 @@ const getHabitsQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "cleaningWashingTime", operator: ">", value: 2 },
+      ],
     },
     {
       description:
@@ -519,6 +586,9 @@ const getHabitsQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "cleaningDryerTime", operator: ">", value: 2 },
+      ],
     },
     {
       description:
@@ -527,6 +597,9 @@ const getHabitsQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "cleaningDishwasherTime", operator: ">", value: 2 },
+      ],
     },
     {
       description: "Combien de réfrigérateurs possédez-vous ?",
@@ -535,6 +608,9 @@ const getHabitsQuestions = () => {
       valueType: "number",
       options: buildChoices(range(0, 11)),
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "refrigeratorNumber", operator: ">", value: 2 },
+      ],
     },
     {
       description: "Combien de congélateurs possédez-vous ?",
@@ -543,6 +619,9 @@ const getHabitsQuestions = () => {
       valueType: "number",
       options: buildChoices(range(0, 11)),
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "freezerNumber", operator: ">", value: 2 },
+      ],
     },
     {
       description: "Quel est votre système d'éclairage ?",
@@ -577,6 +656,9 @@ const getFoodQuestions = () => {
       valueType: "boolean",
       options: booleanChoice,
       defaultValue: false,
+      credibilityConditions: [
+        { question: "eatingVegetables", operator: "=", value: false },
+      ],
     },
     {
       description: "Consommez-vous des produits laitiers ?",
@@ -612,6 +694,9 @@ const getFoodQuestions = () => {
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "eatingTinDrink", operator: ">", value: 3 },
+      ],
     },
     {
       description: "Achetez-vous uniquement des produits sans emballage ?",
@@ -637,6 +722,9 @@ const getFoodQuestions = () => {
       valueType: "number",
       options: buildChoices(range(0, 11)),
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "eatingCatNumber", operator: ">", value: 3 },
+      ],
     },
     {
       description: "Combien avez-vous de chiens ?",
@@ -645,6 +733,9 @@ const getFoodQuestions = () => {
       valueType: "number",
       options: buildChoices(range(0, 11)),
       defaultValue: 0,
+      credibilityConditions: [
+        { question: "eatingDogNumber", operator: ">", value: 3 },
+      ],
     },
     {
       description: "Avez-vous un cheval ?",
@@ -653,6 +744,9 @@ const getFoodQuestions = () => {
       valueType: "boolean",
       options: booleanChoice,
       defaultValue: false,
+      credibilityConditions: [
+        { question: "eatingHorse", operator: "=", value: true },
+      ],
     },
   ];
   return foodQuestions.map((question: Omit<Question, "type">) => ({

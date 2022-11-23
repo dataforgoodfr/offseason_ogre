@@ -7,9 +7,12 @@ import {
 } from "../models/form";
 import { isNotEmpty } from "./choices";
 
-const compare = (currentValue: any, condition: any) => {
+export const compare = (currentValue: any, condition: any) => {
   if (condition.operator === ">") {
     return currentValue > condition.value;
+  }
+  if (condition.operator === ">=") {
+    return currentValue >= condition.value;
   }
   if (condition.operator === "<") {
     return currentValue < condition.value;
