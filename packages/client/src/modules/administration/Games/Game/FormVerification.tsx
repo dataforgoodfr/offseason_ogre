@@ -1,4 +1,4 @@
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Typography, useTheme } from "@mui/material";
 import { DataGrid, GridCellParams, GridColumns } from "@mui/x-data-grid";
 import axios from "axios";
 import { useState } from "react";
@@ -29,6 +29,8 @@ import {
   useGameId,
 } from "./utils";
 import { getNonNullValues } from "../../../play/Personalization/utils/formValidation";
+import { ErrorAlert, SuccessAlert } from "../../../alert";
+import { t } from "../../../translations";
 
 export { FormVerification };
 
@@ -41,6 +43,7 @@ function FormVerification({
 }): JSX.Element {
   const [updatedRows, setUpdatedRows] = useState<FormattedRow[]>([]);
   const gameId = useGameId();
+  const theme = useTheme();
   const playersQuery = usePlayers(gameId);
   const players = playersQuery?.data?.data?.players ?? [];
   const queryClient = useQueryClient();
@@ -56,7 +59,11 @@ function FormVerification({
     }
   );
 
-  const updatePersonalizations = useMutation<Response, { message: string }>(
+  const updatePersonalizations = useMutation<
+    Response,
+    { message: string },
+    { draft: boolean }
+  >(
     () => {
       const newRows = updatedRows.map(
         ({
@@ -69,7 +76,12 @@ function FormVerification({
       return axios.post(`/api/games/${gameId}/forms/update`, newRows);
     },
     {
-      onSuccess: () => {
+      onSuccess: (response: any, variables: { draft: boolean }) => {
+        if (!variables.draft) {
+          validateForms.mutate();
+          setOpenFormValidation(false);
+        }
+        setUpdatedRows([]);
         queryClient.invalidateQueries(`/api/games/${gameId}/players`);
       },
     }
@@ -121,6 +133,10 @@ function FormVerification({
 
   return (
     <VerificationContainer show={openFormValidation}>
+      {updatePersonalizations.isError && (
+        <ErrorAlert message={updatePersonalizations.error.message} />
+      )}
+      {updatePersonalizations.isSuccess && <SuccessAlert />}
       <DataGridBox sx={{ backgroundColor: "white", color: "black" }}>
         <DataGrid
           sx={{ textAlign: "center" }}
@@ -161,16 +177,52 @@ function FormVerification({
           <Icon name="close" sx={{ mr: 2 }} /> Annuler
         </Button>
         <Button
-          onClick={() => {
-            updatePersonalizations.mutate();
-            validateForms.mutate();
-            setOpenFormValidation(false);
-          }}
+          onClick={() => updatePersonalizations.mutate({ draft: true })}
+          variant="contained"
+          sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
+        >
+          <Icon name="settings" sx={{ mr: 2 }} /> Enregistrer les modifications
+        </Button>
+        <Button
+          onClick={() => updatePersonalizations.mutate({ draft: false })}
           variant="contained"
           sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
         >
           <Icon name="check-circle" sx={{ mr: 2 }} /> Valider
         </Button>
+      </Grid>
+      <Grid
+        container
+        direction="column"
+        alignItems="left"
+        sx={{ mb: 4, mt: 4, backgroundColor: "white" }}
+      >
+        <Typography
+          sx={{
+            mb: 2,
+            backgroundColor: "white",
+            color: theme.palette.primary.main,
+          }}
+        >
+          <Icon
+            name="tips"
+            sx={{ mr: 2, color: theme.palette.primary.contrastText }}
+          />{" "}
+          {t("form.validation.yellow")}
+        </Typography>
+        <Typography
+          sx={{
+            mb: 2,
+            backgroundColor: "white",
+            color: theme.palette.primary.main,
+          }}
+        >
+          <Icon
+            name="tips"
+            sx={{ mr: 2, color: theme.palette.primary.contrastText }}
+          />{" "}
+          {t("form.validation.heating")}
+        </Typography>
       </Grid>
     </VerificationContainer>
   );

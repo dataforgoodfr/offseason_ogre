@@ -88,13 +88,13 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
   });
 
   return (
-    <>
+    <Grid container>
       {!hasGameStarted(game.status) && (
         <>
           <Grid
             container
             alignItems="center"
-            sx={{ float: "right", pb: 2, pt: 2 }}
+            sx={{ float: "right", pb: 2, pt: 2, height: "100%" }}
           >
             <Button
               onClick={() => blockForms.mutate(game && game.status !== "ready")}
@@ -139,7 +139,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
         openFormValidation={openFormValidation}
         setOpenFormValidation={setOpenFormValidation}
       />
-    </>
+    </Grid>
   );
 }
 

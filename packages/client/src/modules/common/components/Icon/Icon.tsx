@@ -38,6 +38,7 @@ import {
   Lock,
   LunchDining,
   Microwave,
+  TipsAndUpdates,
   Train,
 } from "@mui/icons-material";
 
@@ -77,6 +78,7 @@ const ICONS = {
   settings: SettingsSuggestIcon,
   star: Star,
   synthesis: AutoGraphRoundedIcon,
+  tips: TipsAndUpdates,
   team: Groups,
   train: Train,
   trophy: EmojiEvents,
