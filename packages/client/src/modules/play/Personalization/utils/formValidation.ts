@@ -47,10 +47,10 @@ export const fulfillsConditions = (
 export const isSectionValid = (
   formValues: Question[],
   watch: any,
-  sectionName: string
+  questionType: string
 ) => {
   return formValues
-    .filter((question: Question) => question.type === sectionName)
+    .filter((question: Question) => question.type === questionType)
     .every((question: Question) => {
       if (fulfillsConditionsForm(watch, question)) {
         return isNotEmpty(watch(question.name));
