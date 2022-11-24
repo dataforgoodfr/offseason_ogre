@@ -8,7 +8,7 @@
   "launch.success.confirmation": "Êtes-vous sûr.e de vouloir lancer l'atelier ?",
   "launch.error.playersWithoutTeams": "Certains joueurs ne sont pas répartis dans une équipe, répartissez tous les joueurs avant de démarrer la partie.",
   "launch.error.playerWithUnvalidatedForm": "Attention, les données d'un joueur ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
-  "launch.error.playersWithUnvalidatedForm": "Attention, les données de certains joueurs ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
+  "launch.error.playerWithUnvalidatedForm_p": "Attention, les données de certains joueurs ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
 
   "production.energy.biomass.name": "Biomasse",
   "production.energy.biomass.accordion.title": "Biomasse (électricité)",
