@@ -35,7 +35,7 @@ export const computeIntermediateValues = (
   };
 };
 
-export const getFossilCarConsumption = (profile: PersoForm) => {
+export const getFossilCarConsumption = (personalization: PersoForm) => {
   const {
     car,
     carEnergy,
@@ -45,7 +45,7 @@ export const getFossilCarConsumption = (profile: PersoForm) => {
     carDistanceAlone,
     carDistanceHoushold,
     carDistanceCarsharing,
-  } = profile;
+  } = personalization;
 
   if (!car) {
     return (
@@ -79,26 +79,26 @@ export const getFossilCarConsumption = (profile: PersoForm) => {
 };
 
 export const getFossilHeatingConsumption = (
-  profile: PersoForm,
+  personalization: PersoForm,
   intermediateValues: IntermediateValues
 ) => {
-  const { heatingEnergy } = profile;
+  const { heatingEnergy } = personalization;
   if (![houseEnergies.FIOUL, houseEnergies.GAZ].includes(heatingEnergy)) {
     return 0;
   }
   return getHeatingConsumption(
-    profile,
+    personalization,
     intermediateValues.heatingConsumptionInvoiceCoeff
   );
 };
 
-export const getPlaneConsumption = (profile: PersoForm) => {
-  const { planeDistance } = profile;
-  return (planeDistance / 365) * transportCoeffs.PLANE;
+export const getPlaneConsumption = (personalization: PersoForm) => {
+  const { planeDistance } = personalization;
+  return (planeDistance / DAYS_IN_YEAR) * transportCoeffs.PLANE;
 };
 
-export const getAirConditionningConsumption = (profile: PersoForm) => {
-  const { airConditionning, aCDaysNb, aCRoomNb } = profile;
+export const getAirConditionningConsumption = (personalization: PersoForm) => {
+  const { airConditionning, aCDaysNb, aCRoomNb } = personalization;
 
   if (!airConditionning) {
     return 0;
@@ -107,10 +107,10 @@ export const getAirConditionningConsumption = (profile: PersoForm) => {
 };
 
 export const getBrownGoodsConsumption = (
-  profile: PersoForm,
+  personalization: PersoForm,
   intermediateValues: IntermediateValues
 ) => {
-  const { numericEquipment } = profile;
+  const { numericEquipment } = personalization;
   if (numericEquipment) {
     return 7.5 - intermediateValues.brownGoodsCoeff;
   }
@@ -125,7 +125,7 @@ export const getCleanCookConsumption = (
   );
 };
 
-export const getElectricCarConsumption = (profile: PersoForm) => {
+export const getElectricCarConsumption = (personalization: PersoForm) => {
   const {
     carEnergy,
     carDistanceAlone,
@@ -133,7 +133,7 @@ export const getElectricCarConsumption = (profile: PersoForm) => {
     carDistanceCarsharing,
     numberAdults,
     numberKids,
-  } = profile;
+  } = personalization;
   if (carEnergy !== carEnergies.ELECTRICITE) {
     return 0;
   }
@@ -146,8 +146,8 @@ export const getElectricCarConsumption = (profile: PersoForm) => {
   );
 };
 
-export const getLightConsumption = (profile: PersoForm) => {
-  const { lightingSystem } = profile;
+export const getLightConsumption = (personalization: PersoForm) => {
+  const { lightingSystem } = personalization;
   if (lightingSystem === lighting.AMPOULES_LED) {
     return lightingConstants.LED;
   }
@@ -155,10 +155,10 @@ export const getLightConsumption = (profile: PersoForm) => {
 };
 
 export const getNoCarbonHeatingConsumption = (
-  profile: PersoForm,
+  personalization: PersoForm,
   intermediateValues: IntermediateValues
 ) => {
-  const { heatingEnergy } = profile;
+  const { heatingEnergy } = personalization;
 
   if (
     ![houseEnergies.BOIS, houseEnergies.ELECTRICITE].includes(heatingEnergy)
@@ -166,17 +166,17 @@ export const getNoCarbonHeatingConsumption = (
     return 0;
   }
   return getHeatingConsumption(
-    profile,
+    personalization,
     intermediateValues.heatingConsumptionInvoiceCoeff
   );
 };
 
-export const getTrainConsumption = (profile: PersoForm) => {
-  const { trainDistance } = profile;
-  return (trainDistance / 365) * transportCoeffs.TRAIN;
+export const getTrainConsumption = (personalization: PersoForm) => {
+  const { trainDistance } = personalization;
+  return (trainDistance / DAYS_IN_YEAR) * transportCoeffs.TRAIN;
 };
 
-export const getFoodConsumption = (profile: PersoForm) => {
+export const getFoodConsumption = (personalization: PersoForm) => {
   const {
     eatingVegan,
     eatingVegetables,
@@ -188,7 +188,7 @@ export const getFoodConsumption = (profile: PersoForm) => {
     eatingCatNumber,
     eatingDogNumber,
     eatingHorse,
-  } = profile;
+  } = personalization;
   const result = [];
   if (eatingVegan) {
     result.push(consumptionFood.VEGAN);
@@ -221,8 +221,8 @@ export const getFoodConsumption = (profile: PersoForm) => {
   return result.reduce((a, b) => a + b, 0);
 };
 
-export const getGreyCarConsumption = (profile: PersoForm) => {
-  const { car, carEnergy, carAge } = profile;
+export const getGreyCarConsumption = (personalization: PersoForm) => {
+  const { car, carEnergy, carAge } = personalization;
 
   if (!car) {
     return 0;
@@ -235,8 +235,9 @@ export const getGreyCarConsumption = (profile: PersoForm) => {
   );
 };
 
-export const getGreyNumericConsumption = (profile: PersoForm) => {
-  const { numericEquipment, numericWebTimeDay, numericVideoTimeDay } = profile;
+export const getGreyNumericConsumption = (personalization: PersoForm) => {
+  const { numericEquipment, numericWebTimeDay, numericVideoTimeDay } =
+    personalization;
 
   return (
     consumptionGreyNumeric.EQUIPMENT_GLOBAL *
@@ -254,8 +255,8 @@ export const getGreyNumericConsumption = (profile: PersoForm) => {
   );
 };
 
-export const getGreyOther = (profile: PersoForm) => {
-  const { eatingLocal, clothingQuantity } = profile;
+export const getGreyOther = (personalization: PersoForm) => {
+  const { eatingLocal, clothingQuantity } = personalization;
 
   return (
     consumptionGreyOther.OTHER_GLOBAL *
@@ -269,8 +270,8 @@ export const getGreyOther = (profile: PersoForm) => {
   );
 };
 
-export const getGreyTransport = (profile: PersoForm) => {
-  const { eatingLocal, clothingQuantity } = profile;
+export const getGreyTransport = (personalization: PersoForm) => {
+  const { eatingLocal, clothingQuantity } = personalization;
 
   return (
     consumptionGreyTransport.GLOBAL *

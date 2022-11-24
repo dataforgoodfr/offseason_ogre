@@ -12,10 +12,10 @@ import {
 } from "./constants";
 
 export const getHeatingConsumption = (
-  profile: PersoForm,
+  personalization: PersoForm,
   heatingConsumptionInvoiceCoeff: number
 ) => {
-  const { heatingInvoice, heatingConsumption, numberAdults } = profile;
+  const { heatingInvoice, heatingConsumption, numberAdults } = personalization;
   if (heatingInvoice === 0) {
     return heatingConsumption / (DAYS_IN_YEAR * numberAdults);
   }
@@ -30,8 +30,10 @@ export const getHeatingConsumption = (
   );
 };
 
-export const getHeatingConsumptionInvoiceCoeff = (profile: PersoForm) => {
-  const { heatingInvoice, heatingEnergy } = profile;
+export const getHeatingConsumptionInvoiceCoeff = (
+  personalization: PersoForm
+) => {
+  const { heatingInvoice, heatingEnergy } = personalization;
   return heatingInvoice / getHeatingEnergyCoeff(heatingEnergy);
 };
 
@@ -58,9 +60,8 @@ const showerTimesToCoeff = {
 
 const getCoeff = (configName: string, mapping: any) => (key: string) => {
   const coeff = mapping[key];
-
   if (coeff == null) {
-    throw new Error(`Invalid profile value for ${configName}: ${key}`);
+    throw new Error(`Invalid personalization value for ${configName}: ${key}`);
   }
 
   return coeff;
@@ -73,7 +74,7 @@ export const getHeatingEnergyCoeff = getCoeff(
   heatingEnergyToCoeff
 );
 
-export const getWhiteProductsCoeff = (profile: PersoForm) => {
+export const getWhiteProductsCoeff = (personalization: PersoForm) => {
   const {
     cookingKettle,
     cookingPlateTime,
@@ -83,7 +84,7 @@ export const getWhiteProductsCoeff = (profile: PersoForm) => {
     cleaningDishwasherTime,
     refrigeratorNumber,
     freezerNumber,
-  } = profile;
+  } = personalization;
 
   const result = [];
   if (cookingKettle) {
@@ -103,8 +104,8 @@ export const getWhiteProductsCoeff = (profile: PersoForm) => {
   return result.reduce((a, b) => a + b, 0);
 };
 
-export const getShowerBathCoeff = (profile: PersoForm) => {
-  const { showerBath, showerNumber, showerTime } = profile;
+export const getShowerBathCoeff = (personalization: PersoForm) => {
+  const { showerBath, showerNumber, showerTime } = personalization;
   if (showerBath === cleaning.BAINS) {
     return 5;
   }
