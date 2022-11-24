@@ -5,6 +5,11 @@
   "message.error.register.GAME_NOT_FOUND": "La partie n'a pas pu être trouvée. Vérifiez son id et recommencez.",
   "message.error.register.USER_ALREADY_JOINED_GAME": "Vous êtes déjà inscrit.e à cette partie.",
 
+  "launch.success.confirmation": "Êtes-vous sûr.e de vouloir lancer l'atelier ?",
+  "launch.error.playersWithoutTeams": "Certains joueurs ne sont pas répartis dans une équipe, répartissez tous les joueurs avant de démarrer la partie.",
+  "launch.error.playerWithUnvalidatedForm": "Attention, les données d'un joueur ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
+  "launch.error.playersWithUnvalidatedForm": "Attention, les données de certains joueurs ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
+
   "production.energy.biomass.name": "Biomasse",
   "production.energy.biomass.accordion.title": "Biomasse (électricité)",
   "production.energy.biomass.accordion.label-slider": "Surface occupée (en %) du territoire",
