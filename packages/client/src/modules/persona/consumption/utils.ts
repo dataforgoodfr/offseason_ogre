@@ -12,10 +12,10 @@ import {
 } from "./constants";
 
 export const getHeatingConsumption = (
-  profile: PersoForm,
+  personalization: PersoForm,
   heatingConsumptionInvoiceCoeff: number
 ) => {
-  const { heatingInvoice, heatingConsumption, numberAdults } = profile;
+  const { heatingInvoice, heatingConsumption, numberAdults } = personalization;
   if (heatingInvoice === 0) {
     return heatingConsumption / (DAYS_IN_YEAR * numberAdults);
   }
@@ -30,8 +30,10 @@ export const getHeatingConsumption = (
   );
 };
 
-export const getHeatingConsumptionInvoiceCoeff = (profile: PersoForm) => {
-  const { heatingInvoice, heatingEnergy } = profile;
+export const getHeatingConsumptionInvoiceCoeff = (
+  personalization: PersoForm
+) => {
+  const { heatingInvoice, heatingEnergy } = personalization;
   return (
     parseFloat(
       (heatingInvoice / getHeatingEnergyCoeff(heatingEnergy))?.toFixed(2)
@@ -39,46 +41,44 @@ export const getHeatingConsumptionInvoiceCoeff = (profile: PersoForm) => {
   );
 };
 
-const getHeatingEnergyCoeff = (energy: string) => {
-  if (energy === houseEnergies.GAZ) {
-    return heatingEnergyCoeffs.GAZ;
-  } else if (energy === houseEnergies.FIOUL) {
-    return heatingEnergyCoeffs.FIOUL;
-  } else if (energy === houseEnergies.BOIS) {
-    return heatingEnergyCoeffs.BOIS;
-  } else if (energy === houseEnergies.ELECTRICITE) {
-    return heatingEnergyCoeffs.ELECTRICITE;
-  }
-  throw new Error(`Invalid profile value for heating energy: ${energy}`);
+const heatingEnergyToCoeff = {
+  [houseEnergies.GAZ]: heatingEnergyCoeffs.GAZ,
+  [houseEnergies.FIOUL]: heatingEnergyCoeffs.FIOUL,
+  [houseEnergies.BOIS]: heatingEnergyCoeffs.BOIS,
+  [houseEnergies.ELECTRICITE]: heatingEnergyCoeffs.ELECTRICITE,
 };
 
-export const getShowerTimeCoeff = (time: string) => {
-  if (time === showerTimes.MOINS_5) {
-    return 0.5;
-  } else if (time === showerTimes.CINQ_DIX) {
-    return 0.75;
-  } else if (time === showerTimes.DIX_QUINZE) {
-    return 1.25;
-  } else if (time === showerTimes.PLUS_15) {
-    return 2;
-  }
-  throw new Error(`Invalid profile value for shower time: ${time}`);
+const carAgeToCoeff = {
+  [carAges.MOINS_5]: 3,
+  [carAges.CINQ_DIX]: 2,
+  [carAges.DIX_QUINZE]: 1,
+  [carAges.PLUS_15]: 1,
 };
 
-export const getCarAgeCoeff = (carAge: string) => {
-  if (carAge === carAges.MOINS_5) {
-    return 3;
-  } else if (carAge === carAges.CINQ_DIX) {
-    return 2;
-  } else if (carAge === carAges.DIX_QUINZE) {
-    return 1;
-  } else if (carAge === carAges.PLUS_15) {
-    return 1;
-  }
-  throw new Error(`Invalid profile value for car age: ${carAge}`);
+const showerTimesToCoeff = {
+  [showerTimes.MOINS_5]: 0.5,
+  [showerTimes.CINQ_DIX]: 0.75,
+  [showerTimes.DIX_QUINZE]: 1.25,
+  [showerTimes.PLUS_15]: 2,
 };
 
-export const getWhiteProductsCoeff = (profile: PersoForm) => {
+const getCoeff = (configName: string, mapping: any) => (key: string) => {
+  const coeff = mapping[key];
+  if (coeff == null) {
+    throw new Error(`Invalid personalization value for ${configName}: ${key}`);
+  }
+
+  return coeff;
+};
+
+export const getCarAgeCoeff = getCoeff("car age", carAgeToCoeff);
+export const getShowerTimeCoeff = getCoeff("shower time", showerTimesToCoeff);
+export const getHeatingEnergyCoeff = getCoeff(
+  "heating energy",
+  heatingEnergyToCoeff
+);
+
+export const getWhiteProductsCoeff = (personalization: PersoForm) => {
   const {
     cookingKettle,
     cookingPlateTime,
@@ -88,7 +88,7 @@ export const getWhiteProductsCoeff = (profile: PersoForm) => {
     cleaningDishwasherTime,
     refrigeratorNumber,
     freezerNumber,
-  } = profile;
+  } = personalization;
 
   const result = [];
   if (cookingKettle) {
@@ -108,8 +108,8 @@ export const getWhiteProductsCoeff = (profile: PersoForm) => {
   return result.reduce((a, b) => a + b, 0);
 };
 
-export const getShowerBathCoeff = (profile: PersoForm) => {
-  const { showerBath, showerNumber, showerTime } = profile;
+export const getShowerBathCoeff = (personalization: PersoForm) => {
+  const { showerBath, showerNumber, showerTime } = personalization;
   if (showerBath === cleaning.BAINS) {
     return 5;
   }

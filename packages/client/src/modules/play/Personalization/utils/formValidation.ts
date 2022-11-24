@@ -35,22 +35,25 @@ export const fulfillsConditionsForm = (watch: any, question: Question) => {
   );
 };
 
-export const fulfillsConditions = (profile: PersoForm, question: Question) => {
+export const fulfillsConditions = (
+  personalization: PersoForm,
+  question: Question
+) => {
   if (!question.conditions) {
     return true;
   }
   return question.conditions.every((condition: Condition) =>
-    compare(profile[condition.question as keyof PersoForm], condition)
+    compare(personalization[condition.question as keyof PersoForm], condition)
   );
 };
 
 export const isSectionValid = (
   formValues: Question[],
   watch: any,
-  sectionName: string
+  questionType: string
 ) => {
   return formValues
-    .filter((question: Question) => question.type === sectionName)
+    .filter((question: Question) => question.type === questionType)
     .every((question: Question) => {
       if (fulfillsConditionsForm(watch, question)) {
         return isNotEmpty(watch(question.name));

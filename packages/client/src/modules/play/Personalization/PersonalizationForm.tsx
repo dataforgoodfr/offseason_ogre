@@ -105,7 +105,6 @@ function PersonalizationForm() {
         justifyContent="space-between"
       >
         <QuestionText>
-          {" "}
           {question.icon && (
             <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
           )}
@@ -116,11 +115,11 @@ function PersonalizationForm() {
     );
   };
 
-  const buildFormSection = (section: string) => {
+  const buildFormSection = (questionType: string) => {
     return (
       <Grid container direction="column">
         {formValues
-          .filter((question: Question) => question.type === section)
+          .filter((question: Question) => question.type === questionType)
           // https://github.com/react-hook-form/react-hook-form/issues/1990
           .map((question: Question) =>
             buildFormLine(question, fulfillsConditionsForm(watch, question))

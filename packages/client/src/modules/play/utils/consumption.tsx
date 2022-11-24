@@ -469,7 +469,7 @@ function applyPersonalizationImpact(
   const { type, name, update } = getImpact(inputMatrix);
   if (type === "calculatedValues" && inputMatrix.calculatedValues) {
     if (
-      inputMatrix.calculatedValues[name as keyof IntermediateValues] === null
+      inputMatrix.calculatedValues[name as keyof IntermediateValues] == null
     ) {
       console.error(`Could not find personalization value with name ${name}`);
       return;
@@ -477,15 +477,13 @@ function applyPersonalizationImpact(
 
     Object.assign(inputMatrix.calculatedValues, {
       [name]: update(
-        inputMatrix.calculatedValues
-          ? inputMatrix.calculatedValues[name as keyof IntermediateValues]
-          : undefined
+        inputMatrix.calculatedValues[name as keyof IntermediateValues]
       ),
     });
   }
 
   if (type === "personalization") {
-    if (inputMatrix.personalization[name as keyof PersoForm] === null) {
+    if (inputMatrix.personalization[name as keyof PersoForm] == null) {
       console.error(`Could not find personalization value with name ${name}`);
       return;
     }

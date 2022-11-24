@@ -11,6 +11,7 @@ import { Dialog } from "../../../../common/components/Dialog";
 import { Typography } from "../../../../common/components/Typography";
 import { NO_TEAM } from "../../../../common/constants/teams";
 import { usePlayers } from "../services/queries";
+import { t } from "../../../../translations";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -25,12 +26,12 @@ const hasTeamWithTooManyPlayers = (
 
 const hasPlayersWithoutTeam = (teams: ITeamWithPlayers[]) => {
   const noTeamPlayers = teams.find(
-    (team: ITeamWithPlayers) => (team.name = NO_TEAM)
+    (team: ITeamWithPlayers) => team.name === NO_TEAM
   )?.players;
   return noTeamPlayers && noTeamPlayers?.length > 0;
 };
 
-const hasPlayersWithUnvalidatedForm = (players: any[], gameId: number) => {
+const getPlayersWithUnvalidatedFormCount = (players: any[], gameId: number) => {
   return players
     .map(({ playedGames }) => {
       const currentGame = playedGames.find(
@@ -47,7 +48,6 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
   const MAX_TEAM_SIZE = 5;
   const dialogContent = {
-    message: "Êtes-vous sûr.e de vouloir lancer l'atelier ?",
     warningMessage: `Une ou plusieurs équipe(s) dépasse(nt) le nombre de joueurs recommandé (${MAX_TEAM_SIZE} joueurs)`,
   };
 
@@ -57,20 +57,12 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
       id: p.id,
       playedGames: p.playedGames,
     })) ?? [];
-  const playersWithUnvalidatedForms = hasPlayersWithUnvalidatedForm(
+  const playersWithUnvalidatedForms = getPlayersWithUnvalidatedFormCount(
     players,
     game.id
   );
 
   const playersWithoutTeams = hasPlayersWithoutTeam(game.teams);
-
-  const errorDialog = {
-    playersWithoutTeams:
-      "Certains joueurs ne sont pas répartis dans une équipe, répartissez tous les joueurs avant de démarrer la partie.",
-    unvalidatedForms: `Attention, les données de ${playersWithUnvalidatedForms} joueur${
-      playersWithUnvalidatedForms > 1 ? "s" : ""
-    } ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.`,
-  };
 
   const navigate = useNavigate();
   const mutation = useMutation<Response, { message: string }, any>(
@@ -93,7 +85,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
     setSuccessDialogOpen(false);
   };
 
-  const launchGameButton = () => {
+  const handleLaunchGame = () => {
     if (!hasGameStarted(game.status)) {
       if (playersWithoutTeams || playersWithUnvalidatedForms > 0) {
         return setErrorDialogOpen(true);
@@ -108,7 +100,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
       {mutation.isSuccess && <SuccessAlert />}
       <Button
         disabled={playersQuery.isLoading}
-        onClick={launchGameButton}
+        onClick={handleLaunchGame}
         variant="contained"
         color="secondary"
       >
@@ -121,9 +113,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
         actions={
           <>
             <Button onClick={() => setSuccessDialogOpen(false)}>Annuler</Button>
-            <Button onClick={launchGame} autoFocus>
-              Continuer
-            </Button>
+            <Button onClick={launchGame}>Continuer</Button>
           </>
         }
       >
@@ -131,7 +121,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
           {hasTeamWithTooManyPlayers(game.teams, MAX_TEAM_SIZE) &&
             dialogContent.warningMessage}
         </Typography>
-        <Typography>{dialogContent.message}</Typography>
+        <Typography>{t("launch.success.confirmation")}</Typography>
       </Dialog>
       <Dialog
         open={errorDialogOpen}
@@ -144,12 +134,14 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
       >
         {playersWithoutTeams && (
           <Typography sx={{ color: "red", mb: 2 }}>
-            {errorDialog.playersWithoutTeams}
+            {t("launch.error.playersWithoutTeams")}
           </Typography>
         )}
         {playersWithUnvalidatedForms > 0 && (
           <Typography sx={{ color: "red", mb: 2 }}>
-            {errorDialog.unvalidatedForms}
+            {playersWithUnvalidatedForms > 1
+              ? t("launch.error.playerWithUnvalidatedForm_p")
+              : t("launch.error.playerWithUnvalidatedForm")}
           </Typography>
         )}
       </Dialog>
