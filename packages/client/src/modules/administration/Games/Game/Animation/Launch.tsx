@@ -140,7 +140,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
         {playersWithUnvalidatedForms > 0 && (
           <Typography sx={{ color: "red", mb: 2 }}>
             {playersWithUnvalidatedForms > 1
-              ? t("launch.error.playersWithUnvalidatedForm")
+              ? t("launch.error.playerWithUnvalidatedForm_p")
               : t("launch.error.playerWithUnvalidatedForm")}
           </Typography>
         )}
