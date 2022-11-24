@@ -457,9 +457,11 @@ function usePersonaByUserId(userIds: number | number[]) {
 
   if (typeof userIds === "number") {
     const { team, player } = getUserTeamAndPlayer(gameWithTeams, userIds);
+    const personalization = player?.profile.personalization;
     const initialPersona = buildInitialPersona(player?.profile.personalization);
     return buildPersona(
       gameWithTeams,
+      personalization,
       initialPersona,
       player?.actions || [],
       team?.actions || []
@@ -469,13 +471,13 @@ function usePersonaByUserId(userIds: number | number[]) {
   return Object.fromEntries(
     userIds.map((userId) => {
       const { team, player } = getUserTeamAndPlayer(gameWithTeams, userId);
-      const initialPersona = buildInitialPersona(
-        player?.profile.personalization
-      );
+      const personalization = player?.profile.personalization;
+      const initialPersona = buildInitialPersona(personalization);
       return [
         userId,
         buildPersona(
           gameWithTeams,
+          personalization,
           initialPersona,
           player?.actions || [],
           team?.actions || []
@@ -504,5 +506,11 @@ function usePersona() {
   const { playerActions } = usePlayerActions();
   const initialPersona = buildInitialPersona(profile.personalization);
 
-  return buildPersona(game, initialPersona, playerActions, player.teamActions);
+  return buildPersona(
+    game,
+    profile.personalization,
+    initialPersona,
+    playerActions,
+    player.teamActions
+  );
 }

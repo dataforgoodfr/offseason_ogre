@@ -1,6 +1,7 @@
 import {
   carEnergies,
   houseEnergies,
+  IntermediateValues,
   lighting,
   PersoForm,
 } from "../../play/Personalization/models/form";
@@ -22,8 +23,21 @@ import {
   getWhiteProductsCoeff,
 } from "./utils";
 
-export const getFossilCarConsumption = (profile: PersoForm) => {
+export const computeIntermediateValues = (
+  personalization: PersoForm
+): IntermediateValues => {
+  return {
+    whiteProductsCoeff: getWhiteProductsCoeff(personalization),
+    showerBathCoeff: getShowerBathCoeff(personalization),
+    brownGoodsCoeff: 0,
+    heatingConsumptionInvoiceCoeff:
+      getHeatingConsumptionInvoiceCoeff(personalization),
+  };
+};
+
+export const getFossilCarConsumption = (personalization: PersoForm) => {
   const {
+    car,
     carEnergy,
     numberAdults,
     numberKids,
@@ -31,7 +45,16 @@ export const getFossilCarConsumption = (profile: PersoForm) => {
     carDistanceAlone,
     carDistanceHoushold,
     carDistanceCarsharing,
-  } = profile;
+  } = personalization;
+
+  if (!car) {
+    return (
+      ((carDistanceCarsharing * transportCoeffs.MEAN_FOSSIL_CAR_CONSUMPTION) /
+        DAYS_IN_YEAR) *
+      10
+    );
+  }
+
   if (
     ![carEnergies.DIESEL, carEnergies.GPL, carEnergies.HYBRIDE].includes(
       carEnergy
@@ -47,30 +70,32 @@ export const getFossilCarConsumption = (profile: PersoForm) => {
       carConsumption) /
       100 +
       (carDistanceCarsharing * transportCoeffs.MEAN_FOSSIL_CAR_CONSUMPTION) /
-        100 /
         DAYS_IN_YEAR) *
     10
   );
 };
 
-export const getFossilHeatingConsumption = (profile: PersoForm) => {
-  const { heatingEnergy } = profile;
-  const heatingConsumptionInvoiceCoeff =
-    getHeatingConsumptionInvoiceCoeff(profile);
-
+export const getFossilHeatingConsumption = (
+  personalization: PersoForm,
+  intermediateValues: IntermediateValues
+) => {
+  const { heatingEnergy } = personalization;
   if (![houseEnergies.FIOUL, houseEnergies.GAZ].includes(heatingEnergy)) {
     return 0;
   }
-  return getHeatingConsumption(profile, heatingConsumptionInvoiceCoeff);
+  return getHeatingConsumption(
+    personalization,
+    intermediateValues.heatingConsumptionInvoiceCoeff
+  );
 };
 
-export const getPlaneConsumption = (profile: PersoForm) => {
-  const { planeDistance } = profile;
-  return (planeDistance / 365) * transportCoeffs.PLANE;
+export const getPlaneConsumption = (personalization: PersoForm) => {
+  const { planeDistance } = personalization;
+  return (planeDistance / DAYS_IN_YEAR) * transportCoeffs.PLANE;
 };
 
-export const getAirConditionningConsumption = (profile: PersoForm) => {
-  const { airConditionning, aCDaysNb, aCRoomNb } = profile;
+export const getAirConditionningConsumption = (personalization: PersoForm) => {
+  const { airConditionning, aCDaysNb, aCRoomNb } = personalization;
 
   if (!airConditionning) {
     return 0;
@@ -78,19 +103,26 @@ export const getAirConditionningConsumption = (profile: PersoForm) => {
   return (aCRoomNb * aCDaysNb * 0.6 * 12) / DAYS_IN_YEAR;
 };
 
-export const getBrownGoodsConsumption = (profile: PersoForm) => {
-  const { numericEquipment } = profile;
+export const getBrownGoodsConsumption = (
+  personalization: PersoForm,
+  intermediateValues: IntermediateValues
+) => {
+  const { numericEquipment } = personalization;
   if (numericEquipment) {
-    return 7.5;
+    return 7.5 - intermediateValues.brownGoodsCoeff;
   }
-  return 5;
+  return 5 - intermediateValues.brownGoodsCoeff;
 };
 
-export const getCleanCookConsumption = (profile: PersoForm) => {
-  return getWhiteProductsCoeff(profile) + getShowerBathCoeff(profile);
+export const getCleanCookConsumption = (
+  intermediateValues: IntermediateValues
+) => {
+  return (
+    intermediateValues.whiteProductsCoeff + intermediateValues.showerBathCoeff
+  );
 };
 
-export const getElectricCarConsumption = (profile: PersoForm) => {
+export const getElectricCarConsumption = (personalization: PersoForm) => {
   const {
     carEnergy,
     carDistanceAlone,
@@ -98,10 +130,11 @@ export const getElectricCarConsumption = (profile: PersoForm) => {
     carDistanceCarsharing,
     numberAdults,
     numberKids,
-  } = profile;
+  } = personalization;
   if (carEnergy !== carEnergies.ELECTRICITE) {
     return 0;
   }
+
   return (
     (carDistanceAlone / DAYS_IN_YEAR +
       carDistanceHoushold / (DAYS_IN_YEAR * (numberAdults + numberKids)) +
@@ -110,33 +143,37 @@ export const getElectricCarConsumption = (profile: PersoForm) => {
   );
 };
 
-export const getLightConsumption = (profile: PersoForm) => {
-  const { lightingSystem } = profile;
+export const getLightConsumption = (personalization: PersoForm) => {
+  const { lightingSystem } = personalization;
   if (lightingSystem === lighting.AMPOULES_LED) {
     return lightingConstants.LED;
   }
   return lightingConstants.OTHER;
 };
 
-export const getNoCarbonHeatingConsumption = (profile: PersoForm) => {
-  const { heatingEnergy } = profile;
-  const heatingConsumptionInvoiceCoeff =
-    getHeatingConsumptionInvoiceCoeff(profile);
+export const getNoCarbonHeatingConsumption = (
+  personalization: PersoForm,
+  intermediateValues: IntermediateValues
+) => {
+  const { heatingEnergy } = personalization;
 
   if (
     ![houseEnergies.BOIS, houseEnergies.ELECTRICITE].includes(heatingEnergy)
   ) {
     return 0;
   }
-  return getHeatingConsumption(profile, heatingConsumptionInvoiceCoeff);
+  return getHeatingConsumption(
+    personalization,
+    intermediateValues.heatingConsumptionInvoiceCoeff
+  );
 };
 
-export const getTrainConsumption = (profile: PersoForm) => {
-  const { trainDistance } = profile;
-  return (trainDistance / 365) * transportCoeffs.TRAIN;
+export const getTrainConsumption = (personalization: PersoForm) => {
+  const { trainDistance } = personalization;
+  return (trainDistance / DAYS_IN_YEAR) * transportCoeffs.TRAIN;
 };
 
-export const getFoodConsumption = (profile: PersoForm) => {
+export const getFoodConsumption = (personalization: PersoForm) => {
   const {
     eatingVegan,
     eatingVegetables,
@@ -148,7 +185,7 @@ export const getFoodConsumption = (profile: PersoForm) => {
     eatingCatNumber,
     eatingDogNumber,
     eatingHorse,
-  } = profile;
+  } = personalization;
   const result = [];
   if (eatingVegan) {
     result.push(consumptionFood.VEGAN);
@@ -181,8 +218,8 @@ export const getFoodConsumption = (profile: PersoForm) => {
   return result.reduce((a, b) => a + b, 0);
 };
 
-export const getGreyCarConsumption = (profile: PersoForm) => {
-  const { car, carEnergy, carAge } = profile;
+export const getGreyCarConsumption = (personalization: PersoForm) => {
+  const { car, carEnergy, carAge } = personalization;
 
   if (!car) {
     return 0;
@@ -194,8 +231,9 @@ export const getGreyCarConsumption = (profile: PersoForm) => {
   );
 };
 
-export const getGreyNumericConsumption = (profile: PersoForm) => {
-  const { numericEquipment, numericWebTimeDay, numericVideoTimeDay } = profile;
+export const getGreyNumericConsumption = (personalization: PersoForm) => {
+  const { numericEquipment, numericWebTimeDay, numericVideoTimeDay } =
+    personalization;
 
   return (
     consumptionGreyNumeric.EQUIPMENT_GLOBAL *
@@ -213,8 +251,8 @@ export const getGreyNumericConsumption = (profile: PersoForm) => {
   );
 };
 
-export const getGreyOther = (profile: PersoForm) => {
-  const { eatingLocal, clothingQuantity } = profile;
+export const getGreyOther = (personalization: PersoForm) => {
+  const { eatingLocal, clothingQuantity } = personalization;
 
   return (
     consumptionGreyOther.OTHER_GLOBAL *
@@ -228,8 +266,8 @@ export const getGreyOther = (profile: PersoForm) => {
   );
 };
 
-export const getGreyTransport = (profile: PersoForm) => {
-  const { eatingLocal, clothingQuantity } = profile;
+export const getGreyTransport = (personalization: PersoForm) => {
+  const { eatingLocal, clothingQuantity } = personalization;
 
   return (
     consumptionGreyTransport.GLOBAL *

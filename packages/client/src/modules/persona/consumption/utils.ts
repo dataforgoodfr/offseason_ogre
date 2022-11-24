@@ -12,10 +12,10 @@ import {
 } from "./constants";
 
 export const getHeatingConsumption = (
-  profile: PersoForm,
+  personalization: PersoForm,
   heatingConsumptionInvoiceCoeff: number
 ) => {
-  const { heatingInvoice, heatingConsumption, numberAdults } = profile;
+  const { heatingInvoice, heatingConsumption, numberAdults } = personalization;
   if (heatingInvoice === 0) {
     return heatingConsumption / (DAYS_IN_YEAR * numberAdults);
   }
@@ -30,8 +30,10 @@ export const getHeatingConsumption = (
   );
 };
 
-export const getHeatingConsumptionInvoiceCoeff = (profile: PersoForm) => {
-  const { heatingInvoice, heatingEnergy } = profile;
+export const getHeatingConsumptionInvoiceCoeff = (
+  personalization: PersoForm
+) => {
+  const { heatingInvoice, heatingEnergy } = personalization;
   return heatingInvoice / getHeatingEnergyCoeff(heatingEnergy);
 };
 
@@ -45,7 +47,9 @@ const getHeatingEnergyCoeff = (energy: string) => {
   } else if (energy === houseEnergies.ELECTRICITE) {
     return heatingEnergyCoeffs.ELECTRICITE;
   }
-  throw new Error(`Invalid profile value for heating energy: ${energy}`);
+  throw new Error(
+    `Invalid personalization value for heating energy: ${energy}`
+  );
 };
 
 export const getShowerTimeCoeff = (time: string) => {
@@ -58,7 +62,7 @@ export const getShowerTimeCoeff = (time: string) => {
   } else if (time === showerTimes.PLUS_15) {
     return 2;
   }
-  throw new Error(`Invalid profile value for shower time: ${time}`);
+  throw new Error(`Invalid personalization value for shower time: ${time}`);
 };
 
 export const getCarAgeCoeff = (carAge: string) => {
@@ -71,10 +75,10 @@ export const getCarAgeCoeff = (carAge: string) => {
   } else if (carAge === carAges.PLUS_15) {
     return 2;
   }
-  throw new Error(`Invalid profile value for car age: ${carAge}`);
+  throw new Error(`Invalid personalization value for car age: ${carAge}`);
 };
 
-export const getWhiteProductsCoeff = (profile: PersoForm) => {
+export const getWhiteProductsCoeff = (personalization: PersoForm) => {
   const {
     cookingKettle,
     cookingPlateTime,
@@ -84,7 +88,7 @@ export const getWhiteProductsCoeff = (profile: PersoForm) => {
     cleaningDishwasherTime,
     refrigeratorNumber,
     freezerNumber,
-  } = profile;
+  } = personalization;
 
   const result = [];
   if (cookingKettle) {
@@ -104,8 +108,8 @@ export const getWhiteProductsCoeff = (profile: PersoForm) => {
   return result.reduce((a, b) => a + b, 0);
 };
 
-export const getShowerBathCoeff = (profile: PersoForm) => {
-  const { showerBath, showerNumber, showerTime } = profile;
+export const getShowerBathCoeff = (personalization: PersoForm) => {
+  const { showerBath, showerNumber, showerTime } = personalization;
   if (showerBath === cleaning.BAINS) {
     return 5;
   }

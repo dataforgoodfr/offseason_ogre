@@ -18,7 +18,10 @@ import {
   getPlaneConsumption,
   getTrainConsumption,
 } from "./consumption/computing";
-import { PersoForm } from "../play/Personalization/models/form";
+import {
+  IntermediateValues,
+  PersoForm,
+} from "../play/Personalization/models/form";
 
 export { getConsumptionFromProfile };
 export type { ConsumptionDatum, ConsumptionName, ConsumptionType };
@@ -51,33 +54,37 @@ type ConsumptionName =
 type ConsumptionType = "fossil" | "grey" | "mixte" | "renewable";
 type CarbonProduction = "electric" | "fossil";
 
-const getConsumptionFromProfile = (profile: PersoForm) => {
+const getConsumptionFromProfile = (
+  personalization: PersoForm,
+  intermediateValues: IntermediateValues
+) => {
   return deepFreeze([
-    ...getFossilEnergies(profile),
-    ...getGreyEnergies(profile),
-    ...getMixteEnergies(profile),
-    ...getRenewableEnergies(profile),
+    ...getFossilEnergies(personalization, intermediateValues),
+    ...getGreyEnergies(personalization),
+    ...getMixteEnergies(personalization),
+    ...getRenewableEnergies(personalization, intermediateValues),
   ]) as readonly ConsumptionDatum[];
 };
 
 function getFossilEnergies(
-  profile: PersoForm
+  personalization: PersoForm,
+  intermediateValues: IntermediateValues
 ): (ConsumptionDatum & { type: "fossil" })[] {
   const energies = [
     {
       name: "fossilCar",
       carbonProductionPerKwh: carbonPerKwh.FOSSIL_CAR,
-      value: getFossilCarConsumption(profile),
+      value: getFossilCarConsumption(personalization),
     },
     {
       name: "fossilHeating",
       carbonProductionPerKwh: carbonPerKwh.FOSSIL_HEATING,
-      value: getFossilHeatingConsumption(profile),
+      value: getFossilHeatingConsumption(personalization, intermediateValues),
     },
     {
       name: "plane",
       carbonProductionPerKwh: carbonPerKwh.PLANE,
-      value: getPlaneConsumption(profile),
+      value: getPlaneConsumption(personalization),
     },
   ] as const;
   return energies.map((energie) => ({
@@ -87,34 +94,37 @@ function getFossilEnergies(
   }));
 }
 
-function getRenewableEnergies(profile: PersoForm): (ConsumptionDatum & {
+function getRenewableEnergies(
+  personalization: PersoForm,
+  intermediateValues: IntermediateValues
+): (ConsumptionDatum & {
   type: "renewable";
 })[] {
   const energies = [
     {
       name: "airConditionning",
-      value: getAirConditionningConsumption(profile),
+      value: getAirConditionningConsumption(personalization),
     },
     {
       name: "brownGoods",
-      value: getBrownGoodsConsumption(profile),
+      value: getBrownGoodsConsumption(personalization, intermediateValues),
     },
-    { name: "cleanCook", value: getCleanCookConsumption(profile) },
+    { name: "cleanCook", value: getCleanCookConsumption(intermediateValues) },
     {
       name: "electricCar",
-      value: getElectricCarConsumption(profile),
+      value: getElectricCarConsumption(personalization),
     },
     {
       name: "light",
-      value: getLightConsumption(profile),
+      value: getLightConsumption(personalization),
     },
     {
       name: "noCarbonHeating",
-      value: getNoCarbonHeatingConsumption(profile),
+      value: getNoCarbonHeatingConsumption(personalization, intermediateValues),
     },
     {
       name: "train",
-      value: getTrainConsumption(profile),
+      value: getTrainConsumption(personalization),
     },
   ] as const;
   return energies.map((energie) => ({
@@ -125,12 +135,12 @@ function getRenewableEnergies(profile: PersoForm): (ConsumptionDatum & {
 }
 
 function getMixteEnergies(
-  profile: PersoForm
+  personalization: PersoForm
 ): (ConsumptionDatum & { type: "mixte" })[] {
   const energies = [
     {
       name: "food",
-      value: getFoodConsumption(profile),
+      value: getFoodConsumption(personalization),
     },
   ] as const;
   return energies.map((energie) => ({
@@ -141,13 +151,13 @@ function getMixteEnergies(
 }
 
 function getGreyEnergies(
-  profile: PersoForm
+  personalization: PersoForm
 ): (ConsumptionDatum & { type: "grey" })[] {
   const energies = [
     {
       name: "greyCar",
       carbonProductionPerKwh: carbonPerKwh.GREY_CAR,
-      value: getGreyCarConsumption(profile),
+      value: getGreyCarConsumption(personalization),
     },
     {
       name: "greyHouse",
@@ -157,17 +167,17 @@ function getGreyEnergies(
     {
       name: "greyNumeric",
       carbonProductionPerKwh: carbonPerKwh.GREY_NUMERIC,
-      value: getGreyNumericConsumption(profile),
+      value: getGreyNumericConsumption(personalization),
     },
     {
       name: "greyOther",
       carbonProductionPerKwh: carbonPerKwh.GREY_OTHER,
-      value: getGreyOther(profile),
+      value: getGreyOther(personalization),
     },
     {
       name: "greyTransport",
       carbonProductionPerKwh: carbonPerKwh.GREY_TRANSPORT,
-      value: getGreyTransport(profile),
+      value: getGreyTransport(personalization),
     },
     {
       name: "servicePublic",

@@ -88,12 +88,12 @@ model Personalization {
   numberAdults           Int?
   numberKids             Int?
   car                    Boolean?
-  carEnergy              String?              @default("Essence")
-  carConsumption         Float?               @default(0)
-  carDistanceAlone       Float?               @default(0)
-  carDistanceHoushold    Float?               @default(0)
-  carAge                 String?              @default("Entre 10 et 15 ans")
-  carDistanceCarsharing  Float?               @default(0)
+  carEnergy              String?
+  carConsumption         Float?
+  carDistanceAlone       Float?
+  carDistanceHoushold    Float?
+  carAge                 String?
+  carDistanceCarsharing  Float?
   planeDistance          Float?
   trainDistance          Float?
   houseType              String?
@@ -101,14 +101,14 @@ model Personalization {
   heatingEnergy          String?
   heatingConsumption     Float?
   heatingInvoice         Float?
-  heatPump               Boolean?             @default(false)
+  heatPump               Boolean?
   heatingTemperature     Boolean?
   airConditionning       Boolean?
-  aCRoomNb               Int?                 @default(0)
-  aCDaysNb               Float?               @default(0)
+  aCRoomNb               Int?
+  aCDaysNb               Float?
   showerBath             String?
-  showerNumber           Int?                 @default(1)
-  showerTime             String?              @default("5 à 10 minutes")
+  showerNumber           Int?
+  showerTime             String?
   cookingKettle          Boolean?
   cookingPlateTime       Float?
   cookingOvenTime        Float?
@@ -119,10 +119,10 @@ model Personalization {
   freezerNumber          Int?
   lightingSystem         String?
   eatingVegan            Boolean?
-  eatingVegetables       Boolean?             @default(false)
-  eatingDairies          Boolean?             @default(false)
-  eatingEggs             Boolean?             @default(false)
-  eatingMeat             Boolean?             @default(false)
+  eatingVegetables       Boolean?
+  eatingDairies          Boolean?
+  eatingEggs             Boolean?
+  eatingMeat             Boolean?
   eatingTinDrink         Float?
   eatingZeroWaste        Boolean?
   eatingLocal            Boolean?
