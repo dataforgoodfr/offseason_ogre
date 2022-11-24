@@ -75,16 +75,6 @@ function FormVerification({
           columns={buildColumns()}
           disableSelectionOnClick
           experimentalFeatures={{ newEditingApi: true }}
-          //   processRowUpdate={(newRow, oldRow) => {
-          //     if (newRow.teamId !== oldRow.teamId) {
-          //       changeTeamMutation.mutate({
-          //         teamId: newRow.teamId,
-          //         userId: newRow.id,
-          //       });
-          //     }
-          //     return newRow;
-          //   }
-          // }
         />
       </DataGridBox>
       <Grid
