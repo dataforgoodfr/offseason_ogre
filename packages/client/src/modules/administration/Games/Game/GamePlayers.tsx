@@ -28,10 +28,13 @@ import { useGameId } from "./utils";
 import { hasGameStarted } from "../utils";
 import { Icon } from "../../../common/components/Icon";
 import { DataGridBox } from "./GameTeams.styles";
+import { FormVerification } from "./FormVerification";
 
 export { GamePlayers };
 
 function GamePlayers({ game }: { game: IGame }): JSX.Element {
+  const [openFormValidation, setOpenFormValidation] = useState<boolean>(false);
+
   const gameId = useGameId();
 
   const playersQuery = usePlayers(gameId);
@@ -62,17 +65,6 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(`/api/games/${gameId}`);
-      },
-    }
-  );
-
-  const validateForms = useMutation<Response, { message: string }>(
-    () => {
-      return axios.get(`/api/games/${game.id}/validate`);
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
       },
     }
   );
@@ -115,11 +107,11 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
               } les formulaires`}
             </Button>
             <Button
-              onClick={() => validateForms.mutate()}
+              onClick={() => setOpenFormValidation(true)}
               variant="contained"
               sx={{ marginRight: "auto", ml: 2, height: "80%" }}
             >
-              Valider les formulaires
+              Vérifier les formulaires
             </Button>
           </Grid>
         </>
@@ -143,6 +135,10 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
           }}
         />
       </DataGridBox>
+      <FormVerification
+        openFormValidation={openFormValidation}
+        setOpenFormValidation={setOpenFormValidation}
+      />
     </>
   );
 }

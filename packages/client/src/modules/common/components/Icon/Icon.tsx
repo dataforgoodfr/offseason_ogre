@@ -28,6 +28,7 @@ import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 import { SvgIconProps } from "@mui/material";
 import PersonPinRounded from "@mui/icons-material/PersonPinRounded";
 import {
+  Close,
   Computer,
   ConnectingAirports,
   DirectionsCar,
@@ -54,6 +55,7 @@ const ICONS = {
   "check-circle": CheckCircle,
   "check-doubled": DoneAll,
   clothes: DryCleaning,
+  close: Close,
   computer: Computer,
   consumption: ShoppingCart,
   draft: HistoryEdu,

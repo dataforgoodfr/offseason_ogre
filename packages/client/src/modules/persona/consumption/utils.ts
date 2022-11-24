@@ -37,46 +37,42 @@ export const getHeatingConsumptionInvoiceCoeff = (
   return heatingInvoice / getHeatingEnergyCoeff(heatingEnergy);
 };
 
-const getHeatingEnergyCoeff = (energy: string) => {
-  if (energy === houseEnergies.GAZ) {
-    return heatingEnergyCoeffs.GAZ;
-  } else if (energy === houseEnergies.FIOUL) {
-    return heatingEnergyCoeffs.FIOUL;
-  } else if (energy === houseEnergies.BOIS) {
-    return heatingEnergyCoeffs.BOIS;
-  } else if (energy === houseEnergies.ELECTRICITE) {
-    return heatingEnergyCoeffs.ELECTRICITE;
-  }
-  throw new Error(
-    `Invalid personalization value for heating energy: ${energy}`
-  );
+const heatingEnergyToCoeff = {
+  [houseEnergies.GAZ]: heatingEnergyCoeffs.GAZ,
+  [houseEnergies.FIOUL]: heatingEnergyCoeffs.FIOUL,
+  [houseEnergies.BOIS]: heatingEnergyCoeffs.BOIS,
+  [houseEnergies.ELECTRICITE]: heatingEnergyCoeffs.ELECTRICITE,
 };
 
-export const getShowerTimeCoeff = (time: string) => {
-  if (time === showerTimes.MOINS_5) {
-    return 0.5;
-  } else if (time === showerTimes.CINQ_DIX) {
-    return 0.75;
-  } else if (time === showerTimes.DIX_QUINZE) {
-    return 1.25;
-  } else if (time === showerTimes.PLUS_15) {
-    return 2;
-  }
-  throw new Error(`Invalid personalization value for shower time: ${time}`);
+const carAgeToCoeff = {
+  [carAges.MOINS_5]: 3,
+  [carAges.CINQ_DIX]: 2,
+  [carAges.DIX_QUINZE]: 1,
+  [carAges.PLUS_15]: 1,
 };
 
-export const getCarAgeCoeff = (carAge: string) => {
-  if (carAge === carAges.MOINS_5) {
-    return 3;
-  } else if (carAge === carAges.CINQ_DIX) {
-    return 0.75;
-  } else if (carAge === carAges.DIX_QUINZE) {
-    return 1.25;
-  } else if (carAge === carAges.PLUS_15) {
-    return 2;
-  }
-  throw new Error(`Invalid personalization value for car age: ${carAge}`);
+const showerTimesToCoeff = {
+  [showerTimes.MOINS_5]: 0.5,
+  [showerTimes.CINQ_DIX]: 0.75,
+  [showerTimes.DIX_QUINZE]: 1.25,
+  [showerTimes.PLUS_15]: 2,
 };
+
+const getCoeff = (configName: string, mapping: any) => (key: string) => {
+  const coeff = mapping[key];
+  if (coeff == null) {
+    throw new Error(`Invalid personalization value for ${configName}: ${key}`);
+  }
+
+  return coeff;
+};
+
+export const getCarAgeCoeff = getCoeff("car age", carAgeToCoeff);
+export const getShowerTimeCoeff = getCoeff("shower time", showerTimesToCoeff);
+export const getHeatingEnergyCoeff = getCoeff(
+  "heating energy",
+  heatingEnergyToCoeff
+);
 
 export const getWhiteProductsCoeff = (personalization: PersoForm) => {
   const {
