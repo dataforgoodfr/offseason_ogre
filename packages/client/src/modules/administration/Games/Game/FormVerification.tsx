@@ -469,6 +469,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       minWidth: 270,
       headerAlign: "center",
       align: "center",
+      valueFormatter: ({ value }) => parseFloat(value.toFixed(2)) || 0,
       editable: false,
     },
     {

@@ -34,11 +34,7 @@ export const getHeatingConsumptionInvoiceCoeff = (
   personalization: PersoForm
 ) => {
   const { heatingInvoice, heatingEnergy } = personalization;
-  return (
-    parseFloat(
-      (heatingInvoice / getHeatingEnergyCoeff(heatingEnergy))?.toFixed(2)
-    ) || 0
-  );
+  return heatingInvoice / getHeatingEnergyCoeff(heatingEnergy);
 };
 
 const heatingEnergyToCoeff = {
