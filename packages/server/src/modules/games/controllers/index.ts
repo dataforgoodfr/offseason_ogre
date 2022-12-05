@@ -12,6 +12,7 @@ import { removeTeamController } from "./removeTeamController";
 import { putPlayersInTeamsController } from "./putPlayersInTeamsController";
 import { getDefault } from "../services/personalization";
 import { validateProfilesController } from "./validateProfilesController";
+import { updateProfilesController } from "./updateProfilesController";
 
 const crudController = {
   createController,
@@ -26,6 +27,7 @@ const crudController = {
   removeTeamController,
   updateGame,
   validateProfilesController,
+  updateProfilesController,
 };
 const controllers = {
   ...crudController,

@@ -5,6 +5,9 @@
   "message.error.register.GAME_NOT_FOUND": "La partie n'a pas pu être trouvée. Vérifiez son id et recommencez.",
   "message.error.register.USER_ALREADY_JOINED_GAME": "Vous êtes déjà inscrit.e à cette partie.",
 
+  "form.validation.yellow": "Les cases colorées en jaune contiennent les valeurs à vérifier.",
+  "form.validation.heating": "Concernant le chauffage, si le joueur a donné deux valeurs (facture en € et consommation en kWh), il est nécessaire de vérifier que les deux valeurs correspondent. Si ce n’est pas le cas, merci de ne laisser que la valeur la plus probable et de supprimer l’autre.",
+
   "launch.success.confirmation": "Êtes-vous sûr.e de vouloir lancer l'atelier ?",
   "launch.error.playersWithoutTeams": "Certains joueurs ne sont pas répartis dans une équipe, répartissez tous les joueurs avant de démarrer la partie.",
   "launch.error.playerWithUnvalidatedForm": "Attention, les données d'un joueur ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
