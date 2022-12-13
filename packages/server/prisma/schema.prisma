@@ -70,7 +70,7 @@ model Team {
 
 model Profile {
   id                Int             @id @default(autoincrement())
-  player            Players?     
+  player            Players?
   personalization   Personalization @relation(fields: [personalizationId], references: [id])
   personalizationId Int
   status            ProfileStatus   @default(draft)
@@ -84,7 +84,7 @@ enum ProfileStatus {
 
 model Personalization {
   id                     Int                 @id @default(autoincrement())
-  origin                 String             
+  origin                 String
   personalizationName    PersonalizationName
   numberAdults           Int?
   numberKids             Int?
