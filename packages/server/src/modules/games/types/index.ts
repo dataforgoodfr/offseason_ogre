@@ -2,6 +2,7 @@ export type { Game };
 
 interface Game {
   id: number;
+  code: string;
   date: Date;
   description: string;
   name: string;
