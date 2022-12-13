@@ -9,6 +9,7 @@ datasource db {
 
 model Game {
   id               Int       @id @default(autoincrement())
+  code             String    @unique
   date             DateTime
   description      String    @default("")
   name             String
