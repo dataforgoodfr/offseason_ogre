@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
-import OpenInNew from "@mui/icons-material/OpenInNew";
 
 import { Dialog } from "../../common/components/Dialog";
+import { Icon } from "../../common/components/Icon";
 
 export { StepHelpDialog, ActionHelpDialog };
 
@@ -63,7 +63,7 @@ function ActionHelpDialog({
             component="a"
             target="_blank"
             href={helpCardLink}
-            startIcon={<OpenInNew />}
+            startIcon={<Icon name="open-in-new-tab" />}
           >
             Ouvrir la carte
           </Button>

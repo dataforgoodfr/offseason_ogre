@@ -1,12 +1,18 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 import { services } from "../services";
+import { services as playersServices } from "../../players/services";
 import { changeTeamController } from "./changeTeamController";
 import { getPlayedGames } from "../services/getPlayedGames";
 import { getPlayers } from "../services/getPlayers";
 import { registerController } from "./registerController";
 import { dateSchema } from "./types";
 import { removePlayerController } from "./removePlayerController";
+import { removeTeamController } from "./removeTeamController";
+import { putPlayersInTeamsController } from "./putPlayersInTeamsController";
+import { getDefault } from "../services/personalization";
+import { validateProfilesController } from "./validateProfilesController";
+import { updateProfilesController } from "./updateProfilesController";
 
 const crudController = {
   createController,
@@ -15,9 +21,13 @@ const crudController = {
   getGame,
   getPlayedGamesController,
   getPlayersController,
+  putPlayersInTeamsController,
   registerController,
   removePlayerController,
+  removeTeamController,
   updateGame,
+  validateProfilesController,
+  updateProfilesController,
 };
 const controllers = {
   ...crudController,
@@ -80,12 +90,16 @@ async function updateGame(request: Request, response: Response) {
     description: z.string().optional(),
     date: dateSchema.optional(),
     name: z.string().optional(),
-    status: z.enum(["draft", "ready", "finished"]).optional(),
+    status: z.enum(["draft", "ready", "playing", "finished"]).optional(),
   });
 
   const { id } = paramsSchema.parse(request.params);
   const update = bodySchema.parse(request.body);
 
+  if (update?.status === "playing") {
+    const defaultPersonalization = await getDefault();
+    await playersServices.setDefaultProfiles(id, defaultPersonalization);
+  }
   const document = await services.update(id, update);
   response.status(200).json({ document });
 }

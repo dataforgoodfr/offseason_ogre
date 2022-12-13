@@ -1,7 +1,14 @@
-import { consumption, ConsumptionDatum } from "./consumption";
+import { PersoForm } from "../play/Personalization/models/form";
+import { fillPersonalization } from "./utils";
+import {
+  computeCarbonProductionElectricMix,
+  computeCarbonFootprint,
+} from "../play/utils/carbonFootprint";
+import { ConsumptionDatum, getConsumptionFromProfile } from "./consumption";
 import { production, ProductionDatum } from "./production";
+import { computeIntermediateValues } from "./consumption/computing";
 
-export { persona };
+export { buildInitialPersona };
 export type { Persona };
 
 interface Persona {
@@ -13,11 +20,33 @@ interface Persona {
   production: ProductionDatum[];
 }
 
-const persona: Persona = {
-  budget: 13.7,
-  carbonFootprint: 32.73,
-  actionPoints: 0,
-  points: 0,
-  consumption,
-  production,
+const buildInitialPersona: (personalization: PersoForm) => Persona = (
+  personalization: PersoForm
+) => {
+  const formattedPersonalization = fillPersonalization(personalization);
+  const intermediateValues = computeIntermediateValues(
+    formattedPersonalization
+  );
+  const consumption = getConsumptionFromProfile(
+    formattedPersonalization,
+    intermediateValues
+  );
+
+  const carbonProductionElectricMix =
+    computeCarbonProductionElectricMix(production);
+  const carbonFootprint = computeCarbonFootprint(
+    carbonProductionElectricMix,
+    consumption as ConsumptionDatum[]
+  );
+
+  const persona: Persona = {
+    budget: 13.7,
+    actionPoints: 0,
+    points: 0,
+    carbonFootprint,
+    consumption,
+    production,
+  };
+
+  return persona;
 };

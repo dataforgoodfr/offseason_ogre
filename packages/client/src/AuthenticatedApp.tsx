@@ -1,15 +1,24 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./modules/auth/authProvider";
-import { Games } from "./modules/games";
-import { Game } from "./modules/games";
-import { GameConsoleView, MyGames } from "./modules/play";
-import { PlayerPersona } from "./modules/play";
-import { Stats } from "./modules/play/Stats";
-import { Players } from "./modules/players";
-import { Settings, Teachers } from "./modules/teachers";
-import { Layout as AdministrationLayout } from "./modules/administration";
-import { PlayLayout } from "./modules/play/PlayLayout";
-import { PlayerActionsPage } from "./modules/play/playerActions";
+import {
+  Players,
+  Games,
+  Game,
+  Layout as AdministrationLayout,
+  Settings,
+  Teachers,
+} from "./modules/administration";
+import {
+  GameConsoleView,
+  MyGames,
+  PlayerPersona,
+  PlayLayout,
+  PlayerActionsPage,
+  Stats,
+} from "./modules/play";
+import { PersonalizationChoice } from "./modules/play/Personalization";
+import { PersonalizationForm } from "./modules/play/Personalization/PersonalizationForm";
+import { PersonalizationPredefinedPersona } from "./modules/play/Personalization/PersonalizationPredefinedPersona";
 
 export { AuthenticatedApp };
 
@@ -34,6 +43,22 @@ function AuthenticatedApp() {
         <Route path="games/:id" element={<PlayerPersona />} />
         <Route path="games/:id/persona" element={<PlayerPersona />} />
         <Route path="games/:id/persona/stats" element={<Stats />} />
+        <Route
+          path="games/:id/personalize"
+          element={<PersonalizationChoice />}
+        />
+        <Route
+          path="games/:id/personalize/choice"
+          element={<PersonalizationChoice />}
+        />
+        <Route
+          path="games/:id/personalize/form"
+          element={<PersonalizationForm />}
+        />
+        <Route
+          path="games/:id/personalize/oilgre"
+          element={<PersonalizationPredefinedPersona />}
+        />
         <Route
           path="games/:id/persona/actions"
           element={<PlayerActionsPage />}

@@ -1,4 +1,5 @@
 import { database } from "../../../database";
+import { NO_TEAM } from "../../teams/constants/teams";
 import { services as teamServices } from "../../teams/services";
 import { Game } from "../types";
 import { initState } from "./initState";
@@ -22,6 +23,7 @@ async function getDocument(id: number): Promise<Model | null> {
     where: { id },
     include: {
       teams: {
+        where: { isDeleted: false },
         include: {
           players: {
             include: {
@@ -31,11 +33,20 @@ async function getDocument(id: number): Promise<Model | null> {
                   action: true,
                 },
               },
+              profile: {
+                include: {
+                  personalization: true,
+                },
+              },
             },
           },
           actions: {
             include: {
-              action: true,
+              action: {
+                include: {
+                  pointsIntervals: true,
+                },
+              },
             },
           },
         },
@@ -50,11 +61,7 @@ async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {
 
 async function create(document: Omit<Model, "id">): Promise<Model> {
   const game = await model.create({ data: document });
-  await teamServices.create({ gameId: game.id, name: "Equipe 1" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 2" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 3" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 4" });
-  await teamServices.create({ gameId: game.id, name: "Equipe 5" });
+  await teamServices.create({ gameId: game.id, name: NO_TEAM });
   return game;
 }
 

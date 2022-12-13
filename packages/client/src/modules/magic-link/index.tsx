@@ -7,6 +7,8 @@ import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import { ErrorAlert, SuccessAlert } from "../alert";
 import { Button, Typography, useTheme } from "@mui/material";
+import { handleApiError } from "../../utils/request";
+import { t } from "../translations";
 
 interface MagicForm {
   email: string;
@@ -55,7 +57,11 @@ function MagicLink() {
     <>
       {mutation.isError && (
         <ErrorAlert
-          message={mutation.error.response?.data.message || "Unknown error"}
+          message={handleApiError(mutation.error, {
+            USER_DOES_NOT_EXIST: () =>
+              t("message.error.signup.USER_DOES_NOT_EXIST"),
+            default: () => t("message.error.global.UNEXPECTED"),
+          })}
         ></ErrorAlert>
       )}
       <div className="flex flex-col">

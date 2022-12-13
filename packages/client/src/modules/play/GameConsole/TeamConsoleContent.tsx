@@ -32,7 +32,12 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
 
   return (
     <PlayBox display="flex" flexDirection="column" gap={3} mt={2} pt={3}>
-      <Typography display="flex" justifyContent="center" variant="h4">
+      <Typography
+        sx={{ lineBreak: "anywhere" }}
+        display="flex"
+        justifyContent="center"
+        variant="h4"
+      >
         {`Détails ${team.name}`}{" "}
         {team.scenarioName ? ` - ${team.scenarioName}` : ""}
       </Typography>

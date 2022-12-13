@@ -1,25 +1,42 @@
 import _ from "lodash";
 
-export { businessErrors, BusinessError, createBusinessError };
+export { BusinessError, createBusinessError };
 
-const businessErrors = {
-  UNEXPECTED: "UNEXPECTED",
-} as const;
+type ErrorCode =
+  | "USER_DOES_NOT_EXIST"
+  | "GAME_ALREADY_STARTED"
+  | "GAME_NOT_FOUND"
+  | "USER_ALREADY_JOINED_GAME"
+  | "UNEXPECTED";
 
 const errorsConfig = {
+  USER_DOES_NOT_EXIST: {
+    message: "User with email {email} does not exist.",
+  },
+  GAME_ALREADY_STARTED: {
+    message: "Can't join game that already started",
+  },
+  GAME_NOT_FOUND: {
+    message: "Could not find game with id {id}",
+  },
+  USER_ALREADY_JOINED_GAME: {
+    message: "User {userId} already joined game {gameId}",
+  },
   UNEXPECTED: {
     message: "An unexpected error occured",
   },
 } as const;
 
 interface ErrorInterpolations {
-  UNEXPECTED: number;
+  USER_DOES_NOT_EXIST: { email: string };
+  GAME_ALREADY_STARTED: undefined;
+  GAME_NOT_FOUND: { id: number };
+  USER_ALREADY_JOINED_GAME: { userId: number; gameId: number };
+  UNEXPECTED: undefined;
 }
 
-type ErrorCode = typeof businessErrors[keyof typeof businessErrors];
-
 class BusinessError extends Error {
-  public readonly code: ErrorCode = businessErrors.UNEXPECTED;
+  public readonly code: ErrorCode = "UNEXPECTED";
 
   constructor(errorCodeOrMessage: ErrorCode | string, interpolations?: any) {
     const errorMessage = getErrorMessage(errorCodeOrMessage, interpolations);
@@ -29,7 +46,7 @@ class BusinessError extends Error {
     this.name = this.constructor.name;
     this.code = isErrorCode(errorCodeOrMessage)
       ? errorCodeOrMessage
-      : businessErrors.UNEXPECTED;
+      : "UNEXPECTED";
   }
 }
 

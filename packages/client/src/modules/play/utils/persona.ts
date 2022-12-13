@@ -5,8 +5,10 @@ import {
   PlayerActions,
   TeamAction,
 } from "../../../utils/types";
+import { ConsumptionDatum } from "../../persona/consumption";
 import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
+import { PersoForm } from "../Personalization/models/form";
 import {
   computeCarbonFootprint,
   computeCarbonProductionElectricMix,
@@ -20,11 +22,13 @@ export { buildPersona };
 
 function buildPersona(
   game: IGameWithTeams,
+  personalization: PersoForm,
   basePersona: Persona,
   playerActions: PlayerActions[],
   teamActions: TeamAction[]
 ) {
   const personaBySteps = getResultsByStep(
+    personalization,
     basePersona,
     playerActions,
     teamActions
@@ -51,6 +55,7 @@ function buildPersona(
 }
 
 function getResultsByStep(
+  personalization: PersoForm,
   basePersona: Persona,
   playerActions: PlayerActions[],
   teamActions: TeamAction[]
@@ -58,12 +63,19 @@ function getResultsByStep(
   return Object.fromEntries(
     range(0, MAX_NUMBER_STEPS + 1).map((step) => [
       step,
-      computeResultsByStep(basePersona, step, playerActions, teamActions),
+      computeResultsByStep(
+        personalization,
+        basePersona,
+        step,
+        playerActions,
+        teamActions
+      ),
     ])
   );
 }
 
 function computeResultsByStep(
+  personalization: PersoForm,
   basePersona: Persona,
   step: number,
   playerActions: PlayerActions[] = [],
@@ -105,8 +117,12 @@ function computeResultsByStep(
     )
   );
 
-  const budgetPoints = computeBudgetPoints(budget);
-  const co2Points = computeCO2Points(basePersona.carbonFootprint);
+  const budgetPoints =
+    step >= MAX_NUMBER_STEPS - 1 ? computeBudgetPoints(budget) : 0;
+  const co2Points =
+    step >= MAX_NUMBER_STEPS - 1
+      ? computeCO2Points(basePersona.carbonFootprint)
+      : 0;
   const points = playerPoints + teamPoints + budgetPoints + co2Points;
 
   const performedActionsNames = performedPlayerActions.map(
@@ -114,8 +130,8 @@ function computeResultsByStep(
   );
 
   const newConsumption = computeNewConsumptionData(
-    basePersona,
-    performedActionsNames
+    performedActionsNames,
+    personalization
   );
 
   const newProduction = computeNewProductionData(
@@ -132,7 +148,7 @@ function computeResultsByStep(
     computeCarbonProductionElectricMix(newProduction);
   const carbonFootprint = computeCarbonFootprint(
     carbonProductionElectricMix,
-    newConsumption
+    newConsumption as ConsumptionDatum[]
   );
 
   return {

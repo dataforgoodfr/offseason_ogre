@@ -7,6 +7,7 @@ async function initState({ gameId }: { gameId: number }) {
     where: { id: gameId },
     include: {
       teams: {
+        where: { isDeleted: false },
         include: {
           players: {
             include: {
@@ -16,11 +17,20 @@ async function initState({ gameId }: { gameId: number }) {
                   action: true,
                 },
               },
+              profile: {
+                include: {
+                  personalization: true,
+                },
+              },
             },
           },
           actions: {
             include: {
-              action: true,
+              action: {
+                include: {
+                  pointsIntervals: true,
+                },
+              },
             },
           },
         },

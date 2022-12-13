@@ -11,12 +11,16 @@ jobs:
           node-version: "16.14.0"
       - name: Install modules
         run: yarn install
+
       - name: Run lint for the client
         run: yarn workspace ogre-client lint
       - name: Run prettier for the client
         run: yarn workspace ogre-client prettier:check
       - name: Run type-check for the client
         run: yarn workspace ogre-client check-type
+      - name: Run tests for the client
+        run: yarn workspace ogre-client test
+
       - name: Run lint for the server
         run: yarn workspace ogre-server lint
       - name: Run prettier for the server

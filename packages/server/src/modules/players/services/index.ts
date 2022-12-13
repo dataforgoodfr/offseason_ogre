@@ -1,4 +1,4 @@
-import { Players as PlayersPrisma } from "@prisma/client";
+import { Personalization, Players as PlayersPrisma } from "@prisma/client";
 import { database } from "../../../database";
 import { Players } from "../types";
 
@@ -11,6 +11,8 @@ const crudServices = {
   find,
   update,
   updateMany,
+  setDefaultProfiles,
+  validateProfiles,
 };
 
 const services = { ...crudServices };
@@ -29,6 +31,11 @@ async function find(gameId: number, userId: number): Promise<Players | null> {
         },
       },
       team: true,
+      profile: {
+        include: {
+          personalization: true,
+        },
+      },
     },
   }) as unknown as Players;
 }
@@ -56,6 +63,81 @@ async function update(
       team: true,
     },
   }) as unknown as Players;
+}
+
+async function setDefaultProfiles(
+  gameId: number,
+  defaultPersonalization: Personalization
+): Promise<void> {
+  const playersWithoutProfiles = await model.findMany({
+    where: {
+      OR: [
+        {
+          gameId,
+          profileId: null,
+        },
+        {
+          gameId,
+          profile: {
+            status: {
+              not: {
+                equals: "validated",
+              },
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      profile: true,
+    },
+  });
+
+  return playersWithoutProfiles.forEach(async (player: any) => {
+    const profile = await database.profile.create({
+      data: {
+        personalizationId: defaultPersonalization.id,
+        status: "validated",
+      },
+    });
+    await model.update({
+      where: {
+        userId_gameId: {
+          gameId,
+          userId: player.userId,
+        },
+      },
+      data: {
+        profileId: profile.id,
+      },
+    });
+  });
+}
+
+async function validateProfiles(gameId: number): Promise<void> {
+  const playersToValidate = await model.findMany({
+    where: {
+      gameId,
+      profile: {
+        status: {
+          equals: "pendingValidation",
+        },
+      },
+    },
+  });
+
+  return playersToValidate.forEach(async (player: PlayersPrisma) => {
+    if (player.profileId) {
+      await database.profile.update({
+        where: {
+          id: player.profileId,
+        },
+        data: {
+          status: "validated",
+        },
+      });
+    }
+  });
 }
 
 async function updateMany(

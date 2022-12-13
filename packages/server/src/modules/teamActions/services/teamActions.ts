@@ -49,7 +49,11 @@ async function getMany({
       teamId,
     },
     include: {
-      action: true,
+      action: {
+        include: {
+          pointsIntervals: true,
+        },
+      },
     },
   });
 }

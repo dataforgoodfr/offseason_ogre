@@ -1,7 +1,5 @@
 import { Box, Grid, useTheme } from "@mui/material";
 import { ValidateActions } from "./Validation";
-import { PlayerHeader } from "../PlayerPersona/PlayerHeader";
-import { PlayerHeaderGrid } from "./PlayerHeaderGrid";
 import { useCurrentStep, useMyTeam } from "../context/playContext";
 import { PlayBox } from "../Components";
 import { TeamActionsHeader } from "./TeamActionsHeader";
@@ -10,8 +8,9 @@ import { SynthesisScenarioName } from "./SynthesisContent";
 import { PlayerActionsContent } from "./PlayerActionsContent";
 import { PlayerActionsHeader } from "./PlayerActionsHeader";
 import { SynthesisBudget, SynthesisCarbon } from "../Components/Synthesis";
+import { PlayerHeaderGrid } from "../PlayerPersona";
 
-export { PlayerActionsPage, PlayerHeader };
+export { PlayerActionsPage };
 
 function PlayerActionsPage() {
   const currentStep = useCurrentStep();

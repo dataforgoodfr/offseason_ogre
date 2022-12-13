@@ -1,17 +1,12 @@
 import {
   Box,
   Grid,
-  Typography,
   Button,
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Card,
   CardActionArea,
   CardContent,
-  useTheme,
 } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { IGame, ITeam, IUser } from "../../../utils/types";
@@ -29,6 +24,8 @@ import {
   formatBudget,
   formatCarbonFootprint,
 } from "../../../lib/formatter";
+import { Typography } from "../../common/components/Typography";
+import { RowItem } from "../../common/components/RowItem";
 
 export { PlayerHeader, Header, Actions };
 
@@ -57,72 +54,82 @@ function PlayerHeader() {
           }}
         >
           <GameStepper step={game.step} />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            ml: "auto",
+            mr: "auto",
+            pt: 2,
+            textAlign: "center",
+          }}
+        >
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
             {formatPoints(currentPersona.points || 0)} <Icon name="trophy" />
           </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            ml: "auto",
-            mr: "auto",
-            textAlign: "center",
-          }}
-        >
-          <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="production" sx={{ mr: 1 }} />{" "}
-            {sumAllValues(currentPersona.production) || 0} kWh
-          </Typography>
-          <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="consumption" sx={{ mr: 1 }} />{" "}
-            {sumAllValues(currentPersona.consumption) || 0} kWh
-          </Typography>
-          <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="budget" sx={{ mr: 1 }} />{" "}
-            {formatBudget(latestPersona.budget || 0)} €/j
-          </Typography>
-          <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-            <Icon name="carbon-footprint" sx={{ mr: 1 }} />{" "}
-            {formatCarbonFootprint(currentPersona.carbonFootprint || 0)} kg/j
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sx={{
-            ml: "auto",
-            mr: "auto",
-            textAlign: "center",
-            mb: 2,
-          }}
-        >
-          <ScoresLegendLayout>
-            {
-              <Box>
-                <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="production" sx={{ mr: 1 }} />
-                  <br />
-                  Production en kiloWattheures
-                </Typography>
-                <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="consumption" sx={{ mr: 1 }} />
-                  <br />
-                  Consommation en kiloWattheures
-                </Typography>
-                <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="budget" sx={{ mr: 1 }} />
-                  <br />
-                  Budget en euro à dépenser par jour
-                </Typography>
-                <Typography sx={{ fontSize: "12px", fontWeight: "400", mt: 1 }}>
-                  <Icon name="carbon-footprint" sx={{ mr: 1 }} />
-                  <br />
-                  CO2 produit en kilogrammes par jour
-                </Typography>
-              </Box>
+
+          <RowItem
+            sx={{ mt: 1 }}
+            left={
+              <>
+                <Icon name="production" sx={{ mr: 1 }} />
+                <Typography sx={{ fontSize: "12px" }}> Production</Typography>
+              </>
             }
-          </ScoresLegendLayout>
+            right={
+              <Typography sx={{ fontSize: "12px" }}>
+                {sumAllValues(currentPersona.production) || 0} kWh
+              </Typography>
+            }
+          />
+          <RowItem
+            sx={{ mt: 1 }}
+            left={
+              <>
+                <Icon name="consumption" sx={{ mr: 1 }} />
+                <Typography sx={{ fontSize: "12px" }}> Consommation</Typography>
+              </>
+            }
+            right={
+              <Typography sx={{ fontSize: "12px" }}>
+                {sumAllValues(currentPersona.consumption) || 0} kWh
+              </Typography>
+            }
+          />
+          <RowItem
+            sx={{ mt: 1 }}
+            left={
+              <>
+                <Icon name="budget" sx={{ mr: 1 }} />
+                <Typography sx={{ fontSize: "12px" }}>
+                  Budget restant
+                </Typography>
+              </>
+            }
+            right={
+              <Typography sx={{ fontSize: "12px" }}>
+                {formatBudget(latestPersona.budget || 0)} €/j
+              </Typography>
+            }
+          />
+          <RowItem
+            sx={{ mt: 1 }}
+            left={
+              <>
+                <Icon name="carbon-footprint" sx={{ mr: 1 }} />
+                <Typography sx={{ fontSize: "12px" }}>
+                  Empreinte carbone
+                </Typography>
+              </>
+            }
+            right={
+              <Typography sx={{ fontSize: "12px" }}>
+                {formatCarbonFootprint(currentPersona.carbonFootprint || 0)}{" "}
+                kg/j
+              </Typography>
+            }
+          />
         </Grid>
       </PlayBox>
       <Actions />
@@ -170,7 +177,6 @@ function Header({
 }
 
 function Actions() {
-  const gameId = useGameId();
   const { game, isStepFinished } = usePlay();
   const currentStep = useCurrentStep();
 
@@ -191,7 +197,7 @@ function Actions() {
     >
       <Button
         component={Link}
-        to={`/play/games/${gameId}/persona/stats`}
+        to={`/play/games/${game.id}/persona/stats`}
         variant="contained"
         color="secondary"
         sx={{
@@ -202,7 +208,7 @@ function Actions() {
       </Button>
       <Button
         component={Link}
-        to={`/play/games/${gameId}/persona/actions`}
+        to={`/play/games/${game.id}/persona/actions`}
         variant="contained"
         color="primary"
         sx={{
@@ -216,53 +222,4 @@ function Actions() {
       </Button>
     </Box>
   );
-}
-
-function ScoresLegendLayout({ children }: { children: any }) {
-  const theme = useTheme();
-  return (
-    <Accordion
-      sx={{
-        mb: 2,
-        boxShadow: "none",
-      }}
-    >
-      <AccordionSummary
-        expandIcon={<Icon name="arrow-forward" />}
-        aria-controls="infobh-content"
-        id="infobh-header"
-        sx={{
-          backgroundColor: (theme) => theme.palette.primary.main,
-          "& .MuiAccordionSummary-expandIconWrapper": {
-            color: "white",
-            position: "absolute",
-            ml: "auto",
-            mr: "auto",
-            transform: "rotate(90deg)",
-          },
-          "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
-            transform: "rotate(270deg)",
-          },
-        }}
-      ></AccordionSummary>
-      <AccordionDetails
-        sx={{
-          pt: 2,
-          bgcolor: theme.palette.primary.main,
-          color: "white",
-          borderRadius: "5px",
-          border: "2px solid white",
-        }}
-      >
-        {children}
-      </AccordionDetails>
-    </Accordion>
-  );
-}
-
-function useGameId() {
-  const { id } = useParams();
-  if (!id) throw new Error("game id must be defined");
-  const gameId = +id;
-  return gameId;
 }
