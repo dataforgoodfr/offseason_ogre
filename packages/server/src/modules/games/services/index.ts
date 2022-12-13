@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { database } from "../../../database";
 import { NO_TEAM } from "../../teams/constants/teams";
 import { services as teamServices } from "../../teams/services";
@@ -18,7 +19,17 @@ const services = { ...crudServices, initState, register };
 
 export { services };
 
-async function getDocument(id: number): Promise<Model | null> {
+async function getDocument(
+  idOrWhere: number | Prisma.GameFindManyArgs["where"]
+): Promise<Model | null> {
+  let id;
+  if (typeof idOrWhere === "object") {
+    const [document] = await model.findMany({ where: idOrWhere });
+    id = document?.id;
+  } else {
+    id = idOrWhere;
+  }
+
   return model.findUnique({
     where: { id },
     include: {

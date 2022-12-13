@@ -17,7 +17,7 @@ const errorsConfig = {
     message: "Can't join game that already started",
   },
   GAME_NOT_FOUND: {
-    message: "Could not find game with id {id}",
+    message: "Could not find game with {prop} {value}",
   },
   USER_ALREADY_JOINED_GAME: {
     message: "User {userId} already joined game {gameId}",
@@ -30,7 +30,7 @@ const errorsConfig = {
 interface ErrorInterpolations {
   USER_DOES_NOT_EXIST: { email: string };
   GAME_ALREADY_STARTED: undefined;
-  GAME_NOT_FOUND: { id: number };
+  GAME_NOT_FOUND: { prop: string; value: any };
   USER_ALREADY_JOINED_GAME: { userId: number; gameId: number };
   UNEXPECTED: undefined;
 }
