@@ -28,6 +28,7 @@ import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 import { SvgIconProps } from "@mui/material";
 import PersonPinRounded from "@mui/icons-material/PersonPinRounded";
 import {
+  Badge,
   Close,
   Computer,
   ConnectingAirports,
@@ -49,6 +50,7 @@ const ICONS = {
   "access-time": AccessTimeIcon,
   "arrow-back": ArrowBackIosIcon,
   "arrow-forward": ArrowForwardIosIcon,
+  badge: Badge,
   "bar-chart": BarChartRoundedIcon,
   budget: Paid,
   car: DirectionsCar,
