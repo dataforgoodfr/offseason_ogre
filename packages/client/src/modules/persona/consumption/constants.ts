@@ -32,6 +32,7 @@ export const numericEquipment = {
 export const transportCoeffs = {
   ELECTRIC_CAR: 0.45,
   MEAN_FOSSIL_CAR_CONSUMPTION: 0.07,
+  FOSSIL_CAR: 10,
   TRAIN: 0.133,
   PLANE: 0.41,
 };
