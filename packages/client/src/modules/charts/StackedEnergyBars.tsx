@@ -28,6 +28,11 @@ function StackedEnergyBars({
   const theme = useTheme();
   const { game } = usePlay();
 
+  const maximumTotal = Math.max(
+    ...data.map((pileData: any) => pileData.total),
+    0
+  );
+
   const CustomTooltip = ({
     active,
     payload,
@@ -91,7 +96,10 @@ function StackedEnergyBars({
       <ResponsiveContainer width="100%" height={500}>
         <BarChart data={data} onClick={onClick}>
           <XAxis dataKey="name" tick={tick} />
-          <YAxis name="kWh/j" domain={[0, 300]} />
+          <YAxis
+            name="kWh/j"
+            domain={[0, Math.ceil(maximumTotal / 100) * 100]}
+          />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Bar
