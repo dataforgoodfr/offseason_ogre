@@ -1,4 +1,4 @@
-import { Card, useTheme } from "@mui/material";
+import { Card, Grid, Typography, useTheme } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -7,8 +7,10 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  TooltipProps,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
+import { EnergyPalette, ProductionPalette } from "../../utils/theme";
 import { hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 
@@ -23,6 +25,54 @@ function StackedEnergyBars({
 }) {
   const theme = useTheme();
   const { game } = usePlay();
+
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: TooltipProps<number, string>): JSX.Element => {
+    if (active && payload && payload.length) {
+      return (
+        <Grid
+          sx={{
+            backgroundColor: "white",
+            color: "black",
+            border: "1px solid lightgrey",
+            p: 2,
+          }}
+        >
+          <Typography
+            sx={{
+              mb: 1,
+              color: theme.palette.primary.main,
+              fontWeight: "bolder",
+            }}
+          >
+            {label}
+          </Typography>
+          {Object.entries(payload[0].payload)
+            .filter(([key]) => key !== "name")
+            .filter(([key]) => (!hasNuclear(game) ? key !== "nuclear" : true))
+            .map(([key, value]) => (
+              <Typography
+                sx={{
+                  mt: 1,
+                  mb: 1,
+                  color:
+                    theme.palette.energy[key as keyof EnergyPalette] ||
+                    theme.palette.production[key as keyof ProductionPalette] ||
+                    "black",
+                }}
+              >
+                {" "}
+                {translateLabel(key)}: {value}kWh{" "}
+              </Typography>
+            ))}
+        </Grid>
+      );
+    }
+    return <></>;
+  };
 
   return (
     <Card
@@ -41,7 +91,7 @@ function StackedEnergyBars({
         <BarChart data={data} onClick={onClick}>
           <XAxis dataKey="name" />
           <YAxis name="kWh/j" domain={[0, 300]} />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Bar
             barSize={25}
@@ -105,6 +155,7 @@ function StackedEnergyBars({
 
 function translateLabel(value: string): string {
   const translations = {
+    total: "Total",
     fossil: "Energie fossile",
     grey: "Energie grise",
     renewable: "Energie renouvelable",
