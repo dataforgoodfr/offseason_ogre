@@ -18,9 +18,11 @@ export { StackedEnergyBars };
 
 function StackedEnergyBars({
   data,
+  tick = true,
   onClick,
 }: {
   data: any[];
+  tick?: boolean;
   onClick?: CategoricalChartFunc;
 }) {
   const theme = useTheme();
@@ -93,7 +95,7 @@ function StackedEnergyBars({
     >
       <ResponsiveContainer width="100%" height={500}>
         <BarChart data={data} onClick={onClick}>
-          <XAxis dataKey="name" />
+          <XAxis dataKey="name" tick={tick} />
           <YAxis
             name="kWh/j"
             domain={[0, Math.ceil(maximumTotal / 100) * 100]}

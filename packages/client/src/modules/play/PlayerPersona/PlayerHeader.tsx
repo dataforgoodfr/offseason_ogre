@@ -26,12 +26,10 @@ import {
 } from "../../../lib/formatter";
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
-import { useTheme } from "@emotion/react";
 
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
-  const theme = useTheme();
   const { user } = useAuth();
   const { game } = usePlay();
   const { currentPersona, latestPersona } = usePersona();
