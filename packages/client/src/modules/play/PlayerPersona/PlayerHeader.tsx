@@ -26,7 +26,6 @@ import {
 } from "../../../lib/formatter";
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
-import { useTheme } from "@emotion/react";
 
 export { PlayerHeader, Header, Actions };
 
