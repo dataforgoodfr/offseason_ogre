@@ -10,7 +10,7 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
   const data = useBuildData({ team });
   return (
     <Box>
-      <StackedEnergyBars data={data} />
+      <StackedEnergyBars data={data} type="admin" />
     </Box>
   );
 }

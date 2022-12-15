@@ -18,9 +18,11 @@ export { StackedEnergyBars };
 
 function StackedEnergyBars({
   data,
+  type,
   onClick,
 }: {
   data: any[];
+  type: "admin" | "player";
   onClick?: CategoricalChartFunc;
 }) {
   const theme = useTheme();
@@ -88,7 +90,7 @@ function StackedEnergyBars({
     >
       <ResponsiveContainer width="100%" height={500}>
         <BarChart data={data} onClick={onClick}>
-          <XAxis dataKey="name" />
+          <XAxis dataKey="name" tick={type !== "admin"} />
           <YAxis name="kWh/j" domain={[0, 300]} />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
