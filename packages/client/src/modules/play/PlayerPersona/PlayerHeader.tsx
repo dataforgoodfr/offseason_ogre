@@ -31,7 +31,6 @@ import { useTheme } from "@emotion/react";
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
-  const theme = useTheme();
   const { user } = useAuth();
   const { game } = usePlay();
   const { currentPersona, latestPersona } = usePersona();
