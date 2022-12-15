@@ -28,7 +28,6 @@ function StatsGraphs() {
   return (
     <PlayBox>
       <StackedEnergyBars
-        type="player"
         data={useStackedEnergyData()}
         onClick={({ activeTooltipIndex }) => {
           setSelectedBar(activeTooltipIndex);
