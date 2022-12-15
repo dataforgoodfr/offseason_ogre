@@ -22,7 +22,7 @@ function TeamConsoleHeader({
   const isSynthesisStep = currentStep?.id === "final-situation";
 
   return (
-    <Grid container justifyContent="space-between" mt={2}>
+    <Grid container justifyContent="space-around" mt={2}>
       {game.teams.map((team) => {
         return (
           <Grid
@@ -149,7 +149,7 @@ function TeamConsumption({
                     sx={{ color: theme.palette.secondary.main }}
                   />
                 ) : (
-                  <Icon name="player" />
+                  <Icon name="player" sx={{ color: "white" }} />
                 )}
               </div>
             </Tooltip>

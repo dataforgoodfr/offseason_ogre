@@ -5,17 +5,16 @@ import { Typography } from "../../common/components/Typography";
 import { Icon } from "../../common/components/Icon";
 import { t } from "../../translations";
 import { getStepId } from "../constants";
+import { StatsData } from "./StatsConsole";
 
 export { ConsumptionStats, ProductionStats };
 
 function ConsumptionStats({
   data,
+  statsMaxHeight,
 }: {
-  data: {
-    teamIdx: number;
-    stepToData: { [key: number]: number };
-    playerCount: number;
-  }[];
+  statsMaxHeight: number;
+  data: StatsData[];
 }) {
   return (
     <PlayBox mt={2}>
@@ -33,7 +32,10 @@ function ConsumptionStats({
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
-            <LineEvolution data={buildGraphData(data)} />
+            <LineEvolution
+              chartMaxHeight={statsMaxHeight}
+              data={buildGraphData(data)}
+            />
           </Box>
         </Grid>
       </Grid>
@@ -43,12 +45,10 @@ function ConsumptionStats({
 
 function ProductionStats({
   data,
+  statsMaxHeight,
 }: {
-  data: {
-    teamIdx: number;
-    stepToData: { [key: number]: number };
-    playerCount: number;
-  }[];
+  statsMaxHeight: number;
+  data: StatsData[];
 }) {
   return (
     <PlayBox mt={2}>
@@ -66,7 +66,10 @@ function ProductionStats({
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
-            <LineEvolution data={buildGraphData(data)} />
+            <LineEvolution
+              chartMaxHeight={statsMaxHeight}
+              data={buildGraphData(data)}
+            />
           </Box>
         </Grid>
       </Grid>
@@ -74,13 +77,7 @@ function ProductionStats({
   );
 }
 
-function buildGraphData(
-  data: {
-    teamIdx: number;
-    stepToData: { [key: number]: number };
-    playerCount: number;
-  }[]
-) {
+function buildGraphData(data: StatsData[]) {
   const steps = Object.keys(data[0]?.stepToData || {})
     .map((step) => parseInt(step, 10))
     .sort((stepA, stepB) => stepA - stepB);

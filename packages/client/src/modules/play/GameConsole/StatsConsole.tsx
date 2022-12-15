@@ -16,6 +16,12 @@ import { getDaysTo2050 } from "../../../lib/time";
 
 export { StatsConsole };
 
+export interface StatsData {
+  teamIdx: number;
+  stepToData: { [key: number]: number };
+  playerCount: number;
+}
+
 function StatsConsole() {
   const { game } = usePlay();
   const { teamValues } = useTeamValues();
@@ -30,6 +36,35 @@ function StatsConsole() {
   const smallScreenSize = isSynthesisStep ? 2.5 : 3;
   const budgetUnit = isSynthesisStep ? "Mrd€" : "€/j";
   const carbonFootprintUnit = isSynthesisStep ? "T/an" : "kg/j";
+
+  const consumptionData: StatsData[] = teamValues.map((team, idx) => ({
+    teamIdx: idx,
+    stepToData: team.stepToConsumption,
+    playerCount: team.playerCount,
+  }));
+
+  const productionData: StatsData[] = teamValues.map((team, idx) => ({
+    teamIdx: idx,
+    stepToData: team.stepToProduction,
+    playerCount: team.playerCount,
+  }));
+
+  const getMaxFromData = (data: StatsData[]) => {
+    return Math.max(
+      ...data.map(({ stepToData }) =>
+        Math.max(...Object.values(stepToData), 0)
+      ),
+      0
+    );
+  };
+
+  const statsMaxHeight =
+    Math.ceil(
+      Math.max(
+        getMaxFromData(consumptionData),
+        getMaxFromData(productionData)
+      ) / 100
+    ) * 100;
 
   function computeBudget(
     isSynthesisStep: boolean,
@@ -65,20 +100,14 @@ function StatsConsole() {
       <Grid container justifyContent="space-between">
         <Grid item xs={11} sm={5.75}>
           <ConsumptionStats
-            data={teamValues.map((team, idx) => ({
-              teamIdx: idx,
-              stepToData: team.stepToConsumption,
-              playerCount: team.playerCount,
-            }))}
+            statsMaxHeight={statsMaxHeight}
+            data={consumptionData}
           />
         </Grid>
         <Grid item xs={11} sm={5.75}>
           <ProductionStats
-            data={teamValues.map((team, idx) => ({
-              teamIdx: idx,
-              stepToData: team.stepToProduction,
-              playerCount: team.playerCount,
-            }))}
+            statsMaxHeight={statsMaxHeight}
+            data={productionData}
           />
         </Grid>
       </Grid>
