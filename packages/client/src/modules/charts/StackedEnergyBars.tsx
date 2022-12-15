@@ -64,8 +64,7 @@ function StackedEnergyBars({
                     "black",
                 }}
               >
-                {" "}
-                {translateLabel(key)}: {value}kWh{" "}
+                {translateLabel(key)}: {value}kWh
               </Typography>
             ))}
         </Grid>
