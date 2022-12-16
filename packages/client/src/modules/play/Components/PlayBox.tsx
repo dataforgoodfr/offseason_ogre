@@ -1,6 +1,6 @@
-import { Box, BoxProps, useTheme } from "@mui/material";
+import { BoxProps } from "@mui/material";
 import { ReactNode } from "react";
-import { HeaderMask, HeaderSection } from "./PlayBox.styles";
+import { HeaderMask, HeaderSection, StyledBox } from "./PlayBox.styles";
 
 export { PlayBox };
 
@@ -10,54 +10,30 @@ function PlayBox({
   children,
   ...boxProps
 }: { header?: ReactNode; headerSticky?: boolean } & BoxProps = {}) {
-  const theme = useTheme();
-
   if (header) {
     return (
       <>
         <HeaderSection headerSticky={headerSticky}>
           <HeaderMask />
-          <Box
+          <StyledBox
             position="relative"
-            bgcolor={theme.palette.primary.main}
-            border="2px solid"
-            borderBottom="none"
-            borderColor="white"
-            borderRadius="10px 10px 0 0"
-            color="white"
-            p={2}
+            borderRadius="10px 10px 0 0 !important"
+            borderBottom="0 !important"
             {...boxProps}
           >
             {header}
-          </Box>
+          </StyledBox>
         </HeaderSection>
-        <Box
-          bgcolor={theme.palette.primary.main}
-          border="2px solid"
-          borderTop="none"
-          borderColor="white"
-          borderRadius="0 0 10px 10px"
-          color="white"
-          p={2}
+        <StyledBox
+          borderRadius="0 0 10px 10px !important"
+          borderTop="0 !important"
           {...boxProps}
         >
           {children}
-        </Box>
+        </StyledBox>
       </>
     );
   }
 
-  return (
-    <Box
-      bgcolor={theme.palette.primary.main}
-      border="2px solid"
-      borderColor="white"
-      borderRadius="10px"
-      color="white"
-      p={2}
-      {...boxProps}
-    >
-      {children}
-    </Box>
-  );
+  return <StyledBox {...boxProps}>{children}</StyledBox>;
 }

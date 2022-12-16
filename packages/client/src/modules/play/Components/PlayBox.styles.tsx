@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { getStyledProps } from "../../../utils/theme";
 
-export { HeaderMask, HeaderSection };
+export { HeaderMask, HeaderSection, StyledBox };
 
 const HeaderSection = styled(
   Box,
@@ -36,4 +36,13 @@ const HeaderMask = styled(Box)(({ theme }) => ({
   width: "100%",
   height: 64,
   backgroundColor: theme.palette.backgrounds.page,
+}));
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderRadius: "10px",
+  border: "2px solid",
+  borderColor: "#ffffff",
+  backgroundColor: theme.palette.primary.main,
+  color: "#ffffff",
 }));
