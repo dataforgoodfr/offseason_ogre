@@ -6,6 +6,7 @@ import { Icon } from "../../common/components/Icon";
 import { t } from "../../translations";
 import { getStepId } from "../constants";
 import { StatsData } from "./StatsConsole";
+import { roundValue } from "../../common/utils";
 
 export { ConsumptionStats, ProductionStats };
 
@@ -87,7 +88,7 @@ function buildGraphData(data: StatsData[]) {
     const columnLines = Object.fromEntries(
       data.map((datum) => [
         `line${datum.teamIdx + 1}`,
-        datum.stepToData[step] || 0,
+        roundValue(datum.stepToData[step] || 0),
       ])
     );
 
