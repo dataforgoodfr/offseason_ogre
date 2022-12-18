@@ -1,32 +1,14 @@
-import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
+import {  Box, Container, Toolbar, } from "@mui/material";
 import { Outlet } from "react-router-dom";
-import { LoggedUser } from "../../auth";
-import { useAuth } from "../../auth/authProvider";
+import { PlayLayoutHeader } from "./PlayLayoutHeader";
 
 export { PlayLayout };
 
 function PlayLayout() {
-  const { user } = useAuth();
 
   return (
     <Box display="flex">
-      <AppBar color="primary" position="fixed">
-        <Toolbar>
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
-          >
-            {user?.firstName || user?.lastName
-              ? `${user.firstName} ${user.lastName} | `
-              : ""}{" "}
-            {"Play"}
-          </Typography>
-          <LoggedUser />
-        </Toolbar>
-      </AppBar>
+      <PlayLayoutHeader />
       <Box
         component="main"
         sx={{
