@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
-import { sumFor } from "../../persona";
+import { sumAllValues, sumFor } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
 
 export { PlayerChart };
@@ -10,7 +10,7 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
   const data = useBuildData({ team });
   return (
     <Box>
-      <StackedEnergyBars data={data} />
+      <StackedEnergyBars data={data} tick={false} />
     </Box>
   );
 }
@@ -30,6 +30,7 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
 
       return {
         name: buildName(player.user),
+        total: sumAllValues(playerConsumption) || 0,
         fossil: sumFor(playerConsumption, "fossil"),
         grey: sumFor(playerConsumption, "grey"),
         mixte: sumFor(playerConsumption, "mixte"),
@@ -39,6 +40,7 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
     firstPersona
       ? {
           name: "Production",
+          total: sumAllValues(firstPersona.currentPersona.production) || 0,
           offshore: sumFor(firstPersona.currentPersona.production, "offshore"),
           nuclear: sumFor(firstPersona.currentPersona.production, "nuclear"),
           terrestrial: sumFor(
@@ -48,6 +50,7 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
         }
       : {
           name: "Production",
+          total: 0,
           offshore: 0,
           nuclear: 0,
           terrestrial: 0,

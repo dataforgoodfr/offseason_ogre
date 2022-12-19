@@ -14,6 +14,7 @@ import { PlayerActions } from "../../../utils/types";
 import { usePlay, usePlayerActions } from "../context/playContext";
 import { ActionHelpDialog } from "./HelpDialogs";
 import { Dialog } from "../../common/components/Dialog";
+import { Icon } from "../../common/components/Icon";
 
 export { PlayerActionsContent };
 
@@ -139,7 +140,7 @@ function ActionLayout({
         </Typography>
         <Box sx={{ gap: 2 }} display="flex" alignItems="center" mt={1}>
           <Box sx={{ gap: 1 }} display="flex" alignItems="center">
-            Coût :
+            <Icon name="action-points" />
             <Rating
               name="action-points-cost"
               readOnly

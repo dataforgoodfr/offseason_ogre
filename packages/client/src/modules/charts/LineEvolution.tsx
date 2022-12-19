@@ -36,7 +36,13 @@ interface LineEvolutionDatum {
   [key: `line${number}`]: number | string;
 }
 
-function LineEvolution({ data }: { data: LineEvolutionDatum[] }) {
+function LineEvolution({
+  data,
+  chartMaxHeight,
+}: {
+  data: LineEvolutionDatum[];
+  chartMaxHeight: number;
+}) {
   const lineCount =
     Object.keys(data[0] || {})
       .filter((key) => key.startsWith("line"))
@@ -55,7 +61,7 @@ function LineEvolution({ data }: { data: LineEvolutionDatum[] }) {
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis name="kWh/j" domain={[0, 500]} />
+          <YAxis name="kWh/j" domain={[0, chartMaxHeight]} />
           <Tooltip />
           <Legend />
           {range(0, lineCount).map((idx) => (

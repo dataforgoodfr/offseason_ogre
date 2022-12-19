@@ -130,6 +130,21 @@ function PlayerHeader() {
               </Typography>
             }
           />
+          <Button
+            sx={{
+              mt: 2,
+              mb: 1,
+              fontSize: "13px",
+              border: (theme) =>
+                `2px ${theme.palette.primary.contrastText} solid`,
+            }}
+            component={Link}
+            to={`/play/games/${game.id}/persona`}
+            variant="contained"
+            color="primary"
+          >
+            <Icon name="badge" sx={{ mr: 1 }} /> Mes caractéristiques
+          </Button>
         </Grid>
       </PlayBox>
       <Actions />

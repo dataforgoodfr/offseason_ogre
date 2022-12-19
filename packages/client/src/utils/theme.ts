@@ -40,6 +40,9 @@ let theme = createTheme({
       error: "#9d1d32",
       success: "#2d793a",
     },
+    backgrounds: {
+      page: "#577590",
+    },
   },
   variables: {
     headerHeight: {
@@ -62,6 +65,9 @@ declare module "@mui/material/styles" {
     status: {
       error: string;
       success: string;
+    };
+    backgrounds: {
+      page: string;
     };
   }
 

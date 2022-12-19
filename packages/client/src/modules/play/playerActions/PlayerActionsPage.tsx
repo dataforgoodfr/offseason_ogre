@@ -71,8 +71,13 @@ function PlayerActionsLayout() {
             pr: 1,
           }}
         >
-          <PlayBox display="flex" flexDirection="column" gap={4}>
-            <PlayerActionsHeader />
+          <PlayBox
+            display="flex"
+            flexDirection="column"
+            gap={4}
+            header={<PlayerActionsHeader />}
+            headerSticky
+          >
             <PlayerActionsContent />
           </PlayBox>
         </Grid>

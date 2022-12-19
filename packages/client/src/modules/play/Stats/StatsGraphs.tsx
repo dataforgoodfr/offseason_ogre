@@ -12,7 +12,7 @@ import {
 import { STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
-import { sumFor } from "../../persona";
+import { sumAllValues, sumFor } from "../../persona";
 import { getPlayerValuesByStep } from "../utils/playerValues";
 import { IGame } from "../../../utils/types";
 
@@ -87,6 +87,7 @@ function useStackedEnergyData() {
   const initialValues = [
     {
       name: "Initial",
+      total: sumAllValues(initialPersona.consumption) || 0,
       renewable: sumFor(initialPersona.consumption, "renewable"),
       fossil: sumFor(initialPersona.consumption, "fossil"),
       mixte: sumFor(initialPersona.consumption, "mixte"),
@@ -94,6 +95,7 @@ function useStackedEnergyData() {
     },
     {
       name: "Initial",
+      total: sumAllValues(initialPersona.production) || 0,
       offshore: sumFor(initialPersona.production, "offshore"),
       nuclear: sumFor(initialPersona.production, "nuclear"),
       terrestrial: sumFor(initialPersona.production, "terrestrial"),
@@ -106,6 +108,7 @@ function useStackedEnergyData() {
       if (STEPS[step]?.type === "consumption") {
         return {
           name: step ? `Étape ${step}` : "Initial",
+          total: sumAllValues(persona.consumption) || 0,
           renewable: sumFor(persona.consumption, "renewable"),
           fossil: sumFor(persona.consumption, "fossil"),
           mixte: sumFor(persona.consumption, "mixte"),
@@ -114,6 +117,7 @@ function useStackedEnergyData() {
       } else {
         return {
           name: step ? `Étape ${step}` : "Initial",
+          total: sumAllValues(persona.production) || 0,
           offshore: sumFor(persona.production, "offshore"),
           nuclear: sumFor(persona.production, "nuclear"),
           terrestrial: sumFor(persona.production, "terrestrial"),
