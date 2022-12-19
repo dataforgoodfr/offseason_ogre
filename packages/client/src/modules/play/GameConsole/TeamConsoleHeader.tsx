@@ -76,9 +76,13 @@ function TeamProduction({
   ).length;
   const hasFinishedStep = teamActionCount === touchedTeamActionsCount;
 
-  const borderColor = isSelected ? theme.palette.secondary.main : "white";
+  const borderColor = isSelected
+    ? `${theme.palette.secondary.main} !important`
+    : "white !important";
   const textColor =
-    isSelected || hasFinishedStep ? theme.palette.secondary.main : "white";
+    isSelected || hasFinishedStep
+      ? `${theme.palette.secondary.main} !important`
+      : "white !important";
 
   return (
     <PlayBox
@@ -130,7 +134,9 @@ function TeamConsumption({
 }) {
   const theme = useTheme();
 
-  const color = isSelected ? theme.palette.secondary.main : "white";
+  const color = isSelected
+    ? `${theme.palette.secondary.main} !important`
+    : "white !important";
 
   return (
     <PlayBox borderColor={color} color={color}>
@@ -171,9 +177,13 @@ function TeamSynthesis({
 
   const hasScenarioName = !!team.scenarioName;
 
-  const borderColor = isSelected ? theme.palette.secondary.main : "white";
+  const borderColor = isSelected
+    ? `${theme.palette.secondary.main} !important`
+    : "white !important";
   const textColor =
-    isSelected || hasScenarioName ? theme.palette.secondary.main : "white";
+    isSelected || hasScenarioName
+      ? `${theme.palette.secondary.main} !important`
+      : "white !important";
 
   return (
     <PlayBox

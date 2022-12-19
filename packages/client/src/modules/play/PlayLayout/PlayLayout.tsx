@@ -1,11 +1,10 @@
-import {  Box, Container, Toolbar, } from "@mui/material";
+import { Box, Container, Toolbar } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { PlayLayoutHeader } from "./PlayLayoutHeader";
 
 export { PlayLayout };
 
 function PlayLayout() {
-
   return (
     <Box display="flex">
       <PlayLayoutHeader />
