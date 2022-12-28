@@ -10,7 +10,7 @@
         <mj-column background-color="#1A3D5C" padding="32px 16px" border-radius="16px">
           <mj-image src="https://ogre-public.s3.eu-west-3.amazonaws.com/magic-link.png" alt="Logo Magic Link" width="322px" fluid-on-mobile="true" padding-bottom="32px" />
           <mj-text align="center" font-size="16px" color="#ffffff">
-            <p color="#ffffff" font-family="Arial" font-size="16">Cliquer sur ce bouton pour vous connecter en un clic</p>
+            <p color="#ffffff" font-family="Arial" font-size="16">Cliquez sur ce bouton pour vous connecter en un clic</p>
           </mj-text>
           <mj-button background-color="#f9c74f" font-family="Arial" font-size="16px" font-weight="bold" color="#1A3D5C" border-radius="16px" inner-padding="16px 32px" href="{{url}}"> Me Connecter </mj-button>
           <mj-text align="center" font-size="14px" color="#ffffff">
