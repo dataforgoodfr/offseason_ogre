@@ -15,5 +15,7 @@
     "source.fixAll.eslint": true
   },
   "editor.formatOnSave": true,
-  "eslint.format.enable": true
+  "eslint.format.enable": true,
+  "mjml.lintEnable": true,
+  "mjml.lintWhenTyping": true
 }
