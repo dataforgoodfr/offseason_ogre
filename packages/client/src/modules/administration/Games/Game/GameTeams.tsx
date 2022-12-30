@@ -136,7 +136,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
               variant="contained"
               sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
             >
-              Répartir aléatoirement les joueurs
+              Répartir les joueurs
             </Button>
           </Grid>
         </>
