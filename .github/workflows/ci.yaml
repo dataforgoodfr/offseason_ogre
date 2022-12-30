@@ -19,7 +19,7 @@ jobs:
       - name: Run type-check for the client
         run: yarn workspace ogre-client check-type
       - name: Run tests for the client
-        run: yarn workspace ogre-client test
+        run: yarn workspace ogre-client test:no-watch
 
       - name: Run lint for the server
         run: yarn workspace ogre-server lint

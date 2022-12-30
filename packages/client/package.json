@@ -14,7 +14,6 @@
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.0",
     "@types/node": "^16.11.21",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
@@ -28,27 +27,27 @@
     "react-hotjar": "^5.2.0",
     "react-query": "^3.38.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.0",
     "recharts": "^2.1.10",
     "socket.io-client": "^4.5.1",
     "typescript": "^4.5.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
+    "dev": "vite",
+    "build": "yarn check-type && vite build",
+    "serve": "vite preview",
     "check-type": "tsc --noEmit",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prettier:check": "yarn prettier --check .",
     "prettier:write": "yarn prettier --write .",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "vitest watch",
+    "test:no-watch": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -66,15 +65,24 @@
   "devDependencies": {
     "@types/lodash": "^4.14.182",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "autoprefixer": "^10.4.2",
+    "@vitejs/plugin-react": "^3.0.0",
+    "autoprefixer": "^10.4.13",
+    "c8": "^7.12.0",
     "eslint": "^8.13.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.4",
-    "postcss": "^8.4.5",
-    "prettier": "2.6.2"
+    "jsdom": "^20.0.3",
+    "postcss": "^8.4.20",
+    "prettier": "2.6.2",
+    "rollup-plugin-visualizer": "^5.9.0",
+    "tailwindcss": "^3.2.4",
+    "vite": "^4.0.3",
+    "vite-plugin-svgr": "^2.4.0",
+    "vite-tsconfig-paths": "^4.0.3",
+    "vitest": "^0.26.2"
   },
   "proxy": "http://localhost:8080"
 }
