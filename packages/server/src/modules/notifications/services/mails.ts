@@ -7,6 +7,7 @@ export const mails = {
 };
 
 const MAIL_SENDER = "grandeur.energies@gmail.com";
+const MAIL_NAME = "L'Équipe OGRE";
 
 const MAIL_API_KEY = process.env.SENDGRID_API_KEY;
 invariant(MAIL_API_KEY, "SENDGRID_API_KEY must be set in env variables.");
@@ -60,7 +61,10 @@ async function doSendEmail({
 }) {
   try {
     await mailClient.send({
-      from: MAIL_SENDER,
+      from: {
+        email: MAIL_SENDER,
+        name: MAIL_NAME,
+      },
       templateId,
       ...(asmGroupId
         ? {
