@@ -1,5 +1,3 @@
-import { Players } from "@prisma/client";
-import { flatten } from "lodash";
 import { database } from "../../../database";
 import { NO_TEAM } from "../../teams/constants/teams";
 
@@ -18,7 +16,10 @@ async function putPlayersInTeams({ gameId }: { gameId: number }) {
 
   const players = await database.players.findMany({ where: { gameId } });
 
-  const teamPlayerAssignment = getTeamPlayerAssignment(players, teamIds);
+  const teamPlayerAssignment = players.map((player, idx) => ({
+    player,
+    teamId: teamIds[idx % teamIds.length],
+  }));
 
   return Promise.all(
     teamPlayerAssignment.map((assignment) =>
@@ -28,34 +29,4 @@ async function putPlayersInTeams({ gameId }: { gameId: number }) {
       })
     )
   );
-}
-
-function getTeamPlayerAssignment(players: Players[], teamIds: number[]) {
-  const playerCount = players.length;
-  const teamCount = teamIds.length;
-
-  const basePlayerCountPerTeam = Math.floor(playerCount / teamCount);
-  const remainingPlayerCount = playerCount % teamCount;
-  const playerIdxToTeamId = flatten(
-    Array(teamCount)
-      .fill(basePlayerCountPerTeam)
-      .map(dispatchRemainingPlayerCount(remainingPlayerCount))
-      .map(createArraysOfTeamIds(teamIds))
-  );
-
-  const teamPlayerAssignment = players.map((player, idx) => ({
-    player,
-    teamId: playerIdxToTeamId[idx],
-  }));
-
-  return teamPlayerAssignment;
-}
-
-function dispatchRemainingPlayerCount(remainingPlayerCount: number) {
-  return (count: number, idx: number) =>
-    idx < remainingPlayerCount ? count + 1 : count;
-}
-
-function createArraysOfTeamIds(teamIds: number[]) {
-  return (count: number, idx: number) => Array(count).fill(teamIds[idx]);
 }
