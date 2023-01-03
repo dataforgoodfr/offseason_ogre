@@ -21,8 +21,17 @@ const PersoFormNumberInput = ({
       render={({ field }) => (
         <PersoTextField
           {...field}
-          onChange={(e) => field.onChange(parseFloat(e.target.value))}
           type="number"
+          onChange={(e) => field.onChange(e.target.value)}
+          onWheel={(e) => e.target instanceof HTMLElement && e.target.blur()}
+          onBlur={(e) => {
+            if (!e.target.value.match(/(\d)+[\.\,]?(\d)*$/)) {
+              field.onChange("");
+            } else {
+              const newValue = e.target.value.replace(",", ".");
+              field.onChange(parseFloat(newValue));
+            }
+          }}
           InputProps={{ inputProps: { min: 0 } }}
           required
         />

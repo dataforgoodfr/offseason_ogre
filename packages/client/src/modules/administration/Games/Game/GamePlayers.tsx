@@ -29,6 +29,7 @@ import { hasGameStarted } from "../utils";
 import { Icon } from "../../../common/components/Icon";
 import { DataGridBox } from "./GameTeams.styles";
 import { FormVerification } from "./FormVerification";
+import { Game } from "../types";
 
 export { GamePlayers };
 
@@ -69,6 +70,10 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     }
   );
 
+  const isOpen = (game: Game) => {
+    return game && game.status !== "ready";
+  };
+
   if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
   }
@@ -97,13 +102,13 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
             sx={{ float: "right", pb: 2, pt: 2, height: "100%" }}
           >
             <Button
-              onClick={() => blockForms.mutate(game && game.status !== "ready")}
+              onClick={() => blockForms.mutate(isOpen(game))}
               variant="contained"
               sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
             >
-              <Icon name="lock" sx={{ mr: 2 }} />{" "}
+              <Icon name={isOpen(game) ? "lock" : "lock-open"} sx={{ mr: 2 }} />{" "}
               {`${
-                game && game.status !== "ready" ? "Verrouiller" : "Déverouiller"
+                isOpen(game) ? "Verrouiller" : "Déverouiller"
               } les formulaires`}
             </Button>
             <Button
