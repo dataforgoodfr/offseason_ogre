@@ -27,7 +27,7 @@ import { Icon } from "../../common/components/Icon";
 export { MyGames };
 
 interface Registration {
-  gameId: number;
+  gameCode: string;
 }
 
 function MyGames() {
@@ -148,21 +148,25 @@ function buildGameList(games: IGame[], title: string) {
 function JoinGame() {
   const { control, handleSubmit } = useForm({
     defaultValues: {
-      gameId: 0,
+      gameCode: "",
     },
   });
   const { t } = useTranslation();
 
   const queryClient = useQueryClient();
 
-  const mutation = useMutation<Response, { message: string }, Registration>(
-    ({ gameId }) => {
-      return axios.post("/api/games/register", { gameId });
+  const mutation = useMutation<
+    { data: { gameId: number } },
+    { message: string },
+    Registration
+  >(
+    ({ gameCode }) => {
+      return axios.post("/api/games/register", { gameCode });
     },
     {
-      onSuccess: (data, { gameId }) => {
+      onSuccess: async (res) => {
         queryClient.invalidateQueries("/api/games/played-games");
-        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
+        queryClient.invalidateQueries(`/api/games/${res.data.gameId}/players`);
       },
     }
   );
@@ -174,19 +178,19 @@ function JoinGame() {
         <JoinGameInputWrapper>
           <Controller
             control={control}
-            name="gameId"
+            name="gameCode"
             render={({ field }) => (
               <TextField
                 {...field}
-                onChange={(e) => field.onChange(parseInt(e.target.value))}
-                label="Game Id"
-                type="number"
+                onChange={(e) => field.onChange(e.target.value)}
+                label={t("form.field.game-code.label")}
+                type="text"
                 required
               />
             )}
           />
           <Button type="submit" variant="contained">
-            Rejoindre le jeu
+            {t("cta.join-game")}
           </Button>
         </JoinGameInputWrapper>
       </form>

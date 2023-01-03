@@ -1,5 +1,6 @@
 import { Alert, Snackbar } from "@mui/material";
 import { useState } from "react";
+import ReactDOM from "react-dom";
 
 export { ErrorAlert, SuccessAlert, AlertSnackbar };
 
@@ -24,15 +25,20 @@ function ErrorAlert({
 
 function SuccessAlert({
   alertPosition = "default",
+  message = "Succès",
+  onClose,
 }: {
   alertPosition?: string;
+  message?: string;
+  onClose?: () => void;
 }) {
   return (
     <AlertSnackbar
       alertPosition={alertPosition}
+      onClose={onClose}
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="success" variant="filled">
-          Succès
+          {message}
         </Alert>
       )}
     ></AlertSnackbar>
@@ -42,16 +48,23 @@ function SuccessAlert({
 function AlertSnackbar({
   renderAlert,
   alertPosition = "default",
+  onClose: onCloseProp,
 }: {
   renderAlert: (
     onClose: (event: React.SyntheticEvent<Element, Event>) => void
   ) => JSX.Element;
   alertPosition?: string;
+  onClose?: () => void;
 }) {
   const position = choosePosition(alertPosition);
   const [isOpen, setIsOpen] = useState<boolean>(true);
-  const onClose = () => setIsOpen(false);
-  return (
+
+  const onClose = () => {
+    onCloseProp?.();
+    setIsOpen(false);
+  };
+
+  return ReactDOM.createPortal(
     <Snackbar
       anchorOrigin={position}
       autoHideDuration={6000}
@@ -59,7 +72,8 @@ function AlertSnackbar({
       open={isOpen}
     >
       {renderAlert(onClose)}
-    </Snackbar>
+    </Snackbar>,
+    document.getElementById("root")!
   );
 }
 

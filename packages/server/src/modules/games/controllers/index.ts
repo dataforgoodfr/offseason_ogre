@@ -13,6 +13,7 @@ import { putPlayersInTeamsController } from "./putPlayersInTeamsController";
 import { getDefault } from "../services/personalization";
 import { validateProfilesController } from "./validateProfilesController";
 import { updateProfilesController } from "./updateProfilesController";
+import { generateCode } from "../services/utils";
 
 const crudController = {
   createController,
@@ -42,6 +43,7 @@ async function createController(request: Request, response: Response) {
   const documentToCreate = bodySchema.parse(request.body);
   const newDocument = await services.create({
     date: new Date(),
+    code: generateCode(),
     description: "",
     name: `Nouveau jeu - ${new Date().toLocaleString()}`,
     teacherId: response.locals.user.id,

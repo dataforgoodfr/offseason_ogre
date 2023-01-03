@@ -3,7 +3,6 @@ import { ProfileStatus } from "@prisma/client";
 import { Server, Socket } from "../types";
 import { services as playersServices } from "../../players/services";
 import { services as profileServices } from "../../profiles/services";
-import { rooms } from "../constants";
 import { wrapHandler } from "../utils";
 import { update, create } from "../../games/services/personalization";
 
@@ -97,7 +96,7 @@ function handleUpdateProfile(io: Server, socket: Socket) {
       const profile =
         newPlayer?.profileId &&
         (await profileServices.find(newPlayer.profileId));
-      io.to(rooms.game(gameId)).emit("profileUpdated", {
+      socket.emit("profileUpdated", {
         update: profile,
       });
     })

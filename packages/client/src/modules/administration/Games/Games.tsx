@@ -6,11 +6,12 @@ import {
   Typography,
 } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
 import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ErrorAlert, SuccessAlert } from "../../alert";
+import { CopyToClipboard } from "../../common/components/CopyToClipboard";
 
 export { Games };
 
@@ -30,6 +31,16 @@ function Games(): JSX.Element {
 
 const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
   { field: "id", headerName: "ID", width: 80 },
+  {
+    field: "code",
+    headerName: "Code",
+    width: 120,
+    renderCell: (params: GridRenderCellParams<string>) => {
+      return (
+        <CopyToClipboard className="w-full h-full" value={params.value || ""} />
+      );
+    },
+  },
   {
     field: "name",
     headerName: "Nom",

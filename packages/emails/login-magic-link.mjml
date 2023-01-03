@@ -1,0 +1,31 @@
+<mjml>
+  <mj-body background-color="#1A3D5C">
+    <mj-section background-color="#1A3D5C">
+      <mj-column>
+        <mj-image src="https://ogre-public.s3.eu-west-3.amazonaws.com/logo-with-name.png" alt="Logo OGRE" width="120px" height="40px" href="http://atelierogre-production.herokuapp.com" />
+      </mj-column>
+    </mj-section>
+    <mj-wrapper padding="16px">
+      <mj-section background-color="#f9c74f" padding="3px" border-radius="16px">
+        <mj-column background-color="#1A3D5C" padding="32px 16px" border-radius="16px">
+          <mj-image src="https://ogre-public.s3.eu-west-3.amazonaws.com/magic-link.png" alt="Logo Magic Link" width="322px" fluid-on-mobile="true" padding-bottom="32px" />
+          <mj-text align="center" font-size="16px" color="#ffffff">
+            <p color="#ffffff" font-family="Arial" font-size="16">Cliquez sur ce bouton pour vous connecter en un clic</p>
+          </mj-text>
+          <mj-button background-color="#f9c74f" font-family="Arial" font-size="16px" font-weight="bold" color="#1A3D5C" border-radius="16px" inner-padding="16px 32px" href="{{url}}"> Me Connecter </mj-button>
+          <mj-text align="center" font-size="14px" color="#ffffff">
+            <p font-family="Arial">Le bouton ne s'affiche pas ? <a style="color: #ffffff; text-decoration: underline;" href="{{url}}" font-family="Arial">Cliquez ici</a></p>
+          </mj-text>
+        </mj-column>
+      </mj-section>
+    </mj-wrapper>
+    <mj-section background-color="#1A3D5C">
+      <mj-column>
+        <mj-text font-size="16px" color="#ffffff">
+          <p font-family="Arial">— L'Équipe OGRE</p>
+          <a style="color: #ffffff; text-decoration: underline;" href="https://atelierogre-production.herokuapp.com" font-family="Arial">https://atelierogre-production.herokuapp.com</a>
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
