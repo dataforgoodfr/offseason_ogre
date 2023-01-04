@@ -86,7 +86,7 @@ function useStackedEnergyData() {
   const initialPersona = getPlayerValuesByStep(0, game, personaBySteps);
   const initialValues = [
     {
-      name: "Consommation",
+      name: "Conso init",
       total: sumAllValues(initialPersona.consumption) || 0,
       renewable: sumFor(initialPersona.consumption, "renewable"),
       fossil: sumFor(initialPersona.consumption, "fossil"),
@@ -94,7 +94,7 @@ function useStackedEnergyData() {
       grey: sumFor(initialPersona.consumption, "grey"),
     },
     {
-      name: "Production",
+      name: "Prod init",
       total: sumAllValues(initialPersona.production) || 0,
       offshore: sumFor(initialPersona.production, "offshore"),
       nuclear: sumFor(initialPersona.production, "nuclear"),
