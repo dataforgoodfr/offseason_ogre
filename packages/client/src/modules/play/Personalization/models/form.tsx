@@ -1,6 +1,8 @@
 import { range } from "lodash";
 import { buildChoices } from "../utils/choices";
 
+export type FormStatus = "draft" | "pendingValidation" | "validated";
+
 export const persoFormInputs = [
   "numberAdults",
   "numberKids",

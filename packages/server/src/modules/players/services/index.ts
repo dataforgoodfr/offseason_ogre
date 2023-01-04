@@ -98,6 +98,7 @@ async function setDefaultProfiles(
       data: {
         personalizationId: defaultPersonalization.id,
         status: "validated",
+        lastStatusUpdate: new Date(),
       },
     });
     await model.update({
@@ -134,6 +135,7 @@ async function validateProfiles(gameId: number): Promise<void> {
         },
         data: {
           status: "validated",
+          lastStatusUpdate: new Date(),
         },
       });
     }
