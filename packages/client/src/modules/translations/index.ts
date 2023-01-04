@@ -18,7 +18,7 @@ function translateName(type: string, value: string) {
 function translateConsumptionName(value: string): string {
   const translationByValue = {
     airConditionning: "Air climatisé",
-    cleanCook: "Cuisine écologique",
+    cleanCook: "Cuisine",
     brownGoods: "Produits bruns",
     electricCar: "Voiture électrique",
     light: "Lumière",
