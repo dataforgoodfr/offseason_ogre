@@ -80,12 +80,14 @@ function handleUpdateProfile(io: Server, socket: Socket) {
         await update(personalizationId, personalizationData);
         await profileServices.update(player?.profileId, {
           status: profileStatus as ProfileStatus,
+          lastStatusUpdate: new Date(),
         });
       } else {
         const personalization = await create(personalizationData);
         const profile = await profileServices.create({
           personalizationId: personalization.id,
           status: profileStatus as ProfileStatus,
+          lastStatusUpdate: new Date(),
         });
         await playersServices.update(gameId, userId, {
           profileId: profile?.id,

@@ -7,4 +7,5 @@ interface Profile {
   personalization: Personalization;
   personalizationId: number;
   status: ProfileStatus;
+  lastStatusUpdate: Date;
 }

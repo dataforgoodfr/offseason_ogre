@@ -35,7 +35,7 @@ function Game() {
     <>
       <Box sx={{ mt: 2 }}>
         <Typography variant="h3" sx={{ mb: 2 }}>
-          Atelier {game?.id}
+          Atelier {game?.code}
         </Typography>
         <GeneralInfo game={game} />
         <Players game={game} />

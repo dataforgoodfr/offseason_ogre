@@ -74,6 +74,7 @@ model Profile {
   personalization   Personalization @relation(fields: [personalizationId], references: [id])
   personalizationId Int
   status            ProfileStatus   @default(draft)
+  lastStatusUpdate  DateTime        @default(now())
 }
 
 enum ProfileStatus {
