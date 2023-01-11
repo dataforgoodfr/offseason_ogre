@@ -6,7 +6,7 @@ export const mails = {
   sendMail,
 };
 
-const MAIL_SENDER = "grandeur.energies@gmail.com";
+const MAIL_SENDER = "contact@atelierogre.org";
 const MAIL_NAME = "L'Équipe OGRE";
 
 const MAIL_API_KEY = process.env.SENDGRID_API_KEY;
