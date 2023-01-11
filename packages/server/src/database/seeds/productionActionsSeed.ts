@@ -111,8 +111,8 @@ function getProductionActionsDataForProductionStep1(): {
       order: 1,
       helpCardLink:
         "https://drive.google.com/file/d/1gx_7fGbfk3dp1oF1DUg8bNwAv-_JG2NZ/view?usp=sharing",
-      currentYearPowerNeedGw: 17.05,
-      defaultTeamValue: 0.51,
+      currentYearPowerNeedGw: 19.5,
+      defaultTeamValue: 0.58,
       pointsInterval: [
         {
           min: 1,
@@ -141,8 +141,8 @@ function getProductionActionsDataForProductionStep1(): {
       order: 5,
       helpCardLink:
         "https://drive.google.com/file/d/1buRId_oFMdx1NxutSUJB-6ih-JMG8niV/view?usp=sharing",
-      currentYearPowerNeedGw: 5.53,
-      defaultTeamValue: 1.28,
+      currentYearPowerNeedGw: 7.2,
+      defaultTeamValue: 1.67,
       pointsInterval: [
         {
           min: 2,
@@ -171,8 +171,8 @@ function getProductionActionsDataForProductionStep1(): {
       order: 4,
       helpCardLink:
         "https://drive.google.com/file/d/1fuvP46JtmQmKLeY43Iv-W0szE1Rmrajh/view?usp=sharing",
-      currentYearPowerNeedGw: 4.53,
-      defaultTeamValue: 0.38,
+      currentYearPowerNeedGw: 8,
+      defaultTeamValue: 0.67,
       pointsInterval: [
         {
           min: 2,
@@ -201,8 +201,8 @@ function getProductionActionsDataForProductionStep1(): {
       order: 3,
       helpCardLink:
         "https://drive.google.com/file/d/1Oj7bdAcLpdh97DDnepbtjPmWMWpG39Xn/view?usp=sharing",
-      currentYearPowerNeedGw: 1.93,
-      defaultTeamValue: 0.08,
+      currentYearPowerNeedGw: 2.5,
+      defaultTeamValue: 0.1,
       pointsInterval: [
         {
           min: 3,
