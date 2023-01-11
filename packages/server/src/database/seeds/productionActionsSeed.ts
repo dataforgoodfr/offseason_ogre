@@ -85,7 +85,7 @@ function getProductionActionsDataForProductionStep1(): {
       lcoe: 0.092,
       order: 2,
       helpCardLink:
-        "https://drive.google.com/file/d/1uO9Y2oPLsDzs1Mjv1G1bSb8jSTTAynqL/view?usp=sharing",
+        "https://drive.google.com/file/d/1WOj-ls4MYiSOIJFS0Q2_ZP6-kHf94Ov0/view?usp=share_link",
       currentYearPowerNeedGw: 21.42,
       defaultTeamValue: 10.11,
       pointsInterval: [
@@ -110,7 +110,7 @@ function getProductionActionsDataForProductionStep1(): {
       lcoe: 0.0605,
       order: 1,
       helpCardLink:
-        "https://drive.google.com/file/d/1gx_7fGbfk3dp1oF1DUg8bNwAv-_JG2NZ/view?usp=sharing",
+        "https://drive.google.com/file/d/1NpLcrqOY7-5ZFEKjtNQivrTERcDMCRYZ/view?usp=share_link",
       currentYearPowerNeedGw: 17.05,
       defaultTeamValue: 0.51,
       pointsInterval: [
@@ -140,7 +140,7 @@ function getProductionActionsDataForProductionStep1(): {
       lcoe: 0.055,
       order: 5,
       helpCardLink:
-        "https://drive.google.com/file/d/1buRId_oFMdx1NxutSUJB-6ih-JMG8niV/view?usp=sharing",
+        "https://drive.google.com/file/d/12r9aO1uFmGgHx7L0tk-CZAo3p_d22gI-/view?usp=share_link",
       currentYearPowerNeedGw: 5.53,
       defaultTeamValue: 1.28,
       pointsInterval: [
@@ -170,7 +170,7 @@ function getProductionActionsDataForProductionStep1(): {
       lcoe: 0.1425,
       order: 4,
       helpCardLink:
-        "https://drive.google.com/file/d/1fuvP46JtmQmKLeY43Iv-W0szE1Rmrajh/view?usp=sharing",
+        "https://drive.google.com/file/d/1U9hpXWuDESVZPBKwaoxgDdBkXB-uEd3E/view?usp=share_link",
       currentYearPowerNeedGw: 4.53,
       defaultTeamValue: 0.38,
       pointsInterval: [
@@ -200,7 +200,7 @@ function getProductionActionsDataForProductionStep1(): {
       lcoe: 0.128,
       order: 3,
       helpCardLink:
-        "https://drive.google.com/file/d/1Oj7bdAcLpdh97DDnepbtjPmWMWpG39Xn/view?usp=sharing",
+        "https://drive.google.com/file/d/1ozMY1hlYDbUCuCRZxyWbQrupEBnOaqDv/view?usp=share_link",
       currentYearPowerNeedGw: 1.93,
       defaultTeamValue: 0.08,
       pointsInterval: [
@@ -264,7 +264,7 @@ function getProductionActionsDataForProductionStep2(): {
       lcoe: 0.034,
       order: 1,
       helpCardLink:
-        "https://drive.google.com/file/d/18JUYq-sToYw9Nbr8HpLAylKnHsiU3zQ7/view?usp=sharing",
+        "https://drive.google.com/file/d/17M08Ru_shloc0ULvPPjhuZaif4el72S-/view?usp=share_link",
       currentYearPowerNeedGw: 0.0152,
       defaultTeamValue: 0.49,
       pointsInterval: [
@@ -289,7 +289,7 @@ function getProductionActionsDataForProductionStep2(): {
       lcoe: 0.0805,
       order: 2,
       helpCardLink:
-        "https://drive.google.com/file/d/1F1QYdy321llo8QiEEwwlM4xMlM0IFxaL/view?usp=sharing",
+        "https://drive.google.com/file/d/14mn5P-IHY85Iee9Q-qw1367iin0nRB6F/view?usp=share_link",
       currentYearPowerNeedGw: 3.3,
       defaultTeamValue: 0.28,
       pointsInterval: [
@@ -319,7 +319,7 @@ function getProductionActionsDataForProductionStep2(): {
       lcoe: 0.275,
       order: 4,
       helpCardLink:
-        "https://drive.google.com/file/d/1zbCSipobSdAa2-43ytpU7VU2zUcB659u/view?usp=sharing",
+        "https://drive.google.com/file/d/1eAaPXSn4YMCWRcyF0ELArsu0Jrb5-nIa/view?usp=share_link",
       currentYearPowerNeedGw: 0.2405,
       defaultTeamValue: 0.197,
       pointsInterval: [
@@ -349,7 +349,7 @@ function getProductionActionsDataForProductionStep2(): {
       lcoe: 0.0805,
       order: 3,
       helpCardLink:
-        "https://drive.google.com/file/d/1gfeb6hjWG0IIimKpHtjJ_91h38hw2T4I/view?usp=sharing",
+        "https://drive.google.com/file/d/1LtFLAxHnU6CquXhSp1N0N9ZZjsH2P4MF/view?usp=share_link",
       currentYearPowerNeedGw: 0.00045,
       defaultTeamValue: 0.00347,
       pointsInterval: [
@@ -395,7 +395,7 @@ function getProductionActionsDataForProductionStep3(): {
       lcoe: 0.095,
       order: 1,
       helpCardLink:
-        "https://drive.google.com/file/d/1266O8HqYV6QwbfZH_MeYVIWsre_KnGBf/view?usp=sharing",
+        "https://drive.google.com/file/d/1g2lYTDT0x0kdcqlohWzfMK_VVItQQtCO/view?usp=share_link",
       currentYearPowerNeedGw: 61.4,
       defaultTeamValue: 100,
       pointsInterval: [
