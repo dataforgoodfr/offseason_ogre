@@ -6,6 +6,10 @@ import { PersoTextField, PersoSelectTextField } from "../styles/form";
 
 export { PersoFormNumberInput, PersoFormInputList };
 
+const isZeroDefault = (name: keyof PersoForm) => {
+  return ["heatingConsumption", "heatingInvoice"].includes(name);
+};
+
 const PersoFormNumberInput = ({
   control,
   name,
@@ -21,9 +25,20 @@ const PersoFormNumberInput = ({
       render={({ field }) => (
         <PersoTextField
           {...field}
-          onChange={(e) => field.onChange(parseFloat(e.target.value))}
+          onChange={(e) => field.onChange(e.target.value)}
           type="number"
           InputProps={{ inputProps: { min: 0 } }}
+          onWheel={(e) => e.target instanceof HTMLElement && e.target.blur()}
+          onBlur={(e) => {
+            if (!e.target.value.match(/(\d)+[\.\,]?(\d)*$/)) {
+              field.onChange(isZeroDefault(name) ? 0 : null);
+            } else {
+              const newValue = e.target.value.replace(",", ".");
+              field.onChange(
+                parseFloat(newValue) || (isZeroDefault(name) ? 0 : null)
+              );
+            }
+          }}
           required
         />
       )}
