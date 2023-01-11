@@ -6,5 +6,10 @@ export const buildChoices = (array: string[] | number[]) => {
 };
 
 export const isNotEmpty = (value: any) => {
-  return value !== null && value !== undefined && value !== "";
+  return (
+    value !== null &&
+    value !== undefined &&
+    value !== "" &&
+    !Number.isNaN(value)
+  );
 };

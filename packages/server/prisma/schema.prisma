@@ -101,8 +101,8 @@ model Personalization {
   houseType              String?
   houseSurface           Float?
   heatingEnergy          String?
-  heatingConsumption     Float?
-  heatingInvoice         Float?
+  heatingConsumption     Float?              @default(0)
+  heatingInvoice         Float?              @default(0)
   heatPump               Boolean?
   heatingTemperature     Boolean?
   airConditionning       Boolean?

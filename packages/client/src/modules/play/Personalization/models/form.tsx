@@ -312,7 +312,7 @@ const getTransportQuestions = () => {
     {
       icon: "car",
       description:
-        "En moyenne, combien de km parcourez vous-seul par an en voiture avec les personnes composant le ménage ?",
+        "En moyenne, combien de km parcourez vous par an avec les personnes composant le ménage ?",
       name: "carDistanceHoushold" as keyof PersoForm,
       conditions: [
         { question: "car", operator: "=", value: true },
@@ -340,6 +340,7 @@ const getTransportQuestions = () => {
       ],
     },
     {
+      icon: "car",
       description:
         "Même si vous ne possédez pas de voiture, combien de kilomètres par an effectuez-vous en moyenne (avec d'autres personnes) ?",
       name: "carDistanceCarsharing" as keyof PersoForm,
@@ -415,7 +416,7 @@ const getHousingQuestions = () => {
     },
     {
       description:
-        "Quel est le nombre de kWh (kilowatt-heure) consommé PAR AN ? Cette valeur est disponible sur la facture transmise par votre fournisseur d'énergie. Si jamais vous ne savez pas, vous pouvez passer à la question suivante où cette valeur vous est demandée en € ou CHF",
+        "Quel est le nombre de kWh (kilowatt-heure) consommé PAR AN ? Cette valeur est disponible sur la facture transmise par votre fournisseur d'énergie. Si jamais vous ne savez pas, vous pouvez passer à la question suivante où cette valeur vous est demandée en € ou CHF. (Laissez 0 si vous ne savez pas)",
       name: "heatingConsumption" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -423,7 +424,7 @@ const getHousingQuestions = () => {
     },
     {
       description:
-        "Quel est le montant de votre facture d'énergie ANNUELLE pour le chauffage (fioul, gaz, bois) ? Si vous avez un chauffage électrique, indiquez le montant ANNUEL de votre facture.",
+        "Quel est le montant de votre facture d'énergie ANNUELLE pour le chauffage (fioul, gaz, bois) ? Si vous avez un chauffage électrique, indiquez le montant ANNUEL de votre facture. Laissez 0 si vous ne savez pas.",
       name: "heatingInvoice" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
