@@ -1,29 +1,42 @@
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
+import invariant from "tiny-invariant";
 import { database } from "..";
-import { Seed } from "../types";
+import { Seeder } from "../types";
 
 export { seed };
 
-const seed: Seed<Omit<User, "id">> = {
-  seeder: (user: Omit<User, "id">) =>
-    database.user.upsert({
-      where: {
-        email: user.email,
-      },
-      update: user,
-      create: user,
-    }),
-  data: getUsersData(),
+const seed: Seeder<Omit<User, "id">> = async () => {
+  const adminRole = await database.role.findUnique({
+    where: { name: "admin" },
+  });
+
+  invariant(
+    adminRole,
+    `Cannot seed users because admin role is missing in database`
+  );
+
+  return {
+    seeder: (user: Omit<User, "id">) =>
+      database.user.upsert({
+        where: {
+          email: user.email,
+        },
+        update: user,
+        create: user,
+      }),
+    data: getUsersData({ role: adminRole }),
+  };
 };
 
-function getUsersData(): Omit<User, "id">[] {
-  const users = [
+function getUsersData({ role }: { role: Role }) {
+  const users: Omit<User, "id">[] = [
     {
       email: "seeding@database.com",
       isTeacher: false,
       firstName: "Seeding",
       lastName: "Master",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "ogre@yopmail.com",
@@ -31,6 +44,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Og",
       lastName: "Re",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "chareyronlaurene@gmail.com",
@@ -38,6 +52,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Laurène",
       lastName: "Chareyron",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "b00461284@essec.edu",
@@ -45,6 +60,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Vladimir",
       lastName: "Nafissi",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "dbsharp404@gmail.com",
@@ -52,6 +68,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Ba",
       lastName: "Boo",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "dorian.erkens@gmail.com",
@@ -59,6 +76,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Dorian",
       lastName: "Erkens",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "grandeur.energies@gmail.com",
@@ -66,6 +84,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Gregory",
       lastName: "Kotnarovsky",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "guilhem.valentin@insidegroup.fr",
@@ -73,6 +92,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Guilhem",
       lastName: "Valentin",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "kotnarovsky@googlemail.com",
@@ -80,6 +100,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Gregory",
       lastName: "Kotnarovsky",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "louis.sanna@gmail.com",
@@ -87,6 +108,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Louis",
       lastName: "Sanna",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "remi.riviere.free@gmail.com",
@@ -94,6 +116,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Rémi",
       lastName: "Rivière",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "tcateland@gmail.com",
@@ -101,6 +124,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "Thomas",
       lastName: "Cateland",
       country: "FR",
+      roleId: role.id,
     },
     {
       email: "william_haidar@hotmail.fr",
@@ -108,6 +132,7 @@ function getUsersData(): Omit<User, "id">[] {
       firstName: "William",
       lastName: "Haidar",
       country: "FR",
+      roleId: role.id,
     },
   ];
 

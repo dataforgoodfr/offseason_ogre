@@ -1,4 +1,5 @@
 import { database } from ".";
+import { seed as rolesSeed } from "./seeds/rolesSeed";
 import { seed as usersSeed } from "./seeds/usersSeed";
 import { seed as personaSeed } from "./seeds/personaSeed";
 import { seed as actionsSeed } from "./seeds/actionsSeed";
@@ -14,6 +15,7 @@ console.log("Starting seeding...");
 async function seed() {
   await database.$connect();
 
+  await performSeed(rolesSeed);
   await performSeed(usersSeed);
   await performSeed(personaSeed);
   await performSeed(actionsSeed);
