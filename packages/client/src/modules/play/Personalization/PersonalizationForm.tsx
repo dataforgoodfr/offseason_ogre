@@ -9,6 +9,7 @@ import {
   formSections,
   FormStatus,
   formValues,
+  getQuestionByName,
   PersoForm,
   persoFormInputs,
   Question,
@@ -66,14 +67,10 @@ function PersonalizationForm() {
     defaultValues: useMemo(() => {
       const consumption =
         profile?.personalization?.heatingConsumption ||
-        formValues.find(
-          (question: Question) => question.name === "heatingConsumption"
-        )?.defaultValue;
+        getQuestionByName("heatingConsumption")?.defaultValue;
       const invoice =
         profile?.personalization?.heatingInvoice ||
-        formValues.find(
-          (question: Question) => question.name === "heatingInvoice"
-        )?.defaultValue;
+        getQuestionByName("heatingInvoice")?.defaultValue;
       return {
         ...profile.personalization,
         heatingConsumption: consumption,

@@ -312,7 +312,7 @@ const getTransportQuestions = () => {
     {
       icon: "car",
       description:
-        "En moyenne, combien de km parcourez vous par an avec les personnes composant le ménage ?",
+        "En moyenne, combien de km parcourez-vous par an avec les personnes composant le ménage ?",
       name: "carDistanceHoushold" as keyof PersoForm,
       conditions: [
         { question: "car", operator: "=", value: true },
@@ -810,3 +810,7 @@ export const formValues = [
   ...getFoodQuestions(),
   ...getNumericQuestions(),
 ];
+
+export const getQuestionByName = (name: string) => {
+  return formValues.find((question: Question) => question.name === name);
+};
