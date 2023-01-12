@@ -424,7 +424,7 @@ const getHousingQuestions = () => {
     },
     {
       description:
-        "Quel est le montant de votre facture d'énergie ANNUELLE pour le chauffage (fioul, gaz, bois) ? Si vous avez un chauffage électrique, indiquez le montant ANNUEL de votre facture. Laissez 0 si vous ne savez pas.",
+        "Quel est le montant de votre facture d'énergie ANNUELLE pour le chauffage (fioul, gaz, bois) ? Si vous avez un chauffage électrique, indiquez le montant ANNUEL de votre facture. (Laissez 0 si vous ne savez pas)",
       name: "heatingInvoice" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
