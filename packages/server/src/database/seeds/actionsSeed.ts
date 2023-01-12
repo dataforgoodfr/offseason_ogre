@@ -1,11 +1,11 @@
 import { availableActions } from "../../modules/actions/constants/actions";
 import { database } from "..";
 import { Action } from "../../modules/actions/types";
-import { Seed } from "../types";
+import { Seeder } from "../types";
 
 export { seed };
 
-const seed: Seed<Action> = {
+const seed: Seeder<Action> = {
   seeder: (action: Action) =>
     database.action.upsert({
       where: {
