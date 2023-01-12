@@ -1,10 +1,16 @@
 import { ExpandMoreRounded } from "@mui/icons-material";
 import { MenuItem } from "@mui/material";
 import { Control, Controller } from "react-hook-form";
-import { DropdownOption, PersoForm } from "../models/form";
+import { DropdownOption, getQuestionByName, PersoForm } from "../models/form";
 import { PersoTextField, PersoSelectTextField } from "../styles/form";
 
 export { PersoFormNumberInput, PersoFormInputList };
+
+const displayDefaultValue = (name: keyof PersoForm) => {
+  return ["heatingConsumption", "heatingInvoice"].includes(name);
+};
+
+const isFloatParsable = (val: string) => !Number.isNaN(parseFloat(val));
 
 const PersoFormNumberInput = ({
   control,
@@ -21,9 +27,22 @@ const PersoFormNumberInput = ({
       render={({ field }) => (
         <PersoTextField
           {...field}
-          onChange={(e) => field.onChange(parseFloat(e.target.value))}
+          onChange={(e) => field.onChange(e.target.value)}
           type="number"
           InputProps={{ inputProps: { min: 0 } }}
+          onWheel={(e) => e.target instanceof HTMLElement && e.target.blur()}
+          onBlur={(e) => {
+            const newValue = e.target.value.replace(",", ".");
+            if (!isFloatParsable(newValue)) {
+              return field.onChange(
+                displayDefaultValue(name)
+                  ? getQuestionByName(name)?.defaultValue
+                  : NaN
+              );
+            } else {
+              return field.onChange(parseFloat(newValue));
+            }
+          }}
           required
         />
       )}

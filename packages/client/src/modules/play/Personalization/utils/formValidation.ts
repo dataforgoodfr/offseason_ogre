@@ -81,3 +81,12 @@ export const getNonNullValues = (values: any) => {
     )
   );
 };
+
+export const fillWithNull = (values: any) => {
+  return Object.fromEntries(
+    Object.entries(values).map(([key, value]: [string, any]) => [
+      key,
+      isNotEmpty(value) ? value : null,
+    ])
+  );
+};

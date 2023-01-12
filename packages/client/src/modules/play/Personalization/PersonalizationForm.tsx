@@ -9,6 +9,7 @@ import {
   formSections,
   FormStatus,
   formValues,
+  getQuestionByName,
   PersoForm,
   persoFormInputs,
   Question,
@@ -20,7 +21,7 @@ import {
   getOrigin,
   isFormValid,
   isSectionValid,
-  getNonNullValues,
+  fillWithNull,
 } from "./utils/formValidation";
 import { useAuth } from "../../auth/authProvider";
 import { usePlay } from "../context/playContext";
@@ -64,7 +65,17 @@ function PersonalizationForm() {
   } = useForm<PersoForm, Record<string, any>>({
     shouldUnregister: false,
     defaultValues: useMemo(() => {
-      return profile.personalization;
+      const consumption =
+        profile?.personalization?.heatingConsumption ||
+        getQuestionByName("heatingConsumption")?.defaultValue;
+      const invoice =
+        profile?.personalization?.heatingInvoice ||
+        getQuestionByName("heatingInvoice")?.defaultValue;
+      return {
+        ...profile.personalization,
+        heatingConsumption: consumption,
+        heatingInvoice: invoice,
+      };
     }, [profile]),
   });
 
@@ -164,7 +175,7 @@ function PersonalizationForm() {
       updateProfile({
         userId: user?.id,
         update: {
-          ...getNonNullValues(getValues()),
+          ...fillWithNull(getValues()),
           profileStatus: "pendingValidation",
           origin: getOrigin(user?.id, gameId),
           personalizationName: "form",
@@ -178,7 +189,7 @@ function PersonalizationForm() {
       updateProfile({
         userId: user?.id,
         update: {
-          ...getNonNullValues(getValues()),
+          ...fillWithNull(getValues()),
           profileStatus: "draft",
           origin: getOrigin(user?.id, gameId),
           personalizationName: "form",
