@@ -53,6 +53,20 @@ model User {
   isTeacher   Boolean   @default(false)
   playedGames Players[]
   taughtGames Game[]    @relation("TaughtGames")
+  roleId      Int
+  role        Role      @relation(fields: [roleId], references: [id])
+}
+
+model Role {
+  id    Int      @id @default(autoincrement())
+  name  RoleName @unique
+  users User[]
+}
+
+enum RoleName {
+  admin
+  teacher
+  player
 }
 
 model Team {
