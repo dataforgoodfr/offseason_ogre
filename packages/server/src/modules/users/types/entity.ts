@@ -9,6 +9,7 @@ interface User {
   firstName: string;
   isTeacher: boolean;
   lastName: string;
+  roleId: number;
 }
 
 interface Players {

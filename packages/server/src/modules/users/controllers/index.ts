@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
+import { rolesServices } from "../../roles/services";
 import { services } from "../services";
 import { logoutController } from "./logoutController";
 import { signInController } from "./signInController";
@@ -46,9 +47,13 @@ async function signUpController(request: Request, response: Response) {
     firstName: z.string(),
   });
   const documentToCreate = bodySchema.parse(request.body);
+
+  const playerRole = await rolesServices.getOne({ name: "player" });
+
   const newDocument = await services.signUp({
     ...documentToCreate,
     isTeacher: false,
+    roleId: playerRole.id,
   });
   response.status(201).json({ data: newDocument });
 }
