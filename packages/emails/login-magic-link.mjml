@@ -2,7 +2,7 @@
   <mj-body background-color="#1A3D5C">
     <mj-section background-color="#1A3D5C">
       <mj-column>
-        <mj-image src="https://ogre-public.s3.eu-west-3.amazonaws.com/logo-with-name.png" alt="Logo OGRE" width="120px" height="40px" href="http://atelierogre-production.herokuapp.com" />
+        <mj-image src="https://ogre-public.s3.eu-west-3.amazonaws.com/logo-with-name.png" alt="Logo OGRE" width="120px" height="40px" href="https://app.atelierogre.org" />
       </mj-column>
     </mj-section>
     <mj-wrapper padding="16px">
@@ -23,7 +23,7 @@
       <mj-column>
         <mj-text font-size="16px" color="#ffffff">
           <p font-family="Arial">— L'Équipe OGRE</p>
-          <a style="color: #ffffff; text-decoration: underline;" href="https://atelierogre-production.herokuapp.com" font-family="Arial">https://atelierogre-production.herokuapp.com</a>
+          <a style="color: #ffffff; text-decoration: underline;" href="https://app.atelierogre.org" font-family="Arial">https://app.atelierogre.org</a>
         </mj-text>
       </mj-column>
     </mj-section>
