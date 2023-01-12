@@ -6,6 +6,10 @@ import { PersoTextField, PersoSelectTextField } from "../styles/form";
 
 export { PersoFormNumberInput, PersoFormInputList };
 
+const displayDefaultValue = (name: keyof PersoForm) => {
+  return ["heatingConsumption", "heatingInvoice"].includes(name);
+};
+
 const isFloatParsable = (val: string) => !Number.isNaN(parseFloat(val));
 
 const PersoFormNumberInput = ({
@@ -30,10 +34,13 @@ const PersoFormNumberInput = ({
           onBlur={(e) => {
             const newValue = e.target.value.replace(",", ".");
             if (!isFloatParsable(newValue)) {
-              field.onChange(getQuestionByName(name)?.defaultValue);
-              return;
+              return field.onChange(
+                displayDefaultValue(name)
+                  ? getQuestionByName(name)?.defaultValue
+                  : NaN
+              );
             } else {
-              field.onChange(parseFloat(newValue));
+              return field.onChange(parseFloat(newValue));
             }
           }}
           required
