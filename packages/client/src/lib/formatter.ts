@@ -18,5 +18,5 @@ function formatPoints(value?: number) {
 }
 
 function formatProductionGw(value?: number) {
-  return value?.toFixed(0) || "";
+  return value?.toFixed(1) || "";
 }
