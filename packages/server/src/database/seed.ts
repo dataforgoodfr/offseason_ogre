@@ -8,9 +8,10 @@ import {
   pointsIntervalSeed,
 } from "./seeds/productionActionsSeed";
 import { performSeed } from "./utils";
+import { logger } from "../logger";
 
 // eslint-disable-next-line no-console
-console.log("Starting seeding...");
+logger.info("Starting seeding...");
 
 async function seed() {
   await database.$connect();
@@ -27,5 +28,5 @@ async function seed() {
 
 seed().then(() => {
   // eslint-disable-next-line no-console
-  console.log("Seeding done");
+  logger.info("Seeding done");
 });
