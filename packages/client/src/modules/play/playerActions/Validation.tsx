@@ -36,7 +36,7 @@ function ValidateActions() {
       <Dialog
         open={open}
         handleClose={handleClose}
-        content="Les choix ne seront plus modifiable, souhaites-tu valider tes choix ?"
+        content="Les choix ne seront plus modifiables, souhaites-tu valider tes choix ?"
         actions={
           <>
             <Button onClick={handleClose}>Non</Button>
