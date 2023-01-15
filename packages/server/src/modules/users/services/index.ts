@@ -57,7 +57,7 @@ async function create(newUser: Omit<Model, "id">): Promise<Model> {
     throw new Error("Email is already taken.");
   }
   return model.create({
-    data: { ...newUser, isTeacher: computeIsTeacher(newUser) },
+    data: { ...newUser },
   });
 }
 
@@ -72,28 +72,6 @@ async function update(
   }
 
   return model.update({ data: document, where: { id } });
-}
-
-function computeIsTeacher(newUser: Omit<Model, "id">) {
-  if (shouldHaveTeacherRole(newUser.email)) {
-    return true;
-  }
-  return newUser.isTeacher ?? false;
-}
-
-function shouldHaveTeacherRole(email: string): boolean {
-  const mails = [
-    "b00461284@essec.edu",
-    "chareyronlaurene@gmail.com",
-    "felix.barriere@gmail.com",
-    "grandeur.energies@gmail.com",
-    "louis.sanna@gmail.com",
-    "ogre.teacher@yopmail.com",
-    "remi.riviere.free@gmail.com",
-    "tcateland@gmail.com",
-    "william_haidar@hotmail.fr",
-  ];
-  return mails.includes(email);
 }
 
 async function getTeamForPlayer(

@@ -16,7 +16,6 @@ type GridRow = {
   firstName: string;
   email: string;
   country: string;
-  isTeacher: boolean;
   roleId: number;
 };
 

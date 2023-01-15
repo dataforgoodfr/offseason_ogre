@@ -55,7 +55,6 @@ async function signUpController(request: Request, response: Response) {
 
   const newDocument = await services.signUp({
     ...documentToCreate,
-    isTeacher: false,
     roleId: playerRole.id,
   });
   response.status(201).json({ data: newDocument });
@@ -98,7 +97,6 @@ const bodySchemaUpdate = z.object({
   email: z.string().optional(),
   lastName: z.string().optional(),
   firstName: z.string().optional(),
-  isTeacher: z.boolean().optional(),
   roleId: z.number().optional(),
 });
 async function updateUser(request: Request, response: Response) {

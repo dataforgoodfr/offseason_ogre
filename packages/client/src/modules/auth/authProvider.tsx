@@ -4,6 +4,7 @@ import * as React from "react";
 import { useQuery } from "react-query";
 
 import { Role, RoleName, User } from "../users/types";
+import { hasRole } from "./auth.utils";
 
 export { AuthProvider, useAuth };
 
@@ -11,13 +12,21 @@ interface IAuthContext {
   user: null | User;
   isAdmin: boolean;
   roles: Role[];
+  permissions: Permissions;
   findRoleByName: (roleName: RoleName) => Role | undefined;
 }
+
+type Permissions = {
+  canAccessAdminPanel: boolean;
+};
 
 const AuthContext = React.createContext<IAuthContext>({
   user: null,
   isAdmin: false,
   roles: [],
+  permissions: {
+    canAccessAdminPanel: false,
+  },
   findRoleByName: () => undefined,
 });
 const useAuth = () => React.useContext<IAuthContext>(AuthContext);
@@ -65,14 +74,22 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     [roles]
   );
 
+  const permissions: Permissions = React.useMemo(
+    () => ({
+      canAccessAdminPanel: hasRole(["admin", "teacher"], user),
+    }),
+    [user]
+  );
+
   const context = React.useMemo(
     () => ({
       user,
       isAdmin: user?.role.name === "admin",
       roles,
+      permissions,
       findRoleByName,
     }),
-    [roles, user, findRoleByName]
+    [permissions, roles, user, findRoleByName]
   );
 
   if (isLoadingUser || isLoadingRoles) {

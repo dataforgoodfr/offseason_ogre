@@ -34,11 +34,11 @@ const drawerWidth: number = 240;
 export { Layout };
 
 function Layout() {
-  const { user } = useAuth();
+  const { permissions } = useAuth();
   const theme = useTheme();
   const isGameAdministrationRoute = useMatch(`administration/games/:gameId/*`);
 
-  if (!user?.isTeacher) {
+  if (!permissions.canAccessAdminPanel) {
     return <Navigate to="/" />;
   }
 

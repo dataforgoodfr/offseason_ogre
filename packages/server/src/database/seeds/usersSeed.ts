@@ -43,7 +43,6 @@ function getUsersData({
   const users: Omit<User, "id">[] = [
     {
       email: "seeding@database.com",
-      isTeacher: false,
       firstName: "Seeding",
       lastName: "Master",
       country: "FR",
@@ -51,7 +50,6 @@ function getUsersData({
     },
     {
       email: "ogre@yopmail.com",
-      isTeacher: true,
       firstName: "Og",
       lastName: "Re",
       country: "FR",
@@ -59,7 +57,6 @@ function getUsersData({
     },
     {
       email: "chareyronlaurene@gmail.com",
-      isTeacher: true,
       firstName: "Laurène",
       lastName: "Chareyron",
       country: "FR",
@@ -67,7 +64,6 @@ function getUsersData({
     },
     {
       email: "b00461284@essec.edu",
-      isTeacher: true,
       firstName: "Vladimir",
       lastName: "Nafissi",
       country: "FR",
@@ -75,7 +71,6 @@ function getUsersData({
     },
     {
       email: "dbsharp404@gmail.com",
-      isTeacher: true,
       firstName: "Ba",
       lastName: "Boo",
       country: "FR",
@@ -83,7 +78,6 @@ function getUsersData({
     },
     {
       email: "dorian.erkens@gmail.com",
-      isTeacher: true,
       firstName: "Dorian",
       lastName: "Erkens",
       country: "FR",
@@ -91,7 +85,6 @@ function getUsersData({
     },
     {
       email: "grandeur.energies@gmail.com",
-      isTeacher: true,
       firstName: "Gregory",
       lastName: "Kotnarovsky",
       country: "FR",
@@ -99,7 +92,6 @@ function getUsersData({
     },
     {
       email: "guilhem.valentin@insidegroup.fr",
-      isTeacher: true,
       firstName: "Guilhem",
       lastName: "Valentin",
       country: "FR",
@@ -107,7 +99,6 @@ function getUsersData({
     },
     {
       email: "kotnarovsky@googlemail.com",
-      isTeacher: true,
       firstName: "Gregory",
       lastName: "Kotnarovsky",
       country: "FR",
@@ -115,7 +106,6 @@ function getUsersData({
     },
     {
       email: "louis.sanna@gmail.com",
-      isTeacher: true,
       firstName: "Louis",
       lastName: "Sanna",
       country: "FR",
@@ -123,7 +113,6 @@ function getUsersData({
     },
     {
       email: "remi.riviere.free@gmail.com",
-      isTeacher: true,
       firstName: "Rémi",
       lastName: "Rivière",
       country: "FR",
@@ -131,7 +120,6 @@ function getUsersData({
     },
     {
       email: "tcateland@gmail.com",
-      isTeacher: true,
       firstName: "Thomas",
       lastName: "Cateland",
       country: "FR",
@@ -139,7 +127,6 @@ function getUsersData({
     },
     {
       email: "william_haidar@hotmail.fr",
-      isTeacher: true,
       firstName: "William",
       lastName: "Haidar",
       country: "FR",
