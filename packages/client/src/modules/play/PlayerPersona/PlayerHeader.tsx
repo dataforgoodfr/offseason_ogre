@@ -15,6 +15,7 @@ import {
   useCurrentStep,
   useMyTeam,
   usePlay,
+  useTeamValues,
   usePersona,
 } from "../context/playContext";
 import { sumAllValues } from "../../persona";
@@ -33,11 +34,17 @@ function PlayerHeader() {
   const { user } = useAuth();
   const { game } = usePlay();
   const { currentPersona, latestPersona } = usePersona();
+  const { teamValues } = useTeamValues();
+  const teamIdToTeamValues = Object.fromEntries(
+    teamValues.map((value) => [value.id, value])
+  );
 
   const myTeam = useMyTeam();
   if (user === null) {
     throw new Error("User must be authentified");
   }
+
+  const playerPoints = myTeam ? teamIdToTeamValues[myTeam.id]?.points || 0 : 0;
 
   return (
     <Box>
@@ -66,7 +73,7 @@ function PlayerHeader() {
           }}
         >
           <Typography sx={{ fontSize: "12px", fontWeight: "600" }}>
-            {formatPoints(currentPersona.points || 0)} <Icon name="trophy" />
+            {formatPoints(playerPoints)} <Icon name="trophy" />
           </Typography>
 
           <RowItem
