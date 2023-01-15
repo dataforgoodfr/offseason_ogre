@@ -201,7 +201,6 @@ function GameListItems() {
 }
 
 function AdminListItems() {
-  const { isAdmin } = useAuth();
   const { t } = useTranslation();
 
   return (
@@ -217,17 +216,11 @@ function AdminListItems() {
           label: t("role.teacher_other"),
           to: "/administration/teachers",
         },
-        ...(isAdmin
-          ? [
-              {
-                IconComponent: (props: any) => (
-                  <Icon {...props} name="admin-user" />
-                ),
-                label: t("role.admin_other"),
-                to: "/administration/admins",
-              },
-            ]
-          : []),
+        {
+          IconComponent: (props: any) => <Icon {...props} name="admin-user" />,
+          label: t("role.admin_other"),
+          to: "/administration/admins",
+        },
         {
           IconComponent: SettingsIcon,
           label: "Gérer mon profil",

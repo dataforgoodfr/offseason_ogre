@@ -7,25 +7,26 @@ import { Role, RoleName, User } from "../users/types";
 import { hasRole } from "./auth.utils";
 
 export { AuthProvider, useAuth };
+export type { UserPermissions };
 
 interface IAuthContext {
   user: null | User;
-  isAdmin: boolean;
   roles: Role[];
-  permissions: Permissions;
+  permissions: UserPermissions;
   findRoleByName: (roleName: RoleName) => Role | undefined;
 }
 
-type Permissions = {
+type UserPermissions = {
   canAccessAdminPanel: boolean;
+  canEditUserRole: boolean;
 };
 
 const AuthContext = React.createContext<IAuthContext>({
   user: null,
-  isAdmin: false,
   roles: [],
   permissions: {
     canAccessAdminPanel: false,
+    canEditUserRole: false,
   },
   findRoleByName: () => undefined,
 });
@@ -74,9 +75,10 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     [roles]
   );
 
-  const permissions: Permissions = React.useMemo(
+  const permissions: UserPermissions = React.useMemo(
     () => ({
       canAccessAdminPanel: hasRole(["admin", "teacher"], user),
+      canEditUserRole: hasRole(["admin"], user),
     }),
     [user]
   );
@@ -84,7 +86,6 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const context = React.useMemo(
     () => ({
       user,
-      isAdmin: user?.role.name === "admin",
       roles,
       permissions,
       findRoleByName,

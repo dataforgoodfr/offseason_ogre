@@ -4,7 +4,7 @@ import axios from "axios";
 import { useMutation, useQuery } from "react-query";
 import { findColumnOption } from "../../../lib/mui";
 import { ErrorAlert, SuccessAlert } from "../../alert";
-import { useAuth } from "../../auth/authProvider";
+import { useAuth, UserPermissions } from "../../auth/authProvider";
 import { t } from "../../translations";
 import { Role } from "../types";
 
@@ -24,7 +24,7 @@ function UsersDataGrid({
 }: {
   defaultFilterItems?: GridFilterItem[];
 }) {
-  const { isAdmin, roles } = useAuth();
+  const { permissions, roles } = useAuth();
 
   // TODO: perform sorting and pagination on server side after v1.
   const queryUsers = useQuery("users", () => {
@@ -66,7 +66,7 @@ function UsersDataGrid({
       <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
         <DataGrid
           rows={rows}
-          columns={buildColumns({ isAdmin, availableRoles: roles })}
+          columns={buildColumns({ permissions, availableRoles: roles })}
           initialState={{
             filter: {
               filterModel: {
@@ -86,10 +86,10 @@ function UsersDataGrid({
 }
 
 function buildColumns({
-  isAdmin,
+  permissions,
   availableRoles,
 }: {
-  isAdmin: boolean;
+  permissions: UserPermissions;
   availableRoles: Role[];
 }): GridColDef<GridRow>[] {
   return [
@@ -133,7 +133,7 @@ function buildColumns({
       })),
       flex: 1,
       minWidth: 150,
-      editable: isAdmin,
+      editable: permissions.canEditUserRole,
       type: "singleSelect",
     },
   ];
