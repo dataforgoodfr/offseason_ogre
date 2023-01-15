@@ -1,5 +1,8 @@
+import { Role } from "@prisma/client";
 import type { Request, Response } from "express";
+import { pick } from "lodash";
 import { z } from "zod";
+import { getUserRequesting } from "../../../lib/express";
 import { rolesServices } from "../../roles/services";
 import { services } from "../services";
 import { logoutController } from "./logoutController";
@@ -90,21 +93,37 @@ async function getTeamForPlayer(request: Request, response: Response) {
   response.status(200).json({ data: document });
 }
 
+const bodySchemaUpdate = z.object({
+  country: z.string().optional(),
+  email: z.string().optional(),
+  lastName: z.string().optional(),
+  firstName: z.string().optional(),
+  isTeacher: z.boolean().optional(),
+  roleId: z.number().optional(),
+});
 async function updateUser(request: Request, response: Response) {
   const paramsSchema = z.object({
     id: z.string().regex(/^\d+$/).transform(Number),
   });
-  const bodySchema = z.object({
-    country: z.string().optional(),
-    email: z.string().optional(),
-    lastName: z.string().optional(),
-    firstName: z.string().optional(),
-    isTeacher: z.boolean().optional(),
-  });
 
   const { id } = paramsSchema.parse(request.params);
-  const updateData = bodySchema.parse(request.body);
+
+  const updateData = filterUpdateData(
+    bodySchemaUpdate.parse(request.body),
+    getUserRequesting(response)?.role
+  );
 
   const document = await services.update(id, updateData);
   response.status(200).json({ document });
+}
+
+function filterUpdateData(
+  update: ReturnType<typeof bodySchemaUpdate.parse>,
+  role: Role | null | undefined
+) {
+  if (role?.name === "admin") {
+    return update;
+  }
+
+  return pick(update, "country", "email", "lastName", "firstName");
 }

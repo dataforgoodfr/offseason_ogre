@@ -3,23 +3,28 @@ import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
 
-import { User } from "../users/types";
+import { Role, User } from "../users/types";
 
 export { AuthProvider, useAuth };
 
 interface IAuthContext {
   user: null | User;
+  isAdmin: boolean;
+  roles: Role[];
 }
 
 const AuthContext = React.createContext<IAuthContext>({
   user: null,
+  isAdmin: false,
+  roles: [],
 });
 const useAuth = () => React.useContext<IAuthContext>(AuthContext);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
+  const [roles, setRoles] = React.useState<Role[]>([]);
 
-  const { isLoading } = useQuery(
+  const { isLoading: isLoadingUser } = useQuery(
     "logged-user",
     () => {
       return axios.get<any, { data: { user: null | User } }>(
@@ -36,12 +41,36 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   );
 
-  if (isLoading) {
+  const { isLoading: isLoadingRoles } = useQuery(
+    "roles",
+    () => {
+      return axios.get<any, { data: { roles: Role[] } }>("/api/roles");
+    },
+    {
+      onSuccess: (data) => {
+        setRoles(data?.data?.roles);
+      },
+      onError: () => {
+        setRoles([]);
+      },
+    }
+  );
+
+  const context = React.useMemo(
+    () => ({
+      user,
+      isAdmin: user?.role.name === "admin",
+      roles,
+    }),
+    [roles, user]
+  );
+
+  if (isLoadingUser || isLoadingRoles) {
     return <Loading />;
   }
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={context}>{children}</AuthContext.Provider>
   );
 }
 
