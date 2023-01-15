@@ -3,7 +3,7 @@ import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
 
-import { Role, User } from "../users/types";
+import { Role, RoleName, User } from "../users/types";
 
 export { AuthProvider, useAuth };
 
@@ -11,12 +11,14 @@ interface IAuthContext {
   user: null | User;
   isAdmin: boolean;
   roles: Role[];
+  findRoleByName: (roleName: RoleName) => Role | undefined;
 }
 
 const AuthContext = React.createContext<IAuthContext>({
   user: null,
   isAdmin: false,
   roles: [],
+  findRoleByName: () => undefined,
 });
 const useAuth = () => React.useContext<IAuthContext>(AuthContext);
 
@@ -56,13 +58,21 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   );
 
+  const findRoleByName = React.useCallback(
+    (roleName: RoleName): Role | undefined => {
+      return roles.find((role) => role.name === roleName);
+    },
+    [roles]
+  );
+
   const context = React.useMemo(
     () => ({
       user,
       isAdmin: user?.role.name === "admin",
       roles,
+      findRoleByName,
     }),
-    [roles, user]
+    [roles, user, findRoleByName]
   );
 
   if (isLoadingUser || isLoadingRoles) {

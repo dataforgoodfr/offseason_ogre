@@ -85,8 +85,11 @@
   "production.energy.nuclear.graph.name": "Nucléaire",
 
   "role.admin": "Admin",
+  "role.admin_other": "Admins",
   "role.player": "Joueur",
+  "role.player_other": "Joueurs",
   "role.teacher": "Animateur",
+  "role.teacher_other": "Animateurs",
 
   "step.consumption-1.name": "Étape 1",
   "step.consumption-1.title": "Choix de consommation 1",

@@ -26,6 +26,8 @@ import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../../auth";
 import { useAuth } from "../../auth/authProvider";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import { useTranslation } from "../../translations/useTranslation";
+import { Icon } from "../../common/components/Icon";
 
 const drawerWidth: number = 240;
 
@@ -189,7 +191,7 @@ function GameListItems() {
     <Fragment>
       {[
         {
-          Icon: GamesIcon,
+          IconComponent: GamesIcon,
           label: "Gestion des ateliers",
           to: "/administration/games",
         },
@@ -199,17 +201,35 @@ function GameListItems() {
 }
 
 function AdminListItems() {
+  const { isAdmin } = useAuth();
+  const { t } = useTranslation();
+
   return (
     <Fragment>
       {[
-        { Icon: PersonIcon, label: "Joueurs", to: "/administration/players" },
         {
-          Icon: SchoolIcon,
-          label: "Animateurs",
-          to: "/administration/teachers",
+          IconComponent: PersonIcon,
+          label: t("role.player_other"),
+          to: "/administration/players",
         },
         {
-          Icon: SettingsIcon,
+          IconComponent: SchoolIcon,
+          label: t("role.teacher_other"),
+          to: "/administration/teachers",
+        },
+        ...(isAdmin
+          ? [
+              {
+                IconComponent: (props: any) => (
+                  <Icon {...props} name="admin-user" />
+                ),
+                label: t("role.admin_other"),
+                to: "/administration/admins",
+              },
+            ]
+          : []),
+        {
+          IconComponent: SettingsIcon,
           label: "Gérer mon profil",
           to: "/administration/settings",
         },
@@ -219,13 +239,11 @@ function AdminListItems() {
 }
 
 function RenderListItem({
-  Icon,
+  IconComponent,
   label,
   to,
 }: {
-  Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-    muiName: string;
-  };
+  IconComponent: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
   label: string;
   to: string;
 }) {
@@ -234,7 +252,7 @@ function RenderListItem({
     <Link to={to} key={to}>
       <ListItemButton selected={match !== null}>
         <ListItemIcon>
-          <Icon color="primary" />
+          <IconComponent color="primary" />
         </ListItemIcon>
         <ListItemText
           primary={label}
