@@ -80,6 +80,16 @@ function StackedEnergyBars({
     return <></>;
   };
 
+  const allBars = data
+    .map((d) =>
+      Object.entries(d)
+        .map(([key, value]) => key)
+        .filter((key) => !["name", "total"].includes(key))
+        .filter((key) => (!hasNuclear(game) ? key !== "nuclear" : true))
+    )
+    .flat();
+  const uniqueBars = [...new Set(allBars)].reverse();
+
   return (
     <Card
       sx={{
@@ -102,60 +112,20 @@ function StackedEnergyBars({
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Bar
-            barSize={25}
-            dataKey="renewable"
-            fill={theme.palette.energy.renewable}
-            name={translateLabel("renewable")}
-            stackId="a"
-            unit="kWh/jour"
-          />
-          <Bar
-            dataKey="mixte"
-            fill={theme.palette.energy.mixte}
-            name={translateLabel("mixte")}
-            stackId="a"
-            unit="kWh/jour"
-          />
-          <Bar
-            dataKey="fossil"
-            fill={theme.palette.energy.fossil}
-            stackId="a"
-            name={translateLabel("fossil")}
-            unit="kWh/jour"
-          />
-          <Bar
-            dataKey="offshore"
-            fill={theme.palette.production.offshore}
-            barSize={25}
-            name={translateLabel("offshore")}
-            stackId="a"
-            unit="kWh/jour"
-          />
-          <Bar
-            dataKey="terrestrial"
-            stackId="a"
-            fill={theme.palette.production.terrestrial}
-            barSize={25}
-            name={translateLabel("terrestrial")}
-            unit="kWh/jour"
-          />
-          <Bar
-            dataKey="grey"
-            stackId="a"
-            fill={theme.palette.energy.grey}
-            unit="kWh/jour"
-            name={translateLabel("grey")}
-          />
-          {hasNuclear(game) && (
+          {uniqueBars.map((key) => (
             <Bar
-              dataKey="nuclear"
+              dataKey={key}
               stackId="a"
-              fill={theme.palette.production.nuclear}
+              fill={
+                theme.palette.energy[key as keyof EnergyPalette] ||
+                theme.palette.production[key as keyof ProductionPalette] ||
+                "black"
+              }
+              barSize={25}
+              name={translateLabel(key)}
               unit="kWh/jour"
-              name={translateLabel("nuclear")}
             />
-          )}
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </Card>
