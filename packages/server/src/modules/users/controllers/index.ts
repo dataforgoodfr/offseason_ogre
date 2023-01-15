@@ -7,6 +7,7 @@ import { rolesServices } from "../../roles/services";
 import { services } from "../services";
 import { logoutController } from "./logoutController";
 import { signInController } from "./signInController";
+import { getManyUsersController } from "./getManyUsersController";
 
 const crudController = {
   getDocumentController,
@@ -15,7 +16,7 @@ const crudController = {
 };
 const controllers = {
   ...crudController,
-  getManyControllers,
+  getManyControllers: getManyUsersController,
   getLoggedUserController,
   logoutController,
   sendMagicLinkController,
@@ -24,23 +25,6 @@ const controllers = {
 };
 
 export { controllers };
-
-async function getManyControllers(request: Request, response: Response) {
-  const querySchema = z.object({
-    page: z.string().regex(/^\d+$/).default("1").transform(Number),
-    sort: z
-      .string()
-      .regex(/[a-zA-Z_]+:(asc|desc)+/)
-      .default("id:asc"),
-  });
-  const { page, sort } = querySchema.parse(request.query);
-  const [sortAttr, sortValue] = sort.split(":") as [string, "asc" | "desc"];
-  const documents = await services.getMany({
-    orderBy: { [sortAttr]: sortValue },
-    page,
-  });
-  response.status(200).json({ documents });
-}
 
 async function signUpController(request: Request, response: Response) {
   const bodySchema = z.object({

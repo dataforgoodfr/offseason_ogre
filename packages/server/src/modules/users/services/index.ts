@@ -33,11 +33,11 @@ async function getDocument(id: number): Promise<Model | null> {
 }
 
 async function getMany({
-  partial = {},
+  where,
   orderBy = {},
   page = 1,
 }: {
-  partial?: Partial<Model>;
+  where?: NonNullable<Parameters<typeof model.findMany>[0]>["where"];
   orderBy?: { [k: string]: "asc" | "desc" };
   page?: number;
 }): Promise<Model[]> {
@@ -45,7 +45,7 @@ async function getMany({
   const PAGE_SIZE = 100_000;
   const pageIdx = page - 1;
   return model.findMany({
-    where: partial,
+    where,
     orderBy,
     skip: pageIdx * PAGE_SIZE,
     take: PAGE_SIZE,
