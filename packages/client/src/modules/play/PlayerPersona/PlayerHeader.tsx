@@ -79,7 +79,7 @@ function PlayerHeader() {
             }
             right={
               <Typography sx={{ fontSize: "12px" }}>
-                {sumAllValues(currentPersona.production) || 0} kWh
+                {sumAllValues(currentPersona.production) || 0} kWh/jour
               </Typography>
             }
           />
@@ -93,7 +93,7 @@ function PlayerHeader() {
             }
             right={
               <Typography sx={{ fontSize: "12px" }}>
-                {sumAllValues(currentPersona.consumption) || 0} kWh
+                {sumAllValues(currentPersona.consumption) || 0} kWh/jour
               </Typography>
             }
           />

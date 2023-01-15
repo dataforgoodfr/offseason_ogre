@@ -82,10 +82,15 @@ function DetailsEnergyBars(
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" domain={[0, 50]} unit="kWh" />
-        <YAxis type="category" width={160} dataKey="name" />
+        <XAxis type="number" domain={[0, 50]} unit="kWh/jour" />
+        <YAxis
+          type="category"
+          width={160}
+          style={{ marginTop: "5px", fontSize: "11px" }}
+          dataKey="name"
+        />
         <Tooltip />
-        <Bar dataKey="value" unit="kWh">
+        <Bar dataKey="value" unit="kWh/jour">
           {personaValues.map(({ name, type }) => {
             return (
               <Cell

@@ -97,7 +97,7 @@ function StackedEnergyBars({
         <BarChart data={data} onClick={onClick}>
           <XAxis dataKey="name" tick={tick} />
           <YAxis
-            name="kWh/j"
+            name="kWh/jour"
             domain={[0, Math.ceil(maximumTotal / 100) * 100]}
           />
           <Tooltip content={<CustomTooltip />} />
@@ -108,21 +108,21 @@ function StackedEnergyBars({
             fill={theme.palette.energy.renewable}
             name={translateLabel("renewable")}
             stackId="a"
-            unit="kWh"
+            unit="kWh/jour"
           />
           <Bar
             dataKey="mixte"
             fill={theme.palette.energy.mixte}
             name={translateLabel("mixte")}
             stackId="a"
-            unit="kWh"
+            unit="kWh/jour"
           />
           <Bar
             dataKey="fossil"
             fill={theme.palette.energy.fossil}
             stackId="a"
             name={translateLabel("fossil")}
-            unit="kWh"
+            unit="kWh/jour"
           />
           <Bar
             dataKey="offshore"
@@ -130,7 +130,7 @@ function StackedEnergyBars({
             barSize={25}
             name={translateLabel("offshore")}
             stackId="a"
-            unit="kWh"
+            unit="kWh/jour"
           />
           <Bar
             dataKey="terrestrial"
@@ -138,13 +138,13 @@ function StackedEnergyBars({
             fill={theme.palette.production.terrestrial}
             barSize={25}
             name={translateLabel("terrestrial")}
-            unit="kWh"
+            unit="kWh/jour"
           />
           <Bar
             dataKey="grey"
             stackId="a"
             fill={theme.palette.energy.grey}
-            unit="kWh"
+            unit="kWh/jour"
             name={translateLabel("grey")}
           />
           {hasNuclear(game) && (
@@ -152,7 +152,7 @@ function StackedEnergyBars({
               dataKey="nuclear"
               stackId="a"
               fill={theme.palette.production.nuclear}
-              unit="kWh"
+              unit="kWh/jour"
               name={translateLabel("nuclear")}
             />
           )}
@@ -167,7 +167,7 @@ function translateLabel(value: string): string {
     total: "Total",
     fossil: "Energie fossile",
     grey: "Energie grise",
-    renewable: "Energie renouvelable",
+    renewable: "Energie décarbonée",
     mixte: "Energie mixte",
     offshore: "Production offshore",
     terrestrial: "Production terrestre",
