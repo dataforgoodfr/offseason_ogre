@@ -100,7 +100,7 @@ function buildEnergyButtons(
                 .map(({ name, value }: { name: string; value: number }) => {
                   return `${translateName(stepType, name)} : ${roundValue(
                     value
-                  )} kWh `;
+                  )} kWh/jour `;
                 })
                 .join("\n")}
             </div>

@@ -61,7 +61,7 @@ function LineEvolution({
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
-          <YAxis name="kWh/j" domain={[0, chartMaxHeight]} />
+          <YAxis name="kWh/jour" domain={[0, chartMaxHeight]} />
           <Tooltip />
           <Legend />
           {range(0, lineCount).map((idx) => (
@@ -70,7 +70,7 @@ function LineEvolution({
               dataKey={`line${idx + 1}`}
               stroke={LINE_COLORS[idx % lineCount]}
               name={`Équipe ${idx + 1}`}
-              unit="kWh"
+              unit="kWh/jour"
             />
           ))}
         </LineChart>
