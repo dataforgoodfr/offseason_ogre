@@ -394,7 +394,7 @@ function useGameSocket({
             update.lastFinishedStep &&
             update.lastFinishedStep !== previous.lastFinishedStep
           ) {
-            navigate(`/play/games/${previous.id}/persona`);
+            navigate(`/play/games/${previous.id}/persona/stats`);
           }
           return { ...previous, ...update };
         });
