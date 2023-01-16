@@ -112,7 +112,7 @@ function PlayerSynthesis({ player }: { player: Player }) {
         >
           <Icon name="production" sx={{ mr: 1 }} />
           <Box display="flex" alignItems="center">
-            {sumAllValues(latestPersona.production) || 0} kWh
+            {sumAllValues(latestPersona.production) || 0} kWh/jour
           </Box>
         </Box>
         <Box
@@ -122,7 +122,7 @@ function PlayerSynthesis({ player }: { player: Player }) {
         >
           <Icon name="consumption" sx={{ mr: 1 }} />
           <Box display="flex" alignItems="center">
-            {sumAllValues(latestPersona.consumption) || 0} kWh
+            {sumAllValues(latestPersona.consumption) || 0} kWh/jour
           </Box>
         </Box>
         <Box

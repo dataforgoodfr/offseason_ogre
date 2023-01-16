@@ -71,7 +71,7 @@ function StackedEnergyBars({
                     "black",
                 }}
               >
-                {translateLabel(key)}: {value}kWh
+                {translateLabel(key)}: {value}kWh/jour
               </Typography>
             ))}
         </Grid>
@@ -79,6 +79,15 @@ function StackedEnergyBars({
     }
     return <></>;
   };
+
+  const uniqueBars = data
+    .flatMap((d) =>
+      Object.keys(d)
+        .filter((key) => !["name", "total"].includes(key))
+        .filter((key) => (!hasNuclear(game) ? key !== "nuclear" : true))
+    )
+    .filter((value, index, array) => array.indexOf(value) === index)
+    .reverse();
 
   return (
     <Card
@@ -97,65 +106,25 @@ function StackedEnergyBars({
         <BarChart data={data} onClick={onClick}>
           <XAxis dataKey="name" tick={tick} />
           <YAxis
-            name="kWh/j"
+            name="kWh/jour"
             domain={[0, Math.ceil(maximumTotal / 100) * 100]}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Bar
-            barSize={25}
-            dataKey="renewable"
-            fill={theme.palette.energy.renewable}
-            name={translateLabel("renewable")}
-            stackId="a"
-            unit="kWh"
-          />
-          <Bar
-            dataKey="mixte"
-            fill={theme.palette.energy.mixte}
-            name={translateLabel("mixte")}
-            stackId="a"
-            unit="kWh"
-          />
-          <Bar
-            dataKey="fossil"
-            fill={theme.palette.energy.fossil}
-            stackId="a"
-            name={translateLabel("fossil")}
-            unit="kWh"
-          />
-          <Bar
-            dataKey="offshore"
-            fill={theme.palette.production.offshore}
-            barSize={25}
-            name={translateLabel("offshore")}
-            stackId="a"
-            unit="kWh"
-          />
-          <Bar
-            dataKey="terrestrial"
-            stackId="a"
-            fill={theme.palette.production.terrestrial}
-            barSize={25}
-            name={translateLabel("terrestrial")}
-            unit="kWh"
-          />
-          <Bar
-            dataKey="grey"
-            stackId="a"
-            fill={theme.palette.energy.grey}
-            unit="kWh"
-            name={translateLabel("grey")}
-          />
-          {hasNuclear(game) && (
+          {uniqueBars.map((key) => (
             <Bar
-              dataKey="nuclear"
+              dataKey={key}
               stackId="a"
-              fill={theme.palette.production.nuclear}
-              unit="kWh"
-              name={translateLabel("nuclear")}
+              fill={
+                theme.palette.energy[key as keyof EnergyPalette] ||
+                theme.palette.production[key as keyof ProductionPalette] ||
+                "black"
+              }
+              barSize={25}
+              name={translateLabel(key)}
+              unit="kWh/jour"
             />
-          )}
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </Card>
@@ -167,7 +136,7 @@ function translateLabel(value: string): string {
     total: "Total",
     fossil: "Energie fossile",
     grey: "Energie grise",
-    renewable: "Energie renouvelable",
+    renewable: "Energie décarbonée",
     mixte: "Energie mixte",
     offshore: "Production offshore",
     terrestrial: "Production terrestre",

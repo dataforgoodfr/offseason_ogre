@@ -70,7 +70,7 @@ const STEPS: readonly GameStep[] = [
     label: "Choix prod 2",
     type: "production",
     energyType: "offshore",
-    budgetAdvised: 4,
+    budgetAdvised: 2,
   },
   {
     id: "production-3",

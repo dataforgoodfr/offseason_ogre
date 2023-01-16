@@ -19,13 +19,13 @@
 
   "production.energy.biomass.name": "Biomasse",
   "production.energy.biomass.accordion.title": "Biomasse (électricité)",
-  "production.energy.biomass.accordion.label-slider": "Surface occupée (en %) du territoire",
+  "production.energy.biomass.accordion.label-slider": "Surface occupée (en %) du territoire forestier et agricole",
   "production.energy.biomass.value.not-credible": "Votre hypothèse dépasse la production (418 TWh) du scénario Negawatt (en plus de détruire nos forêts et réduire nos capacités agricoles).",
   "production.energy.biomass.graph.name": "Biomasse solaire",
 
   "production.energy.geothermal.name": "Géothermie",
   "production.energy.geothermal.accordion.title": "Géothermie (électricité)",
-  "production.energy.geothermal.accordion.label-slider": "Surface occupée (en %) du territoire",
+  "production.energy.geothermal.accordion.label-slider": "Surface occupée (en %) du territoire adapté pour ces installations",
   "production.energy.geothermal.value.not-credible": "Votre hypothèse dépasse le gisement national pour la géothermie (0,14 GW) selon le scénario 100% EnR de l'ADEME.",
   "production.energy.geothermal.graph.name": "Géothermie",
 
@@ -37,7 +37,7 @@
 
   "production.energy.offshoreWindTurbine.name": "Éolien offshore",
   "production.energy.offshoreWindTurbine.accordion.title": "Éolien offshore (électricité)",
-  "production.energy.offshoreWindTurbine.accordion.label-slider": "Surface occupée (en %) du territoire",
+  "production.energy.offshoreWindTurbine.accordion.label-slider": "Surface occupée (en %) de l'espace maritime",
   "production.energy.offshoreWindTurbine.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'éolien offshore (66 GW) selon le scénario 100% EnR de l'ADEME.",
   "production.energy.offshoreWindTurbine.graph.name": "Éolien offshore",
 
@@ -62,18 +62,18 @@
   "production.energy.thermalSolar.name": "Solaire thermique",
   "production.energy.thermalSolar.accordion.title": "Solaire thermique (eau chaude)",
   "production.energy.thermalSolar.accordion.label-slider": "Surface en m² installée sur la toiture",
-  "production.energy.thermalSolar.value.not-credible": "Votre hypothèse dépasse le gisement national pour le solaire thermique (10 GW) selon le scénario 100% EnR de l'ADEME.",
+  "production.energy.thermalSolar.value.not-credible": "Il sera difficile d'équiper tous les logements de 5 à 10 m² de solaire thermique (problème de surchauffe).",
   "production.energy.thermalSolar.graph.name": "Solaire thermique",
 
   "production.energy.tidal.name": "Marées",
   "production.energy.tidal.accordion.title": "Marées (électricité)",
-  "production.energy.tidal.accordion.label-slider": "Surface occupée (en %) du territoire",
+  "production.energy.tidal.accordion.label-slider": "Périmètre occupé (en %) de la côte atlantique",
   "production.energy.tidal.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'énergie marémotrice (3 GW) selon le scénario 100% EnR de l'ADEME mais reste possible selon le syndicat des EnR (15 GW).",
   "production.energy.tidal.graph.name": "Marées",
 
   "production.energy.wave.name": "Vagues",
   "production.energy.wave.accordion.title": "Vagues (électricité)",
-  "production.energy.wave.accordion.label-slider": "Surface occupée (en %) du territoire",
+  "production.energy.wave.accordion.label-slider": "Surface occupée (en %) de l'espace maritime (atlantique)",
   "production.energy.wave.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'énergie houlomotrice (10 GW) selon le scénario 100% EnR de l'ADEME.",
   "production.energy.wave.graph.name": "Vagues",
 
