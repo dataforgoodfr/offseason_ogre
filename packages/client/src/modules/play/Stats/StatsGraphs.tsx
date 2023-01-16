@@ -88,10 +88,10 @@ function useStackedEnergyData() {
     {
       name: "Conso init",
       total: sumAllValues(initialPersona.consumption) || 0,
-      renewable: sumFor(initialPersona.consumption, "renewable"),
       fossil: sumFor(initialPersona.consumption, "fossil"),
-      mixte: sumFor(initialPersona.consumption, "mixte"),
       grey: sumFor(initialPersona.consumption, "grey"),
+      mixte: sumFor(initialPersona.consumption, "mixte"),
+      renewable: sumFor(initialPersona.consumption, "renewable"),
     },
     {
       name: "Prod init",
@@ -109,10 +109,10 @@ function useStackedEnergyData() {
         return {
           name: step ? `Étape ${step}` : "Initial",
           total: sumAllValues(persona.consumption) || 0,
-          renewable: sumFor(persona.consumption, "renewable"),
           fossil: sumFor(persona.consumption, "fossil"),
-          mixte: sumFor(persona.consumption, "mixte"),
           grey: sumFor(persona.consumption, "grey"),
+          mixte: sumFor(persona.consumption, "mixte"),
+          renewable: sumFor(persona.consumption, "renewable"),
         };
       } else {
         return {
