@@ -71,7 +71,7 @@ function StackedEnergyBars({
                     "black",
                 }}
               >
-                {translateLabel(key)}: {value}kWh
+                {translateLabel(key)}: {value}kWh/jour
               </Typography>
             ))}
         </Grid>
@@ -80,15 +80,14 @@ function StackedEnergyBars({
     return <></>;
   };
 
-  const allBars = data
-    .map((d) =>
-      Object.entries(d)
-        .map(([key, value]) => key)
+  const uniqueBars = data
+    .flatMap((d) =>
+      Object.keys(d)
         .filter((key) => !["name", "total"].includes(key))
         .filter((key) => (!hasNuclear(game) ? key !== "nuclear" : true))
     )
-    .flat();
-  const uniqueBars = [...new Set(allBars)].reverse();
+    .filter((value, index, array) => array.indexOf(value) === index)
+    .reverse();
 
   return (
     <Card
