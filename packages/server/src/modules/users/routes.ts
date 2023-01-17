@@ -1,6 +1,9 @@
 import express from "express";
 import { asyncErrorHandler } from "../utils/asyncErrorHandler";
-import { guardResource } from "../../middlewares/guardResource";
+import {
+  checkOwnershipFromRequest,
+  guardResource,
+} from "../../middlewares/guardResource";
 import { controllers } from "./controllers";
 
 export { router };
@@ -30,12 +33,7 @@ router.put(
   "/:id",
   guardResource({
     roles: ["admin"],
-    ownership: {
-      fromRequest: {
-        source: "params",
-        path: "id",
-      },
-    },
+    ownership: checkOwnershipFromRequest("params", "id"),
   }),
   asyncErrorHandler(controllers.updateUser)
 );

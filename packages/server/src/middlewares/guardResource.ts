@@ -5,7 +5,7 @@ import invariant from "tiny-invariant";
 import { getUserRequesting } from "../lib/express";
 import { logger } from "../logger";
 
-export { guardResource };
+export { checkOwnershipFromRequest, guardResource };
 
 /**
  * If multiple options are specified, they are treated as a logical OR.
@@ -20,15 +20,7 @@ type GuardOptions = {
   /**
    * User can access resource if they own the resource.
    */
-  ownership?: {
-    /**
-     * Verify ownership from request data.
-     */
-    fromRequest: {
-      source: "body" | "params";
-      path: string;
-    };
-  };
+  ownership?: GuardCheckOwnership;
 };
 
 type GuardCheck = (
@@ -40,6 +32,20 @@ type GuardCheck = (
 type GuardCheckResult = {
   success: boolean;
 };
+
+type GuardCheckOwnership = (
+  user: User & { role: Role },
+  request: Request
+) => GuardCheckResult;
+
+const checkOwnershipFromRequest =
+  (source: "body" | "params", path: string): GuardCheckOwnership =>
+  (user, request) => {
+    const ownerId = parseInt(get(request, `${source}.${path}`), 10);
+    return {
+      success: user.id === ownerId,
+    };
+  };
 
 const checkRole: GuardCheck = (
   { roles = ["*"] }: GuardOptions,
@@ -74,16 +80,7 @@ const checkOwnership: GuardCheck = (
   }
 
   try {
-    const ownerId = parseInt(
-      get(
-        request,
-        `${ownership.fromRequest.source}.${ownership.fromRequest.path}`
-      ),
-      10
-    );
-    return {
-      success: user.id === ownerId,
-    };
+    return ownership(user, request);
   } catch (err) {
     logger.error(err);
     return {
