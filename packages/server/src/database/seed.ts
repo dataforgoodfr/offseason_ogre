@@ -1,32 +1,9 @@
-import { database } from ".";
-import { seed as rolesSeed } from "./seeds/rolesSeed";
-import { seed as usersSeed } from "./seeds/usersSeed";
-import { seed as personaSeed } from "./seeds/personaSeed";
-import { seed as actionsSeed } from "./seeds/actionsSeed";
-import {
-  seed as productionActionsSeed,
-  pointsIntervalSeed,
-} from "./seeds/productionActionsSeed";
-import { performSeed } from "./utils";
-import { logger } from "../logger";
+import { connectToDatase, disconnectFromDatase, seed } from ".";
 
-// eslint-disable-next-line no-console
-logger.info("Starting seeding...");
-
-async function seed() {
-  await database.$connect();
-
-  await performSeed(rolesSeed);
-  await performSeed(usersSeed);
-  await performSeed(personaSeed);
-  await performSeed(actionsSeed);
-  await performSeed(productionActionsSeed);
-  await performSeed(pointsIntervalSeed);
-
-  await database.$disconnect();
+async function seedDatabase() {
+  await connectToDatase();
+  await seed();
+  await disconnectFromDatase();
 }
 
-seed().then(() => {
-  // eslint-disable-next-line no-console
-  logger.info("Seeding done");
-});
+seedDatabase();
