@@ -6,7 +6,7 @@ import {
   ProductionAction,
   ProductionActionSeed,
 } from "../../modules/productionActions/types";
-import { Seed } from "../types";
+import { Seeder } from "../types";
 
 export { seed, pointsIntervalSeed };
 
@@ -14,7 +14,7 @@ type ProductionActionWithPointInterval = ProductionAction & {
   pointsInterval: PointsInterval[];
 };
 
-const seed: Seed<ProductionAction> = {
+const seed: Seeder<ProductionAction> = {
   seeder: (productionAction) =>
     database.productionAction.upsert({
       where: {
@@ -26,7 +26,7 @@ const seed: Seed<ProductionAction> = {
   data: getProductionActionsData(),
 };
 
-const pointsIntervalSeed: Seed<PointsInterval> = {
+const pointsIntervalSeed: Seeder<PointsInterval> = {
   seeder: (pointsInterval) =>
     database.pointsInterval.upsert({
       where: {

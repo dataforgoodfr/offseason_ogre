@@ -14,11 +14,12 @@ import { getDefault } from "../services/personalization";
 import { validateProfilesController } from "./validateProfilesController";
 import { updateProfilesController } from "./updateProfilesController";
 import { generateCode } from "../services/utils";
+import { getManyGamesControllers } from "./getManyGamesController";
 
 const crudController = {
   createController,
   changeTeamController,
-  getManyControllers,
+  getManyControllers: getManyGamesControllers,
   getGame,
   getPlayedGamesController,
   getPlayersController,
@@ -53,11 +54,6 @@ async function createController(request: Request, response: Response) {
     ...documentToCreate,
   });
   response.status(201).json({ data: newDocument });
-}
-
-async function getManyControllers(request: Request, response: Response) {
-  const documents = await services.getMany();
-  response.status(200).json({ documents });
 }
 
 async function getPlayedGamesController(request: Request, response: Response) {

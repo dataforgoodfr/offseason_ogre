@@ -15,7 +15,7 @@ function getSocketData(socket: Socket): SocketData {
     email: z.string(),
     firstName: z.string(),
     lastName: z.string(),
-    isTeacher: z.boolean(),
+    roleId: z.number(),
   });
   return z.object({ gameId: z.number(), user: userSchema }).parse(socket.data);
 }

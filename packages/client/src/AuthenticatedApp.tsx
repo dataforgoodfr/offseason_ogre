@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./modules/auth/authProvider";
 import {
+  Admins,
   Players,
   Games,
   Game,
@@ -32,6 +33,7 @@ function AuthenticatedApp() {
       <Route path="administration" element={<AdministrationLayout />}>
         <Route path="games" element={<Games />} />
         <Route path="games/:id" element={<Game />} />
+        <Route path="admins" element={<Admins />} />
         <Route path="players" element={<Players />} />
         <Route path="teachers" element={<Teachers />} />
         <Route path="settings" element={<Settings />} />

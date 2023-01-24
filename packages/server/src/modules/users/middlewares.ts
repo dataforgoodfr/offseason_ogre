@@ -28,6 +28,9 @@ async function authenticateUser(
   database.user
     .findUnique({
       where: { email },
+      include: {
+        role: true,
+      },
     })
     .then((user) => {
       response.locals.user = user;

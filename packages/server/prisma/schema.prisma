@@ -34,7 +34,7 @@ model Players {
   gameId          Int
   team            Team            @relation(fields: [teamId], references: [id])
   teamId          Int
-  user            User            @relation(fields: [userId], references: [id])
+  user            User            @relation("PlayedGames", fields: [userId], references: [id])
   userId          Int
   profile         Profile?        @relation(fields: [profileId], references: [id])
   profileId       Int?            @unique
@@ -50,9 +50,22 @@ model User {
   email       String    @unique
   firstName   String
   lastName    String
-  isTeacher   Boolean   @default(false)
-  playedGames Players[]
+  playedGames Players[] @relation("PlayedGames")
   taughtGames Game[]    @relation("TaughtGames")
+  roleId      Int
+  role        Role      @relation(fields: [roleId], references: [id])
+}
+
+model Role {
+  id    Int      @id @default(autoincrement())
+  name  RoleName @unique
+  users User[]
+}
+
+enum RoleName {
+  admin
+  teacher
+  player
 }
 
 model Team {

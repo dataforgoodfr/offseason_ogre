@@ -2,16 +2,30 @@ import { Box, CircularProgress } from "@mui/material";
 import { DataGrid, GridColDef, GridFilterItem } from "@mui/x-data-grid";
 import axios from "axios";
 import { useMutation, useQuery } from "react-query";
-import { IUser } from "../../../utils/types";
-import { SuccessAlert } from "../../alert";
+import { findColumnOption } from "../../../lib/mui";
+import { ErrorAlert, SuccessAlert } from "../../alert";
+import { useAuth, UserPermissions } from "../../auth/authProvider";
+import { t } from "../../translations";
+import { Role } from "../types";
 
 export { UsersDataGrid };
+
+type GridRow = {
+  id: number;
+  lastName: string;
+  firstName: string;
+  email: string;
+  country: string;
+  roleId: number;
+};
 
 function UsersDataGrid({
   defaultFilterItems = [],
 }: {
   defaultFilterItems?: GridFilterItem[];
 }) {
+  const { permissions, roles } = useAuth();
+
   // TODO: perform sorting and pagination on server side after v1.
   const queryUsers = useQuery("users", () => {
     return axios.get<undefined, { data: { documents: any[] } }>(
@@ -19,14 +33,21 @@ function UsersDataGrid({
     );
   });
 
-  const mutateUser = useMutation((user: IUser) => {
+  const mutateUser = useMutation((user: GridRow) => {
     const path = `/api/users/${user.id}`;
     return axios.put(path, user);
   });
 
-  const handleCellEditCommit = (params: any) => {
-    const newValue = { ...params.row, [params.field]: params.value };
-    mutateUser.mutate(newValue);
+  const handleCellEdit = (
+    newRow: GridRow,
+    oldRow: GridRow
+  ): Promise<GridRow> => {
+    return new Promise((resolve) => {
+      mutateUser.mutate(newRow, {
+        onSuccess: () => resolve(newRow),
+        onError: () => resolve(oldRow),
+      });
+    });
   };
 
   if (queryUsers.isLoading) {
@@ -38,11 +59,14 @@ function UsersDataGrid({
   return (
     <>
       {mutateUser.isSuccess && <SuccessAlert />}
+      {mutateUser.isError && (
+        <ErrorAlert message={t("message.error.admin.global.UNEXPECTED")} />
+      )}
 
       <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
         <DataGrid
           rows={rows}
-          columns={buildColumns()}
+          columns={buildColumns({ permissions, availableRoles: roles })}
           initialState={{
             filter: {
               filterModel: {
@@ -53,20 +77,21 @@ function UsersDataGrid({
           disableSelectionOnClick
           pageSize={20}
           rowsPerPageOptions={[20]}
-          onCellEditCommit={handleCellEditCommit}
+          experimentalFeatures={{ newEditingApi: true }}
+          processRowUpdate={handleCellEdit}
         />
       </Box>
     </>
   );
 }
 
-function buildColumns(): GridColDef<{
-  lastName: string;
-  firstName: string;
-  email: string;
-  country: string;
-  isTeacher: boolean;
-}>[] {
+function buildColumns({
+  permissions,
+  availableRoles,
+}: {
+  permissions: UserPermissions;
+  availableRoles: Role[];
+}): GridColDef<GridRow>[] {
   return [
     {
       field: "last-name",
@@ -98,13 +123,18 @@ function buildColumns(): GridColDef<{
       minWidth: 150,
     },
     {
-      field: "isTeacher",
-      headerName: "Animateur",
-      editable: true,
-      type: "boolean",
-      valueGetter: (params) => params.row.isTeacher,
+      field: "roleId",
+      headerName: "Role",
+      valueFormatter: ({ value, field, api }) =>
+        findColumnOption(api, field, value)?.label,
+      valueOptions: availableRoles.map((role) => ({
+        value: role.id,
+        label: t(`role.${role.name}` as any),
+      })),
       flex: 1,
       minWidth: 150,
+      editable: permissions.canEditUserRole,
+      type: "singleSelect",
     },
   ];
 }
