@@ -2,6 +2,7 @@ import { Box, Paper, Typography } from "@mui/material";
 import { useAuth } from "../../auth/authProvider";
 import { useTranslation } from "../../translations/useTranslation";
 import { UsersDataGrid } from "../../users";
+import { RoleNames } from "../../users/types";
 
 export { Players };
 
@@ -20,7 +21,7 @@ function Players(): JSX.Element {
             {
               columnField: "roleId",
               operatorValue: "is",
-              value: findRoleByName("player")?.id,
+              value: findRoleByName(RoleNames.PLAYER)?.id,
             },
           ]}
         />

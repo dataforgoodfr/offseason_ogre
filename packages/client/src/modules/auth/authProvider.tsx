@@ -3,7 +3,7 @@ import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
 
-import { Role, RoleName, User } from "../users/types";
+import { Role, RoleName, RoleNames, User } from "../users/types";
 import { hasRole } from "./auth.utils";
 
 export { AuthProvider, useAuth };
@@ -77,8 +77,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const permissions: UserPermissions = React.useMemo(
     () => ({
-      canAccessAdminPanel: hasRole(["admin", "teacher"], user),
-      canEditUserRole: hasRole(["admin"], user),
+      canAccessAdminPanel: hasRole([RoleNames.ADMIN, RoleNames.TEACHER], user),
+      canEditUserRole: hasRole([RoleNames.ADMIN], user),
     }),
     [user]
   );

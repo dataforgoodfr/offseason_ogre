@@ -1,5 +1,6 @@
 import { Game } from "../administration/Games/types";
 
+export { RoleNames };
 export type { Role, RoleName, User };
 
 interface Players {
@@ -26,4 +27,10 @@ interface Role {
   name: RoleName;
 }
 
-type RoleName = "admin" | "player" | "teacher";
+const RoleNames = {
+  ADMIN: "admin",
+  PLAYER: "player",
+  TEACHER: "teacher",
+} as const;
+
+type RoleName = typeof RoleNames[keyof typeof RoleNames];
