@@ -21,7 +21,7 @@ import {
   SvgIconTypeMap,
   useTheme,
 } from "@mui/material";
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../../auth";
 import { useAuth } from "../../auth/authProvider";
@@ -202,33 +202,44 @@ function GameListItems() {
 
 function AdminListItems() {
   const { t } = useTranslation();
+  const { permissions } = useAuth();
 
-  return (
-    <Fragment>
-      {[
-        {
-          IconComponent: PersonIcon,
-          label: t("role.player_other"),
-          to: "/administration/players",
-        },
-        {
-          IconComponent: SchoolIcon,
-          label: t("role.teacher_other"),
-          to: "/administration/teachers",
-        },
-        {
-          IconComponent: (props: any) => <Icon {...props} name="admin-user" />,
-          label: t("role.admin_other"),
-          to: "/administration/admins",
-        },
-        {
-          IconComponent: SettingsIcon,
-          label: "Gérer mon profil",
-          to: "/administration/settings",
-        },
-      ].map(RenderListItem)}
-    </Fragment>
-  );
+  const navItems = useMemo(() => {
+    return [
+      {
+        IconComponent: PersonIcon,
+        label: t("role.player_other"),
+        to: "/administration/players",
+      },
+      ...(permissions.canAccessTeacherList
+        ? [
+            {
+              IconComponent: SchoolIcon,
+              label: t("role.teacher_other"),
+              to: "/administration/teachers",
+            },
+          ]
+        : []),
+      ...(permissions.canAccessAdminList
+        ? [
+            {
+              IconComponent: (props: any) => (
+                <Icon {...props} name="admin-user" />
+              ),
+              label: t("role.admin_other"),
+              to: "/administration/admins",
+            },
+          ]
+        : []),
+      {
+        IconComponent: SettingsIcon,
+        label: "Gérer mon profil",
+        to: "/administration/settings",
+      },
+    ];
+  }, [permissions, t]);
+
+  return <Fragment>{navItems.map(RenderListItem)}</Fragment>;
 }
 
 function RenderListItem({

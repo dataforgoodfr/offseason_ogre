@@ -17,7 +17,9 @@ interface IAuthContext {
 }
 
 type UserPermissions = {
+  canAccessAdminList: boolean;
   canAccessAdminPanel: boolean;
+  canAccessTeacherList: boolean;
   canEditUserRole: boolean;
 };
 
@@ -25,7 +27,9 @@ const AuthContext = React.createContext<IAuthContext>({
   user: null,
   roles: [],
   permissions: {
+    canAccessAdminList: false,
     canAccessAdminPanel: false,
+    canAccessTeacherList: false,
     canEditUserRole: false,
   },
   findRoleByName: () => undefined,
@@ -77,7 +81,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const permissions: UserPermissions = React.useMemo(
     () => ({
+      canAccessAdminList: hasRole([RoleNames.ADMIN], user),
       canAccessAdminPanel: hasRole([RoleNames.ADMIN, RoleNames.TEACHER], user),
+      canAccessTeacherList: hasRole([RoleNames.ADMIN], user),
       canEditUserRole: hasRole([RoleNames.ADMIN], user),
     }),
     [user]
