@@ -12,6 +12,10 @@ CREATE TABLE "Role" (
 -- CreateIndex
 CREATE UNIQUE INDEX "Role_name_key" ON "Role"("name");
 
+INSERT INTO "Role" ("name") VALUES ('admin');
+INSERT INTO "Role" ("name") VALUES ('teacher');
+INSERT INTO "Role" ("name") VALUES ('player');
+
 -- AlterTable
 ALTER TABLE "User" ADD COLUMN     "roleId" INTEGER;
 
@@ -19,14 +23,14 @@ ALTER TABLE "User" ADD COLUMN     "roleId" INTEGER;
 DO $$
 DECLARE
   r RECORD;
-  player_role RECORD;
+  player_role_id INTEGER;
   code text := '';
 BEGIN
-    player_role := (SELECT DISTINCT id FROM "Role" WHERE name='player');
+    player_role_id := (SELECT DISTINCT id FROM "Role" WHERE name='player');
     FOR r IN
         SELECT * FROM "User"
     LOOP
-        UPDATE "User" SET roleId=player_role.id WHERE id=r.id;
+        UPDATE "User" SET "roleId"=player_role_id WHERE id=r.id;
     END LOOP;
 END;
 $$
