@@ -2,7 +2,6 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
-
 import Cancel from "@mui/icons-material/Cancel";
 import Cloud from "@mui/icons-material/Cloud";
 import CheckCircle from "@mui/icons-material/CheckCircle";
@@ -40,6 +39,7 @@ import {
   Lock,
   LunchDining,
   Microwave,
+  Shield,
   TipsAndUpdates,
   Train,
 } from "@mui/icons-material";
@@ -49,6 +49,7 @@ export { Icon };
 const ICONS = {
   "action-points": DirectionsBike,
   "access-time": AccessTimeIcon,
+  "admin-user": Shield,
   "arrow-back": ArrowBackIosIcon,
   "arrow-forward": ArrowForwardIosIcon,
   badge: Badge,

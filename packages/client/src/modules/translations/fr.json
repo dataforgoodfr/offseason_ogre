@@ -1,6 +1,7 @@
 {
   "cta.join-game": "Rejoindre le jeu",
 
+  "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
   "message.error.signup.USER_DOES_NOT_EXIST": "Pas d'utilisateur avec cet email, créez un compte pour vous connecter.",
   "message.error.global.UNEXPECTED": "Une erreur inconnue est survenue. Demandez de l'aide à votre chef.fe d'atelier.",
   "message.error.register.GAME_ALREADY_STARTED": "Vous ne pouvez pas rejoindre une partie qui a déjà commencé.",
@@ -82,6 +83,13 @@
   "production.energy.nuclear.accordion.label-slider": "Comparaison par rapport à l'existant (installation actuelle = 100%)",
   "production.energy.nuclear.value.not-credible": "Votre hypothèse dépasse largement les scénarios RTE en matière de capacité installée en 2050.",
   "production.energy.nuclear.graph.name": "Nucléaire",
+
+  "role.admin": "Admin",
+  "role.admin_other": "Admins",
+  "role.player": "Joueur",
+  "role.player_other": "Joueurs",
+  "role.teacher": "Animateur",
+  "role.teacher_other": "Animateurs",
 
   "step.consumption-1.name": "Étape 1",
   "step.consumption-1.title": "Choix de consommation 1",

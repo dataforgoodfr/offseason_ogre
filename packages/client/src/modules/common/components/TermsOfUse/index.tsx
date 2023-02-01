@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Dialog } from "../Dialog";
-import { DialogTitle, DialogActions, Button } from "@mui/material";
+import { Button } from "@mui/material";
 
 const TermsOfUse = () => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);

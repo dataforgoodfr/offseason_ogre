@@ -4,16 +4,16 @@ import { useTranslation } from "../../translations/useTranslation";
 import { UsersDataGrid } from "../../users";
 import { RoleNames } from "../../users/types";
 
-export { Teachers };
+export { Admins };
 
-function Teachers(): JSX.Element {
+function Admins(): JSX.Element {
   const { findRoleByName } = useAuth();
   const { t } = useTranslation();
 
   return (
     <>
       <Box alignItems="center" display="flex">
-        <Typography variant="h3">{t("role.teacher_other")}</Typography>
+        <Typography variant="h3">{t("role.admin_other")}</Typography>
       </Box>
       <Paper sx={{ mt: 2, p: 2 }}>
         <UsersDataGrid
@@ -21,7 +21,7 @@ function Teachers(): JSX.Element {
             {
               columnField: "roleId",
               operatorValue: "is",
-              value: findRoleByName(RoleNames.TEACHER)?.id,
+              value: findRoleByName(RoleNames.ADMIN)?.id,
             },
           ]}
         />

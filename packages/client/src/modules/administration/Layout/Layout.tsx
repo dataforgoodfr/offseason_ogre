@@ -21,22 +21,24 @@ import {
   SvgIconTypeMap,
   useTheme,
 } from "@mui/material";
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../../auth";
 import { useAuth } from "../../auth/authProvider";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
+import { useTranslation } from "../../translations/useTranslation";
+import { Icon } from "../../common/components/Icon";
 
 const drawerWidth: number = 240;
 
 export { Layout };
 
 function Layout() {
-  const { user } = useAuth();
+  const { permissions } = useAuth();
   const theme = useTheme();
   const isGameAdministrationRoute = useMatch(`administration/games/:gameId/*`);
 
-  if (!user?.isTeacher) {
+  if (!permissions.canAccessAdminPanel) {
     return <Navigate to="/" />;
   }
 
@@ -189,7 +191,7 @@ function GameListItems() {
     <Fragment>
       {[
         {
-          Icon: GamesIcon,
+          IconComponent: GamesIcon,
           label: "Gestion des ateliers",
           to: "/administration/games",
         },
@@ -199,33 +201,53 @@ function GameListItems() {
 }
 
 function AdminListItems() {
-  return (
-    <Fragment>
-      {[
-        { Icon: PersonIcon, label: "Joueurs", to: "/administration/players" },
-        {
-          Icon: SchoolIcon,
-          label: "Animateurs",
-          to: "/administration/teachers",
-        },
-        {
-          Icon: SettingsIcon,
-          label: "Gérer mon profil",
-          to: "/administration/settings",
-        },
-      ].map(RenderListItem)}
-    </Fragment>
-  );
+  const { t } = useTranslation();
+  const { permissions } = useAuth();
+
+  const navItems = useMemo(() => {
+    return [
+      {
+        IconComponent: PersonIcon,
+        label: t("role.player_other"),
+        to: "/administration/players",
+      },
+      ...(permissions.canAccessTeacherList
+        ? [
+            {
+              IconComponent: SchoolIcon,
+              label: t("role.teacher_other"),
+              to: "/administration/teachers",
+            },
+          ]
+        : []),
+      ...(permissions.canAccessAdminList
+        ? [
+            {
+              IconComponent: (props: any) => (
+                <Icon {...props} name="admin-user" />
+              ),
+              label: t("role.admin_other"),
+              to: "/administration/admins",
+            },
+          ]
+        : []),
+      {
+        IconComponent: SettingsIcon,
+        label: "Gérer mon profil",
+        to: "/administration/settings",
+      },
+    ];
+  }, [permissions, t]);
+
+  return <Fragment>{navItems.map(RenderListItem)}</Fragment>;
 }
 
 function RenderListItem({
-  Icon,
+  IconComponent,
   label,
   to,
 }: {
-  Icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-    muiName: string;
-  };
+  IconComponent: OverridableComponent<SvgIconTypeMap<{}, "svg">>;
   label: string;
   to: string;
 }) {
@@ -234,7 +256,7 @@ function RenderListItem({
     <Link to={to} key={to}>
       <ListItemButton selected={match !== null}>
         <ListItemIcon>
-          <Icon color="primary" />
+          <IconComponent color="primary" />
         </ListItemIcon>
         <ListItemText
           primary={label}

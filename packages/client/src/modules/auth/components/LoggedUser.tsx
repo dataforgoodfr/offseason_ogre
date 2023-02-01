@@ -92,9 +92,9 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
 
 function AdministrationMenuItem({ handleClose }: { handleClose: () => void }) {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { permissions } = useAuth();
 
-  if (!user?.isTeacher) {
+  if (!permissions.canAccessAdminPanel) {
     return <></>;
   }
   return (

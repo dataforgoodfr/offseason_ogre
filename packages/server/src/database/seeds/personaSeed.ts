@@ -1,10 +1,10 @@
 import { Personalization, PersonalizationName } from "@prisma/client";
 import { database } from "..";
-import { Seed } from "../types";
+import { Seeder } from "../types";
 
 export { seed };
 
-const seed: Seed<Omit<Personalization, "id" | "updatedAt">> = {
+const seed: Seeder<Omit<Personalization, "id" | "updatedAt">> = {
   seeder: (persona: Omit<Personalization, "id" | "updatedAt">) =>
     database.personalization.upsert({
       where: {

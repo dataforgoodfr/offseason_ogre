@@ -1,5 +1,9 @@
 import express from "express";
 import { asyncErrorHandler } from "../utils/asyncErrorHandler";
+import {
+  checkOwnershipFromRequest,
+  guardResource,
+} from "../../middlewares/guardResource";
 import { controllers } from "./controllers";
 
 export { router };
@@ -25,4 +29,11 @@ router.post(
   asyncErrorHandler(controllers.sendMagicLinkController)
 );
 
-router.put("/:id", asyncErrorHandler(controllers.updateUser));
+router.put(
+  "/:id",
+  guardResource({
+    roles: ["admin"],
+    ownership: checkOwnershipFromRequest("params", "id"),
+  }),
+  asyncErrorHandler(controllers.updateUser)
+);

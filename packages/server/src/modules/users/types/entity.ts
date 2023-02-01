@@ -7,8 +7,8 @@ interface User {
   country: string;
   email: string;
   firstName: string;
-  isTeacher: boolean;
   lastName: string;
+  roleId: number;
 }
 
 interface Players {
