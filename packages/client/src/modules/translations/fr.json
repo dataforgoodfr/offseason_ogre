@@ -1,6 +1,8 @@
 {
   "cta.join-game": "Rejoindre le jeu",
+  "cta.read-synthesis": "Voir la synthèse",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
+  "cta.validate-team-choice": "Valider pour l'équipe",
 
   "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
   "message.error.signup.USER_DOES_NOT_EXIST": "Pas d'utilisateur avec cet email, créez un compte pour vous connecter.",
@@ -11,6 +13,7 @@
   "message.success.copied": "Copiée !",
 
   "form.field.game-code.label": "Code du jeu",
+  "form.field.scenario-name.label": "Nom du scénario",
   "form.validation.yellow": "Les cases colorées en jaune contiennent les valeurs à vérifier.",
   "form.validation.heating": "Concernant le chauffage, si le joueur a donné deux valeurs (facture en € et consommation en kWh), il est nécessaire de vérifier que les deux valeurs correspondent. Si ce n’est pas le cas, merci de ne laisser que la valeur la plus probable et de supprimer l’autre.",
 
@@ -107,6 +110,10 @@
   "step.production-3.name": "Étape 5",
   "step.production-3.title": "Choix de production 3",
 
+  "synthesis.player.scenario-section.title": "Nom du scénario",
+  "synthesis.player.scenario-section.edit-help.description-1": "Donnez un nom à votre scénario pour le futur énergétique de la France.",
+  "synthesis.player.scenario-section.edit-help.description-2": "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe.",
+
   "form.status.draft": "Brouillon",
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",
@@ -114,5 +121,4 @@
   "form.last-action.draft": "Dernière sauvegarde",
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
   "form.last-action.validated": "Validation"
-
 }

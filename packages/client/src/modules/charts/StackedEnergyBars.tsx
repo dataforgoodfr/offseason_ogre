@@ -62,6 +62,7 @@ function StackedEnergyBars({
             .filter(([key]) => (!hasNuclear(game) ? key !== "nuclear" : true))
             .map(([key, value]) => (
               <Typography
+                key={key}
                 sx={{
                   mt: 1,
                   mb: 1,

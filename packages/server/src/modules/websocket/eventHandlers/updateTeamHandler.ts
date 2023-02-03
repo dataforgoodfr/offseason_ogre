@@ -8,7 +8,12 @@ import { services as teamServices } from "../../teams/services";
 import * as teamActionsServices from "../../teamActions/services";
 import { rooms } from "../constants";
 import { Server, Socket } from "../types";
-import { getSocketData, hasFinishedStep, wrapHandler } from "../utils";
+import {
+  getSocketData,
+  hasFinishedStep,
+  isGameFinished,
+  wrapHandler,
+} from "../utils";
 
 export { handleUpdateTeam };
 
@@ -46,6 +51,11 @@ async function handleUpdateTeamSafely(
       const { gameId, user } = getSocketData(socket);
 
       const { game, player } = await getPlayerAndGame(gameId, user.id);
+
+      invariant(
+        !isGameFinished(game),
+        `User ${player.userId} can't update team ${player.teamId} because game ${player.gameId} is finished`
+      );
 
       if (teamActionsUpdate && teamActionsUpdate.length !== 0) {
         const areUpdatable = !player.hasFinishedStep && !hasFinishedStep(game);

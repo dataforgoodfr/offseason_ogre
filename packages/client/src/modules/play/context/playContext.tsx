@@ -37,6 +37,7 @@ export {
 
 interface IPlayContext {
   game: IGameWithTeams;
+  isGameFinished: boolean;
   isStepFinished: boolean;
   updateGame: (update: Partial<IGame>) => void;
   playerActions: PlayerActions[];
@@ -172,6 +173,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     <PlayContext.Provider
       value={{
         game: gameWithSortedTeams,
+        isGameFinished: gameWithSortedTeams.status === "finished",
         isStepFinished:
           gameWithSortedTeams.step === gameWithSortedTeams.lastFinishedStep,
         updateGame,
