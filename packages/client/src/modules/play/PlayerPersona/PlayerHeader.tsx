@@ -199,7 +199,7 @@ function Header({
 }
 
 function Actions() {
-  const { game, isStepFinished } = usePlay();
+  const { game, isGameFinished, isStepFinished } = usePlay();
   const currentStep = useCurrentStep();
 
   const iconName =
@@ -237,7 +237,7 @@ function Actions() {
           mt: 2,
           width: "200px",
         }}
-        disabled={game.step === 0 || isStepFinished}
+        disabled={!isGameFinished && (game.step === 0 || isStepFinished)}
       >
         <Icon name={iconName} sx={{ mr: 1 }} />
         {currentStep?.label}

@@ -11,13 +11,58 @@ import { ScenarioNameTextField } from "./SynthesisContent.styles";
 export { SynthesisScenarioName };
 
 function SynthesisScenarioName() {
+  const { isGameFinished } = usePlay();
+
+  const isTeamEditable = !isGameFinished;
+
+  return (
+    <Box display="flex" flexDirection="column" pr={4} gap={3}>
+      <Typography sx={{ fontSize: "20px", fontWeight: "600" }}>
+        <Icon name="team" /> Nom du scénario
+        {isTeamEditable && <ScenarioNameEditionHelp />}
+      </Typography>
+      <Box display="flex" flexDirection="column" gap={3} pl={4}>
+        {isTeamEditable ? <ScenarioNameEditable /> : <ScenarioNameReadonly />}
+      </Box>
+    </Box>
+  );
+}
+
+function ScenarioNameEditionHelp() {
+  const [openHelp, setOpenHelp] = useState(false);
+
+  return (
+    <>
+      <IconButton
+        aria-label="help with current step"
+        onClick={() => setOpenHelp(true)}
+      >
+        <Icon name="helper" sx={{ color: "white" }} />
+      </IconButton>
+      <Dialog open={openHelp} handleClose={() => setOpenHelp(false)}>
+        <>
+          <Typography>
+            Donnez un nom à votre scénario pour le futur énergétique de la
+            France.
+          </Typography>
+          <br />
+          <Typography>
+            Veuillez choisir une personne qui éditera le nom pour l’ensemble de
+            l'équipe.
+          </Typography>
+        </>
+      </Dialog>
+    </>
+  );
+}
+
+function ScenarioNameEditable() {
   const theme = useTheme();
   const team = useMyTeam();
 
   const { updateTeam } = usePlay();
 
   const [localName, setLocalName] = useState(team?.scenarioName);
-  const [openHelp, setOpenHelp] = useState(false);
 
   const handleValidateScenarioName = () => {
     updateTeam({ scenarioName: localName });
@@ -30,29 +75,7 @@ function SynthesisScenarioName() {
   useEffect(() => setLocalName(team?.scenarioName), [team?.scenarioName]);
 
   return (
-    <Box display="flex" flexDirection="column" width="80%" gap={3}>
-      <Typography sx={{ fontSize: "20px", fontWeight: "600" }}>
-        <Icon name="team" /> Nom du scénario
-        <IconButton
-          aria-label="help with current step"
-          onClick={() => setOpenHelp(true)}
-        >
-          <Icon name="helper" sx={{ color: "white" }} />
-        </IconButton>
-        <Dialog open={openHelp} handleClose={() => setOpenHelp(false)}>
-          <>
-            <Typography>
-              Donnez un nom à votre scénario pour le futur énergétique de la
-              France.
-            </Typography>
-            <br />
-            <Typography>
-              Veuillez choisir une personne qui éditera le nom pour l’ensemble
-              de l'équipe.
-            </Typography>
-          </>
-        </Dialog>
-      </Typography>
+    <>
       <ScenarioNameTextField
         sx={{ textAlign: "center" }}
         id="outlined-basic"
@@ -75,6 +98,12 @@ function SynthesisScenarioName() {
         <Icon name="check-doubled" />
         <Typography ml={1}>Valider pour l'équipe</Typography>
       </Button>
-    </Box>
+    </>
   );
+}
+
+function ScenarioNameReadonly() {
+  const team = useMyTeam();
+
+  return <Typography>{team?.scenarioName}</Typography>;
 }
