@@ -1,5 +1,6 @@
 {
   "cta.join-game": "Rejoindre le jeu",
+  "cta.read-terms-of-use": "Lire les conditions d'utilisation",
 
   "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
   "message.error.signup.USER_DOES_NOT_EXIST": "Pas d'utilisateur avec cet email, créez un compte pour vous connecter.",
