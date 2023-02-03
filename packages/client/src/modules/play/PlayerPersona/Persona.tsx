@@ -23,9 +23,19 @@ function Persona() {
     }
     return value;
   };
-  const buildDescriptionLine = (value: any, question: Question) => {
+
+  const buildDescriptionLine = (
+    value: any,
+    question: Question,
+    key: string
+  ) => {
     return (
-      <QuestionLine container direction="row" justifyContent="space-between">
+      <QuestionLine
+        key={key}
+        container
+        direction="row"
+        justifyContent="space-between"
+      >
         <QuestionText>
           {question.icon && (
             <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
@@ -52,7 +62,8 @@ function Persona() {
             .map((question: Question) =>
               buildDescriptionLine(
                 personalization[question.name as keyof PersoForm],
-                question
+                question,
+                question.name
               )
             )}
       </Grid>
