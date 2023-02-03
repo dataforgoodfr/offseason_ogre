@@ -6,7 +6,7 @@ import { setSessionItem, startSession } from "../../lib/session";
 import { Game } from "../games/types";
 import { Socket, SocketData } from "./types";
 
-export { getSocketData, wrapHandler, hasFinishedStep };
+export { getSocketData, wrapHandler, hasFinishedStep, isGameFinished };
 
 function getSocketData(socket: Socket): SocketData {
   const userSchema = z.object({
@@ -48,4 +48,8 @@ function setRequestId(handler: SocketHandler) {
 
 function hasFinishedStep(game: Partial<Game>) {
   return game?.step === game?.lastFinishedStep;
+}
+
+function isGameFinished(game: Pick<Game, "status">) {
+  return game.status === "finished";
 }
