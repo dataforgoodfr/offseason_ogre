@@ -101,7 +101,7 @@ function GameItem({ game }: { game: IGame }) {
               component={Link}
               color="secondary"
               variant="contained"
-              to={`/play/games/${game.id}/persona`}
+              to={`/play/games/${game.id}/persona/actions`}
               sx={{ ml: "auto" }}
             >
               <Icon name="synthesis" sx={{ mr: 2 }} /> {t("cta.read-synthesis")}
