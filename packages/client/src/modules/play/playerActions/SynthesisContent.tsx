@@ -7,10 +7,12 @@ import { useMyTeam, usePlay } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
 import { Dialog } from "../../common/components/Dialog";
 import { ScenarioNameTextField } from "./SynthesisContent.styles";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { SynthesisScenarioName };
 
 function SynthesisScenarioName() {
+  const { t } = useTranslation();
   const { isGameFinished } = usePlay();
 
   const isTeamEditable = !isGameFinished;
@@ -18,7 +20,7 @@ function SynthesisScenarioName() {
   return (
     <Box display="flex" flexDirection="column" pr={4} gap={3}>
       <Typography sx={{ fontSize: "20px", fontWeight: "600" }}>
-        <Icon name="team" /> Nom du scénario
+        <Icon name="team" /> {t("synthesis.player.scenario-section.title")}
         {isTeamEditable && <ScenarioNameEditionHelp />}
       </Typography>
       <Box display="flex" flexDirection="column" gap={3} pl={4}>
@@ -29,6 +31,8 @@ function SynthesisScenarioName() {
 }
 
 function ScenarioNameEditionHelp() {
+  const { t } = useTranslation();
+
   const [openHelp, setOpenHelp] = useState(false);
 
   return (
@@ -42,13 +46,11 @@ function ScenarioNameEditionHelp() {
       <Dialog open={openHelp} handleClose={() => setOpenHelp(false)}>
         <>
           <Typography>
-            Donnez un nom à votre scénario pour le futur énergétique de la
-            France.
+            {t("synthesis.player.scenario-section.edit-help.description-1")}
           </Typography>
           <br />
           <Typography>
-            Veuillez choisir une personne qui éditera le nom pour l’ensemble de
-            l'équipe.
+            {t("synthesis.player.scenario-section.edit-help.description-2")}
           </Typography>
         </>
       </Dialog>
@@ -59,6 +61,7 @@ function ScenarioNameEditionHelp() {
 function ScenarioNameEditable() {
   const theme = useTheme();
   const team = useMyTeam();
+  const { t } = useTranslation();
 
   const { updateTeam } = usePlay();
 
@@ -79,7 +82,7 @@ function ScenarioNameEditable() {
       <ScenarioNameTextField
         sx={{ textAlign: "center" }}
         id="outlined-basic"
-        label="Nom du scénario"
+        label={t("form.field.scenario-name.label")}
         variant="outlined"
         value={localName}
         onChange={handleChange}
@@ -96,7 +99,7 @@ function ScenarioNameEditable() {
         type="button"
       >
         <Icon name="check-doubled" />
-        <Typography ml={1}>Valider pour l'équipe</Typography>
+        <Typography ml={1}>{t("cta.validate-team-choice")}</Typography>
       </Button>
     </>
   );
