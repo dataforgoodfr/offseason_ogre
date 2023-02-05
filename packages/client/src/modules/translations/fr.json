@@ -2,6 +2,7 @@
   "cta.join-game": "Rejoindre le jeu",
   "cta.read-synthesis": "Voir la synthèse",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
+  "cta.send-magic-link": "Envoyez moi un lien de connexion",
   "cta.validate-team-choice": "Valider pour l'équipe",
 
   "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
@@ -12,6 +13,7 @@
   "message.error.register.USER_ALREADY_JOINED_GAME": "Vous êtes déjà inscrit.e à cette partie.",
   "message.success.copied": "Copiée !",
 
+  "form.field.email.label": "Adresse mail",
   "form.field.game-code.label": "Code du jeu",
   "form.field.scenario-name.label": "Nom du scénario",
   "form.validation.yellow": "Les cases colorées en jaune contiennent les valeurs à vérifier.",
@@ -22,6 +24,10 @@
   "launch.error.playerWithUnvalidatedForm": "Attention, les données d'un joueur ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
   "launch.error.playerWithUnvalidatedForm_p": "Attention, les données de certains joueurs ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
 
+  "page.login.title": "Connexion",
+  "page.login.description": "Si vous avez déjà un compte :",
+  "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
+  "page.login.signup-section.cta": "Créer un compte",
   "production.energy.biomass.name": "Biomasse",
   "production.energy.biomass.accordion.title": "Biomasse (électricité)",
   "production.energy.biomass.accordion.label-slider": "Surface occupée (en %) du territoire forestier et agricole",

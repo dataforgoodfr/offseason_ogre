@@ -1,20 +1,21 @@
 import { useForm } from "react-hook-form";
 import FormInput from "../common/components/FormInput";
 import { Link } from "react-router-dom";
-import TermsOfUse from "../common/components/TermsOfUse";
 import { sendMagicLink } from "../users/services";
 import { useMutation } from "react-query";
 import { AxiosError } from "axios";
 import { ErrorAlert, SuccessAlert } from "../alert";
-import { Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, useTheme } from "@mui/material";
 import { handleApiError } from "../../utils/request";
-import { t } from "../translations";
+import { Typography } from "../common/components/Typography";
+import { useTranslation } from "../translations/useTranslation";
 
 interface MagicForm {
   email: string;
 }
 
 function MagicLink() {
+  const { t } = useTranslation();
   const { control, getValues, handleSubmit } = useForm<MagicForm, any>({
     defaultValues: {
       email: "",
@@ -64,21 +65,37 @@ function MagicLink() {
           })}
         ></ErrorAlert>
       )}
-      <div className="flex flex-col">
-        <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <FormInput control={control} name="email" label="Adresse mail" />
-          <Button color="secondary" variant="contained" type="submit">
-            Envoyez moi un lien de connexion
-          </Button>
-        </form>
-        <Link
-          className="text-white self-center m-4 hover:text-white hover:underline"
-          to="/signup"
-        >
-          Créer un compte
-        </Link>
-        <TermsOfUse />
-      </div>
+
+      <Box display="flex" flexDirection="column" color="#ffffff">
+        <Box mb={4}>
+          <Typography variant="h4" mb={1}>
+            {t("page.login.title")}
+          </Typography>
+          <Typography>{t("page.login.description")}</Typography>
+        </Box>
+
+        <Box mb={4}>
+          <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+            <FormInput
+              control={control}
+              name="email"
+              label={t("form.field.email.label")}
+            />
+            <Button color="secondary" variant="contained" type="submit">
+              {t("cta.send-magic-link")}
+            </Button>
+          </form>
+        </Box>
+
+        <Box mb={2} textAlign="center">
+          <Typography>{t("page.login.signup-section.title")}</Typography>
+          <Typography>
+            <Link className="hover:underline" to="/signup">
+              {t("page.login.signup-section.cta")}
+            </Link>
+          </Typography>
+        </Box>
+      </Box>
     </>
   );
 }
