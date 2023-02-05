@@ -10,6 +10,7 @@ import { connectToDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
 import { logger } from "./logger";
 import { logError, setRequestId } from "./middlewares";
+import { limiter } from "./middlewares/limit";
 
 const app = express();
 
@@ -37,7 +38,7 @@ app.use(
 );
 
 // Serving index.html by default
-app.get("*", (_request: Request, response: Response) => {
+app.get("*", limiter, (_request: Request, response: Response) => {
   response.set("Cache-control", "no-cache");
   response.set("last-modified", new Date().toUTCString());
   return response.sendFile(
