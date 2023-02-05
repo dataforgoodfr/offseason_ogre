@@ -9,6 +9,9 @@ export const mails = {
 const MAIL_SENDER = "contact@atelierogre.org";
 const MAIL_NAME = "L'Équipe OGRE";
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require("dotenv").config({ path: `${__dirname}/../../../../.env` });
+
 const MAIL_API_KEY = process.env.SENDGRID_API_KEY;
 invariant(MAIL_API_KEY, "SENDGRID_API_KEY must be set in env variables.");
 mailClient.setApiKey(MAIL_API_KEY);
