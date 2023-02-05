@@ -1,6 +1,7 @@
 export { handleApiError };
 
 type BusinessErrorCode =
+  | "USER_ALREADY_EXISTS"
   | "USER_DOES_NOT_EXIST"
   | "GAME_ALREADY_STARTED"
   | "GAME_NOT_FOUND"

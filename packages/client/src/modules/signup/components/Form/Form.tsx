@@ -1,16 +1,20 @@
 import FormInput from "../../../common/components/FormInput";
 import { useForm } from "react-hook-form";
 import CheckboxWithText from "../CheckboxWithText";
-import TermsOfUse from "../../../common/components/TermsOfUse";
 import { NewUser } from "../../../users/services";
 import { useMutation } from "react-query";
 import axios, { AxiosError } from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../alert";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
+import { Typography } from "../../../common/components/Typography";
+import { useTranslation } from "../../../translations/useTranslation";
+import { Link } from "react-router-dom";
+import { handleApiError } from "../../../../utils/request";
 
 export default Form;
 
 function Form() {
+  const { t } = useTranslation();
   const { control, getValues, handleSubmit } = useForm({
     defaultValues: {
       firstName: "",
@@ -45,31 +49,71 @@ function Form() {
     <>
       {mutation.isError && (
         <ErrorAlert
-          message={mutation.error.response?.data.message || "Unkown error"}
+          message={handleApiError(mutation.error, {
+            USER_ALREADY_EXISTS: () =>
+              t("message.error.signup.USER_ALREADY_EXISTS"),
+            default: () => t("message.error.global.UNEXPECTED"),
+          })}
         />
       )}
-      <UserForm />
+
+      <Box color="#ffffff">
+        <Box mb={4}>
+          <Typography variant="h4" mb={1}>
+            {t("page.signup.title")}
+          </Typography>
+        </Box>
+
+        <Box mb={4}>
+          <UserForm />
+        </Box>
+
+        <Box textAlign="center">
+          <Typography>{t("page.signup.login-section.title")}</Typography>
+          <Typography>
+            <Link className="hover:underline" to="/magic-link">
+              {t("page.signup.login-section.cta")}
+            </Link>
+          </Typography>
+        </Box>
+      </Box>
     </>
   );
 
   function UserForm() {
     return (
-      <form className="flex flex-col w-72" onSubmit={handleSubmit(onValid)}>
+      <form className="flex flex-col" onSubmit={handleSubmit(onValid)}>
         <div className="flex flex-col justify-center items-center">
-          <FormInput control={control} name="firstName" label="Prénom" />
-          <FormInput control={control} name="lastName" label="Nom" />
-          <FormInput control={control} name="country" label="Pays" />
-          <FormInput control={control} name="email" label="Adresse mail" />
+          <FormInput
+            control={control}
+            name="firstName"
+            label={t("form.field.first-name.label")}
+          />
+          <FormInput
+            control={control}
+            name="lastName"
+            label={t("form.field.last-name.label")}
+          />
+          <FormInput
+            control={control}
+            name="country"
+            label={t("form.field.country.label")}
+          />
+          <FormInput
+            control={control}
+            name="email"
+            label={t("form.field.email.label")}
+          />
         </div>
-        <TermsOfUse />
         <CheckboxWithText control={control} />
         <Button
           type="submit"
           variant="contained"
           color="secondary"
-          sx={{ margin: "auto", width: "161px" }}
+          fullWidth
+          sx={{ mt: 2 }}
         >
-          Créer le compte
+          {t("cta.signup")}
         </Button>
       </form>
     );

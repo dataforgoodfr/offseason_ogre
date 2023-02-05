@@ -1,6 +1,7 @@
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 import { Controller } from "react-hook-form";
+import TermsOfUse from "../../../common/components/TermsOfUse";
 
 const CheckboxWithText = ({ control }: { control: any }) => {
   return (
@@ -12,9 +13,9 @@ const CheckboxWithText = ({ control }: { control: any }) => {
           <CustomCheckbox {...field} {...label} required />
         )}
       />
-      <p className="text-white w-60 mb-4 mt-4">
-        En cochant cette case, je certifie avoir lu et accepté sans réserve les
-        précédentes conditions générales
+      <p className="w-60 mb-4 mt-4">
+        En cochant cette case, je certifie avoir lu et accepté sans réserve les{" "}
+        <TermsOfUse text="conditions générales d'utilisation" />
       </p>
     </div>
   );
