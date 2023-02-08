@@ -5,6 +5,7 @@ import {
   guardResource,
 } from "../../middlewares/guardResource";
 import { controllers } from "./controllers";
+import { limiter } from "../../middlewares/limit";
 
 export { router };
 
@@ -15,7 +16,11 @@ router.get(
   "/logged-user",
   asyncErrorHandler(controllers.getLoggedUserController)
 );
-router.get("/sign-in", asyncErrorHandler(controllers.signInController));
+router.get(
+  "/sign-in",
+  limiter,
+  asyncErrorHandler(controllers.signInController)
+);
 router.get("/:id", asyncErrorHandler(controllers.getDocumentController));
 router.get(
   "/:id/games/:gameId/team",
