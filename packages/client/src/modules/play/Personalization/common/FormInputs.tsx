@@ -80,7 +80,9 @@ const PersoFormInputList = ({
           }}
         >
           {options.map((option: { value: any; description: any }) => (
-            <MenuItem value={option.value}> {option.description} </MenuItem>
+            <MenuItem key={option.value} value={option.value}>
+              {option.description}
+            </MenuItem>
           ))}
         </PersoSelectTextField>
       )}

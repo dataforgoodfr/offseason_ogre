@@ -126,9 +126,10 @@ function PersonalizationForm() {
     return `le ${day} à ${time}`;
   };
 
-  const buildFormLine = (question: Question, display: boolean) => {
+  const buildFormLine = (key: string, question: Question, display: boolean) => {
     return (
       <QuestionLine
+        key={key}
         container
         sx={{ display: display ? "flex" : "none" }}
         direction="row"
@@ -152,7 +153,11 @@ function PersonalizationForm() {
           .filter((question: Question) => question.type === questionType)
           // https://github.com/react-hook-form/react-hook-form/issues/1990
           .map((question: Question) =>
-            buildFormLine(question, fulfillsConditionsForm(watch, question))
+            buildFormLine(
+              question.name,
+              question,
+              fulfillsConditionsForm(watch, question)
+            )
           )}
       </Grid>
     );
