@@ -9,33 +9,50 @@ import { Icon } from "../Icon";
 export { AccordionItemStyled, AccordionSummaryStyled, AccordionDetailsStyled };
 
 const AccordionItemStyled = styled(
-  (props: AccordionProps & { themeVariation: string }) => (
-    <Accordion disableGutters elevation={0} square {...props} />
-  )
+  (
+    props: AccordionProps & {
+      themeVariation?: "accent-large" | "default-large";
+    }
+  ) => <Accordion disableGutters elevation={0} square {...props} />
 )(({ theme, themeVariation }) => {
-  if (themeVariation === "orange") {
-    return {
-      marginBottom: theme.spacing(2),
-      borderRadius: "5px",
-      color: "white",
-      border: "3px solid #F9C74F",
-      "&:before": {
-        display: "none",
+  const commonCss = {
+    borderRadius: "5px",
+    borderWidth: "2px",
+    borderColor: "#ffffff",
+    borderStyle: "solid",
+    "&:before": {
+      display: "none",
+    },
+    color: "#ffffff",
+  };
+
+  const largeVariationCss = {
+    marginBottom: theme.spacing(2),
+    borderWidth: "3px",
+  };
+
+  let themeCss = {};
+  if (themeVariation === "accent-large") {
+    themeCss = {
+      borderColor: "#F9C74F",
+    };
+  } else if (themeVariation === "default-large") {
+    themeCss = {
+      borderColor: "#ffffff",
+    };
+  } else {
+    themeCss = {
+      "&:not(:last-child)": {
+        marginBottom: theme.spacing(1),
       },
     };
   }
 
-  return {
-    border: "2px solid white",
-    borderRadius: "5px",
-    color: "white",
-    "&:not(:last-child)": {
-      marginBottom: theme.spacing(1),
-    },
-    "&:before": {
-      display: "none",
-    },
-  };
+  themeCss = themeVariation?.includes("large")
+    ? { ...largeVariationCss, ...themeCss }
+    : themeCss;
+
+  return { ...commonCss, ...themeCss };
 });
 
 const AccordionSummaryStyled = styled(
@@ -52,15 +69,6 @@ const AccordionSummaryStyled = styled(
   },
   "& .MuiAccordionSummary-content": {
     color: valid ? theme.palette.primary.contrastText : "white",
-  },
-  "& .MuiAccordionSummary-content.Mui-expanded": {
-    color: "white",
-  },
-  "& .validIcon": {
-    display: "flex",
-  },
-  "& .MuiAccordionSummary-content.Mui-expanded .validIcon": {
-    display: "none",
   },
 }));
 

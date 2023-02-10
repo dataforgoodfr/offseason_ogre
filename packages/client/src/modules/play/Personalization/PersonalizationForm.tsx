@@ -316,10 +316,10 @@ function PersonalizationForm() {
         </Typography>
         <Accordion
           options={Object.entries(formSections).map(
-            ([_, value]: [string, any]) => {
-              const valid = isSectionValid(formValues, watch, value.name);
+            ([_, section]: [string, any]) => {
+              const valid = isSectionValid(formValues, watch, section.name);
               return {
-                key: value.name,
+                key: section.name,
                 header: (
                   <Typography alignItems="center" display="flex" variant="h6">
                     {valid && (
@@ -329,15 +329,15 @@ function PersonalizationForm() {
                         sx={{ mr: 2 }}
                       />
                     )}
-                    {value.titleIcon && (
-                      <Icon name={value.titleIcon} sx={{ mr: 1 }} />
+                    {section.titleIcon && (
+                      <Icon name={section.titleIcon} sx={{ mr: 1 }} />
                     )}
-                    {value.title}
+                    {section.title}
                   </Typography>
                 ),
-                content: buildFormSection(value.name),
-                valid: valid,
-                themeVariation: "orange",
+                content: buildFormSection(section.name),
+                valid,
+                themeVariation: valid ? "accent-large" : "default-large",
               };
             }
           )}
