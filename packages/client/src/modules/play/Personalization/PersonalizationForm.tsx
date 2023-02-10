@@ -30,7 +30,7 @@ import { BackArrowDialog, ValidationDialog } from "./common/Dialogs";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { IGame } from "../../../utils/types";
-import { ErrorAlert } from "../../alert";
+import { ErrorAlert, SuccessAlert } from "../../alert";
 import { Accordion } from "../../common/components/Accordion";
 import { t } from "../../translations";
 
@@ -40,6 +40,9 @@ function PersonalizationForm() {
   const gameId = useGameId();
   const theme = useTheme();
   const { profile, updateProfile } = usePlay();
+  const [formSaveStatus, setFormSaveStatus] = useState<
+    "draft-saved" | "form-validated" | "error" | null
+  >(null);
 
   const query = useQuery(`/api/games/${gameId}`, () => {
     return axios.get<undefined, { data: { document: any } }>(
@@ -54,6 +57,16 @@ function PersonalizationForm() {
   const backArrowDialogContent = {
     warningMessage: `Il semble que vous n’ayez pas sauvegardé votre formulaire. Etes-vous sur de vouloir revenir en arrière ? Vous perdrez l’ensemble de vos réponses aux questions du formulaire si vous validez le retour`,
   };
+
+  const shouldShowSaveSuccessAlert = useMemo(() => {
+    return (
+      formSaveStatus &&
+      ["draft-saved", "form-validated"].includes(formSaveStatus)
+    );
+  }, [formSaveStatus]);
+  const shouldShowSaveErrorAlert = useMemo(() => {
+    return formSaveStatus && ["error"].includes(formSaveStatus);
+  }, [formSaveStatus]);
 
   const {
     control,
@@ -177,29 +190,35 @@ function PersonalizationForm() {
 
   const onSubmit = () => {
     if (user && isFormValid(watch)) {
-      updateProfile({
-        userId: user?.id,
-        update: {
-          ...fillWithNull(getValues()),
-          profileStatus: "pendingValidation",
-          origin: getOrigin(user?.id, gameId),
-          personalizationName: "form",
+      updateProfile(
+        {
+          userId: user?.id,
+          update: {
+            ...fillWithNull(getValues()),
+            profileStatus: "pendingValidation",
+            origin: getOrigin(user?.id, gameId),
+            personalizationName: "form",
+          },
         },
-      });
+        (res) => setFormSaveStatus(res?.success ? "form-validated" : "error")
+      );
     }
   };
 
   const saveDraft = () => {
     if (user) {
-      updateProfile({
-        userId: user?.id,
-        update: {
-          ...fillWithNull(getValues()),
-          profileStatus: "draft",
-          origin: getOrigin(user?.id, gameId),
-          personalizationName: "form",
+      updateProfile(
+        {
+          userId: user?.id,
+          update: {
+            ...fillWithNull(getValues()),
+            profileStatus: "draft",
+            origin: getOrigin(user?.id, gameId),
+            personalizationName: "form",
+          },
         },
-      });
+        (res) => setFormSaveStatus(res?.success ? "draft-saved" : "error")
+      );
     }
   };
 
@@ -343,6 +362,22 @@ function PersonalizationForm() {
           )}
         />
       </form>
+
+      {shouldShowSaveSuccessAlert && (
+        <SuccessAlert
+          message={
+            formSaveStatus === "form-validated"
+              ? t("message.success.form-validated")
+              : t("message.success.draft-saved")
+          }
+          onClose={() => {
+            setFormSaveStatus(null);
+          }}
+        />
+      )}
+      {shouldShowSaveErrorAlert && (
+        <ErrorAlert message={t("message.error.global.UNEXPECTED")} />
+      )}
     </CustomContainer>
   );
 }

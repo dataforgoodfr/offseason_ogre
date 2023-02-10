@@ -53,7 +53,10 @@ interface IPlayContext {
   updatePlayer: (options: { hasFinishedStep?: boolean }) => void;
   profile: any;
   readProfile: () => void;
-  updateProfile: (options: { userId: number; update: any }) => void;
+  updateProfile: (
+    options: { userId: number; update: any },
+    onRespond?: (args: { success: boolean }) => void
+  ) => void;
   updateTeam: (update: {
     teamActions?: {
       id: number;
@@ -150,14 +153,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     socket.emit("updatePlayer", { gameId, hasFinishedStep });
   };
 
-  const updateProfile = ({
-    userId,
-    update,
-  }: {
-    userId: number;
-    update: any;
-  }) => {
-    socket.emit("updateProfile", { gameId, userId, update });
+  const updateProfile = (
+    {
+      userId,
+      update,
+    }: {
+      userId: number;
+      update: any;
+    },
+    onRespond?: (args: { success: boolean }) => void
+  ) => {
+    socket.emit("updateProfile", { gameId, userId, update }, onRespond);
   };
 
   const updateTeam = ({
