@@ -2,6 +2,7 @@ import { Express } from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { handleJoinGame } from "./eventHandlers/joinGameHandler";
+import { handleReadProfile } from "./eventHandlers/readProfileHandler";
 import { handleUpdateGame } from "./eventHandlers/updateGameHandler";
 import { updatePlayerActions } from "./eventHandlers/updatePlayerActionsHandler";
 import { handleUpdatePlayer } from "./eventHandlers/updatePlayerHandler";
@@ -19,6 +20,7 @@ function initWebSocket({ app }: { app: Express }) {
     handleUpdateGame(io, socket);
     updatePlayerActions(io, socket);
     handleUpdatePlayer(io, socket);
+    handleReadProfile(io, socket);
     handleUpdateProfile(io, socket);
     handleUpdateTeam(io, socket);
   });
