@@ -1,6 +1,11 @@
 import * as jwt from "jsonwebtoken";
+import invariant from "tiny-invariant";
 
-const secretKey = process.env.SECRET_KEY || "secret_key";
+invariant(
+  process.env.SECRET_KEY !== undefined,
+  "SECRET_KEY is missing in your environment"
+);
+const secretKey = process.env.SECRET_KEY;
 
 export { verify, sign };
 

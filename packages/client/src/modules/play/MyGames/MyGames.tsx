@@ -44,7 +44,9 @@ function MyGames() {
   );
 }
 
-function GameItem({ game }: any) {
+function GameItem({ game }: { game: IGame }) {
+  const { t } = useTranslation();
+
   return (
     <PlayBox sx={{ mt: 2 }}>
       <GameItemHost>
@@ -90,6 +92,19 @@ function GameItem({ game }: any) {
               sx={{ ml: "auto" }}
             >
               <Icon name="videogame-controller" sx={{ mr: 2 }} /> Jouer
+            </Button>
+          </Grid>
+        )}
+        {game.status === "finished" && (
+          <Grid item display="flex" xs={2}>
+            <Button
+              component={Link}
+              color="secondary"
+              variant="contained"
+              to={`/play/games/${game.id}/persona/actions`}
+              sx={{ ml: "auto" }}
+            >
+              <Icon name="synthesis" sx={{ mr: 2 }} /> {t("cta.read-synthesis")}
             </Button>
           </Grid>
         )}
