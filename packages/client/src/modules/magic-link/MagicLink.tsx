@@ -67,7 +67,7 @@ function MagicLink() {
       )}
 
       <Box display="flex" flexDirection="column" color="#ffffff">
-        <Box mb={4}>
+        <Box mb={2}>
           <Typography variant="h4" mb={1}>
             {t("page.login.title")}
           </Typography>
