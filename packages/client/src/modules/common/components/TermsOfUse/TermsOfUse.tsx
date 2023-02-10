@@ -1,17 +1,18 @@
 import { useTranslation } from "../../../translations/useTranslation";
 import { TERMS_OF_USE_URL } from "../../constants";
+import { Typography } from "../Typography";
 
-const TermsOfUse = () => {
+const TermsOfUse = ({ text }: { text?: string }) => {
   const { t } = useTranslation();
 
   return (
     <a
-      className="text-white self-center hover:text-white hover:underline"
+      className="self-center underline"
       href={TERMS_OF_USE_URL}
       target="_blank"
       rel="noreferrer"
     >
-      {t("cta.read-terms-of-use")}
+      <Typography as="span">{text || t("cta.read-terms-of-use")}</Typography>
     </a>
   );
 };
