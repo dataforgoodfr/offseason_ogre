@@ -51,7 +51,7 @@ function PersonalizationPredefinedPersona() {
                 </Typography>
               ),
               content: getOilgrePersonaDetails(value.name),
-              themeVariation: "orange",
+              themeVariation: "accent-large",
             };
           }
         )}

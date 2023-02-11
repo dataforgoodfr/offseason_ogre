@@ -5,13 +5,14 @@ import AccordionSummary, {
 } from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { Icon } from "../Icon";
+import { ThemeVariation } from "./Accordion";
 
 export { AccordionItemStyled, AccordionSummaryStyled, AccordionDetailsStyled };
 
 const AccordionItemStyled = styled(
   (
     props: AccordionProps & {
-      themeVariation?: "accent-large" | "default-large";
+      themeVariation?: ThemeVariation;
     }
   ) => <Accordion disableGutters elevation={0} square {...props} />
 )(({ theme, themeVariation }) => {
