@@ -14,6 +14,8 @@
   "message.error.register.GAME_NOT_FOUND": "La partie n'a pas pu être trouvée. Vérifiez son id et recommencez.",
   "message.error.register.USER_ALREADY_JOINED_GAME": "Vous êtes déjà inscrit.e à cette partie.",
   "message.success.copied": "Copiée !",
+  "message.success.draft-saved": "Brouillon sauvegardé",
+  "message.success.form-validated": "Formulaire validé",
 
   "form.field.country.label": "Pays",
   "form.field.email.label": "Adresse mail",

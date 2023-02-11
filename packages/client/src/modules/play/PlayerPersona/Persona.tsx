@@ -94,7 +94,7 @@ function Persona() {
                 profile.personalization,
                 value.name
               ),
-              themeVariation: "orange",
+              themeVariation: "accent-large",
             };
           }
         )}

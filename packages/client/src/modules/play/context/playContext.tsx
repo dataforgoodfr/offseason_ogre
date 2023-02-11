@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { CircularProgress } from "@mui/material";
 import * as React from "react";
@@ -52,7 +52,11 @@ interface IPlayContext {
   player: PlayerState;
   updatePlayer: (options: { hasFinishedStep?: boolean }) => void;
   profile: any;
-  updateProfile: (options: { userId: number; update: any }) => void;
+  readProfile: () => void;
+  updateProfile: (
+    options: { userId: number; update: any },
+    onRespond?: (args: { success: boolean }) => void
+  ) => void;
   updateTeam: (update: {
     teamActions?: {
       id: number;
@@ -79,6 +83,7 @@ function RootPlayProvider({ children }: { children: React.ReactNode }) {
 }
 
 function PlayProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
   const match = useMatch(`play/games/:gameId/*`);
   if (!match) throw new Error("Provider use outside of game play.");
   const gameId = +(match.params.gameId as string);
@@ -108,6 +113,12 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     () => sortTeams(gameWithTeams),
     [gameWithTeams]
   );
+
+  const readProfile = useCallback(() => {
+    if (user?.id) {
+      socket?.emit("readProfile", { gameId, userId: user.id });
+    }
+  }, [gameId, socket, user]);
 
   if (gameWithSortedTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
@@ -142,14 +153,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     socket.emit("updatePlayer", { gameId, hasFinishedStep });
   };
 
-  const updateProfile = ({
-    userId,
-    update,
-  }: {
-    userId: number;
-    update: any;
-  }) => {
-    socket.emit("updateProfile", { gameId, userId, update });
+  const updateProfile = (
+    {
+      userId,
+      update,
+    }: {
+      userId: number;
+      update: any;
+    },
+    onRespond?: (args: { success: boolean }) => void
+  ) => {
+    socket.emit("updateProfile", { gameId, userId, update }, onRespond);
   };
 
   const updateTeam = ({
@@ -184,6 +198,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         player,
         updatePlayer,
         profile,
+        readProfile,
         updateProfile,
         updateTeam,
       }}
