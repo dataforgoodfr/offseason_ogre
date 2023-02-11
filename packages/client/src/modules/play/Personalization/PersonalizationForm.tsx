@@ -125,20 +125,18 @@ function PersonalizationForm() {
 
   const buildFormLine = (key: string, question: Question, display: boolean) => {
     return (
-      <QuestionLine
-        key={key}
-        container
-        sx={{ display: display ? "flex" : "none" }}
-        direction="row"
-        justifyContent="space-between"
-      >
-        <QuestionText>
-          {question.icon && (
-            <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
-          )}
-          {question.description}
-        </QuestionText>
-        {getComponentType(question)}
+      <QuestionLine key={key} sx={{ display: display ? "grid" : "none" }}>
+        <div className="question-line__text-wrapper">
+          <QuestionText>
+            {question.icon && (
+              <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
+            )}
+            {question.description}
+          </QuestionText>
+        </div>
+        <div className="question-line__input-wrapper">
+          {getComponentType(question)}
+        </div>
       </QuestionLine>
     );
   };
