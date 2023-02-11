@@ -23,7 +23,7 @@
     "start": "yarn workspace ogre-server start"
   },
   "engines": {
-    "node": "16.x.x"
+    "node": "18.x.x"
   },
   "workspaces": [
     "packages/*"
