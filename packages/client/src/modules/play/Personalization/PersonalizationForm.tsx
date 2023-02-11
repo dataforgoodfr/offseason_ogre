@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button, Grid, Tooltip, Typography, useTheme } from "@mui/material";
+import { Button, Grid, Tooltip, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { BackArrow, BackArrowWithValidation } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
 import {
   formSections,
-  FormStatus,
   formValues,
   getQuestionByName,
   PersoForm,
@@ -32,13 +31,14 @@ import { useQuery } from "react-query";
 import { IGame } from "../../../utils/types";
 import { ErrorAlert, SuccessAlert } from "../../alert";
 import { Accordion } from "../../common/components/Accordion";
-import { t } from "../../translations";
+import { FormStatusBanner } from "./common/FormStatusBanner";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
   const gameId = useGameId();
-  const theme = useTheme();
+  const { t } = useTranslation();
   const { profile, updateProfile } = usePlay();
   const [formSaveStatus, setFormSaveStatus] = useState<
     "draft-saved" | "form-validated" | "error" | null
@@ -121,22 +121,6 @@ function PersonalizationForm() {
       );
     }
     throw new Error("Unsupported question type");
-  };
-
-  const formatLastUpdateDate = (date: Date) => {
-    if (!date) {
-      return "Aucune action enregistrée";
-    }
-
-    const dateObj = new Date(date);
-    const day = dateObj.toLocaleDateString([], {
-      dateStyle: "short",
-    });
-    const time = new Date(date).toLocaleTimeString([], {
-      timeStyle: "short",
-    });
-
-    return `le ${day} à ${time}`;
   };
 
   const buildFormLine = (key: string, question: Question, display: boolean) => {
@@ -228,42 +212,7 @@ function PersonalizationForm() {
         <ErrorAlert alertPosition="top" message={formBlockText} />
       )}
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        {profile && profile.status && (
-          <Grid
-            container
-            direction="column"
-            justifyContent="space-between"
-            sx={{
-              border: `3px solid ${theme.palette.primary.contrastText}`,
-              borderRadius: 2,
-              p: 3,
-              width: "fit-content",
-            }}
-          >
-            <Typography
-              sx={{
-                color: theme.palette.primary.contrastText,
-                fontSize: "20px",
-              }}
-            >
-              <Typography component="span" sx={{ textDecoration: "underline" }}>
-                État du formulaire:
-              </Typography>{" "}
-              {t(`form.status.${profile.status as FormStatus}`)}
-            </Typography>
-            <Typography
-              sx={{
-                color: theme.palette.primary.contrastText,
-                fontSize: "20px",
-              }}
-            >
-              <Typography component="span" sx={{ textDecoration: "underline" }}>
-                {t(`form.last-action.${profile.status as FormStatus}`)}:
-              </Typography>{" "}
-              {formatLastUpdateDate(profile.lastStatusUpdate)}
-            </Typography>
-          </Grid>
-        )}
+        <FormStatusBanner />
         <Grid container direction="row" justifyContent="space-between">
           {!isDirty && (
             <BackArrow path={`/play/games/${gameId}/personalize/choice`} />
