@@ -4,9 +4,6 @@ import { styled } from "@mui/material/styles";
 export const CustomContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(4),
   marginBottom: theme.spacing(4),
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(4),
-  },
 }));
 
 export const CentralContainer = styled(Container)(({ theme }) => ({

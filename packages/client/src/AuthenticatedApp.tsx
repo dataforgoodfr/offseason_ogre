@@ -17,7 +17,10 @@ import {
   PlayerActionsPage,
   Stats,
 } from "./modules/play";
-import { PersonalizationChoice } from "./modules/play/Personalization";
+import {
+  PersonalizationLayout,
+  PersonalizationChoice,
+} from "./modules/play/Personalization";
 import { PersonalizationForm } from "./modules/play/Personalization/PersonalizationForm";
 import { PersonalizationPredefinedPersona } from "./modules/play/Personalization/PersonalizationPredefinedPersona";
 
@@ -45,22 +48,12 @@ function AuthenticatedApp() {
         <Route path="games/:id" element={<PlayerPersona />} />
         <Route path="games/:id/persona" element={<PlayerPersona />} />
         <Route path="games/:id/persona/stats" element={<Stats />} />
-        <Route
-          path="games/:id/personalize"
-          element={<PersonalizationChoice />}
-        />
-        <Route
-          path="games/:id/personalize/choice"
-          element={<PersonalizationChoice />}
-        />
-        <Route
-          path="games/:id/personalize/form"
-          element={<PersonalizationForm />}
-        />
-        <Route
-          path="games/:id/personalize/oilgre"
-          element={<PersonalizationPredefinedPersona />}
-        />
+        <Route path="games/:id/personalize" element={<PersonalizationLayout />}>
+          <Route path="choice" element={<PersonalizationChoice />} />
+          <Route path="form" element={<PersonalizationForm />} />
+          <Route path="oilgre" element={<PersonalizationPredefinedPersona />} />
+          <Route path="" element={<Navigate to="choice" />} />
+        </Route>
         <Route
           path="games/:id/persona/actions"
           element={<PlayerActionsPage />}

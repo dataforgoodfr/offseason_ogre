@@ -11,7 +11,7 @@ export { handleUpdateProfile };
 function handleUpdateProfile(io: Server, socket: Socket) {
   socket.on(
     "updateProfile",
-    wrapHandler(async (args: unknown) => {
+    wrapHandler(async (args: unknown, respond: (...argz: any[]) => void) => {
       const schema = z.object({
         gameId: z.number(),
         userId: z.number(),
@@ -101,6 +101,7 @@ function handleUpdateProfile(io: Server, socket: Socket) {
       socket.emit("profileUpdated", {
         update: profile,
       });
+      respond({ success: true });
     })
   );
 }

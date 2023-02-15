@@ -12,10 +12,11 @@ interface AccordionProps {
     key: string;
     header: React.ReactNode;
     content: React.ReactNode;
-    themeVariation?: string;
+    themeVariation?: ThemeVariation;
     valid?: boolean;
   }[];
 }
+export type ThemeVariation = "accent-large" | "default" | "default-large";
 
 function Accordion({ options }: AccordionProps) {
   const [expanded, setExpanded] = React.useState<string | null>(null);

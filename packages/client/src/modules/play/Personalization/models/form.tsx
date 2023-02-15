@@ -1,4 +1,5 @@
 import { range } from "lodash";
+import { IconName } from "../../../common/components/Icon";
 import { buildChoices } from "../utils/choices";
 
 export type FormStatus = "draft" | "pendingValidation" | "validated";
@@ -118,7 +119,7 @@ export interface Condition {
 
 export interface Question {
   type: string;
-  icon?: string;
+  icon?: IconName;
   description: string;
   name: keyof PersoForm;
   conditions?: Condition[];
@@ -216,7 +217,7 @@ export const formSections = {
 };
 
 const getGeneralQuestions = () => {
-  const generalQuestions = [
+  const generalQuestions: Omit<Question, "type">[] = [
     {
       description: "Combien d'adultes habitent au sein de votre logement ?",
       name: "numberAdults" as keyof PersoForm,
@@ -248,7 +249,7 @@ const getGeneralQuestions = () => {
 };
 
 const getTransportQuestions = () => {
-  const transportQuestions = [
+  const transportQuestions: Omit<Question, "type">[] = [
     {
       icon: "car",
       description: "Avez-vous une voiture ?",
@@ -384,7 +385,7 @@ const getTransportQuestions = () => {
 };
 
 const getHousingQuestions = () => {
-  const housingQuestions = [
+  const housingQuestions: Omit<Question, "type">[] = [
     {
       description: "Quel est le type de votre logement ?",
       name: "houseType" as keyof PersoForm,
@@ -503,7 +504,7 @@ const getHousingQuestions = () => {
 };
 
 const getHabitsQuestions = () => {
-  const habitsQuestions = [
+  const habitsQuestions: Omit<Question, "type">[] = [
     {
       description: "Prenez-vous des bains ou des douches ?",
       name: "showerBath" as keyof PersoForm,
@@ -642,7 +643,7 @@ const getHabitsQuestions = () => {
 };
 
 const getFoodQuestions = () => {
-  const foodQuestions = [
+  const foodQuestions: Omit<Question, "type">[] = [
     {
       description: "Êtes-vous végétalien (vegan) ?",
       name: "eatingVegan" as keyof PersoForm,
@@ -759,7 +760,7 @@ const getFoodQuestions = () => {
 };
 
 const getNumericQuestions = () => {
-  const numericQuestions = [
+  const numericQuestions: Omit<Question, "type">[] = [
     {
       description:
         "Avez-vous au moins un équipement numérique par personne dans le foyer ?",
