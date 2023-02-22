@@ -35,7 +35,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1xsTVShg7gVW0MbRoVwYKzaSDyjfwUjKl/view?usp=share_link",
       actionPointCost: 2,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -44,7 +43,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1cWqdCf2gaRxlqiDJksn2r1eBW3YzLluV/view?usp=share_link",
       actionPointCost: 2,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -53,7 +51,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1_HjnnT1PReXwBZbpSkPKLxmg3150b5zy/view?usp=share_link",
       actionPointCost: 2,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -63,7 +60,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/193t5vMEnZSM63crP_f8lcLwb-aT4QVbL/view?usp=share_link",
       actionPointCost: 2,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -73,7 +69,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1dnDPdDinE4RHNihhsAH0xdH7P9_hQR4d/view?usp=share_link",
       actionPointCost: 1,
-      points: 100,
       financialCost: 0,
     },
     {
@@ -82,7 +77,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/17KGVHphAIsM5qgrYrDNqBPWGR3oCi9MS/view?usp=share_link",
       actionPointCost: 1,
-      points: 100,
       financialCost: 0,
     },
     {
@@ -91,7 +85,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1a3osQzEObej0rXNgdLnLrq8jgeh1c_1h/view?usp=share_link",
       actionPointCost: 1,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -101,7 +94,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/16h1uaf99s1NQHyMEfJM-ASm9d_a4Zy4V/view?usp=share_link",
       actionPointCost: 2,
-      points: 100,
       financialCost: 0,
     },
     {
@@ -110,7 +102,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1FqqrV9pVPr_X6sPceZ7ZnEFILlkOfN8f/view?usp=share_link",
       actionPointCost: 2,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -119,7 +110,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/16BQ3GUx0LACvmnEvIBNiV61Ph9-1wIEs/view?usp=share_link",
       actionPointCost: 1,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -128,7 +118,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1FS1oD5Il-j2M8NA2U7kklWc-8yC7n5wW/view?usp=share_link",
       actionPointCost: 1,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -137,7 +126,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1JfswSvFEMlekhQ3ZYYmO933HFjaKJr-w/view?usp=share_link",
       actionPointCost: 2,
-      points: 300,
       financialCost: 0,
     },
     {
@@ -147,7 +135,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1x2ph5rsK-VUADEtvfuIkynQS4DC2rsO2/view?usp=share_link",
       actionPointCost: 3,
-      points: 0,
 
       financialCost: 2.19,
     },
@@ -157,7 +144,6 @@ function getActionsDataForConsumptionStep1(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1nvK4QMe_VZzIscdd4c5jG3uQ7IdDswJe/view?usp=share_link",
       actionPointCost: 3,
-      points: 0,
       financialCost: 0,
     },
   ];
@@ -176,7 +162,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1zlW9Um4AiTk6yKENGJi5PXZ6tdCG-WJ0/view?usp=share_link",
       actionPointCost: 1,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -185,7 +170,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/11427RQghOR7Jbo-hmmLA6mkty-0O7PId/view?usp=share_link",
       actionPointCost: 3,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -194,7 +178,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/11iWqGde4FVYsJwUKcYCZt5k3NaKi9X4r/view?usp=share_link",
       actionPointCost: 1,
-      points: 300,
       financialCost: 1.78,
     },
     {
@@ -203,7 +186,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1jnh9UhhADO-vopQwvWtWsobs9dY3niTG/view?usp=share_link",
       actionPointCost: 1,
-      points: 300,
       financialCost: 0.89,
     },
     {
@@ -212,7 +194,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1Wh8t39PBC6IdUy_ByNAo6OLFtQ4_1FSj/view?usp=share_link",
       actionPointCost: 1,
-      points: 300,
       financialCost: 0.69,
     },
     {
@@ -221,7 +202,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1ORl_tkkT4D75YQ-K3h5ma5dgo1gGzrdU/view?usp=share_link",
       actionPointCost: 1,
-      points: 300,
       financialCost: 0.57,
     },
     {
@@ -230,7 +210,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1lahrX7EQCiGlOPmylcPqI_7ytAp0DCJI/view?usp=share_link",
       actionPointCost: 1,
-      points: 200,
       financialCost: 2.85,
     },
     {
@@ -239,7 +218,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1u9BgdS22UXraNFxNAEINCrnkHq8OMZZx/view?usp=share_link",
       actionPointCost: 2,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -248,7 +226,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1PpkLPFUjTKK7RAdari_88wM-u-xJ1F25/view?usp=share_link",
       actionPointCost: 3,
-      points: 200,
       financialCost: 0,
     },
     {
@@ -257,7 +234,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1bbZK-rxQJoI3-8CgGD59VmoRoEtlO2gt/view?usp=share_link",
       actionPointCost: 2,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -266,7 +242,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1IU04I8c8ZfX6pqHmguleEPbYN2Gh4G3c/view?usp=share_link",
       actionPointCost: 1,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -275,7 +250,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1hNDeP_-BrW6jcwre6heV3JyHqghxguvg/view?usp=share_link",
       actionPointCost: 1,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -284,7 +258,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1l8oXs2DycpBu-JPycUChRqpLyp1vnH7M/view?usp=share_link",
       actionPointCost: 2,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -293,7 +266,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1IriXin5FAGjpSfqMySzCrVbMzZjP8dxA/view?usp=share_link",
       actionPointCost: 2,
-      points: 100,
       financialCost: 0,
     },
     {
@@ -302,7 +274,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1jPS4oWZD3_nJHh_BoTo8tVle8HClvcOL/view?usp=share_link",
       actionPointCost: 1,
-      points: 0,
       financialCost: 0,
     },
     {
@@ -311,7 +282,6 @@ function getActionsDataForConsumptionStep2(): Action[] {
       helpCardLink:
         "https://drive.google.com/file/d/1tAa8_owb2uF3Ly_UlTtCq5cx4CUY13N-/view?usp=share_link",
       actionPointCost: 1,
-      points: 0,
       financialCost: 0,
     },
   ];

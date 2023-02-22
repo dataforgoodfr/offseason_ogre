@@ -53,7 +53,6 @@ interface Action {
   helpCardLink: string;
   actionPointCost: number;
   financialCost: number;
-  points: number;
   playerActions: PlayerActions[];
 }
 
