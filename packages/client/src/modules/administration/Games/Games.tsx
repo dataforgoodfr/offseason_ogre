@@ -59,7 +59,7 @@ const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
     field: "date",
     headerName: "Date",
     type: "dateTime",
-    valueGetter: (params) => {
+    renderCell: (params: GridRenderCellParams<string>) => {
       return new Date(params.row.date).toLocaleString([], {
         dateStyle: "short",
         timeStyle: "short",
