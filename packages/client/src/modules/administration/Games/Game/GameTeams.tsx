@@ -127,7 +127,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
               variant="contained"
               sx={{ marginRight: "auto", ml: 2, height: "80%" }}
             >
-              Ajouter des équipes
+              {t("cta.set-team-count")}
             </Button>
           </Grid>
           <Grid container alignItems="center" sx={{ pb: 2, pt: 2 }}>
