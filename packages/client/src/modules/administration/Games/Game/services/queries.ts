@@ -20,7 +20,15 @@ export const getTeamQueryPath = (gameId: number) =>
     gameId: `${gameId}`,
   })}`;
 
-export const useTeams = (teamQueryPath: string) =>
-  useQuery(teamQueryPath, () => {
-    return axios.get<undefined, { data: { teams: Team[] } }>(teamQueryPath);
-  });
+type useTeamsApiResponse = { data: { teams: Team[] } };
+export const useTeams = (
+  teamQueryPath: string,
+  options: { onSuccess?: (data: useTeamsApiResponse) => void } = {}
+) =>
+  useQuery(
+    teamQueryPath,
+    () => {
+      return axios.get<undefined, useTeamsApiResponse>(teamQueryPath);
+    },
+    options
+  );
