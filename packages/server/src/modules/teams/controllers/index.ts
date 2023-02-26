@@ -1,5 +1,8 @@
 import { Request, Response } from "express";
+import { range } from "lodash";
 import { z } from "zod";
+import { getAddOrRemoveCount } from "../../../lib/array";
+import { NO_TEAM } from "../constants/teams";
 import { services } from "../services";
 
 export { getTeamsController, getTeamController, createTeamsController };
@@ -25,9 +28,32 @@ async function getTeamController(request: Request, response: Response) {
 async function createTeamsController(request: Request, response: Response) {
   const bodySchema = z.object({
     gameId: z.number(),
-    quantity: z.number(),
+    quantity: z.number().gte(1),
   });
   const { gameId, quantity } = bodySchema.parse(request.body);
-  await services.createMany(gameId, quantity);
+
+  const existingTeams = await services.getMany({
+    gameId,
+    name: { not: NO_TEAM },
+  });
+  const { addCount, removeCount } = getAddOrRemoveCount(
+    existingTeams,
+    quantity
+  );
+
+  if (addCount > 0) {
+    const teamsToCreate = range(addCount).map((i) => ({
+      gameId,
+      name: `Creating ${services.buildTeamName(existingTeams.length + i + 1)}`,
+    }));
+    await services.createMany(teamsToCreate);
+    await services.resetTeamsName(gameId);
+  }
+  if (removeCount > 0) {
+    const teamsToRemove = existingTeams.slice(-removeCount);
+    await services.removeMany(teamsToRemove);
+    await services.resetTeamsName(gameId);
+  }
+
   response.status(200).json({});
 }
