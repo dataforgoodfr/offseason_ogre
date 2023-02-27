@@ -7,6 +7,7 @@ type ErrorCode =
   | "USER_DOES_NOT_EXIST"
   | "GAME_ALREADY_STARTED"
   | "GAME_NOT_FOUND"
+  | "TEAM_NOT_FOUND"
   | "USER_ALREADY_JOINED_GAME"
   | "UNEXPECTED";
 
@@ -23,6 +24,9 @@ const errorsConfig: { [k in ErrorCode]: any } = {
   GAME_NOT_FOUND: {
     message: "Could not find game with {prop} {value}",
   },
+  TEAM_NOT_FOUND: {
+    message: "Could not find team with {prop} {value}",
+  },
   USER_ALREADY_JOINED_GAME: {
     message: "User {userId} already joined game {gameId}",
   },
@@ -36,6 +40,7 @@ interface ErrorInterpolations {
   USER_DOES_NOT_EXIST: { email: string };
   GAME_ALREADY_STARTED: undefined;
   GAME_NOT_FOUND: { prop: string; value: any };
+  TEAM_NOT_FOUND: { prop: string; value: any };
   USER_ALREADY_JOINED_GAME: { userId: number; gameId: number };
   UNEXPECTED: undefined;
 }

@@ -27,7 +27,7 @@ type GuardCheck = (
   options: GuardOptions,
   user: User & { role: Role },
   request: Request
-) => GuardCheckResult;
+) => GuardCheckResult | Promise<GuardCheckResult>;
 
 type GuardCheckResult = {
   success: boolean;
@@ -36,7 +36,7 @@ type GuardCheckResult = {
 type GuardCheckOwnership = (
   user: User & { role: Role },
   request: Request
-) => GuardCheckResult;
+) => GuardCheckResult | Promise<GuardCheckResult>;
 
 const checkOwnershipFromRequest =
   (source: "body" | "params", path: string): GuardCheckOwnership =>
@@ -72,7 +72,7 @@ const checkOwnership: GuardCheck = (
   { ownership }: GuardOptions,
   user: User & { role: Role },
   request: Request
-): GuardCheckResult => {
+): GuardCheckResult | Promise<GuardCheckResult> => {
   if (!ownership) {
     return {
       success: true,
@@ -92,7 +92,7 @@ const checkOwnership: GuardCheck = (
 const CHECKS: GuardCheck[] = [checkRole, checkOwnership];
 
 function guardResource(options: GuardOptions) {
-  return (request: Request, response: Response, next: NextFunction) => {
+  return async (request: Request, response: Response, next: NextFunction) => {
     const user = getUserRequesting(response);
 
     invariant(
@@ -100,9 +100,11 @@ function guardResource(options: GuardOptions) {
       `User can't access resource because they are not authenticated`
     );
 
-    const accessGranted = CHECKS.map(
-      (check) => check(options, user, request).success
-    ).some(Boolean);
+    const accessGranted = await Promise.all(
+      CHECKS.map((check) => check(options, user, request))
+    ).then((checkResult) =>
+      checkResult.map((res) => res.success).some(Boolean)
+    );
 
     if (!accessGranted) {
       throw new Error(

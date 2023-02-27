@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import { removeTeam } from "../services/removeTeam";
+import { services } from "../../teams/services";
 
 export { removeTeamController };
 
 async function removeTeamController(request: Request, response: Response) {
   const bodySchema = z.object({
-    gameId: z.number(),
     teamId: z.number(),
   });
-  const { gameId, teamId } = bodySchema.parse(request.body);
-  await removeTeam({ gameId, teamId });
+  const { teamId } = bodySchema.parse(request.body);
+  const removedTeam = await services.remove({ id: teamId });
+  await services.resetTeamsName(removedTeam.gameId);
   response.status(200).json({});
 }
