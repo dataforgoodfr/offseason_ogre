@@ -19,18 +19,24 @@ const logError = (
   logger.error(err);
 
   if (err instanceof BusinessError) {
-    res.status(400).json({
-      message: err.message,
-      code: err.code,
-      ...(!isProd ? { stack: err.stack } : {}),
-    });
+    if (err.code === "USER_NOT_AUTHENTICATED") {
+      res.status(401).json(formatBusinessError(err));
+    } else if (err.code === "USER_NOT_AUTHORIZED") {
+      res.status(403).json(formatBusinessError(err));
+    } else {
+      res.status(400).json(formatBusinessError(err));
+    }
     return;
   }
 
-  const businessError = createBusinessError("UNEXPECTED");
-  res.status(500).json({
-    message: businessError.message,
-    code: businessError.code,
-    ...(!isProd ? { stack: err.stack } : {}),
-  });
+  const unexpectedErr = createBusinessError("UNEXPECTED");
+  res.status(500).json(formatBusinessError(unexpectedErr));
 };
+
+function formatBusinessError(err: BusinessError) {
+  return {
+    message: err.message,
+    code: err.code,
+    ...(!isProd ? { stack: err.stack } : {}),
+  };
+}
