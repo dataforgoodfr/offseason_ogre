@@ -168,7 +168,6 @@ model Action {
   helpCardLink    String          @default("")
   actionPointCost Int
   financialCost   Float
-  points          Int             @default(0)
   playerActions   PlayerActions[]
 }
 

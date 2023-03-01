@@ -112,8 +112,9 @@ function StackedEnergyBars({
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          {uniqueBars.map((key) => (
+          {uniqueBars.map((key, idx) => (
             <Bar
+              key={`${key}-${idx}`}
               dataKey={key}
               stackId="a"
               fill={

@@ -8,6 +8,7 @@ import {
 import { ConsumptionDatum } from "../../persona/consumption";
 import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
+import { computeConsumptionPoints } from "../gameEngines/consumptionPointsEngine";
 import { PersoForm } from "../Personalization/models/form";
 import {
   computeCarbonFootprint,
@@ -106,11 +107,6 @@ function computeResultsByStep(
   const costPerDay = playerActionsCost + teamActionsCost;
   const budget = basePersona.budget - costPerDay;
 
-  const playerPoints = sum(
-    performedPlayerActions.map(
-      (playerAction: PlayerActions) => playerAction.action.points
-    )
-  );
   const teamPoints = sum(
     performedTeamActions.map(
       (teamAction: TeamAction) => computeTeamActionStats(teamAction).points
@@ -123,7 +119,11 @@ function computeResultsByStep(
     step >= MAX_NUMBER_STEPS - 1
       ? computeCO2Points(basePersona.carbonFootprint)
       : 0;
-  const points = playerPoints + teamPoints + budgetPoints + co2Points;
+  const points =
+    computeConsumptionPoints(personalization, performedPlayerActions, step) +
+    teamPoints +
+    budgetPoints +
+    co2Points;
 
   const performedActionsNames = performedPlayerActions.map(
     (playerAction: PlayerActions) => playerAction.action.name

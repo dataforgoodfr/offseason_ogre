@@ -1,4 +1,4 @@
-export { deepFreeze, sortBy };
+export { deepFreeze, sortBy, sumReducer };
 
 type OnlyNumberKeys<T> = keyof {
   [K in keyof T as T[K] extends number ? K : never]: T[K];
@@ -24,3 +24,5 @@ function deepFreeze<T>(arr: T[]): readonly T[] {
 
   return Object.freeze(arr);
 }
+
+const sumReducer = (sum: number, nb: number): number => sum + nb;
