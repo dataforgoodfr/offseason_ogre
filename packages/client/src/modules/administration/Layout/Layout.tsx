@@ -7,7 +7,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Container from "@mui/material/Container";
-import { Link, Navigate, Outlet, useMatch } from "react-router-dom";
+import { Link, Navigate, Outlet, PathMatch, useMatch } from "react-router-dom";
 import GamesIcon from "@mui/icons-material/Games";
 import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
@@ -36,7 +36,13 @@ export { Layout };
 function Layout() {
   const { permissions } = useAuth();
   const theme = useTheme();
-  const isGameAdministrationRoute = useMatch(`administration/games/:gameId/*`);
+  const routeMatch = useMatch(`administration/*`);
+
+  const isNestedRoute = useMemo(() => {
+    return (
+      routeMatch && routeMatch?.pathname.split("/").filter(Boolean).length > 2
+    );
+  }, [routeMatch]);
 
   if (!permissions.canAccessAdminPanel) {
     return <Navigate to="/" />;
@@ -50,7 +56,9 @@ function Layout() {
             pr: "24px", // keep right padding when drawer closed
           }}
         >
-          {isGameAdministrationRoute ? renderBackButton() : <></>}
+          {isNestedRoute ? (
+            <BackButton to={buildPathToPreviousPage(routeMatch)} />
+          ) : null}
           <Typography
             component="h1"
             variant="h6"
@@ -109,10 +117,14 @@ function Layout() {
   );
 }
 
-function renderBackButton(): JSX.Element {
+function buildPathToPreviousPage(match: PathMatch | null) {
+  return match?.pathname.split("/").slice(0, -1).join("/") || "";
+}
+
+function BackButton({ to }: { to: string }): JSX.Element {
   return (
     <>
-      <Button component={Link} to="/administration/games" sx={{ mr: 2 }}>
+      <Button component={Link} to={to} sx={{ mr: 2 }}>
         <ArrowBackIosNewIcon sx={{ height: "1rem" }} /> Retour
       </Button>
       <Divider
