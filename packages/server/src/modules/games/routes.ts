@@ -40,7 +40,11 @@ router.put(
   asyncErrorHandler(controllers.putPlayersInTeamsController)
 );
 router.post("/", asyncErrorHandler(controllers.createController));
-router.post("/register", asyncErrorHandler(controllers.registerController));
+router.post(
+  "/register",
+  guardResource({ roles: ["*"] }),
+  asyncErrorHandler(controllers.registerController)
+);
 router.post(
   "/remove-player",
   asyncErrorHandler(controllers.removePlayerController)
