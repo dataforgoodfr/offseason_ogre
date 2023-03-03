@@ -15,6 +15,7 @@ import {
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import { IGame } from "../../../../utils/types";
 import { useState } from "react";
@@ -28,13 +29,11 @@ import { useGameId } from "./utils";
 import { hasGameStarted } from "../utils";
 import { Icon } from "../../../common/components/Icon";
 import { DataGridBox } from "./GameTeams.styles";
-import { FormVerification } from "./FormVerification";
 
 export { GamePlayers };
 
 function GamePlayers({ game }: { game: IGame }): JSX.Element {
-  const [openFormValidation, setOpenFormValidation] = useState<boolean>(false);
-
+  const navigate = useNavigate();
   const gameId = useGameId();
 
   const playersQuery = usePlayers(gameId);
@@ -107,7 +106,9 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
               } les formulaires`}
             </Button>
             <Button
-              onClick={() => setOpenFormValidation(true)}
+              onClick={() =>
+                navigate(`/administration/games/${gameId}/form-verification`)
+              }
               variant="contained"
               sx={{ marginRight: "auto", ml: 2, height: "80%" }}
             >
@@ -135,10 +136,6 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
           }}
         />
       </DataGridBox>
-      <FormVerification
-        openFormValidation={openFormValidation}
-        setOpenFormValidation={setOpenFormValidation}
-      />
     </Grid>
   );
 }

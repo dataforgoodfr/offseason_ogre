@@ -35,7 +35,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
   const gameId = useGameId();
   const { t } = useTranslation();
 
-  const [teamsQuantity, setTeamsQuantity] = useState<number>();
+  const [teamsQuantity, setTeamsQuantity] = useState<number>(TEAM_COUNT_MIN);
 
   const playersQuery = usePlayers(gameId);
   const teamQueryPath = getTeamQueryPath(gameId);

@@ -1,4 +1,4 @@
-import { Grid, Button, Typography, useTheme } from "@mui/material";
+import { Grid, Button, Typography, useTheme, Box } from "@mui/material";
 import { DataGrid, GridCellParams, GridColumns } from "@mui/x-data-grid";
 import axios from "axios";
 import { useState } from "react";
@@ -17,7 +17,6 @@ import {
   PersoForm,
   showerTimes,
 } from "../../../play/Personalization/models/form";
-import { VerificationContainer } from "./FormVerification.styles";
 import { DataGridBox } from "./FormVerification.styles";
 import { usePlayers } from "./services/queries";
 import {
@@ -34,13 +33,7 @@ import { t } from "../../../translations";
 
 export { FormVerification };
 
-function FormVerification({
-  openFormValidation,
-  setOpenFormValidation,
-}: {
-  openFormValidation: boolean;
-  setOpenFormValidation: (value: boolean) => void;
-}): JSX.Element {
+function FormVerification(): JSX.Element {
   const [updatedRows, setUpdatedRows] = useState<FormattedRow[]>([]);
   const gameId = useGameId();
   const theme = useTheme();
@@ -79,7 +72,6 @@ function FormVerification({
       onSuccess: (response: any, variables: { draft: boolean }) => {
         if (!variables.draft) {
           validateForms.mutate();
-          setOpenFormValidation(false);
         }
         setUpdatedRows([]);
         queryClient.invalidateQueries(`/api/games/${gameId}/players`);
@@ -132,11 +124,15 @@ function FormVerification({
     });
 
   return (
-    <VerificationContainer show={openFormValidation}>
+    <Box>
       {updatePersonalizations.isError && (
         <ErrorAlert message={updatePersonalizations.error.message} />
       )}
       {updatePersonalizations.isSuccess && <SuccessAlert />}
+
+      <Typography variant="h3" sx={{ mb: 2 }}>
+        Vérification des formulaires
+      </Typography>
       <DataGridBox sx={{ backgroundColor: "white", color: "black" }}>
         <DataGrid
           sx={{ textAlign: "center" }}
@@ -161,15 +157,10 @@ function FormVerification({
           }}
         />
       </DataGridBox>
-      <Grid
-        container
-        alignItems="center"
-        sx={{ pb: 4, pt: 4, backgroundColor: "white" }}
-      >
+      <Grid container alignItems="center" sx={{ pb: 4, pt: 4 }}>
         <Button
           onClick={() => {
             setUpdatedRows([]);
-            setOpenFormValidation(false);
           }}
           variant="contained"
           sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
@@ -195,12 +186,11 @@ function FormVerification({
         container
         direction="column"
         alignItems="left"
-        sx={{ mb: 4, mt: 4, backgroundColor: "white" }}
+        sx={{ mb: 4, mt: 4 }}
       >
         <Typography
           sx={{
             mb: 2,
-            backgroundColor: "white",
             color: theme.palette.primary.main,
           }}
         >
@@ -213,7 +203,6 @@ function FormVerification({
         <Typography
           sx={{
             mb: 2,
-            backgroundColor: "white",
             color: theme.palette.primary.main,
           }}
         >
@@ -224,7 +213,7 @@ function FormVerification({
           {t("form.validation.heating")}
         </Typography>
       </Grid>
-    </VerificationContainer>
+    </Box>
   );
 }
 
