@@ -1,9 +1,13 @@
 import { Role, RoleName, User } from "@prisma/client";
 import type { NextFunction, Request, Response } from "express";
 import { get } from "lodash";
-import invariant from "tiny-invariant";
 import { getUserRequesting } from "../lib/express";
 import { logger } from "../logger";
+import { asyncErrorHandler } from "../modules/utils/asyncErrorHandler";
+import {
+  BusinessError,
+  createBusinessError,
+} from "../modules/utils/businessError";
 
 export { checkOwnershipFromRequest, guardResource };
 
@@ -27,7 +31,7 @@ type GuardCheck = (
   options: GuardOptions,
   user: User & { role: Role },
   request: Request
-) => GuardCheckResult;
+) => GuardCheckResult | Promise<GuardCheckResult>;
 
 type GuardCheckResult = {
   success: boolean;
@@ -36,7 +40,7 @@ type GuardCheckResult = {
 type GuardCheckOwnership = (
   user: User & { role: Role },
   request: Request
-) => GuardCheckResult;
+) => GuardCheckResult | Promise<GuardCheckResult>;
 
 const checkOwnershipFromRequest =
   (source: "body" | "params", path: string): GuardCheckOwnership =>
@@ -72,7 +76,7 @@ const checkOwnership: GuardCheck = (
   { ownership }: GuardOptions,
   user: User & { role: Role },
   request: Request
-): GuardCheckResult => {
+): GuardCheckResult | Promise<GuardCheckResult> => {
   if (!ownership) {
     return {
       success: true,
@@ -92,28 +96,30 @@ const checkOwnership: GuardCheck = (
 const CHECKS: GuardCheck[] = [checkRole, checkOwnership];
 
 function guardResource(options: GuardOptions) {
-  return (request: Request, response: Response, next: NextFunction) => {
-    const user = getUserRequesting(response);
+  return asyncErrorHandler(
+    async (request: Request, response: Response, next: NextFunction) => {
+      const user = getUserRequesting(response);
 
-    invariant(
-      user,
-      `User can't access resource because they are not authenticated`
-    );
+      if (!user) {
+        throw createBusinessError("USER_NOT_AUTHENTICATED");
+      }
 
-    const accessGranted = CHECKS.map(
-      (check) => check(options, user, request).success
-    ).some(Boolean);
-
-    if (!accessGranted) {
-      throw new Error(
-        `User ${
-          user.id
-        } does not have access to resource ${formatRequestedResource(request)}`
+      const accessGranted = await Promise.all(
+        CHECKS.map((check) => check(options, user, request))
+      ).then((checkResult) =>
+        checkResult.map((res) => res.success).some(Boolean)
       );
-    }
 
-    next();
-  };
+      if (!accessGranted) {
+        throw new BusinessError("USER_NOT_AUTHORIZED", {
+          userId: user.id,
+          resource: formatRequestedResource(request),
+        });
+      }
+
+      next();
+    }
+  );
 }
 
 function formatRequestedResource(request: Request) {

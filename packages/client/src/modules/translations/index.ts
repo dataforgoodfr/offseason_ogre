@@ -1,7 +1,9 @@
 import translationFr from "./fr.json";
 
 export { t, translateName };
+export type { I18nTranslateFunction };
 
+type I18nTranslateFunction = typeof t;
 function t(key: keyof typeof translationFr) {
   return translationFr[key] || key;
 }

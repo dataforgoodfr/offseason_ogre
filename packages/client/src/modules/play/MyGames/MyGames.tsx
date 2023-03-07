@@ -1,3 +1,4 @@
+import { trim } from "lodash";
 import { Link } from "react-router-dom";
 import {
   Box,
@@ -197,7 +198,9 @@ function JoinGame() {
             render={({ field }) => (
               <TextField
                 {...field}
-                onChange={(e) => field.onChange(e.target.value)}
+                onChange={(e) =>
+                  field.onChange(trim(e.target.value).toUpperCase())
+                }
                 label={t("form.field.game-code.label")}
                 type="text"
                 required

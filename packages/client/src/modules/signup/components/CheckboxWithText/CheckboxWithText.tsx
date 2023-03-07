@@ -24,6 +24,7 @@ const CheckboxWithText = ({ control }: { control: any }) => {
 const CustomCheckbox = styled(Checkbox)(() => ({
   path: {
     color: "#C4C4C4",
+    fill: "#C4C4C4",
   },
 }));
 

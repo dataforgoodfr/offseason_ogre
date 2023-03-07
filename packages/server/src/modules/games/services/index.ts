@@ -20,18 +20,10 @@ const services = { ...crudServices, initState, register };
 export { services };
 
 async function getDocument(
-  idOrWhere: number | Prisma.GameFindManyArgs["where"]
+  idOrWhere: number | Prisma.GameFindFirstArgs["where"]
 ): Promise<Model | null> {
-  let id;
-  if (typeof idOrWhere === "object") {
-    const [document] = await model.findMany({ where: idOrWhere });
-    id = document?.id;
-  } else {
-    id = idOrWhere;
-  }
-
-  return model.findUnique({
-    where: { id },
+  return model.findFirst({
+    where: typeof idOrWhere === "number" ? { id: idOrWhere } : idOrWhere,
     include: {
       teams: {
         where: { isDeleted: false },

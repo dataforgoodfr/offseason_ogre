@@ -6,7 +6,7 @@ export const QuestionLine = styled(Grid)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   padding: "0 20px 0",
   [theme.breakpoints.down("sm")]: {
-    gridTemplateRows: "auto auto",
+    gridTemplateRows: "1fr auto",
     gap: theme.spacing(2),
   },
   [theme.breakpoints.up("sm")]: {

@@ -23,6 +23,7 @@ import {
 } from "./modules/play/Personalization";
 import { PersonalizationForm } from "./modules/play/Personalization/PersonalizationForm";
 import { PersonalizationPredefinedPersona } from "./modules/play/Personalization/PersonalizationPredefinedPersona";
+import { FormVerification } from "./modules/administration/Games/Game/FormVerification";
 
 export { AuthenticatedApp };
 
@@ -36,6 +37,10 @@ function AuthenticatedApp() {
       <Route path="administration" element={<AdministrationLayout />}>
         <Route path="games" element={<Games />} />
         <Route path="games/:id" element={<Game />} />
+        <Route
+          path="games/:id/form-verification"
+          element={<FormVerification />}
+        />
         <Route path="admins" element={<Admins />} />
         <Route path="players" element={<Players />} />
         <Route path="teachers" element={<Teachers />} />

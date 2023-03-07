@@ -23,17 +23,30 @@ import { NO_TEAM } from "../../../common/constants/teams";
 import { usePlayers, getTeamQueryPath, useTeams } from "./services/queries";
 import { useGameId } from "./utils";
 import { hasGameStarted } from "../utils";
+import { ErrorAlert, SuccessAlert } from "../../../alert";
+import { useTranslation } from "../../../translations/useTranslation";
+import { I18nTranslateFunction } from "../../../translations";
 
 export { GameTeams };
 
+const TEAM_COUNT_MIN = 1;
+
 function GameTeams({ game }: { game: IGame }): JSX.Element {
   const gameId = useGameId();
+  const { t } = useTranslation();
 
-  const [teamsQuantity, setTeamsQuantity] = useState<number>(1);
+  const [teamsQuantity, setTeamsQuantity] = useState<number>(TEAM_COUNT_MIN);
 
   const playersQuery = usePlayers(gameId);
   const teamQueryPath = getTeamQueryPath(gameId);
-  const teamQuery = useTeams(teamQueryPath);
+  const teamQuery = useTeams(teamQueryPath, {
+    onSuccess: (data) => {
+      const teamCount = data.data.teams.filter(
+        (team) => team.name !== NO_TEAM
+      ).length;
+      setTeamsQuantity(Math.max(teamCount, TEAM_COUNT_MIN));
+    },
+  });
 
   const queryClient = useQueryClient();
 
@@ -49,6 +62,26 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
       onSuccess: () => {
         queryClient.invalidateQueries(`/api/games/${gameId}/players`);
         queryClient.invalidateQueries(teamQueryPath);
+      },
+    }
+  );
+
+  const removeTeamMutation = useMutation<
+    Response,
+    { message: string },
+    { teamId: number }
+  >(
+    ({ teamId }) => {
+      return axios.post("/api/games/remove-team", { teamId });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
+        queryClient.invalidateQueries(
+          `/api/teams?${new URLSearchParams({
+            gameId: `${gameId}`,
+          })}`
+        );
       },
     }
   );
@@ -98,7 +131,12 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
       <Box style={{ height: 500, width: "100%" }}>
         <DataGrid
           rows={rows}
-          columns={buildColumns({ game })}
+          columns={buildColumns({
+            game,
+            removeTeam: (teamId: number) =>
+              removeTeamMutation.mutate({ teamId }),
+            t,
+          })}
           disableSelectionOnClick
           pageSize={10}
           rowsPerPageOptions={[10]}
@@ -115,10 +153,15 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
             <TeamTextField
               sx={{ textAlign: "center", ml: 2, mr: 2 }}
               id="outlined-number"
-              label="Nombre d'équipes"
+              label={t("form.field.team-count.label")}
               type="number"
               value={teamsQuantity}
               onChange={handleChange}
+              InputProps={{
+                inputProps: {
+                  min: TEAM_COUNT_MIN,
+                },
+              }}
             />
             <Button
               onClick={() =>
@@ -127,7 +170,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
               variant="contained"
               sx={{ marginRight: "auto", ml: 2, height: "80%" }}
             >
-              Ajouter des équipes
+              {t("cta.set-team-count")}
             </Button>
           </Grid>
           <Grid container alignItems="center" sx={{ pb: 2, pt: 2 }}>
@@ -136,10 +179,27 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
               variant="contained"
               sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
             >
-              Répartir les joueurs
+              {t("cta.assign-team-to-players")}
             </Button>
           </Grid>
         </>
+      )}
+
+      {createTeamsMutation.isSuccess && (
+        <SuccessAlert message={t("message.success.admin.teams-created")} />
+      )}
+      {removeTeamMutation.isSuccess && (
+        <SuccessAlert message={t("message.success.admin.team-removed")} />
+      )}
+      {orderPlayersMutation.isSuccess && (
+        <SuccessAlert
+          message={t("message.success.admin.team-assigned-to-players")}
+        />
+      )}
+      {(createTeamsMutation.isError ||
+        removeTeamMutation.isError ||
+        orderPlayersMutation.isError) && (
+        <ErrorAlert message={t("message.error.admin.global.UNEXPECTED")} />
       )}
     </>
   );
@@ -151,25 +211,39 @@ interface Row {
   numberOfPlayers: number;
 }
 
-function buildColumns({ game }: { game: IGame }): GridColumns<Row> {
+function buildColumns({
+  game,
+  removeTeam,
+  t,
+}: {
+  game: IGame;
+  removeTeam: (teamId: number) => void;
+  t: I18nTranslateFunction;
+}): GridColumns<Row> {
   return [
     {
       field: "name",
-      headerName: "Nom",
+      headerName: t("table.column.team-name.label"),
       flex: 1,
       minWidth: 150,
     },
     {
       field: "numberOfPlayers",
-      headerName: "Nombre de joueurs",
+      headerName: t("table.column.player-count.label"),
       flex: 1,
       minWidth: 250,
     },
-    ...buildActionColumns({ game }),
+    ...buildActionColumns({ game, removeTeam }),
   ];
 }
 
-function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
+function buildActionColumns({
+  game,
+  removeTeam,
+}: {
+  game: IGame;
+  removeTeam: (teamId: number) => void;
+}): GridColumns<Row> {
   if (hasGameStarted(game.status)) {
     return [];
   }
@@ -180,40 +254,33 @@ function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
       width: 80,
       getActions: (params: GridRowParams<Row>) =>
         params.row.name !== NO_TEAM
-          ? [<DeleteActionCellItem params={params} />]
+          ? [<DeleteActionCellItem params={params} removeTeam={removeTeam} />]
           : [],
     },
   ];
 }
 
-function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
-  const queryClient = useQueryClient();
-  const gameId = useGameId();
+function DeleteActionCellItem({
+  params,
+  removeTeam,
+}: {
+  params: GridRowParams<Row>;
+  removeTeam: (teamId: number) => void;
+}) {
+  const { t } = useTranslation();
+
   const teamId = params.row.id;
-  const removeTeamMutation = useMutation<Response, { message: string }>(
-    () => {
-      return axios.post("/api/games/remove-team", { gameId, teamId });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
-        queryClient.invalidateQueries(
-          `/api/teams?${new URLSearchParams({
-            gameId: `${gameId}`,
-          })}`
-        );
-      },
-    }
-  );
+
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
   return (
     <>
-      {}
       <GridActionsCellItem
         icon={<DeleteIcon />}
         label="Delete"
         onClick={() => setIsDialogOpen(true)}
       />
+
       <Dialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
@@ -221,19 +288,19 @@ function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Voulez-vous supprimer l'équipe ?
+          {t("modal.remove-team.title")}
         </DialogTitle>
         <DialogActions>
           <Button autoFocus onClick={() => setIsDialogOpen(false)}>
-            Non
+            {t("cta.no")}
           </Button>
           <Button
             onClick={() => {
-              removeTeamMutation.mutate();
+              removeTeam(teamId);
               setIsDialogOpen(false);
             }}
           >
-            Oui
+            {t("cta.yes")}
           </Button>
         </DialogActions>
       </Dialog>
