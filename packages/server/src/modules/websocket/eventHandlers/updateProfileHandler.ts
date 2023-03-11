@@ -85,6 +85,7 @@ function handleUpdateProfile(io: Server, socket: Socket) {
       } else {
         const personalization = await create(personalizationData);
         const profile = await profileServices.create({
+          userId,
           personalizationId: personalization.id,
           status: profileStatus as ProfileStatus,
           lastStatusUpdate: new Date(),

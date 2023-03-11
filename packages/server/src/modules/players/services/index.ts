@@ -96,6 +96,7 @@ async function setDefaultProfiles(
   return playersWithoutProfiles.forEach(async (player: any) => {
     const profile = await database.profile.create({
       data: {
+        userId: player.userId,
         personalizationId: defaultPersonalization.id,
         status: "validated",
         lastStatusUpdate: new Date(),
