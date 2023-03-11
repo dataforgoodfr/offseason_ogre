@@ -144,6 +144,11 @@
   "synthesis.player.scenario-section.edit-help.description-1": "Donnez un nom à votre scénario pour le futur énergétique de la France.",
   "synthesis.player.scenario-section.edit-help.description-2": "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe.",
 
+  "game.status.draft": "Brouillon",
+  "game.status.finished": "Terminé",
+  "game.status.playing": "En cours",
+  "game.status.ready": "Prêt",
+
   "form.status.draft": "Brouillon",
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",

@@ -5,6 +5,7 @@ import { User } from "../modules/users/types";
 
 export type {
   IGame,
+  IGameWithTeacher,
   IGameWithTeams,
   ITeam,
   ITeamWithPlayers,
@@ -20,8 +21,12 @@ export type {
   TeamAction,
 };
 
-type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
+type WithTeacher<T> = T & { teacher: IUser };
+type WithTeams<T> = T & { teams: ITeamWithPlayers[] };
+
 type IGame = Game;
+type IGameWithTeacher = WithTeacher<IGame>;
+type IGameWithTeams = WithTeams<IGame>;
 
 interface ITeam {
   id: number;

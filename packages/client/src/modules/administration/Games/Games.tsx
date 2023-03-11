@@ -12,6 +12,9 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ErrorAlert, SuccessAlert } from "../../alert";
 import { CopyToClipboard } from "../../common/components/CopyToClipboard";
+import { IGameWithTeacher } from "../../../utils/types";
+import { I18nTranslateFunction } from "../../translations";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { Games };
 
@@ -29,7 +32,9 @@ function Games(): JSX.Element {
   );
 }
 
-const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
+const buildColumns: (args: {
+  t: I18nTranslateFunction;
+}) => GridColDef<IGameWithTeacher>[] = ({ t }) => [
   { field: "id", headerName: "ID", width: 80 },
   {
     field: "code",
@@ -68,10 +73,19 @@ const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
     flex: 1,
     minWidth: 150,
   },
+  {
+    field: "status",
+    headerName: "Statut",
+    valueGetter: (params) => t(`game.status.${params.row.status}`),
+    flex: 1,
+    minWidth: 150,
+  },
 ];
 
 function GamesDataGrid() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const query = useQuery("games", () => {
     return axios.get<undefined, { data: { documents: any[] } }>("/api/games");
   });
@@ -80,13 +94,13 @@ function GamesDataGrid() {
     return <CircularProgress />;
   }
 
-  const rows = query?.data?.data?.documents ?? [];
+  const rows: IGameWithTeacher[] = query?.data?.data?.documents ?? [];
 
   return (
     <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
       <DataGrid
         rows={rows}
-        columns={columns}
+        columns={buildColumns({ t })}
         disableSelectionOnClick
         initialState={{
           sorting: {
