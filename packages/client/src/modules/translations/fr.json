@@ -1,5 +1,6 @@
 {
   "cta.assign-team-to-players": "Répartir les joueurs",
+  "cta.create-game": "Nouveau jeu",
   "cta.join-game": "Rejoindre le jeu",
   "cta.no": "Non",
   "cta.read-synthesis": "Voir la synthèse",
@@ -36,6 +37,12 @@
   "form.validation.yellow": "Les cases colorées en jaune contiennent les valeurs à vérifier.",
   "form.validation.heating": "Concernant le chauffage, si le joueur a donné deux valeurs (facture en € et consommation en kWh), il est nécessaire de vérifier que les deux valeurs correspondent. Si ce n’est pas le cas, merci de ne laisser que la valeur la plus probable et de supprimer l’autre.",
 
+  "table.column.game-code.label": "Code",
+  "table.column.game-date.label": "Date",
+  "table.column.game-id.label": "ID",
+  "table.column.game-name.label": "Nom",
+  "table.column.game-status.label": "Statut",
+  "table.column.game-teacher.label": "Animateur",
   "table.column.player-count.label": "Nombre de joueurs",
   "table.column.team-name.label": "Nom",
 
@@ -44,6 +51,7 @@
   "launch.error.playerWithUnvalidatedForm": "Attention, les données d'un joueur ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
   "launch.error.playerWithUnvalidatedForm_p": "Attention, les données de certains joueurs ne sont pas validées. Veuillez vérifier ces données pour pouvoir lancer l’atelier.",
 
+  "page.admin.games.title": "Ateliers",
   "page.login.title": "Connexion",
   "page.login.description": "Si vous avez déjà un compte :",
   "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
