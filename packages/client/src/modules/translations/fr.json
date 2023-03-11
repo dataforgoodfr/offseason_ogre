@@ -1,13 +1,16 @@
 {
   "cta.assign-team-to-players": "Répartir les joueurs",
+  "cta.check-forms": "Vérifier les formulaires",
   "cta.create-game": "Nouveau jeu",
   "cta.join-game": "Rejoindre le jeu",
+  "cta.lock-forms": "Verrouiller les formulaires",
   "cta.no": "Non",
   "cta.read-synthesis": "Voir la synthèse",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
   "cta.send-magic-link": "Envoyez moi un lien de connexion",
   "cta.set-team-count": "Définir le nombre d'équipes",
   "cta.signup": "Créer le compte",
+  "cta.unlock-forms": "Déverouiller les formulaires",
   "cta.validate-team-choice": "Valider pour l'équipe",
   "cta.yes": "Oui",
 
@@ -26,6 +29,7 @@
   "message.success.draft-saved": "Brouillon sauvegardé",
   "message.success.form-validated": "Formulaire validé",
 
+  "modal.remove-player.title": "Voulez-vous supprimer le joueur ?",
   "modal.remove-team.title": "Voulez-vous supprimer l'équipe ?",
 
   "form.field.country.label": "Pays",
@@ -38,6 +42,7 @@
   "form.validation.yellow": "Les cases colorées en jaune contiennent les valeurs à vérifier.",
   "form.validation.heating": "Concernant le chauffage, si le joueur a donné deux valeurs (facture en € et consommation en kWh), il est nécessaire de vérifier que les deux valeurs correspondent. Si ce n’est pas le cas, merci de ne laisser que la valeur la plus probable et de supprimer l’autre.",
 
+  "table.column.form-status.label": "Statut du formulaire",
   "table.column.game-code.label": "Code",
   "table.column.game-date.label": "Date",
   "table.column.game-id.label": "ID",
@@ -45,6 +50,9 @@
   "table.column.game-status.label": "Statut",
   "table.column.game-teacher.label": "Animateur",
   "table.column.player-count.label": "Nombre de joueurs",
+  "table.column.player-email.label": "Email",
+  "table.column.player-name.label": "Nom",
+  "table.column.player-team.label": "Équipe",
   "table.column.team-name.label": "Nom",
 
   "launch.success.confirmation": "Êtes-vous sûr.e de vouloir lancer l'atelier ?",
@@ -158,6 +166,10 @@
   "game.status.playing": "En cours",
   "game.status.ready": "Prêt",
 
+  "admin.form.status.draft": "Brouillon",
+  "admin.form.status.pending-validation": "En attente de validation",
+  "admin.form.status.unfilled": "Non rempli",
+  "admin.form.status.validated": "Validé",
   "form.status.draft": "Brouillon",
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",

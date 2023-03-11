@@ -32,6 +32,10 @@ import { DataGridBox } from "./GameTeams.styles";
 import { useRemovePlayerMutation } from "./services/mutations";
 import { ErrorAlert, SuccessAlert } from "../../../alert";
 import { useTranslation } from "../../../translations/useTranslation";
+import { I18nTranslateFunction } from "../../../translations";
+import { includes, kebabCase } from "lodash";
+import { pipe } from "../../../../lib/fp";
+import { FormStatus } from "../../../play/Personalization/models/form";
 
 export { GamePlayers };
 
@@ -109,11 +113,9 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
                 sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
               >
                 <Icon name="lock" sx={{ mr: 2 }} />{" "}
-                {`${
-                  game && game.status !== "ready"
-                    ? "Verrouiller"
-                    : "Déverouiller"
-                } les formulaires`}
+                {game && game.status !== "ready"
+                  ? t("cta.lock-forms")
+                  : t("cta.unlock-forms")}
               </Button>
               <Button
                 onClick={() =>
@@ -122,7 +124,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
                 variant="contained"
                 sx={{ marginRight: "auto", ml: 2, height: "80%" }}
               >
-                Vérifier les formulaires
+                {t("cta.check-forms")}
               </Button>
             </Grid>
           </>
@@ -135,6 +137,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
               teams,
               removePlayer: (userId: number) =>
                 removePlayerMutation.mutate({ userId }),
+              t,
             })}
             disableSelectionOnClick
             pageSize={10}
@@ -175,15 +178,17 @@ function buildColumns({
   game,
   teams,
   removePlayer,
+  t,
 }: {
   game: IGame;
   teams: Team[];
   removePlayer: (userId: number) => void;
+  t: I18nTranslateFunction;
 }): GridColumns<Row> {
   return [
     {
       field: "name",
-      headerName: "Nom",
+      headerName: t("table.column.player-name.label"),
       valueGetter: (params) => {
         const row = params.row;
         return row.firstName + " " + row.lastName;
@@ -193,51 +198,49 @@ function buildColumns({
     },
     {
       field: "email",
-      headerName: "Email",
+      headerName: t("table.column.player-email.label"),
       flex: 1,
       minWidth: 250,
     },
-    ...buildTeamColumns({ game, teams }),
-    ...buildFormColumns(),
+    ...buildTeamColumns({ game, teams, t }),
+    ...buildFormColumns({ t }),
     ...buildActionColumns({ game, removePlayer }),
   ];
 }
 
-function buildFormColumns(): GridColumns<Row> {
+function buildFormColumns({
+  t,
+}: {
+  t: I18nTranslateFunction;
+}): GridColumns<Row> {
   const baseFormColumn = {
     editable: false,
     field: "formStatus",
-    headerName: "Statut du formulaire",
+    headerName: t("table.column.form-status.label"),
     cellClassName: (params: GridCellParams<string>) => {
-      if (params.value === "pendingValidation") return "form-to-validate";
-      if (params.value === "validated") return "form-validated";
-      return "form-draft";
+      return pipe(
+        params.value || "",
+        (value): FormStatus =>
+          includes(["pendingValidation", "validated"], value)
+            ? (value as FormStatus)
+            : "draft",
+        (status: FormStatus) => `form-${kebabCase(status)}`
+      );
     },
     renderCell: ({ value }) => {
-      if (value === "draft") {
-        return (
-          <>
-            <Icon name="draft" sx={{ mr: 1 }} /> Brouillon
-          </>
-        );
-      }
-      if (value === "validated") {
-        return (
-          <>
-            <Icon name="check-circle" sx={{ mr: 1 }} /> Validé
-          </>
-        );
-      }
-      if (value === "pendingValidation") {
-        return (
-          <>
-            <Icon name="settings" sx={{ mr: 1 }} /> En attente de validation
-          </>
-        );
-      }
+      const formStatus = pipe(
+        value || "",
+        (value): FormStatus | "unfilled" =>
+          includes(["draft", "pendingValidation", "validated"], value)
+            ? (value as FormStatus)
+            : "unfilled",
+        kebabCase
+      );
+
       return (
         <>
-          <Icon name="mark-circle" sx={{ mr: 1 }} /> Non rempli
+          <Icon name={`form-${formStatus}` as any} sx={{ mr: 1 }} />{" "}
+          {t(`admin.form.status.${formStatus}` as any)}
         </>
       );
     },
@@ -250,14 +253,16 @@ function buildFormColumns(): GridColumns<Row> {
 function buildTeamColumns({
   game,
   teams,
+  t,
 }: {
   game: IGame;
   teams: Team[];
+  t: I18nTranslateFunction;
 }): GridColumns<Row> {
   const baseTeamColumn = {
     editable: false,
     field: "teamId",
-    headerName: "Equipe",
+    headerName: t("table.column.player-team.label"),
     valueFormatter: ({ value, field, api }) => {
       const colDef = api.getColumn(field);
       const option = colDef.valueOptions.find(
@@ -313,6 +318,8 @@ function DeleteActionCellItem({
   params: GridRowParams<Row>;
   removePlayer: (userId: number) => void;
 }) {
+  const { t } = useTranslation();
+
   const userId = params.row.id;
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
@@ -330,11 +337,11 @@ function DeleteActionCellItem({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Voulez-vous supprimer le joueur ?
+          {t("modal.remove-player.title")}
         </DialogTitle>
         <DialogActions>
           <Button autoFocus onClick={() => setIsDialogOpen(false)}>
-            Non
+            {t("cta.no")}
           </Button>
           <Button
             onClick={() => {
@@ -342,7 +349,7 @@ function DeleteActionCellItem({
               setIsDialogOpen(false);
             }}
           >
-            Oui
+            {t("cta.yes")}
           </Button>
         </DialogActions>
       </Dialog>
