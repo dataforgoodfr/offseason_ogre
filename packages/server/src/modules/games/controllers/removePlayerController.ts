@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import { removePlayer } from "../services/removePlayer";
+import { services as playersServices } from "../../players/services";
 
 export { removePlayerController };
 
@@ -10,6 +10,6 @@ async function removePlayerController(request: Request, response: Response) {
     userId: z.number(),
   });
   const { gameId, userId } = bodySchema.parse(request.body);
-  await removePlayer({ gameId, userId });
+  await playersServices.remove({ gameId, userId });
   response.status(200).json({});
 }
