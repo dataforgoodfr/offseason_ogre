@@ -47,9 +47,14 @@ function PlayerHeader() {
   const playerPoints = myTeam ? teamIdToTeamValues[myTeam.id]?.points || 0 : 0;
 
   return (
-    <Box>
-      <PlayBox>
-        <Header game={game} team={myTeam || undefined} user={user} />
+    <Box className="player-header">
+      <PlayBox className="player-header__profile">
+        <Header
+          className="player-header__profile__header"
+          game={game}
+          team={myTeam || undefined}
+          user={user}
+        />
         <Grid
           item
           xs={12}
@@ -154,7 +159,7 @@ function PlayerHeader() {
           </Button>
         </Grid>
       </PlayBox>
-      <Actions />
+      <Actions className="player-header__actions" />
     </Box>
   );
 }
@@ -163,14 +168,16 @@ function Header({
   game,
   team,
   user,
+  className,
 }: {
   game?: IGame;
   team?: ITeam;
   user?: IUser;
+  className?: string;
 }) {
   return (
-    <Grid container>
-      <Grid item xs={4}>
+    <Grid className={className} display="grid" gridTemplateColumns="1fr 3fr">
+      <Grid maxWidth={150}>
         <Card>
           <CardActionArea
             to={`/play/games/${game?.id}/persona`}
@@ -186,7 +193,7 @@ function Header({
           </CardActionArea>
         </Card>
       </Grid>
-      <Grid item sx={{ pl: 2 }} xs={8}>
+      <Grid sx={{ pl: 2 }}>
         <Typography variant="h6" sx={{ lineBreak: "anywhere" }}>
           {user?.firstName} {user?.lastName}
         </Typography>
@@ -198,7 +205,7 @@ function Header({
   );
 }
 
-function Actions() {
+function Actions({ className }: { className?: string }) {
   const { game, isGameFinished, isStepFinished } = usePlay();
   const currentStep = useCurrentStep();
 
@@ -209,6 +216,7 @@ function Actions() {
 
   return (
     <Box
+      className={className}
       sx={{
         display: "flex",
         alignItems: "center",
