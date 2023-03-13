@@ -18,14 +18,12 @@ function ValidateActions() {
   };
 
   return (
-    <Box>
+    <Box mt={2}>
       <Button
         variant="contained"
         color="actionValidation"
         sx={{
-          mt: 2,
           width: "200px",
-          height: "3rem",
         }}
         disabled={player.hasFinishedStep}
         onClick={handleClickOpen}
