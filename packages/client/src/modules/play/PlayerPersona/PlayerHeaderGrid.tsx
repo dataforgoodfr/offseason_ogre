@@ -14,16 +14,7 @@ function PlayerHeaderGrid({
   additionalActions = null,
 }: PlayerActionsHeaderProps) {
   return (
-    <CustomGrid
-      className="player-actions-header"
-      xs={12}
-      sm={3}
-      sx={{
-        pl: 1,
-        pr: 1,
-        justifyContent: "space-between",
-      }}
-    >
+    <CustomGrid className="player-header-grid">
       <Grid item>
         <PlayerHeader />
       </Grid>
