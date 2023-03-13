@@ -27,10 +27,12 @@ import {
 } from "../../../lib/formatter";
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { game } = usePlay();
   const { currentPersona, latestPersona } = usePersona();
@@ -86,7 +88,9 @@ function PlayerHeader() {
             left={
               <>
                 <Icon name="production" sx={{ mr: 1 }} />
-                <Typography sx={{ fontSize: "12px" }}> Production</Typography>
+                <Typography sx={{ fontSize: "12px" }}>
+                  {t("player.profile.summary.production")}
+                </Typography>
               </>
             }
             right={
@@ -100,7 +104,9 @@ function PlayerHeader() {
             left={
               <>
                 <Icon name="consumption" sx={{ mr: 1 }} />
-                <Typography sx={{ fontSize: "12px" }}> Consommation</Typography>
+                <Typography sx={{ fontSize: "12px" }}>
+                  {t("player.profile.summary.consumption")}
+                </Typography>
               </>
             }
             right={
@@ -115,7 +121,7 @@ function PlayerHeader() {
               <>
                 <Icon name="budget" sx={{ mr: 1 }} />
                 <Typography sx={{ fontSize: "12px" }}>
-                  Budget restant
+                  {t("player.profile.summary.remaining-budget")}
                 </Typography>
               </>
             }
@@ -131,7 +137,7 @@ function PlayerHeader() {
               <>
                 <Icon name="carbon-footprint" sx={{ mr: 1 }} />
                 <Typography sx={{ fontSize: "12px" }}>
-                  Empreinte carbone
+                  {t("player.profile.summary.carbon-footprint")}
                 </Typography>
               </>
             }
@@ -155,7 +161,8 @@ function PlayerHeader() {
             variant="contained"
             color="primary"
           >
-            <Icon name="badge" sx={{ mr: 1 }} /> Mes caractéristiques
+            <Icon name="badge" sx={{ mr: 1 }} />{" "}
+            {t("cta.go-to-player-characteristics")}
           </Button>
         </Grid>
       </PlayBox>
@@ -206,6 +213,7 @@ function Header({
 }
 
 function Actions({ className }: { className?: string }) {
+  const { t } = useTranslation();
   const { game, isGameFinished, isStepFinished } = usePlay();
   const currentStep = useCurrentStep();
 
@@ -234,7 +242,8 @@ function Actions({ className }: { className?: string }) {
           width: "200px",
         }}
       >
-        <Icon name="bar-chart" sx={{ mr: 1 }} /> Statistiques
+        <Icon name="bar-chart" sx={{ mr: 1 }} />{" "}
+        {t("cta.go-to-player-statistics")}
       </Button>
       <Button
         component={Link}
@@ -248,7 +257,7 @@ function Actions({ className }: { className?: string }) {
         disabled={!isGameFinished && (game.step === 0 || isStepFinished)}
       >
         <Icon name={iconName} sx={{ mr: 1 }} />
-        {currentStep?.label}
+        {t(`cta.go-to-step.${currentStep?.id}` as any)}
       </Button>
     </Box>
   );
