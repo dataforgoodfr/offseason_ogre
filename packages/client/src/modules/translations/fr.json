@@ -1,5 +1,6 @@
 {
   "cta.assign-team-to-players": "Répartir les joueurs",
+  "cta.end-turn": "Terminer le tour",
   "cta.go-to-player-characteristics": "Mes caractéristiques",
   "cta.go-to-player-statistics": "Statistiques",
   "cta.go-to-step.consumption-1": "Choix conso 1",
@@ -34,6 +35,7 @@
   "message.success.form-validated": "Formulaire validé",
 
   "modal.remove-team.title": "Voulez-vous supprimer l'équipe ?",
+  "modal.validate-consumption-choices.title": "Les choix ne seront plus modifiables, souhaites-tu valider tes choix ?",
 
   "form.field.country.label": "Pays",
   "form.field.email.label": "Adresse mail",

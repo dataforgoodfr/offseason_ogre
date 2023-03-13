@@ -1,11 +1,13 @@
 import { Box, Button } from "@mui/material";
 import { useState } from "react";
 import { Dialog } from "../../common/components/Dialog";
+import { useTranslation } from "../../translations/useTranslation";
 import { usePlay } from "../context/playContext";
 
 export { ValidateActions };
 
 function ValidateActions() {
+  const { t } = useTranslation();
   const { player, updatePlayer } = usePlay();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -28,18 +30,18 @@ function ValidateActions() {
         disabled={player.hasFinishedStep}
         onClick={handleClickOpen}
       >
-        Terminer le tour
+        {t(`cta.end-turn`)}
       </Button>
 
       <Dialog
         open={open}
         handleClose={handleClose}
-        content="Les choix ne seront plus modifiables, souhaites-tu valider tes choix ?"
+        content={t(`modal.validate-consumption-choices.title`)}
         actions={
           <>
-            <Button onClick={handleClose}>Non</Button>
+            <Button onClick={handleClose}>{t(`cta.no`)}</Button>
             <Button onClick={handleFinishStep} autoFocus>
-              Oui
+              {t(`cta.yes`)}
             </Button>
           </>
         }
