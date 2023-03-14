@@ -35,7 +35,7 @@ const DataGridBox = styled(Box)(({ theme }) => ({
   "& .form-validated": {
     color: "green",
   },
-  "& .form-to-validate": {
+  "& .form-pending-validation": {
     color: "red",
   },
 }));

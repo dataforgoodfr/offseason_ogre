@@ -47,6 +47,17 @@ router.post(
 );
 router.post(
   "/remove-player",
+  guardResource({
+    roles: ["admin"],
+    ownership: async (user, request) => {
+      const gameId = parseInt(request.body.gameId, 10);
+      const game = await gameServices.getDocument(gameId);
+
+      return {
+        success: user.id === game?.teacherId,
+      };
+    },
+  }),
   asyncErrorHandler(controllers.removePlayerController)
 );
 router.put("/change-team", asyncErrorHandler(controllers.changeTeamController));

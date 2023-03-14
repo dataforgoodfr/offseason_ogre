@@ -29,11 +29,19 @@ import { useGameId } from "./utils";
 import { hasGameStarted } from "../utils";
 import { Icon } from "../../../common/components/Icon";
 import { DataGridBox } from "./GameTeams.styles";
+import { useRemovePlayerMutation } from "./services/mutations";
+import { ErrorAlert, SuccessAlert } from "../../../alert";
+import { useTranslation } from "../../../translations/useTranslation";
+import { I18nTranslateFunction } from "../../../translations";
+import { includes, kebabCase } from "lodash";
+import { pipe } from "../../../../lib/fp";
+import { FormStatus } from "../../../play/Personalization/models/form";
 
 export { GamePlayers };
 
 function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const gameId = useGameId();
 
   const playersQuery = usePlayers(gameId);
@@ -41,6 +49,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const teamQuery = useTeams(teamQueryPath);
 
   const queryClient = useQueryClient();
+  const { removePlayerMutation } = useRemovePlayerMutation(gameId);
   const changeTeamMutation = useMutation<
     Response,
     { message: string },
@@ -87,56 +96,73 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
   });
 
   return (
-    <Grid container>
-      {!hasGameStarted(game.status) && (
-        <>
-          <Grid
-            container
-            alignItems="center"
-            sx={{ float: "right", pb: 2, pt: 2, height: "100%" }}
-          >
-            <Button
-              onClick={() => blockForms.mutate(game && game.status !== "ready")}
-              variant="contained"
-              sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
+    <>
+      <Grid container>
+        {!hasGameStarted(game.status) && (
+          <>
+            <Grid
+              container
+              alignItems="center"
+              sx={{ float: "right", pb: 2, pt: 2, height: "100%" }}
             >
-              <Icon name="lock" sx={{ mr: 2 }} />{" "}
-              {`${
-                game && game.status !== "ready" ? "Verrouiller" : "Déverouiller"
-              } les formulaires`}
-            </Button>
-            <Button
-              onClick={() =>
-                navigate(`/administration/games/${gameId}/form-verification`)
+              <Button
+                onClick={() =>
+                  blockForms.mutate(game && game.status !== "ready")
+                }
+                variant="contained"
+                sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
+              >
+                <Icon name="lock" sx={{ mr: 2 }} />{" "}
+                {game && game.status !== "ready"
+                  ? t("cta.lock-forms")
+                  : t("cta.unlock-forms")}
+              </Button>
+              <Button
+                onClick={() =>
+                  navigate(`/administration/games/${gameId}/form-verification`)
+                }
+                variant="contained"
+                sx={{ marginRight: "auto", ml: 2, height: "80%" }}
+              >
+                {t("cta.check-forms")}
+              </Button>
+            </Grid>
+          </>
+        )}
+        <DataGridBox>
+          <DataGrid
+            rows={rows}
+            columns={buildColumns({
+              game,
+              teams,
+              removePlayer: (userId: number) =>
+                removePlayerMutation.mutate({ userId }),
+              t,
+            })}
+            disableSelectionOnClick
+            pageSize={10}
+            rowsPerPageOptions={[10]}
+            experimentalFeatures={{ newEditingApi: true }}
+            processRowUpdate={(newRow, oldRow) => {
+              if (newRow.teamId !== oldRow.teamId) {
+                changeTeamMutation.mutate({
+                  teamId: newRow.teamId,
+                  userId: newRow.id,
+                });
               }
-              variant="contained"
-              sx={{ marginRight: "auto", ml: 2, height: "80%" }}
-            >
-              Vérifier les formulaires
-            </Button>
-          </Grid>
-        </>
+              return newRow;
+            }}
+          />
+        </DataGridBox>
+      </Grid>
+
+      {removePlayerMutation.isSuccess && (
+        <SuccessAlert message={t("message.success.admin.player-removed")} />
       )}
-      <DataGridBox>
-        <DataGrid
-          rows={rows}
-          columns={buildColumns({ game, teams })}
-          disableSelectionOnClick
-          pageSize={10}
-          rowsPerPageOptions={[10]}
-          experimentalFeatures={{ newEditingApi: true }}
-          processRowUpdate={(newRow, oldRow) => {
-            if (newRow.teamId !== oldRow.teamId) {
-              changeTeamMutation.mutate({
-                teamId: newRow.teamId,
-                userId: newRow.id,
-              });
-            }
-            return newRow;
-          }}
-        />
-      </DataGridBox>
-    </Grid>
+      {removePlayerMutation.isError && (
+        <ErrorAlert message={t("message.error.admin.global.UNEXPECTED")} />
+      )}
+    </>
   );
 }
 
@@ -151,14 +177,18 @@ interface Row {
 function buildColumns({
   game,
   teams,
+  removePlayer,
+  t,
 }: {
   game: IGame;
   teams: Team[];
+  removePlayer: (userId: number) => void;
+  t: I18nTranslateFunction;
 }): GridColumns<Row> {
   return [
     {
       field: "name",
-      headerName: "Nom",
+      headerName: t("table.column.player-name.label"),
       valueGetter: (params) => {
         const row = params.row;
         return row.firstName + " " + row.lastName;
@@ -168,51 +198,49 @@ function buildColumns({
     },
     {
       field: "email",
-      headerName: "Email",
+      headerName: t("table.column.player-email.label"),
       flex: 1,
       minWidth: 250,
     },
-    ...buildTeamColumns({ game, teams }),
-    ...buildFormColumns(),
-    ...buildActionColumns({ game }),
+    ...buildTeamColumns({ game, teams, t }),
+    ...buildFormColumns({ t }),
+    ...buildActionColumns({ game, removePlayer }),
   ];
 }
 
-function buildFormColumns(): GridColumns<Row> {
+function buildFormColumns({
+  t,
+}: {
+  t: I18nTranslateFunction;
+}): GridColumns<Row> {
   const baseFormColumn = {
     editable: false,
     field: "formStatus",
-    headerName: "Statut du formulaire",
+    headerName: t("table.column.form-status.label"),
     cellClassName: (params: GridCellParams<string>) => {
-      if (params.value === "pendingValidation") return "form-to-validate";
-      if (params.value === "validated") return "form-validated";
-      return "form-draft";
+      return pipe(
+        params.value || "",
+        (value): FormStatus =>
+          includes(["pendingValidation", "validated"], value)
+            ? (value as FormStatus)
+            : "draft",
+        (status: FormStatus) => `form-${kebabCase(status)}`
+      );
     },
     renderCell: ({ value }) => {
-      if (value === "draft") {
-        return (
-          <>
-            <Icon name="draft" sx={{ mr: 1 }} /> Brouillon
-          </>
-        );
-      }
-      if (value === "validated") {
-        return (
-          <>
-            <Icon name="check-circle" sx={{ mr: 1 }} /> Validé
-          </>
-        );
-      }
-      if (value === "pendingValidation") {
-        return (
-          <>
-            <Icon name="settings" sx={{ mr: 1 }} /> En attente de validation
-          </>
-        );
-      }
+      const formStatus = pipe(
+        value || "",
+        (value): FormStatus | "unfilled" =>
+          includes(["draft", "pendingValidation", "validated"], value)
+            ? (value as FormStatus)
+            : "unfilled",
+        kebabCase
+      );
+
       return (
         <>
-          <Icon name="mark-circle" sx={{ mr: 1 }} /> Non rempli
+          <Icon name={`form-${formStatus}` as any} sx={{ mr: 1 }} />{" "}
+          {t(`admin.form.status.${formStatus}` as any)}
         </>
       );
     },
@@ -225,14 +253,16 @@ function buildFormColumns(): GridColumns<Row> {
 function buildTeamColumns({
   game,
   teams,
+  t,
 }: {
   game: IGame;
   teams: Team[];
+  t: I18nTranslateFunction;
 }): GridColumns<Row> {
   const baseTeamColumn = {
     editable: false,
     field: "teamId",
-    headerName: "Equipe",
+    headerName: t("table.column.player-team.label"),
     valueFormatter: ({ value, field, api }) => {
       const colDef = api.getColumn(field);
       const option = colDef.valueOptions.find(
@@ -259,7 +289,13 @@ function buildTeamColumns({
   ] as GridColumns<Row>;
 }
 
-function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
+function buildActionColumns({
+  game,
+  removePlayer,
+}: {
+  game: IGame;
+  removePlayer: (userId: number) => void;
+}): GridColumns<Row> {
   if (hasGameStarted(game.status)) {
     return [];
   }
@@ -269,27 +305,24 @@ function buildActionColumns({ game }: { game: IGame }): GridColumns<Row> {
       type: "actions",
       width: 80,
       getActions: (params: GridRowParams<Row>) => [
-        <DeleteActionCellItem params={params} />,
+        <DeleteActionCellItem params={params} removePlayer={removePlayer} />,
       ],
     },
   ];
 }
 
-function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
-  const queryClient = useQueryClient();
-  const gameId = useGameId();
+function DeleteActionCellItem({
+  params,
+  removePlayer,
+}: {
+  params: GridRowParams<Row>;
+  removePlayer: (userId: number) => void;
+}) {
+  const { t } = useTranslation();
+
   const userId = params.row.id;
-  const removePlayerMutation = useMutation<Response, { message: string }>(
-    () => {
-      return axios.post("/api/games/remove-player", { gameId, userId });
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(`/api/games/${gameId}/players`);
-      },
-    }
-  );
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
   return (
     <>
       <GridActionsCellItem
@@ -304,19 +337,19 @@ function DeleteActionCellItem({ params }: { params: GridRowParams<Row> }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Voulez-vous supprimer le joueur ?
+          {t("modal.remove-player.title")}
         </DialogTitle>
         <DialogActions>
           <Button autoFocus onClick={() => setIsDialogOpen(false)}>
-            Non
+            {t("cta.no")}
           </Button>
           <Button
             onClick={() => {
-              removePlayerMutation.mutate();
+              removePlayer(userId);
               setIsDialogOpen(false);
             }}
           >
-            Oui
+            {t("cta.yes")}
           </Button>
         </DialogActions>
       </Dialog>

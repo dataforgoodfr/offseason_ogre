@@ -54,6 +54,7 @@ model User {
   taughtGames Game[]    @relation("TaughtGames")
   roleId      Int
   role        Role      @relation(fields: [roleId], references: [id])
+  profiles    Profile[] @relation("UserProfile")
 }
 
 model Role {
@@ -83,6 +84,8 @@ model Team {
 
 model Profile {
   id                Int             @id @default(autoincrement())
+  user              User            @relation("UserProfile", fields: [userId], references: [id])
+  userId            Int
   player            Players?
   personalization   Personalization @relation(fields: [personalizationId], references: [id])
   personalizationId Int
