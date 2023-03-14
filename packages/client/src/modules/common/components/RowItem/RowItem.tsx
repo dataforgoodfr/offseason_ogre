@@ -19,7 +19,7 @@ function RowItem({ left, right, sx }: RowItemProps) {
       <Box display="flex" alignItems="center">
         {left}
       </Box>
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="center" textAlign="right">
         {right}
       </Box>
     </Box>

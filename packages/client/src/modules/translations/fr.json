@@ -2,6 +2,16 @@
   "cta.assign-team-to-players": "Répartir les joueurs",
   "cta.check-forms": "Vérifier les formulaires",
   "cta.create-game": "Nouveau jeu",
+  "cta.end-turn": "Terminer le tour",
+  "cta.go-to-player-characteristics": "Mes caractéristiques",
+  "cta.go-to-player-statistics": "Statistiques",
+  "cta.go-to-step.consumption-1": "Choix conso 1",
+  "cta.go-to-step.consumption-2": "Choix conso 2",
+  "cta.go-to-step.final-situation": "Synthèse",
+  "cta.go-to-step.initial-situation": "Actions",
+  "cta.go-to-step.production-1": "Choix prod 1",
+  "cta.go-to-step.production-2": "Choix prod 2",
+  "cta.go-to-step.production-3": "Choix prod 3",
   "cta.join-game": "Rejoindre le jeu",
   "cta.lock-forms": "Verrouiller les formulaires",
   "cta.no": "Non",
@@ -31,6 +41,7 @@
 
   "modal.remove-player.title": "Voulez-vous supprimer le joueur ?",
   "modal.remove-team.title": "Voulez-vous supprimer l'équipe ?",
+  "modal.validate-consumption-choices.title": "Les choix ne seront plus modifiables, souhaites-tu valider tes choix ?",
 
   "form.field.country.label": "Pays",
   "form.field.email.label": "Adresse mail",
@@ -68,6 +79,11 @@
   "page.signup.title": "Création de compte",
   "page.signup.login-section.title": "Si vous avez déjà un compte :",
   "page.signup.login-section.cta": "Se connecter",
+
+  "player.profile.summary.carbon-footprint": "Empreinte carbone",
+  "player.profile.summary.consumption": "Consommation",
+  "player.profile.summary.production": "Production",
+  "player.profile.summary.remaining-budget": "Budget restant",
 
   "production.energy.biomass.name": "Biomasse",
   "production.energy.biomass.accordion.title": "Biomasse (électricité)",

@@ -27,10 +27,12 @@ import {
 } from "../../../lib/formatter";
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { PlayerHeader, Header, Actions };
 
 function PlayerHeader() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { game } = usePlay();
   const { currentPersona, latestPersona } = usePersona();
@@ -47,9 +49,14 @@ function PlayerHeader() {
   const playerPoints = myTeam ? teamIdToTeamValues[myTeam.id]?.points || 0 : 0;
 
   return (
-    <Box>
-      <PlayBox>
-        <Header game={game} team={myTeam || undefined} user={user} />
+    <Box className="player-header">
+      <PlayBox className="player-header__profile">
+        <Header
+          className="player-header__profile__header"
+          game={game}
+          team={myTeam || undefined}
+          user={user}
+        />
         <Grid
           item
           xs={12}
@@ -81,7 +88,9 @@ function PlayerHeader() {
             left={
               <>
                 <Icon name="production" sx={{ mr: 1 }} />
-                <Typography sx={{ fontSize: "12px" }}> Production</Typography>
+                <Typography sx={{ fontSize: "12px" }}>
+                  {t("player.profile.summary.production")}
+                </Typography>
               </>
             }
             right={
@@ -95,7 +104,9 @@ function PlayerHeader() {
             left={
               <>
                 <Icon name="consumption" sx={{ mr: 1 }} />
-                <Typography sx={{ fontSize: "12px" }}> Consommation</Typography>
+                <Typography sx={{ fontSize: "12px" }}>
+                  {t("player.profile.summary.consumption")}
+                </Typography>
               </>
             }
             right={
@@ -110,7 +121,7 @@ function PlayerHeader() {
               <>
                 <Icon name="budget" sx={{ mr: 1 }} />
                 <Typography sx={{ fontSize: "12px" }}>
-                  Budget restant
+                  {t("player.profile.summary.remaining-budget")}
                 </Typography>
               </>
             }
@@ -126,7 +137,7 @@ function PlayerHeader() {
               <>
                 <Icon name="carbon-footprint" sx={{ mr: 1 }} />
                 <Typography sx={{ fontSize: "12px" }}>
-                  Empreinte carbone
+                  {t("player.profile.summary.carbon-footprint")}
                 </Typography>
               </>
             }
@@ -150,11 +161,12 @@ function PlayerHeader() {
             variant="contained"
             color="primary"
           >
-            <Icon name="badge" sx={{ mr: 1 }} /> Mes caractéristiques
+            <Icon name="badge" sx={{ mr: 1 }} />{" "}
+            {t("cta.go-to-player-characteristics")}
           </Button>
         </Grid>
       </PlayBox>
-      <Actions />
+      <Actions className="player-header__actions" />
     </Box>
   );
 }
@@ -163,14 +175,16 @@ function Header({
   game,
   team,
   user,
+  className,
 }: {
   game?: IGame;
   team?: ITeam;
   user?: IUser;
+  className?: string;
 }) {
   return (
-    <Grid container>
-      <Grid item xs={4}>
+    <Grid className={className} display="grid" gridTemplateColumns="1fr 3fr">
+      <Grid maxWidth={150}>
         <Card>
           <CardActionArea
             to={`/play/games/${game?.id}/persona`}
@@ -186,7 +200,7 @@ function Header({
           </CardActionArea>
         </Card>
       </Grid>
-      <Grid item sx={{ pl: 2 }} xs={8}>
+      <Grid sx={{ pl: 2 }}>
         <Typography variant="h6" sx={{ lineBreak: "anywhere" }}>
           {user?.firstName} {user?.lastName}
         </Typography>
@@ -198,7 +212,8 @@ function Header({
   );
 }
 
-function Actions() {
+function Actions({ className }: { className?: string }) {
+  const { t } = useTranslation();
   const { game, isGameFinished, isStepFinished } = usePlay();
   const currentStep = useCurrentStep();
 
@@ -209,6 +224,7 @@ function Actions() {
 
   return (
     <Box
+      className={className}
       sx={{
         display: "flex",
         alignItems: "center",
@@ -226,7 +242,8 @@ function Actions() {
           width: "200px",
         }}
       >
-        <Icon name="bar-chart" sx={{ mr: 1 }} /> Statistiques
+        <Icon name="bar-chart" sx={{ mr: 1 }} />{" "}
+        {t("cta.go-to-player-statistics")}
       </Button>
       <Button
         component={Link}
@@ -240,7 +257,7 @@ function Actions() {
         disabled={!isGameFinished && (game.step === 0 || isStepFinished)}
       >
         <Icon name={iconName} sx={{ mr: 1 }} />
-        {currentStep?.label}
+        {t(`cta.go-to-step.${currentStep?.id}` as any)}
       </Button>
     </Box>
   );
