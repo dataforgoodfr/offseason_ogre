@@ -12,14 +12,19 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ErrorAlert, SuccessAlert } from "../../alert";
 import { CopyToClipboard } from "../../common/components/CopyToClipboard";
+import { IGameWithTeacher } from "../../../utils/types";
+import { I18nTranslateFunction } from "../../translations";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { Games };
 
 function Games(): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <>
       <Box alignItems="center" display="flex">
-        <Typography variant="h3">Ateliers</Typography>
+        <Typography variant="h3">{t("page.admin.games.title")}</Typography>
         <NewGame />
       </Box>
       <Paper sx={{ mt: 2, p: 2 }}>
@@ -29,11 +34,13 @@ function Games(): JSX.Element {
   );
 }
 
-const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
-  { field: "id", headerName: "ID", width: 80 },
+const buildColumns: (args: {
+  t: I18nTranslateFunction;
+}) => GridColDef<IGameWithTeacher>[] = ({ t }) => [
+  { field: "id", headerName: t("table.column.game-id.label"), width: 80 },
   {
     field: "code",
-    headerName: "Code",
+    headerName: t("table.column.game-code.label"),
     width: 120,
     renderCell: (params: GridRenderCellParams<string>) => {
       return (
@@ -43,13 +50,13 @@ const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
   },
   {
     field: "name",
-    headerName: "Nom",
+    headerName: t("table.column.game-name.label"),
     flex: 1,
     minWidth: 150,
   },
   {
     field: "teacher",
-    headerName: "Animateur",
+    headerName: t("table.column.game-teacher.label"),
     width: 250,
     valueGetter: (params) => params.row.teacher.email,
     flex: 1,
@@ -57,7 +64,7 @@ const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
   },
   {
     field: "date",
-    headerName: "Date",
+    headerName: t("table.column.game-date.label"),
     type: "dateTime",
     renderCell: (params: GridRenderCellParams<string>) => {
       return new Date(params.row.date).toLocaleString([], {
@@ -68,10 +75,19 @@ const columns: GridColDef<{ date: string; teacher: { email: string } }>[] = [
     flex: 1,
     minWidth: 150,
   },
+  {
+    field: "status",
+    headerName: t("table.column.game-status.label"),
+    valueGetter: (params) => t(`game.status.${params.row.status}`),
+    flex: 1,
+    minWidth: 150,
+  },
 ];
 
 function GamesDataGrid() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const query = useQuery("games", () => {
     return axios.get<undefined, { data: { documents: any[] } }>("/api/games");
   });
@@ -80,13 +96,13 @@ function GamesDataGrid() {
     return <CircularProgress />;
   }
 
-  const rows = query?.data?.data?.documents ?? [];
+  const rows: IGameWithTeacher[] = query?.data?.data?.documents ?? [];
 
   return (
     <Box style={{ height: 600, width: "100%", cursor: "pointer" }}>
       <DataGrid
         rows={rows}
-        columns={columns}
+        columns={buildColumns({ t })}
         disableSelectionOnClick
         initialState={{
           sorting: {
@@ -108,6 +124,7 @@ function GamesDataGrid() {
 
 function NewGame() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const mutation = useMutation<Response, { message: string }>(
     (newGame) => {
@@ -127,7 +144,7 @@ function NewGame() {
         variant="contained"
         sx={{ marginLeft: "auto" }}
       >
-        <AddBoxIcon sx={{ mr: 1 }} /> Nouveau Jeu
+        <AddBoxIcon sx={{ mr: 1 }} /> {t("cta.create-game")}
       </Button>
     </>
   );

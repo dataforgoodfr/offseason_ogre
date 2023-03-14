@@ -2,7 +2,7 @@ export type { Game, GameStatus };
 
 interface Game {
   id: number;
-  date: Date;
+  date: string;
   description?: string;
   name: string;
   status: GameStatus;

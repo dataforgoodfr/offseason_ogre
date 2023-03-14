@@ -1,6 +1,7 @@
 import { Personalization, Players as PlayersPrisma } from "@prisma/client";
 import { database } from "../../../database";
 import { Players } from "../types";
+import * as playerActionsServices from "../../actions/services/playerActions";
 
 const model = database.players;
 type Model = PlayersPrisma;
@@ -9,9 +10,10 @@ export { services };
 
 const crudServices = {
   find,
+  remove,
+  setDefaultProfiles,
   update,
   updateMany,
-  setDefaultProfiles,
   validateProfiles,
 };
 
@@ -96,6 +98,7 @@ async function setDefaultProfiles(
   return playersWithoutProfiles.forEach(async (player: any) => {
     const profile = await database.profile.create({
       data: {
+        userId: player.userId,
         personalizationId: defaultPersonalization.id,
         status: "validated",
         lastStatusUpdate: new Date(),
@@ -151,5 +154,12 @@ async function updateMany(
       gameId,
     },
     data,
+  });
+}
+
+async function remove({ gameId, userId }: { gameId: number; userId: number }) {
+  await playerActionsServices.removeForPlayer({ gameId, userId });
+  await database.players.delete({
+    where: { userId_gameId: { gameId, userId } },
   });
 }
