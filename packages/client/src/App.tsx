@@ -3,6 +3,7 @@ import { useAuth } from "./modules/auth/authProvider";
 import { UnauthenticatedApp } from "./UnauthenticatedApp";
 import { hotjar } from "react-hotjar";
 import { useEffect } from "react";
+import { ErrorBoundary } from "./modules/error-handling/ErrorBoundary";
 
 export default App;
 
@@ -12,5 +13,10 @@ function App() {
   }, []);
 
   const { user } = useAuth();
-  return user ? <AuthenticatedApp /> : <UnauthenticatedApp />;
+
+  return (
+    <ErrorBoundary>
+      {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+    </ErrorBoundary>
+  );
 }

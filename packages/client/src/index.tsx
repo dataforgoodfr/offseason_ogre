@@ -15,6 +15,9 @@ import { AuthProvider } from "./modules/auth/authProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LayoutProvider } from "./modules/Layout/context";
 import { RootPlayProvider } from "./modules/play/context/playContext";
+import { initErrorTracer } from "./modules/error-handling";
+
+initErrorTracer();
 
 const queryClient = new QueryClient();
 
