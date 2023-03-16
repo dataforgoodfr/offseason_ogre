@@ -12,6 +12,8 @@
     "@mui/system": "^5.11.4",
     "@mui/x-data-grid": "^5.17.18",
     "@mui/x-date-pickers": "^5.0.0-alpha.3",
+    "@sentry/react": "^7.43.0",
+    "@sentry/tracing": "^7.43.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -68,6 +70,7 @@
     ]
   },
   "devDependencies": {
+    "@sentry/vite-plugin": "^0.4.0",
     "@types/lodash": "^4.14.182",
     "@typescript-eslint/eslint-plugin": "^5.19.0",
     "@vitejs/plugin-react": "^3.0.0",
