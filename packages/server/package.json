@@ -4,6 +4,8 @@
   "dependencies": {
     "@prisma/client": "^3.12.0",
     "@sendgrid/mail": "^7.6.2",
+    "@sentry/node": "^7.43.0",
+    "@sentry/tracing": "^7.43.0",
     "body-parser": "^1.20.0",
     "cookie": "^0.5.0",
     "cookie-parser": "^1.4.6",

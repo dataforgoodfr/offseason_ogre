@@ -11,11 +11,14 @@ import { initWebSocket } from "./modules/websocket";
 import { logger } from "./logger";
 import { logError, setRequestId } from "./middlewares";
 import { limiter } from "./middlewares/limit";
+import { initErrorTracer, traceRequests } from "./error-handling";
 
 const app = express();
+initErrorTracer(app);
 
 connectToDatase().then(seed);
 
+traceRequests(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 // Parse JSON bodies (as sent by API clients)
 app.use(bodyParser.json());
