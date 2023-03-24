@@ -1,4 +1,4 @@
-import mailClient from "@sendgrid/mail";
+import mailClient, { MailDataRequired } from "@sendgrid/mail";
 import invariant from "tiny-invariant";
 import { logger } from "../../../logger";
 
@@ -22,11 +22,23 @@ interface TemplateData {
   };
 }
 
+interface TemplateConfig {
+  templateId: string;
+  asmGroupId?: number;
+  trackingSettings?: MailDataRequired["trackingSettings"];
+}
+
 const TEMPLATE_NAME_TO_CONFIG: {
-  [k in TemplateName]: { templateId: string; asmGroupId?: number };
+  [k in TemplateName]: TemplateConfig;
 } = {
   "login-magic-link": {
     templateId: "d-a64abce41def4af0915688059ed632ac",
+    trackingSettings: {
+      clickTracking: {
+        enable: false,
+        enableText: false,
+      },
+    },
   },
 };
 
@@ -37,30 +49,27 @@ export async function sendMail<T extends TemplateName>(
   templateName: T,
   templateData: TemplateData[T]
 ) {
-  const config = TEMPLATE_NAME_TO_CONFIG[templateName];
+  const templateConfig = TEMPLATE_NAME_TO_CONFIG[templateName];
 
-  if (!config) {
+  if (!templateConfig) {
     throw new Error(`Could not find config for email ${templateName}`);
   }
 
   await doSendEmail({
     to,
+    templateConfig,
     templateData,
-    templateId: config.templateId,
-    asmGroupId: config.asmGroupId,
   });
 }
 
 async function doSendEmail({
   to,
-  templateId,
+  templateConfig,
   templateData,
-  asmGroupId,
 }: {
   to: string;
-  templateId: string;
+  templateConfig: TemplateConfig;
   templateData: TemplateData[TemplateName];
-  asmGroupId?: number;
 }) {
   try {
     await mailClient.send({
@@ -68,11 +77,11 @@ async function doSendEmail({
         email: MAIL_SENDER,
         name: MAIL_NAME,
       },
-      templateId,
-      ...(asmGroupId
+      templateId: templateConfig.templateId,
+      ...(templateConfig.asmGroupId
         ? {
             asm: {
-              groupId: asmGroupId,
+              groupId: templateConfig.asmGroupId,
             },
           }
         : {}),
@@ -86,6 +95,7 @@ async function doSendEmail({
           dynamicTemplateData: templateData as any,
         },
       ],
+      ...(templateConfig.trackingSettings || {}),
     });
   } catch (err) {
     logger.error(err);
