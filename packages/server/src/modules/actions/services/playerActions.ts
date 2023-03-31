@@ -6,7 +6,13 @@ import { logger } from "../../../logger";
 const model = database.playerActions;
 type Model = PlayerActions;
 
-export { create, getMany, getOrCreatePlayerActions, updatePlayerActions };
+export {
+  create,
+  getMany,
+  getOrCreatePlayerActions,
+  removeForPlayer,
+  updatePlayerActions,
+};
 
 async function create({
   actionId,
@@ -48,6 +54,23 @@ async function getMany({
     },
   });
   return documents;
+}
+
+async function removeForPlayer({
+  gameId,
+  userId,
+}: {
+  gameId: number;
+  userId: number;
+}): Promise<void> {
+  await database.playerActions.deleteMany({
+    where: {
+      AND: {
+        gameId,
+        userId,
+      },
+    },
+  });
 }
 
 async function getOrCreatePlayerActions(

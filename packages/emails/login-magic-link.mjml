@@ -14,7 +14,8 @@
           </mj-text>
           <mj-button background-color="#f9c74f" font-family="Arial" font-size="16px" font-weight="bold" color="#1A3D5C" border-radius="16px" inner-padding="16px 32px" href="{{url}}"> Me Connecter </mj-button>
           <mj-text align="center" font-size="14px" color="#ffffff">
-            <p font-family="Arial">Le bouton ne s'affiche pas ? <a style="color: #ffffff; text-decoration: underline;" href="{{url}}" font-family="Arial">Cliquez ici</a></p>
+            <p font-family="Arial">Le bouton ne fonctionne pas ? <br> Copiez/collez cette url dans votre navigateur pour vous connecter :</p>
+            <p><a style="color: #ffffff; text-decoration: underline; word-wrap: break-word;" href="" font-family="Arial">{{url}}</a></p>
           </mj-text>
         </mj-column>
       </mj-section>

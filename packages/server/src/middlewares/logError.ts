@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { traceError } from "../error-handling";
 import { logger } from "../logger";
 import {
   BusinessError,
@@ -11,12 +12,13 @@ const isProd = process.env.NODE_ENV === "production";
 
 const logError = (
   err: Error,
-  _: Request,
+  req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
   logger.error(err);
+  traceError(err, req, res);
 
   if (err instanceof BusinessError) {
     if (err.code === "USER_NOT_AUTHENTICATED") {

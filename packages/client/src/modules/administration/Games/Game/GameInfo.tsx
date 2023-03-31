@@ -14,7 +14,7 @@ export { GameInfo };
 interface IGameFormProps {
   name: string;
   description?: string;
-  date: Date;
+  date: string | Date;
 }
 
 interface IInfoProps {
