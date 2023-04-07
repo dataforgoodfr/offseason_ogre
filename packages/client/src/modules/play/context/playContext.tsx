@@ -40,14 +40,12 @@ interface IPlayContext {
   isGameFinished: boolean;
   isStepFinished: boolean;
   updateGame: (update: Partial<IGame>) => void;
-  playerActions: PlayerActions[];
   updatePlayerActions: (
     update: {
       isPerformed: boolean;
       id: number;
     }[]
   ) => void;
-  actionPointsLimitExceeded: boolean;
   setActionPointsLimitExceeded: (limitExceeded: boolean) => void;
   player: PlayerState;
   updatePlayer: (options: { hasFinishedStep?: boolean }) => void;
@@ -69,6 +67,8 @@ type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
 interface PlayerState {
   hasFinishedStep: boolean;
+  actionPointsLimitExceeded: boolean;
+  playerActions: PlayerActions[];
   teamActions: TeamAction[];
 }
 
@@ -91,20 +91,16 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
     null
   );
-  const [playerActions, setPlayerActions] = useState<PlayerActions[]>([]);
-  const [actionPointsLimitExceeded, setActionPointsLimitExceeded] =
-    useState<boolean>(false);
-  // TODO: move actionPointsLimitExceeded and playerActions to this state.
   const [player, setPlayer] = useState<PlayerState>({
     hasFinishedStep: true,
+    actionPointsLimitExceeded: false,
+    playerActions: [],
     teamActions: [],
   });
   const [profile, setProfile] = useState<any>({});
   const { socket } = useGameSocket({
     gameId,
     setGameWithTeams,
-    setPlayerActions,
-    setActionPointsLimitExceeded,
     setPlayer,
     setProfile,
   });
@@ -119,6 +115,13 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       socket?.emit("readProfile", { gameId, userId: user.id });
     }
   }, [gameId, socket, user]);
+
+  const setActionPointsLimitExceeded = useCallback(
+    (actionPointsLimitExceeded: boolean) => {
+      setPlayer((previous) => ({ ...previous, actionPointsLimitExceeded }));
+    },
+    [setPlayer]
+  );
 
   if (gameWithSortedTeams === null || socket === null) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
@@ -191,9 +194,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         isStepFinished:
           gameWithSortedTeams.step === gameWithSortedTeams.lastFinishedStep,
         updateGame,
-        playerActions,
         updatePlayerActions,
-        actionPointsLimitExceeded,
         setActionPointsLimitExceeded,
         player,
         updatePlayer,
@@ -352,12 +353,12 @@ function useCurrentStep(): GameStep | null {
 }
 
 function usePlayerActions() {
-  const { game, playerActions } = useLoadedPlay();
+  const { game, player } = useLoadedPlay();
 
   return {
-    playerActions,
+    playerActions: player.playerActions,
     actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
-    ...computePlayerActionsStats(game.step, playerActions),
+    ...computePlayerActionsStats(game.step, player.playerActions),
   };
 }
 
@@ -376,15 +377,11 @@ function useTeamActions() {
 function useGameSocket({
   gameId,
   setGameWithTeams,
-  setPlayerActions,
-  setActionPointsLimitExceeded,
   setPlayer,
   setProfile,
 }: {
   gameId: number;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
-  setPlayerActions: React.Dispatch<React.SetStateAction<PlayerActions[]>>;
-  setActionPointsLimitExceeded: React.Dispatch<React.SetStateAction<boolean>>;
   setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
   setProfile: React.Dispatch<React.SetStateAction<any>>;
 }): { socket: Socket | null } {
@@ -421,12 +418,18 @@ function useGameSocket({
     newSocket.on(
       "playerActionsUpdated",
       ({ playerActions = [] }: { playerActions: PlayerActions[] }) => {
-        setPlayerActions(playerActions.sort(sortBy("actionId", "asc")));
+        setPlayer((previous) => ({
+          ...previous,
+          playerActions: playerActions.sort(sortBy("actionId", "asc")),
+        }));
       }
     );
 
     newSocket.on("actionPointsLimitExceeded", () => {
-      setActionPointsLimitExceeded(true);
+      setPlayer((previous) => ({
+        ...previous,
+        actionPointsLimitExceeded: true,
+      }));
     });
 
     newSocket.on(
@@ -449,15 +452,7 @@ function useGameSocket({
     return () => {
       newSocket.disconnect();
     };
-  }, [
-    gameId,
-    setGameWithTeams,
-    setPlayerActions,
-    setActionPointsLimitExceeded,
-    setPlayer,
-    setProfile,
-    navigate,
-  ]);
+  }, [gameId, setGameWithTeams, setPlayer, setProfile, navigate]);
   return { socket };
 }
 
