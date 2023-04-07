@@ -7,6 +7,7 @@ import {
 import { ConsumptionDatum, getConsumptionFromProfile } from "./consumption";
 import { production, ProductionDatum } from "./production";
 import { computeIntermediateValues } from "./consumption/computing";
+import { computeMaterials, MaterialsDatum } from "./materials";
 
 export { buildInitialPersona };
 export type { Persona };
@@ -18,6 +19,7 @@ interface Persona {
   points: number;
   consumption: readonly ConsumptionDatum[];
   production: ProductionDatum[];
+  materials: MaterialsDatum[];
 }
 
 const buildInitialPersona: (personalization: PersoForm) => Persona = (
@@ -39,6 +41,8 @@ const buildInitialPersona: (personalization: PersoForm) => Persona = (
     consumption as ConsumptionDatum[]
   );
 
+  const materials = computeMaterials(production);
+
   const persona: Persona = {
     budget: 13.7,
     actionPoints: 0,
@@ -46,6 +50,7 @@ const buildInitialPersona: (personalization: PersoForm) => Persona = (
     carbonFootprint,
     consumption,
     production,
+    materials,
   };
 
   return persona;
