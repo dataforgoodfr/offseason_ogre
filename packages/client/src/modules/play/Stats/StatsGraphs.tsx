@@ -13,7 +13,6 @@ import { STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumFor } from "../../persona";
-import { getPlayerValuesByStep } from "../utils/playerValues";
 import { IGame } from "../../../utils/types";
 
 export { StatsGraphs };
@@ -40,14 +39,14 @@ function StatsGraphs() {
 
 function StepDetails({ bar }: { bar: number | undefined }) {
   const { game } = usePlay();
-  const { personaBySteps } = usePersona();
+  const { getPersonaAtStep } = usePersona();
 
   if (typeof bar === "undefined") return <></>;
   const step = bar === 0 || bar === 1 ? 0 : bar - 1;
 
   if (isNotFinishedStep(step, game)) return <></>;
 
-  const persona = getPlayerValuesByStep(step, game, personaBySteps);
+  const persona = getPersonaAtStep(step);
   if (step === 0 && bar === 0) {
     return (
       <>
@@ -81,9 +80,9 @@ function StepDetails({ bar }: { bar: number | undefined }) {
 
 function useStackedEnergyData() {
   const { game } = usePlay();
-  const { personaBySteps } = usePersona();
+  const { personaBySteps, getPersonaAtStep } = usePersona();
 
-  const initialPersona = getPlayerValuesByStep(0, game, personaBySteps);
+  const initialPersona = getPersonaAtStep(0);
   const initialValues = [
     {
       name: "Conso init",
