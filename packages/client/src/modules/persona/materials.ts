@@ -16,7 +16,7 @@ const computeMaterials = (production: ProductionDatum[]): MaterialsDatum[] => {
   const results = production
     .map((prod: ProductionDatum) => {
       const prodConstants = Object.values(productionConstants).find(
-        (value) => value.name == prod.name
+        (value) => value.name === prod.name
       );
       return [
         { type: "concrete", value: prodConstants?.concretePerUnit || 0 },
