@@ -6,7 +6,7 @@ import {
   TeamAction,
 } from "../../../utils/types";
 import { ConsumptionDatum } from "../../persona/consumption";
-import { computeMaterials } from "../../persona/materials";
+import { computeMaterials } from "../gameEngines/materialsEngine";
 import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
 import { computeConsumptionPoints } from "../gameEngines/consumptionPointsEngine";

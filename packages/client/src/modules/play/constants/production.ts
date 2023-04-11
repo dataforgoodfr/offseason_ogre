@@ -1,3 +1,5 @@
+import { MaterialsType } from "../../../utils/types";
+
 export { productionConstants, productionActionNames };
 
 const productionConstants = {
@@ -95,7 +97,7 @@ const productionActionNames = Object.values(productionConstants).map(
   (value) => value.name
 );
 
-export const materials = {
+export const materials: { [key: string]: MaterialsType } = {
   CONCRETE: "concrete",
   STEEL: "steel",
   CEMENT: "cement",

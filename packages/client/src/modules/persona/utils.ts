@@ -7,7 +7,7 @@ import {
 import { isNotEmpty } from "../play/Personalization/utils/choices";
 import { fulfillsConditions } from "../play/Personalization/utils/formValidation";
 
-export function sumFor<T extends { type: string; value: number }>(
+export function sumForAndFormat<T extends { type: string; value: number }>(
   array: readonly T[],
   type: string
 ) {
@@ -17,7 +17,7 @@ export function sumFor<T extends { type: string; value: number }>(
   ).toFixed(2);
 }
 
-export function sumForNumber<T extends { type: string; value: number }>(
+export function sumFor<T extends { type: string; value: number }>(
   array: readonly T[],
   type: string
 ) {

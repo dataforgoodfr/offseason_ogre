@@ -7,7 +7,10 @@ import {
 import { ConsumptionDatum, getConsumptionFromProfile } from "./consumption";
 import { production, ProductionDatum } from "./production";
 import { computeIntermediateValues } from "./consumption/computing";
-import { computeMaterials, MaterialsDatum } from "./materials";
+import {
+  computeMaterials,
+  MaterialsDatum,
+} from "../play/gameEngines/materialsEngine";
 
 export { buildInitialPersona };
 export type { Persona };

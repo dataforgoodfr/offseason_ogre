@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
-import { sumAllValues, sumFor } from "../../persona";
+import { sumAllValues, sumForAndFormat } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
 
 export { PlayerChart };
@@ -31,19 +31,25 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
       return {
         name: buildName(player.user),
         total: sumAllValues(playerConsumption) || 0,
-        fossil: sumFor(playerConsumption, "fossil"),
-        grey: sumFor(playerConsumption, "grey"),
-        mixte: sumFor(playerConsumption, "mixte"),
-        renewable: sumFor(playerConsumption, "renewable"),
+        fossil: sumForAndFormat(playerConsumption, "fossil"),
+        grey: sumForAndFormat(playerConsumption, "grey"),
+        mixte: sumForAndFormat(playerConsumption, "mixte"),
+        renewable: sumForAndFormat(playerConsumption, "renewable"),
       };
     }),
     firstPersona
       ? {
           name: "Production",
           total: sumAllValues(firstPersona.currentPersona.production) || 0,
-          offshore: sumFor(firstPersona.currentPersona.production, "offshore"),
-          nuclear: sumFor(firstPersona.currentPersona.production, "nuclear"),
-          terrestrial: sumFor(
+          offshore: sumForAndFormat(
+            firstPersona.currentPersona.production,
+            "offshore"
+          ),
+          nuclear: sumForAndFormat(
+            firstPersona.currentPersona.production,
+            "nuclear"
+          ),
+          terrestrial: sumForAndFormat(
             firstPersona.currentPersona.production,
             "terrestrial"
           ),

@@ -12,7 +12,7 @@ import {
 import { STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
-import { sumAllValues, sumFor } from "../../persona";
+import { sumAllValues, sumForAndFormat } from "../../persona";
 import { getPlayerValuesByStep } from "../utils/playerValues";
 import { IGame } from "../../../utils/types";
 
@@ -88,17 +88,17 @@ function useStackedEnergyData() {
     {
       name: "Conso init",
       total: sumAllValues(initialPersona.consumption) || 0,
-      fossil: sumFor(initialPersona.consumption, "fossil"),
-      grey: sumFor(initialPersona.consumption, "grey"),
-      mixte: sumFor(initialPersona.consumption, "mixte"),
-      renewable: sumFor(initialPersona.consumption, "renewable"),
+      fossil: sumForAndFormat(initialPersona.consumption, "fossil"),
+      grey: sumForAndFormat(initialPersona.consumption, "grey"),
+      mixte: sumForAndFormat(initialPersona.consumption, "mixte"),
+      renewable: sumForAndFormat(initialPersona.consumption, "renewable"),
     },
     {
       name: "Prod init",
       total: sumAllValues(initialPersona.production) || 0,
-      offshore: sumFor(initialPersona.production, "offshore"),
-      nuclear: sumFor(initialPersona.production, "nuclear"),
-      terrestrial: sumFor(initialPersona.production, "terrestrial"),
+      offshore: sumForAndFormat(initialPersona.production, "offshore"),
+      nuclear: sumForAndFormat(initialPersona.production, "nuclear"),
+      terrestrial: sumForAndFormat(initialPersona.production, "terrestrial"),
     },
   ];
 
@@ -109,18 +109,18 @@ function useStackedEnergyData() {
         return {
           name: step ? `Étape ${step}` : "Initial",
           total: sumAllValues(persona.consumption) || 0,
-          fossil: sumFor(persona.consumption, "fossil"),
-          grey: sumFor(persona.consumption, "grey"),
-          mixte: sumFor(persona.consumption, "mixte"),
-          renewable: sumFor(persona.consumption, "renewable"),
+          fossil: sumForAndFormat(persona.consumption, "fossil"),
+          grey: sumForAndFormat(persona.consumption, "grey"),
+          mixte: sumForAndFormat(persona.consumption, "mixte"),
+          renewable: sumForAndFormat(persona.consumption, "renewable"),
         };
       } else {
         return {
           name: step ? `Étape ${step}` : "Initial",
           total: sumAllValues(persona.production) || 0,
-          offshore: sumFor(persona.production, "offshore"),
-          nuclear: sumFor(persona.production, "nuclear"),
-          terrestrial: sumFor(persona.production, "terrestrial"),
+          offshore: sumForAndFormat(persona.production, "offshore"),
+          nuclear: sumForAndFormat(persona.production, "nuclear"),
+          terrestrial: sumForAndFormat(persona.production, "terrestrial"),
         };
       }
     }
