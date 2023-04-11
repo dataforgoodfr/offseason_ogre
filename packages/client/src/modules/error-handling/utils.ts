@@ -8,8 +8,7 @@ const initErrorTracer = () => {
     dsn: import.meta.env.VITE_SENTRY_DSN,
     environment: import.meta.env.VITE_SENTRY_ENV || "development",
     integrations: [new BrowserTracing()],
-    // TODO: adapt value in production.
-    tracesSampleRate: 1.0,
+    tracesSampleRate: import.meta.env.PROD ? 0.01 : 1.0,
   });
 };
 

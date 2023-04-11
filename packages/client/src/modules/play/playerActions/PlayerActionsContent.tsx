@@ -19,11 +19,8 @@ import { Icon } from "../../common/components/Icon";
 export { PlayerActionsContent };
 
 function PlayerActionsContent() {
-  const {
-    updatePlayerActions,
-    actionPointsLimitExceeded,
-    setActionPointsLimitExceeded,
-  } = usePlay();
+  const { updatePlayerActions, player, setActionPointsLimitExceeded } =
+    usePlay();
   const {
     actionPointsAvailableAtCurrentStep,
     playerActionsAtCurrentStep: playerActions,
@@ -55,7 +52,7 @@ function PlayerActionsContent() {
       })}
 
       <Dialog
-        open={actionPointsLimitExceeded}
+        open={player.actionPointsLimitExceeded}
         handleClose={() => setActionPointsLimitExceeded(false)}
         actions={
           <>
