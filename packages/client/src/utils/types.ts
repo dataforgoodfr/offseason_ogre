@@ -19,6 +19,7 @@ export type {
   ProductionActionType,
   ProductionActionUnit,
   TeamAction,
+  MaterialsType,
 };
 
 type WithTeacher<T> = T & { teacher: IUser };
@@ -130,3 +131,5 @@ interface TeamAction {
   value: number;
   isTouched: boolean;
 }
+
+type MaterialsType = "concrete" | "steel" | "cement" | "glass";
