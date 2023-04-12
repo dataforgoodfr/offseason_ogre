@@ -1,16 +1,25 @@
 import { Box } from "@mui/material";
+import { formatMaterial } from "../../../lib/formatter";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
+import { MaterialsBars } from "../../charts";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
 import { sumAllValues, sumForAndFormat } from "../../persona";
+import { productionTypes } from "../constants";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
+import { MaterialsDatum } from "../gameEngines/materialsEngine";
 
 export { PlayerChart };
 
 function PlayerChart({ team }: { team: ITeamWithPlayers }) {
   const data = useBuildData({ team });
+  const consProdData = data.filter((data) =>
+    ["consumption", "production"].includes(data.type)
+  );
+  const materialsData = data.filter((data) => data.type === "materials");
   return (
-    <Box>
-      <StackedEnergyBars data={data} tick={false} />
+    <Box sx={{ display: "grid", gridTemplateColumns: "2fr 1fr" }} gap={3}>
+      <StackedEnergyBars data={consProdData} tick={false} />
+      <MaterialsBars data={materialsData} tick={false} />
     </Box>
   );
 }
@@ -30,6 +39,7 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
 
       return {
         name: buildName(player.user),
+        type: "consumption",
         total: sumAllValues(playerConsumption) || 0,
         fossil: sumForAndFormat(playerConsumption, "fossil"),
         grey: sumForAndFormat(playerConsumption, "grey"),
@@ -40,6 +50,7 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
     firstPersona
       ? {
           name: "Production",
+          type: "production",
           total: sumAllValues(firstPersona.currentPersona.production) || 0,
           offshore: sumForAndFormat(
             firstPersona.currentPersona.production,
@@ -56,11 +67,24 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
         }
       : {
           name: "Production",
+          type: "production",
           total: 0,
           offshore: 0,
           nuclear: 0,
           terrestrial: 0,
         },
+    ...Object.values(productionTypes).map((prodType: string) => ({
+      name: prodType,
+      type: "materials",
+      ...Object.assign(
+        {},
+        ...firstPersona?.currentPersona.materials
+          .filter((mat: MaterialsDatum) => mat.type === prodType)
+          .map((mat: MaterialsDatum) => ({
+            [mat.name]: formatMaterial(mat.value) || 0,
+          }))
+      ),
+    })),
   ];
 }
 
