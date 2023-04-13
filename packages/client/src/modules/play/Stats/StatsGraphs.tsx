@@ -17,7 +17,6 @@ import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame } from "../../../utils/types";
 import { formatMaterial } from "../../../lib/formatter";
 import { MaterialsDatum } from "../gameEngines/materialsEngine";
-import { Box } from "@mui/material";
 import { ProductionStepDetails } from "./StatsGraphs.styles";
 
 export { StatsGraphs };
