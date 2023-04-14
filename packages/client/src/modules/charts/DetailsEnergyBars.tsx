@@ -34,7 +34,7 @@ function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
 
   const personaValues = persona.production.filter(
     ({ type }: ProductionDatum) => {
-      if (!hasNuclear(game) && type === productionConstants.NUCLEAR.name) {
+      if (type !== productionConstants.NUCLEAR.name || hasNuclear(game)) {
         return false;
       }
       return true;

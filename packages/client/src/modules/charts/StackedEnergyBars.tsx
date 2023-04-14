@@ -13,6 +13,7 @@ import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalCh
 import { EnergyPalette, ProductionPalette } from "../../utils/theme";
 import { hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
+import { productionConstants } from "../play";
 
 export { StackedEnergyBars };
 
@@ -59,7 +60,10 @@ function StackedEnergyBars({
           </Typography>
           {Object.entries(payload[0].payload)
             .filter(([key]) => key !== "name" && key !== "type")
-            .filter(([key]) => (!hasNuclear(game) ? key !== "nuclear" : true))
+            .filter(
+              ([key]) =>
+                key !== productionConstants.NUCLEAR.name || hasNuclear(game)
+            )
             .map(([key, value]) => (
               <Typography
                 key={key}
@@ -85,7 +89,9 @@ function StackedEnergyBars({
     .flatMap((d) =>
       Object.keys(d)
         .filter((key) => !["name", "total", "type"].includes(key))
-        .filter((key) => (!hasNuclear(game) ? key !== "nuclear" : true))
+        .filter(
+          (key) => key !== productionConstants.NUCLEAR.name || hasNuclear(game)
+        )
     )
     .filter((value, index, array) => array.indexOf(value) === index)
     .reverse();

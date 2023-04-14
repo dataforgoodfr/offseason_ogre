@@ -13,6 +13,7 @@ import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalCh
 import { MaterialsPalette } from "../../utils/theme";
 import { hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
+import { productionConstants } from "../play";
 
 export { MaterialsBars };
 
@@ -30,8 +31,9 @@ function MaterialsBars({
 
   const formattedData = data
     .filter((material) => !["water", "geology"].includes(material.name))
-    .filter((material) =>
-      !hasNuclear(game) ? material.name !== "nuclear" : true
+    .filter(
+      (material) =>
+        material.name !== productionConstants.NUCLEAR.name || hasNuclear(game)
     );
 
   const CustomTooltip = ({
