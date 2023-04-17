@@ -14,6 +14,8 @@ import { MaterialsPalette } from "../../utils/theme";
 import { hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 import { productionConstants } from "../play";
+import { MaterialsType, ProductionTypes } from "../../utils/types";
+import { t } from "../translations";
 
 export { MaterialsBars };
 
@@ -113,7 +115,7 @@ function MaterialsBars({
       <ResponsiveContainer width="98%" height={500}>
         <BarChart data={formattedData} onClick={onClick}>
           <XAxis dataKey="name" tick={tick} tickFormatter={translateLabel} />
-          <YAxis name="kTonnes" />
+          <YAxis name="MTonnes" />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           {uniqueBars.map((key, idx) => (
@@ -137,15 +139,8 @@ function MaterialsBars({
 }
 
 function translateLabel(value: string): string {
-  const translations = {
-    concrete: "Béton",
-    steel: "Acier",
-    cement: "Ciment",
-    glass: "Verre",
-    wind: "Eolien",
-    photovoltaic: "PV",
-    biomass: "Biomasse",
-    nuclear: "Nucléaire",
-  } as Record<string, string>;
-  return translations[value] ?? "Unkown";
+  return (
+    t(`graph.materials.${value as MaterialsType | ProductionTypes}`) ??
+    "Unknown"
+  );
 }

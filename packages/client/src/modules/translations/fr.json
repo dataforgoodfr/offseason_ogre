@@ -190,6 +190,26 @@
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",
 
+  "graph.energy.total": "Total",
+  "graph.energy.fossil": "Energie fossile",
+  "graph.energy.grey": "Energie grise",
+  "graph.energy.renewable": "Energie décarbonée",
+  "graph.energy.mixte": "Energie mixte",
+  "graph.energy.offshore": "Production offshore",
+  "graph.energy.terrestrial": "Production terrestre",
+  "graph.energy.nuclear": "Nucléaire",
+
+  "graph.materials.concrete": "Béton",
+  "graph.materials.steel": "Acier",
+  "graph.materials.cement": "Ciment",
+  "graph.materials.glass": "Verre",
+  "graph.materials.wind": "Eolien",
+  "graph.materials.photovoltaic": "PV",
+  "graph.materials.biomass": "Biomasse",
+  "graph.materials.water": "Aquatique",
+  "graph.materials.geology": "Geologique",
+  "graph.materials.nuclear": "Nucléaire",
+
   "form.last-action.draft": "Dernière sauvegarde",
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
   "form.last-action.validated": "Validation"

@@ -14,6 +14,9 @@ import { EnergyPalette, ProductionPalette } from "../../utils/theme";
 import { hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 import { productionConstants } from "../play";
+import { t } from "../translations";
+import { ConsumptionType } from "../persona/consumption";
+import { ProductionActionType } from "../../utils/types";
 
 export { StackedEnergyBars };
 
@@ -140,15 +143,8 @@ function StackedEnergyBars({
 }
 
 function translateLabel(value: string): string {
-  const translations = {
-    total: "Total",
-    fossil: "Energie fossile",
-    grey: "Energie grise",
-    renewable: "Energie décarbonée",
-    mixte: "Energie mixte",
-    offshore: "Production offshore",
-    terrestrial: "Production terrestre",
-    nuclear: "Nucléaire",
-  } as Record<string, string>;
-  return translations[value] ?? "Unkown";
+  return (
+    t(`graph.energy.${value as ConsumptionType | ProductionActionType}`) ??
+    "Unknown"
+  );
 }
