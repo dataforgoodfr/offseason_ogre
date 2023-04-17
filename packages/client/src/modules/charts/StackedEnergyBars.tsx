@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import { EnergyPalette, ProductionPalette } from "../../utils/theme";
-import { hasNuclear } from "../common/utils";
+import { hasNuclear, filterOutDuplicates } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 import { productionConstants } from "../play";
 import { t } from "../translations";
@@ -96,7 +96,7 @@ function StackedEnergyBars({
           (key) => key !== productionConstants.NUCLEAR.name || hasNuclear(game)
         )
     )
-    .filter((value, index, array) => array.indexOf(value) === index)
+    .filter(filterOutDuplicates)
     .reverse();
 
   return (

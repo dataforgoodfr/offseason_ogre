@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import { MaterialsPalette } from "../../utils/theme";
-import { hasNuclear } from "../common/utils";
+import { filterOutDuplicates, hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 import { productionConstants } from "../play";
 import { MaterialsType, ProductionTypes } from "../../utils/types";
@@ -19,12 +19,19 @@ import { t } from "../translations";
 
 export { MaterialsBars };
 
+type MaterialsDataType = {
+  [key in MaterialsType]: string;
+} & {
+  name: ProductionTypes;
+  type: string;
+};
+
 function MaterialsBars({
   data,
   tick = true,
   onClick,
 }: {
-  data: any[];
+  data: MaterialsDataType[];
   tick?: boolean;
   onClick?: CategoricalChartFunc;
 }) {
@@ -32,7 +39,12 @@ function MaterialsBars({
   const { game } = usePlay();
 
   const formattedData = data
-    .filter((material) => !["water", "geology"].includes(material.name))
+    .filter(
+      (material) =>
+        Object.keys(material).filter(
+          (key: string) => !["name", "type"].includes(key)
+        ).length > 0
+    )
     .filter(
       (material) =>
         material.name !== productionConstants.NUCLEAR.name || hasNuclear(game)
@@ -92,7 +104,7 @@ function MaterialsBars({
     .flatMap((d) =>
       Object.keys(d).filter((key) => !["name", "type"].includes(key))
     )
-    .filter((value, index, array) => array.indexOf(value) === index)
+    .filter(filterOutDuplicates)
     .reverse();
 
   return (

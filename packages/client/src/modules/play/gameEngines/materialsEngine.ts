@@ -4,6 +4,7 @@ import { productionConstants } from "..";
 import { FRANCE } from "../constants/country";
 import { ProductionDatum } from "../../persona/production";
 import { sumFor } from "../../persona/utils";
+import { filterOutDuplicates } from "../../common/utils";
 
 export { computeMaterials };
 
@@ -60,9 +61,7 @@ const computeMaterials = (production: ProductionDatum[]): MaterialsDatum[] => {
   const productionTypes = results
     .filter((result) => result.value !== 0)
     .map((result) => result.prodType)
-    .filter(
-      (value, index, array) => array.indexOf(value) === index
-    ) as ProductionTypes[];
+    .filter(filterOutDuplicates) as ProductionTypes[];
 
   return productionTypes.flatMap((prodType) => {
     const filteredResults = results.filter(
