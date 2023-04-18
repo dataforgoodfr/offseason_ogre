@@ -6,12 +6,13 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
-import { connectToDatase, seed } from "./database";
+import { connectToDatase, disconnectFromDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
 import { logger } from "./logger";
 import { logError, setRequestId } from "./middlewares";
 import { limiter } from "./middlewares/limit";
 import { initErrorTracer, traceRequests } from "./error-handling";
+import { redis } from "./modules/redis/services";
 
 async function createApp() {
   const app = express();
@@ -59,8 +60,9 @@ async function createApp() {
     logger.info(`app listening on port ${port}!`);
   });
 
-  process.on("SIGTERM", () => {
+  process.on("SIGTERM", async () => {
     logger.info("SIGTERM received");
+    await Promise.all([disconnectFromDatase(), redis.disconnect()]);
     process.exit();
   });
 }
