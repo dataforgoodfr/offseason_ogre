@@ -1,7 +1,3 @@
-import { t } from "./";
+import { useTranslation } from "react-i18next";
 
 export { useTranslation };
-
-function useTranslation() {
-  return { t };
-}
