@@ -9,3 +9,10 @@ services:
       - POSTGRES_DB=ogre-development
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+  redis:
+    image: "bitnami/redis:latest"
+    container_name: ogre_redis_container
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
