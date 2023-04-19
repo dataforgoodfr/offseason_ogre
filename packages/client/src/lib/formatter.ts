@@ -3,6 +3,7 @@ export {
   formatCarbonFootprint,
   formatPoints,
   formatProductionGw,
+  formatMaterial,
 };
 
 function formatBudget(value?: number) {
@@ -19,4 +20,8 @@ function formatPoints(value?: number) {
 
 function formatProductionGw(value?: number) {
   return value?.toFixed(1) || "";
+}
+
+function formatMaterial(value?: number) {
+  return value?.toFixed(2) || "";
 }

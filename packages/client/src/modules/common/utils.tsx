@@ -18,3 +18,7 @@ export function emphasizeText(text: string) {
     </Box>
   );
 }
+
+export function filterOutDuplicates(value: any, index: number, array: any[]) {
+  return array.indexOf(value) === index;
+}

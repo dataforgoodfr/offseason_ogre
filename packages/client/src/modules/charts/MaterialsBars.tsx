@@ -10,32 +10,45 @@ import {
   TooltipProps,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
-import { EnergyPalette, ProductionPalette } from "../../utils/theme";
-import { hasNuclear, filterOutDuplicates } from "../common/utils";
+import { MaterialsPalette } from "../../utils/theme";
+import { filterOutDuplicates, hasNuclear } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 import { productionConstants } from "../play";
+import { MaterialsType, ProductionTypes } from "../../utils/types";
 import { t } from "../translations";
-import { ConsumptionType } from "../persona/consumption";
-import { ProductionActionType } from "../../utils/types";
 
-export { StackedEnergyBars };
+export { MaterialsBars };
 
-function StackedEnergyBars({
+type MaterialsDataType = {
+  [key in MaterialsType]: string;
+} & {
+  name: ProductionTypes;
+  type: string;
+};
+
+function MaterialsBars({
   data,
   tick = true,
   onClick,
 }: {
-  data: any[];
+  data: MaterialsDataType[];
   tick?: boolean;
   onClick?: CategoricalChartFunc;
 }) {
   const theme = useTheme();
   const { game } = usePlay();
 
-  const maximumTotal = Math.max(
-    ...data.map((pileData: any) => pileData.total),
-    0
-  );
+  const formattedData = data
+    .filter(
+      (material) =>
+        Object.keys(material).filter(
+          (key: string) => !["name", "type"].includes(key)
+        ).length > 0
+    )
+    .filter(
+      (material) =>
+        material.name !== productionConstants.NUCLEAR.name || hasNuclear(game)
+    );
 
   const CustomTooltip = ({
     active,
@@ -59,13 +72,13 @@ function StackedEnergyBars({
               fontWeight: "bolder",
             }}
           >
-            {label}
+            {translateLabel(label)}
           </Typography>
           {Object.entries(payload[0].payload)
             .filter(([key]) => key !== "name" && key !== "type")
             .filter(
-              ([key]) =>
-                key !== productionConstants.NUCLEAR.name || hasNuclear(game)
+              ([key, value]) =>
+                parseInt(value as string) && parseInt(value as string) !== 0
             )
             .map(([key, value]) => (
               <Typography
@@ -74,12 +87,11 @@ function StackedEnergyBars({
                   mt: 1,
                   mb: 1,
                   color:
-                    theme.palette.energy[key as keyof EnergyPalette] ||
-                    theme.palette.production[key as keyof ProductionPalette] ||
+                    theme.palette.materials[key as keyof MaterialsPalette] ||
                     "black",
                 }}
               >
-                {translateLabel(key)}: {value}kWh/jour
+                {translateLabel(key)}: {value} MTonnes
               </Typography>
             ))}
         </Grid>
@@ -88,13 +100,9 @@ function StackedEnergyBars({
     return <></>;
   };
 
-  const uniqueBars = data
+  const uniqueBars = formattedData
     .flatMap((d) =>
-      Object.keys(d)
-        .filter((key) => !["name", "total", "type"].includes(key))
-        .filter(
-          (key) => key !== productionConstants.NUCLEAR.name || hasNuclear(game)
-        )
+      Object.keys(d).filter((key) => !["name", "type"].includes(key))
     )
     .filter(filterOutDuplicates)
     .reverse();
@@ -105,20 +113,21 @@ function StackedEnergyBars({
         alignItems: "center",
         display: "flex",
         justifyContent: "center",
+        flexDirection: "column",
         pt: 4,
         pb: 4,
         pr: 2,
         pl: 2,
         mb: 1,
+        mt: 1,
+        ml: 1,
+        mr: 1,
       }}
     >
-      <ResponsiveContainer width="100%" height={500}>
-        <BarChart data={data} onClick={onClick}>
-          <XAxis dataKey="name" tick={tick} />
-          <YAxis
-            name="kWh/jour"
-            domain={[0, Math.ceil(maximumTotal / 100) * 100]}
-          />
+      <ResponsiveContainer width="98%" height={500}>
+        <BarChart data={formattedData} onClick={onClick}>
+          <XAxis dataKey="name" tick={tick} tickFormatter={translateLabel} />
+          <YAxis name="MTonnes" />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           {uniqueBars.map((key, idx) => (
@@ -127,13 +136,12 @@ function StackedEnergyBars({
               dataKey={key}
               stackId="a"
               fill={
-                theme.palette.energy[key as keyof EnergyPalette] ||
-                theme.palette.production[key as keyof ProductionPalette] ||
+                theme.palette.materials[key as keyof MaterialsPalette] ||
                 "black"
               }
-              barSize={25}
+              barSize={15}
               name={translateLabel(key)}
-              unit="kWh/jour"
+              unit="MTonnes"
             />
           ))}
         </BarChart>
@@ -144,7 +152,7 @@ function StackedEnergyBars({
 
 function translateLabel(value: string): string {
   return (
-    t(`graph.energy.${value as ConsumptionType | ProductionActionType}`) ??
+    t(`graph.materials.${value as MaterialsType | ProductionTypes}`) ??
     "Unknown"
   );
 }

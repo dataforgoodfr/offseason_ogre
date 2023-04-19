@@ -20,6 +20,7 @@ export type {
   ProductionActionUnit,
   TeamAction,
   MaterialsType,
+  ProductionTypes,
 };
 
 type WithTeacher<T> = T & { teacher: IUser };
@@ -133,3 +134,11 @@ interface TeamAction {
 }
 
 type MaterialsType = "concrete" | "steel" | "cement" | "glass";
+
+type ProductionTypes =
+  | "wind"
+  | "water"
+  | "geology"
+  | "biomass"
+  | "photovoltaic"
+  | "nuclear";

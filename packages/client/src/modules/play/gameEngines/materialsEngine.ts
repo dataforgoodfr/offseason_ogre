@@ -1,14 +1,16 @@
 import { getDaysTo2050 } from "../../../lib/time";
-import { MaterialsType } from "../../../utils/types";
+import { MaterialsType, ProductionTypes } from "../../../utils/types";
 import { productionConstants } from "..";
 import { FRANCE } from "../constants/country";
 import { ProductionDatum } from "../../persona/production";
 import { sumFor } from "../../persona/utils";
+import { filterOutDuplicates } from "../../common/utils";
 
 export { computeMaterials };
 
 export interface MaterialsDatum {
   name: MaterialsType;
+  type: ProductionTypes;
   value: number;
 }
 
@@ -19,7 +21,10 @@ const sumTo2050 = (
   }[],
   material: MaterialsType
 ) => {
-  return sumFor(results, material) * getDaysTo2050() * FRANCE.population || 0;
+  return (
+    (sumFor(results, material) * getDaysTo2050() * (FRANCE.population || 0)) /
+    1000
+  );
 };
 
 const computeMaterials = (production: ProductionDatum[]): MaterialsDatum[] => {
@@ -31,40 +36,58 @@ const computeMaterials = (production: ProductionDatum[]): MaterialsDatum[] => {
       return [
         {
           type: "concrete",
+          prodType: prodConstants?.type || "",
           value: (prodConstants?.concretePerUnit || 0) * prod.value,
         },
         {
           type: "steel",
+          prodType: prodConstants?.type || "",
           value: (prodConstants?.steelPerUnit || 0) * prod.value,
         },
         {
           type: "cement",
+          prodType: prodConstants?.type || "",
           value: (prodConstants?.cementPerUnit || 0) * prod.value,
         },
         {
           type: "glass",
+          prodType: prodConstants?.type || "",
           value: (prodConstants?.glassPerUnit || 0) * prod.value,
         },
       ];
     })
     .flat();
 
-  return [
-    {
-      name: "concrete",
-      value: sumTo2050(results, "concrete"),
-    },
-    {
-      name: "steel",
-      value: sumTo2050(results, "steel"),
-    },
-    {
-      name: "cement",
-      value: sumTo2050(results, "cement"),
-    },
-    {
-      name: "glass",
-      value: sumTo2050(results, "glass"),
-    },
-  ];
+  const productionTypes = results
+    .filter((result) => result.value !== 0)
+    .map((result) => result.prodType)
+    .filter(filterOutDuplicates) as ProductionTypes[];
+
+  return productionTypes.flatMap((prodType) => {
+    const filteredResults = results.filter(
+      (material) => material.prodType === prodType
+    );
+    return [
+      {
+        name: "concrete",
+        value: sumTo2050(filteredResults, "concrete"),
+        type: prodType,
+      },
+      {
+        name: "steel",
+        value: sumTo2050(filteredResults, "steel"),
+        type: prodType,
+      },
+      {
+        name: "cement",
+        value: sumTo2050(filteredResults, "cement"),
+        type: prodType,
+      },
+      {
+        name: "glass",
+        value: sumTo2050(filteredResults, "glass"),
+        type: prodType,
+      },
+    ];
+  });
 };

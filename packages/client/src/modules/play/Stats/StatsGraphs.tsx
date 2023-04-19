@@ -3,17 +3,21 @@ import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
+  MaterialsBars,
 } from "../../charts";
 import { PlayBox } from "../Components";
 import {
   EnergyConsumptionButtons,
   EnergyProductionButtons,
 } from "../../common/components/EnergyButtons";
-import { STEPS } from "../constants";
+import { productionTypes, STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame } from "../../../utils/types";
+import { formatMaterial } from "../../../lib/formatter";
+import { MaterialsDatum } from "../gameEngines/materialsEngine";
+import { ProductionStepDetails } from "./StatsGraphs.styles";
 
 export { StatsGraphs };
 
@@ -47,6 +51,22 @@ function StepDetails({ bar }: { bar: number | undefined }) {
   if (isNotFinishedStep(step, game)) return <></>;
 
   const persona = getPersonaAtStep(step);
+
+  const materialsValues = Object.values(productionTypes).map(
+    (prodType: string) => ({
+      name: prodType,
+      type: "materials",
+      ...Object.assign(
+        {},
+        ...persona.materials
+          .filter((mat: MaterialsDatum) => mat.type === prodType)
+          .map((mat: MaterialsDatum) => ({
+            [mat.name]: formatMaterial(mat.value) || 0,
+          }))
+      ),
+    })
+  );
+
   if (step === 0 && bar === 0) {
     return (
       <>
@@ -57,7 +77,10 @@ function StepDetails({ bar }: { bar: number | undefined }) {
   } else if (step === 0 && bar === 1) {
     return (
       <>
-        <DetailsEnergyProductionBars persona={persona} />
+        <ProductionStepDetails>
+          <DetailsEnergyProductionBars persona={persona} />
+          <MaterialsBars data={materialsValues} />
+        </ProductionStepDetails>
         <EnergyProductionButtons persona={persona} />
       </>
     );
@@ -71,7 +94,10 @@ function StepDetails({ bar }: { bar: number | undefined }) {
   } else {
     return (
       <>
-        <DetailsEnergyProductionBars persona={persona} />
+        <ProductionStepDetails>
+          <DetailsEnergyProductionBars persona={persona} />
+          <MaterialsBars data={materialsValues} />
+        </ProductionStepDetails>
         <EnergyProductionButtons persona={persona} />
       </>
     );
