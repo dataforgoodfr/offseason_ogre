@@ -76,6 +76,7 @@
   "page.login.description": "Si vous avez déjà un compte :",
   "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
   "page.login.signup-section.cta": "Créer un compte",
+  "page.player.statistics.tabs.consumption-production.label": "Consommation & Production",
   "page.signup.title": "Création de compte",
   "page.signup.login-section.title": "Si vous avez déjà un compte :",
   "page.signup.login-section.cta": "Se connecter",

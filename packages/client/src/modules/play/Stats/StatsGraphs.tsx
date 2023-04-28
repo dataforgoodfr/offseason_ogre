@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
@@ -18,6 +18,8 @@ import { IGame } from "../../../utils/types";
 import { formatMaterial } from "../../../lib/formatter";
 import { MaterialsDatum } from "../gameEngines/materialsEngine";
 import { ProductionStepDetails } from "./StatsGraphs.styles";
+import { Tabs } from "../../common/components/Tabs";
+import { useTranslation } from "react-i18next";
 
 export { StatsGraphs };
 
@@ -26,10 +28,29 @@ function isNotFinishedStep(step: number, game: IGame) {
 }
 
 function StatsGraphs() {
-  const [bar, setSelectedBar] = React.useState<number>();
+  const { t } = useTranslation();
+
+  const tabs = useMemo(() => {
+    return [
+      {
+        label: t("page.player.statistics.tabs.consumption-production.label"),
+        component: <ConsumptionAndProductionGraph />,
+      },
+    ];
+  }, [t]);
 
   return (
     <PlayBox>
+      <Tabs tabs={tabs} />
+    </PlayBox>
+  );
+}
+
+function ConsumptionAndProductionGraph() {
+  const [bar, setSelectedBar] = useState<number>();
+
+  return (
+    <>
       <StackedEnergyBars
         data={useStackedEnergyData()}
         onClick={({ activeTooltipIndex }) => {
@@ -37,7 +58,7 @@ function StatsGraphs() {
         }}
       />
       {<StepDetails bar={bar} />}
-    </PlayBox>
+    </>
   );
 }
 
