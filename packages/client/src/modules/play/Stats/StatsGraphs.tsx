@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
@@ -14,12 +14,19 @@ import { productionTypes, STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
-import { IGame } from "../../../utils/types";
+import { IGame, MaterialsType } from "../../../utils/types";
 import { formatMaterial } from "../../../lib/formatter";
 import { MaterialsDatum } from "../gameEngines/materialsEngine";
 import { ProductionStepDetails } from "./StatsGraphs.styles";
 import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "react-i18next";
+import {
+  StackedBars,
+  StackedBarsStack,
+  StackedBarsBar,
+} from "../../charts/StackedBars";
+import { pipe } from "../../../lib/fp";
+import { Persona } from "../../persona/persona";
 
 export { StatsGraphs };
 
@@ -35,6 +42,10 @@ function StatsGraphs() {
       {
         label: t("page.player.statistics.tabs.consumption-production.label"),
         component: <ConsumptionAndProductionGraph />,
+      },
+      {
+        label: t("page.player.statistics.tabs.materials.label"),
+        component: <MaterialsGraphTab />,
       },
     ];
   }, [t]);
@@ -57,12 +68,16 @@ function ConsumptionAndProductionGraph() {
           setSelectedBar(activeTooltipIndex);
         }}
       />
-      {<StepDetails bar={bar} />}
+      {<ConsumptionAndProductionDetailsGraph bar={bar} />}
     </>
   );
 }
 
-function StepDetails({ bar }: { bar: number | undefined }) {
+function ConsumptionAndProductionDetailsGraph({
+  bar,
+}: {
+  bar: number | undefined;
+}) {
   const { game } = usePlay();
   const { getPersonaAtStep } = usePersona();
 
@@ -172,4 +187,68 @@ function useStackedEnergyData() {
     }
   );
   return [...initialValues, ...stepsDetails];
+}
+
+function MaterialsGraphTab() {
+  const { t } = useTranslation();
+  const { game } = usePlay();
+  const { getPersonaAtStep } = usePersona();
+
+  const computeBarsForPersona = useCallback(
+    (persona: Persona): StackedBarsBar[] => {
+      const indexBarByMaterialName = (persona: Persona) =>
+        persona.materials.reduce((barIndexedByMaterialName, materialDatum) => {
+          if (!barIndexedByMaterialName[materialDatum.name]) {
+            barIndexedByMaterialName[materialDatum.name] = {
+              key: materialDatum.name,
+              label: t(`graph.materials.${materialDatum.name}`),
+              total: 0,
+            };
+          }
+
+          barIndexedByMaterialName[materialDatum.name].total +=
+            materialDatum.value;
+
+          return barIndexedByMaterialName;
+        }, {} as Record<MaterialsType, StackedBarsBar>);
+
+      const sortBars = (
+        barIndexedByMaterialName: Record<MaterialsType, StackedBarsBar>
+      ) => {
+        return Object.entries(barIndexedByMaterialName)
+          .sort(([materialNameA], [materialNameB]) =>
+            materialNameA.localeCompare(materialNameB)
+          )
+          .map(([_, bar]) => bar);
+      };
+
+      return pipe(persona, indexBarByMaterialName, sortBars);
+    },
+    [t]
+  );
+
+  const graphStacks: StackedBarsStack[] = useMemo(() => {
+    return _.range(1, game.lastFinishedStep + 1).map(
+      (stepIdx): StackedBarsStack => {
+        const bars: StackedBarsBar[] = computeBarsForPersona(
+          getPersonaAtStep(stepIdx)
+        );
+        const total = _.sumBy(bars, "total");
+        return {
+          label: t(`step.${STEPS[stepIdx].id}.name`),
+          total,
+          bars,
+        };
+      }
+    );
+  }, [game.lastFinishedStep, computeBarsForPersona, getPersonaAtStep, t]);
+
+  return (
+    <StackedBars
+      stacks={graphStacks}
+      yAxisUnitLabel={t("unit.tonne.mega")}
+      palettes="materials"
+      yAxisValueFormatter={formatMaterial}
+    />
+  );
 }

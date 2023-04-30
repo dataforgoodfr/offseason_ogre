@@ -1,3 +1,5 @@
+import { userLocale } from "../modules/translations";
+
 export {
   formatBudget,
   formatCarbonFootprint,
@@ -23,5 +25,10 @@ function formatProductionGw(value?: number) {
 }
 
 function formatMaterial(value?: number) {
-  return value?.toFixed(2) || "";
+  return value != null
+    ? new Intl.NumberFormat(userLocale, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value)
+    : "";
 }

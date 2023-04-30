@@ -77,6 +77,7 @@
   "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
   "page.login.signup-section.cta": "Créer un compte",
   "page.player.statistics.tabs.consumption-production.label": "Consommation & Production",
+  "page.player.statistics.tabs.materials.label": "Matériaux",
   "page.signup.title": "Création de compte",
   "page.signup.login-section.title": "Si vous avez déjà un compte :",
   "page.signup.login-section.cta": "Se connecter",
@@ -191,6 +192,8 @@
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",
 
+  "graph.common.total": "Total",
+
   "graph.energy.total": "Total",
   "graph.energy.fossil": "Energie fossile",
   "graph.energy.grey": "Energie grise",
@@ -213,5 +216,7 @@
 
   "form.last-action.draft": "Dernière sauvegarde",
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
-  "form.last-action.validated": "Validation"
+  "form.last-action.validated": "Validation",
+
+  "unit.tonne.mega": "MTonnes"
 }
