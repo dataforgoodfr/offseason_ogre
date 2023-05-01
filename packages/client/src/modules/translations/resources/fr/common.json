@@ -192,6 +192,7 @@
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",
 
+  "graph.common.production": "Production",
   "graph.common.total": "Total",
 
   "graph.energy.total": "Total",
@@ -218,5 +219,6 @@
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
   "form.last-action.validated": "Validation",
 
+  "unit.watthour-per-day.kilo": "kWh/jour",
   "unit.tonne.mega": "MTonnes"
 }

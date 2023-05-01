@@ -8,15 +8,23 @@ import {
   Legend,
   ResponsiveContainer,
   TooltipProps,
+  Line,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toArray } from "../../lib/array";
 import { UnwrapArray } from "../../utils/types";
+import { range } from "lodash";
+import { pipe } from "../../lib/fp";
 
 export { StackedBars };
-export type { StackedBarsStacks, StackedBarsStackData, StackedBarsBar };
+export type {
+  StackedBarsBar,
+  StackedBarsLine,
+  StackedBarsStacks,
+  StackedBarsStackData,
+};
 
 interface StackedBarsStacks extends DataSourceConfig {
   data: StackedBarsStackData[];
@@ -29,29 +37,52 @@ interface StackedBarsStackData {
 }
 
 interface StackedBarsBar {
+  /** Used to pick the color of the bar from the palettes. */
   key: string;
   label: string;
   total: number;
 }
 
-type DataSource = keyof Pick<StackedBarsProps, "stacks">;
+interface StackedBarsLine extends DataSourceConfig {
+  /** Used to pick the color of the line from the palettes. */
+  key: string;
+  label: string;
+  data: number[];
+}
+
+type DataSource = keyof Pick<StackedBarsProps, "lines" | "stacks">;
 interface DataSourceConfig {
   yAxisUnitLabel: string;
   palettes?: keyof Theme["palette"] | (keyof Theme["palette"])[];
+  hideInTooltip?: boolean;
   yAxisValueFormatter: (value?: number) => string;
 }
 
 interface StackedBarsProps {
   stacks: StackedBarsStacks;
+  lines?: StackedBarsLine[];
   tick?: boolean;
   onClick?: CategoricalChartFunc;
 }
 
-function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
+function StackedBars({
+  stacks,
+  lines = [],
+  tick = true,
+  onClick,
+}: StackedBarsProps) {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const maximumTotal = Math.max(...stacks.data.map((stack) => stack.total), 0);
+  const maximumTotal = useMemo(
+    () =>
+      Math.max(
+        ...stacks.data.map((stack) => stack.total),
+        ...lines.flatMap((line) => line.data),
+        0
+      ),
+    [lines, stacks]
+  );
 
   const getColorFromPalettes = useCallback(
     (
@@ -69,23 +100,34 @@ function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
     [theme.palette]
   );
 
-  const buildDataKey = (dataSource: DataSource, key: string) => {
-    return `${dataSource}-${key}`;
+  const buildDataKey = (
+    dataSource: DataSource,
+    key: string,
+    lineIdx?: number
+  ) => {
+    return `${dataSource}__${key}__${lineIdx}`;
   };
 
   const extractDataFromDataKey = (dataKey: string) => {
-    const splitDataKey = dataKey.split("-");
+    const splitDataKey = dataKey.split("__");
     return {
       dataSource: splitDataKey[0] as DataSource,
       key: splitDataKey[1],
+      lineIdx: parseInt(splitDataKey[2] || "0"),
     };
   };
 
-  const getDataSourceConfig = (dataSource: DataSource): DataSourceConfig => {
+  const getDataSourceConfig = (
+    dataSource: DataSource,
+    lineIdx?: number
+  ): DataSourceConfig => {
     return dataSource === "stacks"
       ? stacks
+      : dataSource === "lines"
+      ? lines[lineIdx!]!
       : {
           yAxisUnitLabel: "",
+          hideInTooltip: false,
           yAxisValueFormatter: (value) => `${value}`,
         };
   };
@@ -99,6 +141,15 @@ function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
       if (!payload?.length) {
         return [];
       }
+
+      const getItemDataSource = (
+        item: UnwrapArray<NonNullable<typeof payload>>
+      ) => {
+        const { dataSource, lineIdx } = extractDataFromDataKey(
+          item.dataKey as string
+        );
+        return getDataSourceConfig(dataSource, lineIdx);
+      };
 
       const enrichItem = (
         dataSourceConfig: DataSourceConfig,
@@ -115,23 +166,45 @@ function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
 
       const stack: { label: string; total: number } = payload[0].payload;
 
-      return payload
-        .map((item) => {
-          const { dataSource, key } = extractDataFromDataKey(
-            item.dataKey as string
-          );
-          const dataSourceConfig = getDataSourceConfig(dataSource);
+      const sortItems = (
+        itemA: UnwrapArray<NonNullable<typeof payload>>,
+        itemB: UnwrapArray<NonNullable<typeof payload>>
+      ) => {
+        if (
+          (itemA.dataKey as string).startsWith("stacks") &&
+          (itemB.dataKey as string).startsWith("stacks")
+        ) {
+          return 0;
+        }
+        if ((itemA.dataKey as string).startsWith("stacks")) {
+          return 1;
+        }
+        return -1;
+      };
 
-          return enrichItem(dataSourceConfig, key, item);
-        })
-        .concat(
-          enrichItem(getDataSourceConfig("stacks"), "total", {
-            dataKey: "total",
-            name: t("graph.common.total"),
-            value: stack.total,
+      return (
+        payload
+          .filter((item) => {
+            const dataSourceConfig = getItemDataSource(item);
+            return !dataSourceConfig.hideInTooltip;
           })
-        )
-        .reverse();
+          .map((item) => {
+            const { key } = extractDataFromDataKey(item.dataKey as string);
+            const dataSourceConfig = getItemDataSource(item);
+            return enrichItem(dataSourceConfig, key, item);
+          })
+          .sort(sortItems as any)
+          .concat(
+            enrichItem(getDataSourceConfig("stacks"), "total", {
+              dataKey: "total",
+              name: t("graph.common.total"),
+              value: stack.total,
+            })
+          )
+          // The bars contained in the payload are in reverse order
+          // compared to their display order.
+          .reverse()
+      );
     }, [payload]);
 
     if (active && payload && payload.length) {
@@ -171,33 +244,73 @@ function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
     return <></>;
   };
 
-  const bars = useMemo(() => {
-    return Object.values(
-      Object.fromEntries(
+  const barsGraph = useMemo(() => {
+    const dataSource: DataSource = "stacks";
+
+    return pipe(
+      stacks,
+      (stacks) =>
         stacks.data
           .flatMap((stack) => stack.bars)
           .map((bar) => [
-            buildDataKey("stacks", bar.key),
+            buildDataKey(dataSource, bar.key),
             {
               ...bar,
-              dataKey: buildDataKey("stacks", bar.key),
+              dataKey: buildDataKey(dataSource, bar.key),
               unit: stacks.yAxisUnitLabel,
               fill: getColorFromPalettes(bar.key, stacks.palettes),
             },
-          ])
-      )
+          ]),
+      Object.fromEntries,
+      Object.values
     );
   }, [stacks, getColorFromPalettes]);
 
+  const linesGraph = useMemo(() => {
+    const dataSource: DataSource = "lines";
+
+    if (!lines) {
+      return [];
+    }
+
+    return pipe(
+      lines,
+      (lines) =>
+        lines.map((line, idx) => {
+          const dataKey = buildDataKey(dataSource, line.key, idx);
+          return [
+            dataKey,
+            {
+              ...line,
+              dataKey,
+              unit: line.yAxisUnitLabel,
+              stroke: getColorFromPalettes(line.key, line.palettes),
+            },
+          ];
+        }),
+      Object.fromEntries,
+      Object.values
+    );
+  }, [lines, getColorFromPalettes]);
+
   const data = useMemo(() => {
-    return stacks.data.map((stack) => ({
-      label: stack.label,
-      total: stack.total,
-      ...Object.fromEntries(
-        stack.bars.map((bar) => [buildDataKey("stacks", bar.key), bar.total])
-      ),
-    }));
-  }, [stacks]);
+    return range(0, stacks.data.length).map((dataIdx) => {
+      const stack = stacks.data[dataIdx];
+      return {
+        label: stack.label,
+        total: stack.total,
+        ...Object.fromEntries(
+          stack.bars.map((bar) => [buildDataKey("stacks", bar.key), bar.total])
+        ),
+        ...Object.fromEntries(
+          lines.map((line, lineIdx) => [
+            buildDataKey("lines", line.key, lineIdx),
+            line.data[dataIdx],
+          ])
+        ),
+      };
+    });
+  }, [lines, stacks]);
 
   return (
     <Card
@@ -218,7 +331,7 @@ function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
           <YAxis domain={[0, Math.ceil(maximumTotal / 100) * 100]} />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          {bars.map((bar, idx) => (
+          {barsGraph.map((bar, idx) => (
             <Bar
               key={`${bar.dataKey}-${idx}`}
               dataKey={bar.dataKey}
@@ -227,6 +340,16 @@ function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
               barSize={25}
               name={bar.label}
               unit={bar.unit}
+            />
+          ))}
+          {linesGraph.map((line, idx) => (
+            <Line
+              key={`${line.dataKey}-${idx}`}
+              type="monotone"
+              dataKey={line.dataKey}
+              stroke={line.stroke}
+              name={line.label}
+              unit={line.unit}
             />
           ))}
         </ComposedChart>

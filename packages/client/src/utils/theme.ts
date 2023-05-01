@@ -35,6 +35,7 @@ let theme = createTheme({
       offshore: "#4C677E",
       nuclear: "#F65574",
       terrestrial: "#8A8256",
+      total: "#4C677E",
     },
     materials: {
       concrete: "#7FB069",
@@ -120,6 +121,7 @@ interface ProductionPalette {
   offshore: string;
   nuclear: string;
   terrestrial: string;
+  total: string;
 }
 
 interface MaterialsPalette {

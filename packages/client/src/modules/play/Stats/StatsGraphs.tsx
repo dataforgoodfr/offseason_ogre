@@ -25,6 +25,7 @@ import {
   StackedBarsStackData,
   StackedBarsBar,
   StackedBarsStacks,
+  StackedBarsLine,
 } from "../../charts/StackedBars";
 import { pipe } from "../../../lib/fp";
 import { Persona } from "../../persona/persona";
@@ -251,5 +252,31 @@ function MaterialsGraphTab() {
     };
   }, [game.lastFinishedStep, computeBarsForPersona, getPersonaAtStep, t]);
 
-  return <StackedBars stacks={graphStacks} />;
+  const graphLines: StackedBarsLine[] = useMemo(() => {
+    const data = _.range(1, game.lastFinishedStep + 1).map((stepIdx) => {
+      const persona = getPersonaAtStep(stepIdx);
+      return _.sumBy(persona.production, "value");
+    });
+
+    const dataMax = Math.max(...data);
+    const stackTotalMax = Math.max(
+      ...graphStacks.data.map((stack) => stack.total)
+    );
+    const resizeFactor = stackTotalMax / dataMax;
+    const resizeDatum = (datum: number) => datum * resizeFactor;
+
+    return [
+      {
+        data: data.map(resizeDatum),
+        key: "total",
+        label: t("graph.common.production"),
+        yAxisUnitLabel: t("unit.watthour-per-day.kilo"),
+        palettes: "production",
+        hideInTooltip: true,
+        yAxisValueFormatter: (value) => value?.toFixed(2),
+      } as StackedBarsLine,
+    ];
+  }, [game.lastFinishedStep, graphStacks, getPersonaAtStep, t]);
+
+  return <StackedBars stacks={graphStacks} lines={graphLines} />;
 }
