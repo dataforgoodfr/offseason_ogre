@@ -1,6 +1,7 @@
 import { Card, Grid, Theme, Typography, useTheme } from "@mui/material";
 import {
   ComposedChart,
+  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -55,6 +56,8 @@ interface DataSourceConfig {
   yAxisUnitLabel: string;
   palettes?: keyof Theme["palette"] | (keyof Theme["palette"])[];
   hideInTooltip?: boolean;
+  /** Whether to display items with a value of 0 in the tooltip. Defaults to false. */
+  keepZerosInTooltip?: boolean;
   yAxisValueFormatter: (value?: number) => string;
 }
 
@@ -62,6 +65,7 @@ interface StackedBarsProps {
   stacks: StackedBarsStacks;
   lines?: StackedBarsLine[];
   tick?: boolean;
+  direction?: "horizontal" | "vertical";
   onClick?: CategoricalChartFunc;
 }
 
@@ -69,6 +73,7 @@ function StackedBars({
   stacks,
   lines = [],
   tick = true,
+  direction = "horizontal",
   onClick,
 }: StackedBarsProps) {
   const theme = useTheme();
@@ -186,7 +191,13 @@ function StackedBars({
         payload
           .filter((item) => {
             const dataSourceConfig = getItemDataSource(item);
-            return !dataSourceConfig.hideInTooltip;
+            if (dataSourceConfig.hideInTooltip) {
+              return false;
+            }
+            if (!dataSourceConfig.keepZerosInTooltip && item.value === 0) {
+              return false;
+            }
+            return true;
           })
           .map((item) => {
             const { key } = extractDataFromDataKey(item.dataKey as string);
@@ -312,6 +323,29 @@ function StackedBars({
     });
   }, [lines, stacks]);
 
+  const chartConfig = useMemo(() => {
+    const mainAxisProps = {
+      type: "category",
+      dataKey: "label",
+      tick,
+    };
+
+    const secondaryAxisProps = {
+      type: "number",
+      domain: [0, Math.ceil(maximumTotal / 100) * 100],
+    };
+
+    const layout = lines?.length ? "horizontal" : direction;
+
+    return {
+      layout,
+      xAxisProps: layout === "horizontal" ? mainAxisProps : secondaryAxisProps,
+      yAxisProps: layout === "horizontal" ? secondaryAxisProps : mainAxisProps,
+      ChartComponent:
+        !lines?.length || layout === "vertical" ? BarChart : ComposedChart,
+    };
+  }, [direction, lines, maximumTotal, tick]);
+
   return (
     <Card
       sx={{
@@ -326,9 +360,13 @@ function StackedBars({
       }}
     >
       <ResponsiveContainer width="100%" height={500}>
-        <ComposedChart data={data} onClick={onClick}>
-          <XAxis dataKey="label" tick={tick} />
-          <YAxis domain={[0, Math.ceil(maximumTotal / 100) * 100]} />
+        <chartConfig.ChartComponent
+          data={data}
+          onClick={onClick}
+          layout={chartConfig.layout}
+        >
+          <XAxis {...(chartConfig.xAxisProps as any)} />
+          <YAxis {...(chartConfig.yAxisProps as any)} angle={-45} />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           {barsGraph.map((bar, idx) => (
@@ -352,7 +390,7 @@ function StackedBars({
               unit={line.unit}
             />
           ))}
-        </ComposedChart>
+        </chartConfig.ChartComponent>
       </ResponsiveContainer>
     </Card>
   );
