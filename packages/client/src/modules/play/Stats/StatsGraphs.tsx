@@ -3,7 +3,6 @@ import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
-  MaterialsBars,
 } from "../../charts";
 import { PlayBox } from "../Components";
 import {
@@ -17,7 +16,6 @@ import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame, MaterialsType, ProductionTypes } from "../../../utils/types";
 import { formatMaterial } from "../../../lib/formatter";
 import { MaterialsDatum } from "../gameEngines/materialsEngine";
-import { ProductionStepDetails } from "./StatsGraphs.styles";
 import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "react-i18next";
 import {
@@ -115,10 +113,7 @@ function ConsumptionAndProductionDetailsGraph({
   } else if (step === 0 && bar === 1) {
     return (
       <>
-        <ProductionStepDetails>
-          <DetailsEnergyProductionBars persona={persona} />
-          <MaterialsBars data={materialsValues} />
-        </ProductionStepDetails>
+        <DetailsEnergyProductionBars persona={persona} />
         <EnergyProductionButtons persona={persona} />
       </>
     );
@@ -132,10 +127,7 @@ function ConsumptionAndProductionDetailsGraph({
   } else {
     return (
       <>
-        <ProductionStepDetails>
-          <DetailsEnergyProductionBars persona={persona} />
-          <MaterialsBars data={materialsValues} />
-        </ProductionStepDetails>
+        <DetailsEnergyProductionBars persona={persona} />
         <EnergyProductionButtons persona={persona} />
       </>
     );
