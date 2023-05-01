@@ -1,6 +1,6 @@
 import { Card, Grid, Theme, Typography, useTheme } from "@mui/material";
 import {
-  BarChart,
+  ComposedChart,
   Bar,
   XAxis,
   YAxis,
@@ -10,14 +10,19 @@ import {
   TooltipProps,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { toArray } from "../../lib/array";
+import { UnwrapArray } from "../../utils/types";
 
 export { StackedBars };
-export type { StackedBarsStack, StackedBarsBar };
+export type { StackedBarsStacks, StackedBarsStackData, StackedBarsBar };
 
-interface StackedBarsStack {
+interface StackedBarsStacks extends DataSourceConfig {
+  data: StackedBarsStackData[];
+}
+
+interface StackedBarsStackData {
   label: string;
   total: number;
   bars: StackedBarsBar[];
@@ -29,53 +34,107 @@ interface StackedBarsBar {
   total: number;
 }
 
-function StackedBars({
-  stacks,
-  yAxisUnitLabel,
-  tick = true,
-  palettes: palettesProps = [],
-  onClick,
-  yAxisValueFormatter,
-}: {
-  stacks: StackedBarsStack[];
+type DataSource = keyof Pick<StackedBarsProps, "stacks">;
+interface DataSourceConfig {
   yAxisUnitLabel: string;
-  tick?: boolean;
   palettes?: keyof Theme["palette"] | (keyof Theme["palette"])[];
-  onClick?: CategoricalChartFunc;
   yAxisValueFormatter: (value?: number) => string;
-}) {
+}
+
+interface StackedBarsProps {
+  stacks: StackedBarsStacks;
+  tick?: boolean;
+  onClick?: CategoricalChartFunc;
+}
+
+function StackedBars({ stacks, tick = true, onClick }: StackedBarsProps) {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const maximumTotal = Math.max(...stacks.map((stack) => stack.total), 0);
+  const maximumTotal = Math.max(...stacks.data.map((stack) => stack.total), 0);
 
-  const palettes = useMemo(() => {
-    return Object.assign(
-      {},
-      ...toArray(palettesProps).map(
-        (paletteName) => theme.palette[paletteName as keyof Theme["palette"]]
-      )
-    );
-  }, [palettesProps, theme]);
+  const getColorFromPalettes = useCallback(
+    (
+      key: string,
+      palettes: keyof Theme["palette"] | (keyof Theme["palette"])[] = []
+    ): string => {
+      const keyToColor = Object.assign(
+        {},
+        ...toArray(palettes).map(
+          (paletteName) => theme.palette[paletteName as keyof Theme["palette"]]
+        )
+      );
+      return keyToColor?.[key || ""] || "black";
+    },
+    [theme.palette]
+  );
+
+  const buildDataKey = (dataSource: DataSource, key: string) => {
+    return `${dataSource}-${key}`;
+  };
+
+  const extractDataFromDataKey = (dataKey: string) => {
+    const splitDataKey = dataKey.split("-");
+    return {
+      dataSource: splitDataKey[0] as DataSource,
+      key: splitDataKey[1],
+    };
+  };
+
+  const getDataSourceConfig = (dataSource: DataSource): DataSourceConfig => {
+    return dataSource === "stacks"
+      ? stacks
+      : {
+          yAxisUnitLabel: "",
+          yAxisValueFormatter: (value) => `${value}`,
+        };
+  };
 
   const CustomTooltip = ({
     active,
     payload,
     label,
   }: TooltipProps<number, string>): JSX.Element => {
-    if (active && payload && payload.length) {
+    const items = useMemo(() => {
+      if (!payload?.length) {
+        return [];
+      }
+
+      const enrichItem = (
+        dataSourceConfig: DataSourceConfig,
+        key: string,
+        item: UnwrapArray<NonNullable<typeof payload>>
+      ) => {
+        return {
+          ...item,
+          value: dataSourceConfig.yAxisValueFormatter(item.value),
+          unit: dataSourceConfig.yAxisUnitLabel,
+          color: getColorFromPalettes(key, dataSourceConfig.palettes),
+        };
+      };
+
       const stack: { label: string; total: number } = payload[0].payload;
 
-      const bars = [
-        ...payload,
-        {
-          dataKey: "total",
-          name: t("graph.common.total"),
-          value: stack.total,
-          unit: yAxisUnitLabel,
-        },
-      ].reverse();
+      return payload
+        .map((item) => {
+          const { dataSource, key } = extractDataFromDataKey(
+            item.dataKey as string
+          );
+          const dataSourceConfig = getDataSourceConfig(dataSource);
 
+          return enrichItem(dataSourceConfig, key, item);
+        })
+        .concat(
+          enrichItem(getDataSourceConfig("stacks"), "total", {
+            dataKey: "total",
+            name: t("graph.common.total"),
+            value: stack.total,
+          })
+        )
+        .reverse();
+    }, [payload]);
+
+    if (active && payload && payload.length) {
       return (
         <Grid
           sx={{
@@ -94,16 +153,16 @@ function StackedBars({
           >
             {label}
           </Typography>
-          {bars.map((bar) => (
+          {items.map((item) => (
             <Typography
-              key={bar.dataKey}
+              key={item.dataKey}
               sx={{
                 mt: 1,
                 mb: 1,
-                color: palettes[bar.dataKey || ""] || "black",
+                color: item.color,
               }}
             >
-              {bar.name}: {yAxisValueFormatter(bar.value)} {bar.unit}
+              {item.name}: {item.value} {item.unit}
             </Typography>
           ))}
         </Grid>
@@ -115,16 +174,28 @@ function StackedBars({
   const bars = useMemo(() => {
     return Object.values(
       Object.fromEntries(
-        stacks.flatMap((stack) => stack.bars).map((bar) => [bar.key, bar])
+        stacks.data
+          .flatMap((stack) => stack.bars)
+          .map((bar) => [
+            buildDataKey("stacks", bar.key),
+            {
+              ...bar,
+              dataKey: buildDataKey("stacks", bar.key),
+              unit: stacks.yAxisUnitLabel,
+              fill: getColorFromPalettes(bar.key, stacks.palettes),
+            },
+          ])
       )
     );
-  }, [stacks]);
+  }, [stacks, getColorFromPalettes]);
 
   const data = useMemo(() => {
-    return stacks.map((stack) => ({
+    return stacks.data.map((stack) => ({
       label: stack.label,
       total: stack.total,
-      ...Object.fromEntries(stack.bars.map((bar) => [bar.key, bar.total])),
+      ...Object.fromEntries(
+        stack.bars.map((bar) => [buildDataKey("stacks", bar.key), bar.total])
+      ),
     }));
   }, [stacks]);
 
@@ -142,26 +213,23 @@ function StackedBars({
       }}
     >
       <ResponsiveContainer width="100%" height={500}>
-        <BarChart data={data} onClick={onClick}>
+        <ComposedChart data={data} onClick={onClick}>
           <XAxis dataKey="label" tick={tick} />
-          <YAxis
-            name={yAxisUnitLabel}
-            domain={[0, Math.ceil(maximumTotal / 100) * 100]}
-          />
+          <YAxis domain={[0, Math.ceil(maximumTotal / 100) * 100]} />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           {bars.map((bar, idx) => (
             <Bar
-              key={`${bar.key}-${idx}`}
-              dataKey={bar.key}
+              key={`${bar.dataKey}-${idx}`}
+              dataKey={bar.dataKey}
               stackId="a"
-              fill={palettes[bar.key || ""] || "black"}
+              fill={bar.fill}
               barSize={25}
               name={bar.label}
-              unit={yAxisUnitLabel}
+              unit={bar.unit}
             />
           ))}
-        </BarChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </Card>
   );

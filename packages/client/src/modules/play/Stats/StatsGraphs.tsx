@@ -22,8 +22,9 @@ import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "react-i18next";
 import {
   StackedBars,
-  StackedBarsStack,
+  StackedBarsStackData,
   StackedBarsBar,
+  StackedBarsStacks,
 } from "../../charts/StackedBars";
 import { pipe } from "../../../lib/fp";
 import { Persona } from "../../persona/persona";
@@ -227,9 +228,9 @@ function MaterialsGraphTab() {
     [t]
   );
 
-  const graphStacks: StackedBarsStack[] = useMemo(() => {
-    return _.range(1, game.lastFinishedStep + 1).map(
-      (stepIdx): StackedBarsStack => {
+  const graphStacks: StackedBarsStacks = useMemo(() => {
+    const data = _.range(1, game.lastFinishedStep + 1).map(
+      (stepIdx): StackedBarsStackData => {
         const bars: StackedBarsBar[] = computeBarsForPersona(
           getPersonaAtStep(stepIdx)
         );
@@ -241,14 +242,14 @@ function MaterialsGraphTab() {
         };
       }
     );
+
+    return {
+      data,
+      yAxisUnitLabel: t("unit.tonne.mega"),
+      palettes: "materials",
+      yAxisValueFormatter: formatMaterial,
+    };
   }, [game.lastFinishedStep, computeBarsForPersona, getPersonaAtStep, t]);
 
-  return (
-    <StackedBars
-      stacks={graphStacks}
-      yAxisUnitLabel={t("unit.tonne.mega")}
-      palettes="materials"
-      yAxisValueFormatter={formatMaterial}
-    />
-  );
+  return <StackedBars stacks={graphStacks} />;
 }
