@@ -1,4 +1,4 @@
-import { Card, Grid, Theme, Typography, useTheme } from "@mui/material";
+import { Card, Grid, Theme, useTheme } from "@mui/material";
 import {
   ComposedChart,
   BarChart,
@@ -18,6 +18,7 @@ import { toArray } from "../../lib/array";
 import { UnwrapArray } from "../../utils/types";
 import { range } from "lodash";
 import { pipe } from "../../lib/fp";
+import { Typography } from "../common/components/Typography";
 
 export { StackedBars };
 export type {
@@ -62,6 +63,7 @@ interface DataSourceConfig {
 }
 
 interface StackedBarsProps {
+  title?: string;
   stacks: StackedBarsStacks;
   lines?: StackedBarsLine[];
   tick?: boolean;
@@ -70,6 +72,7 @@ interface StackedBarsProps {
 }
 
 function StackedBars({
+  title,
   stacks,
   lines = [],
   tick = true,
@@ -349,8 +352,9 @@ function StackedBars({
   return (
     <Card
       sx={{
-        alignItems: "center",
         display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
         pt: 4,
         pb: 4,
@@ -359,6 +363,11 @@ function StackedBars({
         mb: 1,
       }}
     >
+      {!!title && (
+        <Typography variant="h5" sx={{ mb: 4, textAlign: "center" }}>
+          {title}
+        </Typography>
+      )}
       <ResponsiveContainer width="100%" height={500}>
         <chartConfig.ChartComponent
           data={data}

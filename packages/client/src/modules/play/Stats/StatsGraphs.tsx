@@ -27,7 +27,7 @@ import {
 } from "../../charts/StackedBars";
 import { pipe } from "../../../lib/fp";
 import { Persona } from "../../persona/persona";
-import { Typography } from "../../common/components/Typography";
+import { ENERGY_SHIFT_TARGET_YEAR } from "../../common/constants";
 
 export { StatsGraphs };
 
@@ -41,7 +41,7 @@ function StatsGraphs() {
   const tabs = useMemo(() => {
     return [
       {
-        label: t("page.player.statistics.tabs.consumption-production.label"),
+        label: t("page.player.statistics.tabs.energy-balance.label"),
         component: <ConsumptionAndProductionGraph />,
       },
       {
@@ -135,8 +135,19 @@ function ConsumptionAndProductionDetailsGraph({
   barIdx: number | undefined;
   bar?: { name: string };
 }) {
+  const { t } = useTranslation();
   const { game } = usePlay();
   const { getPersonaAtStep } = usePersona();
+
+  const graphTitle = useMemo(() => {
+    if (bar) {
+      return t(
+        "page.player.statistics.tabs.energy-balance.graphs.details.title",
+        { stackName: bar.name }
+      );
+    }
+    return "";
+  }, [bar, t]);
 
   if (typeof barIdx === "undefined") return <></>;
   const step = barIdx === 0 || barIdx === 1 ? 0 : barIdx - 1;
@@ -147,27 +158,24 @@ function ConsumptionAndProductionDetailsGraph({
 
   return (
     <>
-      <Typography variant="h5" sx={{ mt: 4, mb: 2 }}>
-        Décomposition de la pile {bar?.name}
-      </Typography>
       {step === 0 && barIdx === 0 ? (
         <>
-          <DetailsEnergyConsumptionBars persona={persona} />
+          <DetailsEnergyConsumptionBars title={graphTitle} persona={persona} />
           <EnergyConsumptionButtons persona={persona} />
         </>
       ) : step === 0 && barIdx === 1 ? (
         <>
-          <DetailsEnergyProductionBars persona={persona} />
+          <DetailsEnergyProductionBars title={graphTitle} persona={persona} />
           <EnergyProductionButtons persona={persona} />
         </>
       ) : STEPS[step]?.type === "consumption" ? (
         <>
-          <DetailsEnergyConsumptionBars persona={persona} />
+          <DetailsEnergyConsumptionBars title={graphTitle} persona={persona} />
           <EnergyConsumptionButtons persona={persona} />
         </>
       ) : (
         <>
-          <DetailsEnergyProductionBars persona={persona} />
+          <DetailsEnergyProductionBars title={graphTitle} persona={persona} />
           <EnergyProductionButtons persona={persona} />
         </>
       )}
@@ -271,7 +279,16 @@ function MaterialsPerStepGraph() {
     ];
   }, [game.lastFinishedStep, graphStacks, getPersonaAtStep, t]);
 
-  return <StackedBars stacks={graphStacks} lines={graphLines} />;
+  return (
+    <StackedBars
+      title={t(
+        "page.player.statistics.tabs.materials.graphs.quantity-per-step.title",
+        { year: ENERGY_SHIFT_TARGET_YEAR }
+      )}
+      stacks={graphStacks}
+      lines={graphLines}
+    />
+  );
 }
 
 function MaterialsPerProductionTypeGraph() {
@@ -322,5 +339,13 @@ function MaterialsPerProductionTypeGraph() {
     };
   }, [currentPersona, t]);
 
-  return <StackedBars direction="vertical" stacks={graphStacks} />;
+  return (
+    <StackedBars
+      title={t(
+        "page.player.statistics.tabs.materials.graphs.quantity-per-production-type.title"
+      )}
+      direction="vertical"
+      stacks={graphStacks}
+    />
+  );
 }
