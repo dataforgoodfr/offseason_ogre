@@ -54,7 +54,7 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
             <PlayerComponent key={player.user.id} player={player} />
           ))}
         </Box>
-        <Box display="flex" flexDirection="column" gap={2}>
+        <Box display="flex" flexDirection="column">
           {isProductionStep && (
             <PlayBox>
               <TeamActionsRecap

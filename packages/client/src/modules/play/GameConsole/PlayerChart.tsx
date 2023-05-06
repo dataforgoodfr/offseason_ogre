@@ -1,27 +1,52 @@
-import { Box } from "@mui/material";
-import { formatMaterial } from "../../../lib/formatter";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
-import { MaterialsBars } from "../../charts";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
 import { sumAllValues, sumForAndFormat } from "../../persona";
-import { productionTypes } from "../constants";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
-import { MaterialsDatum } from "../gameEngines/materialsEngine";
+import { Tabs } from "../../common/components/Tabs";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  MaterialsPerProductionTypeChart,
+  MaterialsPerStepChart,
+} from "../../charts";
 
 export { PlayerChart };
 
 function PlayerChart({ team }: { team: ITeamWithPlayers }) {
+  const { t } = useTranslation();
+
+  const userIds = team.players.map(({ user }) => user.id);
+  const personaByUserId = usePersonaByUserId(userIds);
+  const [firstPersona] = Object.values(personaByUserId);
+
   const data = useBuildData({ team });
   const consProdData = data.filter((data) =>
     ["consumption", "production"].includes(data.type)
   );
-  const materialsData = data.filter((data) => data.type === "materials");
-  return (
-    <Box sx={{ display: "grid", gridTemplateColumns: "2fr 1fr" }} gap={3}>
-      <StackedEnergyBars data={consProdData} tick={false} />
-      <MaterialsBars data={materialsData} tick={false} />
-    </Box>
-  );
+
+  const tabs = useMemo(() => {
+    return [
+      {
+        label: t("page.teacher.statistics.tabs.energy-balance.label"),
+        component: <StackedEnergyBars data={consProdData} tick={false} />,
+      },
+      {
+        label: t("page.teacher.statistics.tabs.materials.label"),
+        component: (
+          <>
+            <MaterialsPerStepChart
+              getPersonaAtStep={firstPersona.getPersonaAtStep}
+            />
+            <MaterialsPerProductionTypeChart
+              persona={firstPersona.currentPersona}
+            />
+          </>
+        ),
+      },
+    ];
+  }, [consProdData, firstPersona, t]);
+
+  return <Tabs tabs={tabs} />;
 }
 
 function useBuildData({ team }: { team: ITeamWithPlayers }) {
@@ -73,18 +98,6 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
           nuclear: 0,
           terrestrial: 0,
         },
-    ...Object.values(productionTypes).map((prodType: string) => ({
-      name: prodType,
-      type: "materials",
-      ...Object.assign(
-        {},
-        ...firstPersona?.currentPersona.materials
-          .filter((mat: MaterialsDatum) => mat.type === prodType)
-          .map((mat: MaterialsDatum) => ({
-            [mat.name]: formatMaterial(mat.value) || 0,
-          }))
-      ),
-    })),
   ];
 }
 

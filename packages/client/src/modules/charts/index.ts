@@ -4,12 +4,14 @@ import {
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
 } from "./DetailsEnergyBars";
-import { MaterialsBars } from "./MaterialsBars";
+import { MaterialsPerProductionTypeChart } from "./MaterialsPerProductionTypeChart";
+import { MaterialsPerStepChart } from "./MaterialsPerStepChart";
 
 export {
   StackedEnergyBars,
   LineEvolution,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
-  MaterialsBars,
+  MaterialsPerProductionTypeChart,
+  MaterialsPerStepChart,
 };
