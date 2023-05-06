@@ -1,8 +1,10 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
+  MaterialsPerProductionTypeChart,
+  MaterialsPerStepChart,
 } from "../../charts";
 import { PlayBox } from "../Components";
 import {
@@ -13,21 +15,9 @@ import { STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
-import { IGame, MaterialsType, ProductionTypes } from "../../../utils/types";
-import { formatMaterial } from "../../../lib/formatter";
-import { MaterialsDatum } from "../gameEngines/materialsEngine";
+import { IGame } from "../../../utils/types";
 import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "react-i18next";
-import {
-  StackedBars,
-  StackedBarsStackData,
-  StackedBarsBar,
-  StackedBarsStacks,
-  StackedBarsLine,
-} from "../../charts/StackedBars";
-import { pipe } from "../../../lib/fp";
-import { Persona } from "../../persona/persona";
-import { ENERGY_SHIFT_TARGET_YEAR } from "../../common/constants";
 
 export { StatsGraphs };
 
@@ -184,168 +174,12 @@ function ConsumptionAndProductionDetailsGraph({
 }
 
 function MaterialsGraphTab() {
+  const { currentPersona, getPersonaAtStep } = usePersona();
+
   return (
     <>
-      <MaterialsPerStepGraph />
-      <MaterialsPerProductionTypeGraph />
+      <MaterialsPerStepChart getPersonaAtStep={getPersonaAtStep} />
+      <MaterialsPerProductionTypeChart persona={currentPersona} />
     </>
-  );
-}
-
-function MaterialsPerStepGraph() {
-  const { t } = useTranslation();
-  const { game } = usePlay();
-  const { getPersonaAtStep } = usePersona();
-
-  const computeBarsForPersona = useCallback(
-    (persona: Persona): StackedBarsBar[] => {
-      const indexBarByMaterialName = (persona: Persona) =>
-        persona.materials.reduce((barIndexedByMaterialName, materialDatum) => {
-          if (!barIndexedByMaterialName[materialDatum.name]) {
-            barIndexedByMaterialName[materialDatum.name] = {
-              key: materialDatum.name,
-              label: t(`graph.materials.${materialDatum.name}`),
-              total: 0,
-            };
-          }
-
-          barIndexedByMaterialName[materialDatum.name].total +=
-            materialDatum.value;
-
-          return barIndexedByMaterialName;
-        }, {} as Record<MaterialsType, StackedBarsBar>);
-
-      const sortBars = (
-        barIndexedByMaterialName: Record<MaterialsType, StackedBarsBar>
-      ) => {
-        return Object.entries(barIndexedByMaterialName)
-          .sort(([materialNameA], [materialNameB]) =>
-            materialNameA.localeCompare(materialNameB)
-          )
-          .map(([_, bar]) => bar);
-      };
-
-      return pipe(persona, indexBarByMaterialName, sortBars);
-    },
-    [t]
-  );
-
-  const graphStacks: StackedBarsStacks = useMemo(() => {
-    const data = _.range(1, game.lastFinishedStep + 1).map(
-      (stepIdx): StackedBarsStackData => {
-        const bars: StackedBarsBar[] = computeBarsForPersona(
-          getPersonaAtStep(stepIdx)
-        );
-        const total = _.sumBy(bars, "total");
-        return {
-          label: t(`step.${STEPS[stepIdx].id}.name`),
-          total,
-          bars,
-        };
-      }
-    );
-
-    return {
-      data,
-      yAxisUnitLabel: t("unit.tonne.mega"),
-      palettes: "materials",
-      yAxisValueFormatter: formatMaterial,
-    };
-  }, [game.lastFinishedStep, computeBarsForPersona, getPersonaAtStep, t]);
-
-  const graphLines: StackedBarsLine[] = useMemo(() => {
-    const data = _.range(1, game.lastFinishedStep + 1).map((stepIdx) => {
-      const persona = getPersonaAtStep(stepIdx);
-      return _.sumBy(persona.production, "value");
-    });
-
-    const dataMax = Math.max(...data);
-    const stackTotalMax = Math.max(
-      ...graphStacks.data.map((stack) => stack.total)
-    );
-    const resizeFactor = stackTotalMax / dataMax;
-    const resizeDatum = (datum: number) => datum * resizeFactor;
-
-    return [
-      {
-        data: data.map(resizeDatum),
-        key: "total",
-        label: t("graph.common.production"),
-        yAxisUnitLabel: t("unit.watthour-per-day.kilo"),
-        palettes: "production",
-        hideInTooltip: true,
-        yAxisValueFormatter: (value) => value?.toFixed(2),
-      } as StackedBarsLine,
-    ];
-  }, [game.lastFinishedStep, graphStacks, getPersonaAtStep, t]);
-
-  return (
-    <StackedBars
-      title={t(
-        "page.player.statistics.tabs.materials.graphs.quantity-per-step.title",
-        { year: ENERGY_SHIFT_TARGET_YEAR }
-      )}
-      stacks={graphStacks}
-      lines={graphLines}
-    />
-  );
-}
-
-function MaterialsPerProductionTypeGraph() {
-  const { t } = useTranslation();
-  const { currentPersona } = usePersona();
-
-  const graphStacks: StackedBarsStacks = useMemo(() => {
-    const data: StackedBarsStackData[] = pipe(
-      currentPersona.materials,
-      (materials: MaterialsDatum[]) => _.sortBy(materials, "name"),
-      (materials: MaterialsDatum[]) =>
-        materials.reduce(
-          (
-            materialsIndexedByProdType: Record<
-              ProductionTypes,
-              MaterialsDatum[]
-            >,
-            datum
-          ) => {
-            if (!materialsIndexedByProdType[datum.type]) {
-              materialsIndexedByProdType[datum.type] = [];
-            }
-            materialsIndexedByProdType[datum.type].push(datum);
-            return materialsIndexedByProdType;
-          },
-          {} as Record<ProductionTypes, MaterialsDatum[]>
-        ),
-      Object.entries as any,
-      (entries: [ProductionTypes, MaterialsDatum[]][]) =>
-        _.sortBy(entries, (entry) => entry[0]),
-      (entries) =>
-        entries.map(([prodType, materials]) => ({
-          label: t(`graph.materials.${prodType}`),
-          total: _.sumBy(materials, "value"),
-          bars: materials.map((datum) => ({
-            key: datum.name,
-            label: t(`graph.materials.${datum.name}`),
-            total: datum.value,
-          })),
-        }))
-    );
-
-    return {
-      data,
-      yAxisUnitLabel: t("unit.tonne.mega"),
-      palettes: "materials",
-      yAxisValueFormatter: formatMaterial,
-    };
-  }, [currentPersona, t]);
-
-  return (
-    <StackedBars
-      title={t(
-        "page.player.statistics.tabs.materials.graphs.quantity-per-production-type.title"
-      )}
-      direction="vertical"
-      stacks={graphStacks}
-    />
   );
 }
