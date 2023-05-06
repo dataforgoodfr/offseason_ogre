@@ -88,6 +88,7 @@ function DetailsEnergyBars(
           width={160}
           style={{ marginTop: "5px", fontSize: "11px" }}
           dataKey="name"
+          {...{ angle: -45 }}
         />
         <Tooltip />
         <Bar dataKey="value" unit="kWh/jour">

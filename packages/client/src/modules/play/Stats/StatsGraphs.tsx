@@ -9,7 +9,7 @@ import {
   EnergyConsumptionButtons,
   EnergyProductionButtons,
 } from "../../common/components/EnergyButtons";
-import { productionTypes, STEPS } from "../constants";
+import { STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
@@ -87,21 +87,6 @@ function ConsumptionAndProductionDetailsGraph({
   if (isNotFinishedStep(step, game)) return <></>;
 
   const persona = getPersonaAtStep(step);
-
-  const materialsValues = Object.values(productionTypes).map(
-    (prodType: string) => ({
-      name: prodType,
-      type: "materials",
-      ...Object.assign(
-        {},
-        ...persona.materials
-          .filter((mat: MaterialsDatum) => mat.type === prodType)
-          .map((mat: MaterialsDatum) => ({
-            [mat.name]: formatMaterial(mat.value) || 0,
-          }))
-      ),
-    })
-  );
 
   if (step === 0 && bar === 0) {
     return (

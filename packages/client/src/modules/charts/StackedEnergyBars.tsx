@@ -118,6 +118,7 @@ function StackedEnergyBars({
           <YAxis
             name="kWh/jour"
             domain={[0, Math.ceil(maximumTotal / 100) * 100]}
+            {...{ angle: -45 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
