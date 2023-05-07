@@ -5,11 +5,15 @@ import {
   Bar,
   XAxis,
   YAxis,
+  YAxisProps,
   Tooltip,
   Legend,
   ResponsiveContainer,
   TooltipProps,
   Line,
+  BarProps,
+  LineProps,
+  XAxisProps,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import { useCallback, useMemo } from "react";
@@ -19,6 +23,7 @@ import { UnwrapArray } from "../../utils/types";
 import { range } from "lodash";
 import { pipe } from "../../lib/fp";
 import { Typography } from "../common/components/Typography";
+import { ObjectBuilder } from "../../lib/object";
 
 export { StackedBars };
 export type {
@@ -50,6 +55,7 @@ interface StackedBarsLine extends DataSourceConfig {
   key: string;
   label: string;
   data: number[];
+  useLinesAxis?: boolean;
 }
 
 type DataSource = keyof Pick<StackedBarsProps, "lines" | "stacks">;
@@ -82,16 +88,6 @@ function StackedBars({
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const maximumTotal = useMemo(
-    () =>
-      Math.max(
-        ...stacks.data.map((stack) => stack.total),
-        ...lines.flatMap((line) => line.data),
-        0
-      ),
-    [lines, stacks]
-  );
-
   const getColorFromPalettes = useCallback(
     (
       key: string,
@@ -113,7 +109,11 @@ function StackedBars({
     key: string,
     lineIdx?: number
   ) => {
-    return `${dataSource}__${key}__${lineIdx}`;
+    const chunks: (string | number)[] = [dataSource, key];
+    if (lineIdx != null) {
+      chunks.push(lineIdx);
+    }
+    return chunks.join("__");
   };
 
   const extractDataFromDataKey = (dataKey: string) => {
@@ -258,55 +258,6 @@ function StackedBars({
     return <></>;
   };
 
-  const barsGraph = useMemo(() => {
-    const dataSource: DataSource = "stacks";
-
-    return pipe(
-      stacks,
-      (stacks) =>
-        stacks.data
-          .flatMap((stack) => stack.bars)
-          .map((bar) => [
-            buildDataKey(dataSource, bar.key),
-            {
-              ...bar,
-              dataKey: buildDataKey(dataSource, bar.key),
-              unit: stacks.yAxisUnitLabel,
-              fill: getColorFromPalettes(bar.key, stacks.palettes),
-            },
-          ]),
-      Object.fromEntries,
-      Object.values
-    );
-  }, [stacks, getColorFromPalettes]);
-
-  const linesGraph = useMemo(() => {
-    const dataSource: DataSource = "lines";
-
-    if (!lines) {
-      return [];
-    }
-
-    return pipe(
-      lines,
-      (lines) =>
-        lines.map((line, idx) => {
-          const dataKey = buildDataKey(dataSource, line.key, idx);
-          return [
-            dataKey,
-            {
-              ...line,
-              dataKey,
-              unit: line.yAxisUnitLabel,
-              stroke: getColorFromPalettes(line.key, line.palettes),
-            },
-          ];
-        }),
-      Object.fromEntries,
-      Object.values
-    );
-  }, [lines, getColorFromPalettes]);
-
   const data = useMemo(() => {
     return range(0, stacks.data.length).map((dataIdx) => {
       const stack = stacks.data[dataIdx];
@@ -327,27 +278,163 @@ function StackedBars({
   }, [lines, stacks]);
 
   const chartConfig = useMemo(() => {
-    const mainAxisProps = {
-      type: "category",
-      dataKey: "label",
-      tick,
-    };
-
-    const secondaryAxisProps = {
-      type: "number",
-      domain: [0, Math.ceil(maximumTotal / 100) * 100],
+    type AxisProps =
+      | Partial<Omit<XAxisProps, "xAxisId">>
+      | Partial<Omit<YAxisProps, "yAxisId">>;
+    type AxisPropsBuilderArgs = AxisProps & {
+      maxTotal?: number;
+      axisId?: DataSource;
+      angle?: number;
     };
 
     const layout = lines?.length ? "horizontal" : direction;
+    const isHorizontalLayout = layout === "horizontal";
+
+    const buildMainAxisProps = ({
+      ...otherProps
+    }: AxisPropsBuilderArgs = {}): AxisProps => {
+      return {
+        ...otherProps,
+        type: "category",
+        dataKey: "label",
+        tick,
+      };
+    };
+
+    const buildCrossAxisProps = ({
+      maxTotal,
+      axisId,
+      ...otherProps
+    }: AxisPropsBuilderArgs = {}): AxisProps => {
+      const axisIdProps = axisId
+        ? isHorizontalLayout
+          ? { yAxisId: axisId }
+          : { xAxisId: axisId }
+        : {};
+
+      return {
+        ...otherProps,
+        ...axisIdProps,
+        type: "number",
+        domain: [0, Math.ceil((maxTotal || 0) / 100) * 100],
+      };
+    };
+
+    const buildCrossAxisForStacks = () => {
+      const linesOnStacksAxis = lines.filter((line) => !!line.useLinesAxis);
+      const maxTotal = Math.max(
+        ...stacks.data.map((stack) => stack.total),
+        ...linesOnStacksAxis.flatMap((line) => line.data),
+        0
+      );
+
+      return buildCrossAxisProps({
+        axisId: "stacks",
+        maxTotal,
+        angle: isHorizontalLayout ? -45 : 0,
+      });
+    };
+
+    const buildCrossAxisForLines = () => {
+      const linesOnLinesAxis = lines.filter((line) => !!line.useLinesAxis);
+      const hasMultipleCrossAxes = !!linesOnLinesAxis.length;
+
+      if (!hasMultipleCrossAxes) {
+        return null;
+      }
+
+      const maxTotal = Math.max(
+        ...linesOnLinesAxis.flatMap((line) => line.data),
+        0
+      );
+
+      return buildCrossAxisProps({
+        axisId: "lines",
+        maxTotal,
+        angle: isHorizontalLayout ? 45 : 0,
+        orientation: isHorizontalLayout ? "right" : "top",
+      });
+    };
+
+    const mainAxis = buildMainAxisProps({
+      angle: isHorizontalLayout ? 0 : -45,
+    });
+    const crossAxisForStacks = buildCrossAxisForStacks();
+    const crossAxisForLines = buildCrossAxisForLines();
+
+    const ChartComponent = ComposedChart;
+
+    const buildBarsProps = () => {
+      const dataSource: DataSource = "stacks";
+
+      return pipe(
+        stacks,
+        (stacks) =>
+          stacks.data
+            .flatMap((stack) => stack.bars)
+            .map((bar) => {
+              const builder = new ObjectBuilder<Partial<BarProps>>();
+
+              const barProps = builder
+                .add("dataKey", buildDataKey(dataSource, bar.key))
+                .add("name", bar.label)
+                .add("unit", stacks.yAxisUnitLabel)
+                .add("fill", getColorFromPalettes(bar.key, stacks.palettes))
+                .add("stackId", "a")
+                .add("barSize", 25)
+                .add(isHorizontalLayout ? "yAxisId" : "xAxisId", "stacks")
+                .get();
+
+              return [buildDataKey(dataSource, bar.key), barProps];
+            }),
+        Object.fromEntries,
+        Object.values
+      ) as Partial<BarProps>[];
+    };
+
+    const buildLinesProps = () => {
+      const dataSource: DataSource = "lines";
+
+      return pipe(
+        lines,
+        (lines) =>
+          lines.map((line, idx) => {
+            const builder = new ObjectBuilder<Partial<LineProps>>();
+
+            const dataKey = buildDataKey(dataSource, line.key, idx);
+            const lineProps = builder
+              .add("dataKey", dataKey)
+              .add("name", line.label)
+              .add("unit", line.yAxisUnitLabel)
+              .add("stroke", getColorFromPalettes(line.key, line.palettes))
+              .add("type", "monotone")
+              .add(
+                isHorizontalLayout ? "yAxisId" : "xAxisId",
+                line.useLinesAxis ? "lines" : "stacks"
+              )
+              .get();
+
+            return [dataKey, lineProps];
+          }),
+        Object.fromEntries,
+        Object.values
+      ) as Partial<LineProps>[];
+    };
+
+    const barsProps = buildBarsProps();
+    const linesProps = buildLinesProps();
 
     return {
       layout,
-      xAxisProps: layout === "horizontal" ? mainAxisProps : secondaryAxisProps,
-      yAxisProps: layout === "horizontal" ? secondaryAxisProps : mainAxisProps,
-      ChartComponent:
-        !lines?.length || layout === "vertical" ? BarChart : ComposedChart,
+      xAxisStacksProps: isHorizontalLayout ? mainAxis : crossAxisForStacks,
+      xAxisLinesProps: isHorizontalLayout ? mainAxis : crossAxisForLines,
+      yAxisStacksProps: isHorizontalLayout ? crossAxisForStacks : mainAxis,
+      yAxisLinesProps: isHorizontalLayout ? crossAxisForLines : mainAxis,
+      barsProps,
+      linesProps,
+      ChartComponent,
     };
-  }, [direction, lines, maximumTotal, tick]);
+  }, [direction, lines, stacks, tick, getColorFromPalettes]);
 
   return (
     <Card
@@ -374,30 +461,21 @@ function StackedBars({
           onClick={onClick}
           layout={chartConfig.layout}
         >
-          <XAxis {...(chartConfig.xAxisProps as any)} />
-          <YAxis {...(chartConfig.yAxisProps as any)} angle={-45} />
+          <XAxis {...(chartConfig.xAxisStacksProps as any)} />
+          {chartConfig.xAxisLinesProps && (
+            <XAxis {...(chartConfig.xAxisLinesProps as any)} />
+          )}
+          <YAxis {...(chartConfig.yAxisStacksProps as any)} />
+          {chartConfig.yAxisLinesProps && (
+            <YAxis {...(chartConfig.yAxisLinesProps as any)} />
+          )}
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          {barsGraph.map((bar, idx) => (
-            <Bar
-              key={`${bar.dataKey}-${idx}`}
-              dataKey={bar.dataKey}
-              stackId="a"
-              fill={bar.fill}
-              barSize={25}
-              name={bar.label}
-              unit={bar.unit}
-            />
+          {chartConfig.barsProps.map((props, idx) => (
+            <Bar key={`${props.dataKey}-${idx}`} {...(props as any)} />
           ))}
-          {linesGraph.map((line, idx) => (
-            <Line
-              key={`${line.dataKey}-${idx}`}
-              type="monotone"
-              dataKey={line.dataKey}
-              stroke={line.stroke}
-              name={line.label}
-              unit={line.unit}
-            />
+          {chartConfig.linesProps.map((props, idx) => (
+            <Line key={`${props.dataKey}-${idx}`} {...(props as any)} />
           ))}
         </chartConfig.ChartComponent>
       </ResponsiveContainer>

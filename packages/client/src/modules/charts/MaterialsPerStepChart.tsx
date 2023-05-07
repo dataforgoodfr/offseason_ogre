@@ -88,21 +88,14 @@ function MaterialsPerStepChart({
       return _.sumBy(persona.production, "value");
     });
 
-    const dataMax = Math.max(...data);
-    const stackTotalMax = Math.max(
-      ...graphStacks.data.map((stack) => stack.total)
-    );
-    const resizeFactor = stackTotalMax / dataMax;
-    const resizeDatum = (datum: number) => datum * resizeFactor;
-
     return [
       {
-        data: data.map(resizeDatum),
+        data,
         key: "total",
         label: t("graph.common.production"),
         yAxisUnitLabel: t("unit.watthour-per-day.kilo"),
         palettes: "production",
-        hideInTooltip: true,
+        useLinesAxis: true,
         yAxisValueFormatter: (value) => value?.toFixed(2),
       } as StackedBarsLine,
     ];
