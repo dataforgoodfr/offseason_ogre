@@ -10,7 +10,7 @@ import {
 import { Persona } from "../persona/persona";
 import { MaterialsType } from "../../utils/types";
 import { pipe } from "../../lib/fp";
-import { STEPS } from "../play";
+import { STEPS, isStepOfType } from "../play";
 import _ from "lodash";
 import { formatMaterial, formatProduction } from "../../lib/formatter";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../common/constants";
@@ -25,6 +25,14 @@ function MaterialsPerStepChart({
 }) {
   const { t } = useTranslation();
   const { game } = usePlay();
+
+  const stepIdsToDisplay = useMemo(
+    (): number[] =>
+      _.range(0, game.lastFinishedStep + 1).filter((step) =>
+        isStepOfType(step, "production")
+      ),
+    [game.lastFinishedStep]
+  );
 
   const computeBarsForPersona = useCallback(
     (persona: Persona): StackedBarsBar[] => {
@@ -60,19 +68,17 @@ function MaterialsPerStepChart({
   );
 
   const graphStacks: StackedBarsStacks = useMemo(() => {
-    const data = _.range(1, game.lastFinishedStep + 1).map(
-      (stepIdx): StackedBarsStackData => {
-        const bars: StackedBarsBar[] = computeBarsForPersona(
-          getPersonaAtStep(stepIdx)
-        );
-        const total = _.sumBy(bars, "total");
-        return {
-          label: t(`step.${STEPS[stepIdx].id}.name`),
-          total,
-          bars,
-        };
-      }
-    );
+    const data = stepIdsToDisplay.map((stepIdx): StackedBarsStackData => {
+      const bars: StackedBarsBar[] = computeBarsForPersona(
+        getPersonaAtStep(stepIdx)
+      );
+      const total = _.sumBy(bars, "total");
+      return {
+        label: t(`step.${STEPS[stepIdx].id}.name`),
+        total,
+        bars,
+      };
+    });
 
     return {
       data,
@@ -81,10 +87,10 @@ function MaterialsPerStepChart({
       yAxisValueFormatter: formatMaterial(),
       yAxisTicksValueFormatter: formatMaterial({ fractionDigits: 0 }),
     };
-  }, [game.lastFinishedStep, computeBarsForPersona, getPersonaAtStep, t]);
+  }, [stepIdsToDisplay, computeBarsForPersona, getPersonaAtStep, t]);
 
   const graphLines: StackedBarsLine[] = useMemo(() => {
-    const data = _.range(1, game.lastFinishedStep + 1).map((stepIdx) => {
+    const data = stepIdsToDisplay.map((stepIdx) => {
       const persona = getPersonaAtStep(stepIdx);
       return _.sumBy(persona.production, "value");
     });
@@ -101,7 +107,7 @@ function MaterialsPerStepChart({
         yAxisTicksValueFormatter: formatProduction({ fractionDigits: 0 }),
       } as StackedBarsLine,
     ];
-  }, [game.lastFinishedStep, getPersonaAtStep, t]);
+  }, [stepIdsToDisplay, getPersonaAtStep, t]);
 
   return (
     <StackedBars
