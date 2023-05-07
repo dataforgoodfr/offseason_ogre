@@ -23,6 +23,7 @@ import { range } from "lodash";
 import { pipe } from "../../lib/fp";
 import { Typography } from "../common/components/Typography";
 import { ObjectBuilder } from "../../lib/object";
+import { orderOfMagnitude } from "../../lib/math";
 
 export { StackedBars };
 export type {
@@ -64,7 +65,10 @@ interface DataSourceConfig {
   hideInTooltip?: boolean;
   /** Whether to display items with a value of 0 in the tooltip. Defaults to false. */
   keepZerosInTooltip?: boolean;
+  /** Format the values displayed. */
   yAxisValueFormatter: (value?: number) => string;
+  /** Format the values displayed at the ticks of the axis. If not specified, `yAxisValueFormatter` will be used instead. */
+  yAxisTicksValueFormatter?: (value?: number) => string;
 }
 
 interface StackedBarsProps {
@@ -284,9 +288,7 @@ function StackedBars({
   }, [lines, stacks]);
 
   const chartConfig = useMemo(() => {
-    type AxisProps =
-      | Partial<Omit<XAxisProps, "xAxisId">>
-      | Partial<Omit<YAxisProps, "yAxisId">>;
+    type AxisProps = Partial<XAxisProps> | Partial<YAxisProps>;
     type AxisPropsBuilderArgs = AxisProps & {
       maxTotal?: number;
       axisId?: DataSource;
@@ -307,22 +309,26 @@ function StackedBars({
     };
 
     const buildCrossAxisProps = ({
-      maxTotal,
+      maxTotal = 0,
       axisId,
       ...otherProps
     }: AxisPropsBuilderArgs = {}): AxisProps => {
-      const axisIdProps = axisId
-        ? isHorizontalLayout
-          ? { yAxisId: axisId }
-          : { xAxisId: axisId }
-        : {};
+      const magnitude = orderOfMagnitude(maxTotal);
+      const step = 10 ** magnitude;
+      const halfStep = step / 2;
 
-      return {
-        ...otherProps,
-        ...axisIdProps,
-        type: "number",
-        domain: [0, Math.ceil((maxTotal || 0) / 100) * 100],
-      };
+      const significantFigure = Math.floor(maxTotal / step);
+      let maxAxis = significantFigure * step;
+      while (maxAxis < maxTotal) {
+        maxAxis += halfStep;
+      }
+
+      return new ObjectBuilder<AxisProps>()
+        .add(otherProps)
+        .add(isHorizontalLayout ? "yAxisId" : ("xAxisId" as any), axisId)
+        .add("type", "number")
+        .add("domain", [0, maxAxis])
+        .get();
     };
 
     const buildCrossAxisForStacks = () => {
@@ -337,6 +343,8 @@ function StackedBars({
         axisId: "stacks",
         maxTotal,
         angle: isHorizontalLayout ? -45 : 0,
+        tickFormatter:
+          stacks.yAxisTicksValueFormatter || stacks.yAxisValueFormatter,
       });
     };
 
@@ -353,11 +361,14 @@ function StackedBars({
         0
       );
 
+      const line = linesOnLinesAxis[0];
       return buildCrossAxisProps({
         axisId: "lines",
         maxTotal,
         angle: isHorizontalLayout ? 45 : 0,
         orientation: isHorizontalLayout ? "right" : "top",
+        tickFormatter:
+          line.yAxisTicksValueFormatter || line.yAxisValueFormatter,
       });
     };
 

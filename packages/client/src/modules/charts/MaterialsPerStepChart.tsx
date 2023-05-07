@@ -12,7 +12,7 @@ import { MaterialsType } from "../../utils/types";
 import { pipe } from "../../lib/fp";
 import { STEPS } from "../play";
 import _ from "lodash";
-import { formatMaterial } from "../../lib/formatter";
+import { formatMaterial, formatProduction } from "../../lib/formatter";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../common/constants";
 import { usePlay } from "../play/context/playContext";
 
@@ -78,7 +78,8 @@ function MaterialsPerStepChart({
       data,
       yAxisUnitLabel: t("unit.tonne.mega"),
       palettes: "materials",
-      yAxisValueFormatter: formatMaterial,
+      yAxisValueFormatter: formatMaterial(),
+      yAxisTicksValueFormatter: formatMaterial({ fractionDigits: 0 }),
     };
   }, [game.lastFinishedStep, computeBarsForPersona, getPersonaAtStep, t]);
 
@@ -96,7 +97,8 @@ function MaterialsPerStepChart({
         yAxisUnitLabel: t("unit.watthour-per-day.kilo"),
         palettes: "production",
         useLinesAxis: true,
-        yAxisValueFormatter: (value) => value?.toFixed(2),
+        yAxisValueFormatter: formatProduction(),
+        yAxisTicksValueFormatter: formatProduction({ fractionDigits: 0 }),
       } as StackedBarsLine,
     ];
   }, [game.lastFinishedStep, getPersonaAtStep, t]);

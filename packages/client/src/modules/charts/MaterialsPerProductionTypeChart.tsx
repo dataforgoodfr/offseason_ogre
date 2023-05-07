@@ -57,7 +57,8 @@ function MaterialsPerProductionTypeChart({ persona }: { persona: Persona }) {
       data,
       yAxisUnitLabel: t("unit.tonne.mega"),
       palettes: "materials",
-      yAxisValueFormatter: formatMaterial,
+      yAxisValueFormatter: formatMaterial(),
+      yAxisTicksValueFormatter: formatMaterial({ fractionDigits: 0 }),
     };
   }, [persona, t]);
 
