@@ -1,7 +1,6 @@
 import { Card, Grid, Theme, useTheme } from "@mui/material";
 import {
   ComposedChart,
-  BarChart,
   Bar,
   XAxis,
   YAxis,
@@ -178,6 +177,9 @@ function StackedBars({
         itemA: UnwrapArray<NonNullable<typeof payload>>,
         itemB: UnwrapArray<NonNullable<typeof payload>>
       ) => {
+        const isHorizontalLayout = direction === "horizontal";
+        const stacksPriority = isHorizontalLayout ? 1 : -1;
+
         if (
           (itemA.dataKey as string).startsWith("stacks") &&
           (itemB.dataKey as string).startsWith("stacks")
@@ -185,39 +187,43 @@ function StackedBars({
           return 0;
         }
         if ((itemA.dataKey as string).startsWith("stacks")) {
-          return 1;
+          return stacksPriority;
         }
-        return -1;
+        return -stacksPriority;
       };
 
-      return (
-        payload
-          .filter((item) => {
-            const dataSourceConfig = getItemDataSource(item);
-            if (dataSourceConfig.hideInTooltip) {
-              return false;
-            }
-            if (!dataSourceConfig.keepZerosInTooltip && item.value === 0) {
-              return false;
-            }
-            return true;
-          })
-          .map((item) => {
-            const { key } = extractDataFromDataKey(item.dataKey as string);
-            const dataSourceConfig = getItemDataSource(item);
-            return enrichItem(dataSourceConfig, key, item);
-          })
-          .sort(sortItems as any)
-          .concat(
+      return pipe(
+        payload,
+        (payload) =>
+          payload
+            .filter((item) => {
+              const dataSourceConfig = getItemDataSource(item);
+              if (dataSourceConfig.hideInTooltip) {
+                return false;
+              }
+              if (!dataSourceConfig.keepZerosInTooltip && item.value === 0) {
+                return false;
+              }
+              return true;
+            })
+            .map((item) => {
+              const { key } = extractDataFromDataKey(item.dataKey as string);
+              const dataSourceConfig = getItemDataSource(item);
+              return enrichItem(dataSourceConfig, key, item);
+            }),
+        (payload) => {
+          const sortedPayload = payload.sort(sortItems as any);
+          const isHorizontalLayout = direction === "horizontal";
+          return isHorizontalLayout ? sortedPayload.reverse() : sortedPayload;
+        },
+        (payload) =>
+          [
             enrichItem(getDataSourceConfig("stacks"), "total", {
               dataKey: "total",
               name: t("graph.common.total"),
               value: stack.total,
-            })
-          )
-          // The bars contained in the payload are in reverse order
-          // compared to their display order.
-          .reverse()
+            }),
+          ].concat(payload)
       );
     }, [payload]);
 
@@ -287,8 +293,7 @@ function StackedBars({
       angle?: number;
     };
 
-    const layout = lines?.length ? "horizontal" : direction;
-    const isHorizontalLayout = layout === "horizontal";
+    const isHorizontalLayout = direction === "horizontal";
 
     const buildMainAxisProps = ({
       ...otherProps
@@ -425,7 +430,7 @@ function StackedBars({
     const linesProps = buildLinesProps();
 
     return {
-      layout,
+      layout: direction,
       xAxisStacksProps: isHorizontalLayout ? mainAxis : crossAxisForStacks,
       xAxisLinesProps: isHorizontalLayout ? mainAxis : crossAxisForLines,
       yAxisStacksProps: isHorizontalLayout ? crossAxisForStacks : mainAxis,
