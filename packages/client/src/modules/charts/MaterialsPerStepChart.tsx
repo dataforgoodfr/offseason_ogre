@@ -99,7 +99,7 @@ function MaterialsPerStepChart({
         yAxisValueFormatter: (value) => value?.toFixed(2),
       } as StackedBarsLine,
     ];
-  }, [game.lastFinishedStep, graphStacks, getPersonaAtStep, t]);
+  }, [game.lastFinishedStep, getPersonaAtStep, t]);
 
   return (
     <StackedBars
