@@ -140,8 +140,8 @@ function ConsumptionAndProductionDetailsGraph({
   }, [bar, t]);
 
   if (typeof barIdx === "undefined") return <></>;
-  const step = barIdx === 0 || barIdx === 1 ? 0 : barIdx - 1;
 
+  const step = Math.max(barIdx - 1, 0);
   if (isNotFinishedStep(step, game)) return <></>;
 
   const persona = getPersonaAtStep(step);
