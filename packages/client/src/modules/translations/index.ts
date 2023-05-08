@@ -2,13 +2,15 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { resources, defaultNS } from "./resources";
 import { TFunction } from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
+import { getUserLocale } from "get-user-locale";
 
-export { translateName };
+export { userLocale, translateName };
 export const { t } = i18n;
 export type { I18nTranslateFunction };
 
 type I18nTranslateFunction = TFunction<"common", undefined>;
+
+const userLocale = getUserLocale() || "fr";
 
 function translateName(type: string, value: string) {
   if (type === "consumption") {
@@ -46,15 +48,13 @@ function translateProductionName(value: string): string {
   return t(`production.energy.${value}.graph.name` as any);
 }
 
-i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
-  .init({
-    resources,
-    fallbackLng: "fr",
-    defaultNS,
-    interpolation: {
-      escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
-    },
-    returnNull: false,
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: userLocale,
+  fallbackLng: "fr",
+  defaultNS,
+  interpolation: {
+    escapeValue: false, // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+  },
+  returnNull: false,
+});

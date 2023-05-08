@@ -21,6 +21,7 @@ export type {
   TeamAction,
   MaterialsType,
   ProductionTypes,
+  UnwrapArray,
 };
 
 type WithTeacher<T> = T & { teacher: IUser };
@@ -142,3 +143,5 @@ type ProductionTypes =
   | "biomass"
   | "photovoltaic"
   | "nuclear";
+
+type UnwrapArray<T> = T extends Array<infer U> ? U : T;

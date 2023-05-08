@@ -1,4 +1,4 @@
-import { Card, Grid, Typography, useTheme } from "@mui/material";
+import { Card, Grid, useTheme } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -17,14 +17,17 @@ import { productionConstants } from "../play";
 import { t } from "../translations";
 import { ConsumptionType } from "../persona/consumption";
 import { ProductionActionType } from "../../utils/types";
+import { Typography } from "../common/components/Typography";
 
 export { StackedEnergyBars };
 
 function StackedEnergyBars({
+  title,
   data,
   tick = true,
   onClick,
 }: {
+  title?: string;
   data: any[];
   tick?: boolean;
   onClick?: CategoricalChartFunc;
@@ -102,8 +105,9 @@ function StackedEnergyBars({
   return (
     <Card
       sx={{
-        alignItems: "center",
         display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
         pt: 4,
         pb: 4,
@@ -112,12 +116,18 @@ function StackedEnergyBars({
         mb: 1,
       }}
     >
+      {!!title && (
+        <Typography variant="h5" sx={{ mb: 4, textAlign: "center" }}>
+          {title}
+        </Typography>
+      )}
       <ResponsiveContainer width="100%" height={500}>
         <BarChart data={data} onClick={onClick}>
           <XAxis dataKey="name" tick={tick} />
           <YAxis
             name="kWh/jour"
             domain={[0, Math.ceil(maximumTotal / 100) * 100]}
+            {...{ angle: -45 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />

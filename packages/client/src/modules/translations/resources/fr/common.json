@@ -76,9 +76,14 @@
   "page.login.description": "Si vous avez déjà un compte :",
   "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
   "page.login.signup-section.cta": "Créer un compte",
+  "page.player.statistics.tabs.energy-balance.label": "Équilibre énergétique",
+  "page.player.statistics.tabs.energy-balance.graphs.details.title": "Décomposition de la pile {{stackName}}",
+  "page.player.statistics.tabs.materials.label": "Matériaux",
   "page.signup.title": "Création de compte",
   "page.signup.login-section.title": "Si vous avez déjà un compte :",
   "page.signup.login-section.cta": "Se connecter",
+  "page.teacher.statistics.tabs.energy-balance.label": "Équilibre énergétique",
+  "page.teacher.statistics.tabs.materials.label": "Matériaux",
 
   "player.profile.summary.carbon-footprint": "Empreinte carbone",
   "player.profile.summary.consumption": "Consommation",
@@ -190,6 +195,9 @@
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",
 
+  "graph.common.production": "Production",
+  "graph.common.total": "Total",
+
   "graph.energy.total": "Total",
   "graph.energy.fossil": "Energie fossile",
   "graph.energy.grey": "Energie grise",
@@ -209,8 +217,13 @@
   "graph.materials.water": "Aquatique",
   "graph.materials.geology": "Geologique",
   "graph.materials.nuclear": "Nucléaire",
+  "graph.materials.quantity-per-step-graph.title": "Quantité de matériaux nécessaire à la transition d’ici {{year}}",
+  "graph.materials.quantity-per-production-type-graph.title": "Répartition des matériaux par moyen de production",
 
   "form.last-action.draft": "Dernière sauvegarde",
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
-  "form.last-action.validated": "Validation"
+  "form.last-action.validated": "Validation",
+
+  "unit.watthour-per-day.kilo": "kWh/jour",
+  "unit.tonne.mega": "MTonnes"
 }

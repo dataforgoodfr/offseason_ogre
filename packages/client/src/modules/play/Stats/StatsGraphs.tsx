@@ -1,23 +1,23 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
-  MaterialsBars,
+  MaterialsPerProductionTypeChart,
+  MaterialsPerStepChart,
 } from "../../charts";
 import { PlayBox } from "../Components";
 import {
   EnergyConsumptionButtons,
   EnergyProductionButtons,
 } from "../../common/components/EnergyButtons";
-import { productionTypes, STEPS } from "../constants";
+import { STEPS } from "../constants";
 import _ from "lodash";
 import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame } from "../../../utils/types";
-import { formatMaterial } from "../../../lib/formatter";
-import { MaterialsDatum } from "../gameEngines/materialsEngine";
-import { ProductionStepDetails } from "./StatsGraphs.styles";
+import { Tabs } from "../../common/components/Tabs";
+import { useTranslation } from "react-i18next";
 
 export { StatsGraphs };
 
@@ -26,129 +26,160 @@ function isNotFinishedStep(step: number, game: IGame) {
 }
 
 function StatsGraphs() {
-  const [bar, setSelectedBar] = React.useState<number>();
+  const { t } = useTranslation();
+
+  const tabs = useMemo(() => {
+    return [
+      {
+        label: t("page.player.statistics.tabs.energy-balance.label"),
+        component: <ConsumptionAndProductionGraph />,
+      },
+      {
+        label: t("page.player.statistics.tabs.materials.label"),
+        component: <MaterialsGraphTab />,
+      },
+    ];
+  }, [t]);
 
   return (
     <PlayBox>
-      <StackedEnergyBars
-        data={useStackedEnergyData()}
-        onClick={({ activeTooltipIndex }) => {
-          setSelectedBar(activeTooltipIndex);
-        }}
-      />
-      {<StepDetails bar={bar} />}
+      <Tabs tabs={tabs} />
     </PlayBox>
   );
 }
 
-function StepDetails({ bar }: { bar: number | undefined }) {
+function ConsumptionAndProductionGraph() {
+  const [selectedBarIdx, setSelectedBarIdx] = useState<number>();
+  const { game } = usePlay();
+  const { personaBySteps, getPersonaAtStep } = usePersona();
+
+  const bars = useMemo(() => {
+    const initialPersona = getPersonaAtStep(0);
+    const initialValues = [
+      {
+        name: "Conso init",
+        total: sumAllValues(initialPersona.consumption) || 0,
+        fossil: sumForAndFormat(initialPersona.consumption, "fossil"),
+        grey: sumForAndFormat(initialPersona.consumption, "grey"),
+        mixte: sumForAndFormat(initialPersona.consumption, "mixte"),
+        renewable: sumForAndFormat(initialPersona.consumption, "renewable"),
+      },
+      {
+        name: "Prod init",
+        total: sumAllValues(initialPersona.production) || 0,
+        offshore: sumForAndFormat(initialPersona.production, "offshore"),
+        nuclear: sumForAndFormat(initialPersona.production, "nuclear"),
+        terrestrial: sumForAndFormat(initialPersona.production, "terrestrial"),
+      },
+    ];
+
+    const stepsDetails = _.range(1, game.lastFinishedStep + 1).map(
+      (step: number) => {
+        const persona = personaBySteps[step];
+        if (STEPS[step]?.type === "consumption") {
+          return {
+            name: step ? `Étape ${step}` : "Initial",
+            total: sumAllValues(persona.consumption) || 0,
+            fossil: sumForAndFormat(persona.consumption, "fossil"),
+            grey: sumForAndFormat(persona.consumption, "grey"),
+            mixte: sumForAndFormat(persona.consumption, "mixte"),
+            renewable: sumForAndFormat(persona.consumption, "renewable"),
+          };
+        } else {
+          return {
+            name: step ? `Étape ${step}` : "Initial",
+            total: sumAllValues(persona.production) || 0,
+            offshore: sumForAndFormat(persona.production, "offshore"),
+            nuclear: sumForAndFormat(persona.production, "nuclear"),
+            terrestrial: sumForAndFormat(persona.production, "terrestrial"),
+          };
+        }
+      }
+    );
+
+    return [...initialValues, ...stepsDetails];
+  }, [game.lastFinishedStep, personaBySteps, getPersonaAtStep]);
+
+  return (
+    <>
+      <StackedEnergyBars
+        data={bars}
+        onClick={({ activeTooltipIndex }) => {
+          setSelectedBarIdx(activeTooltipIndex);
+        }}
+      />
+      {
+        <ConsumptionAndProductionDetailsGraph
+          barIdx={selectedBarIdx}
+          bar={bars[selectedBarIdx ?? -1]}
+        />
+      }
+    </>
+  );
+}
+
+function ConsumptionAndProductionDetailsGraph({
+  barIdx,
+  bar,
+}: {
+  barIdx: number | undefined;
+  bar?: { name: string };
+}) {
+  const { t } = useTranslation();
   const { game } = usePlay();
   const { getPersonaAtStep } = usePersona();
 
-  if (typeof bar === "undefined") return <></>;
-  const step = bar === 0 || bar === 1 ? 0 : bar - 1;
+  const graphTitle = useMemo(() => {
+    if (bar) {
+      return t(
+        "page.player.statistics.tabs.energy-balance.graphs.details.title",
+        { stackName: bar.name }
+      );
+    }
+    return "";
+  }, [bar, t]);
 
+  if (typeof barIdx === "undefined") return <></>;
+
+  const step = Math.max(barIdx - 1, 0);
   if (isNotFinishedStep(step, game)) return <></>;
 
   const persona = getPersonaAtStep(step);
 
-  const materialsValues = Object.values(productionTypes).map(
-    (prodType: string) => ({
-      name: prodType,
-      type: "materials",
-      ...Object.assign(
-        {},
-        ...persona.materials
-          .filter((mat: MaterialsDatum) => mat.type === prodType)
-          .map((mat: MaterialsDatum) => ({
-            [mat.name]: formatMaterial(mat.value) || 0,
-          }))
-      ),
-    })
+  return (
+    <>
+      {step === 0 && barIdx === 0 ? (
+        <>
+          <DetailsEnergyConsumptionBars title={graphTitle} persona={persona} />
+          <EnergyConsumptionButtons persona={persona} />
+        </>
+      ) : step === 0 && barIdx === 1 ? (
+        <>
+          <DetailsEnergyProductionBars title={graphTitle} persona={persona} />
+          <EnergyProductionButtons persona={persona} />
+        </>
+      ) : STEPS[step]?.type === "consumption" ? (
+        <>
+          <DetailsEnergyConsumptionBars title={graphTitle} persona={persona} />
+          <EnergyConsumptionButtons persona={persona} />
+        </>
+      ) : (
+        <>
+          <DetailsEnergyProductionBars title={graphTitle} persona={persona} />
+          <EnergyProductionButtons persona={persona} />
+        </>
+      )}
+    </>
   );
-
-  if (step === 0 && bar === 0) {
-    return (
-      <>
-        <DetailsEnergyConsumptionBars persona={persona} />
-        <EnergyConsumptionButtons persona={persona} />
-      </>
-    );
-  } else if (step === 0 && bar === 1) {
-    return (
-      <>
-        <ProductionStepDetails>
-          <DetailsEnergyProductionBars persona={persona} />
-          <MaterialsBars data={materialsValues} />
-        </ProductionStepDetails>
-        <EnergyProductionButtons persona={persona} />
-      </>
-    );
-  } else if (STEPS[step]?.type === "consumption") {
-    return (
-      <>
-        <DetailsEnergyConsumptionBars persona={persona} />
-        <EnergyConsumptionButtons persona={persona} />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <ProductionStepDetails>
-          <DetailsEnergyProductionBars persona={persona} />
-          <MaterialsBars data={materialsValues} />
-        </ProductionStepDetails>
-        <EnergyProductionButtons persona={persona} />
-      </>
-    );
-  }
 }
 
-function useStackedEnergyData() {
-  const { game } = usePlay();
-  const { personaBySteps, getPersonaAtStep } = usePersona();
+function MaterialsGraphTab() {
+  const { currentPersona, getPersonaAtStep } = usePersona();
 
-  const initialPersona = getPersonaAtStep(0);
-  const initialValues = [
-    {
-      name: "Conso init",
-      total: sumAllValues(initialPersona.consumption) || 0,
-      fossil: sumForAndFormat(initialPersona.consumption, "fossil"),
-      grey: sumForAndFormat(initialPersona.consumption, "grey"),
-      mixte: sumForAndFormat(initialPersona.consumption, "mixte"),
-      renewable: sumForAndFormat(initialPersona.consumption, "renewable"),
-    },
-    {
-      name: "Prod init",
-      total: sumAllValues(initialPersona.production) || 0,
-      offshore: sumForAndFormat(initialPersona.production, "offshore"),
-      nuclear: sumForAndFormat(initialPersona.production, "nuclear"),
-      terrestrial: sumForAndFormat(initialPersona.production, "terrestrial"),
-    },
-  ];
-
-  const stepsDetails = _.range(1, game.lastFinishedStep + 1).map(
-    (step: number) => {
-      const persona = personaBySteps[step];
-      if (STEPS[step]?.type === "consumption") {
-        return {
-          name: step ? `Étape ${step}` : "Initial",
-          total: sumAllValues(persona.consumption) || 0,
-          fossil: sumForAndFormat(persona.consumption, "fossil"),
-          grey: sumForAndFormat(persona.consumption, "grey"),
-          mixte: sumForAndFormat(persona.consumption, "mixte"),
-          renewable: sumForAndFormat(persona.consumption, "renewable"),
-        };
-      } else {
-        return {
-          name: step ? `Étape ${step}` : "Initial",
-          total: sumAllValues(persona.production) || 0,
-          offshore: sumForAndFormat(persona.production, "offshore"),
-          nuclear: sumForAndFormat(persona.production, "nuclear"),
-          terrestrial: sumForAndFormat(persona.production, "terrestrial"),
-        };
-      }
-    }
+  return (
+    <>
+      <MaterialsPerStepChart getPersonaAtStep={getPersonaAtStep} />
+      <MaterialsPerProductionTypeChart persona={currentPersona} />
+    </>
   );
-  return [...initialValues, ...stepsDetails];
 }

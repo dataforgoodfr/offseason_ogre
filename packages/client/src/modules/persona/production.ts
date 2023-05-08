@@ -1,11 +1,11 @@
-import { ProductionActionType } from "../../utils/types";
+import { ProductionActionNames, ProductionActionType } from "../../utils/types";
 import { productionConstants } from "../play/constants";
 
 export { production };
 export type { ProductionDatum };
 
 interface ProductionDatum {
-  name: string;
+  name: ProductionActionNames;
   type: ProductionActionType;
   // Base production in kWh.
   value: number;
