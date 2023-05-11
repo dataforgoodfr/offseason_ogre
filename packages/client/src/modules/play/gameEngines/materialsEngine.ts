@@ -1,7 +1,9 @@
-import { getDaysTo2050 } from "../../../lib/time";
-import { MaterialsType, ProductionTypes } from "../../../utils/types";
+import {
+  MaterialsType,
+  ProductionTypes,
+  TeamAction,
+} from "../../../utils/types";
 import { productionConstants } from "..";
-import { FRANCE } from "../constants/country";
 import { ProductionDatum } from "../../persona/production";
 import { sumFor } from "../../persona/utils";
 import { filterOutDuplicates } from "../../common/utils";
@@ -21,38 +23,37 @@ const sumTo2050 = (
   }[],
   material: MaterialsType
 ) => {
-  return (
-    (sumFor(results, material) * getDaysTo2050() * (FRANCE.population || 0)) /
-    1000
-  );
+  return sumFor(results, material);
 };
 
-const computeMaterials = (production: ProductionDatum[]): MaterialsDatum[] => {
+const computeMaterials = (
+  production: ProductionDatum[],
+  performedTeamActions: TeamAction[]
+): MaterialsDatum[] => {
   const results = production
     .map((prod: ProductionDatum) => {
       const prodConstants = Object.values(productionConstants).find(
         (prodConfig) => prodConfig.name === prod.name
       );
+      const powerNeed =
+        performedTeamActions.find(
+          (teamAction: TeamAction) => teamAction.action.name === prod.name
+        )?.action.powerNeededKWh || 0;
       return [
-        {
-          type: "concrete",
-          prodType: prodConstants?.type || "",
-          value: (prodConstants?.concretePerUnit || 0) * prod.value,
-        },
         {
           type: "steel",
           prodType: prodConstants?.type || "",
-          value: (prodConstants?.steelPerUnit || 0) * prod.value,
+          value: (prodConstants?.steelPerUnit || 0) * prod.value * powerNeed,
         },
         {
           type: "cement",
           prodType: prodConstants?.type || "",
-          value: (prodConstants?.cementPerUnit || 0) * prod.value,
+          value: (prodConstants?.cementPerUnit || 0) * prod.value * powerNeed,
         },
         {
           type: "glass",
           prodType: prodConstants?.type || "",
-          value: (prodConstants?.glassPerUnit || 0) * prod.value,
+          value: (prodConstants?.glassPerUnit || 0) * prod.value * powerNeed,
         },
       ];
     })
@@ -68,11 +69,6 @@ const computeMaterials = (production: ProductionDatum[]): MaterialsDatum[] => {
       (material) => material.prodType === prodType
     );
     return [
-      {
-        name: "concrete",
-        value: sumTo2050(filteredResults, "concrete"),
-        type: prodType,
-      },
       {
         name: "steel",
         value: sumTo2050(filteredResults, "steel"),

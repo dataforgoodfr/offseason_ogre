@@ -66,9 +66,9 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
         name: buildName(player.user),
         type: "consumption",
         total: sumAllValues(playerConsumption) || 0,
-        fossil: sumForAndFormat(playerConsumption, "fossil"),
         grey: sumForAndFormat(playerConsumption, "grey"),
         mixte: sumForAndFormat(playerConsumption, "mixte"),
+        fossil: sumForAndFormat(playerConsumption, "fossil"),
         renewable: sumForAndFormat(playerConsumption, "renewable"),
       };
     }),

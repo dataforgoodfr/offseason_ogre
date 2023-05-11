@@ -140,7 +140,7 @@ function computeResultsByStep(
     basePersona
   );
 
-  const newMaterials = computeMaterials(newProduction);
+  const newMaterials = computeMaterials(newProduction, teamActions);
 
   const { actionPointsUsedAtCurrentStep } = computePlayerActionsStats(
     step,

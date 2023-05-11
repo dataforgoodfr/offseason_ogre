@@ -11,6 +11,7 @@ import {
   computeMaterials,
   MaterialsDatum,
 } from "../play/gameEngines/materialsEngine";
+import { TeamAction } from "../../utils/types";
 
 export { buildInitialPersona };
 export type { Persona };
@@ -25,9 +26,10 @@ interface Persona {
   materials: MaterialsDatum[];
 }
 
-const buildInitialPersona: (personalization: PersoForm) => Persona = (
-  personalization: PersoForm
-) => {
+const buildInitialPersona: (
+  personalization: PersoForm,
+  teamActions: TeamAction[]
+) => Persona = (personalization: PersoForm, teamActions: TeamAction[]) => {
   const formattedPersonalization = fillPersonalization(personalization);
   const intermediateValues = computeIntermediateValues(
     formattedPersonalization
@@ -44,7 +46,7 @@ const buildInitialPersona: (personalization: PersoForm) => Persona = (
     consumption as ConsumptionDatum[]
   );
 
-  const materials = computeMaterials(production);
+  const materials = computeMaterials(production, teamActions);
 
   const persona: Persona = {
     budget: 13.7,

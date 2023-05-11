@@ -207,17 +207,17 @@
   "graph.energy.terrestrial": "Production terrestre",
   "graph.energy.nuclear": "Nucléaire",
 
-  "graph.materials.concrete": "Béton",
   "graph.materials.steel": "Acier",
   "graph.materials.cement": "Ciment",
   "graph.materials.glass": "Verre",
-  "graph.materials.wind": "Eolien",
+  "graph.materials.windOnshore": "Eolien onshore",
+  "graph.materials.windOffshore": "Eolien offshore",
   "graph.materials.photovoltaic": "PV",
   "graph.materials.biomass": "Biomasse",
   "graph.materials.water": "Aquatique",
   "graph.materials.geology": "Geologique",
   "graph.materials.nuclear": "Nucléaire",
-  "graph.materials.quantity-per-step-graph.title": "Quantité de matériaux nécessaire à la transition d’ici {{year}}",
+  "graph.materials.quantity-per-step-graph.title": "Quantité de matériaux nécessaires à la transition d’ici {{year}}",
   "graph.materials.quantity-per-production-type-graph.title": "Répartition des matériaux par moyen de production",
 
   "form.last-action.draft": "Dernière sauvegarde",
@@ -225,5 +225,6 @@
   "form.last-action.validated": "Validation",
 
   "unit.watthour-per-day.kilo": "kWh/jour",
+  "unit.tonne.kilo": "kTonnes",
   "unit.tonne.mega": "MTonnes"
 }

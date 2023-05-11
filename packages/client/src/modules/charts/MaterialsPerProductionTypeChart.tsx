@@ -20,7 +20,6 @@ function MaterialsPerProductionTypeChart({ persona }: { persona: Persona }) {
   const graphStacks: StackedBarsStacks = useMemo(() => {
     const data: StackedBarsStackData[] = pipe(
       persona.materials,
-      (materials: MaterialsDatum[]) => _.sortBy(materials, "name"),
       (materials: MaterialsDatum[]) =>
         materials.reduce(
           (
@@ -55,7 +54,7 @@ function MaterialsPerProductionTypeChart({ persona }: { persona: Persona }) {
 
     return {
       data,
-      yAxisUnitLabel: t("unit.tonne.mega"),
+      yAxisUnitLabel: t("unit.tonne.kilo"),
       palettes: "materials",
       yAxisValueFormatter: formatMaterial(),
       yAxisTicksValueFormatter: formatMaterial({ fractionDigits: 0 }),

@@ -19,4 +19,7 @@ const CustomTab = styled(Tab)(({ theme }) => ({
   "&:last-of-type": {
     borderTopRightRadius: `4px`,
   },
+  "&.active": {
+    boxShadow: "inset 1px 1px 5px 1px rgba(0, 0, 0, .5)",
+  },
 }));
