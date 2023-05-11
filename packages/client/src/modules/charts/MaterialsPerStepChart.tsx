@@ -55,7 +55,7 @@ function MaterialsPerStepChart({
       const sortBars = (
         barIndexedByMaterialName: Record<MaterialsType, StackedBarsBar>
       ) => {
-        return Object.entries(barIndexedByMaterialName).map(([_, bar]) => bar);
+        return Object.values(barIndexedByMaterialName);
       };
 
       return pipe(persona, indexBarByMaterialName, sortBars);
