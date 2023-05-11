@@ -11,9 +11,7 @@ import {
   computeMaterials,
   MaterialsDatum,
 } from "../play/gameEngines/materialsEngine";
-import { useAuth } from "../auth/authProvider";
-import { ITeamWithPlayers, Player, TeamAction } from "../../utils/types";
-import { usePlay } from "../play/context/playContext";
+import { TeamAction } from "../../utils/types";
 
 export { buildInitialPersona };
 export type { Persona };
