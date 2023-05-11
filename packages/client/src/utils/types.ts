@@ -134,10 +134,11 @@ interface TeamAction {
   isTouched: boolean;
 }
 
-type MaterialsType = "concrete" | "steel" | "cement" | "glass";
+type MaterialsType = "steel" | "cement" | "glass";
 
 type ProductionTypes =
-  | "wind"
+  | "windOnshore"
+  | "windOffshore"
   | "water"
   | "geology"
   | "biomass"

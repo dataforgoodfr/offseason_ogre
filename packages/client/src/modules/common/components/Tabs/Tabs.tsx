@@ -18,8 +18,12 @@ function Tabs({ tabs }: { tabs: { label: string; component: ReactNode }[] }) {
         variant="scrollable"
         onChange={(_, tabIdx) => setSelectedTabIdx(tabIdx)}
       >
-        {tabs.map((tab) => (
-          <CustomTab className="tabs__tab" key={tab.label} label={tab.label} />
+        {tabs.map((tab, index) => (
+          <CustomTab
+            className={`tabs__tab ${selectedTabIdx === index ? "active" : ""}`}
+            key={tab.label}
+            label={tab.label}
+          />
         ))}
       </CustomTabs>
       {currentTab?.component}

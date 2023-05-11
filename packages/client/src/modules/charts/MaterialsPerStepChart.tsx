@@ -55,11 +55,7 @@ function MaterialsPerStepChart({
       const sortBars = (
         barIndexedByMaterialName: Record<MaterialsType, StackedBarsBar>
       ) => {
-        return Object.entries(barIndexedByMaterialName)
-          .sort(([materialNameA], [materialNameB]) =>
-            materialNameA.localeCompare(materialNameB)
-          )
-          .map(([_, bar]) => bar);
+        return Object.entries(barIndexedByMaterialName).map(([_, bar]) => bar);
       };
 
       return pipe(persona, indexBarByMaterialName, sortBars);
@@ -82,7 +78,7 @@ function MaterialsPerStepChart({
 
     return {
       data,
-      yAxisUnitLabel: t("unit.tonne.mega"),
+      yAxisUnitLabel: t("unit.tonne.kilo"),
       palettes: "materials",
       yAxisValueFormatter: formatMaterial(),
       yAxisTicksValueFormatter: formatMaterial({ fractionDigits: 0 }),

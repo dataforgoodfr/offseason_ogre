@@ -342,6 +342,7 @@ function StackedBars({
       return buildCrossAxisProps({
         axisId: "stacks",
         maxTotal,
+        ...(stacks.yAxisUnitLabel ? { unit: ` ${stacks.yAxisUnitLabel}` } : {}),
         angle: isHorizontalLayout ? -45 : 0,
         tickFormatter:
           stacks.yAxisTicksValueFormatter || stacks.yAxisValueFormatter,
@@ -365,6 +366,7 @@ function StackedBars({
       return buildCrossAxisProps({
         axisId: "lines",
         maxTotal,
+        ...(line.yAxisUnitLabel ? { unit: ` ${line.yAxisUnitLabel}` } : {}),
         angle: isHorizontalLayout ? 45 : 0,
         orientation: isHorizontalLayout ? "right" : "top",
         tickFormatter:

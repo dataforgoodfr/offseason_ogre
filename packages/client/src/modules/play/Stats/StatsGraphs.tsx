@@ -59,9 +59,9 @@ function ConsumptionAndProductionGraph() {
       {
         name: "Conso init",
         total: sumAllValues(initialPersona.consumption) || 0,
-        fossil: sumForAndFormat(initialPersona.consumption, "fossil"),
         grey: sumForAndFormat(initialPersona.consumption, "grey"),
         mixte: sumForAndFormat(initialPersona.consumption, "mixte"),
+        fossil: sumForAndFormat(initialPersona.consumption, "fossil"),
         renewable: sumForAndFormat(initialPersona.consumption, "renewable"),
       },
       {
@@ -80,9 +80,9 @@ function ConsumptionAndProductionGraph() {
           return {
             name: step ? `Étape ${step}` : "Initial",
             total: sumAllValues(persona.consumption) || 0,
-            fossil: sumForAndFormat(persona.consumption, "fossil"),
             grey: sumForAndFormat(persona.consumption, "grey"),
             mixte: sumForAndFormat(persona.consumption, "mixte"),
+            fossil: sumForAndFormat(persona.consumption, "fossil"),
             renewable: sumForAndFormat(persona.consumption, "renewable"),
           };
         } else {

@@ -38,7 +38,6 @@ let theme = createTheme({
       total: "#4C677E",
     },
     materials: {
-      concrete: "#7FB069",
       steel: "#5A5766",
       cement: "#E6AA68",
       glass: "#A72608",
@@ -125,7 +124,6 @@ interface ProductionPalette {
 }
 
 interface MaterialsPalette {
-  concrete: string;
   steel: string;
   cement: string;
   glass: string;
