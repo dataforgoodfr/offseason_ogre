@@ -19,6 +19,9 @@ export type {
   ProductionActionType,
   ProductionActionUnit,
   TeamAction,
+  MaterialsType,
+  ProductionTypes,
+  UnwrapArray,
 };
 
 type WithTeacher<T> = T & { teacher: IUser };
@@ -130,3 +133,16 @@ interface TeamAction {
   value: number;
   isTouched: boolean;
 }
+
+type MaterialsType = "steel" | "cement" | "glass";
+
+type ProductionTypes =
+  | "windOnshore"
+  | "windOffshore"
+  | "water"
+  | "geology"
+  | "biomass"
+  | "photovoltaic"
+  | "nuclear";
+
+type UnwrapArray<T> = T extends Array<infer U> ? U : T;

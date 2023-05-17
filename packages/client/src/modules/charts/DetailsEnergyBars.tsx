@@ -16,19 +16,33 @@ import { ProductionDatum } from "../persona/production";
 import { productionConstants } from "../play";
 import { usePlay } from "../play/context/playContext";
 import { translateName } from "../translations";
+import { Typography } from "../common/components/Typography";
 
 export { DetailsEnergyConsumptionBars, DetailsEnergyProductionBars };
 
-function DetailsEnergyConsumptionBars({ persona }: { persona: Persona }) {
+function DetailsEnergyConsumptionBars({
+  title,
+  persona,
+}: {
+  title?: string;
+  persona: Persona;
+}) {
   const theme = useTheme();
   return DetailsEnergyBars(
     "consumption",
     persona.consumption,
-    theme.palette.energy
+    theme.palette.energy,
+    title
   );
 }
 
-function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
+function DetailsEnergyProductionBars({
+  title,
+  persona,
+}: {
+  title?: string;
+  persona: Persona;
+}) {
   const theme = useTheme();
   const { game } = usePlay();
 
@@ -44,20 +58,23 @@ function DetailsEnergyProductionBars({ persona }: { persona: Persona }) {
   return DetailsEnergyBars(
     "production",
     personaValues,
-    theme.palette.production
+    theme.palette.production,
+    title
   );
 }
 
 function DetailsEnergyBars(
   energyType: string,
   personaValues: readonly ConsumptionDatum[] | ProductionDatum[],
-  color: EnergyPalette | ProductionPalette
+  color: EnergyPalette | ProductionPalette,
+  title?: string
 ) {
   return (
     <Card
       sx={{
-        alignItems: "center",
         display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
         pt: 4,
         pb: 4,
@@ -65,6 +82,11 @@ function DetailsEnergyBars(
         pl: 2,
       }}
     >
+      {!!title && (
+        <Typography variant="h5" sx={{ mb: 4, textAlign: "center" }}>
+          {title}
+        </Typography>
+      )}
       <BarChart
         width={500}
         height={550}
@@ -88,6 +110,7 @@ function DetailsEnergyBars(
           width={160}
           style={{ marginTop: "5px", fontSize: "11px" }}
           dataKey="name"
+          {...{ angle: -45 }}
         />
         <Tooltip />
         <Bar dataKey="value" unit="kWh/jour">

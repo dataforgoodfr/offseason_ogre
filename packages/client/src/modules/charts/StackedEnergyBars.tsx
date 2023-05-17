@@ -1,4 +1,4 @@
-import { Card, Grid, Typography, useTheme } from "@mui/material";
+import { Card, Grid, useTheme } from "@mui/material";
 import {
   BarChart,
   Bar,
@@ -11,16 +11,23 @@ import {
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import { EnergyPalette, ProductionPalette } from "../../utils/theme";
-import { hasNuclear } from "../common/utils";
+import { hasNuclear, filterOutDuplicates } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
+import { productionConstants } from "../play";
+import { t } from "../translations";
+import { ConsumptionType } from "../persona/consumption";
+import { ProductionActionType } from "../../utils/types";
+import { Typography } from "../common/components/Typography";
 
 export { StackedEnergyBars };
 
 function StackedEnergyBars({
+  title,
   data,
   tick = true,
   onClick,
 }: {
+  title?: string;
   data: any[];
   tick?: boolean;
   onClick?: CategoricalChartFunc;
@@ -58,8 +65,11 @@ function StackedEnergyBars({
             {label}
           </Typography>
           {Object.entries(payload[0].payload)
-            .filter(([key]) => key !== "name")
-            .filter(([key]) => (!hasNuclear(game) ? key !== "nuclear" : true))
+            .filter(([key]) => key !== "name" && key !== "type")
+            .filter(
+              ([key]) =>
+                key !== productionConstants.NUCLEAR.name || hasNuclear(game)
+            )
             .map(([key, value]) => (
               <Typography
                 key={key}
@@ -84,17 +94,20 @@ function StackedEnergyBars({
   const uniqueBars = data
     .flatMap((d) =>
       Object.keys(d)
-        .filter((key) => !["name", "total"].includes(key))
-        .filter((key) => (!hasNuclear(game) ? key !== "nuclear" : true))
+        .filter((key) => !["name", "total", "type"].includes(key))
+        .filter(
+          (key) => key !== productionConstants.NUCLEAR.name || hasNuclear(game)
+        )
     )
-    .filter((value, index, array) => array.indexOf(value) === index)
+    .filter(filterOutDuplicates)
     .reverse();
 
   return (
     <Card
       sx={{
-        alignItems: "center",
         display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         justifyContent: "center",
         pt: 4,
         pb: 4,
@@ -103,12 +116,18 @@ function StackedEnergyBars({
         mb: 1,
       }}
     >
+      {!!title && (
+        <Typography variant="h5" sx={{ mb: 4, textAlign: "center" }}>
+          {title}
+        </Typography>
+      )}
       <ResponsiveContainer width="100%" height={500}>
         <BarChart data={data} onClick={onClick}>
           <XAxis dataKey="name" tick={tick} />
           <YAxis
             name="kWh/jour"
             domain={[0, Math.ceil(maximumTotal / 100) * 100]}
+            {...{ angle: -45 }}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
@@ -134,15 +153,8 @@ function StackedEnergyBars({
 }
 
 function translateLabel(value: string): string {
-  const translations = {
-    total: "Total",
-    fossil: "Energie fossile",
-    grey: "Energie grise",
-    renewable: "Energie décarbonée",
-    mixte: "Energie mixte",
-    offshore: "Production offshore",
-    terrestrial: "Production terrestre",
-    nuclear: "Nucléaire",
-  } as Record<string, string>;
-  return translations[value] ?? "Unkown";
+  return (
+    t(`graph.energy.${value as ConsumptionType | ProductionActionType}`) ??
+    "Unknown"
+  );
 }

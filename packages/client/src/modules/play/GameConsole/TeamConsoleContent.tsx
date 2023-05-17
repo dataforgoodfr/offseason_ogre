@@ -48,13 +48,13 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
         </PlayBox>
       )}
 
-      <Box display="grid" gap={2} gridTemplateColumns="1fr 1fr">
+      <Box display="grid" gap={2} gridTemplateColumns="1fr 2fr">
         <Box display="flex" flexDirection="column" gap={2}>
           {team.players.map((player) => (
             <PlayerComponent key={player.user.id} player={player} />
           ))}
         </Box>
-        <Box display="flex" flexDirection="column" gap={2}>
+        <Box display="flex" flexDirection="column">
           {isProductionStep && (
             <PlayBox>
               <TeamActionsRecap

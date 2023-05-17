@@ -13,8 +13,7 @@ const initErrorTracer = (app: Router) => {
       new Sentry.Integrations.Http({ tracing: true }),
       new Tracing.Integrations.Express({ app }),
     ],
-    // TODO: adapt value in production.
-    tracesSampleRate: 1.0,
+    tracesSampleRate: process.env.SENTRY_ENV !== "development" ? 0.01 : 1.0,
   });
 };
 

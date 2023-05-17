@@ -1,18 +1,52 @@
-import { Box } from "@mui/material";
 import { ITeamWithPlayers, IUser } from "../../../utils/types";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
-import { sumAllValues, sumFor } from "../../persona";
+import { sumAllValues, sumForAndFormat } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
+import { Tabs } from "../../common/components/Tabs";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  MaterialsPerProductionTypeChart,
+  MaterialsPerStepChart,
+} from "../../charts";
 
 export { PlayerChart };
 
 function PlayerChart({ team }: { team: ITeamWithPlayers }) {
+  const { t } = useTranslation();
+
+  const userIds = team.players.map(({ user }) => user.id);
+  const personaByUserId = usePersonaByUserId(userIds);
+  const [firstPersona] = Object.values(personaByUserId);
+
   const data = useBuildData({ team });
-  return (
-    <Box>
-      <StackedEnergyBars data={data} tick={false} />
-    </Box>
+  const consProdData = data.filter((data) =>
+    ["consumption", "production"].includes(data.type)
   );
+
+  const tabs = useMemo(() => {
+    return [
+      {
+        label: t("page.teacher.statistics.tabs.energy-balance.label"),
+        component: <StackedEnergyBars data={consProdData} tick={false} />,
+      },
+      {
+        label: t("page.teacher.statistics.tabs.materials.label"),
+        component: (
+          <>
+            <MaterialsPerStepChart
+              getPersonaAtStep={firstPersona.getPersonaAtStep}
+            />
+            <MaterialsPerProductionTypeChart
+              persona={firstPersona.currentPersona}
+            />
+          </>
+        ),
+      },
+    ];
+  }, [consProdData, firstPersona, t]);
+
+  return <Tabs tabs={tabs} />;
 }
 
 function useBuildData({ team }: { team: ITeamWithPlayers }) {
@@ -30,26 +64,35 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
 
       return {
         name: buildName(player.user),
+        type: "consumption",
         total: sumAllValues(playerConsumption) || 0,
-        fossil: sumFor(playerConsumption, "fossil"),
-        grey: sumFor(playerConsumption, "grey"),
-        mixte: sumFor(playerConsumption, "mixte"),
-        renewable: sumFor(playerConsumption, "renewable"),
+        grey: sumForAndFormat(playerConsumption, "grey"),
+        mixte: sumForAndFormat(playerConsumption, "mixte"),
+        fossil: sumForAndFormat(playerConsumption, "fossil"),
+        renewable: sumForAndFormat(playerConsumption, "renewable"),
       };
     }),
     firstPersona
       ? {
           name: "Production",
+          type: "production",
           total: sumAllValues(firstPersona.currentPersona.production) || 0,
-          offshore: sumFor(firstPersona.currentPersona.production, "offshore"),
-          nuclear: sumFor(firstPersona.currentPersona.production, "nuclear"),
-          terrestrial: sumFor(
+          offshore: sumForAndFormat(
+            firstPersona.currentPersona.production,
+            "offshore"
+          ),
+          nuclear: sumForAndFormat(
+            firstPersona.currentPersona.production,
+            "nuclear"
+          ),
+          terrestrial: sumForAndFormat(
             firstPersona.currentPersona.production,
             "terrestrial"
           ),
         }
       : {
           name: "Production",
+          type: "production",
           total: 0,
           offshore: 0,
           nuclear: 0,

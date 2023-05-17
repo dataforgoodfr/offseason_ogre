@@ -1,6 +1,11 @@
 import { createTheme, responsiveFontSizes } from "@mui/material";
 
-export type { ThemeVariant, EnergyPalette, ProductionPalette };
+export type {
+  ThemeVariant,
+  EnergyPalette,
+  ProductionPalette,
+  MaterialsPalette,
+};
 export { theme };
 
 type ThemeVariant = "light" | "dark" | "system";
@@ -30,6 +35,12 @@ let theme = createTheme({
       offshore: "#4C677E",
       nuclear: "#F65574",
       terrestrial: "#8A8256",
+      total: "#4C677E",
+    },
+    materials: {
+      steel: "#5A5766",
+      cement: "#E6AA68",
+      glass: "#A72608",
     },
     actionValidation: {
       main: lightBlue,
@@ -61,6 +72,7 @@ declare module "@mui/material/styles" {
   interface CustomPalette {
     energy: EnergyPalette;
     production: ProductionPalette;
+    materials: MaterialsPalette;
     actionValidation: Partial<Palette["primary"]>;
     status: {
       error: string;
@@ -108,4 +120,11 @@ interface ProductionPalette {
   offshore: string;
   nuclear: string;
   terrestrial: string;
+  total: string;
+}
+
+interface MaterialsPalette {
+  steel: string;
+  cement: string;
+  glass: string;
 }
