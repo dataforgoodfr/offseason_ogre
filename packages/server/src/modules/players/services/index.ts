@@ -10,6 +10,7 @@ export { services };
 
 const crudServices = {
   find,
+  findMany,
   remove,
   setDefaultProfiles,
   update,
@@ -40,6 +41,19 @@ async function find(gameId: number, userId: number): Promise<Players | null> {
       },
     },
   }) as unknown as Players;
+}
+
+async function findMany(
+  where: NonNullable<Parameters<typeof model.findMany>[0]>["where"] = {}
+) {
+  return model.findMany({
+    where: {
+      ...where,
+    },
+    orderBy: {
+      userId: "asc",
+    },
+  });
 }
 
 async function update(

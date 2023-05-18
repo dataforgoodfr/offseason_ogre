@@ -7,7 +7,13 @@ import * as productionActionsServices from "../../productionActions/services";
 const model = database.teamActions;
 type Model = TeamActions;
 
-export { create, getMany, getOrCreateTeamActions, updateTeamActions };
+export {
+  create,
+  getMany,
+  getOrCreateTeamActions,
+  removeForTeam,
+  updateTeamActions,
+};
 
 async function create({
   actionId,
@@ -54,6 +60,14 @@ async function getMany({
           pointsIntervals: true,
         },
       },
+    },
+  });
+}
+
+async function removeForTeam({ teamId }: { teamId: number }): Promise<void> {
+  await database.teamActions.deleteMany({
+    where: {
+      teamId,
     },
   });
 }
