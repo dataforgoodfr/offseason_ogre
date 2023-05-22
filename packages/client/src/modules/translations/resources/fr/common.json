@@ -24,6 +24,9 @@
   "cta.validate-team-choice": "Valider pour l'équipe",
   "cta.yes": "Oui",
 
+  "dialog.step.end": "Voulez-vous clôturer l'étape",
+  "dialog.step.start": "Voulez-vous démarrer l'étape",
+
   "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
   "message.error.signup.USER_ALREADY_EXISTS": "Cette adresse mail est déjà associée à un compte.",
   "message.error.signup.USER_DOES_NOT_EXIST": "Cette adresse mail n'est associée à aucun compte.",

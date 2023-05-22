@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import {
   StackedBars,
   StackedBarsStackData,
@@ -11,6 +10,7 @@ import { pipe } from "../../lib/fp";
 import { ProductionTypes } from "../../utils/types";
 import { formatMaterial } from "../../lib/formatter";
 import _ from "lodash";
+import { useTranslation } from "../translations/useTranslation";
 
 export { MaterialsPerProductionTypeChart };
 

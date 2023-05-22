@@ -9,7 +9,6 @@ import { IGameWithTeams, ITeam } from "../../../../utils/types";
 import { MAX_TEAMS_POINTS } from "../../constants";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
 import { isLargeGame, isSynthesisStep } from "../../utils/game";
-import { t } from "i18next";
 
 interface TeamIdToValues {
   [k: string]: {
@@ -81,7 +80,8 @@ export const buildValuesPoints = (
 
 export const buildValuesBudget = (
   game: IGameWithTeams,
-  teamIdToTeamValues: TeamIdToValues
+  teamIdToTeamValues: TeamIdToValues,
+  t: any
 ) => {
   const isSynthesis = isSynthesisStep(game);
   if (isLargeGame(game)) {
@@ -130,7 +130,8 @@ export const buildValuesBudget = (
 
 export const buildValuesCarbonFootprint = (
   game: IGameWithTeams,
-  teamIdToTeamValues: TeamIdToValues
+  teamIdToTeamValues: TeamIdToValues,
+  t: any
 ) => {
   const isSynthesis = isSynthesisStep(game);
   if (isLargeGame(game)) {

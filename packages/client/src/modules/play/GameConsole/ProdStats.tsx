@@ -3,7 +3,6 @@ import { LineEvolution } from "../../charts";
 import { PlayBox } from "../Components";
 import { Typography } from "../../common/components/Typography";
 import { Icon } from "../../common/components/Icon";
-import { t } from "../../translations";
 import { getStepId } from "../constants";
 import { StatsData } from "./StatsConsole";
 import { roundValue } from "../../common/utils";
@@ -11,6 +10,7 @@ import { IGameWithTeams } from "../../../utils/types";
 import { usePlay } from "../context/playContext";
 import { isLargeGame } from "../utils/game";
 import { mean } from "../../../lib/math";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { ConsumptionStats, ProductionStats };
 
@@ -22,6 +22,8 @@ function ConsumptionStats({
   data: StatsData[];
 }) {
   const { game } = usePlay();
+  const { t } = useTranslation();
+
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -40,7 +42,7 @@ function ConsumptionStats({
           <Box p={2}>
             <LineEvolution
               chartMaxHeight={statsMaxHeight}
-              data={buildGraphData(game, data)}
+              data={buildGraphData(game, data, t)}
             />
           </Box>
         </Grid>
@@ -57,6 +59,8 @@ function ProductionStats({
   data: StatsData[];
 }) {
   const { game } = usePlay();
+  const { t } = useTranslation();
+
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -75,7 +79,7 @@ function ProductionStats({
           <Box p={2}>
             <LineEvolution
               chartMaxHeight={statsMaxHeight}
-              data={buildGraphData(game, data)}
+              data={buildGraphData(game, data, t)}
             />
           </Box>
         </Grid>
@@ -84,14 +88,14 @@ function ProductionStats({
   );
 }
 
-function buildGraphData(game: IGameWithTeams, data: StatsData[]) {
+function buildGraphData(game: IGameWithTeams, data: StatsData[], t: any) {
   const steps = Object.keys(data[0]?.stepToData || {})
     .map((step) => parseInt(step, 10))
     .sort((stepA, stepB) => stepA - stepB);
 
   const result = steps.map((step) => {
     const columnLabel = t(`step.${getStepId(step) || "not-found"}.name` as any);
-    const columnLines = buildColumnLines(game, data, step);
+    const columnLines = buildColumnLines(game, data, step, t);
 
     return {
       name: columnLabel,
@@ -104,7 +108,8 @@ function buildGraphData(game: IGameWithTeams, data: StatsData[]) {
 function buildColumnLines(
   game: IGameWithTeams,
   data: StatsData[],
-  step: number
+  step: number,
+  t: any
 ) {
   if (isLargeGame(game)) {
     const valuesByStep = data.map((datum) => datum.stepToData[step] || 0);

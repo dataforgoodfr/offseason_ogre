@@ -11,6 +11,7 @@ import {
   buildValuesCarbonFootprint,
   buildValuesPoints,
 } from "./utils/statsConsoleValues";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { StatsConsole };
 
@@ -23,6 +24,7 @@ export interface StatsData {
 function StatsConsole() {
   const { game } = usePlay();
   const { teamValues } = useTeamValues();
+  const { t } = useTranslation();
   const theme = useTheme();
 
   const teamIdToTeamValues = Object.fromEntries(
@@ -69,16 +71,17 @@ function StatsConsole() {
     return <SummaryCard valuesToDisplay={teamsToDisplay} />;
   }
 
-  function displayCarbonFootprint() {
+  function displayCarbonFootprint(t: any) {
     const valuesToDisplay = buildValuesCarbonFootprint(
       game,
-      teamIdToTeamValues
+      teamIdToTeamValues,
+      t
     );
     return <SummaryCard valuesToDisplay={valuesToDisplay} />;
   }
 
   function displayBudget() {
-    const valuesToDisplay = buildValuesBudget(game, teamIdToTeamValues);
+    const valuesToDisplay = buildValuesBudget(game, teamIdToTeamValues, t);
     return <SummaryCard valuesToDisplay={valuesToDisplay} />;
   }
 
@@ -164,7 +167,7 @@ function StatsConsole() {
               <Icon sx={{ mr: 1 }} name="carbon-footprint" /> CO2 (
               {carbonFootprintUnit})
             </Typography>
-            {displayCarbonFootprint()}
+            {displayCarbonFootprint(t)}
           </PlayBox>
         </Grid>
         <Grid item sx={{ m: 1 }} xs={11} sm={smallScreenSize}>

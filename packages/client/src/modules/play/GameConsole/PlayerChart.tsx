@@ -4,11 +4,11 @@ import { sumAllValues, sumForAndFormat } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
 import { Tabs } from "../../common/components/Tabs";
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import {
   MaterialsPerProductionTypeChart,
   MaterialsPerStepChart,
 } from "../../charts";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { PlayerChart };
 
