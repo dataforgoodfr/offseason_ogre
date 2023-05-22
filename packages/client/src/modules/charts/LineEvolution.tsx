@@ -48,6 +48,8 @@ function LineEvolution({
       .filter((key) => key.startsWith("line"))
       .map((key) => parseInt(key.replace("line", ""))).length || 0;
 
+  const linesData = Object.entries(data[0] || {});
+
   return (
     <Card
       sx={{
@@ -70,9 +72,12 @@ function LineEvolution({
               dataKey={`line${idx + 1}.value`}
               stroke={LINE_COLORS[idx % lineCount]}
               name={
-                Object.entries(data[0]).find(
-                  ([key, _]) => key === `line${idx + 1}`
-                )[1]?.name || ""
+                linesData.filter(([key, _]) => key === `line${idx + 1}`)
+                  .length > 0
+                  ? linesData.filter(
+                      ([key, _]) => key === `line${idx + 1}`
+                    )[0][1]?.name
+                  : ""
               }
               unit="kWh/jour"
             />
