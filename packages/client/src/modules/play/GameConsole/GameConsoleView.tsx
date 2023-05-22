@@ -103,8 +103,8 @@ function Header(props: any) {
                 handleClose={() => setIsDialogOpen(false)}
                 content={
                   !isStepFinished
-                    ? `${t(`dialog.step.end`)} ${currentStepNumber} ?`
-                    : `${t(`dialog.step.start`)} ${nextStepNumber} ?`
+                    ? t(`dialog.step.end`, { stepNumber: currentStepNumber })
+                    : t(`dialog.step.start`, { stepNumber: nextStepNumber })
                 }
                 actions={
                   <>
@@ -117,7 +117,7 @@ function Header(props: any) {
                         setIsDialogOpen(false);
                       }}
                     >
-                      Continuer
+                      {t(`dialog.step.yes`)}
                     </Button>
                     <Button
                       color="primary"
@@ -126,7 +126,7 @@ function Header(props: any) {
                       sx={{ border: 1, borderColor: "secondary", mt: 1 }}
                       onClick={() => setIsDialogOpen(false)}
                     >
-                      Annuler
+                      {t(`dialog.step.no`)}
                     </Button>
                   </>
                 }

@@ -12,6 +12,7 @@ import {
   buildValuesPoints,
 } from "./utils/statsConsoleValues";
 import { useTranslation } from "../../translations/useTranslation";
+import { I18nTranslateFunction } from "../../translations";
 
 export { StatsConsole };
 
@@ -71,7 +72,7 @@ function StatsConsole() {
     return <SummaryCard valuesToDisplay={teamsToDisplay} />;
   }
 
-  function displayCarbonFootprint(t: any) {
+  function displayCarbonFootprint(t: I18nTranslateFunction) {
     const valuesToDisplay = buildValuesCarbonFootprint(
       game,
       teamIdToTeamValues,

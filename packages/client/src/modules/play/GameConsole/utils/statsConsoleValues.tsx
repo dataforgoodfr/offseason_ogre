@@ -9,6 +9,7 @@ import { IGameWithTeams, ITeam } from "../../../../utils/types";
 import { MAX_TEAMS_POINTS } from "../../constants";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
 import { isLargeGame, isSynthesisStep } from "../../utils/game";
+import { I18nTranslateFunction } from "../../../translations";
 
 interface TeamIdToValues {
   [k: string]: {
@@ -81,7 +82,7 @@ export const buildValuesPoints = (
 export const buildValuesBudget = (
   game: IGameWithTeams,
   teamIdToTeamValues: TeamIdToValues,
-  t: any
+  t: I18nTranslateFunction
 ) => {
   const isSynthesis = isSynthesisStep(game);
   if (isLargeGame(game)) {
@@ -131,7 +132,7 @@ export const buildValuesBudget = (
 export const buildValuesCarbonFootprint = (
   game: IGameWithTeams,
   teamIdToTeamValues: TeamIdToValues,
-  t: any
+  t: I18nTranslateFunction
 ) => {
   const isSynthesis = isSynthesisStep(game);
   if (isLargeGame(game)) {

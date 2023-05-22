@@ -11,6 +11,7 @@ import { usePlay } from "../context/playContext";
 import { isLargeGame } from "../utils/game";
 import { mean } from "../../../lib/math";
 import { useTranslation } from "../../translations/useTranslation";
+import { I18nTranslateFunction } from "../../translations";
 
 export { ConsumptionStats, ProductionStats };
 
@@ -88,7 +89,11 @@ function ProductionStats({
   );
 }
 
-function buildGraphData(game: IGameWithTeams, data: StatsData[], t: any) {
+function buildGraphData(
+  game: IGameWithTeams,
+  data: StatsData[],
+  t: I18nTranslateFunction
+) {
   const steps = Object.keys(data[0]?.stepToData || {})
     .map((step) => parseInt(step, 10))
     .sort((stepA, stepB) => stepA - stepB);
@@ -109,7 +114,7 @@ function buildColumnLines(
   game: IGameWithTeams,
   data: StatsData[],
   step: number,
-  t: any
+  t: I18nTranslateFunction
 ) {
   if (isLargeGame(game)) {
     const valuesByStep = data.map((datum) => datum.stepToData[step] || 0);
