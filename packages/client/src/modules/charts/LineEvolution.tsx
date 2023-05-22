@@ -33,7 +33,7 @@ const LINE_COLORS = [
 interface LineEvolutionDatum {
   name: string;
   // Data keys start from `line1`.
-  [key: `line${number}`]: number | string;
+  [key: `line${number}`]: { value: number | string; name: string };
 }
 
 function LineEvolution({
@@ -67,9 +67,13 @@ function LineEvolution({
           {range(0, lineCount).map((idx) => (
             <Line
               key={idx}
-              dataKey={`line${idx + 1}`}
+              dataKey={`line${idx + 1}.value`}
               stroke={LINE_COLORS[idx % lineCount]}
-              name={`Équipe ${idx + 1}`}
+              name={
+                Object.entries(data[0]).find(
+                  ([key, _]) => key === `line${idx + 1}`
+                )[1]?.name || ""
+              }
               unit="kWh/jour"
             />
           ))}

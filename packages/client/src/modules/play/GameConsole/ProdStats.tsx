@@ -7,6 +7,10 @@ import { t } from "../../translations";
 import { getStepId } from "../constants";
 import { StatsData } from "./StatsConsole";
 import { roundValue } from "../../common/utils";
+import { IGameWithTeams } from "../../../utils/types";
+import { usePlay } from "../context/playContext";
+import { isLargeGame } from "../utils/game";
+import { mean } from "../../../lib/math";
 
 export { ConsumptionStats, ProductionStats };
 
@@ -17,6 +21,7 @@ function ConsumptionStats({
   statsMaxHeight: number;
   data: StatsData[];
 }) {
+  const { game } = usePlay();
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -28,14 +33,14 @@ function ConsumptionStats({
             variant="h5"
           >
             <Icon sx={{ mr: 1 }} name="consumption" />
-            Évolution des consommations entre équipes
+            {t("graph.energy.consumption.title")}
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
             <LineEvolution
               chartMaxHeight={statsMaxHeight}
-              data={buildGraphData(data)}
+              data={buildGraphData(game, data)}
             />
           </Box>
         </Grid>
@@ -51,6 +56,7 @@ function ProductionStats({
   statsMaxHeight: number;
   data: StatsData[];
 }) {
+  const { game } = usePlay();
   return (
     <PlayBox mt={2}>
       <Grid container>
@@ -61,15 +67,15 @@ function ProductionStats({
             justifyContent="center"
             variant="h5"
           >
-            <Icon sx={{ mr: 1 }} name="production" /> Évolution des productions
-            entre équipes
+            <Icon sx={{ mr: 1 }} name="production" />{" "}
+            {t("graph.energy.production.title")}
           </Typography>
         </Grid>
         <Grid item xs={12}>
           <Box p={2}>
             <LineEvolution
               chartMaxHeight={statsMaxHeight}
-              data={buildGraphData(data)}
+              data={buildGraphData(game, data)}
             />
           </Box>
         </Grid>
@@ -78,23 +84,53 @@ function ProductionStats({
   );
 }
 
-function buildGraphData(data: StatsData[]) {
+function buildGraphData(game: IGameWithTeams, data: StatsData[]) {
   const steps = Object.keys(data[0]?.stepToData || {})
     .map((step) => parseInt(step, 10))
     .sort((stepA, stepB) => stepA - stepB);
 
-  return steps.map((step) => {
+  const result = steps.map((step) => {
     const columnLabel = t(`step.${getStepId(step) || "not-found"}.name` as any);
-    const columnLines = Object.fromEntries(
-      data.map((datum) => [
-        `line${datum.teamIdx + 1}`,
-        roundValue(datum.stepToData[step] || 0),
-      ])
-    );
+    const columnLines = buildColumnLines(game, data, step);
 
     return {
       name: columnLabel,
       ...columnLines,
     };
   });
+  return result;
+}
+
+function buildColumnLines(
+  game: IGameWithTeams,
+  data: StatsData[],
+  step: number
+) {
+  if (isLargeGame(game)) {
+    const valuesByStep = data.map((datum) => datum.stepToData[step] || 0);
+
+    return {
+      line1: {
+        value: Math.max(...valuesByStep),
+        name: t("graph.common.max"),
+      },
+      line2: {
+        value: roundValue(mean(valuesByStep)),
+        name: t("graph.common.mean"),
+      },
+      line3: {
+        value: Math.min(...valuesByStep),
+        name: t("graph.common.min"),
+      },
+    };
+  }
+  return Object.fromEntries(
+    data.map((datum) => [
+      `line${datum.teamIdx + 1}`,
+      {
+        value: roundValue(datum.stepToData[step] || 0),
+        name: `${t("graph.common.team")} ${datum.teamIdx + 1}`,
+      },
+    ])
+  );
 }
