@@ -137,18 +137,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   });
 
   const gameWithSortedTeams = useMemo(
-    () =>
-      gameWithTeams
-        ? {
-            ...sortTeams(gameWithTeams),
-            isLarge:
-              (gameWithTeams &&
-                gameWithTeams.teams.length > LARGE_GAME_TEAMS) ||
-              false,
-            isSynthesisStep:
-              gameWithTeams && gameWithTeams.step === STEPS.length - 1,
-          }
-        : null,
+    () => enrichTeams(gameWithTeams),
     [gameWithTeams]
   );
 
@@ -251,13 +240,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function sortTeams(gameWithTeams: IEnrichedGame | null) {
+function enrichTeams(gameWithTeams: IEnrichedGame | null) {
   if (gameWithTeams !== null) {
     return {
       ...gameWithTeams,
       teams: [...(gameWithTeams?.teams ?? [])]
         .filter(({ name }) => name !== NO_TEAM)
         .sort(sortBy("id", "asc")),
+      isLarge:
+        (gameWithTeams && gameWithTeams.teams.length > LARGE_GAME_TEAMS) ||
+        false,
+      isSynthesisStep: gameWithTeams && gameWithTeams.step === STEPS.length - 1,
     };
   }
   return null;
@@ -443,7 +436,7 @@ function useGameSocket({
     newSocket.on(
       "gameUpdated",
       ({ update }: { update: Partial<IEnrichedGame> }) => {
-        setGameWithTeams((previous: Partial<IEnrichedGame> | null) => {
+        setGameWithTeams((previous) => {
           if (previous === null) return null;
           if (previous.status !== "finished" && update.status === "finished") {
             navigate("/play");
