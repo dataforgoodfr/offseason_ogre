@@ -11,7 +11,13 @@ import {
   TeamAction,
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
-import { GameStep, GameStepType, isStepOfType, STEPS } from "../constants";
+import {
+  GameStep,
+  GameStepType,
+  isStepOfType,
+  LARGE_GAME_TEAMS,
+  STEPS,
+} from "../constants";
 import { sortBy } from "../../../lib/array";
 import { buildPersona } from "../utils/persona";
 import { computePlayerActionsStats } from "../utils/playerActions";
@@ -35,8 +41,29 @@ export {
   usePersona,
 };
 
+export type { TeamIdToValues };
+
+interface TeamIdToValues {
+  [k: string]: TeamValues;
+}
+interface TeamValues {
+  id: number;
+  playerCount: number;
+  points: number;
+  budget: number;
+  budgetSpent: number;
+  carbonFootprint: number;
+  carbonFootprintReduction: number;
+  stepToConsumption: {
+    [k: string]: number;
+  };
+  stepToProduction: {
+    [k: string]: number;
+  };
+}
+
 interface IPlayContext {
-  game: IGameWithTeams;
+  game: IEnrichedGame;
   isGameFinished: boolean;
   isStepFinished: boolean;
   updateGame: (update: Partial<IGame>) => void;
@@ -63,7 +90,11 @@ interface IPlayContext {
     scenarioName?: string;
   }) => void;
 }
-type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
+type IEnrichedGame = IGame & {
+  teams: ITeamWithPlayers[];
+  isLarge?: boolean;
+  isSynthesisStep?: boolean;
+};
 
 interface PlayerState {
   hasFinishedStep: boolean;
@@ -88,7 +119,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   if (!match) throw new Error("Provider use outside of game play.");
   const gameId = +(match.params.gameId as string);
 
-  const [gameWithTeams, setGameWithTeams] = useState<IGameWithTeams | null>(
+  const [gameWithTeams, setGameWithTeams] = useState<IEnrichedGame | null>(
     null
   );
   const [player, setPlayer] = useState<PlayerState>({
@@ -106,7 +137,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   });
 
   const gameWithSortedTeams = useMemo(
-    () => sortTeams(gameWithTeams),
+    () => enrichTeams(gameWithTeams),
     [gameWithTeams]
   );
 
@@ -209,13 +240,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function sortTeams(gameWithTeams: IGameWithTeams | null) {
+function enrichTeams(gameWithTeams: IEnrichedGame | null) {
   if (gameWithTeams !== null) {
     return {
       ...gameWithTeams,
       teams: [...(gameWithTeams?.teams ?? [])]
         .filter(({ name }) => name !== NO_TEAM)
         .sort(sortBy("id", "asc")),
+      isLarge:
+        (gameWithTeams && gameWithTeams.teams.length > LARGE_GAME_TEAMS) ||
+        false,
+      isSynthesisStep: gameWithTeams && gameWithTeams.step === STEPS.length - 1,
     };
   }
   return null;
@@ -241,7 +276,10 @@ function useMyTeam(): ITeamWithPlayers | null {
   );
 }
 
-function useTeamValues() {
+function useTeamValues(): {
+  teamValues: TeamValues[];
+  getTeamById: (id: number | undefined) => TeamValues | undefined;
+} {
   const { game } = useLoadedPlay();
   const userIds: number[] = [];
   game.teams.map((team) =>
@@ -305,7 +343,7 @@ function useTeamValues() {
   };
 
   return {
-    teamValues: teamValues,
+    teamValues,
     getTeamById,
   };
 }
@@ -381,7 +419,7 @@ function useGameSocket({
   setProfile,
 }: {
   gameId: number;
-  setGameWithTeams: React.Dispatch<React.SetStateAction<IGameWithTeams | null>>;
+  setGameWithTeams: React.Dispatch<React.SetStateAction<IEnrichedGame | null>>;
   setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
   setProfile: React.Dispatch<React.SetStateAction<any>>;
 }): { socket: Socket | null } {
@@ -397,7 +435,7 @@ function useGameSocket({
 
     newSocket.on(
       "gameUpdated",
-      ({ update }: { update: Partial<IGameWithTeams> }) => {
+      ({ update }: { update: Partial<IEnrichedGame> }) => {
         setGameWithTeams((previous) => {
           if (previous === null) return null;
           if (previous.status !== "finished" && update.status === "finished") {
@@ -504,7 +542,7 @@ function usePersonaByUserId(userIds: number | number[]) {
   );
 }
 
-function getUserTeamAndPlayer(game: IGameWithTeams, userId: number) {
+function getUserTeamAndPlayer(game: IEnrichedGame, userId: number) {
   const team = game.teams.find((team: ITeamWithPlayers) =>
     team.players.find((player: Player) => player.userId === userId)
   );

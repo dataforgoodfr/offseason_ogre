@@ -5,6 +5,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  useTheme,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/authProvider";
@@ -182,6 +183,7 @@ function Header({
   user?: IUser;
   className?: string;
 }) {
+  const theme = useTheme();
   return (
     <Grid className={className} display="grid" gridTemplateColumns="1fr 3fr">
       <Grid maxWidth={150}>
@@ -204,9 +206,21 @@ function Header({
         <Typography variant="h6" sx={{ lineBreak: "anywhere" }}>
           {user?.firstName} {user?.lastName}
         </Typography>
-        <Typography sx={{ fontSize: "12px", fontWeight: "400" }}>
-          {team?.name ?? ""}
-        </Typography>
+        <Box display="flex" alignItems="flex-end">
+          <Icon
+            name="team"
+            sx={{ color: theme.palette.primary.contrastText, mr: 1 }}
+          />
+          <Typography
+            sx={{
+              fontSize: "15px",
+              fontWeight: "400",
+              color: theme.palette.primary.contrastText,
+            }}
+          >
+            {team?.name ?? ""}
+          </Typography>
+        </Box>
       </Grid>
     </Grid>
   );
