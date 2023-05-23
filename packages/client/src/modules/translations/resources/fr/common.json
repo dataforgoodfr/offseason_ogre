@@ -197,7 +197,13 @@
 
   "graph.common.production": "Production",
   "graph.common.total": "Total",
+  "graph.common.team": "Équipe",
+  "graph.common.min": "Minimum",
+  "graph.common.mean": "Moyenne",
+  "graph.common.max": "Maximum",
 
+  "graph.energy.consumption.title": "Évolution des consommations entre équipes",
+  "graph.energy.production.title": "Évolution des productions entre équipes",
   "graph.energy.total": "Total",
   "graph.energy.fossil": "Energie fossile",
   "graph.energy.grey": "Energie grise",
@@ -226,5 +232,9 @@
 
   "unit.watthour-per-day.kilo": "kWh/jour",
   "unit.tonne.kilo": "kTonnes",
-  "unit.tonne.mega": "MTonnes"
+  "unit.tonne.mega": "MTonnes",
+  "unit.budget.year": "Mrd€",
+  "unit.budget.day": "€/j",
+  "unit.carbon.year": "T/an",
+  "unit.carbon.day": "kg/j"
 }
