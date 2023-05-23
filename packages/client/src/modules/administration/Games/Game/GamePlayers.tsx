@@ -36,6 +36,7 @@ import { I18nTranslateFunction } from "../../../translations";
 import { includes, kebabCase } from "lodash";
 import { pipe } from "../../../../lib/fp";
 import { FormStatus } from "../../../play/Personalization/models/form";
+import { User } from "../../../users/types";
 
 export { GamePlayers };
 
@@ -73,6 +74,22 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(`/api/games/${gameId}`);
+      },
+    }
+  );
+
+  const retrieveEmails = useMutation<
+    { data: { players: User[] } },
+    { message: string }
+  >(
+    () => {
+      const path = `/api/games/${game.id}/players`;
+      return axios.get<undefined, { data: { players: User[] } }>(path);
+    },
+    {
+      onSuccess: (data) => {
+        const emails = data?.data?.players?.map((player) => player.email) || [];
+        navigator.clipboard.writeText(emails.join(t("admin.email.separator")));
       },
     }
   );
@@ -122,9 +139,16 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
                   navigate(`/administration/games/${gameId}/form-verification`)
                 }
                 variant="contained"
-                sx={{ marginRight: "auto", ml: 2, height: "80%" }}
+                sx={{ mr: "auto", ml: "auto", height: "80%" }}
               >
                 {t("cta.check-forms")}
+              </Button>
+              <Button
+                onClick={() => retrieveEmails.mutate()}
+                variant="contained"
+                sx={{ marginRight: "auto", ml: "auto", height: "80%" }}
+              >
+                {t("cta.retrieve-emails")}
               </Button>
             </Grid>
           </>
@@ -156,6 +180,9 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
         </DataGridBox>
       </Grid>
 
+      {retrieveEmails.isSuccess && (
+        <SuccessAlert message={t("message.success.admin.copied-emails")} />
+      )}
       {removePlayerMutation.isSuccess && (
         <SuccessAlert message={t("message.success.admin.player-removed")} />
       )}
