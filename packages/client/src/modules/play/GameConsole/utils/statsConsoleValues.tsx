@@ -8,7 +8,7 @@ import { getDaysTo2050 } from "../../../../lib/time";
 import { IEnrichedGame, ITeam } from "../../../../utils/types";
 import { MAX_TEAMS_POINTS } from "../../constants";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
-import { t } from "i18next";
+import { I18nTranslateFunction } from "../../../translations";
 import { TeamIdToValues } from "../../context/playContext";
 
 function computeBudget(
@@ -57,7 +57,8 @@ export const buildValuesPoints = (
 
 export const buildValuesBudget = (
   game: IEnrichedGame,
-  teamIdToTeamValues: TeamIdToValues
+  teamIdToTeamValues: TeamIdToValues,
+  t: I18nTranslateFunction
 ) => {
   if (game.isLarge) {
     const budgets = game.teams.map(
@@ -109,7 +110,8 @@ export const buildValuesBudget = (
 
 export const buildValuesCarbonFootprint = (
   game: IEnrichedGame,
-  teamIdToTeamValues: TeamIdToValues
+  teamIdToTeamValues: TeamIdToValues,
+  t: I18nTranslateFunction
 ) => {
   if (game.isLarge) {
     const footprints = game.teams.map(

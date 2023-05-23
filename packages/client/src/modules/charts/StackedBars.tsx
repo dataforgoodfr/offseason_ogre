@@ -16,7 +16,6 @@ import {
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
 import { useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import { toArray } from "../../lib/array";
 import { UnwrapArray } from "../../utils/types";
 import { range } from "lodash";
@@ -24,6 +23,7 @@ import { pipe } from "../../lib/fp";
 import { Typography } from "../common/components/Typography";
 import { ObjectBuilder } from "../../lib/object";
 import { orderOfMagnitude } from "../../lib/math";
+import { useTranslation } from "../translations/useTranslation";
 
 export { StackedBars };
 export type {

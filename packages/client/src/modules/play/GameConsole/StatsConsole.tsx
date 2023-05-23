@@ -10,7 +10,8 @@ import {
   buildValuesCarbonFootprint,
   buildValuesPoints,
 } from "./utils/statsConsoleValues";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "../../translations/useTranslation";
+import { I18nTranslateFunction } from "../../translations";
 import { IEnrichedGame } from "../../../utils/types";
 
 export { StatsConsole };
@@ -137,7 +138,7 @@ function StatsConsole() {
               <Icon sx={{ mr: 1 }} name="carbon-footprint" /> CO2 (
               {carbonFootprintUnit})
             </Typography>
-            {displayCarbonFootprint(game, teamIdToTeamValues)}
+            {displayCarbonFootprint(game, teamIdToTeamValues, t)}
           </PlayBox>
         </Grid>
         <Grid item sx={{ m: 1 }} xs={11} sm={smallScreenSize}>
@@ -150,7 +151,7 @@ function StatsConsole() {
             <Typography mb={1} variant="h5">
               <Icon sx={{ mr: 1 }} name="budget" /> Budget ({budgetUnit})
             </Typography>
-            {displayBudget(game, teamIdToTeamValues)}
+            {displayBudget(game, teamIdToTeamValues, t)}
           </PlayBox>
         </Grid>
       </Grid>
@@ -181,19 +182,22 @@ function displayPoints(
 
 function displayCarbonFootprint(
   game: IEnrichedGame,
-  teamIdToTeamValues: TeamIdToValues
+  teamIdToTeamValues: TeamIdToValues,
+  t: I18nTranslateFunction
 ) {
   const valuesCarbonFootprint = buildValuesCarbonFootprint(
     game,
-    teamIdToTeamValues
+    teamIdToTeamValues,
+    t
   );
   return <SummaryCard valuesToDisplay={valuesCarbonFootprint} />;
 }
 
 function displayBudget(
   game: IEnrichedGame,
-  teamIdToTeamValues: TeamIdToValues
+  teamIdToTeamValues: TeamIdToValues,
+  t: I18nTranslateFunction
 ) {
-  const valuesBudget = buildValuesBudget(game, teamIdToTeamValues);
+  const valuesBudget = buildValuesBudget(game, teamIdToTeamValues, t);
   return <SummaryCard valuesToDisplay={valuesBudget} />;
 }
