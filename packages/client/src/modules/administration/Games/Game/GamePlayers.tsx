@@ -112,7 +112,10 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
                 variant="contained"
                 sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
               >
-                <Icon name="lock" sx={{ mr: 2 }} />{" "}
+                <Icon
+                  name={game && game.status !== "ready" ? "lock" : "lock-open"}
+                  sx={{ mr: 2 }}
+                />{" "}
                 {game && game.status !== "ready"
                   ? t("cta.lock-forms")
                   : t("cta.unlock-forms")}
