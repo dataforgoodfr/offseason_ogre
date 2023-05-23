@@ -232,5 +232,9 @@
 
   "unit.watthour-per-day.kilo": "kWh/jour",
   "unit.tonne.kilo": "kTonnes",
-  "unit.tonne.mega": "MTonnes"
+  "unit.tonne.mega": "MTonnes",
+  "unit.budget.year": "Mrd€",
+  "unit.budget.day": "€/j",
+  "unit.carbon.year": "T/an",
+  "unit.carbon.day": "kg/j"
 }

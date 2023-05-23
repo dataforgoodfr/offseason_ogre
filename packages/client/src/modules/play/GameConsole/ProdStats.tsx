@@ -7,10 +7,9 @@ import { t } from "../../translations";
 import { getStepId } from "../constants";
 import { StatsData } from "./StatsConsole";
 import { roundValue } from "../../common/utils";
-import { IGameWithTeams } from "../../../utils/types";
 import { usePlay } from "../context/playContext";
-import { isLargeGame } from "../utils/game";
 import { mean } from "../../../lib/math";
+import { IEnrichedGame } from "../../../utils/types";
 
 export { ConsumptionStats, ProductionStats };
 
@@ -84,7 +83,7 @@ function ProductionStats({
   );
 }
 
-function buildGraphData(game: IGameWithTeams, data: StatsData[]) {
+function buildGraphData(game: IEnrichedGame, data: StatsData[]) {
   const steps = Object.keys(data[0]?.stepToData || {})
     .map((step) => parseInt(step, 10))
     .sort((stepA, stepB) => stepA - stepB);
@@ -102,25 +101,25 @@ function buildGraphData(game: IGameWithTeams, data: StatsData[]) {
 }
 
 function buildColumnLines(
-  game: IGameWithTeams,
+  game: IEnrichedGame,
   data: StatsData[],
   step: number
 ) {
-  if (isLargeGame(game)) {
+  if (game.isLarge) {
     const valuesByStep = data.map((datum) => datum.stepToData[step] || 0);
 
     return {
       line1: {
-        value: Math.max(...valuesByStep),
-        name: t("graph.common.max"),
+        total: Math.max(...valuesByStep),
+        label: t("graph.common.max"),
       },
       line2: {
-        value: roundValue(mean(valuesByStep)),
-        name: t("graph.common.mean"),
+        total: roundValue(mean(valuesByStep)),
+        label: t("graph.common.mean"),
       },
       line3: {
-        value: Math.min(...valuesByStep),
-        name: t("graph.common.min"),
+        total: Math.min(...valuesByStep),
+        label: t("graph.common.min"),
       },
     };
   }
@@ -128,8 +127,8 @@ function buildColumnLines(
     data.map((datum) => [
       `line${datum.teamIdx + 1}`,
       {
-        value: roundValue(datum.stepToData[step] || 0),
-        name: `${t("graph.common.team")} ${datum.teamIdx + 1}`,
+        total: roundValue(datum.stepToData[step] || 0),
+        label: `${t("graph.common.team")} ${datum.teamIdx + 1}`,
       },
     ])
   );

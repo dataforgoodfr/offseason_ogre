@@ -7,6 +7,7 @@ export type {
   IGame,
   IGameWithTeacher,
   IGameWithTeams,
+  IEnrichedGame,
   ITeam,
   ITeamWithPlayers,
   IUser,
@@ -30,6 +31,10 @@ type WithTeams<T> = T & { teams: ITeamWithPlayers[] };
 type IGame = Game;
 type IGameWithTeacher = WithTeacher<IGame>;
 type IGameWithTeams = WithTeams<IGame>;
+type IEnrichedGame = IGameWithTeams & {
+  isLarge?: boolean;
+  isSynthesisStep?: boolean;
+};
 
 interface ITeam {
   id: number;

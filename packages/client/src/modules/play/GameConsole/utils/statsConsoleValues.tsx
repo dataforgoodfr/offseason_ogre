@@ -5,32 +5,14 @@ import {
   formatPoints,
 } from "../../../../lib/formatter";
 import { getDaysTo2050 } from "../../../../lib/time";
-import { IGameWithTeams, ITeam } from "../../../../utils/types";
+import { IEnrichedGame, ITeam } from "../../../../utils/types";
 import { MAX_TEAMS_POINTS } from "../../constants";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
-import { isLargeGame, isSynthesisStep } from "../../utils/game";
 import { t } from "i18next";
-
-interface TeamIdToValues {
-  [k: string]: {
-    id: number;
-    playerCount: number;
-    points: number;
-    budget: number;
-    budgetSpent: number;
-    carbonFootprint: number;
-    carbonFootprintReduction: number;
-    stepToConsumption: {
-      [k: string]: number;
-    };
-    stepToProduction: {
-      [k: string]: number;
-    };
-  };
-}
+import { TeamIdToValues } from "../../context/playContext";
 
 function computeBudget(
-  isSynthesisStep: boolean,
+  isSynthesisStep: boolean = false,
   budget: number,
   budgetSpent: number
 ) {
@@ -45,7 +27,7 @@ function computeBudget(
 }
 
 function computeCarbonFootprint(
-  isSynthesisStep: boolean,
+  isSynthesisStep: boolean = false,
   carbonFootprint: number
 ) {
   if (isSynthesisStep) {
@@ -59,32 +41,25 @@ function computeCarbonFootprint(
 }
 
 export const buildValuesPoints = (
-  game: IGameWithTeams,
+  game: IEnrichedGame,
   teamIdToTeamValues: TeamIdToValues
 ) => {
-  if (isLargeGame(game)) {
-    return Object.values(teamIdToTeamValues)
-      .sort((a, b) => b.points - a.points)
-      .slice(0, MAX_TEAMS_POINTS)
-      .map((team) => ({
-        id: team.id,
-        name: game.teams.find((t: ITeam) => team.id === t.id)?.name,
-        value: formatPoints(teamIdToTeamValues[team.id].points),
-      }));
-  }
-  return game.teams.map((team) => ({
-    id: team.id,
-    name: team.name,
-    value: formatPoints(teamIdToTeamValues[team.id].points),
-  }));
+  const teamValues = Object.values(teamIdToTeamValues);
+  return teamValues
+    .sort((a, b) => b.points - a.points)
+    .slice(0, game.isLarge ? MAX_TEAMS_POINTS : teamValues.length)
+    .map((team) => ({
+      id: team.id,
+      name: game.teams.find((t: ITeam) => team.id === t.id)?.name,
+      value: formatPoints(teamIdToTeamValues[team.id].points),
+    }));
 };
 
 export const buildValuesBudget = (
-  game: IGameWithTeams,
+  game: IEnrichedGame,
   teamIdToTeamValues: TeamIdToValues
 ) => {
-  const isSynthesis = isSynthesisStep(game);
-  if (isLargeGame(game)) {
+  if (game.isLarge) {
     const budgets = game.teams.map(
       (team) => teamIdToTeamValues[team.id].budget
     );
@@ -96,7 +71,7 @@ export const buildValuesBudget = (
         id: 1,
         name: t("graph.common.max"),
         value: computeBudget(
-          isSynthesis,
+          game.isSynthesisStep,
           Math.max(...budgets),
           Math.max(...budgetsSpent)
         ),
@@ -104,13 +79,17 @@ export const buildValuesBudget = (
       {
         id: 2,
         name: t("graph.common.mean"),
-        value: computeBudget(isSynthesis, mean(budgets), mean(budgetsSpent)),
+        value: computeBudget(
+          game.isSynthesisStep,
+          mean(budgets),
+          mean(budgetsSpent)
+        ),
       },
       {
         id: 3,
         name: t("graph.common.min"),
         value: computeBudget(
-          isSynthesis,
+          game.isSynthesisStep,
           Math.min(...budgets),
           Math.min(...budgetsSpent)
         ),
@@ -121,7 +100,7 @@ export const buildValuesBudget = (
     id: team.id,
     name: team.name,
     value: computeBudget(
-      isSynthesis,
+      game.isSynthesisStep,
       teamIdToTeamValues[team.id].budget,
       teamIdToTeamValues[team.id].budgetSpent
     ),
@@ -129,11 +108,10 @@ export const buildValuesBudget = (
 };
 
 export const buildValuesCarbonFootprint = (
-  game: IGameWithTeams,
+  game: IEnrichedGame,
   teamIdToTeamValues: TeamIdToValues
 ) => {
-  const isSynthesis = isSynthesisStep(game);
-  if (isLargeGame(game)) {
+  if (game.isLarge) {
     const footprints = game.teams.map(
       (team) => teamIdToTeamValues[team.id].carbonFootprint || 0
     );
@@ -141,17 +119,23 @@ export const buildValuesCarbonFootprint = (
       {
         id: 1,
         name: t("graph.common.max"),
-        value: computeCarbonFootprint(isSynthesis, Math.max(...footprints)),
+        value: computeCarbonFootprint(
+          game.isSynthesisStep,
+          Math.max(...footprints)
+        ),
       },
       {
         id: 2,
         name: t("graph.common.mean"),
-        value: computeCarbonFootprint(isSynthesis, mean(footprints)),
+        value: computeCarbonFootprint(game.isSynthesisStep, mean(footprints)),
       },
       {
         id: 3,
         name: t("graph.common.min"),
-        value: computeCarbonFootprint(isSynthesis, Math.min(...footprints)),
+        value: computeCarbonFootprint(
+          game.isSynthesisStep,
+          Math.min(...footprints)
+        ),
       },
     ];
   }
@@ -159,7 +143,7 @@ export const buildValuesCarbonFootprint = (
     id: team.id,
     name: team.name,
     value: computeCarbonFootprint(
-      isSynthesis,
+      game.isSynthesisStep,
       teamIdToTeamValues[team.id].carbonFootprint || 0
     ),
   }));
