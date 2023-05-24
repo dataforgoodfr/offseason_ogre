@@ -9,7 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import range from "lodash/range";
+import { useMemo } from "react";
 
 export { LineEvolution };
 
@@ -33,7 +33,7 @@ const LINE_COLORS = [
 interface LineEvolutionDatum {
   name: string;
   // Data keys start from `line1`.
-  [key: `line${number}`]: number | string;
+  [key: `line${number}`]: { total: number | string; label: string };
 }
 
 function LineEvolution({
@@ -43,10 +43,14 @@ function LineEvolution({
   data: LineEvolutionDatum[];
   chartMaxHeight: number;
 }) {
-  const lineCount =
-    Object.keys(data[0] || {})
-      .filter((key) => key.startsWith("line"))
-      .map((key) => parseInt(key.replace("line", ""))).length || 0;
+  const lineProps = useMemo(() => {
+    return Object.entries(data[0] || {})
+      .filter(([key, _]) => key !== "name")
+      .map(([lineKey, line]) => ({
+        dataKey: `${lineKey}.total`,
+        name: line.label,
+      }));
+  }, [data]);
 
   return (
     <Card
@@ -64,12 +68,12 @@ function LineEvolution({
           <YAxis name="kWh/jour" domain={[0, chartMaxHeight]} />
           <Tooltip />
           <Legend />
-          {range(0, lineCount).map((idx) => (
+          {lineProps.map((props, idx) => (
             <Line
               key={idx}
-              dataKey={`line${idx + 1}`}
-              stroke={LINE_COLORS[idx % lineCount]}
-              name={`Équipe ${idx + 1}`}
+              dataKey={props.dataKey}
+              stroke={LINE_COLORS[idx % lineProps.length]}
+              name={props.name}
               unit="kWh/jour"
             />
           ))}

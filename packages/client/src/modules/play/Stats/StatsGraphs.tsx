@@ -17,7 +17,7 @@ import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame } from "../../../utils/types";
 import { Tabs } from "../../common/components/Tabs";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { StatsGraphs };
 

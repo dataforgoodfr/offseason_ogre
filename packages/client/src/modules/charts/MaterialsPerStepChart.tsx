@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import {
   StackedBars,
   StackedBarsBar,
@@ -15,6 +14,7 @@ import _ from "lodash";
 import { formatMaterial, formatProduction } from "../../lib/formatter";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../common/constants";
 import { usePlay } from "../play/context/playContext";
+import { useTranslation } from "../translations/useTranslation";
 
 export { MaterialsPerStepChart };
 
