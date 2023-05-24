@@ -73,7 +73,7 @@ function MaterialsPerStepChart({
 
       return pipe(persona, indexBarByResourceName, sortBars);
     },
-    [resourceType, t]
+    [resourceType]
   );
 
   const graphStacks: StackedBarsStacks = useMemo(() => {
