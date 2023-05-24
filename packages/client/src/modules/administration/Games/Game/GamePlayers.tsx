@@ -113,7 +113,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
                 sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
               >
                 <Icon
-                  name={game && game.status !== "ready" ? "lock" : "lock-open"}
+                  name={game?.status !== "ready" ? "lock" : "lock-open"}
                   sx={{ mr: 2 }}
                 />{" "}
                 {game && game.status !== "ready"
