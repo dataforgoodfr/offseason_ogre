@@ -5,48 +5,55 @@ import {
   StackedBarsStacks,
 } from "./StackedBars";
 import { Persona } from "../persona/persona";
-import { MaterialsDatum } from "../play/gameEngines/materialsEngine";
+import { PhysicalResourceNeedDatum } from "../play/gameEngines/resourcesEngine";
 import { pipe } from "../../lib/fp";
 import { ProductionTypes } from "../../utils/types";
-import { formatMaterial } from "../../lib/formatter";
 import _ from "lodash";
 import { useTranslation } from "../translations/useTranslation";
+import { formatResource } from "../../lib/formatter";
+import { buildLabel } from "./utils/labels";
 
 export { MaterialsPerProductionTypeChart };
 
-function MaterialsPerProductionTypeChart({ persona }: { persona: Persona }) {
+function MaterialsPerProductionTypeChart({
+  persona,
+  resourceType,
+}: {
+  persona: Persona;
+  resourceType: "materials" | "metals";
+}) {
   const { t } = useTranslation();
 
   const graphStacks: StackedBarsStacks = useMemo(() => {
     const data: StackedBarsStackData[] = pipe(
-      persona.materials,
-      (materials: MaterialsDatum[]) =>
-        materials.reduce(
+      persona[resourceType],
+      (resources: PhysicalResourceNeedDatum[]) =>
+        resources.reduce(
           (
-            materialsIndexedByProdType: Record<
+            resourcesIndexedByProdType: Record<
               ProductionTypes,
-              MaterialsDatum[]
+              PhysicalResourceNeedDatum[]
             >,
             datum
           ) => {
-            if (!materialsIndexedByProdType[datum.type]) {
-              materialsIndexedByProdType[datum.type] = [];
+            if (!resourcesIndexedByProdType[datum.type]) {
+              resourcesIndexedByProdType[datum.type] = [];
             }
-            materialsIndexedByProdType[datum.type].push(datum);
-            return materialsIndexedByProdType;
+            resourcesIndexedByProdType[datum.type].push(datum);
+            return resourcesIndexedByProdType;
           },
-          {} as Record<ProductionTypes, MaterialsDatum[]>
+          {} as Record<ProductionTypes, PhysicalResourceNeedDatum[]>
         ),
       Object.entries as any,
-      (entries: [ProductionTypes, MaterialsDatum[]][]) =>
+      (entries: [ProductionTypes, PhysicalResourceNeedDatum[]][]) =>
         _.sortBy(entries, (entry) => entry[0]),
       (entries) =>
-        entries.map(([prodType, materials]) => ({
+        entries.map(([prodType, resources]) => ({
           label: t(`graph.materials.${prodType}`),
-          total: _.sumBy(materials, "value"),
-          bars: materials.map((datum) => ({
+          total: _.sumBy(resources, "value"),
+          bars: resources.map((datum) => ({
             key: datum.name,
-            label: t(`graph.materials.${datum.name}`),
+            label: buildLabel(resourceType, datum.name),
             total: datum.value,
           })),
         }))
@@ -55,15 +62,17 @@ function MaterialsPerProductionTypeChart({ persona }: { persona: Persona }) {
     return {
       data,
       yAxisUnitLabel: t("unit.tonne.kilo"),
-      palettes: "materials",
-      yAxisValueFormatter: formatMaterial(),
-      yAxisTicksValueFormatter: formatMaterial({ fractionDigits: 0 }),
+      palettes: resourceType,
+      yAxisValueFormatter: formatResource(),
+      yAxisTicksValueFormatter: formatResource({ fractionDigits: 0 }),
     };
-  }, [persona, t]);
+  }, [persona, resourceType, t]);
 
   return (
     <StackedBars
-      title={t("graph.materials.quantity-per-production-type-graph.title")}
+      title={t(
+        `graph.${resourceType}.quantity-per-production-type-graph.title`
+      )}
       direction="vertical"
       stacks={graphStacks}
     />

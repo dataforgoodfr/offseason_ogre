@@ -36,9 +36,26 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
           <>
             <MaterialsPerStepChart
               getPersonaAtStep={firstPersona.getPersonaAtStep}
+              resourceType="materials"
             />
             <MaterialsPerProductionTypeChart
               persona={firstPersona.currentPersona}
+              resourceType="materials"
+            />
+          </>
+        ),
+      },
+      {
+        label: t("page.teacher.statistics.tabs.metals.label"),
+        component: (
+          <>
+            <MaterialsPerStepChart
+              getPersonaAtStep={firstPersona.getPersonaAtStep}
+              resourceType="metals"
+            />
+            <MaterialsPerProductionTypeChart
+              persona={firstPersona.currentPersona}
+              resourceType="metals"
             />
           </>
         ),

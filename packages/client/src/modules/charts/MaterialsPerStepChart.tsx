@@ -7,21 +7,24 @@ import {
   StackedBarsStacks,
 } from "./StackedBars";
 import { Persona } from "../persona/persona";
-import { MaterialsType } from "../../utils/types";
+import { MaterialsType, MetalsType } from "../../utils/types";
 import { pipe } from "../../lib/fp";
 import { STEPS, isStepOfType } from "../play";
 import _ from "lodash";
-import { formatMaterial, formatProduction } from "../../lib/formatter";
+import { formatProduction, formatResource } from "../../lib/formatter";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../common/constants";
 import { usePlay } from "../play/context/playContext";
 import { useTranslation } from "../translations/useTranslation";
+import { buildLabel } from "./utils/labels";
 
 export { MaterialsPerStepChart };
 
 function MaterialsPerStepChart({
   getPersonaAtStep,
+  resourceType,
 }: {
   getPersonaAtStep: (step: number) => Persona;
+  resourceType: "materials" | "metals";
 }) {
   const { t } = useTranslation();
   const { game } = usePlay();
@@ -36,31 +39,41 @@ function MaterialsPerStepChart({
 
   const computeBarsForPersona = useCallback(
     (persona: Persona): StackedBarsBar[] => {
-      const indexBarByMaterialName = (persona: Persona) =>
-        persona.materials.reduce((barIndexedByMaterialName, materialDatum) => {
-          if (!barIndexedByMaterialName[materialDatum.name]) {
-            barIndexedByMaterialName[materialDatum.name] = {
-              key: materialDatum.name,
-              label: t(`graph.materials.${materialDatum.name}`),
-              total: 0,
-            };
-          }
+      const indexBarByResourceName = (persona: Persona) =>
+        persona[resourceType].reduce(
+          (barIndexedByResourceName, resourceDatum) => {
+            if (
+              !barIndexedByResourceName[
+                resourceDatum.name as MaterialsType & MetalsType
+              ]
+            ) {
+              barIndexedByResourceName[resourceDatum.name] = {
+                key: resourceDatum.name,
+                label: buildLabel(resourceType, resourceDatum.name),
+                total: 0,
+              };
+            }
 
-          barIndexedByMaterialName[materialDatum.name].total +=
-            materialDatum.value;
+            barIndexedByResourceName[resourceDatum.name].total +=
+              resourceDatum.value;
 
-          return barIndexedByMaterialName;
-        }, {} as Record<MaterialsType, StackedBarsBar>);
+            return barIndexedByResourceName;
+          },
+          {} as Record<MaterialsType | MetalsType, StackedBarsBar>
+        );
 
       const sortBars = (
-        barIndexedByMaterialName: Record<MaterialsType, StackedBarsBar>
+        barIndexedByResourceName: Record<
+          MaterialsType | MetalsType,
+          StackedBarsBar
+        >
       ) => {
-        return Object.values(barIndexedByMaterialName);
+        return Object.values(barIndexedByResourceName);
       };
 
-      return pipe(persona, indexBarByMaterialName, sortBars);
+      return pipe(persona, indexBarByResourceName, sortBars);
     },
-    [t]
+    [resourceType, t]
   );
 
   const graphStacks: StackedBarsStacks = useMemo(() => {
@@ -79,11 +92,17 @@ function MaterialsPerStepChart({
     return {
       data,
       yAxisUnitLabel: t("unit.tonne.kilo"),
-      palettes: "materials",
-      yAxisValueFormatter: formatMaterial(),
-      yAxisTicksValueFormatter: formatMaterial({ fractionDigits: 0 }),
+      palettes: resourceType,
+      yAxisValueFormatter: formatResource(),
+      yAxisTicksValueFormatter: formatResource({ fractionDigits: 0 }),
     };
-  }, [stepIdsToDisplay, computeBarsForPersona, getPersonaAtStep, t]);
+  }, [
+    stepIdsToDisplay,
+    resourceType,
+    computeBarsForPersona,
+    getPersonaAtStep,
+    t,
+  ]);
 
   const graphLines: StackedBarsLine[] = useMemo(() => {
     const data = stepIdsToDisplay.map((stepIdx) => {
@@ -107,7 +126,7 @@ function MaterialsPerStepChart({
 
   return (
     <StackedBars
-      title={t("graph.materials.quantity-per-step-graph.title", {
+      title={t(`graph.${resourceType}.quantity-per-step-graph.title`, {
         year: ENERGY_SHIFT_TARGET_YEAR,
       })}
       stacks={graphStacks}

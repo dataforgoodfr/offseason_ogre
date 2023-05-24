@@ -38,6 +38,10 @@ function StatsGraphs() {
         label: t("page.player.statistics.tabs.materials.label"),
         component: <MaterialsGraphTab />,
       },
+      {
+        label: t("page.player.statistics.tabs.metals.label"),
+        component: <MetalsGraphTab />,
+      },
     ];
   }, [t]);
 
@@ -178,8 +182,31 @@ function MaterialsGraphTab() {
 
   return (
     <>
-      <MaterialsPerStepChart getPersonaAtStep={getPersonaAtStep} />
-      <MaterialsPerProductionTypeChart persona={currentPersona} />
+      <MaterialsPerStepChart
+        getPersonaAtStep={getPersonaAtStep}
+        resourceType="materials"
+      />
+      <MaterialsPerProductionTypeChart
+        persona={currentPersona}
+        resourceType="materials"
+      />
+    </>
+  );
+}
+
+function MetalsGraphTab() {
+  const { currentPersona, getPersonaAtStep } = usePersona();
+
+  return (
+    <>
+      <MaterialsPerStepChart
+        getPersonaAtStep={getPersonaAtStep}
+        resourceType="metals"
+      />
+      <MaterialsPerProductionTypeChart
+        persona={currentPersona}
+        resourceType="metals"
+      />
     </>
   );
 }

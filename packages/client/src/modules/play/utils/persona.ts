@@ -6,7 +6,10 @@ import {
   TeamAction,
 } from "../../../utils/types";
 import { ConsumptionDatum } from "../../persona/consumption";
-import { computeMaterials } from "../gameEngines/materialsEngine";
+import {
+  computeMaterials,
+  computeMetals,
+} from "../gameEngines/resourcesEngine";
 import { Persona } from "../../persona/persona";
 import { MAX_NUMBER_STEPS } from "../constants";
 import { computeConsumptionPoints } from "../gameEngines/consumptionPointsEngine";
@@ -141,6 +144,7 @@ function computeResultsByStep(
   );
 
   const newMaterials = computeMaterials(newProduction, teamActions);
+  const newMetals = computeMetals(newProduction, teamActions);
 
   const { actionPointsUsedAtCurrentStep } = computePlayerActionsStats(
     step,
@@ -162,5 +166,6 @@ function computeResultsByStep(
     consumption: newConsumption,
     production: newProduction,
     materials: newMaterials,
+    metals: newMetals,
   };
 }
