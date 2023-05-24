@@ -59,6 +59,7 @@
   "form.validation.heating": "Concernant le chauffage, si le joueur a donné deux valeurs (facture en € et consommation en kWh), il est nécessaire de vérifier que les deux valeurs correspondent. Si ce n’est pas le cas, merci de ne laisser que la valeur la plus probable et de supprimer l’autre.",
 
   "table.column.form-status.label": "Statut du formulaire",
+  "table.column.form-status.label.short": "Statut",
   "table.column.game-code.label": "Code",
   "table.column.game-date.label": "Date",
   "table.column.game-id.label": "ID",
