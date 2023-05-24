@@ -193,7 +193,6 @@
   "admin.form.status.pending-validation": "En attente de validation",
   "admin.form.status.unfilled": "Non rempli",
   "admin.form.status.validated": "Validé",
-  "admin.email.separator": ";",
   "form.status.draft": "Brouillon",
   "form.status.pendingValidation": "Transmis à l'animateur - En attente de validation",
   "form.status.validated": "Validé",

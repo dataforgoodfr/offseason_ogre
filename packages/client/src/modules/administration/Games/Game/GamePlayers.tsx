@@ -36,12 +36,12 @@ import { I18nTranslateFunction } from "../../../translations";
 import { includes, kebabCase } from "lodash";
 import { pipe } from "../../../../lib/fp";
 import { FormStatus } from "../../../play/Personalization/models/form";
-import { User } from "../../../users/types";
 
 export { GamePlayers };
 
 function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const navigate = useNavigate();
+  const [copySuccess, setCopySuccess] = useState<boolean>(false);
   const { t } = useTranslation();
   const gameId = useGameId();
 
@@ -78,21 +78,13 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     }
   );
 
-  const retrieveEmails = useMutation<
-    { data: { players: User[] } },
-    { message: string }
-  >(
-    () => {
-      const path = `/api/games/${game.id}/players`;
-      return axios.get<undefined, { data: { players: User[] } }>(path);
-    },
-    {
-      onSuccess: (data) => {
-        const emails = data?.data?.players?.map((player) => player.email) || [];
-        navigator.clipboard.writeText(emails.join(t("admin.email.separator")));
-      },
+  const retrieveEmails = () => {
+    const emails = players?.map((player) => player.email) || [];
+    if (emails.length > 0) {
+      navigator.clipboard.writeText(emails.join(";"));
+      setCopySuccess(true);
     }
-  );
+  };
 
   if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
@@ -144,7 +136,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
                 {t("cta.check-forms")}
               </Button>
               <Button
-                onClick={() => retrieveEmails.mutate()}
+                onClick={() => retrieveEmails()}
                 variant="contained"
                 sx={{ marginRight: "auto", ml: "auto", height: "80%" }}
               >
@@ -180,8 +172,11 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
         </DataGridBox>
       </Grid>
 
-      {retrieveEmails.isSuccess && (
-        <SuccessAlert message={t("message.success.admin.copied-emails")} />
+      {copySuccess && (
+        <SuccessAlert
+          message={t("message.success.admin.copied-emails")}
+          onClose={() => setCopySuccess(false)}
+        />
       )}
       {removePlayerMutation.isSuccess && (
         <SuccessAlert message={t("message.success.admin.player-removed")} />
