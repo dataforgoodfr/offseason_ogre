@@ -41,6 +41,7 @@ export { GamePlayers };
 
 function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const navigate = useNavigate();
+  const [copySuccess, setCopySuccess] = useState<boolean>(false);
   const { t } = useTranslation();
   const gameId = useGameId();
 
@@ -76,6 +77,14 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
       },
     }
   );
+
+  const retrieveEmails = () => {
+    const emails = players?.map((player) => player.email) || [];
+    if (emails.length > 0) {
+      navigator.clipboard.writeText(emails.join(";"));
+      setCopySuccess(true);
+    }
+  };
 
   if (playersQuery.isLoading || teamQuery.isLoading) {
     return <CircularProgress />;
@@ -125,9 +134,16 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
                   navigate(`/administration/games/${gameId}/form-verification`)
                 }
                 variant="contained"
-                sx={{ marginRight: "auto", ml: 2, height: "80%" }}
+                sx={{ mr: "auto", ml: "auto", height: "80%" }}
               >
                 {t("cta.check-forms")}
+              </Button>
+              <Button
+                onClick={() => retrieveEmails()}
+                variant="contained"
+                sx={{ marginRight: "auto", ml: "auto", height: "80%" }}
+              >
+                {t("cta.retrieve-emails")}
               </Button>
             </Grid>
           </>
@@ -159,6 +175,12 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
         </DataGridBox>
       </Grid>
 
+      {copySuccess && (
+        <SuccessAlert
+          message={t("message.success.admin.copied-emails")}
+          onClose={() => setCopySuccess(false)}
+        />
+      )}
       {removePlayerMutation.isSuccess && (
         <SuccessAlert message={t("message.success.admin.player-removed")} />
       )}
