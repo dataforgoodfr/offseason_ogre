@@ -45,7 +45,7 @@ let theme = createTheme({
     metals: {
       copper: "#466365",
       nickel: "#B49A67",
-      manganese: "#CEB3AB",
+      manganese: "#A03E99",
       silicium: "#DE1A1A",
       other: "#7D4F50",
     },
