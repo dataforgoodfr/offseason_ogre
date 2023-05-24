@@ -5,8 +5,8 @@ import { usePersonaByUserId, usePlay } from "../context/playContext";
 import { Tabs } from "../../common/components/Tabs";
 import { useMemo } from "react";
 import {
-  MaterialsPerProductionTypeChart,
-  MaterialsPerStepChart,
+  ResourcesPerProductionTypeChart,
+  ResourcesPerStepChart,
 } from "../../charts";
 import { useTranslation } from "../../translations/useTranslation";
 
@@ -34,11 +34,11 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
         label: t("page.teacher.statistics.tabs.materials.label"),
         component: (
           <>
-            <MaterialsPerStepChart
+            <ResourcesPerStepChart
               getPersonaAtStep={firstPersona.getPersonaAtStep}
               resourceType="materials"
             />
-            <MaterialsPerProductionTypeChart
+            <ResourcesPerProductionTypeChart
               persona={firstPersona.currentPersona}
               resourceType="materials"
             />
@@ -49,11 +49,11 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
         label: t("page.teacher.statistics.tabs.metals.label"),
         component: (
           <>
-            <MaterialsPerStepChart
+            <ResourcesPerStepChart
               getPersonaAtStep={firstPersona.getPersonaAtStep}
               resourceType="metals"
             />
-            <MaterialsPerProductionTypeChart
+            <ResourcesPerProductionTypeChart
               persona={firstPersona.currentPersona}
               resourceType="metals"
             />

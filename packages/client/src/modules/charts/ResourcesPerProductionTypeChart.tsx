@@ -13,9 +13,9 @@ import { useTranslation } from "../translations/useTranslation";
 import { formatResource } from "../../lib/formatter";
 import { buildLabel } from "./utils/labels";
 
-export { MaterialsPerProductionTypeChart };
+export { ResourcesPerProductionTypeChart };
 
-function MaterialsPerProductionTypeChart({
+function ResourcesPerProductionTypeChart({
   persona,
   resourceType,
 }: {

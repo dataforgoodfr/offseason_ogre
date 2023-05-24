@@ -3,8 +3,8 @@ import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
-  MaterialsPerProductionTypeChart,
-  MaterialsPerStepChart,
+  ResourcesPerProductionTypeChart,
+  ResourcesPerStepChart,
 } from "../../charts";
 import { PlayBox } from "../Components";
 import {
@@ -182,11 +182,11 @@ function MaterialsGraphTab() {
 
   return (
     <>
-      <MaterialsPerStepChart
+      <ResourcesPerStepChart
         getPersonaAtStep={getPersonaAtStep}
         resourceType="materials"
       />
-      <MaterialsPerProductionTypeChart
+      <ResourcesPerProductionTypeChart
         persona={currentPersona}
         resourceType="materials"
       />
@@ -199,11 +199,11 @@ function MetalsGraphTab() {
 
   return (
     <>
-      <MaterialsPerStepChart
+      <ResourcesPerStepChart
         getPersonaAtStep={getPersonaAtStep}
         resourceType="metals"
       />
-      <MaterialsPerProductionTypeChart
+      <ResourcesPerProductionTypeChart
         persona={currentPersona}
         resourceType="metals"
       />

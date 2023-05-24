@@ -17,9 +17,9 @@ import { usePlay } from "../play/context/playContext";
 import { useTranslation } from "../translations/useTranslation";
 import { buildLabel } from "./utils/labels";
 
-export { MaterialsPerStepChart };
+export { ResourcesPerStepChart };
 
-function MaterialsPerStepChart({
+function ResourcesPerStepChart({
   getPersonaAtStep,
   resourceType,
 }: {
@@ -61,17 +61,7 @@ function MaterialsPerStepChart({
           },
           {} as Record<MaterialsType | MetalsType, StackedBarsBar>
         );
-
-      const sortBars = (
-        barIndexedByResourceName: Record<
-          MaterialsType | MetalsType,
-          StackedBarsBar
-        >
-      ) => {
-        return Object.values(barIndexedByResourceName);
-      };
-
-      return pipe(persona, indexBarByResourceName, sortBars);
+      return pipe(persona, indexBarByResourceName, Object.values);
     },
     [resourceType]
   );

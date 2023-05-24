@@ -17,16 +17,6 @@ export interface PhysicalResourceNeedDatum {
   value: number;
 }
 
-const sumTo2050 = (
-  results: {
-    type: string;
-    value: number;
-  }[],
-  resource: MaterialsType | MetalsType
-) => {
-  return sumFor(results, resource);
-};
-
 const computePhysicalResources = (
   production: ProductionDatum[],
   performedTeamActions: TeamAction[],
@@ -66,7 +56,7 @@ const computePhysicalResources = (
     );
     return resourcesTypes.map((resource: MaterialsType | MetalsType) => ({
       name: resource,
-      value: sumTo2050(filteredResults, resource),
+      value: sumFor(filteredResults, resource),
       type: prodType,
     }));
   });
