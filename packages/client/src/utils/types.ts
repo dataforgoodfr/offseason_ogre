@@ -21,6 +21,7 @@ export type {
   ProductionActionUnit,
   TeamAction,
   MaterialsType,
+  MetalsType,
   ProductionTypes,
   UnwrapArray,
 };
@@ -140,6 +141,8 @@ interface TeamAction {
 }
 
 type MaterialsType = "steel" | "cement" | "glass";
+
+type MetalsType = "copper" | "nickel" | "manganese" | "silicium" | "other";
 
 type ProductionTypes =
   | "windOnshore"

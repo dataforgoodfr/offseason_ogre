@@ -42,6 +42,13 @@ let theme = createTheme({
       cement: "#E6AA68",
       glass: "#A72608",
     },
+    metals: {
+      copper: "#466365",
+      nickel: "#B49A67",
+      manganese: "#A03E99",
+      silicium: "#DE1A1A",
+      other: "#7D4F50",
+    },
     actionValidation: {
       main: lightBlue,
       contrastText: white,
@@ -73,6 +80,7 @@ declare module "@mui/material/styles" {
     energy: EnergyPalette;
     production: ProductionPalette;
     materials: MaterialsPalette;
+    metals: MetalsPalette;
     actionValidation: Partial<Palette["primary"]>;
     status: {
       error: string;
@@ -127,4 +135,12 @@ interface MaterialsPalette {
   steel: string;
   cement: string;
   glass: string;
+}
+
+interface MetalsPalette {
+  copper: string;
+  nickel: string;
+  manganese: string;
+  silicium: string;
+  other: string;
 }

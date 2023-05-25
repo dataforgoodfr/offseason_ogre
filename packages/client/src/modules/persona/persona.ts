@@ -9,8 +9,9 @@ import { production, ProductionDatum } from "./production";
 import { computeIntermediateValues } from "./consumption/computing";
 import {
   computeMaterials,
-  MaterialsDatum,
-} from "../play/gameEngines/materialsEngine";
+  computeMetals,
+  PhysicalResourceNeedDatum,
+} from "../play/gameEngines/resourcesEngine";
 import { TeamAction } from "../../utils/types";
 
 export { buildInitialPersona };
@@ -23,7 +24,8 @@ interface Persona {
   points: number;
   consumption: readonly ConsumptionDatum[];
   production: ProductionDatum[];
-  materials: MaterialsDatum[];
+  materials: PhysicalResourceNeedDatum[];
+  metals: PhysicalResourceNeedDatum[];
 }
 
 const buildInitialPersona: (
@@ -47,6 +49,7 @@ const buildInitialPersona: (
   );
 
   const materials = computeMaterials(production, teamActions);
+  const metals = computeMetals(production, teamActions);
 
   const persona: Persona = {
     budget: 13.7,
@@ -56,6 +59,7 @@ const buildInitialPersona: (
     consumption,
     production,
     materials,
+    metals,
   };
 
   return persona;
