@@ -14,11 +14,13 @@ import { Slider } from "../../common/components/Slider";
 import { computeTeamActionStats } from "../utils/production";
 import { Dialog } from "../../common/components/Dialog";
 import { formatBudget, formatProductionGw } from "../../../lib/formatter";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { TeamActionsContent };
 
 function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
   const { teamActionsAtCurrentStep } = useTeamActions();
+  const { t } = useTranslation();
 
   const [openHelpDialog, setOpenHelpDialog] = useState(false);
   const [helpCardLink, setHelpCardLink] = useState("");
@@ -59,7 +61,7 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
               onClick={() => setOpenHelpDialog(false)}
               startIcon={<Icon name="open-in-new-tab" />}
             >
-              Ouvrir la carte
+              {t("modal.help.open")}
             </Button>
             <Button
               color="primary"
@@ -68,7 +70,7 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
               sx={{ border: 1, borderColor: "secondary", mt: 1 }}
               onClick={() => setOpenHelpDialog(false)}
             >
-              Merci pour l'aide
+              {t("modal.help.thanks")}
             </Button>
           </>
         }

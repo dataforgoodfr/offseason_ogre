@@ -49,6 +49,8 @@
   "modal.remove-player.title": "Voulez-vous supprimer le joueur ?",
   "modal.remove-team.title": "Voulez-vous supprimer l'équipe ?",
   "modal.validate-consumption-choices.title": "Les choix ne seront plus modifiables, souhaites-tu valider tes choix ?",
+  "modal.help.open": "Ouvrir la carte",
+  "modal.help.thanks": "Merci pour l'aide",
 
   "form.field.country.label": "Pays",
   "form.field.email.label": "Adresse mail",

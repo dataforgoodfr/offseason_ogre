@@ -502,7 +502,7 @@ function StackedBars({
                     onClick={() => setOpenHelpDialog(false)}
                     startIcon={<Icon name="open-in-new-tab" />}
                   >
-                    Ouvrir la carte
+                    {t("modal.help.open")}
                   </Button>
                   <Button
                     color="primary"
@@ -511,7 +511,7 @@ function StackedBars({
                     sx={{ border: 1, borderColor: "secondary", mt: 1 }}
                     onClick={() => setOpenHelpDialog(false)}
                   >
-                    Merci pour l'aide
+                    {t("modal.help.thanks")}
                   </Button>
                 </>
               }

@@ -12,7 +12,10 @@ import { pipe } from "../../lib/fp";
 import { STEPS, isStepOfType } from "../play";
 import _ from "lodash";
 import { formatProduction, formatResource } from "../../lib/formatter";
-import { ENERGY_SHIFT_TARGET_YEAR } from "../common/constants";
+import {
+  ENERGY_SHIFT_TARGET_YEAR,
+  MATERIALS_INFO_CARD_URL,
+} from "../common/constants";
 import { usePlay } from "../play/context/playContext";
 import { useTranslation } from "../translations/useTranslation";
 import { buildLabel } from "./utils/labels";
@@ -121,9 +124,7 @@ function ResourcesPerStepChart({
       })}
       stacks={graphStacks}
       lines={graphLines}
-      information={
-        "https://drive.google.com/file/d/1mXoUrtdklLjW1p7RpjJfe_Sj141Z4QC-/view?usp=share_link"
-      }
+      information={MATERIALS_INFO_CARD_URL}
     />
   );
 }

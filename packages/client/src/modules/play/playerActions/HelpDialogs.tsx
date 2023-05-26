@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 
 import { Dialog } from "../../common/components/Dialog";
 import { Icon } from "../../common/components/Icon";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { StepHelpDialog, ActionHelpDialog };
 
@@ -14,6 +15,7 @@ function StepHelpDialog({
   handleClose: () => void;
   message: string;
 }) {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={open}
@@ -28,7 +30,7 @@ function StepHelpDialog({
           sx={{ border: 1, borderColor: "secondary" }}
           onClick={handleClose}
         >
-          Merci pour l'aide
+          {t("modal.help.thanks")}
         </Button>
       }
     >
@@ -48,6 +50,8 @@ function ActionHelpDialog({
   message: string;
   helpCardLink: string;
 }) {
+  const { t } = useTranslation();
+
   return (
     <Dialog
       open={open}
@@ -65,7 +69,7 @@ function ActionHelpDialog({
             href={helpCardLink}
             startIcon={<Icon name="open-in-new-tab" />}
           >
-            Ouvrir la carte
+            {t("modal.help.open")}
           </Button>
           <Button
             color="primary"
@@ -74,7 +78,7 @@ function ActionHelpDialog({
             sx={{ border: 1, borderColor: "secondary", mt: 1 }}
             onClick={handleClose}
           >
-            Merci pour l'aide
+            {t("modal.help.thanks")}
           </Button>
         </>
       }
