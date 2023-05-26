@@ -159,11 +159,16 @@ function StatsConsole() {
   );
 }
 
-function SummaryCard({ valuesToDisplay }: { valuesToDisplay: any }) {
+function SummaryCard({ valuesToDisplay }: any) {
   return valuesToDisplay.map(
-    (values: { id: number; name: string; value: string }) => (
+    (values: {
+      id: number;
+      icon: JSX.Element;
+      name: string;
+      value: string;
+    }) => (
       <Box key={values.id} display="flex" gap={1} alignSelf="stretch">
-        <Icon name="team" />
+        {values.icon}
         <Typography>{values.name}</Typography>
         <Spacer />
         <Typography>{values.value}</Typography>
@@ -189,7 +194,7 @@ function displayCarbonFootprint(
     game,
     teamIdToTeamValues,
     t
-  );
+  ).map((value) => ({ ...value, icon: <Icon name="team" /> }));
   return <SummaryCard valuesToDisplay={valuesCarbonFootprint} />;
 }
 
@@ -198,6 +203,8 @@ function displayBudget(
   teamIdToTeamValues: TeamIdToValues,
   t: I18nTranslateFunction
 ) {
-  const valuesBudget = buildValuesBudget(game, teamIdToTeamValues, t);
+  const valuesBudget = buildValuesBudget(game, teamIdToTeamValues, t).map(
+    (value) => ({ ...value, icon: <Icon name="team" /> })
+  );
   return <SummaryCard valuesToDisplay={valuesBudget} />;
 }

@@ -206,6 +206,7 @@
   "form.status.validated": "Validé",
 
   "graph.common.production": "Production",
+  "graph.common.information": "Voici le lien vers une carte qui te donnera des informations supplémentaires:",
   "graph.common.total": "Total",
   "graph.common.team": "Équipe",
   "graph.common.min": "Minimum",

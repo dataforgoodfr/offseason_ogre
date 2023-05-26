@@ -121,6 +121,9 @@ function ResourcesPerStepChart({
       })}
       stacks={graphStacks}
       lines={graphLines}
+      information={
+        "https://drive.google.com/file/d/1mXoUrtdklLjW1p7RpjJfe_Sj141Z4QC-/view?usp=share_link"
+      }
     />
   );
 }

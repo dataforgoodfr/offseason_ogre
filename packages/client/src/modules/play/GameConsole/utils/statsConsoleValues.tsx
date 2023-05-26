@@ -10,6 +10,7 @@ import { MAX_TEAMS_POINTS } from "../../constants";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
 import { I18nTranslateFunction } from "../../../translations";
 import { TeamIdToValues } from "../../context/playContext";
+import { Typography } from "@mui/material";
 
 function computeBudget(
   isSynthesisStep: boolean = false,
@@ -40,6 +41,26 @@ function computeCarbonFootprint(
   return formatCarbonFootprint(carbonFootprint);
 }
 
+function getPointIcon(index: number): JSX.Element {
+  if (index < 3) {
+    return (
+      <img
+        style={{ width: "24px" }}
+        src={`/medal_${index + 1}.png`}
+        alt="medal"
+      />
+    );
+  }
+  return (
+    <Typography
+      sx={{ width: "24px", display: "flex", justifyContent: "center" }}
+    >
+      {" "}
+      {index + 1}{" "}
+    </Typography>
+  );
+}
+
 export const buildValuesPoints = (
   game: IEnrichedGame,
   teamIdToTeamValues: TeamIdToValues
@@ -48,9 +69,10 @@ export const buildValuesPoints = (
   return teamValues
     .sort((a, b) => b.points - a.points)
     .slice(0, game.isLarge ? MAX_TEAMS_POINTS : teamValues.length)
-    .map((team) => ({
+    .map((team, index) => ({
       id: team.id,
-      name: game.teams.find((t: ITeam) => team.id === t.id)?.name,
+      icon: getPointIcon(index),
+      name: game.teams.find((t: ITeam) => team.id === t.id)?.name || "",
       value: formatPoints(teamIdToTeamValues[team.id].points),
     }));
 };

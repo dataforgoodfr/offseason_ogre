@@ -107,13 +107,13 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
   return (
     <>
       <Grid container>
-        {!hasGameStarted(game.status) && (
-          <>
-            <Grid
-              container
-              alignItems="center"
-              sx={{ float: "right", pb: 2, pt: 2, height: "100%" }}
-            >
+        <Grid
+          container
+          alignItems="center"
+          sx={{ float: "right", pb: 2, pt: 2, height: "100%" }}
+        >
+          {!hasGameStarted(game.status) && (
+            <>
               <Button
                 onClick={() =>
                   blockForms.mutate(game && game.status !== "ready")
@@ -138,16 +138,16 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
               >
                 {t("cta.check-forms")}
               </Button>
-              <Button
-                onClick={() => retrieveEmails()}
-                variant="contained"
-                sx={{ marginRight: "auto", ml: "auto", height: "80%" }}
-              >
-                {t("cta.retrieve-emails")}
-              </Button>
-            </Grid>
-          </>
-        )}
+            </>
+          )}
+          <Button
+            onClick={() => retrieveEmails()}
+            variant="contained"
+            sx={{ marginRight: "auto", ml: "auto", height: "80%" }}
+          >
+            {t("cta.retrieve-emails")}
+          </Button>
+        </Grid>
         <DataGridBox>
           <DataGrid
             rows={rows}
