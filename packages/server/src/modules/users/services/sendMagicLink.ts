@@ -1,5 +1,5 @@
 import { sign } from "../../tokens";
-import { getApiOrigin } from "../../config";
+import { WEB_APP_URL } from "../../config";
 import { isMailAlreadyUsed } from "./isMailAlreadyUsed";
 import { createBusinessError } from "../../utils/businessError";
 import { mails } from "../../notifications/services/mails";
@@ -10,9 +10,8 @@ async function sendMagicLink(email: string) {
   if (!(await isMailAlreadyUsed(email))) {
     throw createBusinessError("USER_DOES_NOT_EXIST", { email });
   }
-  const origin = getApiOrigin();
   const token = signMagicToken(email);
-  const magicLink = `${origin}/api/users/sign-in?token=${token}`;
+  const magicLink = `${WEB_APP_URL}/sign-in?token=${token}`;
   await mails.sendMail(email, "login-magic-link", { url: magicLink });
 }
 

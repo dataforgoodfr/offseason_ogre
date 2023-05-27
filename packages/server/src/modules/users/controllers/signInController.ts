@@ -3,7 +3,6 @@ import type { Request, Response } from "express";
 import invariant from "tiny-invariant";
 import { z } from "zod";
 import { sign, verify } from "../../tokens";
-import { getFrontOrigin } from "../../config";
 
 export { signInController };
 
@@ -46,6 +45,5 @@ function signInController(req: Request, res: Response): void {
     httpOnly: true,
     maxAge: 30 * 60 * 60 * 24 * 1000,
   });
-  res.redirect(getFrontOrigin());
   res.end();
 }
