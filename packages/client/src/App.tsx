@@ -4,6 +4,7 @@ import { UnauthenticatedApp } from "./UnauthenticatedApp";
 import { hotjar } from "react-hotjar";
 import { useEffect } from "react";
 import { ErrorBoundary } from "./modules/error-handling/ErrorBoundary";
+import { Alerts } from "./modules/alert";
 
 export default App;
 
@@ -17,6 +18,7 @@ function App() {
   return (
     <ErrorBoundary>
       {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+      <Alerts />
     </ErrorBoundary>
   );
 }
