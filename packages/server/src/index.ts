@@ -3,7 +3,6 @@ import express from "express";
 
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import cors from "cors";
 import { apiRouter } from "./modules/apiRouter";
 import { connectToDatase, disconnectFromDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
@@ -11,6 +10,7 @@ import { logger } from "./logger";
 import { logError, setRequestId } from "./middlewares";
 import { initErrorTracer, traceRequests } from "./error-handling";
 import { redis } from "./modules/redis/services";
+import { cors } from "./middlewares/cors";
 
 async function createApp() {
   const app = express();
@@ -24,7 +24,7 @@ async function createApp() {
   // Parse JSON bodies (as sent by API clients)
   app.use(bodyParser.json());
   app.use(cookieParser());
-  app.use(cors());
+  app.use(cors);
 
   const port = process.env.PORT || 8080;
 
