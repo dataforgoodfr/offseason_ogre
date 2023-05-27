@@ -159,16 +159,27 @@ function StatsConsole() {
   );
 }
 
-function SummaryCard({ valuesToDisplay }: { valuesToDisplay: any }) {
-  return valuesToDisplay.map(
-    (values: { id: number; name: string; value: string }) => (
-      <Box key={values.id} display="flex" gap={1} alignSelf="stretch">
-        <Icon name="team" />
-        <Typography>{values.name}</Typography>
-        <Spacer />
-        <Typography>{values.value}</Typography>
-      </Box>
-    )
+function SummaryCard({
+  valuesToDisplay,
+}: {
+  valuesToDisplay: {
+    id: number;
+    icon: JSX.Element;
+    name: string;
+    value: string;
+  }[];
+}) {
+  return (
+    <Box display="flex" flexDirection="column" gap="4px" alignSelf="stretch">
+      {valuesToDisplay.map((values) => (
+        <Box key={values.id} display="flex" gap={1} alignSelf="stretch">
+          {values.icon}
+          <Typography>{values.name}</Typography>
+          <Spacer />
+          <Typography>{values.value}</Typography>
+        </Box>
+      ))}
+    </Box>
   );
 }
 
@@ -189,7 +200,7 @@ function displayCarbonFootprint(
     game,
     teamIdToTeamValues,
     t
-  );
+  ).map((value) => ({ ...value, icon: <Icon name="team" /> }));
   return <SummaryCard valuesToDisplay={valuesCarbonFootprint} />;
 }
 
@@ -198,6 +209,8 @@ function displayBudget(
   teamIdToTeamValues: TeamIdToValues,
   t: I18nTranslateFunction
 ) {
-  const valuesBudget = buildValuesBudget(game, teamIdToTeamValues, t);
+  const valuesBudget = buildValuesBudget(game, teamIdToTeamValues, t).map(
+    (value) => ({ ...value, icon: <Icon name="team" /> })
+  );
   return <SummaryCard valuesToDisplay={valuesBudget} />;
 }

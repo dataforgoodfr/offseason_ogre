@@ -10,6 +10,8 @@ import { MAX_TEAMS_POINTS } from "../../constants";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
 import { I18nTranslateFunction } from "../../../translations";
 import { TeamIdToValues } from "../../context/playContext";
+import { Typography } from "@mui/material";
+import { Icon } from "../../../common/components/Icon";
 
 function computeBudget(
   isSynthesisStep: boolean = false,
@@ -48,12 +50,33 @@ export const buildValuesPoints = (
   return teamValues
     .sort((a, b) => b.points - a.points)
     .slice(0, game.isLarge ? MAX_TEAMS_POINTS : teamValues.length)
-    .map((team) => ({
+    .map((team, index) => ({
       id: team.id,
-      name: game.teams.find((t: ITeam) => team.id === t.id)?.name,
+      icon: getPointIcon(index + 1),
+      name: game.teams.find((t: ITeam) => team.id === t.id)?.name || "",
       value: formatPoints(teamIdToTeamValues[team.id].points),
     }));
 };
+
+function getPointIcon(rank: number): JSX.Element {
+  const ICON_SIZE = 24;
+
+  if (rank === 1) {
+    return <Icon name="rank-1st" width={ICON_SIZE} />;
+  } else if (rank === 2) {
+    return <Icon name="rank-2nd" width={ICON_SIZE} />;
+  } else if (rank === 3) {
+    return <Icon name="rank-3rd" width={ICON_SIZE} />;
+  }
+
+  return (
+    <Typography
+      sx={{ width: ICON_SIZE, display: "flex", justifyContent: "center" }}
+    >
+      {rank}
+    </Typography>
+  );
+}
 
 export const buildValuesBudget = (
   game: IEnrichedGame,
