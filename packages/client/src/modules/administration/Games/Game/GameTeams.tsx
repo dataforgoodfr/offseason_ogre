@@ -14,7 +14,6 @@ import {
   GridRowParams,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IGame } from "../../../../utils/types";
 import { useState } from "react";
@@ -26,6 +25,7 @@ import { hasGameStarted } from "../utils";
 import { ErrorAlert, SuccessAlert } from "../../../alert";
 import { useTranslation } from "../../../translations/useTranslation";
 import { I18nTranslateFunction } from "../../../translations";
+import { http } from "../../../../utils/request";
 
 export { GameTeams };
 
@@ -56,7 +56,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
     { quantity: number }
   >(
     ({ quantity }) => {
-      return axios.post(`/api/teams`, { gameId, quantity });
+      return http.post(`/api/teams`, { gameId, quantity });
     },
     {
       onSuccess: () => {
@@ -72,7 +72,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
     { teamId: number }
   >(
     ({ teamId }) => {
-      return axios.post("/api/games/remove-team", { teamId });
+      return http.post("/api/games/remove-team", { teamId });
     },
     {
       onSuccess: () => {
@@ -88,7 +88,7 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
 
   const orderPlayersMutation = useMutation<Response, { message: string }>(
     () => {
-      return axios.put(`/api/games/${gameId}/players/order`, { gameId });
+      return http.put(`/api/games/${gameId}/players/order`, { gameId });
     },
     {
       onSuccess: () => {

@@ -1,6 +1,6 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 
@@ -9,6 +9,7 @@ import FormInput from "../../common/components/FormInput";
 import { User } from "../../users/types";
 import { useAuth } from "../../auth/authProvider";
 import { getCountryByCode } from "../../signup/components/SelectCountry";
+import { http } from "../../../utils/request";
 
 export { Settings };
 
@@ -30,7 +31,7 @@ function Settings(): JSX.Element {
     User
   >(
     (updateData) => {
-      return axios.put(`/api/users/${user!.id}`, updateData);
+      return http.put(`/api/users/${user!.id}`, updateData);
     },
     {
       onSuccess: async () => {

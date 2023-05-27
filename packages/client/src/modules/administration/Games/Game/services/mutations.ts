@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
+import { http } from "../../../../../utils/request";
 
 export const useRemovePlayerMutation = (gameId: number) => {
   const queryClient = useQueryClient();
@@ -10,7 +10,7 @@ export const useRemovePlayerMutation = (gameId: number) => {
     { userId: number }
   >(
     ({ userId }) => {
-      return axios.post("/api/games/remove-player", { gameId, userId });
+      return http.post("/api/games/remove-player", { gameId, userId });
     },
     {
       onSuccess: () => {

@@ -1,10 +1,10 @@
 import { CircularProgress, useTheme } from "@mui/material";
-import axios from "axios";
 import * as React from "react";
 import { useQuery } from "react-query";
 
 import { Role, RoleName, RoleNames, User } from "../users/types";
 import { hasRole } from "./auth.utils";
+import { http } from "../../utils/request";
 
 export { AuthProvider, useAuth };
 export type { UserPermissions };
@@ -43,7 +43,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const { isLoading: isLoadingUser } = useQuery(
     "logged-user",
     () => {
-      return axios.get<any, { data: { user: null | User } }>(
+      return http.get<any, { data: { user: null | User } }>(
         "/api/users/logged-user"
       );
     },
@@ -60,7 +60,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const { isLoading: isLoadingRoles } = useQuery(
     "roles",
     () => {
-      return axios.get<any, { data: { roles: Role[] } }>("/api/roles");
+      return http.get<any, { data: { roles: Role[] } }>("/api/roles");
     },
     {
       onSuccess: (data) => {

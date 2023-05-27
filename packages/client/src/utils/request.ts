@@ -1,4 +1,13 @@
-export { handleApiError };
+// eslint-disable-next-line no-restricted-imports
+import axios from "axios";
+import { API_URL } from "../modules/common/constants";
+
+export { handleApiError, http };
+
+const http = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+});
 
 type BusinessErrorCode =
   | "USER_ALREADY_EXISTS"

@@ -27,6 +27,7 @@ import { range } from "lodash";
 import { sumAllValues } from "../../persona";
 import { NO_TEAM } from "../../common/constants/teams";
 import { buildInitialPersona } from "../../persona/persona";
+import { WEB_SOCKET_URL } from "../../common/constants";
 
 export {
   PlayProvider,
@@ -426,7 +427,7 @@ function useGameSocket({
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
-    const newSocket = io();
+    const newSocket = io(WEB_SOCKET_URL);
 
     newSocket.on("resetGameState", (state) => {
       const { gameWithTeams } = state;

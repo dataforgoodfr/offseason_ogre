@@ -1,5 +1,4 @@
 import { Box, TextField, Grid, Button, Typography } from "@mui/material";
-import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import SaveIcon from "@mui/icons-material/Save";
@@ -8,6 +7,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { IGame } from "../../../../utils/types";
+import { http } from "../../../../utils/request";
 
 export { GameInfo };
 
@@ -25,7 +25,7 @@ function GameInfo(props: IInfoProps) {
   const queryClient = useQueryClient();
 
   const query = useQuery(`/api/users/${props.game.teacherId}`, () => {
-    return axios.get<undefined, { data: { data: any } }>(
+    return http.get<undefined, { data: { data: any } }>(
       `/api/users/${props.game.teacherId}`
     );
   });
@@ -50,7 +50,7 @@ function GameInfo(props: IInfoProps) {
         date: new Date(game.date),
       };
       const path = `/api/games/${props.game?.id}`;
-      return axios.put(path, formattedGame);
+      return http.put(path, formattedGame);
     },
     {
       onSuccess: (data, game) =>
