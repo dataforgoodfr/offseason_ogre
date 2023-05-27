@@ -15,5 +15,6 @@ const MATERIALS_AND_METALS_INFO_CARD_URL =
   "https://drive.google.com/file/d/1mXoUrtdklLjW1p7RpjJfe_Sj141Z4QC-/view?usp=share_link";
 
 const API_HOST = import.meta.env.VITE_API_HOST || "localhost:3000";
-const API_URL = `http://${API_HOST}`;
+const API_PROTOCOL = process.env.NODE_ENV !== "development" ? "https" : "http";
+const API_URL = `${API_PROTOCOL}://${API_HOST}`;
 const WEB_SOCKET_URL = `ws://${API_HOST}`;
