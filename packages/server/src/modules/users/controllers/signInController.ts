@@ -44,6 +44,8 @@ function signInController(req: Request, res: Response): void {
   res.cookie("authentificationToken", authenticationToken, {
     httpOnly: true,
     maxAge: 30 * 60 * 60 * 24 * 1000,
+    sameSite: "none",
+    secure: true
   });
   res.end();
 }
