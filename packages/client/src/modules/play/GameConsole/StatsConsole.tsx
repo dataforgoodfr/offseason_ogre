@@ -159,21 +159,27 @@ function StatsConsole() {
   );
 }
 
-function SummaryCard({ valuesToDisplay }: any) {
-  return valuesToDisplay.map(
-    (values: {
-      id: number;
-      icon: JSX.Element;
-      name: string;
-      value: string;
-    }) => (
-      <Box key={values.id} display="flex" gap={1} alignSelf="stretch">
-        {values.icon}
-        <Typography>{values.name}</Typography>
-        <Spacer />
-        <Typography>{values.value}</Typography>
-      </Box>
-    )
+function SummaryCard({
+  valuesToDisplay,
+}: {
+  valuesToDisplay: {
+    id: number;
+    icon: JSX.Element;
+    name: string;
+    value: string;
+  }[];
+}) {
+  return (
+    <Box display="flex" flexDirection="column" gap="4px" alignSelf="stretch">
+      {valuesToDisplay.map((values) => (
+        <Box key={values.id} display="flex" gap={1} alignSelf="stretch">
+          {values.icon}
+          <Typography>{values.name}</Typography>
+          <Spacer />
+          <Typography>{values.value}</Typography>
+        </Box>
+      ))}
+    </Box>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Button, Card, Grid, IconButton, Theme, useTheme } from "@mui/material";
+import { Card, Grid, Theme, useTheme } from "@mui/material";
 import {
   ComposedChart,
   Bar,
@@ -15,7 +15,7 @@ import {
   XAxisProps,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
-import { useCallback, useMemo, useState } from "react";
+import { ReactNode, useCallback, useMemo } from "react";
 import { toArray } from "../../lib/array";
 import { UnwrapArray } from "../../utils/types";
 import { range } from "lodash";
@@ -24,8 +24,6 @@ import { Typography } from "../common/components/Typography";
 import { ObjectBuilder } from "../../lib/object";
 import { orderOfMagnitude } from "../../lib/math";
 import { useTranslation } from "../translations/useTranslation";
-import { Dialog } from "../common/components/Dialog";
-import { Icon } from "../common/components/Icon";
 
 export { StackedBars };
 export type {
@@ -79,7 +77,7 @@ interface StackedBarsProps {
   lines?: StackedBarsLine[];
   tick?: boolean;
   direction?: "horizontal" | "vertical";
-  information?: string | null;
+  topRightActions?: ReactNode;
   onClick?: CategoricalChartFunc;
 }
 
@@ -89,12 +87,11 @@ function StackedBars({
   lines = [],
   tick = true,
   direction = "horizontal",
-  information = null,
+  topRightActions,
   onClick,
 }: StackedBarsProps) {
   const theme = useTheme();
   const { t } = useTranslation();
-  const [openHelpDialog, setOpenHelpDialog] = useState<boolean>(false);
 
   const getColorFromPalettes = useCallback(
     (
@@ -475,55 +472,27 @@ function StackedBars({
     >
       <Grid
         container
-        direction="row"
+        direction="column"
         justifyContent="center"
         alignItems="center"
+        gap={2}
+        sx={{ mb: 4 }}
       >
         {!!title && (
-          <Typography variant="h5" sx={{ mb: 4, textAlign: "center" }}>
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
             {title}
           </Typography>
         )}
-        {!!information && (
-          <>
-            <Dialog
-              open={openHelpDialog}
-              handleClose={() => setOpenHelpDialog(false)}
-              content={t("graph.common.information")}
-              actions={
-                <>
-                  <Button
-                    color="secondary"
-                    variant="contained"
-                    sx={{ border: 1, borderColor: "secondary" }}
-                    component="a"
-                    target="_blank"
-                    href={information}
-                    onClick={() => setOpenHelpDialog(false)}
-                    startIcon={<Icon name="open-in-new-tab" />}
-                  >
-                    {t("modal.help.open")}
-                  </Button>
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                    sx={{ border: 1, borderColor: "secondary", mt: 1 }}
-                    onClick={() => setOpenHelpDialog(false)}
-                  >
-                    {t("modal.help.thanks")}
-                  </Button>
-                </>
-              }
-            />
-            <IconButton
-              sx={{ mb: 4, ml: 4 }}
-              onClick={() => setOpenHelpDialog(true)}
-            >
-              <img src="/info_icon.svg" alt="information icon" />
-            </IconButton>
-          </>
-        )}
+        <Grid container direction="column">
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-end"
+            paddingRight={4}
+          >
+            {topRightActions}
+          </Grid>
+        </Grid>
       </Grid>
       <ResponsiveContainer width="100%" height={500}>
         <chartConfig.ChartComponent

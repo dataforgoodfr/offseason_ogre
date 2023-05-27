@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
   StackedBars,
   StackedBarsBar,
@@ -14,11 +14,14 @@ import _ from "lodash";
 import { formatProduction, formatResource } from "../../lib/formatter";
 import {
   ENERGY_SHIFT_TARGET_YEAR,
-  MATERIALS_INFO_CARD_URL,
+  MATERIALS_AND_METALS_INFO_CARD_URL,
 } from "../common/constants";
 import { usePlay } from "../play/context/playContext";
 import { useTranslation } from "../translations/useTranslation";
 import { buildLabel } from "./utils/labels";
+import { Button, IconButton } from "@mui/material";
+import { Dialog } from "../common/components/Dialog";
+import { Icon } from "../common/components/Icon";
 
 export { ResourcesPerStepChart };
 
@@ -31,6 +34,7 @@ function ResourcesPerStepChart({
 }) {
   const { t } = useTranslation();
   const { game } = usePlay();
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
 
   const stepIdsToDisplay = useMemo(
     (): number[] =>
@@ -118,13 +122,49 @@ function ResourcesPerStepChart({
   }, [stepIdsToDisplay, getPersonaAtStep, t]);
 
   return (
-    <StackedBars
-      title={t(`graph.${resourceType}.quantity-per-step-graph.title`, {
-        year: ENERGY_SHIFT_TARGET_YEAR,
-      })}
-      stacks={graphStacks}
-      lines={graphLines}
-      information={MATERIALS_INFO_CARD_URL}
-    />
+    <>
+      <StackedBars
+        title={t(`graph.${resourceType}.quantity-per-step-graph.title`, {
+          year: ENERGY_SHIFT_TARGET_YEAR,
+        })}
+        stacks={graphStacks}
+        lines={graphLines}
+        topRightActions={
+          <IconButton onClick={() => setOpenHelpDialog(true)}>
+            <Icon name="info-card" width={25} />
+          </IconButton>
+        }
+      />
+      <Dialog
+        open={openHelpDialog}
+        handleClose={() => setOpenHelpDialog(false)}
+        content={t("graph.common.information")}
+        actions={
+          <>
+            <Button
+              color="secondary"
+              variant="contained"
+              sx={{ border: 1, borderColor: "secondary" }}
+              component="a"
+              target="_blank"
+              href={MATERIALS_AND_METALS_INFO_CARD_URL}
+              onClick={() => setOpenHelpDialog(false)}
+              startIcon={<Icon name="open-in-new-tab" />}
+            >
+              {t("cta.open-info-card")}
+            </Button>
+            <Button
+              color="primary"
+              variant="contained"
+              type="submit"
+              sx={{ border: 1, borderColor: "secondary", mt: 1 }}
+              onClick={() => setOpenHelpDialog(false)}
+            >
+              {t("cta.thanks-for-help")}
+            </Button>
+          </>
+        }
+      />
+    </>
   );
 }

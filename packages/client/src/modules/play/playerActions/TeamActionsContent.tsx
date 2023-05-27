@@ -61,7 +61,7 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
               onClick={() => setOpenHelpDialog(false)}
               startIcon={<Icon name="open-in-new-tab" />}
             >
-              {t("modal.help.open")}
+              {t("cta.open-info-card")}
             </Button>
             <Button
               color="primary"
@@ -70,7 +70,7 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
               sx={{ border: 1, borderColor: "secondary", mt: 1 }}
               onClick={() => setOpenHelpDialog(false)}
             >
-              {t("modal.help.thanks")}
+              {t("cta.thanks-for-help")}
             </Button>
           </>
         }

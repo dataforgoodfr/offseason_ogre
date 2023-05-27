@@ -11,6 +11,7 @@ import { synthesisConstants } from "../../playerActions/constants/synthesis";
 import { I18nTranslateFunction } from "../../../translations";
 import { TeamIdToValues } from "../../context/playContext";
 import { Typography } from "@mui/material";
+import { Icon } from "../../../common/components/Icon";
 
 function computeBudget(
   isSynthesisStep: boolean = false,
@@ -41,26 +42,6 @@ function computeCarbonFootprint(
   return formatCarbonFootprint(carbonFootprint);
 }
 
-function getPointIcon(index: number): JSX.Element {
-  if (index < 3) {
-    return (
-      <img
-        style={{ width: "24px" }}
-        src={`/medal_${index + 1}.png`}
-        alt="medal"
-      />
-    );
-  }
-  return (
-    <Typography
-      sx={{ width: "24px", display: "flex", justifyContent: "center" }}
-    >
-      {" "}
-      {index + 1}{" "}
-    </Typography>
-  );
-}
-
 export const buildValuesPoints = (
   game: IEnrichedGame,
   teamIdToTeamValues: TeamIdToValues
@@ -71,11 +52,31 @@ export const buildValuesPoints = (
     .slice(0, game.isLarge ? MAX_TEAMS_POINTS : teamValues.length)
     .map((team, index) => ({
       id: team.id,
-      icon: getPointIcon(index),
+      icon: getPointIcon(index + 1),
       name: game.teams.find((t: ITeam) => team.id === t.id)?.name || "",
       value: formatPoints(teamIdToTeamValues[team.id].points),
     }));
 };
+
+function getPointIcon(rank: number): JSX.Element {
+  const ICON_SIZE = 24;
+
+  if (rank === 1) {
+    return <Icon name="rank-1st" width={ICON_SIZE} />;
+  } else if (rank === 2) {
+    return <Icon name="rank-2nd" width={ICON_SIZE} />;
+  } else if (rank === 3) {
+    return <Icon name="rank-3rd" width={ICON_SIZE} />;
+  }
+
+  return (
+    <Typography
+      sx={{ width: ICON_SIZE, display: "flex", justifyContent: "center" }}
+    >
+      {rank}
+    </Typography>
+  );
+}
 
 export const buildValuesBudget = (
   game: IEnrichedGame,
