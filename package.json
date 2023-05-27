@@ -10,7 +10,7 @@
     "husky": "^8.0.1"
   },
   "scripts": {
-    "build": "yarn workspace ogre-client build && yarn workspace ogre-server build",
+    "build": "yarn workspace ogre-server build",
     "prepare": "husky install",
     "client:dev": "yarn workspace ogre-client dev",
     "server:dev": "yarn workspace ogre-server dev",

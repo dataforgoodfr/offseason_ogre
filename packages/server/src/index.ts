@@ -1,6 +1,5 @@
 import "source-map-support/register";
-import path from "path";
-import express, { Request, Response } from "express";
+import express from "express";
 
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
@@ -10,7 +9,6 @@ import { connectToDatase, disconnectFromDatase, seed } from "./database";
 import { initWebSocket } from "./modules/websocket";
 import { logger } from "./logger";
 import { logError, setRequestId } from "./middlewares";
-import { limiter } from "./middlewares/limit";
 import { initErrorTracer, traceRequests } from "./error-handling";
 import { redis } from "./modules/redis/services";
 
@@ -32,26 +30,6 @@ async function createApp() {
 
   app.use(setRequestId);
   app.use("/api", apiRouter);
-
-  // Serve the front.
-  const oneDayInMs = "86401000";
-  app.use(
-    "/",
-    express.static(path.resolve(path.join(__dirname, "../../client/build/")), {
-      etag: false,
-      maxAge: oneDayInMs,
-    })
-  );
-
-  // Serving index.html by default
-  app.get("*", limiter, (_request: Request, response: Response) => {
-    response.set("Cache-control", "no-cache");
-    response.set("last-modified", new Date().toUTCString());
-    return response.sendFile(
-      path.resolve(path.join(__dirname, "../../client/build/index.html")),
-      { etag: false }
-    );
-  });
 
   app.use(logError);
 
