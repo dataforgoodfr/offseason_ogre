@@ -45,7 +45,7 @@ function signInController(req: Request, res: Response): void {
     httpOnly: true,
     maxAge: 30 * 60 * 60 * 24 * 1000,
     sameSite: "none",
-    secure: true
+    secure: true,
   });
   res.end();
 }

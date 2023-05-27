@@ -16,5 +16,6 @@ const MATERIALS_AND_METALS_INFO_CARD_URL =
 
 const API_HOST = import.meta.env.VITE_API_HOST || "localhost:3000";
 const API_PROTOCOL = process.env.NODE_ENV !== "development" ? "https" : "http";
-const API_URL = `${API_PROTOCOL}://${API_HOST}`;
-const WEB_SOCKET_URL = `ws://${API_HOST}`;
+const API_BASE_URL = `${API_PROTOCOL}://${API_HOST}`;
+const API_URL = `${API_BASE_URL}`;
+const WEB_SOCKET_URL = `${API_BASE_URL}`;
