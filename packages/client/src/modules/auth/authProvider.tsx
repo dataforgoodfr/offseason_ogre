@@ -15,7 +15,7 @@ interface IAuthContext {
   roles: Role[];
   permissions: UserPermissions;
   findRoleByName: (roleName: RoleName) => Role | undefined;
-  setToken: (token: string) => void;
+  setToken: (token: string | null) => void;
 }
 
 type UserPermissions = {

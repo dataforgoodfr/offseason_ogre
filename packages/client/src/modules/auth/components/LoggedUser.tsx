@@ -24,6 +24,7 @@ type muiColor =
 function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -75,7 +76,7 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
         <AdministrationMenuItem handleClose={handleClose} />
         <MenuItem
           onClick={() => {
-            localStorage.removeItem("token");
+            setToken(null);
             queryClient.invalidateQueries("logged-user");
             handleClose();
           }}

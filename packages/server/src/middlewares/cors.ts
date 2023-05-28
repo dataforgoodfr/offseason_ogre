@@ -1,13 +1,9 @@
-import corsLib from "cors";
-
-export { cors, corsOptions };
+export { corsOptions };
 
 const corsOptions = {
   credentials: true,
   origin: getOrigins(),
 };
-
-const cors = corsLib(corsOptions);
 
 function getOrigins() {
   if (process.env.NODE_ENV === "production") {

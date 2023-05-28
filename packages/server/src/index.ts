@@ -1,4 +1,5 @@
 import "source-map-support/register";
+import cors from "cors";
 import express from "express";
 
 import bodyParser from "body-parser";
@@ -10,7 +11,7 @@ import { logger } from "./logger";
 import { logError, setRequestId } from "./middlewares";
 import { initErrorTracer, traceRequests } from "./error-handling";
 import { redis } from "./modules/redis/services";
-import { cors } from "./middlewares/cors";
+import { corsOptions } from "./middlewares/cors";
 
 async function createApp() {
   const app = express();
@@ -24,7 +25,7 @@ async function createApp() {
   // Parse JSON bodies (as sent by API clients)
   app.use(bodyParser.json());
   app.use(cookieParser());
-  app.use(cors);
+  app.use(cors(corsOptions));
 
   const port = process.env.PORT || 8080;
 
