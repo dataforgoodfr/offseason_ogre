@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import cookie from "cookie";
 import { z } from "zod";
 import invariant from "tiny-invariant";
 import { services as gameServices } from "../../games/services";
@@ -22,10 +21,8 @@ function handleJoinGame(io: Server, socket: Socket) {
       const gameState = await gameServices.initState({ gameId });
       socket.emit("resetGameState", gameState);
 
-      const cookies = cookie.parse(socket.handshake.headers.cookie || "");
-      const user = await usersServices.authenticateUser(
-        cookies?.authentificationToken
-      );
+      const token = socket.handshake.auth?.token || "";
+      const user = await usersServices.authenticateUser(token);
 
       socket.data.gameId = gameId;
       socket.data.user = user;

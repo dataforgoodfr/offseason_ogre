@@ -4,9 +4,22 @@ import { API_URL } from "../modules/common/constants";
 
 export { handleApiError, http };
 
-const http = axios.create({
-  baseURL: API_URL,
-  withCredentials: true,
+const http = axios.create();
+
+http.defaults.baseURL = API_URL;
+http.defaults.withCredentials = true;
+
+http.interceptors.request.use(function (config) {
+  if (!config.headers) {
+    config.headers = {};
+  }
+
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = token ? `Bearer ${token}` : "";
+  }
+
+  return { ...config };
 });
 
 type BusinessErrorCode =

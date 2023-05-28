@@ -7,7 +7,6 @@ import React from "react";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../authProvider";
-import { http } from "../../../utils/request";
 
 export { LoggedUser };
 
@@ -76,10 +75,9 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
         <AdministrationMenuItem handleClose={handleClose} />
         <MenuItem
           onClick={() => {
-            http.post("/api/users/logout").then(() => {
-              queryClient.invalidateQueries("logged-user");
-              handleClose();
-            });
+            localStorage.removeItem("token");
+            queryClient.invalidateQueries("logged-user");
+            handleClose();
           }}
         >
           <LogoutIcon />

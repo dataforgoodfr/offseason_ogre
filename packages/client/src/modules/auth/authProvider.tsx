@@ -10,10 +10,12 @@ export { AuthProvider, useAuth };
 export type { UserPermissions };
 
 interface IAuthContext {
+  token: string | null;
   user: null | User;
   roles: Role[];
   permissions: UserPermissions;
   findRoleByName: (roleName: RoleName) => Role | undefined;
+  setToken: (token: string) => void;
 }
 
 type UserPermissions = {
@@ -23,7 +25,8 @@ type UserPermissions = {
   canEditUserRole: boolean;
 };
 
-const AuthContext = React.createContext<IAuthContext>({
+const defaultContext: IAuthContext = {
+  token: localStorage.getItem("token") || null,
   user: null,
   roles: [],
   permissions: {
@@ -33,12 +36,16 @@ const AuthContext = React.createContext<IAuthContext>({
     canEditUserRole: false,
   },
   findRoleByName: () => undefined,
-});
+  setToken: () => undefined,
+};
+
+const AuthContext = React.createContext<IAuthContext>(defaultContext);
 const useAuth = () => React.useContext<IAuthContext>(AuthContext);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [roles, setRoles] = React.useState<Role[]>([]);
+  const [token, setToken] = React.useState(defaultContext.token);
+  const [user, setUser] = React.useState<User | null>(defaultContext.user);
+  const [roles, setRoles] = React.useState<Role[]>(defaultContext.roles);
 
   const { isLoading: isLoadingUser } = useQuery(
     "logged-user",
@@ -79,6 +86,18 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     [roles]
   );
 
+  const setTokenCallback = React.useCallback(
+    (token: string | null): void => {
+      if (token) {
+        localStorage.setItem("token", token);
+      } else {
+        localStorage.removeItem("token");
+      }
+      setToken(token);
+    },
+    [setToken]
+  );
+
   const permissions: UserPermissions = React.useMemo(
     () => ({
       canAccessAdminList: hasRole([RoleNames.ADMIN], user),
@@ -91,12 +110,14 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const context = React.useMemo(
     () => ({
+      token,
       user,
       roles,
       permissions,
       findRoleByName,
+      setToken: setTokenCallback,
     }),
-    [permissions, roles, user, findRoleByName]
+    [permissions, roles, token, user, findRoleByName, setTokenCallback]
   );
 
   if (isLoadingUser || isLoadingRoles) {
