@@ -9,4 +9,10 @@ const DataGridBox = styled(Box)(({ theme }) => ({
   "& .not-credible-cell": {
     backgroundColor: theme.palette.primary.contrastText,
   },
+  "& .form-validated": {
+    color: "green",
+  },
+  "& .form-pending-validation": {
+    color: "red",
+  },
 }));

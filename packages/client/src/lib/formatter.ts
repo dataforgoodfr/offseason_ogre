@@ -6,7 +6,7 @@ export {
   formatPoints,
   formatProduction,
   formatProductionGw,
-  formatMaterial,
+  formatResource,
 };
 
 function formatBudget(value?: number) {
@@ -36,7 +36,7 @@ function formatProduction({
   };
 }
 
-function formatMaterial({
+function formatResource({
   fractionDigits = 2,
 }: { fractionDigits?: number } = {}) {
   return function (value?: number) {

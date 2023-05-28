@@ -37,6 +37,7 @@ import {
   HistoryEdu,
   Home,
   Lock,
+  LockOpen,
   LunchDining,
   Microwave,
   Shield,
@@ -45,6 +46,7 @@ import {
 } from "@mui/icons-material";
 
 export { Icon };
+export type IconName = keyof typeof ICONS;
 
 const ICONS = {
   "action-points": DirectionsBike,
@@ -73,7 +75,9 @@ const ICONS = {
   helper: HelpIcon,
   house: Home,
   information: Info,
+  "info-card": IconImgFactory({ asset: "info_icon.svg" }),
   lock: Lock,
+  "lock-open": LockOpen,
   "mark-circle": Cancel,
   microwave: Microwave,
   "open-in-new-tab": OpenInNew,
@@ -84,6 +88,9 @@ const ICONS = {
   "player-pin": PersonPinRounded,
   power: FlashOn,
   production: Factory,
+  "rank-1st": IconImgFactory({ asset: "medal_1.png" }),
+  "rank-2nd": IconImgFactory({ asset: "medal_2.png" }),
+  "rank-3rd": IconImgFactory({ asset: "medal_3.png" }),
   settings: SettingsSuggestIcon,
   star: Star,
   synthesis: AutoGraphRoundedIcon,
@@ -105,4 +112,10 @@ function Icon({ name, ...iconMappedProps }: IconProps) {
   return <Component {...iconMappedProps} />;
 }
 
-export type IconName = keyof typeof ICONS;
+type Asset = "info_icon.svg" | "medal_1.png" | "medal_2.png" | "medal_3.png";
+
+function IconImgFactory({ asset }: { asset: Asset }) {
+  return function IconImg({ width, height }: Omit<IconProps, "name"> = {}) {
+    return <img src={`/${asset}`} alt="" width={width} height={height} />;
+  };
+}

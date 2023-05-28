@@ -15,8 +15,7 @@ import {
   XAxisProps,
 } from "recharts";
 import { CategoricalChartFunc } from "recharts/types/chart/generateCategoricalChart";
-import { useCallback, useMemo } from "react";
-import { useTranslation } from "react-i18next";
+import { ReactNode, useCallback, useMemo } from "react";
 import { toArray } from "../../lib/array";
 import { UnwrapArray } from "../../utils/types";
 import { range } from "lodash";
@@ -24,6 +23,7 @@ import { pipe } from "../../lib/fp";
 import { Typography } from "../common/components/Typography";
 import { ObjectBuilder } from "../../lib/object";
 import { orderOfMagnitude } from "../../lib/math";
+import { useTranslation } from "../translations/useTranslation";
 
 export { StackedBars };
 export type {
@@ -77,6 +77,7 @@ interface StackedBarsProps {
   lines?: StackedBarsLine[];
   tick?: boolean;
   direction?: "horizontal" | "vertical";
+  topRightActions?: ReactNode;
   onClick?: CategoricalChartFunc;
 }
 
@@ -86,6 +87,7 @@ function StackedBars({
   lines = [],
   tick = true,
   direction = "horizontal",
+  topRightActions,
   onClick,
 }: StackedBarsProps) {
   const theme = useTheme();
@@ -468,11 +470,30 @@ function StackedBars({
         mb: 1,
       }}
     >
-      {!!title && (
-        <Typography variant="h5" sx={{ mb: 4, textAlign: "center" }}>
-          {title}
-        </Typography>
-      )}
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        gap={2}
+        sx={{ mb: 4 }}
+      >
+        {!!title && (
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
+            {title}
+          </Typography>
+        )}
+        <Grid container direction="column">
+          <Grid
+            container
+            direction="row"
+            justifyContent="flex-end"
+            paddingRight={4}
+          >
+            {topRightActions}
+          </Grid>
+        </Grid>
+      </Grid>
       <ResponsiveContainer width="100%" height={500}>
         <chartConfig.ChartComponent
           data={data}

@@ -30,6 +30,7 @@ import {
 import { getNonNullValues } from "../../../play/Personalization/utils/formValidation";
 import { ErrorAlert, SuccessAlert } from "../../../alert";
 import { t } from "../../../translations";
+import { kebabCase } from "lodash";
 
 export { FormVerification };
 
@@ -232,6 +233,20 @@ export type FormattedRow = PersoForm & {
 
 function buildColumns(): GridColumns<FormattedRow> {
   return [
+    {
+      editable: false,
+      field: "formStatus",
+      headerName: t("table.column.form-status.label.short"),
+      cellClassName: (params: GridCellParams<string>) =>
+        `form-${kebabCase(params.value)}`,
+      renderCell: ({ value }) => (
+        <Icon name={`form-${kebabCase(value)}` as any} sx={{ mr: 1 }} />
+      ),
+      flex: 1,
+      minWidth: 80,
+      headerAlign: "center",
+      align: "center",
+    },
     {
       field: "name",
       headerName: "Nom",

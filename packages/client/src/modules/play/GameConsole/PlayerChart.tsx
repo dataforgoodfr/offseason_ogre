@@ -4,11 +4,11 @@ import { sumAllValues, sumForAndFormat } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
 import { Tabs } from "../../common/components/Tabs";
 import { useMemo } from "react";
-import { useTranslation } from "react-i18next";
 import {
-  MaterialsPerProductionTypeChart,
-  MaterialsPerStepChart,
+  ResourcesPerProductionTypeChart,
+  ResourcesPerStepChart,
 } from "../../charts";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { PlayerChart };
 
@@ -34,11 +34,28 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
         label: t("page.teacher.statistics.tabs.materials.label"),
         component: (
           <>
-            <MaterialsPerStepChart
+            <ResourcesPerStepChart
               getPersonaAtStep={firstPersona.getPersonaAtStep}
+              resourceType="materials"
             />
-            <MaterialsPerProductionTypeChart
+            <ResourcesPerProductionTypeChart
               persona={firstPersona.currentPersona}
+              resourceType="materials"
+            />
+          </>
+        ),
+      },
+      {
+        label: t("page.teacher.statistics.tabs.metals.label"),
+        component: (
+          <>
+            <ResourcesPerStepChart
+              getPersonaAtStep={firstPersona.getPersonaAtStep}
+              resourceType="metals"
+            />
+            <ResourcesPerProductionTypeChart
+              persona={firstPersona.currentPersona}
+              resourceType="metals"
             />
           </>
         ),

@@ -10,6 +10,8 @@ import { usePlay } from "../context/playContext";
 import { TeamConsoleLayout } from "./TeamConsoleLayout";
 import { StatsConsole } from "./StatsConsole";
 import { STEPS } from "../constants";
+import { Dialog } from "../../common/components/Dialog";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { GameConsoleView };
 
@@ -29,8 +31,10 @@ function GameConsoleView() {
 
 function Header(props: any) {
   const { selectedScreen, setSelectedScreen } = props;
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const { game, isStepFinished, updateGame } = usePlay();
   const theme = useTheme();
+  const { t } = useTranslation();
 
   const nextStepNumber = game.step + 1;
   const currentStepNumber = game.step;
@@ -84,15 +88,50 @@ function Header(props: any) {
         </Grid>
         <Grid item sx={{ margin: "auto" }} xs={3}>
           {game.status !== "finished" && (
-            <Button
-              variant="contained"
-              color={"secondary"}
-              sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
-              onClick={!isStepFinished ? stopStep : startStep}
-            >
-              {!isStepFinished ? stopStepLabel : startStepLabel}
-              <ArrowForwardIcon />
-            </Button>
+            <>
+              <Button
+                variant="contained"
+                color={"secondary"}
+                sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
+                onClick={() => setIsDialogOpen(true)}
+              >
+                {!isStepFinished ? stopStepLabel : startStepLabel}
+                <ArrowForwardIcon />
+              </Button>
+              <Dialog
+                open={isDialogOpen}
+                handleClose={() => setIsDialogOpen(false)}
+                content={
+                  !isStepFinished
+                    ? t(`dialog.step.end`, { stepNumber: currentStepNumber })
+                    : t(`dialog.step.start`, { stepNumber: nextStepNumber })
+                }
+                actions={
+                  <>
+                    <Button
+                      color="secondary"
+                      variant="contained"
+                      sx={{ border: 1, borderColor: "secondary" }}
+                      onClick={() => {
+                        !isStepFinished ? stopStep() : startStep();
+                        setIsDialogOpen(false);
+                      }}
+                    >
+                      {t(`dialog.step.yes`)}
+                    </Button>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      type="submit"
+                      sx={{ border: 1, borderColor: "secondary", mt: 1 }}
+                      onClick={() => setIsDialogOpen(false)}
+                    >
+                      {t(`dialog.step.no`)}
+                    </Button>
+                  </>
+                }
+              />
+            </>
           )}
         </Grid>
       </Grid>

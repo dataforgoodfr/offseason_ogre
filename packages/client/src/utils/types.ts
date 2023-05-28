@@ -7,6 +7,7 @@ export type {
   IGame,
   IGameWithTeacher,
   IGameWithTeams,
+  IEnrichedGame,
   ITeam,
   ITeamWithPlayers,
   IUser,
@@ -20,6 +21,7 @@ export type {
   ProductionActionUnit,
   TeamAction,
   MaterialsType,
+  MetalsType,
   ProductionTypes,
   UnwrapArray,
 };
@@ -30,6 +32,10 @@ type WithTeams<T> = T & { teams: ITeamWithPlayers[] };
 type IGame = Game;
 type IGameWithTeacher = WithTeacher<IGame>;
 type IGameWithTeams = WithTeams<IGame>;
+type IEnrichedGame = IGameWithTeams & {
+  isLarge?: boolean;
+  isSynthesisStep?: boolean;
+};
 
 interface ITeam {
   id: number;
@@ -135,6 +141,8 @@ interface TeamAction {
 }
 
 type MaterialsType = "steel" | "cement" | "glass";
+
+type MetalsType = "copper" | "nickel" | "manganese" | "silicium" | "other";
 
 type ProductionTypes =
   | "windOnshore"

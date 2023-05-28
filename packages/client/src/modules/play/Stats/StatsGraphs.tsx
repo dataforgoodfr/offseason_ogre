@@ -3,8 +3,8 @@ import {
   StackedEnergyBars,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
-  MaterialsPerProductionTypeChart,
-  MaterialsPerStepChart,
+  ResourcesPerProductionTypeChart,
+  ResourcesPerStepChart,
 } from "../../charts";
 import { PlayBox } from "../Components";
 import {
@@ -17,7 +17,7 @@ import { usePersona, usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame } from "../../../utils/types";
 import { Tabs } from "../../common/components/Tabs";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "../../translations/useTranslation";
 
 export { StatsGraphs };
 
@@ -37,6 +37,10 @@ function StatsGraphs() {
       {
         label: t("page.player.statistics.tabs.materials.label"),
         component: <MaterialsGraphTab />,
+      },
+      {
+        label: t("page.player.statistics.tabs.metals.label"),
+        component: <MetalsGraphTab />,
       },
     ];
   }, [t]);
@@ -178,8 +182,31 @@ function MaterialsGraphTab() {
 
   return (
     <>
-      <MaterialsPerStepChart getPersonaAtStep={getPersonaAtStep} />
-      <MaterialsPerProductionTypeChart persona={currentPersona} />
+      <ResourcesPerStepChart
+        getPersonaAtStep={getPersonaAtStep}
+        resourceType="materials"
+      />
+      <ResourcesPerProductionTypeChart
+        persona={currentPersona}
+        resourceType="materials"
+      />
+    </>
+  );
+}
+
+function MetalsGraphTab() {
+  const { currentPersona, getPersonaAtStep } = usePersona();
+
+  return (
+    <>
+      <ResourcesPerStepChart
+        getPersonaAtStep={getPersonaAtStep}
+        resourceType="metals"
+      />
+      <ResourcesPerProductionTypeChart
+        persona={currentPersona}
+        resourceType="metals"
+      />
     </>
   );
 }

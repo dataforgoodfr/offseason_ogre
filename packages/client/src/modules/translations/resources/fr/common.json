@@ -1,6 +1,7 @@
 {
   "cta.assign-team-to-players": "Répartir les joueurs",
   "cta.check-forms": "Vérifier les formulaires",
+  "cta.retrieve-emails": "Récupérer les emails",
   "cta.create-game": "Nouveau jeu",
   "cta.end-turn": "Terminer le tour",
   "cta.go-to-player-characteristics": "Mes caractéristiques",
@@ -15,14 +16,21 @@
   "cta.join-game": "Rejoindre le jeu",
   "cta.lock-forms": "Verrouiller les formulaires",
   "cta.no": "Non",
+  "cta.open-info-card": "Ouvrir la carte",
   "cta.read-synthesis": "Voir la synthèse",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
   "cta.send-magic-link": "Envoyez moi un lien de connexion",
   "cta.set-team-count": "Définir le nombre d'équipes",
   "cta.signup": "Créer le compte",
+  "cta.thanks-for-help": "Merci pour l'aide",
   "cta.unlock-forms": "Déverouiller les formulaires",
   "cta.validate-team-choice": "Valider pour l'équipe",
   "cta.yes": "Oui",
+
+  "dialog.step.end": "Voulez-vous clore l'étape {{stepNumber}} ?",
+  "dialog.step.start": "Voulez-vous démarrer l'étape {{stepNumber}} ?",
+  "dialog.step.yes": "Continuer",
+  "dialog.step.no": "Annuler",
 
   "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
   "message.error.signup.USER_ALREADY_EXISTS": "Cette adresse mail est déjà associée à un compte.",
@@ -31,6 +39,7 @@
   "message.error.register.GAME_ALREADY_STARTED": "Vous ne pouvez pas rejoindre une partie qui a déjà commencé.",
   "message.error.register.GAME_NOT_FOUND": "La partie n'a pas pu être trouvée. Vérifiez son id et recommencez.",
   "message.error.register.USER_ALREADY_JOINED_GAME": "Vous êtes déjà inscrit.e à cette partie.",
+  "message.success.admin.copied-emails": "La liste des adresses emails a été copiée dans le presse-papiers.",
   "message.success.admin.player-removed": "Joueur supprimé avec succès",
   "message.success.admin.team-assigned-to-players": "Joueurs répartis avec succès",
   "message.success.admin.team-removed": "Équipe supprimée avec succès",
@@ -54,6 +63,7 @@
   "form.validation.heating": "Concernant le chauffage, si le joueur a donné deux valeurs (facture en € et consommation en kWh), il est nécessaire de vérifier que les deux valeurs correspondent. Si ce n’est pas le cas, merci de ne laisser que la valeur la plus probable et de supprimer l’autre.",
 
   "table.column.form-status.label": "Statut du formulaire",
+  "table.column.form-status.label.short": "Statut",
   "table.column.game-code.label": "Code",
   "table.column.game-date.label": "Date",
   "table.column.game-id.label": "ID",
@@ -79,11 +89,13 @@
   "page.player.statistics.tabs.energy-balance.label": "Équilibre énergétique",
   "page.player.statistics.tabs.energy-balance.graphs.details.title": "Décomposition de la pile {{stackName}}",
   "page.player.statistics.tabs.materials.label": "Matériaux",
+  "page.player.statistics.tabs.metals.label": "Métaux",
   "page.signup.title": "Création de compte",
   "page.signup.login-section.title": "Si vous avez déjà un compte :",
   "page.signup.login-section.cta": "Se connecter",
   "page.teacher.statistics.tabs.energy-balance.label": "Équilibre énergétique",
   "page.teacher.statistics.tabs.materials.label": "Matériaux",
+  "page.teacher.statistics.tabs.metals.label": "Métaux",
 
   "player.profile.summary.carbon-footprint": "Empreinte carbone",
   "player.profile.summary.consumption": "Consommation",
@@ -196,8 +208,15 @@
   "form.status.validated": "Validé",
 
   "graph.common.production": "Production",
+  "graph.common.information": "Voici le lien vers une carte qui te donnera des informations supplémentaires :",
   "graph.common.total": "Total",
+  "graph.common.team": "Équipe",
+  "graph.common.min": "Minimum",
+  "graph.common.mean": "Moyenne",
+  "graph.common.max": "Maximum",
 
+  "graph.energy.consumption.title": "Évolution des consommations entre équipes",
+  "graph.energy.production.title": "Évolution des productions entre équipes",
   "graph.energy.total": "Total",
   "graph.energy.fossil": "Energie fossile",
   "graph.energy.grey": "Energie grise",
@@ -210,6 +229,11 @@
   "graph.materials.steel": "Acier",
   "graph.materials.cement": "Ciment",
   "graph.materials.glass": "Verre",
+  "graph.metals.copper": "Cuivre",
+  "graph.metals.nickel": "Nickel",
+  "graph.metals.manganese": "Manganèse",
+  "graph.metals.silicium": "Silicium",
+  "graph.metals.other": "Autres",
   "graph.materials.windOnshore": "Eolien onshore",
   "graph.materials.windOffshore": "Eolien offshore",
   "graph.materials.photovoltaic": "PV",
@@ -219,6 +243,8 @@
   "graph.materials.nuclear": "Nucléaire",
   "graph.materials.quantity-per-step-graph.title": "Quantité de matériaux nécessaires à la transition d’ici {{year}}",
   "graph.materials.quantity-per-production-type-graph.title": "Répartition des matériaux par moyen de production",
+  "graph.metals.quantity-per-step-graph.title": "Quantité de métaux nécessaires à la transition d’ici {{year}}",
+  "graph.metals.quantity-per-production-type-graph.title": "Répartition des métaux par moyen de production",
 
   "form.last-action.draft": "Dernière sauvegarde",
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
@@ -226,5 +252,9 @@
 
   "unit.watthour-per-day.kilo": "kWh/jour",
   "unit.tonne.kilo": "kTonnes",
-  "unit.tonne.mega": "MTonnes"
+  "unit.tonne.mega": "MTonnes",
+  "unit.budget.year": "Mrd€",
+  "unit.budget.day": "€/j",
+  "unit.carbon.year": "T/an",
+  "unit.carbon.day": "kg/j"
 }
