@@ -8,12 +8,6 @@ command = "sed -i \"s|API_BASE_URL|${VITE_API_BASE_URL}|g\" netlify.toml && yarn
   force = true
 
 [[redirects]]
-  from = "/socket.io/*"
-  to = "API_BASE_URL/socket.io/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

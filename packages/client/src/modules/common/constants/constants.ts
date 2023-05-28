@@ -16,4 +16,7 @@ const MATERIALS_AND_METALS_INFO_CARD_URL =
 
 const API_BASE_URL = `/`;
 const API_URL = `${API_BASE_URL}`;
-const WEB_SOCKET_URL = `${API_BASE_URL}`;
+// Websockets can not be proxied on Netlify so the api must be targeted directly.
+// @see https://answers.netlify.com/t/does-netlify-support-websocket-proxying/11230
+const WEB_SOCKET_URL =
+  `${import.meta.env.VITE_API_BASE_URL}` || "http://localhost:3000";

@@ -427,7 +427,7 @@ function useGameSocket({
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
-    const newSocket = io(WEB_SOCKET_URL);
+    const newSocket = io(WEB_SOCKET_URL, { withCredentials: true });
 
     newSocket.on("resetGameState", (state) => {
       const { gameWithTeams } = state;
