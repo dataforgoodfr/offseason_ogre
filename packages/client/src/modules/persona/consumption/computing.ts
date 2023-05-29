@@ -67,14 +67,13 @@ export const getFossilCarConsumption = (personalization: PersoForm) => {
   }
 
   return (
-    (((carDistanceAlone / DAYS_IN_YEAR +
+    ((carDistanceAlone / DAYS_IN_YEAR +
       carDistanceHoushold /
         (DAYS_IN_YEAR * ((numberAdults > 0 ? numberAdults : 1) + numberKids))) *
-      carConsumption) /
-      100 +
+      (carConsumption / 100) +
       (carDistanceCarsharing * transportCoeffs.MEAN_FOSSIL_CAR_CONSUMPTION) /
         DAYS_IN_YEAR) *
-    10
+    transportCoeffs.FOSSIL_CAR
   );
 };
 
