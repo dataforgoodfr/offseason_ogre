@@ -57,6 +57,11 @@
     ],
     "rules": {
       "no-use-before-define": "off",
+      "no-restricted-imports": ["error", {
+        "name": "axios",
+        "importNames": ["default"],
+        "message": "Please use `http`, the axios client configured in the request utils (src/utils/request)."
+      }],
       "@typescript-eslint/no-use-before-define": "off"
     }
   },

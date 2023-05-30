@@ -1,16 +1,18 @@
 import { Alert, Snackbar } from "@mui/material";
 import { useState } from "react";
 import ReactDOM from "react-dom";
+import { AlertProvider } from "./AlertProvider";
+import { Alerts } from "./Alerts";
 
-export { ErrorAlert, SuccessAlert, AlertSnackbar };
+export { AlertProvider, Alerts, ErrorAlert, SuccessAlert, AlertSnackbar };
+export type { ErrorAlertProps, SuccessAlertProps };
 
-function ErrorAlert({
-  message,
-  alertPosition = "default",
-}: {
+interface ErrorAlertProps {
   message: string;
-  alertPosition?: string;
-}) {
+  alertPosition?: "top" | "default";
+}
+
+function ErrorAlert({ message, alertPosition = "default" }: ErrorAlertProps) {
   return (
     <AlertSnackbar
       alertPosition={alertPosition}
@@ -23,15 +25,17 @@ function ErrorAlert({
   );
 }
 
+interface SuccessAlertProps {
+  alertPosition?: "top" | "default";
+  message?: string;
+  onClose?: () => void;
+}
+
 function SuccessAlert({
   alertPosition = "default",
   message = "Succès",
   onClose,
-}: {
-  alertPosition?: string;
-  message?: string;
-  onClose?: () => void;
-}) {
+}: SuccessAlertProps) {
   return (
     <AlertSnackbar
       alertPosition={alertPosition}

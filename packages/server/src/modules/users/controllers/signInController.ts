@@ -3,7 +3,6 @@ import type { Request, Response } from "express";
 import invariant from "tiny-invariant";
 import { z } from "zod";
 import { sign, verify } from "../../tokens";
-import { getFrontOrigin } from "../../config";
 
 export { signInController };
 
@@ -40,12 +39,7 @@ function signInController(req: Request, res: Response): void {
     expiresIn: "30 days",
   });
 
-  // set the cookie as the token string, with a similar max age as the token
-  // here, the max age is in milliseconds, so we multiply by 1000
-  res.cookie("authentificationToken", authenticationToken, {
-    httpOnly: true,
-    maxAge: 30 * 60 * 60 * 24 * 1000,
+  res.send({
+    token: authenticationToken,
   });
-  res.redirect(getFrontOrigin());
-  res.end();
 }

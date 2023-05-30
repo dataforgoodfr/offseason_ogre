@@ -5,7 +5,6 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
@@ -15,6 +14,7 @@ import { ITeamWithPlayers } from "../../../../utils/types";
 import { GamePlayers } from "./GamePlayers";
 import { Animation } from "./Animation";
 import { GameTeams } from "./GameTeams";
+import { http } from "../../../../utils/request";
 
 export { Game };
 
@@ -24,7 +24,7 @@ function Game() {
   const params = useParams();
 
   const { data: result } = useQuery(`/api/games/${params.id}`, () => {
-    return axios.get<undefined, { data: { document: any } }>(
+    return http.get<undefined, { data: { document: any } }>(
       `/api/games/${params.id}`
     );
   });

@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert, SuccessAlert } from "../../alert";
@@ -21,7 +20,7 @@ import {
   JoinGameInputWrapper,
 } from "./styles";
 import { IGame } from "../../../utils/types";
-import { handleApiError } from "../../../utils/request";
+import { handleApiError, http } from "../../../utils/request";
 import { useTranslation } from "../../translations/useTranslation";
 import { Icon } from "../../common/components/Icon";
 
@@ -116,7 +115,7 @@ function GameItem({ game }: { game: IGame }) {
 
 function MyGamesList() {
   const query = useQuery("/api/games/played-games", () => {
-    return axios.get<undefined, { data: { games: any[] } }>(
+    return http.get<undefined, { data: { games: any[] } }>(
       "/api/games/played-games"
     );
   });
@@ -177,7 +176,7 @@ function JoinGame() {
     Registration
   >(
     ({ gameCode }) => {
-      return axios.post("/api/games/register", { gameCode });
+      return http.post("/api/games/register", { gameCode });
     },
     {
       onSuccess: async (res) => {

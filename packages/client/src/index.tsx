@@ -16,6 +16,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { LayoutProvider } from "./modules/Layout/context";
 import { RootPlayProvider } from "./modules/play/context/playContext";
 import { initErrorTracer } from "./modules/error-handling";
+import { AlertProvider } from "./modules/alert";
 
 initErrorTracer();
 
@@ -26,13 +27,15 @@ ReactDOM.render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
-          <AuthProvider>
-            <LayoutProvider>
-              <RootPlayProvider>
-                <App />
-              </RootPlayProvider>
-            </LayoutProvider>
-          </AuthProvider>
+          <AlertProvider>
+            <AuthProvider>
+              <LayoutProvider>
+                <RootPlayProvider>
+                  <App />
+                </RootPlayProvider>
+              </LayoutProvider>
+            </AuthProvider>
+          </AlertProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </BrowserRouter>

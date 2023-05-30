@@ -1,5 +1,5 @@
-import axios from "axios";
 import { useQuery } from "react-query";
+import { http } from "../../../../../utils/request";
 
 export interface Team {
   id: number;
@@ -10,7 +10,7 @@ export interface Team {
 
 export const usePlayers = (gameId: number) =>
   useQuery(`/api/games/${gameId}/players`, () => {
-    return axios.get<undefined, { data: { players: any[] } }>(
+    return http.get<undefined, { data: { players: any[] } }>(
       `/api/games/${gameId}/players`
     );
   });
@@ -28,7 +28,7 @@ export const useTeams = (
   useQuery(
     teamQueryPath,
     () => {
-      return axios.get<undefined, useTeamsApiResponse>(teamQueryPath);
+      return http.get<undefined, useTeamsApiResponse>(teamQueryPath);
     },
     options
   );

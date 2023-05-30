@@ -3,6 +3,7 @@ import OgreHeader from "./modules/common/components/OgreHeader";
 import MagicLink from "./modules/magic-link";
 import Signup from "./modules/signup";
 import { theme } from "./utils/theme";
+import SignIn from "./modules/sign-in/SignIn";
 
 export { UnauthenticatedApp };
 
@@ -17,6 +18,7 @@ function UnauthenticatedApp() {
         <Routes>
           <Route path="/" element={<MagicLink />} />
           <Route path="/magic-link" element={<MagicLink />} />
+          <Route path="/sign-in" element={<SignIn />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<Navigate replace to="/" />} />
         </Routes>

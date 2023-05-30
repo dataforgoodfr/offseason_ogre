@@ -3,8 +3,9 @@ import { initReactI18next } from "react-i18next";
 import { resources, defaultNS } from "./resources";
 import { TFunction } from "i18next";
 import { getUserLocale } from "get-user-locale";
+import { useTranslation } from "./useTranslation";
 
-export { userLocale, translateName };
+export { userLocale, translateName, useTranslation };
 export const { t } = i18n;
 export type { I18nTranslateFunction };
 

@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { DataGrid, GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { ErrorAlert, SuccessAlert } from "../../alert";
@@ -15,6 +14,7 @@ import { CopyToClipboard } from "../../common/components/CopyToClipboard";
 import { IGameWithTeacher } from "../../../utils/types";
 import { I18nTranslateFunction } from "../../translations";
 import { useTranslation } from "../../translations/useTranslation";
+import { http } from "../../../utils/request";
 
 export { Games };
 
@@ -89,7 +89,7 @@ function GamesDataGrid() {
   const { t } = useTranslation();
 
   const query = useQuery("games", () => {
-    return axios.get<undefined, { data: { documents: any[] } }>("/api/games");
+    return http.get<undefined, { data: { documents: any[] } }>("/api/games");
   });
 
   if (query.isLoading) {
@@ -128,7 +128,7 @@ function NewGame() {
 
   const mutation = useMutation<Response, { message: string }>(
     (newGame) => {
-      return axios.post("/api/games", newGame);
+      return http.post("/api/games", newGame);
     },
     {
       onSuccess: () => queryClient.invalidateQueries("games"),
