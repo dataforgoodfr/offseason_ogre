@@ -1,3 +1,4 @@
+import isNaN from "lodash/isNaN";
 import { useParams } from "react-router-dom";
 import {
   Condition,
@@ -7,6 +8,7 @@ import {
 } from "../../../play/Personalization/models/form";
 import { compare } from "../../../play/Personalization/utils/formValidation";
 import { Row } from "./FormVerification";
+import { pipe } from "../../../../lib/fp";
 
 export const useGameId = () => {
   const { id } = useParams();
@@ -51,8 +53,13 @@ export const formatValueOptions = ({
   return option ? option.label : "";
 };
 
-export const numericParser = (value: number) => {
-  return value && value < 0 ? 0 : value;
+export const numericParser = (value: number | string): number => {
+  return pipe(
+    value,
+    (value) => (typeof value === "string" ? parseInt(value, 10) : value),
+    (value) => (!value || isNaN(value) ? 0 : value),
+    (value) => Math.max(value, 0)
+  );
 };
 
 export const isCredible = (fieldName: keyof PersoForm, row: Row) => {
