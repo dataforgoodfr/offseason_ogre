@@ -27,7 +27,6 @@ router.get(
   asyncErrorHandler(controllers.getTeamForPlayer)
 );
 
-router.post("/logout", asyncErrorHandler(controllers.logoutController));
 router.post("/sign-up", asyncErrorHandler(controllers.signUpController));
 router.post(
   "/magic-link",

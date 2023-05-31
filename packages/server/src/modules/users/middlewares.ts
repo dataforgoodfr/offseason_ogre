@@ -10,7 +10,8 @@ async function authenticateUser(
   response: Response,
   next: NextFunction
 ) {
-  const { authentificationToken } = request.cookies;
+  const authentificationToken =
+    (request.headers?.authorization || "").split(" ")?.[1] || "";
   let email: string | undefined;
   try {
     const payload = verify(authentificationToken);

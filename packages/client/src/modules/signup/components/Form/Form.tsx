@@ -3,13 +3,13 @@ import { useForm } from "react-hook-form";
 import CheckboxWithText from "../CheckboxWithText";
 import { NewUser } from "../../../users/services";
 import { useMutation } from "react-query";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { ErrorAlert, SuccessAlert } from "../../../alert";
 import { Box, Button } from "@mui/material";
 import { Typography } from "../../../common/components/Typography";
 import { useTranslation } from "../../../translations/useTranslation";
 import { Link } from "react-router-dom";
-import { handleApiError } from "../../../../utils/request";
+import { handleApiError, http } from "../../../../utils/request";
 
 export default Form;
 
@@ -30,7 +30,7 @@ function Form() {
     AxiosError<{ message: string }>,
     NewUser
   >((newUser) => {
-    return axios.post("/api/users/sign-up", newUser);
+    return http.post("/api/users/sign-up", newUser);
   });
 
   const onValid = (formContent: any) =>

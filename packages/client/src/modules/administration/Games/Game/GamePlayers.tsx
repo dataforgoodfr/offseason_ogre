@@ -14,7 +14,6 @@ import {
   GridRowParams,
 } from "@mui/x-data-grid";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "react-query";
 import { IGame } from "../../../../utils/types";
@@ -36,6 +35,7 @@ import { I18nTranslateFunction } from "../../../translations";
 import { includes, kebabCase } from "lodash";
 import { pipe } from "../../../../lib/fp";
 import { FormStatus } from "../../../play/Personalization/models/form";
+import { http } from "../../../../utils/request";
 
 export { GamePlayers };
 
@@ -57,7 +57,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
     { teamId: number; userId: number }
   >(
     ({ teamId, userId }) => {
-      return axios.put("/api/games/change-team", { gameId, teamId, userId });
+      return http.put("/api/games/change-team", { gameId, teamId, userId });
     },
     {
       onSuccess: () => {
@@ -69,7 +69,7 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
   const blockForms = useMutation<Response, { message: string }, any>(
     (block: boolean) => {
       const path = `/api/games/${game.id}`;
-      return axios.put(path, { status: `${block ? "ready" : "draft"}` });
+      return http.put(path, { status: `${block ? "ready" : "draft"}` });
     },
     {
       onSuccess: () => {

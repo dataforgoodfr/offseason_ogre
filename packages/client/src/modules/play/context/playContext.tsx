@@ -27,6 +27,7 @@ import { range } from "lodash";
 import { sumAllValues } from "../../persona";
 import { NO_TEAM } from "../../common/constants/teams";
 import { buildInitialPersona } from "../../persona/persona";
+import { WEB_SOCKET_URL } from "../../common/constants";
 
 export {
   PlayProvider,
@@ -114,7 +115,7 @@ function RootPlayProvider({ children }: { children: React.ReactNode }) {
 }
 
 function PlayProvider({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
+  const { token, user } = useAuth();
   const match = useMatch(`play/games/:gameId/*`);
   if (!match) throw new Error("Provider use outside of game play.");
   const gameId = +(match.params.gameId as string);
@@ -131,6 +132,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<any>({});
   const { socket } = useGameSocket({
     gameId,
+    token,
     setGameWithTeams,
     setPlayer,
     setProfile,
@@ -414,11 +416,13 @@ function useTeamActions() {
 
 function useGameSocket({
   gameId,
+  token,
   setGameWithTeams,
   setPlayer,
   setProfile,
 }: {
   gameId: number;
+  token: string | null;
   setGameWithTeams: React.Dispatch<React.SetStateAction<IEnrichedGame | null>>;
   setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
   setProfile: React.Dispatch<React.SetStateAction<any>>;
@@ -426,7 +430,12 @@ function useGameSocket({
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
   useEffect(() => {
-    const newSocket = io();
+    const newSocket = io(WEB_SOCKET_URL, {
+      withCredentials: true,
+      auth: {
+        token,
+      },
+    });
 
     newSocket.on("resetGameState", (state) => {
       const { gameWithTeams } = state;
@@ -490,7 +499,7 @@ function useGameSocket({
     return () => {
       newSocket.disconnect();
     };
-  }, [gameId, setGameWithTeams, setPlayer, setProfile, navigate]);
+  }, [gameId, token, setGameWithTeams, setPlayer, setProfile, navigate]);
   return { socket };
 }
 

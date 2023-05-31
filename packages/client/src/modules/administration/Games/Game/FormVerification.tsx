@@ -1,6 +1,5 @@
 import { Grid, Button, Typography, useTheme, Box } from "@mui/material";
 import { DataGrid, GridCellParams, GridColumns } from "@mui/x-data-grid";
-import axios from "axios";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { formatBooleanValue } from "../../../../utils/format";
@@ -31,6 +30,7 @@ import { getNonNullValues } from "../../../play/Personalization/utils/formValida
 import { ErrorAlert, SuccessAlert } from "../../../alert";
 import { t } from "../../../translations";
 import { kebabCase } from "lodash";
+import { http } from "../../../../utils/request";
 
 export { FormVerification };
 
@@ -44,7 +44,7 @@ function FormVerification(): JSX.Element {
 
   const validateForms = useMutation<Response, { message: string }>(
     () => {
-      return axios.get(`/api/games/${gameId}/validate`);
+      return http.get(`/api/games/${gameId}/validate`);
     },
     {
       onSuccess: () => {
@@ -67,7 +67,7 @@ function FormVerification(): JSX.Element {
           ...personalization
         }: FormattedRow) => ({ ...getNonNullValues(personalization) })
       );
-      return axios.post(`/api/games/${gameId}/forms/update`, newRows);
+      return http.post(`/api/games/${gameId}/forms/update`, newRows);
     },
     {
       onSuccess: (response: any, variables: { draft: boolean }) => {

@@ -10,12 +10,15 @@ import { handleUpdatePlayer } from "./eventHandlers/updatePlayerHandler";
 import { handleUpdateProfile } from "./eventHandlers/updateProfileHandler";
 import { handleUpdateTeam } from "./eventHandlers/updateTeamHandler";
 import { redis } from "../redis/services";
+import { corsOptions } from "../../middlewares/cors";
 
 export { initWebSocket };
 
 async function initWebSocket({ app }: { app: Express }) {
   const httpServer = createServer(app);
-  const io = new Server(httpServer, {});
+  const io = new Server(httpServer, {
+    cors: corsOptions,
+  });
   const { pubClient, subClient } = await redis.getPubSubClients();
 
   io.adapter(createAdapter(pubClient, subClient));

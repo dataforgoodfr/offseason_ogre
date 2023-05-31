@@ -1,4 +1,26 @@
-export { handleApiError };
+// eslint-disable-next-line no-restricted-imports
+import axios from "axios";
+import { API_URL } from "../modules/common/constants";
+
+export { handleApiError, http };
+
+const http = axios.create();
+
+http.defaults.baseURL = API_URL;
+http.defaults.withCredentials = true;
+
+http.interceptors.request.use(function (config) {
+  if (!config.headers) {
+    config.headers = {};
+  }
+
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return { ...config };
+});
 
 type BusinessErrorCode =
   | "USER_ALREADY_EXISTS"

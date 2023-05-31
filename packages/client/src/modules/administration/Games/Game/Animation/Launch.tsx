@@ -1,7 +1,6 @@
 import { Button } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
-import axios from "axios";
 import { useMutation, useQueryClient } from "react-query";
 import { IGame, ITeamWithPlayers } from "../../../../../utils/types";
 import { SuccessAlert } from "../../../../alert";
@@ -12,6 +11,7 @@ import { Typography } from "../../../../common/components/Typography";
 import { NO_TEAM } from "../../../../common/constants/teams";
 import { usePlayers } from "../services/queries";
 import { t } from "../../../../translations";
+import { http } from "../../../../../utils/request";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -68,7 +68,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   const mutation = useMutation<Response, { message: string }, any>(
     () => {
       const path = `/api/games/${game.id}`;
-      return axios.put(path, { status: "playing" });
+      return http.put(path, { status: "playing" });
     },
     {
       onSuccess: () => {

@@ -1,12 +1,12 @@
 import { Box, CircularProgress } from "@mui/material";
 import { DataGrid, GridColDef, GridFilterItem } from "@mui/x-data-grid";
-import axios from "axios";
 import { useMutation, useQuery } from "react-query";
 import { findColumnOption } from "../../../lib/mui";
 import { ErrorAlert, SuccessAlert } from "../../alert";
 import { useAuth, UserPermissions } from "../../auth/authProvider";
 import { t } from "../../translations";
 import { Role } from "../types";
+import { http } from "../../../utils/request";
 
 export { UsersDataGrid };
 
@@ -28,14 +28,14 @@ function UsersDataGrid({
 
   // TODO: perform sorting and pagination on server side after v1.
   const queryUsers = useQuery("users", () => {
-    return axios.get<undefined, { data: { documents: any[] } }>(
+    return http.get<undefined, { data: { documents: any[] } }>(
       "/api/users?page=1&sort=email:asc"
     );
   });
 
   const mutateUser = useMutation((user: GridRow) => {
     const path = `/api/users/${user.id}`;
-    return axios.put(path, user);
+    return http.put(path, user);
   });
 
   const handleCellEdit = (

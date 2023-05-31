@@ -3,7 +3,6 @@ import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import axios from "axios";
 import React from "react";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +24,7 @@ type muiColor =
 function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { setToken } = useAuth();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -76,10 +76,9 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
         <AdministrationMenuItem handleClose={handleClose} />
         <MenuItem
           onClick={() => {
-            axios.post("/api/users/logout").then(() => {
-              queryClient.invalidateQueries("logged-user");
-              handleClose();
-            });
+            setToken(null);
+            queryClient.invalidateQueries("logged-user");
+            handleClose();
           }}
         >
           <LogoutIcon />

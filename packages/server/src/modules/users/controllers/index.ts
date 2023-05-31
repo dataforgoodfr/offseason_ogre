@@ -5,7 +5,6 @@ import { z } from "zod";
 import { getUserRequesting } from "../../../lib/express";
 import { rolesServices } from "../../roles/services";
 import { services } from "../services";
-import { logoutController } from "./logoutController";
 import { signInController } from "./signInController";
 import { getManyUsersController } from "./getManyUsersController";
 
@@ -18,7 +17,6 @@ const controllers = {
   ...crudController,
   getManyControllers: getManyUsersController,
   getLoggedUserController,
-  logoutController,
   sendMagicLinkController,
   signInController,
   updateUser,

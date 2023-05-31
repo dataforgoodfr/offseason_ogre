@@ -47,6 +47,7 @@
   "message.success.copied": "Copiée !",
   "message.success.draft-saved": "Brouillon sauvegardé",
   "message.success.form-validated": "Formulaire validé",
+  "message.success.sign-in.user-authenticated": "Connexion réussie",
 
   "modal.remove-player.title": "Voulez-vous supprimer le joueur ?",
   "modal.remove-team.title": "Voulez-vous supprimer l'équipe ?",

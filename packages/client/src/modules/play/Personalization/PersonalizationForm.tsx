@@ -26,13 +26,13 @@ import { useAuth } from "../../auth/authProvider";
 import { usePlay } from "../context/playContext";
 import { useGameId } from "./hooks/useGameId";
 import { BackArrowDialog, ValidationDialog } from "./common/Dialogs";
-import axios from "axios";
 import { useQuery } from "react-query";
 import { IGame } from "../../../utils/types";
 import { ErrorAlert, SuccessAlert } from "../../alert";
 import { Accordion } from "../../common/components/Accordion";
 import { FormStatusBanner } from "./common/FormStatusBanner";
 import { useTranslation } from "../../translations/useTranslation";
+import { http } from "../../../utils/request";
 
 export { PersonalizationForm };
 
@@ -45,7 +45,7 @@ function PersonalizationForm() {
   >(null);
 
   const query = useQuery(`/api/games/${gameId}`, () => {
-    return axios.get<undefined, { data: { document: any } }>(
+    return http.get<undefined, { data: { document: any } }>(
       `/api/games/${gameId}`
     );
   });

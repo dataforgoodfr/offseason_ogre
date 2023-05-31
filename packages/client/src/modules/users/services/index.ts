@@ -1,4 +1,4 @@
-import axios from "axios";
+import { http } from "../../../utils/request";
 
 export { sendMagicLink };
 export type { NewUser };
@@ -11,6 +11,6 @@ interface NewUser {
 }
 
 async function sendMagicLink({ email }: { email: string }) {
-  const { data } = await axios.post("/api/users/magic-link", { email });
+  const { data } = await http.post("/api/users/magic-link", { email });
   return data;
 }
