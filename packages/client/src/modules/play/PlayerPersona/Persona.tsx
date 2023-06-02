@@ -94,7 +94,6 @@ function Persona() {
                 profile.personalization,
                 value.name
               ),
-              themeVariation: "accent-large",
             };
           }
         )}
