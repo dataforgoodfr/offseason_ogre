@@ -106,67 +106,140 @@
   "production.energy.biomass.name": "Biomasse",
   "production.energy.biomass.accordion.title": "Biomasse (électricité)",
   "production.energy.biomass.accordion.label-slider": "Surface occupée (en %) du territoire forestier et agricole",
-  "production.energy.biomass.value.not-credible": "Votre hypothèse dépasse la production (418 TWh) du scénario Negawatt (en plus de détruire nos forêts et réduire nos capacités agricoles).",
+  "production.energy.biomass.value.credible": [
+    "Votre hypothèse est crédible.",
+    "C'est le plus ancien moyen pour se chauffer et cuire des aliments. Si la ressource est correctement gérée, l'impact sur le climat est nul."
+  ],
+  "production.energy.biomass.value.not-credible": [
+    "Votre hypothèse dépasse la production (418 TWh) du scénario Negawatt (en plus de détruire nos forêts et réduire nos capacités agricoles).",
+    "Cependant, vous pouvez quand même la valider.",
+    "Lors de la combustion, la biomasse génère des particules fines (aérosols) qui peuvent être dangereuses pour la santé. Pour le biogaz, les sites de production peuvent générer des odeurs peu appréciés des citoyens vivant à proximité."
+  ],
   "production.energy.biomass.graph.name": "Biomasse solaire",
 
   "production.energy.geothermal.name": "Géothermie",
   "production.energy.geothermal.accordion.title": "Géothermie (électricité)",
   "production.energy.geothermal.accordion.label-slider": "Surface occupée (en %) du territoire adapté pour ces installations",
-  "production.energy.geothermal.value.not-credible": "Votre hypothèse dépasse le gisement national pour la géothermie (0,14 GW) selon le scénario 100% EnR de l'ADEME.",
+  "production.energy.geothermal.value.credible": [
+    "Votre hypothèse est crédible."
+  ],
+  "production.energy.geothermal.value.not-credible": [
+    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour la géothermie (0,14 GW) selon le rapport 100% EnR de l'ADEME.",
+    "Cependant, vous pouvez quand même la valider.",
+    "Certaines contraintes géologiques (ex: tremblement de terre) peuvent limiter l'usage de ces installations."
+  ],
   "production.energy.geothermal.graph.name": "Géothermie",
 
   "production.energy.hydraulic.name": "Hydraulique",
   "production.energy.hydraulic.accordion.title": "Hydraulique (électricité)",
   "production.energy.hydraulic.accordion.label-slider": "Surface occupée (en %) du territoire",
-  "production.energy.hydraulic.value.not-credible": "",
+  "production.energy.hydraulic.value.credible": [""],
+  "production.energy.hydraulic.value.not-credible": [""],
   "production.energy.hydraulic.graph.name": "Hydroélectricité",
 
   "production.energy.offshoreWindTurbine.name": "Éolien offshore",
   "production.energy.offshoreWindTurbine.accordion.title": "Éolien offshore (électricité)",
   "production.energy.offshoreWindTurbine.accordion.label-slider": "Surface occupée (en %) de l'espace maritime",
-  "production.energy.offshoreWindTurbine.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'éolien offshore (66 GW) selon le scénario 100% EnR de l'ADEME.",
+  "production.energy.offshoreWindTurbine.value.credible": [
+    "Votre hypothèse est crédible.",
+    "Si vous choisissez 100%, il va être probablement difficile de naviguer pour les bateaux qui circulent au large des côtes (sans parler des difficultés techniques pour les implanter, ni de l'impact sur la biodiversité marine)."
+  ],
+  "production.energy.offshoreWindTurbine.value.not-credible": [
+    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'éolien offshore en eaux peu profondes (66 GW) selon le rapport 100% EnR de l'ADEME.",
+    "Cependant, vous pouvez quand même la valider.",
+    "Pensez au cuivre et à l'acier nécessaires pour produire les éoliennes hautes parfois de 250m et récupérer l'énergie produite en pleine mer."
+  ],
   "production.energy.offshoreWindTurbine.graph.name": "Éolien offshore",
 
   "production.energy.onshoreWindTurbine.name": "Éolien terrestre",
   "production.energy.onshoreWindTurbine.accordion.title": "Éolien terrestre (électricité)",
   "production.energy.onshoreWindTurbine.accordion.label-slider": "Surface occupée (en %) du territoire",
-  "production.energy.onshoreWindTurbine.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'éolien terrestre (174 GW) selon le scénario 100% EnR de l'ADEME.",
+  "production.energy.onshoreWindTurbine.value.credible": [
+    "Votre hypothèse est crédible.",
+    "Si vous choisissez 100%, cela revient à imaginer une France couverte d'éoliennes. Recouvrir 5% correspondrait à la surface de la région Bretagne."
+  ],
+  "production.energy.onshoreWindTurbine.value.not-credible": [
+    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'éolien terrestre (174 GW) selon le rapport 100% EnR de l'ADEME.",
+    "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
+    "Pensez également aux besoins en béton et acier pour les produire, ainsi qu'à l'acceptabilité pour les habitants."
+  ],
   "production.energy.onshoreWindTurbine.graph.name": "Éolien terrestre",
 
   "production.energy.photovoltaicFarm.name": "Ferme photovoltaïque",
   "production.energy.photovoltaicFarm.accordion.title": "Ferme photovoltaïque (électricité)",
   "production.energy.photovoltaicFarm.accordion.label-slider": "Surface en m² installée au sol",
-  "production.energy.photovoltaicFarm.value.not-credible": "Votre hypothèse dépasse le gisement national pour les fermes solaires (47 GW) selon le scénario 100% EnR de l'ADEME.",
+  "production.energy.photovoltaicFarm.value.credible": [
+    "Votre hypothèse est crédible.",
+    "Ce type d'équipement est généralement installé au sol même si on parle de plus en plus d'agrivoltaïsme. Plus sa surface sera importante, et moins vous aurez d'espaces agricoles (ou partiellement ombragés)."
+  ],
+  "production.energy.photovoltaicFarm.value.not-credible": [
+    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour les fermes solaires (47 GW) selon le rapport 100% EnR de l'ADEME.",
+    "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
+    "Pensez également aux besoins en silicium pour les produire et à la disponibilité (du soleil) qui est variable."
+  ],
   "production.energy.photovoltaicFarm.graph.name": "Ferme solaire",
 
   "production.energy.photovoltaicRoof.name": "Photovoltaïque sur toiture",
   "production.energy.photovoltaicRoof.accordion.title": "Photovoltaïque sur toiture (électricité)",
   "production.energy.photovoltaicRoof.accordion.label-slider": "Surface en m² installée sur la toiture",
-  "production.energy.photovoltaicRoof.value.not-credible": "Votre hypothèse dépasse le gisement national pour le PV sur toitures (364 GW) selon le scénario 100% EnR de l'ADEME.",
+  "production.energy.photovoltaicRoof.value.credible": [
+    "Votre hypothèse est crédible.",
+    "Pour info, une installation moyenne pour une maison individuelle se situe entre 10 et 30 m2."
+  ],
+  "production.energy.photovoltaicRoof.value.not-credible": [
+    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour les panneaux photovoltaïques sur toiture (364 GW) selon le rapport 100% EnR de l'ADEME.",
+    "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
+    "Pensez également aux besoins en silicium pour les produire et à la disponibilité (du soleil) qui est variable."
+  ],
   "production.energy.photovoltaicRoof.graph.name": "Photovoltaïque toiture",
 
   "production.energy.thermalSolar.name": "Solaire thermique",
   "production.energy.thermalSolar.accordion.title": "Solaire thermique (eau chaude)",
   "production.energy.thermalSolar.accordion.label-slider": "Surface en m² installée sur la toiture",
-  "production.energy.thermalSolar.value.not-credible": "Il sera difficile d'équiper tous les logements de 5 à 10 m² de solaire thermique (problème de surchauffe).",
+  "production.energy.thermalSolar.value.credible": [
+    "Votre hypothèse est crédible.",
+    "Pour info, une installation moyenne pour une maison individuelle se situe entre 3 et 5 m2."
+  ],
+  "production.energy.thermalSolar.value.not-credible": [
+    "Il sera difficile d'équiper tous les logements avec plus de 5 m² de panneaux solaire thermique à cause des problèmes de surchauffe que cela peut provoquer au niveau de l'installation, et de la surface disponible sur les toitures.",
+    "Cependant, vous pouvez quand même la valider."
+  ],
   "production.energy.thermalSolar.graph.name": "Solaire thermique",
 
   "production.energy.tidal.name": "Marées",
   "production.energy.tidal.accordion.title": "Marées (électricité)",
   "production.energy.tidal.accordion.label-slider": "Périmètre occupé (en %) de la côte atlantique",
-  "production.energy.tidal.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'énergie marémotrice (3 GW) selon le scénario 100% EnR de l'ADEME mais reste possible selon le syndicat des EnR (15 GW).",
+  "production.energy.tidal.value.credible": ["Votre hypothèse est crédible."],
+  "production.energy.tidal.value.not-credible": [
+    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'énergie marémotrice (3 GW) selon le rapport 100% EnR de l'ADEME mais reste possible selon le syndicat des EnR (15 GW).",
+    "Difficile de produire plus sans \"construire\" de nouveaux estuaires."
+  ],
   "production.energy.tidal.graph.name": "Marées",
 
   "production.energy.wave.name": "Vagues",
   "production.energy.wave.accordion.title": "Vagues (électricité)",
   "production.energy.wave.accordion.label-slider": "Surface occupée (en %) de l'espace maritime (atlantique)",
-  "production.energy.wave.value.not-credible": "Votre hypothèse dépasse le gisement national pour l'énergie houlomotrice (10 GW) selon le scénario 100% EnR de l'ADEME.",
+  "production.energy.wave.value.credible": [
+    "Votre hypothèse est crédible.",
+    "La puissance de la houle atlantique a été mesurée: elle est de 40 kW par mètre de littoral exposé. Une puissance énorme! Avec 100% de surface équipée, et une absorbtion pleine, le rivage atlantique serait plat comme une limande..."
+  ],
+  "production.energy.wave.value.not-credible": [
+    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'énergie houlomotrice (10 GW) selon le rapport 100% EnR de l'ADEME.",
+    "Cependant, vous pouvez quand même la valider.",
+    "Pour info, cette technologie est encore loin d'être industrialisée à l'heure actuelle."
+  ],
   "production.energy.wave.graph.name": "Vagues",
 
   "production.energy.nuclear.name": "Nucléaire",
   "production.energy.nuclear.accordion.title": "Nucléaire",
   "production.energy.nuclear.accordion.label-slider": "Comparaison par rapport à l'existant (installation actuelle = 100%)",
-  "production.energy.nuclear.value.not-credible": "Votre hypothèse dépasse largement les scénarios RTE en matière de capacité installée en 2050.",
+  "production.energy.nuclear.value.credible": [
+    "Votre hypothèse est \"peut-être\" crédible. Votre France en {{year}}, est-elle avec ou sans nucléaire ?"
+  ],
+  "production.energy.nuclear.value.not-credible": [
+    "Votre hypothèse dépasse largement les scénarios RTE en matière de capacité installée en {{year}}.",
+    "Pensez aux conditions d'acceptabilité par les populations, ainsi qu'aux difficultés de refroidissement en cas de grandes sécheresses."
+  ],
   "production.energy.nuclear.graph.name": "Nucléaire",
 
   "role.admin": "Admin",
