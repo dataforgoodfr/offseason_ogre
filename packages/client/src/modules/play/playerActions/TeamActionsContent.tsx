@@ -42,6 +42,7 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
             .filter((option): option is NonNullable<typeof option> =>
               Boolean(option)
             )}
+          canOpenMultiplePanels
         />
       </Box>
 
