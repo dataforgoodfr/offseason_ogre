@@ -1,4 +1,4 @@
-import { Button, Grid, useTheme } from "@mui/material";
+import { Box, Button, Grid, useTheme } from "@mui/material";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import GroupIcon from "@mui/icons-material/Group";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -107,11 +107,21 @@ function Header(props: any) {
                     : t(`dialog.step.start`, { stepNumber: nextStepNumber })
                 }
                 actions={
-                  <>
+                  <Box
+                    display="flex"
+                    flexGrow={1}
+                    justifyContent="space-evenly"
+                  >
+                    <Button
+                      color="primary"
+                      type="submit"
+                      onClick={() => setIsDialogOpen(false)}
+                    >
+                      {t(`dialog.step.no`)}
+                    </Button>
                     <Button
                       color="secondary"
                       variant="contained"
-                      sx={{ border: 1, borderColor: "secondary" }}
                       onClick={() => {
                         !isStepFinished ? stopStep() : startStep();
                         setIsDialogOpen(false);
@@ -119,16 +129,7 @@ function Header(props: any) {
                     >
                       {t(`dialog.step.yes`)}
                     </Button>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      type="submit"
-                      sx={{ border: 1, borderColor: "secondary", mt: 1 }}
-                      onClick={() => setIsDialogOpen(false)}
-                    >
-                      {t(`dialog.step.no`)}
-                    </Button>
-                  </>
+                  </Box>
                 }
               />
             </>
