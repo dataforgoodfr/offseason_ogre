@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "postdeploy": "./heroku-postdeploy.sh"
+    "postdeploy": "chmod +x ./heroku-postdeploy.sh && ./heroku-postdeploy.sh"
   }
 }
