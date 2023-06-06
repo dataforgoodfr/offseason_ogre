@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
@@ -15,6 +14,7 @@ import { computeTeamActionStats } from "../utils/production";
 import { Dialog } from "../../common/components/Dialog";
 import { formatBudget, formatProductionGw } from "../../../lib/formatter";
 import { useTranslation } from "../../translations/useTranslation";
+import { ENERGY_SHIFT_TARGET_YEAR } from "../../common/constants";
 
 export { TeamActionsContent };
 
@@ -42,6 +42,7 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
             .filter((option): option is NonNullable<typeof option> =>
               Boolean(option)
             )}
+          canOpenMultiplePanels
         />
       </Box>
 
@@ -198,56 +199,52 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
         </Typography>
       </Box>
 
-      <ValidateTeamAction
-        teamAction={localTeamAction}
-        onValidateTeamChoice={handleValidateTeamChoice}
-      />
+      <TeamActionCredibility teamAction={localTeamAction} />
+
+      <Box
+        className="team-action-option-content__actions"
+        display="flex"
+        justifyContent="end"
+      >
+        <Button
+          color="secondary"
+          variant="contained"
+          onClick={handleValidateTeamChoice}
+          type="button"
+        >
+          <Icon name="check-doubled" sx={{ mr: 1 }} />
+          Valider pour l'équipe
+        </Button>
+      </Box>
     </Box>
   );
 }
 
-function ValidateTeamAction({
-  teamAction,
-  onValidateTeamChoice,
-}: {
-  teamAction: TeamAction;
-  onValidateTeamChoice: () => void;
-}) {
-  const theme = useTheme();
+function TeamActionCredibility({ teamAction }: { teamAction: TeamAction }) {
+  const { ready, t } = useTranslation();
 
-  const stats = computeTeamActionStats(teamAction);
+  const { isCredible } = computeTeamActionStats(teamAction);
 
-  const backgroundColor = stats.isCredible
-    ? theme.palette.status.success
-    : theme.palette.status.error;
-
-  const credibilityElement = (
-    <Box
-      className="validate-team-choices__content__credibility"
-      display="flex"
-      flexDirection="column"
-    >
-      {stats.isCredible ? (
-        <Typography>Votre hypothèse est crédible</Typography>
-      ) : (
-        <>
-          <Typography>Votre hypothèse n’est pas crédible :</Typography>
-          <Typography>
-            {t(
-              `production.energy.${teamAction.action.name}.value.not-credible`
-            )}
-          </Typography>
-          <Typography>Cependant, vous pouvez quand même la valider.</Typography>
-        </>
-      )}
-    </Box>
-  );
+  const credibilityI18n = useMemo(() => {
+    if (!ready) {
+      return [];
+    }
+    if (isCredible) {
+      return t(`production.energy.${teamAction.action.name}.value.credible`, {
+        year: ENERGY_SHIFT_TARGET_YEAR,
+        returnObjects: true,
+      });
+    }
+    return t(`production.energy.${teamAction.action.name}.value.not-credible`, {
+      year: ENERGY_SHIFT_TARGET_YEAR,
+      returnObjects: true,
+    });
+  }, [isCredible, ready, teamAction.action.name, t]);
 
   return (
     <Box
-      className="validate-team-choices"
+      className="team-action-credibility"
       sx={{
-        backgroundColor,
         border: `2px solid #fff`,
         borderRadius: "5px",
         padding: 1,
@@ -257,13 +254,13 @@ function ValidateTeamAction({
       gap={1}
     >
       <Box
-        className="validate-team-choices__content"
+        className="team-action-credibility__content"
         display="flex"
         flexDirection="row"
         gap={1}
       >
         <Box
-          className="validate-team-choices__content__illustration"
+          className="team-action-credibility__content__illustration"
           sx={{
             overflow: "hidden",
             flex: "0 0 auto",
@@ -273,25 +270,18 @@ function ValidateTeamAction({
           width={44}
           height={44}
         >
-          <img src="/ogre-team.png" alt="Ogre team" />
+          <img src="/sage.png" alt="" />
         </Box>
-        {credibilityElement}
-      </Box>
-      <Box
-        className="validate-team-choices__actions"
-        display="flex"
-        justifyContent="end"
-      >
-        <Button
-          sx={{ border: `2px solid ${theme.palette.secondary.main}` }}
-          color="primary"
-          variant="contained"
-          onClick={onValidateTeamChoice}
-          type="button"
+        <Box
+          className="team-action-credibility__content__credibility"
+          display="flex"
+          flexDirection="column"
+          gap={1}
         >
-          <Icon name="check-doubled" />
-          <Typography ml={1}>Valider pour l'équipe</Typography>
-        </Button>
+          {credibilityI18n.map((text) => (
+            <Typography key={text}>{text}</Typography>
+          ))}
+        </Box>
       </Box>
     </Box>
   );

@@ -18,10 +18,12 @@ function TeamActionsRecap({
   title,
   teamActions = [],
   helper,
+  showCredibility,
 }: {
   title?: string;
   teamActions: TeamAction[];
   helper?: React.ReactNode;
+  showCredibility?: boolean;
 }) {
   const currentStep = useCurrentStep();
 
@@ -78,6 +80,7 @@ function TeamActionsRecap({
           <EnergyListItem
             key={teamAction.action.name}
             teamAction={teamAction}
+            showCredibility={showCredibility}
           />
         ))}
       </Box>
@@ -85,7 +88,13 @@ function TeamActionsRecap({
   );
 }
 
-function EnergyListItem({ teamAction }: { teamAction?: TeamAction }) {
+function EnergyListItem({
+  teamAction,
+  showCredibility,
+}: {
+  teamAction?: TeamAction;
+  showCredibility?: boolean;
+}) {
   const theme = useTheme();
 
   if (!teamAction) {
@@ -99,16 +108,18 @@ function EnergyListItem({ teamAction }: { teamAction?: TeamAction }) {
     <Box display="flex" alignItems="center" color={color}>
       <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
         <Icon name="team" />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 24,
-          }}
-        >
-          {!stats.isCredible && <Icon name="warning" sx={{ fontSize: 22 }} />}
-        </div>
+        {showCredibility && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: 24,
+            }}
+          >
+            {!stats.isCredible && <Icon name="warning" sx={{ fontSize: 22 }} />}
+          </div>
+        )}
         <Typography>
           {t(`production.energy.${teamAction.action.name}.name`)} :
         </Typography>

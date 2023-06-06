@@ -60,6 +60,7 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
               <TeamActionsRecap
                 title="Actions Production"
                 teamActions={teamActionsAtCurrentStep}
+                showCredibility
               />
             </PlayBox>
           )}
