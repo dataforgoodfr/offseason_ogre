@@ -153,14 +153,12 @@ function PlayerHeader() {
             sx={{
               mt: 2,
               mb: 1,
-              fontSize: "13px",
-              border: (theme) =>
-                `2px ${theme.palette.primary.contrastText} solid`,
+              width: "200px",
             }}
             component={Link}
             to={`/play/games/${game.id}/persona`}
             variant="contained"
-            color="primary"
+            color="secondary"
           >
             <Icon name="badge" sx={{ mr: 1 }} />{" "}
             {t("cta.go-to-player-characteristics")}
@@ -263,7 +261,7 @@ function Actions({ className }: { className?: string }) {
         component={Link}
         to={`/play/games/${game.id}/persona/actions`}
         variant="contained"
-        color="primary"
+        color="secondary"
         sx={{
           mt: 2,
           width: "200px",

@@ -75,7 +75,7 @@ function Persona() {
   return (
     <PlayBox>
       <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
-        Mes caractéristiques
+        Mon Profil
       </Typography>
       <Accordion
         options={Object.entries(formSections).map(
@@ -94,7 +94,6 @@ function Persona() {
                 profile.personalization,
                 value.name
               ),
-              themeVariation: "accent-large",
             };
           }
         )}

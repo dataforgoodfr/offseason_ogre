@@ -15,15 +15,22 @@ interface AccordionProps {
     themeVariation?: ThemeVariation;
     valid?: boolean;
   }[];
+  canOpenMultiplePanels?: boolean;
 }
 export type ThemeVariation = "accent-large" | "default" | "default-large";
 
-function Accordion({ options }: AccordionProps) {
-  const [expanded, setExpanded] = React.useState<string | null>(null);
+function Accordion({ canOpenMultiplePanels, options }: AccordionProps) {
+  const [expanded, setExpanded] = React.useState<
+    Record<string, boolean | undefined>
+  >({});
 
   const handleExpandPanel =
     (panel: string) => (_: React.SyntheticEvent, newExpanded: boolean) => {
-      setExpanded(newExpanded ? panel : null);
+      if (canOpenMultiplePanels) {
+        setExpanded((previous) => ({ ...previous, [panel]: newExpanded }));
+      } else {
+        setExpanded({ [panel]: newExpanded });
+      }
     };
 
   const getPanelName = (idx: number): string => `panel-${idx}`;
@@ -34,7 +41,7 @@ function Accordion({ options }: AccordionProps) {
         <AccordionItemStyled
           className={`accordion__item-${getPanelName(idx)}`}
           key={option.key}
-          expanded={expanded === getPanelName(idx)}
+          expanded={!!expanded[getPanelName(idx)]}
           onChange={handleExpandPanel(getPanelName(idx))}
           themeVariation={option.themeVariation || "default"}
         >

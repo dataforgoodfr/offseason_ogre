@@ -27,3 +27,33 @@
 # Link heroku with local repo
 
 `heroku git:remote -a atelierogre-staging`
+
+# Troubleshooting
+
+If the api is not responding to any requests, it may be because the Heroku router is not passing down the request. The error message in the Heroku logs would look like this:
+
+```bash
+2023-05-31T06:33:42.407994+00:00 heroku[router]: at=error code=H99 desc="Platform error" method=GET path="/api/users/logged-user" host=atelierogre-staging.herokuapp.com request_id=cfcbede1-fc9e-4278-ac7c-7c5264b3e4ae fwd="37.167.224.186" dyno= connect= service= status=503 bytes= protocol=https
+```
+
+Or like this:
+
+```bash
+2023-05-31T06:33:48.661017+00:00 heroku[router]: at=error code=H10 desc="App crashed" method=GET path="/api/users/logged-user" host=atelierogre-staging.herokuapp.com request_id=4212171e-d7bc-49da-a0ff-7ed0a95d27d5 fwd="37.167.224.186" dyno= connect= service= status=503 bytes= protocol=https
+```
+
+To solve the issue, run the commands:
+
+```bash
+# Disable sticky sessions
+heroku features:disable http-session-affinity
+
+# Remove all dynos
+heroku ps:scale web=0
+
+# Add new dynos
+heroku ps:scale web=1
+
+# Reactivate sticky session
+heroku features:enable http-session-affinity
+```
