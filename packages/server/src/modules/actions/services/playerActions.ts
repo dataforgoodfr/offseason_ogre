@@ -7,11 +7,11 @@ const model = database.playerActions;
 type Model = PlayerActions;
 
 export {
+  model as queries,
   create,
   getMany,
   getOrCreatePlayerActions,
   removeForPlayer,
-  updatePlayerActions,
 };
 
 async function create({
@@ -115,32 +115,4 @@ async function getOrCreatePlayerActions(
     logger.error(err);
     return [];
   }
-}
-
-async function updatePlayerActions(
-  userId: number,
-  playerActions: {
-    isPerformed: boolean;
-    id: number;
-  }[]
-): Promise<PlayerActions[]> {
-  const [{ gameId }] = await Promise.all(
-    playerActions.map((playerAction) =>
-      database.playerActions.update({
-        where: {
-          id_userId: {
-            id: playerAction.id,
-            userId,
-          },
-        },
-        data: {
-          isPerformed: playerAction.isPerformed,
-        },
-      })
-    )
-  );
-
-  const updatedPlayerActions = await getOrCreatePlayerActions(gameId, userId);
-
-  return updatedPlayerActions;
 }
