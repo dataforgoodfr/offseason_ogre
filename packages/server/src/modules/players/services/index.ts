@@ -9,6 +9,7 @@ type Model = PlayersPrisma;
 export { services };
 
 const crudServices = {
+  queries: model,
   find,
   remove,
   setDefaultProfiles,

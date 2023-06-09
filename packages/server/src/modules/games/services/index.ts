@@ -10,6 +10,7 @@ const model = database.game;
 type Model = Game;
 
 const crudServices = {
+  queries: model,
   getDocument,
   getMany,
   create,

@@ -5,6 +5,13 @@ import { User } from "../types";
 
 export { authenticateUser };
 
+/**
+ * Authenticate a user from an authentication token.
+ *
+ * Throws if the token is missing, malformed, invalid or the user can't be authenticated.
+ *
+ * @param token
+ */
 async function authenticateUser(token = ""): Promise<User> {
   let email: string | undefined;
   try {
