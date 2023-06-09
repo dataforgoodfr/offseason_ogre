@@ -15,6 +15,8 @@ import { validateProfilesController } from "./validateProfilesController";
 import { updateProfilesController } from "./updateProfilesController";
 import { generateCode } from "../services/utils";
 import { getManyGamesControllers } from "./getManyGamesController";
+import * as playerActionsServices from "../../actions/services/playerActions";
+import * as teamActionsServices from "../../teamActions/services";
 
 const crudController = {
   createController,
@@ -95,9 +97,34 @@ async function updateGame(request: Request, response: Response) {
   const update = bodySchema.parse(request.body);
 
   if (update?.status === "playing") {
-    const defaultPersonalization = await getDefault();
-    await playersServices.setDefaultProfiles(id, defaultPersonalization);
+    await prepareGameForLaunch(id);
   }
   const document = await services.update(id, update);
   response.status(200).json({ document });
+}
+
+async function prepareGameForLaunch(gameId: number) {
+  const defaultPersonalization = await getDefault();
+  await playersServices.setDefaultProfiles(gameId, defaultPersonalization);
+
+  const game = await services.queries.findUnique({
+    where: {
+      id: gameId,
+    },
+    include: {
+      players: true,
+      teams: true,
+    },
+  });
+
+  await Promise.all(
+    (game?.players || []).map((p) =>
+      playerActionsServices.getOrCreatePlayerActions(gameId, p.userId)
+    )
+  );
+  await Promise.all(
+    (game?.teams || []).map((t) =>
+      teamActionsServices.getOrCreateTeamActions(t.id)
+    )
+  );
 }
