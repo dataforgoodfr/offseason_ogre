@@ -1,4 +1,4 @@
-import { ITeamWithPlayers, IUser } from "../../../utils/types";
+import { ITeam } from "../../../utils/types";
 import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
 import { sumAllValues, sumForAndFormat } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
@@ -12,10 +12,14 @@ import { useTranslation } from "../../translations/useTranslation";
 
 export { PlayerChart };
 
-function PlayerChart({ team }: { team: ITeamWithPlayers }) {
+function PlayerChart({ team }: { team: ITeam }) {
   const { t } = useTranslation();
+  const { players } = usePlay();
 
-  const userIds = team.players.map(({ user }) => user.id);
+  const userIds = useMemo(
+    () => players.filter((p) => p.teamId === team.id).map((p) => p.userId),
+    [players, team]
+  );
   const personaByUserId = usePersonaByUserId(userIds);
   const [firstPersona] = Object.values(personaByUserId);
 
@@ -66,15 +70,23 @@ function PlayerChart({ team }: { team: ITeamWithPlayers }) {
   return <Tabs tabs={tabs} />;
 }
 
-function useBuildData({ team }: { team: ITeamWithPlayers }) {
-  const { game } = usePlay();
-  const userIds = team.players.map(({ user }) => user.id);
+function useBuildData({ team }: { team: ITeam }) {
+  const { game, players } = usePlay();
+
+  const playersInTeam = useMemo(
+    () => players.filter((p) => p.teamId === team.id),
+    [players, team]
+  );
+  const userIds = useMemo(
+    () => playersInTeam.map((p) => p.userId),
+    [playersInTeam]
+  );
   const personaByUserId = usePersonaByUserId(userIds);
-  const [firstPersona] = Object.values(personaByUserId); // TODO: I am not sure how production should be computed. Sum for all team members?
+  const [firstPersona] = Object.values(personaByUserId);
 
   return [
-    ...team.players.map((player) => {
-      const userId = player.user.id;
+    ...playersInTeam.map((player) => {
+      const userId = player.userId;
       const personaBySteps = personaByUserId[userId]!.personaBySteps;
       const playerConsumption =
         personaBySteps[game.lastFinishedStep].consumption;
@@ -118,6 +130,6 @@ function useBuildData({ team }: { team: ITeamWithPlayers }) {
   ];
 }
 
-function buildName(user: IUser): string {
+function buildName(user: { firstName: string; lastName: string }): string {
   return `${user.firstName} ${user.lastName}`;
 }

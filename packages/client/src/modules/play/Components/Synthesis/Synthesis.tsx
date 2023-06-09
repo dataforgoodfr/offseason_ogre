@@ -4,12 +4,12 @@ import { emphasizeText } from "../../../common/utils";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
 import { Icon } from "../../../common/components/Icon";
 import { useTeamValues } from "../../context/playContext";
-import { ITeamWithPlayers } from "../../../../utils/types";
+import { ITeam } from "../../../../utils/types";
 import { getDaysTo2050 } from "../../../../lib/time";
 
 export { SynthesisRecap, SynthesisBudget, SynthesisCarbon };
 
-function SynthesisRecap({ team }: { team: ITeamWithPlayers }) {
+function SynthesisRecap({ team }: { team: ITeam }) {
   return (
     <Box>
       <SynthesisBudget team={team} />
@@ -20,7 +20,7 @@ function SynthesisRecap({ team }: { team: ITeamWithPlayers }) {
   );
 }
 
-function SynthesisBudget({ team }: { team: ITeamWithPlayers | null }) {
+function SynthesisBudget({ team }: { team: ITeam | null }) {
   const daysTo2050 = getDaysTo2050();
   const { getTeamById } = useTeamValues();
   const teamValues = getTeamById(team?.id);
@@ -51,7 +51,7 @@ function SynthesisBudget({ team }: { team: ITeamWithPlayers | null }) {
   );
 }
 
-function SynthesisCarbon({ team }: { team: ITeamWithPlayers | null }) {
+function SynthesisCarbon({ team }: { team: ITeam | null }) {
   const { getTeamById } = useTeamValues();
   const teamValues = getTeamById(team?.id);
   const teamCarbonFootprintInKgPerDay = teamValues?.carbonFootprint || 0;

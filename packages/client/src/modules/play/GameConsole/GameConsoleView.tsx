@@ -32,7 +32,7 @@ function GameConsoleView() {
 function Header(props: any) {
   const { selectedScreen, setSelectedScreen } = props;
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const { game, isStepFinished, updateGame } = usePlay();
+  const { game, updateGame } = usePlay();
   const theme = useTheme();
   const { t } = useTranslation();
 
@@ -95,14 +95,14 @@ function Header(props: any) {
                 sx={{ border: `1px solid ${theme.palette.secondary.main}` }}
                 onClick={() => setIsDialogOpen(true)}
               >
-                {!isStepFinished ? stopStepLabel : startStepLabel}
+                {!game.isStepFinished ? stopStepLabel : startStepLabel}
                 <ArrowForwardIcon />
               </Button>
               <Dialog
                 open={isDialogOpen}
                 handleClose={() => setIsDialogOpen(false)}
                 content={
-                  !isStepFinished
+                  !game.isStepFinished
                     ? t(`dialog.step.end`, { stepNumber: currentStepNumber })
                     : t(`dialog.step.start`, { stepNumber: nextStepNumber })
                 }
@@ -123,7 +123,7 @@ function Header(props: any) {
                       color="secondary"
                       variant="contained"
                       onClick={() => {
-                        !isStepFinished ? stopStep() : startStep();
+                        !game.isStepFinished ? stopStep() : startStep();
                         setIsDialogOpen(false);
                       }}
                     >

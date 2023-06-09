@@ -2,7 +2,7 @@ import { Box, Rating, useTheme } from "@mui/material";
 import { PlayerChart } from "./PlayerChart";
 import { PlayBox } from "../Components";
 import { Icon } from "../../common/components/Icon";
-import { ITeamWithPlayers, IUser, Player } from "../../../utils/types";
+import { ITeam, Player } from "../../../utils/types";
 import {
   usePersonaByUserId,
   useCurrentStep,
@@ -14,19 +14,25 @@ import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { sumAllValues } from "../../persona";
 import { SynthesisRecap } from "../Components/Synthesis";
+import { useMemo } from "react";
 
 export { TeamConsoleContent };
 
-function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
-  const { game } = usePlay();
+function TeamConsoleContent({ team }: { team: ITeam }) {
+  const { game, players, productionActionById } = usePlay();
   const currentStep = useCurrentStep();
+  const playersInTeam = useMemo(
+    () => players.filter((p) => p.teamId === team.id),
+    [players, team]
+  );
 
   const isProductionStep = currentStep?.type === "production";
   const isSynthesisStep = currentStep?.id === "final-situation";
 
   const teamActionsAtCurrentStep = getTeamActionsAtCurrentStep(
     game.step,
-    team.actions
+    team.actions,
+    productionActionById
   );
   const PlayerComponent = getPlayerComponent(isProductionStep, isSynthesisStep);
 
@@ -50,7 +56,7 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
 
       <Box display="grid" gap={2} gridTemplateColumns="1fr 2fr">
         <Box display="flex" flexDirection="column" gap={2}>
-          {team.players.map((player) => (
+          {playersInTeam.map((player) => (
             <PlayerComponent key={player.user.id} player={player} />
           ))}
         </Box>
@@ -227,6 +233,6 @@ function PlayerConsumption({ player }: { player: Player }) {
   );
 }
 
-function buildName(user: IUser): string {
+function buildName(user: { firstName: string; lastName: string }): string {
   return `${user.firstName} ${user.lastName}`;
 }

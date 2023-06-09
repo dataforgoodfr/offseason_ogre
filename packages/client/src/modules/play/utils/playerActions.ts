@@ -1,17 +1,21 @@
-import { PlayerActions } from "../../../utils/types";
+import { Action, PlayerActions } from "../../../utils/types";
 
 export { computePlayerActionsStats };
 
 function computePlayerActionsStats(
   currentStep: number,
-  playerActions: PlayerActions[]
+  playerActions: PlayerActions[],
+  consumptionActionById: Record<number, Action>
 ) {
   const playerActionsAtCurrentStep = playerActions.filter(
-    (pa) => pa.action.step === currentStep
+    (pa) => consumptionActionById[pa.actionId].step === currentStep
   );
 
   const actionPointsUsedAtCurrentStep = playerActionsAtCurrentStep.reduce(
-    (sum, pa) => (pa.isPerformed ? sum + pa.action.actionPointCost : sum),
+    (sum, pa) =>
+      pa.isPerformed
+        ? sum + consumptionActionById[pa.actionId].actionPointCost
+        : sum,
     0
   );
 
