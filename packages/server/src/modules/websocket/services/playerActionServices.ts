@@ -46,7 +46,7 @@ async function updateMany(
     id: number;
   }[]
 ): Promise<PlayerActions[]> {
-  const [{ gameId }] = await Promise.all(
+  return Promise.all(
     actions.map((playerAction) =>
       services.queries.update({
         where: {
@@ -61,6 +61,4 @@ async function updateMany(
       })
     )
   );
-
-  return findMany(gameId, userId);
 }

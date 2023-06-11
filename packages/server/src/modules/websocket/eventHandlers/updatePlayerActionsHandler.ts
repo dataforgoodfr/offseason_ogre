@@ -46,7 +46,12 @@ function updatePlayerActions(io: Server, socket: Socket) {
         playerActionsUpdate
       );
 
-      if (!canUpdatePlayerActions(lastChosenPlayerActions, STEPS[stepId])) {
+      if (
+        !canUpdatePlayerActions(
+          lastChosenPlayerActions.playerActionsAtCurrentStep,
+          STEPS[stepId]
+        )
+      ) {
         socket.emit("player-actions:action-points-limit-exceeded", {
           updates: [
             {
@@ -60,7 +65,7 @@ function updatePlayerActions(io: Server, socket: Socket) {
 
       const playerActions = await playerActionServices.updateMany(
         user.id,
-        lastChosenPlayerActions
+        lastChosenPlayerActions.playerActionsFreshlyUpdated
       );
 
       const updates = [
@@ -83,23 +88,30 @@ async function computeLastChosenPlayerActions(
     isPerformed: boolean;
     id: number;
   }[]
-): Promise<PlayerActions[]> {
-  const idToPlayerActions = Object.fromEntries(
+) {
+  const playerActionsUpdateById = Object.fromEntries(
     playerActionsUpdate.map((playerAction) => [playerAction.id, playerAction])
   );
 
-  const playerActions = (
+  const playerActionsAtCurrentStep = (
     await playerActionServices.findManyWithActions(gameId, userId)
   )
     .filter((playerAction) => playerAction.action.step === step)
     .map((playerAction) => ({
       ...playerAction,
-      isPerformed: idToPlayerActions[playerAction.id]
-        ? idToPlayerActions[playerAction.id].isPerformed
+      isPerformed: playerActionsUpdateById[playerAction.id]
+        ? playerActionsUpdateById[playerAction.id].isPerformed
         : playerAction.isPerformed,
     }));
 
-  return playerActions;
+  const playerActionsFreshlyUpdated = playerActionsAtCurrentStep.filter(
+    (playerAction) => !!playerActionsUpdateById[playerAction.id]
+  );
+
+  return {
+    playerActionsAtCurrentStep,
+    playerActionsFreshlyUpdated,
+  };
 }
 
 function canUpdatePlayerActions(

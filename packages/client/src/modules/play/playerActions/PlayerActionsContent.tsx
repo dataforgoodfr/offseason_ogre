@@ -33,12 +33,12 @@ function PlayerActionsContent() {
 
   const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
     setActionPointsLimitExceeded(false);
-    updatePlayerActions(
-      playerActions.map((pa) => ({
-        id: pa.id,
-        isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,
-      }))
-    );
+    updatePlayerActions([
+      {
+        id: playerActionId,
+        isPerformed,
+      },
+    ]);
   };
 
   return (
