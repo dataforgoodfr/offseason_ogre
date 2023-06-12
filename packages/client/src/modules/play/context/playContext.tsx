@@ -196,7 +196,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     }[];
     scenarioName?: string;
   }) => {
-    socket.emit("updateTeam", {
+    socket.emit("team:update", {
       step: game.step,
       teamActions,
       scenarioName,

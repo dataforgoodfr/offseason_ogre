@@ -18,12 +18,12 @@ async function findMany(teamId: number) {
   });
 }
 
-async function findManyWithActions(actionIds: number[], teamId: number) {
+async function findManyWithActions(ids: number[], teamId: number) {
   return services.queries.findMany({
     where: {
       AND: {
-        actionId: {
-          in: actionIds,
+        id: {
+          in: ids,
         },
         teamId,
       },
@@ -45,7 +45,7 @@ async function updateMany(
     isTouched: boolean;
   }[]
 ) {
-  await Promise.all(
+  return Promise.all(
     actions.map((teamAction) =>
       services.queries.update({
         where: {
@@ -61,6 +61,4 @@ async function updateMany(
       })
     )
   );
-
-  return findMany(teamId);
 }

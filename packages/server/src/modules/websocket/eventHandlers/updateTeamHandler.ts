@@ -20,7 +20,7 @@ export { handleUpdateTeam };
 
 function handleUpdateTeam(io: Server, socket: Socket) {
   socket.on(
-    "updateTeam",
+    "team:update",
     wrapHandler(async (args: unknown) => {
       await handleUpdateTeamSafely(io, socket, args);
     })
