@@ -90,4 +90,3 @@ type Head<T extends any[]> = T extends [infer THead, ...infer _]
 type Tail<T extends any[]> = T extends [infer _, ...infer TTail]
   ? TTail
   : never;
-
