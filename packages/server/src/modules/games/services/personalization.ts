@@ -1,7 +1,7 @@
 import { Personalization } from "@prisma/client";
 import { database } from "../../../database";
 
-export { update, create, getDefault };
+export { update, getDefault };
 
 async function update(personalizationId: number, personalization: any) {
   return database.personalization.update({
@@ -19,10 +19,4 @@ async function getDefault(): Promise<Personalization> {
       },
     },
   }) as unknown as Personalization;
-}
-
-async function create(personalization: any) {
-  return database.personalization.create({
-    data: personalization,
-  });
 }

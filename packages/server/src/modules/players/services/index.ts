@@ -10,7 +10,6 @@ export { services };
 
 const crudServices = {
   queries: model,
-  find,
   remove,
   setDefaultProfiles,
   update,
@@ -19,29 +18,6 @@ const crudServices = {
 };
 
 const services = { ...crudServices };
-
-async function find(gameId: number, userId: number): Promise<Players | null> {
-  // TODO: find a way to link Prisma typing with attributes included in `include` section.
-  return model.findFirst({
-    where: {
-      gameId,
-      userId,
-    },
-    include: {
-      actions: {
-        include: {
-          action: true,
-        },
-      },
-      team: true,
-      profile: {
-        include: {
-          personalization: true,
-        },
-      },
-    },
-  }) as unknown as Players;
-}
 
 async function update(
   gameId: number,
