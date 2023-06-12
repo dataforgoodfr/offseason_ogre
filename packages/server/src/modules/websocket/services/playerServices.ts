@@ -1,22 +1,35 @@
-import { Players } from "@prisma/client";
-import { services } from "../../players/services";
+import { Players, Prisma } from "@prisma/client";
+import { database } from "../../../database";
+
+const model = database.players;
 
 export const playerServices = {
-  queries: services.queries,
+  queries: model,
   findOne,
   update,
   updateMany,
 };
 
-async function findOne(gameId: number, userId: number) {
-  return services.queries.findUnique({
+async function findOne<
+  OptionsInclude extends Parameters<typeof model.findUnique>[0]["include"]
+>(
+  gameId: number,
+  userId: number,
+  options: {
+    include?: OptionsInclude;
+  } = {}
+): Promise<Prisma.PlayersGetPayload<{
+  include: OptionsInclude;
+}> | null> {
+  return model.findUnique({
     where: {
       userId_gameId: {
         gameId,
         userId,
       },
     },
-  });
+    ...options,
+  }) as any;
 }
 
 async function update(
@@ -24,7 +37,7 @@ async function update(
   userId: number,
   data: Partial<Omit<Players, "id">>
 ) {
-  return services.queries.update({
+  return model.update({
     where: {
       userId_gameId: {
         gameId,
@@ -39,7 +52,7 @@ async function updateMany(
   gameId: number,
   data: Partial<Omit<Players, "id">>
 ): Promise<void> {
-  await services.queries.updateMany({
+  await model.updateMany({
     where: {
       gameId,
     },

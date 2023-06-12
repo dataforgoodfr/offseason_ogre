@@ -69,7 +69,6 @@ interface IPlayContext {
   ) => void;
   setActionPointsLimitExceeded: (limitExceeded: boolean) => void;
   updatePlayer: (options: { hasFinishedStep?: boolean }) => void;
-  profile: any;
   readProfile: () => void;
   updateProfile: (
     options: { userId: number; update: any },
@@ -118,7 +117,6 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     setProductionActions,
     setTeams,
   } = usePlayStore();
-  const [profile, setProfile] = useState<any>({});
   const { socket } = useGameSocket({
     gameId,
     token,
@@ -128,14 +126,13 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     setPlayers,
     setProductionActions,
     setTeams,
-    setProfile,
   });
 
   const readProfile = useCallback(() => {
     if (user?.id) {
-      socket?.emit("readProfile", { gameId, userId: user.id });
+      socket?.emit("profile:read");
     }
-  }, [gameId, socket, user]);
+  }, [socket, user]);
 
   const setActionPointsLimitExceeded = useCallback(
     (actionPointsLimitExceeded: boolean) => {
@@ -186,7 +183,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     },
     onRespond?: (args: { success: boolean }) => void
   ) => {
-    socket.emit("updateProfile", { gameId, userId, update }, onRespond);
+    socket.emit("profile:update", { gameId, userId, update }, onRespond);
   };
 
   const updateTeam = ({
@@ -220,7 +217,6 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         updatePlayerActions,
         setActionPointsLimitExceeded,
         updatePlayer,
-        profile,
         readProfile,
         updateProfile,
         updateTeam,
@@ -390,7 +386,6 @@ function useGameSocket({
   setPlayers,
   setProductionActions,
   setTeams,
-  setProfile,
 }: {
   gameId: number;
   token: string | null;
@@ -402,8 +397,6 @@ function useGameSocket({
     React.SetStateAction<ProductionAction[]>
   >;
   setTeams: React.Dispatch<React.SetStateAction<ITeam[]>>;
-  // TODO: typing.
-  setProfile: React.Dispatch<React.SetStateAction<any>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
@@ -484,10 +477,6 @@ function useGameSocket({
       }
     );
 
-    newSocket.on("profileUpdated", ({ update }: { update: Partial<any> }) => {
-      setProfile((previous: any) => ({ ...previous, ...update }));
-    });
-
     newSocket.on("connect", () => {
       newSocket.emit("game:join", gameId);
     });
@@ -508,7 +497,6 @@ function useGameSocket({
      * /!\ Only use absolute navigation inside of this `useEffect`!
      */
     // navigate,
-    setProfile,
     setConsumptionActions,
     setGame,
     setIsInitialised,
