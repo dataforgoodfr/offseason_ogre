@@ -3,15 +3,23 @@ import { computePlayerActionsStats } from "../../../utils/playerActions";
 import { usePlay } from "../../playContext";
 import { useMemo } from "react";
 import { getTeamActionsAtCurrentStep } from "../../../utils/teamActions";
+import { useAuth } from "../../../../auth/authProvider";
 
 export { useCurrentPlayer };
 
 function useCurrentPlayer() {
+  const { user } = useAuth();
   const { consumptionActionById, game, players, productionActionById, teams } =
     usePlay();
 
-  const player = useMemo(() => players[0], [players]);
-  const team = useMemo(() => teams[0], [teams]);
+  const player = useMemo(
+    () => players.find((p) => p.userId === user?.id)!,
+    [players, user]
+  );
+  const team = useMemo(
+    () => teams.find((t) => t.id === player.teamId)!,
+    [player, teams]
+  );
   const teamActionsAtCurrentStep = useMemo(
     () =>
       getTeamActionsAtCurrentStep(
