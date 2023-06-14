@@ -137,10 +137,11 @@ async function filterValidTeamActionsUpdate(
   }[]
 ) {
   const teamActionIds = teamActionsUpdate.map((update) => update.id);
-  const teamActions = await teamActionServices.findManyWithActions(
-    teamActionIds,
-    teamId
-  );
+  const teamActions = await teamActionServices.findMany(teamActionIds, teamId, {
+    include: {
+      action: true,
+    },
+  });
   const teamActionIdToUpdatable = Object.fromEntries(
     teamActions
       .filter(

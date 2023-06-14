@@ -1,25 +1,29 @@
-import * as services from "../../teamActions/services";
+import { Prisma } from "@prisma/client";
+import { database } from "../../../database";
+
+const model = database.teamActions;
 
 export const teamActionServices = {
-  queries: services.queries,
   findMany,
-  findManyWithActions,
   updateMany,
 };
 
-async function findMany(teamId: number) {
-  return services.queries.findMany({
-    where: {
-      teamId,
-    },
-    orderBy: {
-      actionId: "asc",
-    },
-  });
-}
-
-async function findManyWithActions(ids: number[], teamId: number) {
-  return services.queries.findMany({
+async function findMany<
+  OptionsInclude extends NonNullable<
+    Parameters<typeof model.findMany>[0]
+  >["include"]
+>(
+  ids: number[],
+  teamId: number,
+  options: {
+    include?: OptionsInclude;
+  } = {}
+): Promise<
+  Prisma.TeamActionsGetPayload<{
+    include: OptionsInclude;
+  }>[]
+> {
+  return model.findMany({
     where: {
       AND: {
         id: {
@@ -28,13 +32,11 @@ async function findManyWithActions(ids: number[], teamId: number) {
         teamId,
       },
     },
-    include: {
-      action: true,
-    },
     orderBy: {
       actionId: "asc",
     },
-  });
+    ...options,
+  }) as any;
 }
 
 async function updateMany(
@@ -47,7 +49,7 @@ async function updateMany(
 ) {
   return Promise.all(
     actions.map((teamAction) =>
-      services.queries.update({
+      model.update({
         where: {
           id_teamId: {
             id: teamAction.id,
