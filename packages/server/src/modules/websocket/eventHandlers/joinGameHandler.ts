@@ -1,16 +1,17 @@
 /* eslint-disable no-param-reassign */
 import { z } from "zod";
 import invariant from "tiny-invariant";
-import { services as playersServices } from "../../players/services";
-import { services as teamsServices } from "../../teams/services";
 import { services as usersServices } from "../../users/services";
-import * as actionsServices from "../../actions/services";
-import * as productionActionsServices from "../../productionActions/services";
-import { Server, Socket } from "../types";
+import { GameInitEmitted, Server, Socket } from "../types";
 import { rooms } from "../constants";
 import { wrapHandler } from "../utils";
-import { NO_TEAM } from "../../teams/constants/teams";
-import { gameServices } from "../services";
+import {
+  actionServices,
+  gameServices,
+  playerServices,
+  productionActionServices,
+  teamServices,
+} from "../services";
 
 export { handleJoinGame };
 
@@ -29,14 +30,10 @@ function handleJoinGame(io: Server, socket: Socket) {
       socket.data.user = user;
 
       const isPlayer = game?.teacherId !== user.id;
+
+      let gameInitData: GameInitEmitted;
       if (isPlayer) {
-        const player = await playersServices.queries.findUnique({
-          where: {
-            userId_gameId: {
-              gameId,
-              userId: user.id,
-            },
-          },
+        const player = await playerServices.findOne(gameId, user.id, {
           include: {
             user: true,
             actions: {
@@ -58,10 +55,7 @@ function handleJoinGame(io: Server, socket: Socket) {
 
         const [team, consumptionActions, productionActions] = await Promise.all(
           [
-            teamsServices.queries.findFirst({
-              where: {
-                id: player.teamId,
-              },
+            teamServices.findOne(player.teamId, {
               include: {
                 actions: {
                   orderBy: {
@@ -70,8 +64,8 @@ function handleJoinGame(io: Server, socket: Socket) {
                 },
               },
             }),
-            actionsServices.getAll(),
-            productionActionsServices.getAll(),
+            actionServices.findAll(),
+            productionActionServices.findAll(),
           ]
         );
         invariant(team, `Could not find team ${player.teamId}`);
@@ -81,18 +75,17 @@ function handleJoinGame(io: Server, socket: Socket) {
         socket.join(rooms.players(gameId));
         socket.join(rooms.team(gameId, player.teamId));
 
-        socket.emit("game:init", {
+        gameInitData = {
           game,
           consumptionActions,
           productionActions,
           players: [player],
           teams: [team],
-        });
+        };
       } else {
         const [players, teams, consumptionActions, productionActions] =
           await Promise.all([
-            playersServices.queries.findMany({
-              where: { gameId },
+            playerServices.findMany(gameId, {
               include: {
                 user: true,
                 actions: true,
@@ -103,40 +96,29 @@ function handleJoinGame(io: Server, socket: Socket) {
                 },
               },
             }),
-            teamsServices.queries.findMany({
-              where: {
-                AND: {
-                  gameId,
-                  name: {
-                    not: {
-                      equals: NO_TEAM,
-                    },
-                  },
-                },
-              },
+            teamServices.findMany(gameId, {
               include: {
                 actions: true,
               },
-              orderBy: {
-                id: "asc",
-              },
             }),
-            actionsServices.getAll(),
-            productionActionsServices.getAll(),
+            actionServices.findAll(),
+            productionActionServices.findAll(),
           ]);
 
         socket.join(`${gameId}`);
         socket.join(rooms.user(gameId, user.id));
         socket.join(rooms.teachers(gameId));
 
-        socket.emit("game:init", {
+        gameInitData = {
           game,
           consumptionActions,
           productionActions,
           players,
           teams,
-        });
+        };
       }
+
+      socket.emit("game:init", gameInitData);
     })
   );
 }

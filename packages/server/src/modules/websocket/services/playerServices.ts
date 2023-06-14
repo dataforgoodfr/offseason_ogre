@@ -4,8 +4,8 @@ import { database } from "../../../database";
 const model = database.players;
 
 export const playerServices = {
-  queries: model,
   findOne,
+  findMany,
   update,
   updateMany,
 };
@@ -27,6 +27,28 @@ async function findOne<
         gameId,
         userId,
       },
+    },
+    ...options,
+  }) as any;
+}
+
+async function findMany<
+  OptionsInclude extends NonNullable<
+    Parameters<typeof model.findMany>[0]
+  >["include"]
+>(
+  gameId: number,
+  options: {
+    include?: OptionsInclude;
+  } = {}
+): Promise<
+  Prisma.PlayersGetPayload<{
+    include: OptionsInclude;
+  }>[]
+> {
+  return model.findMany({
+    where: {
+      gameId,
     },
     ...options,
   }) as any;

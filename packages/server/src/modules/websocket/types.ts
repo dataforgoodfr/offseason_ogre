@@ -12,20 +12,21 @@ import {
 } from "@prisma/client";
 import { User } from "../users/types";
 
-export { Server, Socket, SocketData };
+export {
+  GameInitEmitted,
+  PlayerEmitted,
+  Server,
+  Socket,
+  SocketData,
+  TeamEmitted,
+};
 
 // TODO: type the socket
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type ListenEvents = any;
 
 type EmitEvents = {
-  "game:init": (args: {
-    game: Game;
-    consumptionActions: Action[];
-    productionActions: ProductionAction[];
-    players: PlayerEmitted[];
-    teams: TeamEmitted[];
-  }) => void;
+  "game:init": (args: GameInitEmitted) => void;
   "game:update": (args: { update: Partial<Game> }) => void;
   "player:update": (args: { updates: Partial<PlayerEmitted>[] }) => void;
   "player-actions:update": (args: {
@@ -37,6 +38,13 @@ type EmitEvents = {
   "team:update": (args: { updates: Partial<TeamEmitted>[] }) => void;
 };
 
+type GameInitEmitted = {
+  game: Game;
+  consumptionActions: Action[];
+  productionActions: ProductionAction[];
+  players: PlayerEmitted[];
+  teams: TeamEmitted[];
+};
 type PlayerEmitted = Players & {
   actionPointsLimitExceeded?: boolean;
   user: User;
