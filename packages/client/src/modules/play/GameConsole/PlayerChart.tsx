@@ -9,6 +9,7 @@ import {
   ResourcesPerStepChart,
 } from "../../charts";
 import { useTranslation } from "../../translations/useTranslation";
+import { formatUserName } from "../../../lib/formatter";
 
 export { PlayerChart };
 
@@ -92,7 +93,7 @@ function useBuildData({ team }: { team: ITeam }) {
         personaBySteps[game.lastFinishedStep].consumption;
 
       return {
-        name: buildName(player.user),
+        name: formatUserName(player.user),
         type: "consumption",
         total: sumAllValues(playerConsumption) || 0,
         grey: sumForAndFormat(playerConsumption, "grey"),
@@ -128,8 +129,4 @@ function useBuildData({ team }: { team: ITeam }) {
           terrestrial: 0,
         },
   ];
-}
-
-function buildName(user: { firstName: string; lastName: string }): string {
-  return `${user.firstName} ${user.lastName}`;
 }

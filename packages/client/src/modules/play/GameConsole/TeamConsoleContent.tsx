@@ -9,7 +9,11 @@ import {
   usePlay,
 } from "../context/playContext";
 import { Typography } from "../../common/components/Typography";
-import { formatBudget, formatCarbonFootprint } from "../../../lib/formatter";
+import {
+  formatBudget,
+  formatCarbonFootprint,
+  formatUserName,
+} from "../../../lib/formatter";
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { sumAllValues } from "../../persona";
@@ -95,7 +99,7 @@ function PlayerSynthesis({ player }: { player: Player }) {
   return (
     <PlayBox key={player.userId}>
       <Box display="flex" alignItems="center">
-        <Typography variant="h5">{buildName(player.user)}</Typography>
+        <Typography variant="h5">{formatUserName(player.user)}</Typography>
       </Box>
       <Box display="flex" justifyContent="space-evenly" alignItems="center">
         <Box
@@ -153,7 +157,7 @@ function PlayerProduction({ player }: { player: Player }) {
   return (
     <PlayBox key={player.userId}>
       <Box display="flex" alignItems="center">
-        <Typography variant="h5">{buildName(player.user)}</Typography>
+        <Typography variant="h5">{formatUserName(player.user)}</Typography>
       </Box>
 
       <Box display="flex" alignItems="center" mt={2}>
@@ -185,7 +189,7 @@ function PlayerConsumption({ player }: { player: Player }) {
   return (
     <PlayBox key={player.userId}>
       <Box display="flex" alignItems="center">
-        <Typography variant="h5">{buildName(player.user)}</Typography>
+        <Typography variant="h5">{formatUserName(player.user)}</Typography>
         {player.hasFinishedStep ? (
           <Icon
             name="player-finished"
@@ -231,8 +235,4 @@ function PlayerConsumption({ player }: { player: Player }) {
       </Box>
     </PlayBox>
   );
-}
-
-function buildName(user: { firstName: string; lastName: string }): string {
-  return `${user.firstName} ${user.lastName}`;
 }

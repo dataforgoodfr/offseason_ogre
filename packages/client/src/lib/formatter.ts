@@ -7,6 +7,7 @@ export {
   formatProduction,
   formatProductionGw,
   formatResource,
+  formatUserName,
 };
 
 function formatBudget(value?: number) {
@@ -51,4 +52,8 @@ function formatNumber(value?: number, options: Intl.NumberFormatOptions = {}) {
   return value != null
     ? new Intl.NumberFormat(userLocale, options).format(value)
     : "";
+}
+
+function formatUserName(user: { firstName: string; lastName: string }): string {
+  return `${user.firstName} ${user.lastName}`;
 }
