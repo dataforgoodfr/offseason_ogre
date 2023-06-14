@@ -70,7 +70,7 @@ function Persona() {
     );
   };
 
-  const { player } = useCurrentPlayer();
+  const { profile } = useCurrentPlayer();
 
   return (
     <PlayBox>
@@ -91,7 +91,7 @@ function Persona() {
                 </Typography>
               ),
               content: buildDescriptionSection(
-                player.profile.personalization,
+                profile.personalization,
                 value.name
               ),
             };

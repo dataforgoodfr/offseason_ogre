@@ -33,14 +33,15 @@ function mergeArrays<T extends Record<string, any>>(
   targetArray: T[] = [],
   sourceArray: T[] = []
 ) {
-  if (doesArrayHoldsItemsWithId(targetArray)) {
+  if (doesArrayHoldsItemsWithIdField(targetArray, "id")) {
     return updateCollection(targetArray, "id", sourceArray as any);
   }
   return sourceArray;
 }
 
-function doesArrayHoldsItemsWithId(
-  arr: Record<string, any>[] | any[]
+function doesArrayHoldsItemsWithIdField(
+  arr: Record<string, any>[] | any[],
+  idField: string
 ): arr is Record<string, any>[] {
-  return !!arr.length && isObject(arr[0]) && (arr[0] as any)?.["id"] != null;
+  return !!arr.length && isObject(arr[0]) && (arr[0] as any)?.[idField] != null;
 }

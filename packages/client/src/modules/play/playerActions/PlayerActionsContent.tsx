@@ -25,8 +25,8 @@ function PlayerActionsContent() {
     updatePlayerActions,
     setActionPointsLimitExceeded,
   } = usePlay();
-  const { player } = useCurrentPlayer();
   const {
+    player,
     actionPointsAvailableAtCurrentStep,
     playerActionsAtCurrentStep: playerActions,
   } = useCurrentPlayer();
