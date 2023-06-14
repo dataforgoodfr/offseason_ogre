@@ -571,11 +571,7 @@ function getUserTeamAndPlayer(
   { players, teams }: { players: Player[]; teams: ITeam[] }
 ) {
   const player = players.find((p) => p.userId === userId) || null;
-
-  let team = null;
-  if (player) {
-    team = teams.find((t) => t.id === player.teamId) || null;
-  }
+  const team = teams.find((t) => t.id === player?.teamId) || null;
 
   return { team, player };
 }
