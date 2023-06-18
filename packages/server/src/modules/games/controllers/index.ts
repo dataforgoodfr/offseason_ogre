@@ -17,6 +17,7 @@ import { generateCode } from "../services/utils";
 import { getManyGamesControllers } from "./getManyGamesController";
 import * as playerActionsServices from "../../actions/services/playerActions";
 import * as teamActionsServices from "../../teamActions/services";
+import { batchItems } from "../../../lib/array";
 
 const crudController = {
   createController,
@@ -104,6 +105,8 @@ async function updateGame(request: Request, response: Response) {
 }
 
 async function prepareGameForLaunch(gameId: number) {
+  const BATCH_SIZE = 25;
+
   const defaultPersonalization = await getDefault();
   await playersServices.setDefaultProfiles(gameId, defaultPersonalization);
 
@@ -117,14 +120,17 @@ async function prepareGameForLaunch(gameId: number) {
     },
   });
 
-  await Promise.all(
-    (game?.players || []).map((p) =>
+  await batchItems(game?.players || [], BATCH_SIZE, async (playerBatch) => {
+    const processingPlayerActions = playerBatch.map((p) =>
       playerActionsServices.getOrCreatePlayerActions(gameId, p.userId)
-    )
-  );
-  await Promise.all(
-    (game?.teams || []).map((t) =>
+    );
+    await Promise.all(processingPlayerActions);
+  });
+
+  await batchItems(game?.teams || [], BATCH_SIZE, async (teamBatch) => {
+    const processingTeamActions = teamBatch.map((t) =>
       teamActionsServices.getOrCreateTeamActions(t.id)
-    )
-  );
+    );
+    await Promise.all(processingTeamActions);
+  });
 }
