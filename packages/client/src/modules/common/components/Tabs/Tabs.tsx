@@ -1,9 +1,14 @@
-import React, { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import { CustomTab, CustomTabs } from "./Tabs.styles";
+import { Box } from "@mui/material";
 
 export { Tabs };
 
-function Tabs({ tabs }: { tabs: { label: string; component: ReactNode }[] }) {
+function Tabs({
+  tabs,
+}: {
+  tabs: { label: string; icon?: ReactNode; component: ReactNode }[];
+}) {
   const [selectedTabIdx, setSelectedTabIdx] = useState(0);
 
   const currentTab = useMemo(() => {
@@ -22,7 +27,11 @@ function Tabs({ tabs }: { tabs: { label: string; component: ReactNode }[] }) {
           <CustomTab
             className={`tabs__tab ${selectedTabIdx === index ? "active" : ""}`}
             key={tab.label}
-            label={tab.label}
+            label={
+              <Box display="flex" gap={1} alignItems="center">
+                {tab.icon} {tab.label}
+              </Box>
+            }
           />
         ))}
       </CustomTabs>
