@@ -5,7 +5,6 @@ import { PlayerHeaderGrid } from "../PlayerPersona";
 import { PlayerPageLayout } from "../PlayLayout";
 import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "../../translations/useTranslation";
-import { Icon } from "../../common/components/Icon";
 import { SynthesisGeneralTab } from "./SynthesisGeneralTab";
 
 export { SynthesisPage };
@@ -30,7 +29,7 @@ function SynthesisLayout() {
               tabs={[
                 {
                   label: t("synthesis.player.general-section.title"),
-                  icon: <Icon name="chart-pie" />,
+                  iconName: "chart-pie",
                   component: <SynthesisGeneralTab />,
                 },
               ]}
