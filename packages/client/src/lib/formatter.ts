@@ -3,6 +3,8 @@ import { userLocale } from "../modules/translations";
 export {
   formatBudget,
   formatCarbonFootprint,
+  formatConsumption,
+  formatPercentage,
   formatPoints,
   formatProduction,
   formatProductionGw,
@@ -23,6 +25,26 @@ function formatPoints(value?: number) {
 
 function formatProductionGw(value?: number) {
   return value?.toFixed(1) || "";
+}
+
+function formatConsumption(
+  value: number,
+  { fractionDigits = 0 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
+}
+
+function formatPercentage(
+  value?: number,
+  { fractionDigits = 1 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 function formatProduction({
