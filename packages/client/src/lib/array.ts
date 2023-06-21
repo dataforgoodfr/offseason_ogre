@@ -92,4 +92,3 @@ type Tail<T extends unknown[]> = T extends [infer _, ...infer TTail]
   : never;
 
 type KeyUnknownGuard<T> = T extends string | number | symbol ? T : any;
-
