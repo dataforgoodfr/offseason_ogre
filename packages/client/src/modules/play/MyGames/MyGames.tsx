@@ -6,7 +6,7 @@ import {
   CircularProgress,
   Grid,
   TextField,
-  Typography,
+  useTheme,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -18,11 +18,12 @@ import {
   CustomPaper,
   GameItemHost,
   JoinGameInputWrapper,
-} from "./styles";
+} from "./MyGames.styles";
 import { IGame } from "../../../utils/types";
 import { handleApiError, http } from "../../../utils/request";
 import { useTranslation } from "../../translations/useTranslation";
 import { Icon } from "../../common/components/Icon";
+import { Typography } from "../../common/components/Typography";
 
 export { MyGames };
 
@@ -31,10 +32,12 @@ interface Registration {
 }
 
 function MyGames() {
+  const { t } = useTranslation();
+
   return (
     <CustomContainer maxWidth="lg">
-      <Typography variant="h3" color="secondary">
-        Mes ateliers
+      <Typography variant="h3" color="#ffffff">
+        {t("page.games-list.title")}
       </Typography>
       <CustomDivider>
         <JoinGame />
@@ -46,6 +49,7 @@ function MyGames() {
 
 function GameItem({ game }: { game: IGame }) {
   const { t } = useTranslation();
+  const theme = useTheme();
 
   return (
     <PlayBox sx={{ mt: 2 }}>
@@ -63,10 +67,10 @@ function GameItem({ game }: { game: IGame }) {
               color="secondary"
               variant="contained"
               to={`/play/games/${game.id}/personalize/choice`}
-              sx={{ ml: "auto" }}
+              sx={{ display: "flex", gap: 1 }}
             >
-              <Icon name="settings" sx={{ mr: 2 }} />
-              Préparer l'atelier
+              <Icon name="settings" sx={{ width: "1rem", height: "1rem" }} />
+              <Typography as="span">{t("cta.prepare-game")}</Typography>
             </Button>
           </Grid>
         )}
@@ -75,10 +79,23 @@ function GameItem({ game }: { game: IGame }) {
             <Button
               variant="contained"
               disabled
-              sx={{ ml: "auto", backgroundColor: "#AFAFAF !important" }}
+              sx={{
+                display: "flex",
+                gap: 1,
+                backgroundColor: "#AFAFAF !important",
+              }}
             >
-              <Icon name="access-time" sx={{ mr: 2, color: "white" }} />
-              <Typography sx={{ color: "white" }}>Pas démarré</Typography>
+              <Icon
+                name="access-time"
+                sx={{
+                  width: "1rem",
+                  height: "1rem",
+                  color: theme.palette.primary.main,
+                }}
+              />
+              <Typography as="span" sx={{ color: theme.palette.primary.main }}>
+                {t("game.status.not-started")}
+              </Typography>
             </Button>
           </Grid>
         )}
@@ -89,9 +106,13 @@ function GameItem({ game }: { game: IGame }) {
               color="secondary"
               variant="contained"
               to={`/play/games/${game.id}/persona`}
-              sx={{ ml: "auto" }}
+              sx={{ display: "flex", gap: 1 }}
             >
-              <Icon name="videogame-controller" sx={{ mr: 2 }} /> Jouer
+              <Icon
+                name="videogame-controller"
+                sx={{ width: "1rem", height: "1rem" }}
+              />
+              <Typography as="span">{t("cta.play-game")}</Typography>
             </Button>
           </Grid>
         )}
@@ -102,9 +123,10 @@ function GameItem({ game }: { game: IGame }) {
               color="secondary"
               variant="contained"
               to={`/play/games/${game.id}/persona/actions`}
-              sx={{ ml: "auto" }}
+              sx={{ display: "flex", gap: 1 }}
             >
-              <Icon name="synthesis" sx={{ mr: 2 }} /> {t("cta.read-synthesis")}
+              <Icon name="synthesis" sx={{ width: "1rem", height: "1rem" }} />
+              <Typography as="span">{t("cta.read-synthesis")}</Typography>
             </Button>
           </Grid>
         )}
@@ -114,6 +136,8 @@ function GameItem({ game }: { game: IGame }) {
 }
 
 function MyGamesList() {
+  const { t } = useTranslation();
+
   const query = useQuery("/api/games/played-games", () => {
     return http.get<undefined, { data: { games: any[] } }>(
       "/api/games/played-games"
@@ -135,10 +159,11 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {currentGames.length > 0 &&
-        buildGameList(currentGames, "Ateliers en cours")}
-      {draftGames.length > 0 && buildGameList(draftGames, "Prochains ateliers")}
+        buildGameList(currentGames, t("page.games-list.ongoing-list.title"))}
+      {draftGames.length > 0 &&
+        buildGameList(draftGames, t("page.games-list.upcoming-list.title"))}
       {finishedGames.length > 0 &&
-        buildGameList(finishedGames, "Ateliers terminés")}
+        buildGameList(finishedGames, t("page.games-list.finished-list.title"))}
     </Box>
   );
 }
@@ -147,7 +172,7 @@ function buildGameList(games: IGame[], title: string) {
   return (
     <>
       <Box>
-        <Typography textAlign={"center"} variant="h5" color="secondary" mt={6}>
+        <Typography textAlign={"center"} variant="h5" color="#ffffff" mt={6}>
           {title}
         </Typography>
       </Box>
@@ -206,8 +231,14 @@ function JoinGame() {
               />
             )}
           />
-          <Button type="submit" variant="contained">
-            {t("cta.join-game")}
+          <Button
+            type="submit"
+            color="secondary"
+            variant="contained"
+            sx={{ display: "flex", gap: 1 }}
+          >
+            <Icon name="launch" sx={{ width: "1rem", height: "1rem" }} />
+            <Typography as="span">{t("cta.join-game")}</Typography>
           </Button>
         </JoinGameInputWrapper>
       </form>

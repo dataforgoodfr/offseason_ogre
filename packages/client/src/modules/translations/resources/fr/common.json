@@ -17,6 +17,8 @@
   "cta.lock-forms": "Verrouiller les formulaires",
   "cta.no": "Non",
   "cta.open-info-card": "Ouvrir la carte",
+  "cta.play-game": "Jouer",
+  "cta.prepare-game": "Préparer l'atelier",
   "cta.read-synthesis": "Voir la synthèse",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
   "cta.send-magic-link": "Envoyez moi un lien de connexion",
@@ -87,6 +89,10 @@
   "page.login.description": "Si vous avez déjà un compte :",
   "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
   "page.login.signup-section.cta": "Créer un compte",
+  "page.games-list.title": "Mes ateliers",
+  "page.games-list.finished-list.title": "Ateliers terminés",
+  "page.games-list.ongoing-list.title": "Ateliers en cours",
+  "page.games-list.upcoming-list.title": "Prochains ateliers",
   "page.player.statistics.tabs.energy-balance.label": "Équilibre énergétique",
   "page.player.statistics.tabs.energy-balance.graphs.details.title": "Décomposition de la pile {{stackName}}",
   "page.player.statistics.tabs.materials.label": "Matériaux",
@@ -270,6 +276,7 @@
 
   "game.status.draft": "Brouillon",
   "game.status.finished": "Terminé",
+  "game.status.not-started": "Pas démarré",
   "game.status.playing": "En cours",
   "game.status.ready": "Prêt",
 
