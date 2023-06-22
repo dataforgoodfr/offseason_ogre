@@ -13,11 +13,12 @@ import {
 } from "../../common/components/EnergyButtons";
 import { STEPS } from "../constants";
 import _ from "lodash";
-import { usePersona, usePlay } from "../context/playContext";
+import { usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame } from "../../../utils/types";
 import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "../../translations/useTranslation";
+import { usePersona } from "../context/hooks/player";
 
 export { StatsGraphs };
 

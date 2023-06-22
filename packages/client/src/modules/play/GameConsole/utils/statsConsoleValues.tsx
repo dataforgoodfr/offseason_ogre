@@ -44,6 +44,7 @@ function computeCarbonFootprint(
 
 export const buildValuesPoints = (
   game: IEnrichedGame,
+  teams: ITeam[],
   teamIdToTeamValues: TeamIdToValues
 ) => {
   const teamValues = Object.values(teamIdToTeamValues);
@@ -53,7 +54,7 @@ export const buildValuesPoints = (
     .map((team, index) => ({
       id: team.id,
       icon: getPointIcon(index + 1),
-      name: game.teams.find((t: ITeam) => team.id === t.id)?.name || "",
+      name: teams.find((t: ITeam) => team.id === t.id)?.name || "",
       value: formatPoints(teamIdToTeamValues[team.id].points),
     }));
 };
@@ -80,14 +81,13 @@ function getPointIcon(rank: number): JSX.Element {
 
 export const buildValuesBudget = (
   game: IEnrichedGame,
+  teams: ITeam[],
   teamIdToTeamValues: TeamIdToValues,
   t: I18nTranslateFunction
 ) => {
   if (game.isLarge) {
-    const budgets = game.teams.map(
-      (team) => teamIdToTeamValues[team.id].budget
-    );
-    const budgetsSpent = game.teams.map(
+    const budgets = teams.map((team) => teamIdToTeamValues[team.id].budget);
+    const budgetsSpent = teams.map(
       (team) => teamIdToTeamValues[team.id].budgetSpent
     );
     return [
@@ -120,7 +120,7 @@ export const buildValuesBudget = (
       },
     ];
   }
-  return game.teams.map((team) => ({
+  return teams.map((team) => ({
     id: team.id,
     name: team.name,
     value: computeBudget(
@@ -133,11 +133,12 @@ export const buildValuesBudget = (
 
 export const buildValuesCarbonFootprint = (
   game: IEnrichedGame,
+  teams: ITeam[],
   teamIdToTeamValues: TeamIdToValues,
   t: I18nTranslateFunction
 ) => {
   if (game.isLarge) {
-    const footprints = game.teams.map(
+    const footprints = teams.map(
       (team) => teamIdToTeamValues[team.id].carbonFootprint || 0
     );
     return [
@@ -164,7 +165,7 @@ export const buildValuesCarbonFootprint = (
       },
     ];
   }
-  return game.teams.map((team) => ({
+  return teams.map((team) => ({
     id: team.id,
     name: team.name,
     value: computeCarbonFootprint(

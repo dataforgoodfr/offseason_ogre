@@ -23,6 +23,7 @@
     "@types/recharts": "^1.8.24",
     "axios": "^0.25.0",
     "date-fns": "^2.28.0",
+    "deepmerge": "^4.3.1",
     "get-user-locale": "^2.2.1",
     "i18next": "^22.4.14",
     "lodash": "^4.17.21",
@@ -57,11 +58,16 @@
     ],
     "rules": {
       "no-use-before-define": "off",
-      "no-restricted-imports": ["error", {
-        "name": "axios",
-        "importNames": ["default"],
-        "message": "Please use `http`, the axios client configured in the request utils (src/utils/request)."
-      }],
+      "no-restricted-imports": [
+        "error",
+        {
+          "name": "axios",
+          "importNames": [
+            "default"
+          ],
+          "message": "Please use `http`, the axios client configured in the request utils (src/utils/request)."
+        }
+      ],
       "@typescript-eslint/no-use-before-define": "off"
     }
   },

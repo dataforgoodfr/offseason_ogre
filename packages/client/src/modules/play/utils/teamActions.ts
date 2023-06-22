@@ -1,19 +1,22 @@
-import { TeamAction } from "../../../utils/types";
+import { ProductionAction, TeamAction } from "../../../utils/types";
 
 export { getTeamActionsAtCurrentStep };
 
 function getTeamActionsAtCurrentStep(
   currentStep: number,
-  teamActions: TeamAction[]
+  teamActions: TeamAction[],
+  productionActionById: Record<number, ProductionAction>
 ) {
   const teamActionsAtCurrentStep = teamActions
     .filter(
       (teamAction) =>
-        teamAction.action.step === currentStep && teamAction.action.isPlayable
+        productionActionById[teamAction.actionId].step === currentStep &&
+        productionActionById[teamAction.actionId].isPlayable
     )
     .sort(
       (teamActionA, teamActionB) =>
-        teamActionA.action.order - teamActionB.action.order
+        productionActionById[teamActionA.actionId].order -
+        productionActionById[teamActionB.actionId].order
     );
 
   return teamActionsAtCurrentStep;

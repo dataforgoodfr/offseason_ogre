@@ -1,17 +1,17 @@
 import { useCallback } from "react";
 import { Grid, Typography, useTheme } from "@mui/material";
 import { FormStatus } from "../models/form";
-import { usePlay } from "../../context/playContext";
 import { useTranslation } from "../../../translations/useTranslation";
+import { useCurrentPlayer } from "../../context/hooks/player";
 
 export { FormStatusBanner };
 
 function FormStatusBanner() {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { profile } = usePlay();
+  const { profile } = useCurrentPlayer();
 
-  const formatLastUpdateDate = useCallback((date: Date) => {
+  const formatLastUpdateDate = useCallback((date: string) => {
     if (!date) {
       return "Aucune action enregistrée";
     }

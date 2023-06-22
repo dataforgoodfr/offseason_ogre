@@ -33,13 +33,15 @@ import { Accordion } from "../../common/components/Accordion";
 import { FormStatusBanner } from "./common/FormStatusBanner";
 import { useTranslation } from "../../translations/useTranslation";
 import { http } from "../../../utils/request";
+import { useCurrentPlayer } from "../context/hooks/player";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
   const gameId = useGameId();
   const { t } = useTranslation();
-  const { profile, updateProfile } = usePlay();
+  const { updateProfile } = usePlay();
+  const { profile } = useCurrentPlayer();
   const [formSaveStatus, setFormSaveStatus] = useState<
     "draft-saved" | "form-validated" | "error" | null
   >(null);
@@ -85,10 +87,10 @@ function PersonalizationForm() {
         profile?.personalization?.heatingInvoice ||
         getQuestionByName("heatingInvoice")?.defaultValue;
       return {
-        ...profile.personalization,
+        ...(profile?.personalization || {}),
         heatingConsumption: consumption,
         heatingInvoice: invoice,
-      };
+      } as PersoForm;
     }, [profile]),
   });
 
