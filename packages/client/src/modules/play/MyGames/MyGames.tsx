@@ -1,13 +1,5 @@
 import { trim } from "lodash";
-import { Link } from "react-router-dom";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Grid,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import { Box, CircularProgress, Grid, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert } from "../../alert";
@@ -22,9 +14,9 @@ import {
 import { IGame } from "../../../utils/types";
 import { handleApiError, http } from "../../../utils/request";
 import { useTranslation } from "../../translations/useTranslation";
-import { Icon } from "../../common/components/Icon";
 import { Typography } from "../../common/components/Typography";
 import { useAlerts } from "../../alert/AlertProvider";
+import { Button } from "../../common/components/Button";
 
 export { MyGames };
 
@@ -50,7 +42,6 @@ function MyGames() {
 
 function GameItem({ game }: { game: IGame }) {
   const { t } = useTranslation();
-  const theme = useTheme();
 
   return (
     <PlayBox sx={{ mt: 2 }}>
@@ -64,70 +55,37 @@ function GameItem({ game }: { game: IGame }) {
         {game.status === "draft" && (
           <Grid item display="flex" xs={2}>
             <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
+              iconName="settings"
               to={`/play/games/${game.id}/personalize/choice`}
-              sx={{ display: "flex", gap: 1 }}
             >
-              <Icon name="settings" sx={{ width: "1rem", height: "1rem" }} />
-              <Typography as="span">{t("cta.prepare-game")}</Typography>
+              {t("cta.prepare-game")}
             </Button>
           </Grid>
         )}
         {game.status === "ready" && (
           <Grid item display="flex" xs={2}>
-            <Button
-              variant="contained"
-              disabled
-              sx={{
-                display: "flex",
-                gap: 1,
-                backgroundColor: "#AFAFAF !important",
-              }}
-            >
-              <Icon
-                name="access-time"
-                sx={{
-                  width: "1rem",
-                  height: "1rem",
-                  color: theme.palette.primary.main,
-                }}
-              />
-              <Typography as="span" sx={{ color: theme.palette.primary.main }}>
-                {t("game.status.not-started")}
-              </Typography>
+            <Button disabled iconName="access-time">
+              {t("game.status.not-started")}
             </Button>
           </Grid>
         )}
         {game.status === "playing" && (
           <Grid item display="flex" xs={2}>
             <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
+              iconName="videogame-controller"
               to={`/play/games/${game.id}/persona`}
-              sx={{ display: "flex", gap: 1 }}
             >
-              <Icon
-                name="videogame-controller"
-                sx={{ width: "1rem", height: "1rem" }}
-              />
-              <Typography as="span">{t("cta.play-game")}</Typography>
+              {t("cta.play-game")}
             </Button>
           </Grid>
         )}
         {game.status === "finished" && (
           <Grid item display="flex" xs={2}>
             <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
+              iconName="synthesis"
               to={`/play/games/${game.id}/persona/actions`}
-              sx={{ display: "flex", gap: 1 }}
             >
-              <Icon name="synthesis" sx={{ width: "1rem", height: "1rem" }} />
-              <Typography as="span">{t("cta.read-synthesis")}</Typography>
+              {t("cta.read-synthesis")}
             </Button>
           </Grid>
         )}
@@ -246,13 +204,11 @@ function JoinGame() {
             )}
           />
           <Button
-            type="submit"
-            color="secondary"
-            variant="contained"
-            sx={{ display: "flex", gap: 1 }}
+            htmlType="submit"
+            iconName="launch"
+            loading={mutation.isLoading}
           >
-            <Icon name="launch" sx={{ width: "1rem", height: "1rem" }} />
-            <Typography as="span">{t("cta.join-game")}</Typography>
+            {t("cta.join-game")}
           </Button>
         </JoinGameInputWrapper>
       </form>

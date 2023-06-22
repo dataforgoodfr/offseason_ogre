@@ -1,43 +1,94 @@
 import { Button as ButtonLib, CircularProgress } from "@mui/material";
 import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { Icon, IconName } from "../Icon";
+import { Typography } from "../Typography";
 
 export { Button };
 
 interface ButtonProps {
   type?: "primary" | "secondary";
+  htmlType?: "button" | "submit";
+  disabled?: boolean;
   loading?: boolean;
-  onClick: () => void | Promise<void>;
+  to?: string;
+  iconName?: IconName;
+  onClick?: () => void | Promise<void>;
   children: React.ReactNode;
 }
 
 function Button({
   type = "primary",
+  htmlType = "button",
+  disabled = false,
   loading = false,
-  onClick,
+  to,
+  iconName,
+  onClick: onClickProp,
   children,
 }: ButtonProps) {
+  const navigate = useNavigate();
+
   const buttonProps = useMemo(() => {
+    if (disabled) {
+      return {
+        props: {
+          variant: "contained",
+        },
+        sx: {
+          backgroundColor: "#efefef !important",
+          color: "#adadad !important",
+        },
+      };
+    }
     if (type === "primary") {
       return {
-        color: "secondary",
-        variant: "contained",
+        props: {
+          variant: "contained",
+          color: "secondary",
+        },
       };
     }
     return {
-      color: "primary",
+      props: {
+        color: "primary",
+      },
     };
-  }, [type]);
+  }, [disabled, type]);
   const loaderColor = useMemo(
     () => (type === "primary" ? "primary" : "secondary"),
     [type]
   );
 
+  const onClick = useMemo(() => {
+    if (to) {
+      return () => navigate(to);
+    }
+    return onClickProp;
+  }, [to, navigate, onClickProp]);
+
   return (
-    <ButtonLib {...(buttonProps as any)} disabled={loading} onClick={onClick}>
-      {loading && (
-        <CircularProgress color={loaderColor} size={16} sx={{ mr: 1 }} />
+    <ButtonLib
+      type={htmlType}
+      {...((buttonProps.props || {}) as any)}
+      disabled={loading || disabled}
+      onClick={onClick}
+      sx={{
+        ...(buttonProps.sx || {}),
+        display: "flex",
+        gap: 1,
+      }}
+    >
+      {loading && <CircularProgress color={loaderColor} size={16} />}
+      {iconName && !loading && (
+        <Icon
+          name={iconName}
+          sx={{ width: "1rem", height: "1rem", color: buttonProps.sx?.color }}
+        />
       )}
-      {children}
+      <Typography as="span" sx={{ color: buttonProps.sx?.color }}>
+        {children}
+      </Typography>
     </ButtonLib>
   );
 }
