@@ -2,11 +2,7 @@ import { Box, IconButton } from "@mui/material";
 import HelpIcon from "@mui/icons-material/Help";
 import { useState } from "react";
 import { Typography } from "../../common/components/Typography";
-import {
-  useCurrentStep,
-  usePersona,
-  usePlayerActions,
-} from "../context/playContext";
+import { useCurrentStep } from "../context/playContext";
 import { StepHelpDialog } from "./HelpDialogs";
 import { Icon } from "../../common/components/Icon";
 import { formatBudget, formatCarbonFootprint } from "../../../lib/formatter";
@@ -18,6 +14,7 @@ import {
   MediaQuery,
 } from "./PlayerActionsHeader.styles";
 import { t } from "../../translations";
+import { usePersona, useCurrentPlayer } from "../context/hooks/player";
 
 export { PlayerActionsHeader };
 
@@ -90,7 +87,7 @@ function PlayerActionsHeader() {
 }
 
 function ActionPoints() {
-  const { actionPointsUsedAtCurrentStep } = usePlayerActions();
+  const { actionPointsUsedAtCurrentStep } = useCurrentPlayer();
   const currentStep = useCurrentStep();
 
   const availableActionPoints = currentStep?.availableActionPoints ?? 0;

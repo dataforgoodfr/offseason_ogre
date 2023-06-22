@@ -3,7 +3,7 @@ import sumBy from "lodash/sumBy";
 import React from "react";
 
 import { Typography } from "../../../common/components/Typography";
-import { useCurrentStep } from "../../context/playContext";
+import { useCurrentStep, usePlay } from "../../context/playContext";
 import { Icon } from "../../../common/components/Icon";
 import { computeTeamActionStats } from "../../utils/production";
 import { TeamAction } from "../../../../utils/types";
@@ -26,11 +26,12 @@ function TeamActionsRecap({
   showCredibility?: boolean;
 }) {
   const currentStep = useCurrentStep();
+  const { productionActionById } = usePlay();
 
   const energyNameToEnergyStats = Object.fromEntries(
     teamActions.map((teamAction) => [
-      teamAction.action.name,
-      computeTeamActionStats(teamAction),
+      productionActionById[teamAction.actionId].name,
+      computeTeamActionStats(teamAction, productionActionById),
     ])
   );
 
@@ -78,7 +79,7 @@ function TeamActionsRecap({
       <Box style={{ gap: "4px" }} display="flex" flexDirection="column">
         {teamActions.map((teamAction) => (
           <EnergyListItem
-            key={teamAction.action.name}
+            key={productionActionById[teamAction.actionId].name}
             teamAction={teamAction}
             showCredibility={showCredibility}
           />
@@ -96,12 +97,13 @@ function EnergyListItem({
   showCredibility?: boolean;
 }) {
   const theme = useTheme();
+  const { productionActionById } = usePlay();
 
   if (!teamAction) {
     return null;
   }
 
-  const stats = computeTeamActionStats(teamAction);
+  const stats = computeTeamActionStats(teamAction, productionActionById);
   const color = teamAction.isTouched ? theme.palette.secondary.main : "white";
 
   return (
@@ -121,7 +123,12 @@ function EnergyListItem({
           </div>
         )}
         <Typography>
-          {t(`production.energy.${teamAction.action.name}.name`)} :
+          {t(
+            `production.energy.${
+              productionActionById[teamAction.actionId].name
+            }.name`
+          )}
+          :
         </Typography>
       </Box>
 

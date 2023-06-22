@@ -1,11 +1,6 @@
-import { Game, Players } from "@prisma/client";
 import invariant from "tiny-invariant";
 import { z } from "zod";
 import { safe } from "../../../lib/fp";
-import { services as gameServices } from "../../games/services";
-import { services as playersServices } from "../../players/services";
-import { services as teamServices } from "../../teams/services";
-import * as teamActionsServices from "../../teamActions/services";
 import { rooms } from "../constants";
 import { Server, Socket } from "../types";
 import {
@@ -14,12 +9,18 @@ import {
   isGameFinished,
   wrapHandler,
 } from "../utils";
+import {
+  gameServices,
+  playerServices,
+  teamActionServices,
+  teamServices,
+} from "../services";
 
 export { handleUpdateTeam };
 
 function handleUpdateTeam(io: Server, socket: Socket) {
   socket.on(
-    "updateTeam",
+    "team:update",
     wrapHandler(async (args: unknown) => {
       await handleUpdateTeamSafely(io, socket, args);
     })
@@ -70,7 +71,7 @@ async function handleUpdateTeamSafely(
           teamActionsUpdate
         );
 
-        const teamActions = await teamActionsServices.updateTeamActions(
+        const teamActions = await teamActionServices.updateMany(
           player.teamId,
           validTeamActionsUpdate.map((update) => ({
             id: update.id,
@@ -79,8 +80,21 @@ async function handleUpdateTeamSafely(
           }))
         );
 
-        io.to(rooms.team(gameId, player.teamId)).emit("playerUpdated", {
-          update: { teamActions },
+        io.to(rooms.team(gameId, player.teamId)).emit("team:update", {
+          updates: [
+            {
+              id: player.teamId,
+              actions: teamActions,
+            },
+          ],
+        });
+        io.to(rooms.teachers(gameId)).emit("team:update", {
+          updates: [
+            {
+              id: player.teamId,
+              actions: teamActions,
+            },
+          ],
         });
       }
 
@@ -88,39 +102,27 @@ async function handleUpdateTeamSafely(
         const updatedTeam = await teamServices.update(player.teamId, {
           scenarioName,
         });
-        io.to(rooms.team(gameId, updatedTeam.id)).emit("gameUpdated", {
-          update: game,
+        io.to(rooms.team(gameId, updatedTeam.id)).emit("team:update", {
+          updates: [updatedTeam],
+        });
+        io.to(rooms.teachers(gameId)).emit("team:update", {
+          updates: [updatedTeam],
         });
       }
-
-      const gameLatestUpdate = await gameServices.getDocument(gameId);
-
-      if (scenarioName) {
-        io.to(rooms.team(gameId, player.teamId)).emit("gameUpdated", {
-          update: gameLatestUpdate,
-        });
-      }
-
-      io.to(rooms.teachers(gameId)).emit("gameUpdated", {
-        update: gameLatestUpdate,
-      });
     },
     { logError: true }
   );
 }
 
-async function getPlayerAndGame(
-  gameId: number,
-  userId: number
-): Promise<{ game: Game; player: Players }> {
+async function getPlayerAndGame(gameId: number, userId: number) {
   const [game, player] = await Promise.all([
-    gameServices.getDocument(gameId),
-    playersServices.find(gameId, userId),
+    gameServices.findOne(gameId),
+    playerServices.findOne(gameId, userId),
   ]);
-  invariant(game, `Could not find game for gameId ${gameId}`);
+  invariant(game, `Could not find game ${gameId}`);
   invariant(
     player,
-    `Could not find player for gameId ${gameId} and userId ${userId}`
+    `Could not find player for game ${gameId} and user ${userId}`
   );
 
   return { game, player };
@@ -135,9 +137,10 @@ async function filterValidTeamActionsUpdate(
   }[]
 ) {
   const teamActionIds = teamActionsUpdate.map((update) => update.id);
-  const teamActions = await teamActionsServices.getMany({
-    ids: teamActionIds,
-    teamId,
+  const teamActions = await teamActionServices.findMany(teamActionIds, teamId, {
+    include: {
+      action: true,
+    },
   });
   const teamActionIdToUpdatable = Object.fromEntries(
     teamActions

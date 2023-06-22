@@ -2,15 +2,15 @@ import { IconButton } from "@mui/material";
 import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
-import { useTeamActions } from "../context/playContext";
 import { Dialog } from "../../common/components/Dialog";
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 import { Icon } from "../../common/components/Icon";
+import { useCurrentPlayer } from "../context/hooks/player";
 
 export { TeamActionsHeader };
 
 function TeamActionsHeader() {
-  const { teamActionsAtCurrentStep } = useTeamActions();
+  const { teamActionsAtCurrentStep } = useCurrentPlayer();
 
   const [openHelp, setOpenHelp] = useState(false);
 

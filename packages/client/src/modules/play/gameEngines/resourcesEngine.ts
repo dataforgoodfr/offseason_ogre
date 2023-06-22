@@ -1,6 +1,7 @@
 import {
   MaterialsType,
   MetalsType,
+  ProductionAction,
   ProductionTypes,
   TeamAction,
 } from "../../../utils/types";
@@ -17,9 +18,38 @@ export interface PhysicalResourceNeedDatum {
   value: number;
 }
 
+const computeMaterials = (
+  production: ProductionDatum[],
+  performedTeamActions: TeamAction[],
+  productionActionById: Record<number, ProductionAction>
+): PhysicalResourceNeedDatum[] => {
+  return computePhysicalResources(
+    production,
+    performedTeamActions,
+    productionActionById,
+    Object.values(materials),
+    "materials"
+  );
+};
+
+const computeMetals = (
+  production: ProductionDatum[],
+  performedTeamActions: TeamAction[],
+  productionActionById: Record<number, ProductionAction>
+): PhysicalResourceNeedDatum[] => {
+  return computePhysicalResources(
+    production,
+    performedTeamActions,
+    productionActionById,
+    Object.values(metals),
+    "metals"
+  );
+};
+
 const computePhysicalResources = (
   production: ProductionDatum[],
   performedTeamActions: TeamAction[],
+  productionActionById: Record<number, ProductionAction>,
   resourcesTypes: MaterialsType[] | MetalsType[],
   type: "materials" | "metals"
 ): PhysicalResourceNeedDatum[] => {
@@ -28,10 +58,13 @@ const computePhysicalResources = (
       const prodConstants = Object.values(productionConstants).find(
         (prodConfig) => prodConfig.name === prod.name
       );
-      const powerNeed =
-        performedTeamActions.find(
-          (teamAction: TeamAction) => teamAction.action.name === prod.name
-        )?.action.powerNeededKWh || 0;
+      const teamAction = performedTeamActions.find(
+        (teamAction: TeamAction) =>
+          productionActionById[teamAction.actionId]?.name === prod.name
+      );
+      const productionAction =
+        productionActionById[teamAction?.actionId || -1] || {};
+      const powerNeed = productionAction.powerNeededKWh || 0;
       return resourcesTypes.map((resourceType: MaterialsType | MetalsType) => ({
         type: resourceType,
         prodType: prodConstants?.type || "",
@@ -60,28 +93,4 @@ const computePhysicalResources = (
       type: prodType,
     }));
   });
-};
-
-const computeMaterials = (
-  production: ProductionDatum[],
-  performedTeamActions: TeamAction[]
-): PhysicalResourceNeedDatum[] => {
-  return computePhysicalResources(
-    production,
-    performedTeamActions,
-    Object.values(materials),
-    "materials"
-  );
-};
-
-const computeMetals = (
-  production: ProductionDatum[],
-  performedTeamActions: TeamAction[]
-): PhysicalResourceNeedDatum[] => {
-  return computePhysicalResources(
-    production,
-    performedTeamActions,
-    Object.values(metals),
-    "metals"
-  );
 };

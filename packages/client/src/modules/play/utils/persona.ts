@@ -1,8 +1,10 @@
 import range from "lodash/range";
 import sum from "lodash/sum";
 import {
-  IGameWithTeams,
+  Action,
+  IGame,
   PlayerActions,
+  ProductionAction,
   TeamAction,
 } from "../../../utils/types";
 import { ConsumptionDatum } from "../../persona/consumption";
@@ -26,17 +28,21 @@ import { computeNewProductionData, computeTeamActionStats } from "./production";
 export { buildPersona };
 
 function buildPersona(
-  game: IGameWithTeams,
+  game: IGame,
   personalization: PersoForm,
   basePersona: Persona,
   playerActions: PlayerActions[],
-  teamActions: TeamAction[]
+  consumptionActionById: Record<number, Action>,
+  teamActions: TeamAction[],
+  productionActionById: Record<number, ProductionAction>
 ) {
   const personaBySteps = getResultsByStep(
     personalization,
     basePersona,
     playerActions,
-    teamActions
+    consumptionActionById,
+    teamActions,
+    productionActionById
   );
 
   const getPersonaAtStep = (step: number) => {
@@ -63,7 +69,9 @@ function getResultsByStep(
   personalization: PersoForm,
   basePersona: Persona,
   playerActions: PlayerActions[],
-  teamActions: TeamAction[]
+  consumptionActionById: Record<number, Action>,
+  teamActions: TeamAction[],
+  productionActionById: Record<number, ProductionAction>
 ): Record<number, Persona> {
   return Object.fromEntries(
     range(0, MAX_NUMBER_STEPS + 1).map((step) => [
@@ -73,7 +81,9 @@ function getResultsByStep(
         basePersona,
         step,
         playerActions,
-        teamActions
+        consumptionActionById,
+        teamActions,
+        productionActionById
       ),
     ])
   );
@@ -84,7 +94,9 @@ function computeResultsByStep(
   basePersona: Persona,
   step: number,
   playerActions: PlayerActions[] = [],
-  teamActions: TeamAction[] = []
+  consumptionActionById: Record<number, Action>,
+  teamActions: TeamAction[] = [],
+  productionActionById: Record<number, ProductionAction>
 ): Persona {
   if (step === 0) {
     return basePersona;
@@ -92,20 +104,24 @@ function computeResultsByStep(
 
   const performedPlayerActions = playerActions.filter(
     (playerAction: PlayerActions) =>
-      playerAction.action.step <= step && playerAction.isPerformed === true
+      consumptionActionById[playerAction.actionId].step <= step &&
+      playerAction.isPerformed === true
   );
   const performedTeamActions = teamActions.filter(
-    (teamAction: TeamAction) => teamAction.action.step <= step
+    (teamAction: TeamAction) =>
+      productionActionById[teamAction.actionId].step <= step
   );
 
   const playerActionsCost = sum(
     performedPlayerActions.map(
-      (playerAction: PlayerActions) => playerAction.action.financialCost
+      (playerAction: PlayerActions) =>
+        consumptionActionById[playerAction.actionId].financialCost
     )
   );
   const teamActionsCost = sum(
     performedTeamActions.map(
-      (teamAction: TeamAction) => computeTeamActionStats(teamAction).cost
+      (teamAction: TeamAction) =>
+        computeTeamActionStats(teamAction, productionActionById).cost
     )
   );
   const costPerDay = playerActionsCost + teamActionsCost;
@@ -113,7 +129,8 @@ function computeResultsByStep(
 
   const teamPoints = sum(
     performedTeamActions.map(
-      (teamAction: TeamAction) => computeTeamActionStats(teamAction).points
+      (teamAction: TeamAction) =>
+        computeTeamActionStats(teamAction, productionActionById).points
     )
   );
 
@@ -124,13 +141,19 @@ function computeResultsByStep(
       ? computeCO2Points(basePersona.carbonFootprint)
       : 0;
   const points =
-    computeConsumptionPoints(personalization, performedPlayerActions, step) +
+    computeConsumptionPoints(
+      personalization,
+      performedPlayerActions,
+      consumptionActionById,
+      step
+    ) +
     teamPoints +
     budgetPoints +
     co2Points;
 
   const performedActionsNames = performedPlayerActions.map(
-    (playerAction: PlayerActions) => playerAction.action.name
+    (playerAction: PlayerActions) =>
+      consumptionActionById[playerAction.actionId].name
   );
 
   const newConsumption = computeNewConsumptionData(
@@ -140,15 +163,25 @@ function computeResultsByStep(
 
   const newProduction = computeNewProductionData(
     performedTeamActions,
+    productionActionById,
     basePersona
   );
 
-  const newMaterials = computeMaterials(newProduction, teamActions);
-  const newMetals = computeMetals(newProduction, teamActions);
+  const newMaterials = computeMaterials(
+    newProduction,
+    teamActions,
+    productionActionById
+  );
+  const newMetals = computeMetals(
+    newProduction,
+    teamActions,
+    productionActionById
+  );
 
   const { actionPointsUsedAtCurrentStep } = computePlayerActionsStats(
     step,
-    playerActions
+    playerActions,
+    consumptionActionById
   );
 
   const carbonProductionElectricMix =

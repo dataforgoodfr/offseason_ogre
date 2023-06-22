@@ -13,9 +13,9 @@ export { SynthesisScenarioName };
 
 function SynthesisScenarioName() {
   const { t } = useTranslation();
-  const { isGameFinished } = usePlay();
+  const { game } = usePlay();
 
-  const isTeamEditable = !isGameFinished;
+  const isTeamEditable = !game.isGameFinished;
 
   return (
     <Box display="flex" flexDirection="column" pr={4} gap={3}>

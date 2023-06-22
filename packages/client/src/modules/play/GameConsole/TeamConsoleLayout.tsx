@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePlay } from "../context/playContext";
 import { TeamConsoleContent } from "./TeamConsoleContent";
 import { TeamConsoleHeader } from "./TeamConsoleHeader";
@@ -7,13 +7,22 @@ import { TeamConsoleHeader } from "./TeamConsoleHeader";
 export { TeamConsoleLayout };
 
 function TeamConsoleLayout() {
-  const { game } = usePlay();
+  const { teams } = usePlay();
 
   const [selectedTeamId, setSelectedTeamId] = useState<number>(
-    game.teams[0]?.id
+    teams[0]?.id || 0
   );
 
-  const selectedTeam = game.teams.find(({ id }) => id === selectedTeamId);
+  const selectedTeam = useMemo(
+    () => teams.find(({ id }) => id === selectedTeamId),
+    [selectedTeamId, teams]
+  );
+
+  useEffect(() => {
+    if (!selectedTeamId && teams.length) {
+      setSelectedTeamId(teams[0].id);
+    }
+  }, [selectedTeamId, teams]);
 
   if (!selectedTeamId || !selectedTeam) return <></>;
 

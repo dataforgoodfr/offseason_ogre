@@ -5,4 +5,5 @@ const rooms = {
   players: (gameId: number) => `${gameId}/players`,
   teachers: (gameId: number) => `${gameId}/teachers`,
   team: (gameId: number, teamId: number) => `${gameId}/team/${teamId}`,
+  user: (gameId: number, playerId: number) => `${gameId}/users/${playerId}`,
 };
