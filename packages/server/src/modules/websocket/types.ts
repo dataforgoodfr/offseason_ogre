@@ -27,6 +27,7 @@ type ListenEvents = any;
 
 type EmitEvents = {
   "game:init": (args: GameInitEmitted) => void;
+  "game:leave": () => void;
   "game:update": (args: { update: Partial<Game> }) => void;
   "player:update": (args: { updates: Partial<PlayerEmitted>[] }) => void;
   "player-actions:update": (args: {

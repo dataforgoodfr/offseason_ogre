@@ -418,6 +418,10 @@ function useGameSocket({
       setIsInitialised(true);
     });
 
+    newSocket.on("game:leave", () => {
+      navigate("/play/my-games");
+    });
+
     newSocket.on("game:update", ({ update }: { update: Partial<IGame> }) => {
       setGame((previous) => {
         if (previous === null) {

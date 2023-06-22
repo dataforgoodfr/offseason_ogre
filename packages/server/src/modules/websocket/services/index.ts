@@ -5,5 +5,6 @@ export * from "./playerActionServices";
 export * from "./playerServices";
 export * from "./productionActionServices";
 export * from "./profileServices";
+export * from "./roleServices";
 export * from "./teamActionServices";
 export * from "./teamServices";

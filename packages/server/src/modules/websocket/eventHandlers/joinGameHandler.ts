@@ -10,8 +10,12 @@ import {
   gameServices,
   playerServices,
   productionActionServices,
+  roleServices,
   teamServices,
 } from "../services";
+import { BusinessError } from "../../utils/businessError";
+import { Game } from "../../games/types";
+import { User } from "../../users/types";
 
 export { handleJoinGame };
 
@@ -29,10 +33,8 @@ function handleJoinGame(io: Server, socket: Socket) {
       socket.data.gameId = gameId;
       socket.data.user = user;
 
-      const isPlayer = game?.teacherId !== user.id;
-
       let gameInitData: GameInitEmitted;
-      if (isPlayer) {
+      if (await hasPlayerAccess(user, game)) {
         const player = await playerServices.findOne(gameId, user.id, {
           include: {
             user: true,
@@ -82,7 +84,7 @@ function handleJoinGame(io: Server, socket: Socket) {
           players: [player],
           teams: [team],
         };
-      } else {
+      } else if (await hasTeacherAccess(user, game)) {
         const [players, teams, consumptionActions, productionActions] =
           await Promise.all([
             playerServices.findMany(gameId, {
@@ -116,9 +118,37 @@ function handleJoinGame(io: Server, socket: Socket) {
           players,
           teams,
         };
+      } else {
+        socket.emit("game:leave");
+        throw new BusinessError(
+          `User ${user.id} is not authorized to join game ${game.id}`
+        );
       }
 
       socket.emit("game:init", gameInitData);
     })
   );
+}
+
+async function hasTeacherAccess(user: User, game: Game) {
+  if (game.teacherId === user.id) {
+    return true;
+  }
+
+  // TODO: protect game access with a list of allowed teachers?
+  const userRole = await roleServices.findOne(user.roleId);
+  if (["admin", "teacher"].includes(userRole?.name || "")) {
+    return true;
+  }
+
+  return false;
+}
+
+async function hasPlayerAccess(user: User, game: Game) {
+  const player = await playerServices.findOne(game.id, user.id);
+  if (player) {
+    return true;
+  }
+
+  return false;
 }

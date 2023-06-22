@@ -15,6 +15,7 @@ import { useTranslation } from "../../translations/useTranslation";
 
 export { GameConsoleView };
 
+// TODO: protect page using user role.
 function GameConsoleView() {
   const [selectedScreen, setSelectedScreen] = useState<string>("Teams");
   return (
