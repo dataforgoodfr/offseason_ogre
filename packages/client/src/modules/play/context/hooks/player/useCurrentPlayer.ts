@@ -33,6 +33,7 @@ function useCurrentPlayer() {
   return {
     player,
     profile: player.profile,
+    personalization: player.profile.personalization,
     playerActions: player.actions,
     actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
     teamActions: team.actions,

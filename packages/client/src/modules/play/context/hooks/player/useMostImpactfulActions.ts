@@ -1,7 +1,5 @@
 import { sumBy } from "lodash";
 import { computeNewConsumptionData } from "../../../utils/consumption";
-import { usePersona, usePlayerActions } from "../../playContext";
-import { useMyProfile } from "./useMyProfile";
 import { sumFor } from "../../../../persona";
 import {
   ConsumptionDatum,
@@ -11,6 +9,9 @@ import { indexArrayBy } from "../../../../../lib/array";
 import { fromEntries } from "../../../../../lib/object";
 import { useMemo } from "react";
 import { Action } from "../../../../../utils/types";
+import { useCurrentPlayer } from "./useCurrentPlayer";
+import { usePersona } from "./usePersona";
+import { usePlay } from "../../playContext";
 
 export { useMostImpactfulActions };
 export type { ImpactfulAction };
@@ -28,14 +29,16 @@ type ImpactfulAction = {
 };
 
 function useMostImpactfulActions({ limit = 5 }: { limit?: number } = {}) {
-  const { personalization } = useMyProfile();
-  const { playerActions } = usePlayerActions();
+  const { consumptionActionById } = usePlay();
+  const { personalization, playerActions } = useCurrentPlayer();
   const { personaBySteps } = usePersona();
 
   const mostImpactfulActions = useMemo(() => {
     const initialPersona = personaBySteps[0];
-    const actions = playerActions.map((playerAction) => playerAction.action);
-    const actionNameToPlayerAction = indexArrayBy(playerActions, "action.name");
+    const actions = playerActions.map(
+      (playerAction) => consumptionActionById[playerAction.actionId]
+    );
+    const PlayerActionByActionId = indexArrayBy(playerActions, "actionId");
 
     const initialConsumptionByType = computeConsumptionByType(
       initialPersona.consumption
@@ -68,13 +71,19 @@ function useMostImpactfulActions({ limit = 5 }: { limit?: number } = {}) {
 
         return {
           action,
-          isPerformed: actionNameToPlayerAction[action.name!].isPerformed,
+          isPerformed: PlayerActionByActionId[action.id].isPerformed,
           consumptionImpacts,
         };
       });
 
     return mostImpactfulActions;
-  }, [limit, personaBySteps, personalization, playerActions]);
+  }, [
+    consumptionActionById,
+    limit,
+    personaBySteps,
+    personalization,
+    playerActions,
+  ]);
 
   return {
     mostImpactfulActions,
