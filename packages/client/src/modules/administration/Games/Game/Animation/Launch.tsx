@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
@@ -6,6 +5,7 @@ import { IGame, ITeamWithPlayers } from "../../../../../utils/types";
 import { SuccessAlert } from "../../../../alert";
 import { useNavigate } from "react-router-dom";
 import { hasGameStarted } from "../../utils";
+import { Button } from "../../../../common/components/Button";
 import { Dialog } from "../../../../common/components/Dialog";
 import { Typography } from "../../../../common/components/Typography";
 import { NO_TEAM } from "../../../../common/constants/teams";
@@ -65,7 +65,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
   const playersWithoutTeams = hasPlayersWithoutTeam(game.teams);
 
   const navigate = useNavigate();
-  const mutation = useMutation<Response, { message: string }, any>(
+  const launchGameMutation = useMutation<Response, { message: string }, any>(
     () => {
       const path = `/api/games/${game.id}`;
       return http.put(path, { status: "playing" });
@@ -80,7 +80,7 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
 
   const launchGame = () => {
     if (!hasGameStarted(game.status)) {
-      mutation.mutate({ status: true });
+      launchGameMutation.mutate({ status: true });
     }
     setSuccessDialogOpen(false);
   };
@@ -97,12 +97,10 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
 
   return (
     <div>
-      {mutation.isSuccess && <SuccessAlert />}
+      {launchGameMutation.isSuccess && <SuccessAlert />}
       <Button
-        disabled={playersQuery.isLoading}
+        loading={playersQuery.isLoading || launchGameMutation.isLoading}
         onClick={handleLaunchGame}
-        variant="contained"
-        color="secondary"
       >
         <RocketLaunchIcon sx={{ height: "1rem" }} />
         {!hasGameStarted(game.status) ? "Animer" : "Rejoindre"}
@@ -112,7 +110,12 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
         handleClose={() => setSuccessDialogOpen(false)}
         actions={
           <>
-            <Button onClick={() => setSuccessDialogOpen(false)}>Annuler</Button>
+            <Button
+              type="secondary"
+              onClick={() => setSuccessDialogOpen(false)}
+            >
+              Annuler
+            </Button>
             <Button onClick={launchGame}>Continuer</Button>
           </>
         }
@@ -128,7 +131,9 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
         handleClose={() => setErrorDialogOpen(false)}
         actions={
           <>
-            <Button onClick={() => setErrorDialogOpen(false)}> Fermer</Button>
+            <Button type="secondary" onClick={() => setErrorDialogOpen(false)}>
+              Fermer
+            </Button>
           </>
         }
       >

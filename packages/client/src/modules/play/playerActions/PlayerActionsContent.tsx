@@ -11,29 +11,34 @@ import { Typography } from "../../common/components/Typography";
 
 import { useState } from "react";
 import { PlayerActions } from "../../../utils/types";
-import { usePlay, usePlayerActions } from "../context/playContext";
+import { usePlay } from "../context/playContext";
 import { ActionHelpDialog } from "./HelpDialogs";
 import { Dialog } from "../../common/components/Dialog";
 import { Icon } from "../../common/components/Icon";
+import { useCurrentPlayer } from "../context/hooks/player";
 
 export { PlayerActionsContent };
 
 function PlayerActionsContent() {
-  const { updatePlayerActions, player, setActionPointsLimitExceeded } =
-    usePlay();
   const {
+    consumptionActionById,
+    updatePlayerActions,
+    setActionPointsLimitExceeded,
+  } = usePlay();
+  const {
+    player,
     actionPointsAvailableAtCurrentStep,
     playerActionsAtCurrentStep: playerActions,
-  } = usePlayerActions();
+  } = useCurrentPlayer();
 
   const handleActionChange = (playerActionId: number, isPerformed: boolean) => {
     setActionPointsLimitExceeded(false);
-    updatePlayerActions(
-      playerActions.map((pa) => ({
-        id: pa.id,
-        isPerformed: pa.id === playerActionId ? isPerformed : pa.isPerformed,
-      }))
-    );
+    updatePlayerActions([
+      {
+        id: playerActionId,
+        isPerformed,
+      },
+    ]);
   };
 
   return (
@@ -46,13 +51,15 @@ function PlayerActionsContent() {
             onPlayerActionChanged={(isPerformed) =>
               handleActionChange(playerAction.id, isPerformed)
             }
-            helpCardLink={playerAction.action.helpCardLink}
+            helpCardLink={
+              consumptionActionById[playerAction.actionId].helpCardLink
+            }
           />
         );
       })}
 
       <Dialog
-        open={player.actionPointsLimitExceeded}
+        open={!!player.actionPointsLimitExceeded}
         handleClose={() => setActionPointsLimitExceeded(false)}
         actions={
           <>
@@ -97,6 +104,7 @@ function ActionLayout({
   onPlayerActionChanged: (isPerformed: boolean) => void;
   helpCardLink: string;
 }) {
+  const { consumptionActionById } = usePlay();
   const [openHelp, setOpenHelp] = useState(false);
 
   const handleClickOpenHelp = () => setOpenHelp(true);
@@ -134,7 +142,7 @@ function ActionLayout({
             message={helpMessage}
             helpCardLink={helpCardLink}
           />
-          {playerAction.action.description}
+          {consumptionActionById[playerAction.actionId].description}
         </Typography>
         <Box sx={{ gap: 2 }} display="flex" alignItems="center" mt={1}>
           <Box sx={{ gap: 1 }} display="flex" alignItems="center">
@@ -143,12 +151,14 @@ function ActionLayout({
               name="action-points-cost"
               readOnly
               max={3}
-              value={playerAction.action.actionPointCost}
+              value={
+                consumptionActionById[playerAction.actionId].actionPointCost
+              }
             />
           </Box>
           <Box sx={{ gap: 1 }} display="flex" alignItems="center">
             <PaidIcon />
-            {`${playerAction.action.financialCost}€/j`}
+            {`${consumptionActionById[playerAction.actionId].financialCost}€/j`}
           </Box>
         </Box>
       </Box>

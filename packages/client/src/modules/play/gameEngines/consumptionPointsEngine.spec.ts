@@ -1,4 +1,4 @@
-import { ActionNames, PlayerActions } from "../../../utils/types";
+import { Action, ActionNames, PlayerActions } from "../../../utils/types";
 import { PersoForm } from "../Personalization/models/form";
 import { availableActions } from "../playerActions/constants/actions";
 import { computeConsumptionPoints } from "./consumptionPointsEngine";
@@ -13,6 +13,21 @@ interface Test {
     points: number;
   };
 }
+
+// TODO: rework `computeConsumptionPoints` to pass a custom configuration.
+// Here it is a quick fix to handle the new `playContext` store structure.
+const consumptionActionIdByName = Object.fromEntries(
+  Object.values(availableActions).map((actionName, idx) => [
+    actionName,
+    idx + 1,
+  ])
+);
+const consumptionActionById = Object.fromEntries(
+  Object.values(availableActions).map((actionName, idx) => [
+    idx + 1,
+    { name: actionName } as unknown as Action,
+  ])
+);
 
 describe("consumptionPointsEngine ", () => {
   describe("personalization", () => {
@@ -349,6 +364,7 @@ const runTests = (
       const consumptionPoints = computeConsumptionPoints(
         test.setup.personalization || buildPersonalization(),
         test.setup.performedPlayerAction || buildPlayerActions(),
+        consumptionActionById,
         STEP
       );
 
@@ -381,9 +397,7 @@ function buildPlayerActions(
   return performedActionNames.map(
     (actionName) =>
       ({
-        action: {
-          name: actionName,
-        },
+        actionId: consumptionActionIdByName[actionName],
         isPerformed: true,
       } as PlayerActions)
   );

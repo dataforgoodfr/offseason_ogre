@@ -3,12 +3,14 @@ import { useState } from "react";
 import { Dialog } from "../../common/components/Dialog";
 import { useTranslation } from "../../translations/useTranslation";
 import { usePlay } from "../context/playContext";
+import { useCurrentPlayer } from "../context/hooks/player";
 
 export { ValidateActions };
 
 function ValidateActions() {
   const { t } = useTranslation();
-  const { player, updatePlayer } = usePlay();
+  const { updatePlayer } = usePlay();
+  const { player } = useCurrentPlayer();
 
   const [open, setOpen] = useState<boolean>(false);
   const handleClickOpen = () => setOpen(true);

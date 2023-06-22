@@ -9,6 +9,7 @@ type Model = Team;
 export { services };
 
 const crudServices = {
+  queries: model,
   create,
   getMany,
   get,

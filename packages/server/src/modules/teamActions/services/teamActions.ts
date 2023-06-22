@@ -7,7 +7,7 @@ import * as productionActionsServices from "../../productionActions/services";
 const model = database.teamActions;
 type Model = TeamActions;
 
-export { create, getMany, getOrCreateTeamActions, updateTeamActions };
+export { model as queries, create, getMany, getOrCreateTeamActions };
 
 async function create({
   actionId,
@@ -89,32 +89,4 @@ async function getOrCreateTeamActions(teamId: number) {
     logger.error(err);
     return [];
   }
-}
-
-async function updateTeamActions(
-  teamId: number,
-  teamActions: {
-    id: number;
-    value: number;
-    isTouched: boolean;
-  }[]
-): Promise<TeamActions[]> {
-  await Promise.all(
-    teamActions.map((teamAction) =>
-      database.teamActions.update({
-        where: {
-          id_teamId: {
-            id: teamAction.id,
-            teamId,
-          },
-        },
-        data: {
-          value: teamAction.value,
-          isTouched: teamAction.isTouched,
-        },
-      })
-    )
-  );
-
-  return getOrCreateTeamActions(teamId);
 }

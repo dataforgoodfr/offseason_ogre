@@ -2,31 +2,41 @@ import { Box, Rating, useTheme } from "@mui/material";
 import { PlayerChart } from "./PlayerChart";
 import { PlayBox } from "../Components";
 import { Icon } from "../../common/components/Icon";
-import { ITeamWithPlayers, IUser, Player } from "../../../utils/types";
+import { ITeam, Player } from "../../../utils/types";
 import {
   usePersonaByUserId,
   useCurrentStep,
   usePlay,
 } from "../context/playContext";
 import { Typography } from "../../common/components/Typography";
-import { formatBudget, formatCarbonFootprint } from "../../../lib/formatter";
+import {
+  formatBudget,
+  formatCarbonFootprint,
+  formatUserName,
+} from "../../../lib/formatter";
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { sumAllValues } from "../../persona";
 import { SynthesisRecap } from "../Components/Synthesis";
+import { useMemo } from "react";
 
 export { TeamConsoleContent };
 
-function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
-  const { game } = usePlay();
+function TeamConsoleContent({ team }: { team: ITeam }) {
+  const { game, players, productionActionById } = usePlay();
   const currentStep = useCurrentStep();
+  const playersInTeam = useMemo(
+    () => players.filter((p) => p.teamId === team.id),
+    [players, team]
+  );
 
   const isProductionStep = currentStep?.type === "production";
   const isSynthesisStep = currentStep?.id === "final-situation";
 
   const teamActionsAtCurrentStep = getTeamActionsAtCurrentStep(
     game.step,
-    team.actions
+    team.actions,
+    productionActionById
   );
   const PlayerComponent = getPlayerComponent(isProductionStep, isSynthesisStep);
 
@@ -50,7 +60,7 @@ function TeamConsoleContent({ team }: { team: ITeamWithPlayers }) {
 
       <Box display="grid" gap={2} gridTemplateColumns="1fr 2fr">
         <Box display="flex" flexDirection="column" gap={2}>
-          {team.players.map((player) => (
+          {playersInTeam.map((player) => (
             <PlayerComponent key={player.user.id} player={player} />
           ))}
         </Box>
@@ -89,7 +99,7 @@ function PlayerSynthesis({ player }: { player: Player }) {
   return (
     <PlayBox key={player.userId}>
       <Box display="flex" alignItems="center">
-        <Typography variant="h5">{buildName(player.user)}</Typography>
+        <Typography variant="h5">{formatUserName(player.user)}</Typography>
       </Box>
       <Box display="flex" justifyContent="space-evenly" alignItems="center">
         <Box
@@ -147,7 +157,7 @@ function PlayerProduction({ player }: { player: Player }) {
   return (
     <PlayBox key={player.userId}>
       <Box display="flex" alignItems="center">
-        <Typography variant="h5">{buildName(player.user)}</Typography>
+        <Typography variant="h5">{formatUserName(player.user)}</Typography>
       </Box>
 
       <Box display="flex" alignItems="center" mt={2}>
@@ -179,7 +189,7 @@ function PlayerConsumption({ player }: { player: Player }) {
   return (
     <PlayBox key={player.userId}>
       <Box display="flex" alignItems="center">
-        <Typography variant="h5">{buildName(player.user)}</Typography>
+        <Typography variant="h5">{formatUserName(player.user)}</Typography>
         {player.hasFinishedStep ? (
           <Icon
             name="player-finished"
@@ -225,8 +235,4 @@ function PlayerConsumption({ player }: { player: Player }) {
       </Box>
     </PlayBox>
   );
-}
-
-function buildName(user: IUser): string {
-  return `${user.firstName} ${user.lastName}`;
 }
