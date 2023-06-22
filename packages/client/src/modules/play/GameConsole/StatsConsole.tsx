@@ -12,7 +12,7 @@ import {
 } from "./utils/statsConsoleValues";
 import { useTranslation } from "../../translations/useTranslation";
 import { I18nTranslateFunction } from "../../translations";
-import { IEnrichedGame } from "../../../utils/types";
+import { IEnrichedGame, ITeam } from "../../../utils/types";
 
 export { StatsConsole };
 
@@ -24,7 +24,7 @@ export interface StatsData {
 
 function StatsConsole() {
   const { t } = useTranslation();
-  const { game } = usePlay();
+  const { game, teams } = usePlay();
   const { teamValues } = useTeamValues();
   const theme = useTheme();
 
@@ -101,7 +101,7 @@ function StatsConsole() {
             >
               <Icon sx={{ mr: 1 }} name="trophy" /> Points
             </Typography>
-            {displayPoints(game, teamIdToTeamValues)}
+            {displayPoints(game, teams, teamIdToTeamValues)}
           </PlayBox>
         </Grid>
         {game.isSynthesisStep && !game.isLarge && (
@@ -115,7 +115,7 @@ function StatsConsole() {
               <Typography mb={1} variant="h5">
                 Nom du scénario
               </Typography>
-              {game.teams.map((team) => (
+              {teams.map((team) => (
                 <Box key={team.id} display="flex" gap={1} alignSelf="stretch">
                   <Icon name="team" />
                   <Typography>{team.name}</Typography>
@@ -138,7 +138,7 @@ function StatsConsole() {
               <Icon sx={{ mr: 1 }} name="carbon-footprint" /> CO2 (
               {carbonFootprintUnit})
             </Typography>
-            {displayCarbonFootprint(game, teamIdToTeamValues, t)}
+            {displayCarbonFootprint(game, teams, teamIdToTeamValues, t)}
           </PlayBox>
         </Grid>
         <Grid item sx={{ m: 1 }} xs={11} sm={smallScreenSize}>
@@ -151,7 +151,7 @@ function StatsConsole() {
             <Typography mb={1} variant="h5">
               <Icon sx={{ mr: 1 }} name="budget" /> Budget ({budgetUnit})
             </Typography>
-            {displayBudget(game, teamIdToTeamValues, t)}
+            {displayBudget(game, teams, teamIdToTeamValues, t)}
           </PlayBox>
         </Grid>
       </Grid>
@@ -185,19 +185,22 @@ function SummaryCard({
 
 function displayPoints(
   game: IEnrichedGame,
+  teams: ITeam[],
   teamIdToTeamValues: TeamIdToValues
 ) {
-  const teamsToDisplay = buildValuesPoints(game, teamIdToTeamValues);
+  const teamsToDisplay = buildValuesPoints(game, teams, teamIdToTeamValues);
   return <SummaryCard valuesToDisplay={teamsToDisplay} />;
 }
 
 function displayCarbonFootprint(
   game: IEnrichedGame,
+  teams: ITeam[],
   teamIdToTeamValues: TeamIdToValues,
   t: I18nTranslateFunction
 ) {
   const valuesCarbonFootprint = buildValuesCarbonFootprint(
     game,
+    teams,
     teamIdToTeamValues,
     t
   ).map((value) => ({ ...value, icon: <Icon name="team" /> }));
@@ -206,11 +209,15 @@ function displayCarbonFootprint(
 
 function displayBudget(
   game: IEnrichedGame,
+  teams: ITeam[],
   teamIdToTeamValues: TeamIdToValues,
   t: I18nTranslateFunction
 ) {
-  const valuesBudget = buildValuesBudget(game, teamIdToTeamValues, t).map(
-    (value) => ({ ...value, icon: <Icon name="team" /> })
-  );
+  const valuesBudget = buildValuesBudget(
+    game,
+    teams,
+    teamIdToTeamValues,
+    t
+  ).map((value) => ({ ...value, icon: <Icon name="team" /> }));
   return <SummaryCard valuesToDisplay={valuesBudget} />;
 }

@@ -76,4 +76,18 @@ router.post(
   }),
   asyncErrorHandler(controllers.removeTeamController)
 );
-router.put("/:id", asyncErrorHandler(controllers.updateGame));
+router.put(
+  "/:id",
+  guardResource({
+    roles: ["admin"],
+    ownership: async (user, request) => {
+      const gameId = parseInt(request.params.id, 10);
+      const game = await gameServices.getDocument(gameId);
+
+      return {
+        success: user.id === game?.teacherId,
+      };
+    },
+  }),
+  asyncErrorHandler(controllers.updateGame)
+);

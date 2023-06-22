@@ -1,20 +1,22 @@
 import { z } from "zod";
 import { ProfileStatus } from "@prisma/client";
+import invariant from "tiny-invariant";
 import { Server, Socket } from "../types";
-import { services as playersServices } from "../../players/services";
-import { services as profileServices } from "../../profiles/services";
-import { wrapHandler } from "../utils";
-import { update, create } from "../../games/services/personalization";
+import { getSocketData, wrapHandler } from "../utils";
+import {
+  personalizationServices,
+  playerServices,
+  profileServices,
+} from "../services";
 
 export { handleUpdateProfile };
 
 function handleUpdateProfile(io: Server, socket: Socket) {
   socket.on(
-    "updateProfile",
+    "profile:update",
     wrapHandler(async (args: unknown, respond: (...argz: any[]) => void) => {
+      // TODO: fix schema required/optional values
       const schema = z.object({
-        gameId: z.number(),
-        userId: z.number(),
         update: z.object({
           profileStatus: z.string(),
           origin: z.string(),
@@ -70,37 +72,65 @@ function handleUpdateProfile(io: Server, socket: Socket) {
         }),
       });
 
-      const { gameId, userId, update: updateData } = schema.parse(args);
+      const { update: updateData } = schema.parse(args);
+      const { gameId, user } = getSocketData(socket);
+      const userId = user.id;
 
-      const player = await playersServices.find(gameId, userId);
+      let player = await playerServices.findOne(gameId, userId, {
+        include: {
+          profile: {
+            include: {
+              personalization: true,
+            },
+          },
+        },
+      });
+      invariant(
+        player,
+        `Could not find player for user ${user.id} and game ${gameId}`
+      );
+
       const { profileStatus, ...personalizationData } = updateData;
-
-      if (player?.profileId && player?.profile.personalizationId) {
-        const personalizationId = player?.profile.personalizationId;
-        await update(personalizationId, personalizationData);
-        await profileServices.update(player?.profileId, {
+      if (player.profile?.personalization) {
+        await personalizationServices.update(
+          player.profile.personalization.id,
+          personalizationData as any
+        );
+        await profileServices.update(player.profile.id, {
           status: profileStatus as ProfileStatus,
           lastStatusUpdate: new Date(),
         });
       } else {
-        const personalization = await create(personalizationData);
+        const personalization = await personalizationServices.create(
+          personalizationData as any
+        );
         const profile = await profileServices.create({
           userId,
           personalizationId: personalization.id,
           status: profileStatus as ProfileStatus,
           lastStatusUpdate: new Date(),
         });
-        await playersServices.update(gameId, userId, {
+        await playerServices.update(gameId, userId, {
           profileId: profile?.id,
         });
       }
 
-      const newPlayer = await playersServices.find(gameId, userId);
-      const profile =
-        newPlayer?.profileId &&
-        (await profileServices.find(newPlayer.profileId));
-      socket.emit("profileUpdated", {
-        update: profile,
+      player = await playerServices.findOne(gameId, userId, {
+        include: {
+          profile: {
+            include: {
+              personalization: true,
+            },
+          },
+        },
+      });
+      invariant(
+        player,
+        `Could not find player for user ${user.id} and game ${gameId}`
+      );
+
+      socket.emit("player:update", {
+        updates: [player],
       });
       respond({ success: true });
     })

@@ -13,12 +13,16 @@ export type {
   IUser,
   Action,
   ActionNames,
+  Personalization,
+  PersonalizationName,
   Player,
   PlayerActions,
   ProductionAction,
   ProductionActionNames,
   ProductionActionType,
   ProductionActionUnit,
+  Profile,
+  ProfileStatus,
   TeamAction,
   MaterialsType,
   MetalsType,
@@ -32,13 +36,16 @@ type WithTeams<T> = T & { teams: ITeamWithPlayers[] };
 type IGame = Game;
 type IGameWithTeacher = WithTeacher<IGame>;
 type IGameWithTeams = WithTeams<IGame>;
-type IEnrichedGame = IGameWithTeams & {
+type IEnrichedGame = IGame & {
   isLarge?: boolean;
   isSynthesisStep?: boolean;
+  isGameFinished: boolean;
+  isStepFinished: boolean;
 };
 
 interface ITeam {
   id: number;
+  gameId: number;
   name: string;
   scenarioName: string;
   actions: TeamAction[];
@@ -53,11 +60,88 @@ interface Player {
   gameId: number;
   teamId: number;
   userId: number;
-  user: IUser;
-  profile: any;
+  user: {
+    id: number;
+    country: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    roleId: number;
+  };
+  profile: Profile;
   actions: PlayerActions[];
   hasFinishedStep: boolean;
+  actionPointsLimitExceeded?: boolean;
 }
+
+interface Profile {
+  id: number;
+  userId: number;
+  personalizationId: number;
+  personalization: Personalization;
+  status: ProfileStatus;
+  lastStatusUpdate: string;
+}
+
+type ProfileStatus = "draft" | "pendingValidation" | "validated";
+
+interface Personalization {
+  id: number;
+  origin: string;
+  personalizationName: PersonalizationName;
+  numberAdults: number;
+  numberKids: number;
+  car: boolean;
+  carEnergy: string;
+  carConsumption: number;
+  carDistanceAlone: number;
+  carDistanceHoushold: number;
+  carAge: string;
+  carDistanceCarsharing: number;
+  planeDistance: number;
+  trainDistance: number;
+  houseType: string;
+  houseSurface: number;
+  heatingEnergy: string;
+  heatingConsumption: number;
+  heatingInvoice: number;
+  heatPump: boolean;
+  heatingTemperature: boolean;
+  airConditionning: boolean;
+  aCRoomNb: number;
+  aCDaysNb: number;
+  showerBath: string;
+  showerNumber: number;
+  showerTime: string;
+  cookingKettle: boolean;
+  cookingPlateTime: number;
+  cookingOvenTime: number;
+  cleaningWashingTime: number;
+  cleaningDryerTime: number;
+  cleaningDishwasherTime: number;
+  refrigeratorNumber: number;
+  freezerNumber: number;
+  lightingSystem: string;
+  eatingVegan: boolean;
+  eatingVegetables: boolean;
+  eatingDairies: boolean;
+  eatingEggs: boolean;
+  eatingMeat: boolean;
+  eatingTinDrink: number;
+  eatingZeroWaste: boolean;
+  eatingLocal: boolean;
+  eatingCatNumber: number;
+  eatingDogNumber: number;
+  eatingHorse: boolean;
+  numericEquipment: boolean;
+  numericWebTimeDay: boolean;
+  numericVideoTimeDay: boolean;
+  clothingQuantity: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+type PersonalizationName = "form" | "oilgre";
 
 interface Action {
   id: number;
@@ -74,10 +158,8 @@ type ActionNames = typeof availableActions[keyof typeof availableActions];
 
 interface PlayerActions {
   id: number;
-  player: Player;
   userId: number;
   gameId: number;
-  action: Action;
   actionId: number;
   isPerformed: boolean;
 }
@@ -131,7 +213,6 @@ interface TeamAction {
   id: number;
   teamId: number;
   actionId: number;
-  action: ProductionAction;
   /**
    * Value chosen by the team.
    * If action unit is `percentage`, value is in [0,100].

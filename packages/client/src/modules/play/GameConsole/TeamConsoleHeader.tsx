@@ -1,5 +1,5 @@
 import { Box, Grid, Tooltip, useTheme } from "@mui/material";
-import { ITeamWithPlayers } from "../../../utils/types";
+import { ITeam } from "../../../utils/types";
 import { PlayBox } from "../Components";
 import { useCurrentStep, usePlay } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
@@ -15,7 +15,7 @@ function TeamConsoleHeader({
   selectedTeamId: number;
   setSelectedTeamId: React.Dispatch<React.SetStateAction<number>>;
 }) {
-  const { game } = usePlay();
+  const { teams } = usePlay();
   const currentStep = useCurrentStep();
 
   const isProductionStep = currentStep?.type === "production";
@@ -23,7 +23,7 @@ function TeamConsoleHeader({
 
   return (
     <Grid container justifyContent="space-around" mt={2}>
-      {game.teams.map((team) => {
+      {teams.map((team) => {
         return (
           <Grid
             key={team.id}
@@ -59,15 +59,16 @@ function TeamProduction({
   team,
   isSelected,
 }: {
-  team: ITeamWithPlayers;
+  team: ITeam;
   isSelected: boolean;
 }) {
-  const { game } = usePlay();
+  const { game, productionActionById } = usePlay();
   const theme = useTheme();
 
   const teamActionsAtCurrentStep = getTeamActionsAtCurrentStep(
     game.step,
-    team.actions
+    team.actions,
+    productionActionById
   );
 
   const teamActionCount = teamActionsAtCurrentStep.length;
@@ -129,10 +130,13 @@ function TeamConsumption({
   team,
   isSelected,
 }: {
-  team: ITeamWithPlayers;
+  team: ITeam;
   isSelected: boolean;
 }) {
   const theme = useTheme();
+  const { players } = usePlay();
+
+  const playersInTeam = players.filter((p) => p.teamId === team.id);
 
   const color = isSelected
     ? `${theme.palette.secondary.main} !important`
@@ -145,7 +149,7 @@ function TeamConsumption({
       </Typography>
 
       <Box display="flex" minHeight="24px">
-        {team.players.map(({ user, hasFinishedStep }) => {
+        {playersInTeam.map(({ user, hasFinishedStep }) => {
           return (
             <Tooltip key={user.id} title={`${user.firstName} ${user.lastName}`}>
               <div>
@@ -170,7 +174,7 @@ function TeamSynthesis({
   team,
   isSelected,
 }: {
-  team: ITeamWithPlayers;
+  team: ITeam;
   isSelected: boolean;
 }) {
   const theme = useTheme();

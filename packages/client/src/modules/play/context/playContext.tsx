@@ -4,42 +4,31 @@ import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import {
+  Action,
+  IEnrichedGame,
   IGame,
-  ITeamWithPlayers,
+  ITeam,
   Player,
-  PlayerActions,
-  TeamAction,
+  ProductionAction,
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
-import {
-  GameStep,
-  GameStepType,
-  isStepOfType,
-  LARGE_GAME_TEAMS,
-  STEPS,
-} from "../constants";
-import { sortBy } from "../../../lib/array";
+import { GameStep, GameStepType, isStepOfType, STEPS } from "../constants";
 import { buildPersona } from "../utils/persona";
-import { computePlayerActionsStats } from "../utils/playerActions";
-import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { mean } from "../../../lib/math";
 import { range } from "lodash";
 import { sumAllValues } from "../../persona";
-import { NO_TEAM } from "../../common/constants/teams";
 import { buildInitialPersona } from "../../persona/persona";
 import { WEB_SOCKET_URL } from "../../common/constants";
+import { usePlayStore } from "./usePlayStore";
+import { updateCollection } from "./playContext.utils";
 
 export {
-  PlayProvider,
   RootPlayProvider,
   useCurrentStep,
   useMyTeam,
   useTeamValues,
   useLoadedPlay as usePlay,
   usePersonaByUserId,
-  usePlayerActions,
-  useTeamActions,
-  usePersona,
 };
 
 export type { TeamIdToValues };
@@ -64,9 +53,13 @@ interface TeamValues {
 }
 
 interface IPlayContext {
+  consumptionActions: Action[];
+  consumptionActionById: Record<number, Action>;
   game: IEnrichedGame;
-  isGameFinished: boolean;
-  isStepFinished: boolean;
+  players: Player[];
+  productionActions: ProductionAction[];
+  productionActionById: Record<number, ProductionAction>;
+  teams: ITeam[];
   updateGame: (update: Partial<IGame>) => void;
   updatePlayerActions: (
     update: {
@@ -75,9 +68,7 @@ interface IPlayContext {
     }[]
   ) => void;
   setActionPointsLimitExceeded: (limitExceeded: boolean) => void;
-  player: PlayerState;
   updatePlayer: (options: { hasFinishedStep?: boolean }) => void;
-  profile: any;
   readProfile: () => void;
   updateProfile: (
     options: { userId: number; update: any },
@@ -90,18 +81,6 @@ interface IPlayContext {
     }[];
     scenarioName?: string;
   }) => void;
-}
-type IEnrichedGame = IGame & {
-  teams: ITeamWithPlayers[];
-  isLarge?: boolean;
-  isSynthesisStep?: boolean;
-};
-
-interface PlayerState {
-  hasFinishedStep: boolean;
-  actionPointsLimitExceeded: boolean;
-  playerActions: PlayerActions[];
-  teamActions: TeamAction[];
 }
 
 const PlayContext = React.createContext<IPlayContext | null>(null);
@@ -117,55 +96,61 @@ function RootPlayProvider({ children }: { children: React.ReactNode }) {
 function PlayProvider({ children }: { children: React.ReactNode }) {
   const { token, user } = useAuth();
   const match = useMatch(`play/games/:gameId/*`);
-  if (!match) throw new Error("Provider use outside of game play.");
-  const gameId = +(match.params.gameId as string);
 
-  const [gameWithTeams, setGameWithTeams] = useState<IEnrichedGame | null>(
-    null
-  );
-  const [player, setPlayer] = useState<PlayerState>({
-    hasFinishedStep: true,
-    actionPointsLimitExceeded: false,
-    playerActions: [],
-    teamActions: [],
-  });
-  const [profile, setProfile] = useState<any>({});
+  const gameId = useMemo(() => {
+    return +(match?.params.gameId as string) || 0;
+  }, [match?.params.gameId]);
+
+  const {
+    consumptionActions,
+    consumptionActionById,
+    game,
+    isInitialised,
+    players,
+    productionActions,
+    productionActionById,
+    teams,
+    setConsumptionActions,
+    setGame,
+    setIsInitialised,
+    setPlayers,
+    setProductionActions,
+    setTeams,
+  } = usePlayStore();
   const { socket } = useGameSocket({
     gameId,
     token,
-    setGameWithTeams,
-    setPlayer,
-    setProfile,
+    setConsumptionActions,
+    setGame,
+    setIsInitialised,
+    setPlayers,
+    setProductionActions,
+    setTeams,
   });
-
-  const gameWithSortedTeams = useMemo(
-    () => enrichTeams(gameWithTeams),
-    [gameWithTeams]
-  );
 
   const readProfile = useCallback(() => {
     if (user?.id) {
-      socket?.emit("readProfile", { gameId, userId: user.id });
+      socket?.emit("profile:read");
     }
-  }, [gameId, socket, user]);
+  }, [socket, user]);
 
   const setActionPointsLimitExceeded = useCallback(
     (actionPointsLimitExceeded: boolean) => {
-      setPlayer((previous) => ({ ...previous, actionPointsLimitExceeded }));
+      setPlayers(([player]) => [{ ...player, actionPointsLimitExceeded }]);
     },
-    [setPlayer]
+    [setPlayers]
   );
 
-  if (gameWithSortedTeams === null || socket === null) {
+  if (!isInitialised || !game || !socket) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
 
   const updateGame = (update: Partial<IGame>) => {
-    setGameWithTeams((previous) => {
+    setGame((previous) => {
       if (previous === null) return null;
       return { ...previous, ...update };
     });
-    socket.emit("updateGame", { gameId, update });
+    socket.emit("game:update", { update });
   };
 
   const updatePlayerActions = (
@@ -174,19 +159,18 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
       id: number;
     }[]
   ) => {
-    if (player.hasFinishedStep) {
+    if (players[0].hasFinishedStep) {
       return;
     }
 
-    socket.emit("updatePlayerActions", {
-      gameId,
-      step: gameWithSortedTeams.step,
+    socket.emit("player-actions:update", {
+      step: game.step,
       playerActions,
     });
   };
 
   const updatePlayer = ({ hasFinishedStep }: { hasFinishedStep?: boolean }) => {
-    socket.emit("updatePlayer", { gameId, hasFinishedStep });
+    socket.emit("player:update", { hasFinishedStep });
   };
 
   const updateProfile = (
@@ -199,7 +183,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     },
     onRespond?: (args: { success: boolean }) => void
   ) => {
-    socket.emit("updateProfile", { gameId, userId, update }, onRespond);
+    socket.emit("profile:update", { gameId, userId, update }, onRespond);
   };
 
   const updateTeam = ({
@@ -212,8 +196,8 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     }[];
     scenarioName?: string;
   }) => {
-    socket.emit("updateTeam", {
-      step: gameWithSortedTeams.step,
+    socket.emit("team:update", {
+      step: game.step,
       teamActions,
       scenarioName,
     });
@@ -222,16 +206,17 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   return (
     <PlayContext.Provider
       value={{
-        game: gameWithSortedTeams,
-        isGameFinished: gameWithSortedTeams.status === "finished",
-        isStepFinished:
-          gameWithSortedTeams.step === gameWithSortedTeams.lastFinishedStep,
+        consumptionActions,
+        consumptionActionById,
+        game,
+        players,
+        productionActions,
+        productionActionById,
+        teams,
         updateGame,
         updatePlayerActions,
         setActionPointsLimitExceeded,
-        player,
         updatePlayer,
-        profile,
         readProfile,
         updateProfile,
         updateTeam,
@@ -242,22 +227,6 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function enrichTeams(gameWithTeams: IEnrichedGame | null) {
-  if (gameWithTeams !== null) {
-    return {
-      ...gameWithTeams,
-      teams: [...(gameWithTeams?.teams ?? [])]
-        .filter(({ name }) => name !== NO_TEAM)
-        .sort(sortBy("id", "asc")),
-      isLarge:
-        (gameWithTeams && gameWithTeams.teams.length > LARGE_GAME_TEAMS) ||
-        false,
-      isSynthesisStep: gameWithTeams && gameWithTeams.step === STEPS.length - 1,
-    };
-  }
-  return null;
-}
-
 function useLoadedPlay(): IPlayContext {
   const playValue = usePlay();
   if (playValue === null) {
@@ -266,79 +235,97 @@ function useLoadedPlay(): IPlayContext {
   return playValue;
 }
 
-function useMyTeam(): ITeamWithPlayers | null {
-  const { game: gameWithTeams } = useLoadedPlay();
+function useMyTeam(): ITeam | null {
+  const { players, teams } = useLoadedPlay();
   const { user } = useAuth();
-  if (!user) return null;
-  if (!gameWithTeams) return null;
-  return (
-    gameWithTeams.teams.find((team) =>
-      team.players.some((player) => player.userId === user.id)
-    ) ?? null
-  );
+
+  const myTeam = useMemo(() => {
+    if (!user || !teams.length) {
+      return null;
+    }
+
+    const myPlayer = players.find((p) => p.userId === user?.id);
+    if (!myPlayer) {
+      return null;
+    }
+
+    return teams.find((t) => t.id === myPlayer.teamId) || null;
+  }, [players, teams, user]);
+
+  return myTeam;
 }
 
 function useTeamValues(): {
   teamValues: TeamValues[];
   getTeamById: (id: number | undefined) => TeamValues | undefined;
 } {
-  const { game } = useLoadedPlay();
-  const userIds: number[] = [];
-  game.teams.map((team) =>
-    team.players.map(({ user }) => userIds.push(user?.id))
+  const { game, players, teams } = useLoadedPlay();
+
+  const userIds: number[] = useMemo(
+    () => players.map((p) => p.userId),
+    [players]
   );
   const personaByUserId = usePersonaByUserId(userIds);
 
-  const teamValues = game.teams.map((team) => ({
-    id: team.id,
-    playerCount: team.players.length,
-    points: mean(
-      team.players.map(
-        ({ userId }) => personaByUserId[userId].currentPersona.points
-      )
-    ),
-    budget: mean(
-      team.players.map(
-        ({ userId }) => personaByUserId[userId].currentPersona.budget
-      )
-    ),
-    budgetSpent: mean(
-      team?.players
-        .map(({ userId }) => personaByUserId[userId])
-        .map(
-          (persona) =>
-            persona.getPersonaAtStep(0).budget - persona.currentPersona.budget
-        )
-    ),
-    carbonFootprint: mean(
-      team.players.map(
-        ({ userId }) => personaByUserId[userId].currentPersona.carbonFootprint
-      )
-    ),
-    carbonFootprintReduction: mean(
-      team?.players
-        .map(({ userId }) => personaByUserId[userId])
-        .map(
-          (persona) =>
-            (1 -
-              persona.currentPersona.carbonFootprint /
-                persona.getPersonaAtStep(0).carbonFootprint) *
-            100
-        )
-    ),
-    stepToConsumption: buildStepToData(
-      "consumption",
-      game,
-      team,
-      personaByUserId
-    ),
-    stepToProduction: buildStepToData(
-      "production",
-      game,
-      team,
-      personaByUserId
-    ),
-  }));
+  const teamValues = useMemo(() => {
+    return teams.map((team) => {
+      const playersInTeam = players.filter((p) => p.teamId === team.id);
+
+      return {
+        id: team.id,
+        playerCount: playersInTeam.length,
+        points: mean(
+          playersInTeam.map(
+            ({ userId }) => personaByUserId[userId].currentPersona.points
+          )
+        ),
+        budget: mean(
+          playersInTeam.map(
+            ({ userId }) => personaByUserId[userId].currentPersona.budget
+          )
+        ),
+        budgetSpent: mean(
+          playersInTeam
+            .map(({ userId }) => personaByUserId[userId])
+            .map(
+              (persona) =>
+                persona.getPersonaAtStep(0).budget -
+                persona.currentPersona.budget
+            )
+        ),
+        carbonFootprint: mean(
+          playersInTeam.map(
+            ({ userId }) =>
+              personaByUserId[userId].currentPersona.carbonFootprint
+          )
+        ),
+        carbonFootprintReduction: mean(
+          playersInTeam
+            .map(({ userId }) => personaByUserId[userId])
+            .map(
+              (persona) =>
+                (1 -
+                  persona.currentPersona.carbonFootprint /
+                    persona.getPersonaAtStep(0).carbonFootprint) *
+                100
+            )
+        ),
+        stepToConsumption: buildStepToData(
+          "consumption",
+          game,
+          playersInTeam,
+          personaByUserId
+        ),
+        stepToProduction: buildStepToData(
+          "production",
+          game,
+          playersInTeam,
+          personaByUserId
+        ),
+      };
+    });
+    // TODO: check `personaByUserId` in deps doesn't trigger infinite renders.
+  }, [game, personaByUserId, players, teams]);
 
   const getTeamById = (id: number | undefined) => {
     return teamValues.find((t) => t.id === id);
@@ -353,7 +340,7 @@ function useTeamValues(): {
 function buildStepToData(
   dataType: GameStepType,
   game: IGame,
-  team: ITeamWithPlayers,
+  players: Player[],
   personaByUserId: ReturnType<typeof usePersonaByUserId>
 ) {
   return Object.fromEntries(
@@ -361,7 +348,7 @@ function buildStepToData(
       .filter((step) => isStepOfType(step, dataType))
       .map((step: number) => [
         step,
-        buildStepData(dataType, step, team, personaByUserId),
+        buildStepData(dataType, step, players, personaByUserId),
       ])
   );
 }
@@ -369,14 +356,12 @@ function buildStepToData(
 function buildStepData(
   dataType: GameStepType,
   step: number,
-  team: ITeamWithPlayers,
+  players: Player[],
   personaByUserId: ReturnType<typeof usePersonaByUserId>
 ) {
   return mean(
-    team.players
-      .map(
-        ({ user }) => personaByUserId[user.id].getPersonaAtStep(step)[dataType]
-      )
+    players
+      .map((p) => personaByUserId[p.userId].getPersonaAtStep(step)[dataType])
       .map((data) =>
         parseInt(sumAllValues(data as { type: string; value: number }[]))
       )
@@ -392,43 +377,30 @@ function useCurrentStep(): GameStep | null {
   return STEPS?.[game.step] || null;
 }
 
-function usePlayerActions() {
-  const { game, player } = useLoadedPlay();
-
-  return {
-    playerActions: player.playerActions,
-    actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
-    ...computePlayerActionsStats(game.step, player.playerActions),
-  };
-}
-
-function useTeamActions() {
-  const { game, player } = useLoadedPlay();
-
-  return {
-    teamActions: player.teamActions,
-    teamActionsAtCurrentStep: getTeamActionsAtCurrentStep(
-      game.step,
-      player.teamActions
-    ),
-  };
-}
-
 function useGameSocket({
   gameId,
   token,
-  setGameWithTeams,
-  setPlayer,
-  setProfile,
+  setConsumptionActions,
+  setGame,
+  setIsInitialised,
+  setPlayers,
+  setProductionActions,
+  setTeams,
 }: {
   gameId: number;
   token: string | null;
-  setGameWithTeams: React.Dispatch<React.SetStateAction<IEnrichedGame | null>>;
-  setPlayer: React.Dispatch<React.SetStateAction<PlayerState>>;
-  setProfile: React.Dispatch<React.SetStateAction<any>>;
+  setConsumptionActions: React.Dispatch<React.SetStateAction<Action[]>>;
+  setGame: React.Dispatch<React.SetStateAction<IGame | null>>;
+  setIsInitialised: React.Dispatch<React.SetStateAction<boolean>>;
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
+  setProductionActions: React.Dispatch<
+    React.SetStateAction<ProductionAction[]>
+  >;
+  setTeams: React.Dispatch<React.SetStateAction<ITeam[]>>;
 }): { socket: Socket | null } {
   const [socket, setSocket] = useState<Socket | null>(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const newSocket = io(WEB_SOCKET_URL, {
       withCredentials: true,
@@ -437,61 +409,80 @@ function useGameSocket({
       },
     });
 
-    newSocket.on("resetGameState", (state) => {
-      const { gameWithTeams } = state;
-      setGameWithTeams(gameWithTeams);
+    newSocket.on("game:init", (state) => {
+      setConsumptionActions(state.consumptionActions);
+      setGame(state.game);
+      setPlayers(state.players);
+      setProductionActions(state.productionActions);
+      setTeams(state.teams);
+      setIsInitialised(true);
+    });
+
+    newSocket.on("game:leave", () => {
+      navigate("/play/my-games");
+    });
+
+    newSocket.on("game:update", ({ update }: { update: Partial<IGame> }) => {
+      setGame((previous) => {
+        if (previous === null) {
+          return null;
+        }
+        if (previous.status !== "finished" && update.status === "finished") {
+          navigate("/play");
+        }
+
+        if (
+          update.lastFinishedStep &&
+          update.lastFinishedStep !== previous.lastFinishedStep
+        ) {
+          navigate(`/play/games/${previous.id}/persona/stats`);
+        }
+        return { ...previous, ...update };
+      });
     });
 
     newSocket.on(
-      "gameUpdated",
-      ({ update }: { update: Partial<IEnrichedGame> }) => {
-        setGameWithTeams((previous) => {
-          if (previous === null) return null;
-          if (previous.status !== "finished" && update.status === "finished") {
-            navigate("/play");
-          }
-
-          if (
-            update.lastFinishedStep &&
-            update.lastFinishedStep !== previous.lastFinishedStep
-          ) {
-            navigate(`/play/games/${previous.id}/persona/stats`);
-          }
-          return { ...previous, ...update };
-        });
+      "player-actions:update",
+      ({
+        updates,
+      }: {
+        updates: (Partial<Player> & Pick<Player, "userId">)[];
+      }) => {
+        setPlayers((players) => updateCollection(players, "userId", updates));
       }
     );
 
     newSocket.on(
-      "playerActionsUpdated",
-      ({ playerActions = [] }: { playerActions: PlayerActions[] }) => {
-        setPlayer((previous) => ({
-          ...previous,
-          playerActions: playerActions.sort(sortBy("actionId", "asc")),
-        }));
+      "player-actions:action-points-limit-exceeded",
+      ({
+        updates,
+      }: {
+        updates: (Partial<Player> & Pick<Player, "userId">)[];
+      }) => {
+        setPlayers((players) => updateCollection(players, "userId", updates));
       }
     );
-
-    newSocket.on("actionPointsLimitExceeded", () => {
-      setPlayer((previous) => ({
-        ...previous,
-        actionPointsLimitExceeded: true,
-      }));
-    });
 
     newSocket.on(
-      "playerUpdated",
-      ({ update }: { update: Partial<PlayerState> }) => {
-        setPlayer((previous) => ({ ...previous, ...update }));
+      "player:update",
+      ({
+        updates,
+      }: {
+        updates: (Partial<Player> & Pick<Player, "userId">)[];
+      }) => {
+        setPlayers((players) => updateCollection(players, "userId", updates));
       }
     );
 
-    newSocket.on("profileUpdated", ({ update }: { update: Partial<any> }) => {
-      setProfile((previous: any) => ({ ...previous, ...update }));
-    });
+    newSocket.on(
+      "team:update",
+      ({ updates }: { updates: (Partial<ITeam> & Pick<ITeam, "id">)[] }) => {
+        setTeams((teams) => updateCollection(teams, "id", updates));
+      }
+    );
 
     newSocket.on("connect", () => {
-      newSocket.emit("joinGame", gameId);
+      newSocket.emit("game:join", gameId);
     });
 
     setSocket(newSocket);
@@ -499,7 +490,25 @@ function useGameSocket({
     return () => {
       newSocket.disconnect();
     };
-  }, [gameId, token, setGameWithTeams, setPlayer, setProfile, navigate]);
+  }, [
+    gameId,
+    token,
+    /**
+     * Don't include `navigate` in dependencies since it changes on every route change,
+     * which trigger a socket disconnection and reconnection.
+     * @see https://github.com/remix-run/react-router/issues/7634
+     *
+     * /!\ Only use absolute navigation inside of this `useEffect`!
+     */
+    // navigate,
+    setConsumptionActions,
+    setGame,
+    setIsInitialised,
+    setPlayers,
+    setProductionActions,
+    setTeams,
+  ]);
+
   return { socket };
 }
 
@@ -512,72 +521,61 @@ function usePersonaByUserId(
   userIds: number[]
 ): Record<number, ReturnType<typeof buildPersona>>;
 function usePersonaByUserId(userIds: number | number[]) {
-  const { game: gameWithTeams } = useLoadedPlay();
+  const { consumptionActionById, game, players, productionActionById, teams } =
+    useLoadedPlay();
 
   if (typeof userIds === "number") {
-    const { team, player } = getUserTeamAndPlayer(gameWithTeams, userIds);
-    const personalization = player?.profile.personalization;
+    const { team, player } = getUserTeamAndPlayer(userIds, { players, teams });
+    const personalization = player?.profile?.personalization!;
     const teamActions = team?.actions || [];
     const initialPersona = buildInitialPersona(
-      player?.profile.personalization,
-      teamActions
+      personalization,
+      teamActions,
+      productionActionById
     );
     return buildPersona(
-      gameWithTeams,
+      game,
       personalization,
       initialPersona,
       player?.actions || [],
-      teamActions
+      consumptionActionById,
+      teamActions,
+      productionActionById
     );
   }
 
   return Object.fromEntries(
     userIds.map((userId) => {
-      const { team, player } = getUserTeamAndPlayer(gameWithTeams, userId);
-      const personalization = player?.profile.personalization;
+      const { team, player } = getUserTeamAndPlayer(userId, { players, teams });
+      const personalization = player?.profile?.personalization!;
       const teamActions = team?.actions || [];
-      const initialPersona = buildInitialPersona(personalization, teamActions);
+      const initialPersona = buildInitialPersona(
+        personalization,
+        teamActions,
+        productionActionById
+      );
       return [
         userId,
         buildPersona(
-          gameWithTeams,
+          game,
           personalization,
           initialPersona,
           player?.actions || [],
-          teamActions
+          consumptionActionById,
+          teamActions,
+          productionActionById
         ),
       ];
     })
   );
 }
 
-function getUserTeamAndPlayer(game: IEnrichedGame, userId: number) {
-  const team = game.teams.find((team: ITeamWithPlayers) =>
-    team.players.find((player: Player) => player.userId === userId)
-  );
-
-  const player = team?.players.find(
-    (player: Player) => player.userId === userId
-  );
+function getUserTeamAndPlayer(
+  userId: number,
+  { players, teams }: { players: Player[]; teams: ITeam[] }
+) {
+  const player = players.find((p) => p.userId === userId) || null;
+  const team = teams.find((t) => t.id === player?.teamId) || null;
 
   return { team, player };
-}
-
-function usePersona() {
-  const { game, player } = useLoadedPlay();
-  const { user } = useAuth();
-  const profile = user && getUserTeamAndPlayer(game, user.id)?.player?.profile;
-  const { playerActions } = usePlayerActions();
-  const initialPersona = buildInitialPersona(
-    profile.personalization,
-    player.teamActions
-  );
-
-  return buildPersona(
-    game,
-    profile.personalization,
-    initialPersona,
-    playerActions,
-    player.teamActions
-  );
 }
