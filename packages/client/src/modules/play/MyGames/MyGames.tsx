@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ErrorAlert, SuccessAlert } from "../../alert";
+import { ErrorAlert } from "../../alert";
 import { PlayBox } from "../Components";
 import {
   CustomContainer,
@@ -24,6 +24,7 @@ import { handleApiError, http } from "../../../utils/request";
 import { useTranslation } from "../../translations/useTranslation";
 import { Icon } from "../../common/components/Icon";
 import { Typography } from "../../common/components/Typography";
+import { useAlerts } from "../../alert/AlertProvider";
 
 export { MyGames };
 
@@ -186,12 +187,13 @@ function buildGameList(games: IGame[], title: string) {
 }
 
 function JoinGame() {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       gameCode: "",
     },
   });
   const { t } = useTranslation();
+  const { enqueueAlert } = useAlerts();
 
   const queryClient = useQueryClient();
 
@@ -207,14 +209,26 @@ function JoinGame() {
       onSuccess: async (res) => {
         queryClient.invalidateQueries("/api/games/played-games");
         queryClient.invalidateQueries(`/api/games/${res.data.gameId}/players`);
+        setValue("gameCode", "");
+        enqueueAlert({
+          severity: "success",
+          message: t("message.success.game-joined"),
+        });
       },
     }
   );
 
-  const onValid = (registration: Registration) => mutation.mutate(registration);
+  const onSubmit = (registration: Registration) => {
+    if (!registration.gameCode) {
+      return;
+    }
+
+    mutation.mutate(registration);
+  };
+
   return (
     <CustomPaper>
-      <form onSubmit={handleSubmit(onValid)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <JoinGameInputWrapper>
           <Controller
             control={control}
@@ -254,7 +268,6 @@ function JoinGame() {
           })}
         />
       )}
-      {mutation.isSuccess && <SuccessAlert />}
     </CustomPaper>
   );
 }
