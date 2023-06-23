@@ -12,8 +12,14 @@ export {
   formatUserName,
 };
 
-function formatBudget(value?: number) {
-  return value?.toFixed(2) || "";
+function formatBudget(
+  value?: number,
+  { fractionDigits = 2 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 function formatCarbonFootprint(

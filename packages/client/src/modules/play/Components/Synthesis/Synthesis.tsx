@@ -1,19 +1,20 @@
 import { Box, styled } from "@mui/material";
 import {
+  formatBudget,
   formatCarbonFootprint,
   formatPercentage,
 } from "../../../../lib/formatter";
 import { useTranslation } from "../../../translations";
-import { emphasizeText } from "../../../common/utils";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
 import { Icon } from "../../../common/components/Icon";
-import { useTeamValues } from "../../context/playContext";
+import { usePlay, useTeamValues } from "../../context/playContext";
 import { ITeam } from "../../../../utils/types";
-import { getDaysTo2050 } from "../../../../lib/time";
+import { getDaysToEnergyShiftTargetYear } from "../../../../lib/time";
 import { Card } from "../../../common/components/Card";
 import { Typography } from "../../../common/components/Typography";
 import { TagNumber } from "../../../common/components/TagNumber";
 import { Tag } from "../../../common/components/Tag";
+import { ENERGY_SHIFT_TARGET_YEAR } from "../../../common/constants";
 
 export { SynthesisRecap };
 
@@ -27,33 +28,84 @@ function SynthesisRecap({ team }: { team: ITeam }) {
 }
 
 function SynthesisBudget({ team }: { team: ITeam | null }) {
-  const daysTo2050 = getDaysTo2050();
+  const { t } = useTranslation(["common", "countries"]);
+  const { game } = usePlay();
+  const daysTo2050 = getDaysToEnergyShiftTargetYear(new Date(game.date));
   const { getTeamById } = useTeamValues();
   const teamValues = getTeamById(team?.id);
 
   const budget = teamValues?.budgetSpent || 0;
 
-  const budgetSpentPersonal = budget * daysTo2050;
-  const budgetSpentTotalFrance =
-    (budgetSpentPersonal * synthesisConstants.FRANCE_POPULATION) /
+  const meanYearlyBudgetPerInhabitant =
+    budget * synthesisConstants.DAYS_IN_YEAR;
+  const meanTotalBudgetPerInhabitant = budget * daysTo2050;
+  const totalCountryBudget =
+    (meanTotalBudgetPerInhabitant * t("countries:country.fr.population.mega")) /
     synthesisConstants.MILLIARD;
 
   return (
-    <Box display="flex" flexDirection="column" gap={3}>
-      <Typography sx={{ fontSize: "20px", fontWeight: "700" }}>
-        <Icon name="budget" /> Synthèse du budget
-      </Typography>
-      <Typography sx={{ fontSize: "14px" }} ml={4}>
-        En moyenne, vous aurez dépensé{" "}
-        {emphasizeText(budgetSpentPersonal.toFixed(0))} € par personne d'ici
-        2050
-      </Typography>
-      <Typography sx={{ fontSize: "14px" }} ml={4}>
-        Ce qui représente un coût total de{" "}
-        {emphasizeText(budgetSpentTotalFrance.toFixed(0))} md€ pour la France
-        entre 2020 et 2050
-      </Typography>
-    </Box>
+    <CardStyled display="flex" flexDirection="column" gap={3} p={1}>
+      <Box display="flex" alignItems="center" gap={1}>
+        <Icon name="budget" />
+        <Typography variant="h4">
+          {t("synthesis.player.general-section.budget.title")}
+        </Typography>
+      </Box>
+
+      <Box>
+        <Typography
+          dangerouslySetInnerHTML={{
+            __html: t(
+              "synthesis.player.general-section.budget.final-mean-budget",
+              {
+                startYear: new Date(game.date).getFullYear(),
+                endYear: ENERGY_SHIFT_TARGET_YEAR,
+                finalMeanYearlyBudgetPerInhabitant: t(
+                  "unit.budget-per-year-per-person.base",
+                  {
+                    value: formatBudget(meanYearlyBudgetPerInhabitant, {
+                      fractionDigits: 0,
+                    }),
+                    symbol: t("countries:country.fr.currency.symbol"),
+                  }
+                ),
+                finalMeanTotalBudgetPerInhabitant: t("unit.budget.base", {
+                  value: formatBudget(meanTotalBudgetPerInhabitant, {
+                    fractionDigits: 0,
+                  }),
+                  symbol: t("countries:country.fr.currency.symbol"),
+                }),
+                finalTotalCountryBudget: t("unit.budget.giga", {
+                  value: formatBudget(totalCountryBudget, {
+                    fractionDigits: 0,
+                  }),
+                  symbol: t("countries:country.fr.currency.symbol"),
+                  count: Math.ceil(totalCountryBudget),
+                }),
+                countryNameWithArticle: t(
+                  "countries:country.fr.name-with-article"
+                ),
+                countryInhabitantName: t(
+                  "countries:country.fr.inhabitant-name"
+                ),
+              }
+            ),
+          }}
+        ></Typography>
+      </Box>
+
+      <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
+        <Tag type={"secondary"}>
+          {t("unit.budget-per-year-per-inhabitant.base", {
+            value: formatBudget(meanYearlyBudgetPerInhabitant, {
+              fractionDigits: 0,
+            }),
+            symbol: t("countries:country.fr.currency.symbol"),
+            countryInhabitantName: t("countries:country.fr.inhabitant-name"),
+          })}
+        </Tag>
+      </Box>
+    </CardStyled>
   );
 }
 
