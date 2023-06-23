@@ -37,7 +37,7 @@
     "db:migrate": "npx prisma migrate dev",
     "db:seed": "npx ts-node ./src/database/seed.ts",
     "db:studio": "npx prisma studio",
-    "dev": "NODE_ENV=development ts-node-dev --respawn ./src/index.ts",
+    "dev": "NODE_ENV=development ts-node-dev --respawn --watch src ./src/index.ts",
     "env:default": "cp .env.example .env",
     "check-type": "tsc --noEmit",
     "lint": "eslint .",

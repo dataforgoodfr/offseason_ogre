@@ -17,7 +17,6 @@ import {
   useMyTeam,
   usePlay,
   useTeamValues,
-  usePersona,
 } from "../context/playContext";
 import { sumAllValues } from "../../persona";
 import { Icon } from "../../common/components/Icon";
@@ -29,6 +28,7 @@ import {
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
 import { useTranslation } from "../../translations/useTranslation";
+import { usePersona } from "../context/hooks/player";
 
 export { PlayerHeader, Header, Actions };
 
@@ -226,7 +226,7 @@ function Header({
 
 function Actions({ className }: { className?: string }) {
   const { t } = useTranslation();
-  const { game, isGameFinished, isStepFinished } = usePlay();
+  const { game } = usePlay();
   const currentStep = useCurrentStep();
 
   const iconName =
@@ -266,7 +266,9 @@ function Actions({ className }: { className?: string }) {
           mt: 2,
           width: "200px",
         }}
-        disabled={!isGameFinished && (game.step === 0 || isStepFinished)}
+        disabled={
+          !game.isGameFinished && (game.step === 0 || game.isStepFinished)
+        }
       >
         <Icon name={iconName} sx={{ mr: 1 }} />
         {t(`cta.go-to-step.${currentStep?.id}` as any)}

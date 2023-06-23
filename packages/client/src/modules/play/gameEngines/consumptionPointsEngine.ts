@@ -1,5 +1,5 @@
 import { sumReducer } from "../../../lib/array";
-import { ActionNames, PlayerActions } from "../../../utils/types";
+import { Action, ActionNames, PlayerActions } from "../../../utils/types";
 import { PersoForm } from "../Personalization/models/form";
 import { availableActions } from "../playerActions/constants/actions";
 
@@ -279,13 +279,17 @@ const PLAYER_ACTIONS_TO_SCORE_CONFIG: Partial<
 function computeConsumptionPoints(
   personalization: PersoForm,
   performedPlayerAction: PlayerActions[],
+  consumptionActionById: Record<number, Action>,
   step: number
 ) {
   return evaluateScoreConfigs(
     getScoreConfigs(),
     step,
     personalization,
-    getIsPlayerActionPerformedChecker(performedPlayerAction)
+    getIsPlayerActionPerformedChecker(
+      performedPlayerAction,
+      consumptionActionById
+    )
   );
 }
 
@@ -297,11 +301,12 @@ function getScoreConfigs() {
 }
 
 function getIsPlayerActionPerformedChecker(
-  performedPlayerAction: PlayerActions[]
+  performedPlayerAction: PlayerActions[],
+  consumptionActionById: Record<number, Action>
 ) {
   const playerActionsToIsPerformed = Object.fromEntries(
     performedPlayerAction.map((performedAction) => [
-      performedAction.action.name,
+      consumptionActionById[performedAction.actionId].name,
       performedAction.isPerformed,
     ])
   );

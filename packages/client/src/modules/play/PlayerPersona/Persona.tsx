@@ -9,10 +9,10 @@ import {
   Question,
 } from "../Personalization/models/form";
 import { fulfillsConditions } from "../Personalization/utils/formValidation";
-import { usePlay } from "../context/playContext";
 import { QuestionLine, QuestionText } from "../Personalization/styles/form";
 import { DescriptionValue } from "./Persona.styles";
 import { formatBooleanValue } from "../../../utils/format";
+import { useCurrentPlayer } from "../context/hooks/player";
 
 export { Persona };
 
@@ -70,7 +70,7 @@ function Persona() {
     );
   };
 
-  const { profile } = usePlay();
+  const { profile } = useCurrentPlayer();
 
   return (
     <PlayBox>
