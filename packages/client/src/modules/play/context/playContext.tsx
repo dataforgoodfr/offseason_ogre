@@ -25,7 +25,6 @@ import { updateCollection } from "./playContext.utils";
 export {
   RootPlayProvider,
   useCurrentStep,
-  useMyTeam,
   useTeamValues,
   useLoadedPlay as usePlay,
   usePersonaByUserId,
@@ -233,26 +232,6 @@ function useLoadedPlay(): IPlayContext {
     throw new Error("play context should have been loaded");
   }
   return playValue;
-}
-
-function useMyTeam(): ITeam | null {
-  const { players, teams } = useLoadedPlay();
-  const { user } = useAuth();
-
-  const myTeam = useMemo(() => {
-    if (!user || !teams.length) {
-      return null;
-    }
-
-    const myPlayer = players.find((p) => p.userId === user?.id);
-    if (!myPlayer) {
-      return null;
-    }
-
-    return teams.find((t) => t.id === myPlayer.teamId) || null;
-  }, [players, teams, user]);
-
-  return myTeam;
 }
 
 function useTeamValues(): {
