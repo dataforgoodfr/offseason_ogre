@@ -118,7 +118,7 @@ function ActionCard({
                       }
                       color={theme.palette.energy[consoImpact.type]}
                     >
-                      <Typography>{t(`energy.${consoImpact.type}`)}</Typography>
+                      {t(`energy.${consoImpact.type}`)}
                     </Tag>
                     <TagNumber
                       value={consoImpact.absolute}
