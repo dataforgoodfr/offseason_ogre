@@ -1,5 +1,6 @@
 import { styled } from "@mui/material";
 import { ReactNode } from "react";
+import { Typography } from "../Typography";
 
 export { Tag };
 
@@ -19,7 +20,7 @@ function Tag({
   return (
     <TagStyled className={className} sx={{ backgroundColor: color }}>
       {icon}
-      {children}
+      <Typography as="span">{children}</Typography>
     </TagStyled>
   );
 }
@@ -31,6 +32,7 @@ const TagStyled = styled("span")(({ theme }) => {
     gap: theme.spacing(0.5),
     flexGrow: 0,
     flexShrink: 0,
+    inlineSize: "fit-content",
     padding: theme.spacing(0.5),
     borderRadius: "10px",
     color: "#ffffff",

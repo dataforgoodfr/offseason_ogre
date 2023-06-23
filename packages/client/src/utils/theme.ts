@@ -1,4 +1,8 @@
-import { createTheme, responsiveFontSizes } from "@mui/material";
+import {
+  GlobalStylesProps,
+  createTheme,
+  responsiveFontSizes,
+} from "@mui/material";
 
 export type {
   ThemeVariant,
@@ -6,7 +10,7 @@ export type {
   ProductionPalette,
   MaterialsPalette,
 };
-export { theme };
+export { globalStyles, theme };
 
 type ThemeVariant = "light" | "dark" | "system";
 
@@ -70,6 +74,17 @@ let theme = createTheme({
   },
 });
 theme = responsiveFontSizes(theme);
+
+/**
+ * Define styles and classes available in the entire app.
+ *
+ * This is especially useful to style translated text.
+ */
+const globalStyles: GlobalStylesProps["styles"] = {
+  ".text-em": {
+    color: `${theme.palette.secondary.main} !important`,
+  },
+};
 
 export const getStyledProps = (...props: string[]) => ({
   shouldForwardProp: (prop: any) => !props.includes(prop as any),

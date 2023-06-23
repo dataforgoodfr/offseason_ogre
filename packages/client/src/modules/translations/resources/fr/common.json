@@ -270,6 +270,8 @@
   "step.production-3.title": "Choix de production 3",
 
   "synthesis.player.general-section.title": "Général",
+  "synthesis.player.general-section.carbon-footprint.title": "Empreinte carbone",
+  "synthesis.player.general-section.carbon-footprint.final-mean-carbon-footprint": "Suite à vos choix, votre empreinte carbone est de <span class='text-em'>{{finalFootprint}}</span>, ce qui correspond à une baisse de <span class='text-em'>{{footprintReduction}}</span> par rapport au début de l’atelier.",
   "synthesis.player.scenario-section.title": "Scénario",
   "synthesis.player.scenario-section.edit-help.description-1": "Donnez un nom à votre scénario pour le futur énergétique de la France.",
   "synthesis.player.scenario-section.edit-help.description-2": "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe.",
@@ -341,5 +343,8 @@
   "unit.budget.day": "€/j",
   "unit.carbon.year": "T/an",
   "unit.carbon.day": "kg/j",
+  "unit.carbon-per-year-per-person.mega_zero": "{{value}} tonne/an et par personne",
+  "unit.carbon-per-year-per-person.mega_one": "{{value}} tonne/an et par personne",
+  "unit.carbon-per-year-per-person.mega_other": "{{value}} tonnes/an et par personne",
   "unit.percentage": "{{value}}%"
 }
