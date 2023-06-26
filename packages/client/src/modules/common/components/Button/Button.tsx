@@ -1,4 +1,4 @@
-import { Button as ButtonLib, CircularProgress } from "@mui/material";
+import { Button as ButtonLib, CircularProgress, useTheme } from "@mui/material";
 import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Icon, IconName } from "../Icon";
@@ -28,6 +28,7 @@ function Button({
   children,
 }: ButtonProps) {
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const buttonProps = useMemo(() => {
     if (disabled) {
@@ -36,8 +37,8 @@ function Button({
           variant: "contained",
         },
         sx: {
-          backgroundColor: "#efefef !important",
-          color: "#adadad !important",
+          backgroundColor: `${theme.palette.components.button.disabled.backgroundColor} !important`,
+          color: `${theme.palette.components.button.disabled.color} !important`,
         },
       };
     }
