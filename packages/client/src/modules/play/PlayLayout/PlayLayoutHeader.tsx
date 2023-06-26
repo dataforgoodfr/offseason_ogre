@@ -30,10 +30,10 @@ function PlayLayoutHeader() {
         />
         <Box className="flex items-center">
           <Typography
-            className="grow "
+            className="grow"
             component="h1"
             variant="h6"
-            color="inherit"
+            color="#ffffff"
             noWrap
           >
             {userName}
