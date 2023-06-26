@@ -32,6 +32,11 @@
   "dialog.step.yes": "Continuer",
   "dialog.step.no": "Annuler",
 
+  "energy.fossil": "Énergie fossile",
+  "energy.grey": "Énergie grise",
+  "energy.renewable": "Énergie décarbonée",
+  "energy.mixte": "Énergie mixte",
+
   "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
   "message.error.signup.USER_ALREADY_EXISTS": "Cette adresse mail est déjà associée à un compte.",
   "message.error.signup.USER_DOES_NOT_EXIST": "Cette adresse mail n'est associée à aucun compte.",
@@ -268,6 +273,10 @@
   "synthesis.player.scenario-section.title": "Scénario",
   "synthesis.player.scenario-section.edit-help.description-1": "Donnez un nom à votre scénario pour le futur énergétique de la France.",
   "synthesis.player.scenario-section.edit-help.description-2": "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe.",
+  "synthesis.player.most-impactful-actions-section.action-performed": "Action effectuée",
+  "synthesis.player.most-impactful-actions-section.action-missed": "Action ratée",
+  "synthesis.player.most-impactful-actions-section.description": "Voici les 5 actions qui avaient le plus d’impact en considérant votre situation initiale.",
+  "synthesis.player.most-impactful-actions-section.title": "Actions à fort impact",
 
   "game.status.draft": "Brouillon",
   "game.status.finished": "Terminé",
@@ -293,10 +302,10 @@
   "graph.energy.consumption.title": "Évolution des consommations entre équipes",
   "graph.energy.production.title": "Évolution des productions entre équipes",
   "graph.energy.total": "Total",
-  "graph.energy.fossil": "Energie fossile",
-  "graph.energy.grey": "Energie grise",
-  "graph.energy.renewable": "Energie décarbonée",
-  "graph.energy.mixte": "Energie mixte",
+  "graph.energy.fossil": "Énergie fossile",
+  "graph.energy.grey": "Énergie grise",
+  "graph.energy.renewable": "Énergie décarbonée",
+  "graph.energy.mixte": "Énergie mixte",
   "graph.energy.offshore": "Production offshore",
   "graph.energy.terrestrial": "Production terrestre",
   "graph.energy.nuclear": "Nucléaire",
@@ -331,5 +340,6 @@
   "unit.budget.year": "Mrd€",
   "unit.budget.day": "€/j",
   "unit.carbon.year": "T/an",
-  "unit.carbon.day": "kg/j"
+  "unit.carbon.day": "kg/j",
+  "unit.percentage": "{{value}}%"
 }

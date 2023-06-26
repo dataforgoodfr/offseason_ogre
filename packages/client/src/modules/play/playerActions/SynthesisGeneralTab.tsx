@@ -8,11 +8,9 @@ function SynthesisGeneralTab() {
   const team = useMyTeam();
 
   return (
-    <>
-      <PlayBox display="flex" flexDirection="column" gap={4}>
-        <SynthesisBudget team={team} />
-        <SynthesisCarbon team={team} />
-      </PlayBox>
-    </>
+    <PlayBox display="flex" flexDirection="column" gap={4}>
+      <SynthesisBudget team={team} />
+      <SynthesisCarbon team={team} />
+    </PlayBox>
   );
 }

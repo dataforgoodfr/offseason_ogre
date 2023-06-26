@@ -6,6 +6,7 @@ import { PlayerPageLayout } from "../PlayLayout";
 import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "../../translations/useTranslation";
 import { SynthesisGeneralTab } from "./SynthesisGeneralTab";
+import { SynthesisMostImpactfulActionsTab } from "./SynthesisMostImpactfulActionsTab";
 
 export { SynthesisPage };
 
@@ -31,6 +32,13 @@ function SynthesisLayout() {
                   label: t("synthesis.player.general-section.title"),
                   iconName: "chart-pie",
                   component: <SynthesisGeneralTab />,
+                },
+                {
+                  label: t(
+                    "synthesis.player.most-impactful-actions-section.title"
+                  ),
+                  iconName: "impactful",
+                  component: <SynthesisMostImpactfulActionsTab />,
                 },
               ]}
             />
