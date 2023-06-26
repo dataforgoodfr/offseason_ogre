@@ -68,6 +68,7 @@ function ActionCard({
                 alignItems="center"
                 variant="h4"
                 color={theme.palette.primary.contrastText}
+                sx={{ cursor: "pointer" }}
               >
                 <Icon name="check-circle" />
               </Typography>
@@ -80,7 +81,12 @@ function ActionCard({
                 "synthesis.player.most-impactful-actions-section.action-missed"
               )}
             >
-              <Typography display="flex" alignItems="center" variant="h4">
+              <Typography
+                display="flex"
+                alignItems="center"
+                variant="h4"
+                sx={{ cursor: "pointer" }}
+              >
                 <Icon name="missed" />
               </Typography>
             </Tooltip>
@@ -117,7 +123,7 @@ function ActionCard({
                     <TagNumber
                       value={consoImpact.absolute}
                       formatter={(value) =>
-                        `${formatConsumption(value)} ${t(
+                        `${formatConsumption(value, { fractionDigits: 1 })} ${t(
                           "unit.watthour-per-day.kilo"
                         )}`
                       }
@@ -135,13 +141,17 @@ function ActionCard({
                   </Box>
                   <Box display="flex">
                     <Typography>
-                      {formatConsumption(consoImpact.initial)}{" "}
+                      {formatConsumption(consoImpact.initial, {
+                        fractionDigits: 1,
+                      })}{" "}
                       {t("unit.watthour-per-day.kilo")}
                     </Typography>
                     &nbsp;
                     <Typography>→</Typography>&nbsp;
                     <Typography>
-                      {formatConsumption(consoImpact.final)}{" "}
+                      {formatConsumption(consoImpact.final, {
+                        fractionDigits: 1,
+                      })}{" "}
                       {t("unit.watthour-per-day.kilo")}
                     </Typography>
                   </Box>
