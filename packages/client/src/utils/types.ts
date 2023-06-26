@@ -68,7 +68,7 @@ interface Player {
     lastName: string;
     roleId: number;
   };
-  profile: Profile;
+  profile: Profile | null;
   actions: PlayerActions[];
   hasFinishedStep: boolean;
   actionPointsLimitExceeded?: boolean;
