@@ -115,8 +115,9 @@ function ResourcesPerStepChart({
         yAxisUnitLabel: t("unit.watthour-per-day.kilo"),
         palettes: "production",
         useLinesAxis: true,
-        yAxisValueFormatter: formatProduction(),
-        yAxisTicksValueFormatter: formatProduction({ fractionDigits: 0 }),
+        yAxisValueFormatter: (value) => formatProduction(value),
+        yAxisTicksValueFormatter: (value) =>
+          formatProduction(value, { fractionDigits: 0 }),
       } as StackedBarsLine,
     ];
   }, [stepIdsToDisplay, getPersonaAtStep, t]);

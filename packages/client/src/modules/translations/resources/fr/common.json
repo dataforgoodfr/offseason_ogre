@@ -274,6 +274,9 @@
   "synthesis.player.general-section.budget.final-mean-budget": "Pour tenir votre scénario, vous devrez dépenser en moyenne <span class='text-em'>{{finalMeanTotalBudgetPerInhabitant}} par {{countryInhabitantName}}</span> d’ici à {{endYear}}, soit <span class='text-em'>{{finalMeanYearlyBudgetPerInhabitant}}</span>. Ceci représente un coût total de <span class='text-em'>{{finalTotalCountryBudget}}</span> pour {{countryNameWithArticle}} entre {{startYear}} et {{endYear}}.",
   "synthesis.player.general-section.carbon-footprint.title": "Empreinte carbone",
   "synthesis.player.general-section.carbon-footprint.final-mean-carbon-footprint": "Suite à vos choix, votre empreinte carbone est de <span class='text-em'>{{finalFootprint}}</span>, ce qui correspond à une baisse de <span class='text-em'>{{footprintReduction}}</span> par rapport au début de l’atelier.",
+  "synthesis.player.general-section.production.title": "Production",
+  "synthesis.player.general-section.production.final-renewable-production-increased": "À la fin de l’atelier, les choix fait en équipe permettent de produire <span class='text-em'>{{finalProduction}}</span> d’énergie décarbonée, soit une <span class='text-em'>augmentation de {{productionChange}}</span> par rapport à la production initiale.",
+  "synthesis.player.general-section.production.final-renewable-production-decreased": "À la fin de l’atelier, les choix fait en équipe permettent de produire <span class='text-em'>{{finalProduction}}</span> d’énergie décarbonée, soit une <span class='text-em'>réduction de {{productionChange}}</span> par rapport à la production initiale.",
   "synthesis.player.scenario-section.title": "Scénario",
   "synthesis.player.scenario-section.edit-help.description-1": "Donnez un nom à votre scénario pour le futur énergétique de la France.",
   "synthesis.player.scenario-section.edit-help.description-2": "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe.",
@@ -339,6 +342,7 @@
   "form.last-action.validated": "Validation",
 
   "unit.watthour-per-day.kilo": "kWh/jour",
+  "unit.watthour-per-day-per-person.kilo": "{{value}} kWh/jour et par personne",
   "unit.tonne.kilo": "kTonnes",
   "unit.tonne.mega": "MTonnes",
   "unit.budget.year": "Mrd€",

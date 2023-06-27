@@ -21,6 +21,7 @@ import { buildInitialPersona } from "../../persona/persona";
 import { WEB_SOCKET_URL } from "../../common/constants";
 import { usePlayStore } from "./usePlayStore";
 import { updateCollection } from "./playContext.utils";
+import { ProductionDatum } from "../../persona/production";
 
 export {
   RootPlayProvider,
@@ -49,6 +50,7 @@ interface TeamValues {
   stepToProduction: {
     [k: string]: number;
   };
+  productionCurrent: ProductionDatum[];
 }
 
 interface IPlayContext {
@@ -58,6 +60,7 @@ interface IPlayContext {
   players: Player[];
   productionActions: ProductionAction[];
   productionActionById: Record<number, ProductionAction>;
+  productionOfCountryToday: ProductionDatum[];
   teams: ITeam[];
   updateGame: (update: Partial<IGame>) => void;
   updatePlayerActions: (
@@ -108,6 +111,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     players,
     productionActions,
     productionActionById,
+    productionOfCountryToday,
     teams,
     setConsumptionActions,
     setGame,
@@ -211,6 +215,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         players,
         productionActions,
         productionActionById,
+        productionOfCountryToday,
         teams,
         updateGame,
         updatePlayerActions,
@@ -249,6 +254,11 @@ function useTeamValues(): {
   const teamValues = useMemo(() => {
     return teams.map((team) => {
       const playersInTeam = players.filter((p) => p.teamId === team.id);
+      const playerRepresentingTeam = playersInTeam[0] || null;
+      const personaRepresentingTeam =
+        personaByUserId[playerRepresentingTeam?.userId || -1] || null;
+      const currentPersonaRepresentingTeam =
+        personaRepresentingTeam?.getPersonaAtStep?.(game.step) || null;
 
       return {
         id: team.id,
@@ -301,6 +311,7 @@ function useTeamValues(): {
           playersInTeam,
           personaByUserId
         ),
+        productionCurrent: currentPersonaRepresentingTeam?.production || [],
       };
     });
     // TODO: check `personaByUserId` in deps doesn't trigger infinite renders.

@@ -21,6 +21,7 @@ export type {
   ProductionActionNames,
   ProductionActionType,
   ProductionActionUnit,
+  ProductionCarbonType,
   Profile,
   ProfileStatus,
   TeamAction,
@@ -204,10 +205,9 @@ interface ProductionActionPercentage extends ProductionActionCommon {
 }
 
 type ProductionActionType = "offshore" | "nuclear" | "terrestrial";
-
 type ProductionActionNames = typeof productionActionNames[number];
-
 type ProductionActionUnit = "area" | "percentage";
+type ProductionCarbonType = "carbonated" | "decarbonated";
 
 interface TeamAction {
   id: number;

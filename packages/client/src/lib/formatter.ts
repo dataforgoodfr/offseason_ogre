@@ -60,15 +60,14 @@ function formatPercentage(
   });
 }
 
-function formatProduction({
-  fractionDigits = 2,
-}: { fractionDigits?: number } = {}) {
-  return function (value?: number) {
-    return formatNumber(value, {
-      minimumFractionDigits: fractionDigits,
-      maximumFractionDigits: fractionDigits,
-    });
-  };
+function formatProduction(
+  value?: number,
+  { fractionDigits = 2 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 function formatResource({

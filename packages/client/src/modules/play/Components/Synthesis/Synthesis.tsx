@@ -1,8 +1,10 @@
-import { Box, styled } from "@mui/material";
+import { Box, styled, useTheme } from "@mui/material";
+import { useCallback, useMemo } from "react";
 import {
   formatBudget,
   formatCarbonFootprint,
   formatPercentage,
+  formatProduction,
 } from "../../../../lib/formatter";
 import { useTranslation } from "../../../translations";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
@@ -15,15 +17,106 @@ import { Typography } from "../../../common/components/Typography";
 import { TagNumber } from "../../../common/components/TagNumber";
 import { Tag } from "../../../common/components/Tag";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../../../common/constants";
+import { sumReducer } from "../../../../lib/array";
+import { ProductionDatum } from "../../../persona/production";
+
+const CARBON_FOOTPRINT_TONS_THRESHOLD = 2;
 
 export { SynthesisRecap };
 
 function SynthesisRecap({ team }: { team: ITeam }) {
   return (
     <Box display="flex" flexDirection="column" gap={2}>
+      <SynthesisProduction team={team} />
       <SynthesisBudget team={team} />
       <SynthesisCarbon team={team} />
     </Box>
+  );
+}
+
+function SynthesisProduction({ team }: { team: ITeam | null }) {
+  const { t } = useTranslation(["common", "countries"]);
+  const theme = useTheme();
+  const { productionOfCountryToday } = usePlay();
+  const { getTeamById } = useTeamValues();
+  const teamValues = getTeamById(team?.id);
+
+  const computeRenewableEnergyProduction = useCallback(
+    (production: ProductionDatum[] = []) =>
+      production
+        .filter((production) => production.carbonType === "decarbonated")
+        .map((production) => production.value)
+        .reduce(sumReducer, 0),
+    []
+  );
+
+  const initialRenewableEnergyProduction = useMemo(
+    () => computeRenewableEnergyProduction(productionOfCountryToday),
+    [productionOfCountryToday, computeRenewableEnergyProduction]
+  );
+  const finalRenewableEnergyProduction = useMemo(
+    () => computeRenewableEnergyProduction(teamValues?.productionCurrent),
+    [teamValues?.productionCurrent, computeRenewableEnergyProduction]
+  );
+
+  const renewableEnergyProductionChange = useMemo(
+    () =>
+      ((finalRenewableEnergyProduction - initialRenewableEnergyProduction) /
+        initialRenewableEnergyProduction) *
+      100,
+    [finalRenewableEnergyProduction, initialRenewableEnergyProduction]
+  );
+
+  return (
+    <CardStyled display="flex" flexDirection="column" gap={3} p={1}>
+      <Box display="flex" alignItems="center" gap={1}>
+        <Icon name="production" />
+        <Typography variant="h4">
+          {t("synthesis.player.general-section.production.title")}
+        </Typography>
+      </Box>
+
+      <Box>
+        <Typography
+          dangerouslySetInnerHTML={{
+            __html: t(
+              renewableEnergyProductionChange >= 0
+                ? "synthesis.player.general-section.production.final-renewable-production-increased"
+                : "synthesis.player.general-section.production.final-renewable-production-decreased",
+              {
+                finalProduction: t("unit.watthour-per-day-per-person.kilo", {
+                  value: formatProduction(finalRenewableEnergyProduction, {
+                    fractionDigits: 1,
+                  }),
+                }),
+                productionChange: t("unit.percentage", {
+                  value: formatPercentage(
+                    Math.abs(renewableEnergyProductionChange)
+                  ),
+                }),
+              }
+            ),
+          }}
+        ></Typography>
+      </Box>
+
+      <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
+        <Tag
+          icon={<Icon name="energy" sx={{ width: "1rem", height: "1rem" }} />}
+          color={theme.palette.energy.renewable}
+        >
+          {t(`energy.renewable`)}
+        </Tag>
+        <TagNumber
+          value={renewableEnergyProductionChange}
+          formatter={(value) =>
+            t("unit.percentage", {
+              value: formatPercentage(value),
+            })
+          }
+        />
+      </Box>
+    </CardStyled>
   );
 }
 
@@ -150,7 +243,13 @@ function SynthesisCarbon({ team }: { team: ITeam | null }) {
       </Box>
 
       <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
-        <Tag type={teamCarbonFootprintInTonPerYear <= 2 ? "success" : "error"}>
+        <Tag
+          type={
+            teamCarbonFootprintInTonPerYear <= CARBON_FOOTPRINT_TONS_THRESHOLD
+              ? "success"
+              : "error"
+          }
+        >
           {t("unit.carbon-per-year-per-person.mega", {
             value: formatCarbonFootprint(teamCarbonFootprintInTonPerYear),
             count: Math.ceil(teamCarbonFootprintInTonPerYear),
