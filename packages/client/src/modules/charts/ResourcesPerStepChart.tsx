@@ -112,7 +112,7 @@ function ResourcesPerStepChart({
         data,
         key: "total",
         label: t("graph.common.production"),
-        yAxisUnitLabel: t("unit.watthour-per-day.kilo"),
+        yAxisUnitLabel: t("unit.watthour-per-day-bare.kilo"),
         palettes: "production",
         useLinesAxis: true,
         yAxisValueFormatter: (value) => formatProduction(value),

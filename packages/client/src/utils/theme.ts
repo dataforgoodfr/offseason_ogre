@@ -30,6 +30,7 @@ let theme = createTheme({
       contrastText: blue,
     },
     energy: {
+      direct: "#4C677E",
       grey: "#6C6C6C",
       fossil: "#AF6A28",
       mixte: "#F9C74F",
@@ -133,6 +134,7 @@ declare module "@mui/material/Button" {
 }
 
 interface EnergyPalette {
+  direct: string;
   grey: string;
   fossil: string;
   mixte: string;
