@@ -8,6 +8,7 @@ export {
   computeNewProductionData,
   computeTeamActionStats,
   computeEnergyProduction,
+  isDecarbonatedEnergyProduction,
 };
 
 function computeTeamActionStats(
@@ -85,4 +86,8 @@ function computeNewProductionData(
   });
 
   return newProduction;
+}
+
+function isDecarbonatedEnergyProduction(production: ProductionDatum): boolean {
+  return production.carbonType === "decarbonated";
 }

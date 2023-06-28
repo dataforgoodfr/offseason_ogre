@@ -1,4 +1,4 @@
-import { Box, styled, useTheme } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { useCallback, useMemo } from "react";
 import {
   formatBudget,
@@ -25,6 +25,7 @@ import {
   isFossilEnergyConsumption,
   isGreyEnergyConsumption,
 } from "../../utils/consumption";
+import { isDecarbonatedEnergyProduction } from "../../utils/production";
 import TagEnergy from "../../../common/components/TagEnergy";
 
 const CARBON_FOOTPRINT_TONS_THRESHOLD = 2;
@@ -243,8 +244,7 @@ function SynthesisConsumption() {
 }
 
 function SynthesisProduction({ team }: { team: ITeam | null }) {
-  const { t } = useTranslation(["common", "countries"]);
-  const theme = useTheme();
+  const { t } = useTranslation();
   const { productionOfCountryToday } = usePlay();
   const { getTeamById } = useTeamValues();
   const teamValues = getTeamById(team?.id);
@@ -252,7 +252,7 @@ function SynthesisProduction({ team }: { team: ITeam | null }) {
   const computeRenewableEnergyProduction = useCallback(
     (production: ProductionDatum[] = []) =>
       production
-        .filter((production) => production.carbonType === "decarbonated")
+        .filter(isDecarbonatedEnergyProduction)
         .map((production) => production.value)
         .reduce(sumReducer, 0),
     []
@@ -305,16 +305,11 @@ function SynthesisProduction({ team }: { team: ITeam | null }) {
               }
             ),
           }}
-        ></Typography>
+        />
       </Box>
 
       <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
-        <Tag
-          icon={<Icon name="energy" sx={{ width: "1rem", height: "1rem" }} />}
-          color={theme.palette.energy.renewable}
-        >
-          {t(`energy.renewable`)}
-        </Tag>
+        <TagEnergy energyType="renewable" />
         <TagNumber
           value={renewableEnergyProductionChange}
           formatter={(value) =>
@@ -392,7 +387,7 @@ function SynthesisBudget({ team }: { team: ITeam | null }) {
               }
             ),
           }}
-        ></Typography>
+        />
       </Box>
 
       <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
@@ -447,7 +442,7 @@ function SynthesisCarbon({ team }: { team: ITeam | null }) {
               }
             ),
           }}
-        ></Typography>
+        />
       </Box>
 
       <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
