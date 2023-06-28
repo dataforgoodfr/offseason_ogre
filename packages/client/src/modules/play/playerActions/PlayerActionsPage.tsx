@@ -1,15 +1,14 @@
 import { useTheme } from "@mui/material";
 import { ValidateActions } from "./Validation";
-import { useCurrentStep, useMyTeam } from "../context/playContext";
+import { useCurrentStep } from "../context/playContext";
 import { PlayBox } from "../Components";
 import { TeamActionsHeader } from "./TeamActionsHeader";
 import { TeamActionsContent } from "./TeamActionsContent";
-import { SynthesisScenarioName } from "./SynthesisContent";
 import { PlayerActionsContent } from "./PlayerActionsContent";
 import { PlayerActionsHeader } from "./PlayerActionsHeader";
-import { SynthesisBudget, SynthesisCarbon } from "../Components/Synthesis";
 import { PlayerHeaderGrid } from "../PlayerPersona";
 import { PlayerPageLayout } from "../PlayLayout";
+import { SynthesisPage } from "./SynthesisPage";
 
 export { PlayerActionsPage };
 
@@ -21,30 +20,13 @@ function PlayerActionsPage() {
   }
 
   if (currentStep.id === "final-situation") {
-    return <SynthesisLayout />;
+    return <SynthesisPage />;
   }
 
   return currentStep.type === "production" ? (
     <TeamActionsLayout />
   ) : (
     <PlayerActionsLayout />
-  );
-}
-
-function SynthesisLayout() {
-  const team = useMyTeam();
-
-  return (
-    <PlayerPageLayout
-      header={<PlayerHeaderGrid />}
-      body={
-        <PlayBox display="flex" flexDirection="column" gap={4}>
-          <SynthesisScenarioName />
-          <SynthesisBudget team={team} />
-          <SynthesisCarbon team={team} />
-        </PlayBox>
-      }
-    />
   );
 }
 

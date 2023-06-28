@@ -50,7 +50,7 @@ const indexArrayBy = <
 >(
   arr: T[],
   key: U
-): Record<T[U], T> => {
+): Record<KeyUnknownGuard<T[U]>, T> => {
   return Object.fromEntries(arr.map((item) => [get(item, key), item]));
 };
 
@@ -83,10 +83,12 @@ type DeepPathRecursive<
 
 type TemplatableTypes = string | number | bigint | boolean | null | undefined;
 
-type Head<T extends any[]> = T extends [infer THead, ...infer _]
+type Head<T extends unknown[]> = T extends [infer THead, ...infer _]
   ? THead
   : never;
 
-type Tail<T extends any[]> = T extends [infer _, ...infer TTail]
+type Tail<T extends unknown[]> = T extends [infer _, ...infer TTail]
   ? TTail
   : never;
+
+type KeyUnknownGuard<T> = T extends string | number | symbol ? T : any;

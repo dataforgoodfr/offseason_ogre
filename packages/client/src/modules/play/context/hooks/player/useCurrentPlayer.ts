@@ -29,10 +29,15 @@ function useCurrentPlayer() {
       ),
     [game.step, team.actions, productionActionById]
   );
+  const personalization = useMemo(
+    () => player?.profile?.personalization || {},
+    [player?.profile?.personalization]
+  );
 
   return {
     player,
     profile: player.profile,
+    personalization,
     playerActions: player.actions,
     actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
     teamActions: team.actions,
