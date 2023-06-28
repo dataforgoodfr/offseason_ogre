@@ -7,9 +7,7 @@ export { usePersona };
 
 function usePersona() {
   const { consumptionActionById, game, productionActionById } = usePlay();
-  const { player, playerActions, teamActions } = useCurrentPlayer();
-
-  const personalization = player.profile.personalization;
+  const { personalization, playerActions, teamActions } = useCurrentPlayer();
 
   const initialPersona = buildInitialPersona(
     personalization,

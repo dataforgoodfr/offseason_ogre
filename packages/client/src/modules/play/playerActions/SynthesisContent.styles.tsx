@@ -3,7 +3,9 @@ import { styled } from "@mui/material/styles";
 
 export { ScenarioNameTextField };
 
-const ScenarioNameTextField = styled(TextField)(({ theme }) => ({
+const ScenarioNameTextField = styled(TextField)(() => ({
+  flexGrow: 1,
+  width: "100%",
   "& label": {
     color: "white",
   },
@@ -15,13 +17,13 @@ const ScenarioNameTextField = styled(TextField)(({ theme }) => ({
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: theme.palette.secondary.main,
+      borderColor: "white",
     },
     "&:hover fieldset": {
-      borderColor: theme.palette.secondary.main,
+      borderColor: "white",
     },
     "&.Mui-focused fieldset": {
-      borderColor: theme.palette.secondary.main,
+      borderColor: "white",
     },
   },
   "& .MuiInputBase-input": {

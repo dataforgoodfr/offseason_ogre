@@ -17,6 +17,8 @@
   "cta.lock-forms": "Verrouiller les formulaires",
   "cta.no": "Non",
   "cta.open-info-card": "Ouvrir la carte",
+  "cta.play-game": "Jouer",
+  "cta.prepare-game": "Préparer l'atelier",
   "cta.read-synthesis": "Voir la synthèse",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
   "cta.send-magic-link": "Envoyez moi un lien de connexion",
@@ -31,6 +33,11 @@
   "dialog.step.start": "Voulez-vous démarrer l'étape {{stepNumber}} ?",
   "dialog.step.yes": "Continuer",
   "dialog.step.no": "Annuler",
+
+  "energy.fossil": "Énergie fossile",
+  "energy.grey": "Énergie grise",
+  "energy.renewable": "Énergie décarbonée",
+  "energy.mixte": "Énergie mixte",
 
   "message.error.admin.global.UNEXPECTED": "L'opération n'a pas pu être effectuée",
   "message.error.signup.USER_ALREADY_EXISTS": "Cette adresse mail est déjà associée à un compte.",
@@ -47,6 +54,7 @@
   "message.success.copied": "Copiée !",
   "message.success.draft-saved": "Brouillon sauvegardé",
   "message.success.form-validated": "Formulaire validé",
+  "message.success.game-joined": "Vous avez rejoint l'atelier avec succès",
   "message.success.sign-in.user-authenticated": "Connexion réussie",
 
   "modal.remove-player.title": "Voulez-vous supprimer le joueur ?",
@@ -87,6 +95,10 @@
   "page.login.description": "Si vous avez déjà un compte :",
   "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
   "page.login.signup-section.cta": "Créer un compte",
+  "page.games-list.title": "Mes ateliers",
+  "page.games-list.finished-list.title": "Ateliers terminés",
+  "page.games-list.ongoing-list.title": "Ateliers en cours",
+  "page.games-list.upcoming-list.title": "Prochains ateliers",
   "page.player.statistics.tabs.energy-balance.label": "Équilibre énergétique",
   "page.player.statistics.tabs.energy-balance.graphs.details.title": "Décomposition de la pile {{stackName}}",
   "page.player.statistics.tabs.materials.label": "Matériaux",
@@ -264,12 +276,18 @@
   "step.production-3.name": "Étape 5",
   "step.production-3.title": "Choix de production 3",
 
-  "synthesis.player.scenario-section.title": "Nom du scénario",
+  "synthesis.player.general-section.title": "Général",
+  "synthesis.player.scenario-section.title": "Scénario",
   "synthesis.player.scenario-section.edit-help.description-1": "Donnez un nom à votre scénario pour le futur énergétique de la France.",
   "synthesis.player.scenario-section.edit-help.description-2": "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe.",
+  "synthesis.player.most-impactful-actions-section.action-performed": "Action effectuée",
+  "synthesis.player.most-impactful-actions-section.action-missed": "Action ratée",
+  "synthesis.player.most-impactful-actions-section.description": "Voici les 5 actions qui avaient le plus d’impact en considérant votre situation initiale.",
+  "synthesis.player.most-impactful-actions-section.title": "Actions à fort impact",
 
   "game.status.draft": "Brouillon",
   "game.status.finished": "Terminé",
+  "game.status.not-started": "Pas démarré",
   "game.status.playing": "En cours",
   "game.status.ready": "Prêt",
 
@@ -292,10 +310,10 @@
   "graph.energy.consumption.title": "Évolution des consommations entre équipes",
   "graph.energy.production.title": "Évolution des productions entre équipes",
   "graph.energy.total": "Total",
-  "graph.energy.fossil": "Energie fossile",
-  "graph.energy.grey": "Energie grise",
-  "graph.energy.renewable": "Energie décarbonée",
-  "graph.energy.mixte": "Energie mixte",
+  "graph.energy.fossil": "Énergie fossile",
+  "graph.energy.grey": "Énergie grise",
+  "graph.energy.renewable": "Énergie décarbonée",
+  "graph.energy.mixte": "Énergie mixte",
   "graph.energy.offshore": "Production offshore",
   "graph.energy.terrestrial": "Production terrestre",
   "graph.energy.nuclear": "Nucléaire",
@@ -330,5 +348,6 @@
   "unit.budget.year": "Mrd€",
   "unit.budget.day": "€/j",
   "unit.carbon.year": "T/an",
-  "unit.carbon.day": "kg/j"
+  "unit.carbon.day": "kg/j",
+  "unit.percentage": "{{value}}%"
 }

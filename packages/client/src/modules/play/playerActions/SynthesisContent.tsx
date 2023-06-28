@@ -1,6 +1,5 @@
 import Button from "@mui/material/Button";
 import { Box, IconButton } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import { useEffect, useState } from "react";
 import { Typography } from "../../common/components/Typography";
 import { useMyTeam, usePlay } from "../context/playContext";
@@ -8,6 +7,7 @@ import { Icon } from "../../common/components/Icon";
 import { Dialog } from "../../common/components/Dialog";
 import { ScenarioNameTextField } from "./SynthesisContent.styles";
 import { useTranslation } from "../../translations/useTranslation";
+import { FlexRow } from "../../common/components/Flex";
 
 export { SynthesisScenarioName };
 
@@ -18,12 +18,12 @@ function SynthesisScenarioName() {
   const isTeamEditable = !game.isGameFinished;
 
   return (
-    <Box display="flex" flexDirection="column" pr={4} gap={3}>
+    <Box display="flex" flexDirection="column" gap={2}>
       <Typography sx={{ fontSize: "20px", fontWeight: "600" }}>
-        <Icon name="team" /> {t("synthesis.player.scenario-section.title")}
+        <Icon name="scenario" /> {t("synthesis.player.scenario-section.title")}
         {isTeamEditable && <ScenarioNameEditionHelp />}
       </Typography>
-      <Box display="flex" flexDirection="column" gap={3} pl={4}>
+      <Box display="flex" flexDirection="column" gap={3}>
         {isTeamEditable ? <ScenarioNameEditable /> : <ScenarioNameReadonly />}
       </Box>
     </Box>
@@ -59,7 +59,6 @@ function ScenarioNameEditionHelp() {
 }
 
 function ScenarioNameEditable() {
-  const theme = useTheme();
   const team = useMyTeam();
   const { t } = useTranslation();
 
@@ -68,6 +67,10 @@ function ScenarioNameEditable() {
   const [localName, setLocalName] = useState(team?.scenarioName);
 
   const handleValidateScenarioName = () => {
+    if (!localName) {
+      return;
+    }
+
     updateTeam({ scenarioName: localName });
   };
 
@@ -78,30 +81,25 @@ function ScenarioNameEditable() {
   useEffect(() => setLocalName(team?.scenarioName), [team?.scenarioName]);
 
   return (
-    <>
-      <ScenarioNameTextField
-        sx={{ textAlign: "center" }}
-        id="outlined-basic"
-        label={t("form.field.scenario-name.label")}
-        variant="outlined"
-        value={localName}
-        onChange={handleChange}
-      />
+    <FlexRow gap={2}>
+      <Box flexGrow={1}>
+        <ScenarioNameTextField
+          sx={{ textAlign: "center" }}
+          id="outlined-basic"
+          label={t("form.field.scenario-name.label")}
+          value={localName}
+          onChange={handleChange}
+        />
+      </Box>
       <Button
-        sx={{
-          textAlign: "center",
-          border: `2px solid ${theme.palette.secondary.main}`,
-        }}
-        color="primary"
+        color="secondary"
         variant="contained"
-        disabled={!localName}
         onClick={handleValidateScenarioName}
-        type="button"
       >
         <Icon name="check-doubled" />
         <Typography ml={1}>{t("cta.validate-team-choice")}</Typography>
       </Button>
-    </>
+    </FlexRow>
   );
 }
 
