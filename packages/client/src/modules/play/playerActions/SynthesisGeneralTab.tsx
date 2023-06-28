@@ -1,5 +1,5 @@
 import { PlayBox } from "../Components";
-import { SynthesisRecap } from "../Components/Synthesis";
+import SynthesisRecapForPlayer from "../Components/Synthesis/SynthesisRecapForPlayer";
 import { useCurrentPlayer } from "../context/hooks/player";
 
 export { SynthesisGeneralTab };
@@ -9,7 +9,7 @@ function SynthesisGeneralTab() {
 
   return (
     <PlayBox display="flex" flexDirection="column" gap={4}>
-      <SynthesisRecap team={team} />
+      <SynthesisRecapForPlayer team={team} />
     </PlayBox>
   );
 }

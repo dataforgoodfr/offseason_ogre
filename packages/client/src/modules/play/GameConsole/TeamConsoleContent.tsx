@@ -17,8 +17,8 @@ import {
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { sumAllValues } from "../../persona";
-import { SynthesisRecap } from "../Components/Synthesis";
 import { useMemo } from "react";
+import SynthesisRecapForTeacher from "../Components/Synthesis/SynthesisRecapForTeacher";
 
 export { TeamConsoleContent };
 
@@ -54,7 +54,7 @@ function TeamConsoleContent({ team }: { team: ITeam }) {
 
       {isSynthesisStep && (
         <PlayBox>
-          <SynthesisRecap team={team} />
+          <SynthesisRecapForTeacher team={team} />
         </PlayBox>
       )}
 
