@@ -20,7 +20,7 @@ const CustomDivider = styled(Divider)(({ theme }) => ({
     width: "100%",
   },
   "&::before, &::after": {
-    borderColor: theme.palette.secondary.light,
+    borderColor: "#ffffff",
   },
   [theme.breakpoints.down("sm")]: {
     ".MuiDivider-wrapper": {
