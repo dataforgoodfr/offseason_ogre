@@ -1,16 +1,16 @@
-import { PlayBox } from "../Components";
-import { Typography } from "../../common/components/Typography";
+import { PlayBox } from "../../Components";
+import { Typography } from "../../../common/components/Typography";
 import {
   ImpactfulAction,
   useMostImpactfulActions,
-} from "../context/hooks/player";
+} from "../../context/hooks/player";
 import { Box, Tooltip, styled, useTheme } from "@mui/material";
-import { useTranslation } from "../../translations";
-import { formatConsumption, formatPercentage } from "../../../lib/formatter";
-import { Icon } from "../../common/components/Icon";
-import { Card } from "../../common/components/Card";
-import { TagNumber } from "../../common/components/TagNumber";
-import TagEnergy from "../../common/components/TagEnergy";
+import { useTranslation } from "../../../translations";
+import { formatConsumption, formatPercentage } from "../../../../lib/formatter";
+import { Icon } from "../../../common/components/Icon";
+import { Card } from "../../../common/components/Card";
+import { TagNumber } from "../../../common/components/TagNumber";
+import TagEnergy from "../../../common/components/TagEnergy";
 
 export { SynthesisMostImpactfulActionsTab };
 

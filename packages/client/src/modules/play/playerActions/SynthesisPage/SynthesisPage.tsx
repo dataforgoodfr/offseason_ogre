@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import { PlayBox } from "../Components";
+import { PlayBox } from "../../Components";
 import { SynthesisScenarioName } from "./SynthesisContent";
-import { PlayerHeaderGrid } from "../PlayerPersona";
-import { PlayerPageLayout } from "../PlayLayout";
-import { Tabs } from "../../common/components/Tabs";
-import { useTranslation } from "../../translations/useTranslation";
+import { PlayerHeaderGrid } from "../../PlayerPersona";
+import { PlayerPageLayout } from "../../PlayLayout";
+import { Tabs } from "../../../common/components/Tabs";
+import { useTranslation } from "../../../translations/useTranslation";
 import { SynthesisGeneralTab } from "./SynthesisGeneralTab";
 import { SynthesisMostImpactfulActionsTab } from "./SynthesisMostImpactfulActionsTab";
 
