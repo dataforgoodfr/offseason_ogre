@@ -1,16 +1,8 @@
 import { trim } from "lodash";
-import { Link } from "react-router-dom";
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, Grid, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ErrorAlert, SuccessAlert } from "../../alert";
+import { ErrorAlert } from "../../alert";
 import { PlayBox } from "../Components";
 import {
   CustomContainer,
@@ -18,11 +10,13 @@ import {
   CustomPaper,
   GameItemHost,
   JoinGameInputWrapper,
-} from "./styles";
+} from "./MyGames.styles";
 import { IGame } from "../../../utils/types";
 import { handleApiError, http } from "../../../utils/request";
 import { useTranslation } from "../../translations/useTranslation";
-import { Icon } from "../../common/components/Icon";
+import { Typography } from "../../common/components/Typography";
+import { useAlerts } from "../../alert/AlertProvider";
+import { Button } from "../../common/components/Button";
 
 export { MyGames };
 
@@ -31,10 +25,12 @@ interface Registration {
 }
 
 function MyGames() {
+  const { t } = useTranslation();
+
   return (
     <CustomContainer maxWidth="lg">
-      <Typography variant="h3" color="secondary">
-        Mes ateliers
+      <Typography variant="h3" color="#ffffff">
+        {t("page.games-list.title")}
       </Typography>
       <CustomDivider>
         <JoinGame />
@@ -59,52 +55,37 @@ function GameItem({ game }: { game: IGame }) {
         {game.status === "draft" && (
           <Grid item display="flex" xs={2}>
             <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
+              iconName="settings"
               to={`/play/games/${game.id}/personalize/choice`}
-              sx={{ ml: "auto" }}
             >
-              <Icon name="settings" sx={{ mr: 2 }} />
-              Préparer l'atelier
+              {t("cta.prepare-game")}
             </Button>
           </Grid>
         )}
         {game.status === "ready" && (
           <Grid item display="flex" xs={2}>
-            <Button
-              variant="contained"
-              disabled
-              sx={{ ml: "auto", backgroundColor: "#AFAFAF !important" }}
-            >
-              <Icon name="access-time" sx={{ mr: 2, color: "white" }} />
-              <Typography sx={{ color: "white" }}>Pas démarré</Typography>
+            <Button disabled iconName="access-time">
+              {t("game.status.not-started")}
             </Button>
           </Grid>
         )}
         {game.status === "playing" && (
           <Grid item display="flex" xs={2}>
             <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
+              iconName="videogame-controller"
               to={`/play/games/${game.id}/persona`}
-              sx={{ ml: "auto" }}
             >
-              <Icon name="videogame-controller" sx={{ mr: 2 }} /> Jouer
+              {t("cta.play-game")}
             </Button>
           </Grid>
         )}
         {game.status === "finished" && (
           <Grid item display="flex" xs={2}>
             <Button
-              component={Link}
-              color="secondary"
-              variant="contained"
+              iconName="synthesis"
               to={`/play/games/${game.id}/persona/actions`}
-              sx={{ ml: "auto" }}
             >
-              <Icon name="synthesis" sx={{ mr: 2 }} /> {t("cta.read-synthesis")}
+              {t("cta.read-synthesis")}
             </Button>
           </Grid>
         )}
@@ -114,6 +95,8 @@ function GameItem({ game }: { game: IGame }) {
 }
 
 function MyGamesList() {
+  const { t } = useTranslation();
+
   const query = useQuery("/api/games/played-games", () => {
     return http.get<undefined, { data: { games: any[] } }>(
       "/api/games/played-games"
@@ -135,10 +118,11 @@ function MyGamesList() {
   return (
     <Box sx={{ mt: 4 }}>
       {currentGames.length > 0 &&
-        buildGameList(currentGames, "Ateliers en cours")}
-      {draftGames.length > 0 && buildGameList(draftGames, "Prochains ateliers")}
+        buildGameList(currentGames, t("page.games-list.ongoing-list.title"))}
+      {draftGames.length > 0 &&
+        buildGameList(draftGames, t("page.games-list.upcoming-list.title"))}
       {finishedGames.length > 0 &&
-        buildGameList(finishedGames, "Ateliers terminés")}
+        buildGameList(finishedGames, t("page.games-list.finished-list.title"))}
     </Box>
   );
 }
@@ -147,7 +131,7 @@ function buildGameList(games: IGame[], title: string) {
   return (
     <>
       <Box>
-        <Typography textAlign={"center"} variant="h5" color="secondary" mt={6}>
+        <Typography textAlign={"center"} variant="h5" color="#ffffff" mt={6}>
           {title}
         </Typography>
       </Box>
@@ -161,12 +145,13 @@ function buildGameList(games: IGame[], title: string) {
 }
 
 function JoinGame() {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       gameCode: "",
     },
   });
   const { t } = useTranslation();
+  const { enqueueAlert } = useAlerts();
 
   const queryClient = useQueryClient();
 
@@ -182,14 +167,26 @@ function JoinGame() {
       onSuccess: async (res) => {
         queryClient.invalidateQueries("/api/games/played-games");
         queryClient.invalidateQueries(`/api/games/${res.data.gameId}/players`);
+        setValue("gameCode", "");
+        enqueueAlert({
+          severity: "success",
+          message: t("message.success.game-joined"),
+        });
       },
     }
   );
 
-  const onValid = (registration: Registration) => mutation.mutate(registration);
+  const onSubmit = (registration: Registration) => {
+    if (!registration.gameCode) {
+      return;
+    }
+
+    mutation.mutate(registration);
+  };
+
   return (
     <CustomPaper>
-      <form onSubmit={handleSubmit(onValid)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <JoinGameInputWrapper>
           <Controller
             control={control}
@@ -206,7 +203,11 @@ function JoinGame() {
               />
             )}
           />
-          <Button type="submit" variant="contained">
+          <Button
+            htmlType="submit"
+            iconName="launch"
+            loading={mutation.isLoading}
+          >
             {t("cta.join-game")}
           </Button>
         </JoinGameInputWrapper>
@@ -223,7 +224,6 @@ function JoinGame() {
           })}
         />
       )}
-      {mutation.isSuccess && <SuccessAlert />}
     </CustomPaper>
   );
 }

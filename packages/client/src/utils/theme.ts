@@ -66,6 +66,14 @@ let theme = createTheme({
     backgrounds: {
       page: "#577590",
     },
+    components: {
+      button: {
+        disabled: {
+          backgroundColor: "#efefef",
+          color: "#adadad",
+        },
+      },
+    },
   },
   variables: {
     headerHeight: {
@@ -104,6 +112,14 @@ declare module "@mui/material/styles" {
     };
     backgrounds: {
       page: string;
+    };
+    components: {
+      button: {
+        disabled: {
+          backgroundColor: string;
+          color: string;
+        };
+      };
     };
   }
 
