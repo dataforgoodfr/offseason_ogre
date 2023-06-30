@@ -4,6 +4,7 @@ import { availableActions } from "../modules/play/playerActions/constants/action
 import { User } from "../modules/users/types";
 
 export type {
+  AchievementName,
   IGame,
   IGameWithTeacher,
   IGameWithTeams,
@@ -235,3 +236,20 @@ type ProductionTypes =
   | "nuclear";
 
 type UnwrapArray<T> = T extends Array<infer U> ? U : T;
+
+type AchievementName =
+  | "choseToInsulateHome"
+  | "choseToKeepCarForLongTime"
+  | "choseToReduceComfortTemperature"
+  | "choseToStopMeat"
+  | "choseToStopPlane"
+  | "choseToSwitchToElectricCar"
+  | "choseToSwitchToTinyHome"
+  | "directEnergyConsumptionLessThanHalfCountryMean"
+  | "noFossilInDirectEnergyConsumption"
+  | "consumptionAndProductionBalanced"
+  | "gameFinished"
+  | "nuclearProductionCredible"
+  | "nuclearProductionExcessive"
+  | "offshoreWindTurbineProductionCredible"
+  | "onshoreWindTurbineProductionCredible";

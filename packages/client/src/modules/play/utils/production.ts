@@ -8,6 +8,7 @@ export {
   computeNewProductionData,
   computeTeamActionStats,
   computeEnergyProduction,
+  computePowerNeed,
   isDecarbonatedEnergyProduction,
 };
 
@@ -18,7 +19,7 @@ function computeTeamActionStats(
   const productionAction = productionActionById[teamAction.actionId];
   // TODO: see with Gregory for renaming (should be `power` instead)?
   const productionKwh = computeEnergyProduction(
-    productionActionById[teamAction.actionId],
+    productionAction,
     teamAction.value
   );
   // TODO: see with Gregory for renaming (should be `production` instead)?
@@ -55,6 +56,18 @@ function computeEnergyProduction(
   throw new Error(
     `Energy unit ${(productionAction as any).unit} not supported`
   );
+}
+
+/**
+ * Compute the power need for a given production action.
+ */
+function computePowerNeed(
+  productionAction: ProductionAction,
+  /** Value depending if the energy produced is per unit of area or a percentage of the maximum energy potential. */
+  value: number
+): number {
+  const productionKwh = computeEnergyProduction(productionAction, value);
+  return productionKwh * productionAction.powerNeededKWh;
 }
 
 function computeNewProductionData(

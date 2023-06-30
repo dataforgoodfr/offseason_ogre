@@ -277,6 +277,8 @@
   "step.production-3.name": "Étape 5",
   "step.production-3.title": "Choix de production 3",
 
+  "synthesis.player.achievements-section.description": "Vos actions vous ont permis de remporter de nombreux succès !",
+  "synthesis.player.achievements-section.title": "Succès",
   "synthesis.player.general-section.title": "Général",
   "synthesis.player.general-section.budget.title": "Budget",
   "synthesis.player.general-section.budget.final-mean-budget": "Pour tenir votre scénario, vous devrez dépenser en moyenne <span class='text-em'>{{finalMeanTotalBudgetPerInhabitant}} par {{countryInhabitantName}}</span> d’ici à {{endYear}}, soit <span class='text-em'>{{finalMeanYearlyBudgetPerInhabitant}}</span>. Ceci représente un coût total de <span class='text-em'>{{finalTotalCountryBudget}}</span> pour {{countryNameWithArticle}} entre {{startYear}} et {{endYear}}.",
