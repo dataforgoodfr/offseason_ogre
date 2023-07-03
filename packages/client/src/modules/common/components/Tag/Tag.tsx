@@ -43,8 +43,8 @@ const TagStyled = styled("span")(({ theme }) => {
       backgroundColor: theme.palette.status.error,
     },
     "&.secondary": {
-      backgroundColor: "#efefef",
-      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.components.tag.secondary.backgroundColor,
+      color: theme.palette.components.tag.secondary.color,
     },
   };
 });

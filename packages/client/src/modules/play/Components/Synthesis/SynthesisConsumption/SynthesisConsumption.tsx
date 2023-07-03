@@ -16,7 +16,7 @@ import {
   isFossilEnergyConsumption,
   isGreyEnergyConsumption,
 } from "../../../utils/consumption";
-import TagEnergy from "../../../../common/components/TagEnergy";
+import { TagEnergy } from "../../../../common/components/TagEnergy";
 import { CardStyled } from "../Synthesis.common.styles";
 
 export default SynthesisConsumption;

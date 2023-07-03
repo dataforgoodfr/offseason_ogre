@@ -1,1 +1,1 @@
-export { default } from "./TagEnergy";
+export { TagEnergy } from "./TagEnergy";
