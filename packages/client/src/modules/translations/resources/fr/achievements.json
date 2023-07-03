@@ -92,14 +92,14 @@
 
   "achievement.offshoreWindTurbineProductionCredible.title": "Semeur de vent en mer !",
   "achievement.offshoreWindTurbineProductionCredible.display-order": 201,
-  "achievement.offshoreWindTurbineProductionCredible.description": "Votre hypothèse pour l’éolien maritime en 2050 est crédible.",
+  "achievement.offshoreWindTurbineProductionCredible.description": "Votre hypothèse pour l’éolien maritime en {{targetYear}} est crédible.",
   "achievement.offshoreWindTurbineProductionCredible.iconSrc": "offshoreWindTurbineProductionCredible.svg",
   "achievement.offshoreWindTurbineProductionCredible.iconAlt": "",
   "achievement.offshoreWindTurbineProductionCredible.type": "production",
 
   "achievement.onshoreWindTurbineProductionCredible.title": "Semeur de vent sur terre !",
   "achievement.onshoreWindTurbineProductionCredible.display-order": 200,
-  "achievement.onshoreWindTurbineProductionCredible.description": "Votre hypothèse pour l’éolien terrestre en 2050 est crédible.",
+  "achievement.onshoreWindTurbineProductionCredible.description": "Votre hypothèse pour l’éolien terrestre en {{targetYear}} est crédible.",
   "achievement.onshoreWindTurbineProductionCredible.iconSrc": "onshoreWindTurbineProductionCredible.svg",
   "achievement.onshoreWindTurbineProductionCredible.iconAlt": "",
   "achievement.onshoreWindTurbineProductionCredible.type": "production"

@@ -3,6 +3,7 @@ import { Box, styled } from "@mui/material";
 import { useTranslation } from "../../../translations";
 import { Card } from "../../../common/components/Card";
 import { AchievementName } from "../../../../utils/types";
+import { ENERGY_SHIFT_TARGET_YEAR } from "../../../common/constants";
 
 export { AchievementCard };
 
@@ -39,7 +40,9 @@ function AchievementCard({
           {t(`achievements:achievement.${achievementName}.title`)}
         </Typography>
         <Typography>
-          {t(`achievements:achievement.${achievementName}.description`)}
+          {t(`achievements:achievement.${achievementName}.description`, {
+            targetYear: ENERGY_SHIFT_TARGET_YEAR,
+          })}
         </Typography>
       </Box>
     </AchievementCardHost>
