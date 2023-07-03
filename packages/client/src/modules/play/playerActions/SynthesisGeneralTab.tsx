@@ -1,16 +1,15 @@
-import { useMyTeam } from "../context/playContext";
 import { PlayBox } from "../Components";
-import { SynthesisBudget, SynthesisCarbon } from "../Components/Synthesis";
+import SynthesisRecapForPlayer from "../Components/Synthesis/SynthesisRecapForPlayer";
+import { useCurrentPlayer } from "../context/hooks/player";
 
 export { SynthesisGeneralTab };
 
 function SynthesisGeneralTab() {
-  const team = useMyTeam();
+  const { team } = useCurrentPlayer();
 
   return (
     <PlayBox display="flex" flexDirection="column" gap={4}>
-      <SynthesisBudget team={team} />
-      <SynthesisCarbon team={team} />
+      <SynthesisRecapForPlayer team={team} />
     </PlayBox>
   );
 }

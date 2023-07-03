@@ -12,12 +12,7 @@ import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
-import {
-  useCurrentStep,
-  useMyTeam,
-  usePlay,
-  useTeamValues,
-} from "../context/playContext";
+import { useCurrentStep, usePlay, useTeamValues } from "../context/playContext";
 import { sumAllValues } from "../../persona";
 import { Icon } from "../../common/components/Icon";
 import {
@@ -28,7 +23,7 @@ import {
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
 import { useTranslation } from "../../translations/useTranslation";
-import { usePersona } from "../context/hooks/player";
+import { useCurrentPlayer, usePersona } from "../context/hooks/player";
 
 export { PlayerHeader, Header, Actions };
 
@@ -42,7 +37,7 @@ function PlayerHeader() {
     teamValues.map((value) => [value.id, value])
   );
 
-  const myTeam = useMyTeam();
+  const { team: myTeam } = useCurrentPlayer();
   if (user === null) {
     throw new Error("User must be authentified");
   }

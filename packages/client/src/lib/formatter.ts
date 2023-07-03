@@ -12,12 +12,24 @@ export {
   formatUserName,
 };
 
-function formatBudget(value?: number) {
-  return value?.toFixed(2) || "";
+function formatBudget(
+  value?: number,
+  { fractionDigits = 2 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
-function formatCarbonFootprint(value?: number) {
-  return value?.toFixed(2) || "";
+function formatCarbonFootprint(
+  value?: number,
+  { fractionDigits = 2 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 function formatPoints(value?: number) {
@@ -48,15 +60,14 @@ function formatPercentage(
   });
 }
 
-function formatProduction({
-  fractionDigits = 2,
-}: { fractionDigits?: number } = {}) {
-  return function (value?: number) {
-    return formatNumber(value, {
-      minimumFractionDigits: fractionDigits,
-      maximumFractionDigits: fractionDigits,
-    });
-  };
+function formatProduction(
+  value?: number,
+  { fractionDigits = 2 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 function formatResource({

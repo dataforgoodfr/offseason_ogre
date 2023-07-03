@@ -1,8 +1,15 @@
+import { indexArrayBy } from "../../../lib/array";
+import { fromEntries } from "../../../lib/object";
 import { ProductionAction, TeamAction } from "../../../utils/types";
 import { Persona } from "../../persona/persona";
-import { ProductionDatum } from "../../persona/production";
+import { PRODUCTION, ProductionDatum } from "../../persona/production";
 
-export { computeNewProductionData, computeTeamActionStats };
+export {
+  computeNewProductionData,
+  computeTeamActionStats,
+  computeEnergyProduction,
+  isDecarbonatedEnergyProduction,
+};
 
 function computeTeamActionStats(
   teamAction: TeamAction,
@@ -10,7 +17,10 @@ function computeTeamActionStats(
 ) {
   const productionAction = productionActionById[teamAction.actionId];
   // TODO: see with Gregory for renaming (should be `power` instead)?
-  const productionKwh = computeProduction(teamAction, productionActionById);
+  const productionKwh = computeEnergyProduction(
+    productionActionById[teamAction.actionId],
+    teamAction.value
+  );
   // TODO: see with Gregory for renaming (should be `production` instead)?
   const powerNeedGw = productionKwh * productionAction.powerNeededKWh;
   const cost = productionKwh * productionAction.lcoe;
@@ -30,16 +40,16 @@ function computeTeamActionStats(
   };
 }
 
-function computeProduction(
-  teamAction: TeamAction,
-  productionActionById: Record<number, ProductionAction>
+function computeEnergyProduction(
+  productionAction: ProductionAction,
+  /** Value depending if the energy produced is per unit of area or a percentage of the maximum energy potential. */
+  value: number
 ): number {
-  const productionAction = productionActionById[teamAction.actionId];
   if (productionAction.unit === "area") {
-    return teamAction.value * productionAction.areaEnergy;
+    return value * productionAction.areaEnergy;
   }
   if (productionAction.unit === "percentage") {
-    return (teamAction.value / 100) * productionAction.totalEnergy;
+    return (value / 100) * productionAction.totalEnergy;
   }
 
   throw new Error(
@@ -52,17 +62,21 @@ function computeNewProductionData(
   productionActionById: Record<number, ProductionAction>,
   persona: Persona
 ) {
-  const productionNameToNewProduction = Object.fromEntries(
+  const productionByName = indexArrayBy(PRODUCTION, "name");
+  const productionNameToNewProduction = fromEntries(
     performedTeamActions
-      .map((teamAction) => ({
-        name: productionActionById[teamAction.actionId].name,
-        type: productionActionById[teamAction.actionId].type,
-        value: computeTeamActionStats(teamAction, productionActionById)
-          .productionKwh,
-      }))
+      .map((teamAction) => {
+        const productionAction = productionActionById[teamAction.actionId];
+        const baseProduction = productionByName[productionAction.name];
+
+        return {
+          ...baseProduction,
+          value: computeEnergyProduction(productionAction, teamAction.value),
+        };
+      })
       .map((production) => [production.name, production])
   );
-  const productionNameToProduction = Object.fromEntries(
+  const productionNameToProduction = fromEntries(
     persona.production.map((production) => [production.name, production])
   );
 
@@ -72,4 +86,8 @@ function computeNewProductionData(
   });
 
   return newProduction;
+}
+
+function isDecarbonatedEnergyProduction(production: ProductionDatum): boolean {
+  return production.carbonType === "decarbonated";
 }

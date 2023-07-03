@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import { Icon } from "../Icon";
 import { Tag } from "../Tag";
-import { Typography } from "../Typography";
 
 export { TagNumber };
 
@@ -51,10 +50,8 @@ function TagNumber({
 
   return (
     <Tag type={tagType} icon={icon}>
-      <Typography as="span">
-        {sign}
-        {formatter(Math.abs(value))}
-      </Typography>
+      {sign}
+      {formatter(Math.abs(value))}
     </Tag>
   );
 }

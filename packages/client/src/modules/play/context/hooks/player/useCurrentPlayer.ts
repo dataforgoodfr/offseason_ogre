@@ -40,6 +40,7 @@ function useCurrentPlayer() {
     personalization,
     playerActions: player.actions,
     actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
+    team,
     teamActions: team.actions,
     teamActionsAtCurrentStep,
     ...computePlayerActionsStats(
