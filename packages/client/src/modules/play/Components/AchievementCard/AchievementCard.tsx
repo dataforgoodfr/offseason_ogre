@@ -36,10 +36,10 @@ function AchievementCard({
         />
       </Box>
       <Box display="flex" flexDirection="column" gap={1}>
-        <Typography variant="h4">
+        <Typography className="achievement-card__title" variant="h4">
           {t(`achievements:achievement.${achievementName}.title`)}
         </Typography>
-        <Typography>
+        <Typography className="achievement-card__description">
           {t(`achievements:achievement.${achievementName}.description`, {
             targetYear: ENERGY_SHIFT_TARGET_YEAR,
           })}
@@ -83,11 +83,20 @@ const AchievementCardHost = styled(Card)(({ theme }) => ({
   "&:hover": {
     transform: "scale(1.05)",
   },
+  ".achievement-card": {
+    "&__title": {
+      textShadow: "#000000 0px 0px 5px",
+    },
+    "&__description": {
+      textShadow: "#000000 0px 0px 5px",
+    },
+  },
 }));
 
 const AchievementCardImage = styled("img")(({ theme }) => ({
   width: 180,
   height: 180,
+  filter: "drop-shadow(0px 0px 2px #000000)",
   [theme.breakpoints.down("sm")]: {
     width: 160,
     minHeight: 160,
