@@ -10,7 +10,7 @@ import { formatConsumption, formatPercentage } from "../../../../lib/formatter";
 import { Icon } from "../../../common/components/Icon";
 import { Card } from "../../../common/components/Card";
 import { TagNumber } from "../../../common/components/TagNumber";
-import TagEnergy from "../../../common/components/TagEnergy";
+import { TagEnergy } from "../../../common/components/TagEnergy";
 
 export { SynthesisMostImpactfulActionsTab };
 

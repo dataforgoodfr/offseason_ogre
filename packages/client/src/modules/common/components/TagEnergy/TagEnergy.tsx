@@ -3,7 +3,7 @@ import { Icon } from "../Icon";
 import { useTheme } from "@mui/material";
 import { useTranslation } from "../../../translations";
 
-export default TagEnergy;
+export { TagEnergy };
 
 function TagEnergy({
   energyType,

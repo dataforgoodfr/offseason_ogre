@@ -13,7 +13,7 @@ import { TagNumber } from "../../../../common/components/TagNumber";
 import { sumReducer } from "../../../../../lib/array";
 import { ProductionDatum } from "../../../../persona/production";
 import { isDecarbonatedEnergyProduction } from "../../../utils/production";
-import TagEnergy from "../../../../common/components/TagEnergy";
+import { TagEnergy } from "../../../../common/components/TagEnergy";
 import { CardStyled } from "../Synthesis.common.styles";
 
 export default SynthesisProduction;

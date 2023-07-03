@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import {
   formatPercentage,
   formatProduction,
@@ -16,8 +16,9 @@ import {
   isFossilEnergyConsumption,
   isGreyEnergyConsumption,
 } from "../../../utils/consumption";
-import TagEnergy from "../../../../common/components/TagEnergy";
+import { TagEnergy } from "../../../../common/components/TagEnergy";
 import { CardStyled } from "../Synthesis.common.styles";
+import { Persona } from "../../../../persona/persona";
 
 export default SynthesisConsumption;
 
@@ -25,21 +26,45 @@ function SynthesisConsumption() {
   const { t } = useTranslation();
   const { initialPersona, latestPersona } = usePersona();
 
-  const initialDirectEnergyConsumption = useMemo(
-    () =>
-      initialPersona.consumption
+  const computeDirectEnergyConsumption = useCallback(
+    (persona: Persona) =>
+      persona.consumption
         .filter(isDirectEnergyConsumption)
         .map((c) => c.value)
         .reduce(sumReducer, 0),
-    [initialPersona]
+    []
+  );
+
+  const computeGreyEnergyConsumption = useCallback(
+    (persona: Persona) =>
+      persona.consumption
+        .filter(isGreyEnergyConsumption)
+        .map((c) => c.value)
+        .reduce(sumReducer, 0),
+    []
+  );
+
+  const computeFossilEnergyConsumptionShare = useCallback(
+    (persona: Persona) => {
+      const totalEnergyConsumption = persona.consumption
+        .map((c) => c.value)
+        .reduce(sumReducer, 0);
+      const fossilEnergyConsumption = persona.consumption
+        .filter(isFossilEnergyConsumption)
+        .map((c) => c.value)
+        .reduce(sumReducer, 0);
+      return (fossilEnergyConsumption / totalEnergyConsumption) * 100;
+    },
+    []
+  );
+
+  const initialDirectEnergyConsumption = useMemo(
+    () => computeDirectEnergyConsumption(initialPersona),
+    [initialPersona, computeDirectEnergyConsumption]
   );
   const finalDirectEnergyConsumption = useMemo(
-    () =>
-      latestPersona.consumption
-        .filter(isDirectEnergyConsumption)
-        .map((c) => c.value)
-        .reduce(sumReducer, 0),
-    [latestPersona]
+    () => computeDirectEnergyConsumption(latestPersona),
+    [latestPersona, computeDirectEnergyConsumption]
   );
   const directEnergyConsumptionChange = useMemo(
     () =>
@@ -49,42 +74,22 @@ function SynthesisConsumption() {
     [finalDirectEnergyConsumption, initialDirectEnergyConsumption]
   );
 
-  const initialFossilEnergyConsumptionShare = useMemo(() => {
-    const totalEnergyConsumption = initialPersona.consumption
-      .map((c) => c.value)
-      .reduce(sumReducer, 0);
-    const fossilEnergyConsumption = initialPersona.consumption
-      .filter(isFossilEnergyConsumption)
-      .map((c) => c.value)
-      .reduce(sumReducer, 0);
-    return (fossilEnergyConsumption / totalEnergyConsumption) * 100;
-  }, [initialPersona]);
-  const finalFossilEnergyConsumptionShare = useMemo(() => {
-    const totalEnergyConsumption = latestPersona.consumption
-      .map((c) => c.value)
-      .reduce(sumReducer, 0);
-    const fossilEnergyConsumption = latestPersona.consumption
-      .filter(isFossilEnergyConsumption)
-      .map((c) => c.value)
-      .reduce(sumReducer, 0);
-    return (fossilEnergyConsumption / totalEnergyConsumption) * 100;
-  }, [latestPersona]);
+  const initialFossilEnergyConsumptionShare = useMemo(
+    () => computeFossilEnergyConsumptionShare(initialPersona),
+    [initialPersona, computeFossilEnergyConsumptionShare]
+  );
+  const finalFossilEnergyConsumptionShare = useMemo(
+    () => computeFossilEnergyConsumptionShare(latestPersona),
+    [latestPersona, computeFossilEnergyConsumptionShare]
+  );
 
   const initialGreyEnergyConsumption = useMemo(
-    () =>
-      initialPersona.consumption
-        .filter(isGreyEnergyConsumption)
-        .map((c) => c.value)
-        .reduce(sumReducer, 0),
-    [initialPersona]
+    () => computeGreyEnergyConsumption(initialPersona),
+    [initialPersona, computeGreyEnergyConsumption]
   );
   const finalGreyEnergyConsumption = useMemo(
-    () =>
-      latestPersona.consumption
-        .filter(isGreyEnergyConsumption)
-        .map((c) => c.value)
-        .reduce(sumReducer, 0),
-    [latestPersona]
+    () => computeGreyEnergyConsumption(latestPersona),
+    [latestPersona, computeGreyEnergyConsumption]
   );
   const greyEnergyConsumptionChange = useMemo(
     () =>

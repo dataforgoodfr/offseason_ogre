@@ -73,6 +73,12 @@ let theme = createTheme({
           color: "#adadad",
         },
       },
+      tag: {
+        secondary: {
+          backgroundColor: "#efefef",
+          color: blue,
+        },
+      },
     },
   },
   variables: {
@@ -116,6 +122,12 @@ declare module "@mui/material/styles" {
     components: {
       button: {
         disabled: {
+          backgroundColor: string;
+          color: string;
+        };
+      };
+      tag: {
+        secondary: {
           backgroundColor: string;
           color: string;
         };
