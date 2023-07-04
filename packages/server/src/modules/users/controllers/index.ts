@@ -7,6 +7,7 @@ import { rolesServices } from "../../roles/services";
 import { services } from "../services";
 import { signInController } from "./signInController";
 import { getManyUsersController } from "./getManyUsersController";
+import { getEmailSchema } from "../../utils/schemaParser";
 
 const crudController = {
   getDocumentController,
@@ -27,7 +28,7 @@ export { controllers };
 async function signUpController(request: Request, response: Response) {
   const bodySchema = z.object({
     country: z.string(),
-    email: z.string(),
+    email: getEmailSchema(),
     lastName: z.string(),
     firstName: z.string(),
   });
@@ -57,7 +58,10 @@ async function getLoggedUserController(request: Request, response: Response) {
 }
 
 async function sendMagicLinkController(request: Request, response: Response) {
-  const { email } = request.body;
+  const bodySchema = z.object({
+    email: getEmailSchema(),
+  });
+  const { email } = bodySchema.parse(request.body);
   await services.sendMagicLink(email);
   response
     .status(200)
@@ -76,7 +80,7 @@ async function getTeamForPlayer(request: Request, response: Response) {
 
 const bodySchemaUpdate = z.object({
   country: z.string().optional(),
-  email: z.string().optional(),
+  email: getEmailSchema(),
   lastName: z.string().optional(),
   firstName: z.string().optional(),
   roleId: z.number().optional(),

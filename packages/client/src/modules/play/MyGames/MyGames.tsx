@@ -1,6 +1,6 @@
 import { trim } from "lodash";
 import { Box, CircularProgress, Grid, TextField } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { ErrorAlert } from "../../alert";
 import { PlayBox } from "../Components";
@@ -17,6 +17,7 @@ import { useTranslation } from "../../translations/useTranslation";
 import { Typography } from "../../common/components/Typography";
 import { useAlerts } from "../../alert/AlertProvider";
 import { Button } from "../../common/components/Button";
+import { useForm } from "../../common/hooks/useForm";
 
 export { MyGames };
 

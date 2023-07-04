@@ -3,7 +3,7 @@ import { Button, Grid, Tooltip, Typography } from "@mui/material";
 import { CustomContainer } from "./styles/personalization";
 import { BackArrow, BackArrowWithValidation } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
-import { useForm } from "react-hook-form";
+import { useForm } from "../../common/hooks/useForm";
 import { PersoFormInputList, PersoFormNumberInput } from "./common/FormInputs";
 import {
   formSections,
