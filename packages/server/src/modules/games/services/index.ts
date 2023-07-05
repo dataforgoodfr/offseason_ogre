@@ -10,7 +10,7 @@ type Model = Game;
 
 const crudServices = {
   queries: model,
-  getDocument,
+  findOne,
   getMany,
   create,
   update,
@@ -19,43 +19,20 @@ const services = { ...crudServices, register };
 
 export { services };
 
-async function getDocument(
-  idOrWhere: number | Prisma.GameFindFirstArgs["where"]
-): Promise<Model | null> {
-  return model.findFirst({
-    where: typeof idOrWhere === "number" ? { id: idOrWhere } : idOrWhere,
-    include: {
-      teams: {
-        where: { isDeleted: false },
-        include: {
-          players: {
-            include: {
-              user: true,
-              actions: {
-                include: {
-                  action: true,
-                },
-              },
-              profile: {
-                include: {
-                  personalization: true,
-                },
-              },
-            },
-          },
-          actions: {
-            include: {
-              action: {
-                include: {
-                  pointsIntervals: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  });
+async function findOne<
+  OptionsInclude extends Parameters<typeof model.findUnique>[0]["include"]
+>(
+  where: Parameters<typeof model.findUnique>[0]["where"],
+  options: {
+    include?: OptionsInclude;
+  } = {}
+): Promise<Prisma.GameGetPayload<{
+  include: OptionsInclude;
+}> | null> {
+  return model.findUnique({
+    where,
+    ...options,
+  }) as any;
 }
 
 async function getMany(partial: Partial<Model> = {}): Promise<Model[]> {

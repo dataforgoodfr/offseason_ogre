@@ -79,7 +79,18 @@ async function getGame(request: Request, response: Response) {
     id: z.string().regex(/^\d+$/).transform(Number),
   });
   const { id } = paramsSchema.parse(request.params);
-  const document = await services.getDocument(id);
+  const document = await services.findOne(
+    { id },
+    {
+      include: {
+        teams: {
+          include: {
+            players: true,
+          },
+        },
+      },
+    }
+  );
   response.status(200).json({ document });
 }
 

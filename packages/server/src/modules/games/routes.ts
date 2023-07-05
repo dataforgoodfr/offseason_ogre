@@ -30,7 +30,7 @@ router.put(
     roles: ["admin"],
     ownership: async (user, request) => {
       const gameId = parseInt(request.body.gameId, 10);
-      const game = await gameServices.getDocument(gameId);
+      const game = await gameServices.findOne({ id: gameId });
 
       return {
         success: user.id === game?.teacherId,
@@ -51,7 +51,7 @@ router.post(
     roles: ["admin"],
     ownership: async (user, request) => {
       const gameId = parseInt(request.body.gameId, 10);
-      const game = await gameServices.getDocument(gameId);
+      const game = await gameServices.findOne({ id: gameId });
 
       return {
         success: user.id === game?.teacherId,
@@ -82,7 +82,7 @@ router.put(
     roles: ["admin"],
     ownership: async (user, request) => {
       const gameId = parseInt(request.params.id, 10);
-      const game = await gameServices.getDocument(gameId);
+      const game = await gameServices.findOne({ id: gameId });
 
       return {
         success: user.id === game?.teacherId,

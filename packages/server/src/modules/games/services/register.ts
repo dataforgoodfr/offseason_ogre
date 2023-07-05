@@ -13,7 +13,7 @@ async function register({
   gameCode: string;
   userId: number;
 }): Promise<number> {
-  const game = await gameServices.getDocument({ code: gameCode });
+  const game = await gameServices.findOne({ code: gameCode });
 
   if (!game) {
     throw createBusinessError("GAME_NOT_FOUND", {
