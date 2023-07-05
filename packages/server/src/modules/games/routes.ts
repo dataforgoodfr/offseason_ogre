@@ -91,3 +91,18 @@ router.put(
   }),
   asyncErrorHandler(controllers.updateGame)
 );
+router.delete(
+  "/:id",
+  guardResource({
+    roles: ["admin"],
+    ownership: async (user, request) => {
+      const gameId = parseInt(request.params.id, 10);
+      const game = await gameServices.findOne({ id: gameId });
+
+      return {
+        success: user.id === game?.teacherId,
+      };
+    },
+  }),
+  asyncErrorHandler(controllers.removeGame)
+);

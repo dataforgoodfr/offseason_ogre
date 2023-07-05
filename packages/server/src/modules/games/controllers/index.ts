@@ -28,6 +28,7 @@ const crudController = {
   getPlayersController,
   putPlayersInTeamsController,
   registerController,
+  removeGame,
   removePlayerController,
   removeTeamController,
   updateGame,
@@ -144,4 +145,16 @@ async function prepareGameForLaunch(gameId: number) {
     );
     await Promise.all(processingTeamActions);
   });
+}
+
+async function removeGame(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+
+  const { id } = paramsSchema.parse(request.params);
+
+  await services.remove({ id });
+
+  response.status(200).json({});
 }

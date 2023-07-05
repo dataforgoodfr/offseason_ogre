@@ -1,6 +1,8 @@
 {
   "cta.assign-team-to-players": "Répartir les joueurs",
+  "cta.cancel": "Annuler",
   "cta.check-forms": "Vérifier les formulaires",
+  "cta.delete": "Supprimer",
   "cta.retrieve-emails": "Récupérer les emails",
   "cta.create-game": "Nouveau jeu",
   "cta.end-turn": "Terminer le tour",
@@ -58,6 +60,7 @@
   "message.success.game-joined": "Vous avez rejoint l'atelier avec succès",
   "message.success.sign-in.user-authenticated": "Connexion réussie",
 
+  "modal.remove-game.title": "Voulez-vous supprimer le jeu {{game}} ?",
   "modal.remove-player.title": "Voulez-vous supprimer le joueur ?",
   "modal.remove-team.title": "Voulez-vous supprimer l'équipe ?",
   "modal.validate-consumption-choices.title": "Les choix ne seront plus modifiables, souhaites-tu valider tes choix ?",
@@ -72,6 +75,7 @@
   "form.validation.yellow": "Les cases colorées en jaune contiennent les valeurs à vérifier.",
   "form.validation.heating": "Concernant le chauffage, si le joueur a donné deux valeurs (facture en € et consommation en kWh), il est nécessaire de vérifier que les deux valeurs correspondent. Si ce n’est pas le cas, merci de ne laisser que la valeur la plus probable et de supprimer l’autre.",
 
+  "table.column.actions.label": "Actions",
   "table.column.form-status.label": "Statut du formulaire",
   "table.column.form-status.label.short": "Statut",
   "table.column.game-code.label": "Code",
