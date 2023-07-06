@@ -24,6 +24,8 @@ import {
 import { PersonalizationForm } from "./modules/play/Personalization/PersonalizationForm";
 import { PersonalizationPredefinedPersona } from "./modules/play/Personalization/PersonalizationPredefinedPersona";
 import { FormVerification } from "./modules/administration/Games/Game/FormVerification";
+import { RouteGuard } from "./modules/router/components/RouteGuard";
+import { gameConsoleGuard } from "./modules/router/guards/gameConsoleGuard";
 
 export { AuthenticatedApp };
 
@@ -63,7 +65,13 @@ function AuthenticatedApp() {
           path="games/:id/persona/actions"
           element={<PlayerActionsPage />}
         />
-        <Route path="games/:id/console" element={<GameConsoleView />} />
+        <Route
+          path="games/:id/console"
+          element={<RouteGuard guard={gameConsoleGuard} />}
+        >
+          <Route path="" element={<GameConsoleView />} />
+          <Route path="*" element={<GameConsoleView />} />
+        </Route>
         <Route path="" element={<Navigate to="my-games" />} />
         <Route path="*" element={<Navigate to="my-games" />} />
       </Route>
