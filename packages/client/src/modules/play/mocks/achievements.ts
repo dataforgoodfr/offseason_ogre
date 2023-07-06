@@ -21,12 +21,12 @@ const ACHIEVEMENTS_CONFIG: Array<{
       { "consumptionAction.keepCar15.isPerformed": { _eq: true } },
     ],
   },
-  //   {
-  //     name: "choseToReduceComfortTemperature",
-  //     successConditions: [
-  //       { "consumptionAction.house19DegreesMax.isPerformed": { _eq: true } },
-  //     ],
-  //   },
+  {
+    name: "choseToReduceComfortTemperature",
+    successConditions: [
+      { "consumptionAction.house19DegreesMax.isPerformed": { _eq: true } },
+    ],
+  },
   {
     name: "choseToStopMeat",
     successConditions: [
