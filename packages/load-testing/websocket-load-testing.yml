@@ -1,0 +1,24 @@
+config:
+  target: http://placeholder.target
+  engines:
+    playwright:
+      aggregateByName: true
+      launchOptions:
+        headless: true
+  payload:
+    # path is relative to the location of the test script
+    path: "credentials.csv"
+    fields:
+      - "email"
+      - "token"
+  processor: "./websocket-load-testing-flow.js"
+  phases:
+    - name: "Players connecting to app"
+      duration: 1
+      arrivalRate: 5
+    - name: "Players checking actions"
+      pause: 60
+scenarios:
+  - name: Websocket load testing
+    engine: playwright
+    testFunction: "testConsumptionActionsLoad"
