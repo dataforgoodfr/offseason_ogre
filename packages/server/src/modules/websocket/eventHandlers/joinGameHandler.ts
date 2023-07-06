@@ -30,8 +30,12 @@ function handleJoinGame(io: Server, socket: Socket) {
       const game = await gameServices.findOne(gameId);
       invariant(game, `Could not find game ${gameId}`);
 
+      const userRole = await roleServices.findOne(user.roleId);
+      invariant(userRole, `User ${user.id} has no roles`);
+
       socket.data.gameId = gameId;
       socket.data.user = user;
+      socket.data.role = userRole;
 
       let gameInitData: GameInitEmitted;
       if (await hasPlayerAccess(user, game)) {
