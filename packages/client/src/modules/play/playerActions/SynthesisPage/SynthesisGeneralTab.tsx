@@ -1,6 +1,6 @@
-import { PlayBox } from "../Components";
-import SynthesisRecapForPlayer from "../Components/Synthesis/SynthesisRecapForPlayer";
-import { useCurrentPlayer } from "../context/hooks/player";
+import { PlayBox } from "../../Components";
+import SynthesisRecapForPlayer from "../../Components/Synthesis/SynthesisRecapForPlayer";
+import { useCurrentPlayer } from "../../context/hooks/player";
 
 export { SynthesisGeneralTab };
 

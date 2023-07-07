@@ -55,7 +55,7 @@ function Button({
         color: "primary",
       },
     };
-  }, [disabled, type]);
+  }, [disabled, theme, type]);
   const loaderColor = useMemo(
     () => (type === "primary" ? "primary" : "secondary"),
     [type]

@@ -479,7 +479,6 @@ function applyPersonalizationImpact(
     if (
       inputMatrix.calculatedValues[name as keyof IntermediateValues] == null
     ) {
-      console.error(`Could not find personalization value with name ${name}`);
       return;
     }
 
@@ -492,7 +491,6 @@ function applyPersonalizationImpact(
 
   if (type === "personalization") {
     if (inputMatrix.personalization[name as keyof PersoForm] == null) {
-      console.error(`Could not find personalization value with name ${name}`);
       return;
     }
 
