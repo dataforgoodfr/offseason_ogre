@@ -16,7 +16,7 @@ router.post(
     roles: ["admin"],
     ownership: async (user, request) => {
       const gameId = parseInt(request.body.gameId, 10);
-      const game = await services.getDocument(gameId);
+      const game = await services.findOne({ id: gameId });
 
       return {
         success: user.id === game?.teacherId,

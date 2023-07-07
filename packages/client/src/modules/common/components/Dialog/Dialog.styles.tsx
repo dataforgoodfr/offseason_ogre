@@ -15,7 +15,7 @@ const CustomDialogActions = styled(DialogActions)(({ theme }) => ({
     padding: "12px 24px 16px",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
   },
 
   "> *": {
