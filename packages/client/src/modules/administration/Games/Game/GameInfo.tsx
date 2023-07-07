@@ -1,5 +1,5 @@
 import { Box, TextField, Grid, Button, Typography } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import SaveIcon from "@mui/icons-material/Save";
 import { SuccessAlert, ErrorAlert } from "../../../alert";
@@ -8,6 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { IGame } from "../../../../utils/types";
 import { http } from "../../../../utils/request";
+import { useForm } from "../../../common/hooks/useForm";
 
 export { GameInfo };
 

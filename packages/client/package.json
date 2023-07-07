@@ -61,11 +61,22 @@
       "no-restricted-imports": [
         "error",
         {
-          "name": "axios",
-          "importNames": [
-            "default"
-          ],
-          "message": "Please use `http`, the axios client configured in the request utils (src/utils/request)."
+          "paths": [
+            {
+              "name": "axios",
+              "importNames": [
+                "default"
+              ],
+              "message": "Please use `http`, the axios client configured in the request utils (src/utils/request)."
+            },
+            {
+              "name": "react-hook-form",
+              "importNames": [
+                "useForm"
+              ],
+              "message": "Use our custom `useForm` hook instead which relies on react-hook-form (src/modules/common/hooks)."
+            }
+          ]
         }
       ],
       "@typescript-eslint/no-use-before-define": "off"
