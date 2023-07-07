@@ -21,11 +21,11 @@ import { buildInitialPersona } from "../../persona/persona";
 import { WEB_SOCKET_URL } from "../../common/constants";
 import { usePlayStore } from "./usePlayStore";
 import { updateCollection } from "./playContext.utils";
+import { ProductionDatum } from "../../persona/production";
 
 export {
   RootPlayProvider,
   useCurrentStep,
-  useMyTeam,
   useTeamValues,
   useLoadedPlay as usePlay,
   usePersonaByUserId,
@@ -50,6 +50,7 @@ interface TeamValues {
   stepToProduction: {
     [k: string]: number;
   };
+  productionCurrent: ProductionDatum[];
 }
 
 interface IPlayContext {
@@ -59,6 +60,7 @@ interface IPlayContext {
   players: Player[];
   productionActions: ProductionAction[];
   productionActionById: Record<number, ProductionAction>;
+  productionOfCountryToday: ProductionDatum[];
   teams: ITeam[];
   updateGame: (update: Partial<IGame>) => void;
   updatePlayerActions: (
@@ -109,6 +111,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     players,
     productionActions,
     productionActionById,
+    productionOfCountryToday,
     teams,
     setConsumptionActions,
     setGame,
@@ -119,6 +122,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   } = usePlayStore();
   const { socket } = useGameSocket({
     gameId,
+    isUserPlayer: user?.role.name === "player",
     token,
     setConsumptionActions,
     setGame,
@@ -141,17 +145,16 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     [setPlayers]
   );
 
+  const updateGame = useCallback(
+    (update: Partial<IGame>) => {
+      socket?.emit("game:update", { update });
+    },
+    [socket]
+  );
+
   if (!isInitialised || !game || !socket) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
-
-  const updateGame = (update: Partial<IGame>) => {
-    setGame((previous) => {
-      if (previous === null) return null;
-      return { ...previous, ...update };
-    });
-    socket.emit("game:update", { update });
-  };
 
   const updatePlayerActions = (
     playerActions: {
@@ -212,6 +215,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
         players,
         productionActions,
         productionActionById,
+        productionOfCountryToday,
         teams,
         updateGame,
         updatePlayerActions,
@@ -235,26 +239,6 @@ function useLoadedPlay(): IPlayContext {
   return playValue;
 }
 
-function useMyTeam(): ITeam | null {
-  const { players, teams } = useLoadedPlay();
-  const { user } = useAuth();
-
-  const myTeam = useMemo(() => {
-    if (!user || !teams.length) {
-      return null;
-    }
-
-    const myPlayer = players.find((p) => p.userId === user?.id);
-    if (!myPlayer) {
-      return null;
-    }
-
-    return teams.find((t) => t.id === myPlayer.teamId) || null;
-  }, [players, teams, user]);
-
-  return myTeam;
-}
-
 function useTeamValues(): {
   teamValues: TeamValues[];
   getTeamById: (id: number | undefined) => TeamValues | undefined;
@@ -270,6 +254,11 @@ function useTeamValues(): {
   const teamValues = useMemo(() => {
     return teams.map((team) => {
       const playersInTeam = players.filter((p) => p.teamId === team.id);
+      const playerRepresentingTeam = playersInTeam[0] || null;
+      const personaRepresentingTeam =
+        personaByUserId[playerRepresentingTeam?.userId || -1] || null;
+      const currentPersonaRepresentingTeam =
+        personaRepresentingTeam?.getPersonaAtStep?.(game.step) || null;
 
       return {
         id: team.id,
@@ -322,6 +311,7 @@ function useTeamValues(): {
           playersInTeam,
           personaByUserId
         ),
+        productionCurrent: currentPersonaRepresentingTeam?.production || [],
       };
     });
     // TODO: check `personaByUserId` in deps doesn't trigger infinite renders.
@@ -379,6 +369,7 @@ function useCurrentStep(): GameStep | null {
 
 function useGameSocket({
   gameId,
+  isUserPlayer,
   token,
   setConsumptionActions,
   setGame,
@@ -388,6 +379,7 @@ function useGameSocket({
   setTeams,
 }: {
   gameId: number;
+  isUserPlayer: boolean;
   token: string | null;
   setConsumptionActions: React.Dispatch<React.SetStateAction<Action[]>>;
   setGame: React.Dispatch<React.SetStateAction<IGame | null>>;
@@ -427,16 +419,20 @@ function useGameSocket({
         if (previous === null) {
           return null;
         }
-        if (previous.status !== "finished" && update.status === "finished") {
-          navigate("/play");
+
+        if (isUserPlayer) {
+          if (previous.status !== "finished" && update.status === "finished") {
+            navigate("/play");
+          }
+
+          if (
+            update.lastFinishedStep &&
+            update.lastFinishedStep !== previous.lastFinishedStep
+          ) {
+            navigate(`/play/games/${previous.id}/persona/stats`);
+          }
         }
 
-        if (
-          update.lastFinishedStep &&
-          update.lastFinishedStep !== previous.lastFinishedStep
-        ) {
-          navigate(`/play/games/${previous.id}/persona/stats`);
-        }
         return { ...previous, ...update };
       });
     });
@@ -492,6 +488,7 @@ function useGameSocket({
     };
   }, [
     gameId,
+    isUserPlayer,
     token,
     /**
      * Don't include `navigate` in dependencies since it changes on every route change,

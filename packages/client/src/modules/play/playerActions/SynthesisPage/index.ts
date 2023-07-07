@@ -1,0 +1,1 @@
+export { SynthesisPage } from "./SynthesisPage";

@@ -30,7 +30,7 @@ export { buildPersona };
 function buildPersona(
   game: IGame,
   personalization: PersoForm,
-  basePersona: Persona,
+  initialPersona: Persona,
   playerActions: PlayerActions[],
   consumptionActionById: Record<number, Action>,
   teamActions: TeamAction[],
@@ -38,7 +38,7 @@ function buildPersona(
 ) {
   const personaBySteps = getResultsByStep(
     personalization,
-    basePersona,
+    initialPersona,
     playerActions,
     consumptionActionById,
     teamActions,
@@ -56,6 +56,7 @@ function buildPersona(
 
   return {
     personaBySteps,
+    initialPersona,
     /** Persona taking into account player's actions at latest validated step. */
     currentPersona,
     /** Persona taking into account latest player's actions, whether the step is active or not. */

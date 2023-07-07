@@ -4,8 +4,18 @@ import { styled } from "@mui/material/styles";
 export { Typography };
 
 const Typography = styled(TypographyMui)(({ theme }) => ({
+  "&:is(h1)": {
+    letterSpacing: "-0.5px",
+  },
+  "&:is(h2)": {
+    letterSpacing: "-0.5px",
+  },
+  "&:is(h3)": {
+    letterSpacing: "-0.5px",
+  },
   "&:is(h4)": {
     fontSize: 22,
+    letterSpacing: "-0.5px",
   },
   "&:is(h5)": {
     fontSize: 18,

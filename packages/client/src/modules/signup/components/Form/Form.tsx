@@ -1,5 +1,5 @@
 import FormInput from "../../../common/components/FormInput";
-import { useForm } from "react-hook-form";
+import { useForm } from "../../../common/hooks/useForm";
 import CheckboxWithText from "../CheckboxWithText";
 import { NewUser } from "../../../users/services";
 import { useMutation } from "react-query";

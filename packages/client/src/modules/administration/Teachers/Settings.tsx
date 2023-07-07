@@ -1,7 +1,6 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import { AxiosError } from "axios";
-import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 
 import { ErrorAlert, SuccessAlert } from "../../alert";
@@ -10,6 +9,7 @@ import { User } from "../../users/types";
 import { useAuth } from "../../auth/authProvider";
 import { getCountryByCode } from "../../signup/components/SelectCountry";
 import { http } from "../../../utils/request";
+import { useForm } from "../../common/hooks/useForm";
 
 export { Settings };
 

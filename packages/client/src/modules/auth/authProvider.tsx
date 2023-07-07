@@ -21,6 +21,7 @@ interface IAuthContext {
 type UserPermissions = {
   canAccessAdminList: boolean;
   canAccessAdminPanel: boolean;
+  canAccessGameConsole: boolean;
   canAccessTeacherList: boolean;
   canEditUserRole: boolean;
 };
@@ -32,6 +33,7 @@ const defaultContext: IAuthContext = {
   permissions: {
     canAccessAdminList: false,
     canAccessAdminPanel: false,
+    canAccessGameConsole: false,
     canAccessTeacherList: false,
     canEditUserRole: false,
   },
@@ -102,6 +104,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     () => ({
       canAccessAdminList: hasRole([RoleNames.ADMIN], user),
       canAccessAdminPanel: hasRole([RoleNames.ADMIN, RoleNames.TEACHER], user),
+      canAccessGameConsole: hasRole([RoleNames.ADMIN, RoleNames.TEACHER], user),
       canAccessTeacherList: hasRole([RoleNames.ADMIN], user),
       canEditUserRole: hasRole([RoleNames.ADMIN], user),
     }),

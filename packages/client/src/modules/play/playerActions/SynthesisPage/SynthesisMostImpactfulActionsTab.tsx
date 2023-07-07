@@ -1,16 +1,16 @@
-import { PlayBox } from "../Components";
-import { Typography } from "../../common/components/Typography";
+import { PlayBox } from "../../Components";
+import { Typography } from "../../../common/components/Typography";
 import {
   ImpactfulAction,
   useMostImpactfulActions,
-} from "../context/hooks/player";
+} from "../../context/hooks/player";
 import { Box, Tooltip, styled, useTheme } from "@mui/material";
-import { useTranslation } from "../../translations";
-import { formatConsumption, formatPercentage } from "../../../lib/formatter";
-import { Icon } from "../../common/components/Icon";
-import { Card } from "../../common/components/Card";
-import { Tag } from "../../common/components/Tag";
-import { TagNumber } from "../../common/components/TagNumber";
+import { useTranslation } from "../../../translations";
+import { formatConsumption, formatPercentage } from "../../../../lib/formatter";
+import { Icon } from "../../../common/components/Icon";
+import { Card } from "../../../common/components/Card";
+import { TagNumber } from "../../../common/components/TagNumber";
+import { TagEnergy } from "../../../common/components/TagEnergy";
 
 export { SynthesisMostImpactfulActionsTab };
 
@@ -109,23 +109,15 @@ function ActionCard({
                   gap={1}
                 >
                   <Box display="flex" flexWrap="wrap" gap={1}>
-                    <Tag
-                      icon={
-                        <Icon
-                          name="energy"
-                          sx={{ width: "1rem", height: "1rem" }}
-                        />
-                      }
-                      color={theme.palette.energy[consoImpact.type]}
-                    >
-                      <Typography>{t(`energy.${consoImpact.type}`)}</Typography>
-                    </Tag>
+                    <TagEnergy energyType={consoImpact.type} />
                     <TagNumber
                       value={consoImpact.absolute}
                       formatter={(value) =>
-                        `${formatConsumption(value, { fractionDigits: 1 })} ${t(
-                          "unit.watthour-per-day.kilo"
-                        )}`
+                        t("unit.watthour-per-day.kilo", {
+                          value: formatConsumption(value, {
+                            fractionDigits: 1,
+                          }),
+                        })
                       }
                       successDirection="decrease"
                     />
@@ -141,18 +133,20 @@ function ActionCard({
                   </Box>
                   <Box display="flex">
                     <Typography>
-                      {formatConsumption(consoImpact.initial, {
-                        fractionDigits: 1,
-                      })}{" "}
-                      {t("unit.watthour-per-day.kilo")}
+                      {t("unit.watthour-per-day.kilo", {
+                        value: formatConsumption(consoImpact.initial, {
+                          fractionDigits: 1,
+                        }),
+                      })}
                     </Typography>
                     &nbsp;
                     <Typography>→</Typography>&nbsp;
                     <Typography>
-                      {formatConsumption(consoImpact.final, {
-                        fractionDigits: 1,
-                      })}{" "}
-                      {t("unit.watthour-per-day.kilo")}
+                      {t("unit.watthour-per-day.kilo", {
+                        value: formatConsumption(consoImpact.final, {
+                          fractionDigits: 1,
+                        }),
+                      })}
                     </Typography>
                   </Box>
                 </Box>

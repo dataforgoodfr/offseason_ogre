@@ -4,6 +4,7 @@ import { availableActions } from "../modules/play/playerActions/constants/action
 import { User } from "../modules/users/types";
 
 export type {
+  AchievementName,
   IGame,
   IGameWithTeacher,
   IGameWithTeams,
@@ -21,6 +22,7 @@ export type {
   ProductionActionNames,
   ProductionActionType,
   ProductionActionUnit,
+  ProductionCarbonType,
   Profile,
   ProfileStatus,
   TeamAction,
@@ -204,10 +206,9 @@ interface ProductionActionPercentage extends ProductionActionCommon {
 }
 
 type ProductionActionType = "offshore" | "nuclear" | "terrestrial";
-
 type ProductionActionNames = typeof productionActionNames[number];
-
 type ProductionActionUnit = "area" | "percentage";
+type ProductionCarbonType = "carbonated" | "decarbonated";
 
 interface TeamAction {
   id: number;
@@ -235,3 +236,20 @@ type ProductionTypes =
   | "nuclear";
 
 type UnwrapArray<T> = T extends Array<infer U> ? U : T;
+
+type AchievementName =
+  | "choseToInsulateHome"
+  | "choseToKeepCarForLongTime"
+  | "choseToReduceComfortTemperature"
+  | "choseToStopMeat"
+  | "choseToStopPlane"
+  | "choseToSwitchToElectricCar"
+  | "choseToSwitchToTinyHome"
+  | "directEnergyConsumptionLessThanHalfCountryMean"
+  | "noFossilInDirectEnergyConsumption"
+  | "consumptionAndProductionBalanced"
+  | "gameFinished"
+  | "nuclearProductionCredible"
+  | "nuclearProductionExcessive"
+  | "offshoreWindTurbineProductionCredible"
+  | "onshoreWindTurbineProductionCredible";

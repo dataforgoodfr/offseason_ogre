@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm } from "../common/hooks/useForm";
 import FormInput from "../common/components/FormInput";
 import { Link } from "react-router-dom";
 import { sendMagicLink } from "../users/services";

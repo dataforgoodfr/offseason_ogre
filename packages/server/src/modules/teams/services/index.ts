@@ -2,6 +2,7 @@ import { Prisma, Team } from "@prisma/client";
 import { database } from "../../../database";
 import { createBusinessError } from "../../utils/businessError";
 import { NO_TEAM } from "../constants/teams";
+import * as teamActionServices from "../../teamActions/services";
 
 const model = database.team;
 type Model = Team;
@@ -85,15 +86,19 @@ async function remove({ id: teamId }: { id: number }) {
     });
   }
 
-  const targetTeam = await database.team.findFirst({
+  const targetTeam = await model.findFirst({
     where: { gameId: teamToRemove.gameId, name: NO_TEAM },
   });
-  await database.players.updateMany({
-    where: { teamId },
-    data: { teamId: targetTeam?.id },
-  });
+  if (targetTeam) {
+    await database.players.updateMany({
+      where: { teamId },
+      data: { teamId: targetTeam.id },
+    });
+  }
 
-  return database.team.delete({
+  await teamActionServices.remove({ teamId });
+
+  return model.delete({
     where: { id: teamId },
   });
 }

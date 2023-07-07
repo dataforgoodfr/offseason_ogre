@@ -1,7 +1,10 @@
 import cloneDeep from "lodash/cloneDeep";
 import { ActionNames } from "../../../utils/types";
 import { fillPersonalization } from "../../persona";
-import { getConsumptionFromProfile } from "../../persona/consumption";
+import {
+  ConsumptionDatum,
+  getConsumptionFromProfile,
+} from "../../persona/consumption";
 import { computeIntermediateValues } from "../../persona/consumption/computing";
 import {
   carAges,
@@ -15,7 +18,12 @@ import {
 } from "../Personalization/models/form";
 import { availableActions } from "../playerActions/constants/actions";
 
-export { computeNewConsumptionData };
+export {
+  computeNewConsumptionData,
+  isDirectEnergyConsumption,
+  isFossilEnergyConsumption,
+  isGreyEnergyConsumption,
+};
 
 interface ImpactMatrix {
   personalization: PersoForm;
@@ -471,7 +479,6 @@ function applyPersonalizationImpact(
     if (
       inputMatrix.calculatedValues[name as keyof IntermediateValues] == null
     ) {
-      console.error(`Could not find personalization value with name ${name}`);
       return;
     }
 
@@ -484,7 +491,6 @@ function applyPersonalizationImpact(
 
   if (type === "personalization") {
     if (inputMatrix.personalization[name as keyof PersoForm] == null) {
-      console.error(`Could not find personalization value with name ${name}`);
       return;
     }
 
@@ -492,4 +498,16 @@ function applyPersonalizationImpact(
       [name]: update(inputMatrix.personalization[name as keyof PersoForm]),
     });
   }
+}
+
+function isDirectEnergyConsumption(consumption: ConsumptionDatum): boolean {
+  return consumption.type !== "grey";
+}
+
+function isFossilEnergyConsumption(consumption: ConsumptionDatum): boolean {
+  return consumption.type === "fossil";
+}
+
+function isGreyEnergyConsumption(consumption: ConsumptionDatum): boolean {
+  return consumption.type === "grey";
 }

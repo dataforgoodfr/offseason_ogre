@@ -5,7 +5,7 @@ import {
   computeCarbonFootprint,
 } from "../play/utils/carbonFootprint";
 import { ConsumptionDatum, getConsumptionFromProfile } from "./consumption";
-import { production, ProductionDatum } from "./production";
+import { PRODUCTION, ProductionDatum } from "./production";
 import { computeIntermediateValues } from "./consumption/computing";
 import {
   computeMaterials,
@@ -43,18 +43,18 @@ const buildInitialPersona = (
   );
 
   const carbonProductionElectricMix =
-    computeCarbonProductionElectricMix(production);
+    computeCarbonProductionElectricMix(PRODUCTION);
   const carbonFootprint = computeCarbonFootprint(
     carbonProductionElectricMix,
     consumption as ConsumptionDatum[]
   );
 
   const materials = computeMaterials(
-    production,
+    PRODUCTION,
     teamActions,
     productionActionById
   );
-  const metals = computeMetals(production, teamActions, productionActionById);
+  const metals = computeMetals(PRODUCTION, teamActions, productionActionById);
 
   const persona: Persona = {
     budget: 13.7,
@@ -62,7 +62,7 @@ const buildInitialPersona = (
     points: 0,
     carbonFootprint,
     consumption,
-    production,
+    production: PRODUCTION,
     materials,
     metals,
   };

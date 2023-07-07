@@ -1,13 +1,14 @@
 import Button from "@mui/material/Button";
 import { Box, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Typography } from "../../common/components/Typography";
-import { useMyTeam, usePlay } from "../context/playContext";
-import { Icon } from "../../common/components/Icon";
-import { Dialog } from "../../common/components/Dialog";
+import { Typography } from "../../../common/components/Typography";
+import { usePlay } from "../../context/playContext";
+import { Icon } from "../../../common/components/Icon";
+import { Dialog } from "../../../common/components/Dialog";
 import { ScenarioNameTextField } from "./SynthesisContent.styles";
-import { useTranslation } from "../../translations/useTranslation";
-import { FlexRow } from "../../common/components/Flex";
+import { useTranslation } from "../../../translations/useTranslation";
+import { FlexRow } from "../../../common/components/Flex";
+import { useCurrentPlayer } from "../../context/hooks/player";
 
 export { SynthesisScenarioName };
 
@@ -59,8 +60,8 @@ function ScenarioNameEditionHelp() {
 }
 
 function ScenarioNameEditable() {
-  const team = useMyTeam();
   const { t } = useTranslation();
+  const { team } = useCurrentPlayer();
 
   const { updateTeam } = usePlay();
 
@@ -104,7 +105,7 @@ function ScenarioNameEditable() {
 }
 
 function ScenarioNameReadonly() {
-  const team = useMyTeam();
+  const { team } = useCurrentPlayer();
 
   return <Typography>{team?.scenarioName}</Typography>;
 }

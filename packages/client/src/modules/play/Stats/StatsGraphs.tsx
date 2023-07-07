@@ -109,8 +109,10 @@ function ConsumptionAndProductionGraph() {
     <>
       <StackedEnergyBars
         data={bars}
-        onClick={({ activeTooltipIndex }) => {
-          setSelectedBarIdx(activeTooltipIndex);
+        onClick={(chartState) => {
+          if (chartState?.activeTooltipIndex != null) {
+            setSelectedBarIdx(chartState.activeTooltipIndex);
+          }
         }}
       />
       {

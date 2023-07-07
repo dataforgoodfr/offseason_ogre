@@ -27,12 +27,14 @@ import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 import { SvgIconProps } from "@mui/material";
 import PersonPinRounded from "@mui/icons-material/PersonPinRounded";
 import {
+  Add,
   Badge,
   Bolt,
   Close,
   Computer,
   ConnectingAirports,
   ContentCopy,
+  Delete,
   DirectionsCar,
   DoNotDisturb,
   DryCleaning,
@@ -75,7 +77,9 @@ const ICONS = {
   computer: Computer,
   consumption: ShoppingCart,
   copy: ContentCopy,
+  create: Add,
   draft: HistoryEdu,
+  delete: Delete,
   energy: Bolt,
   "form-draft": HistoryEdu,
   "form-pending-validation": SettingsSuggestIcon,

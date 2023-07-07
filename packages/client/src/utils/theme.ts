@@ -1,4 +1,8 @@
-import { createTheme, responsiveFontSizes } from "@mui/material";
+import {
+  GlobalStylesProps,
+  createTheme,
+  responsiveFontSizes,
+} from "@mui/material";
 
 export type {
   ThemeVariant,
@@ -6,7 +10,7 @@ export type {
   ProductionPalette,
   MaterialsPalette,
 };
-export { theme };
+export { globalStyles, theme };
 
 type ThemeVariant = "light" | "dark" | "system";
 
@@ -26,6 +30,7 @@ let theme = createTheme({
       contrastText: blue,
     },
     energy: {
+      direct: "#4C677E",
       grey: "#6C6C6C",
       fossil: "#AF6A28",
       mixte: "#F9C74F",
@@ -68,6 +73,12 @@ let theme = createTheme({
           color: "#adadad",
         },
       },
+      tag: {
+        secondary: {
+          backgroundColor: "#efefef",
+          color: blue,
+        },
+      },
     },
   },
   variables: {
@@ -78,6 +89,17 @@ let theme = createTheme({
   },
 });
 theme = responsiveFontSizes(theme);
+
+/**
+ * Define styles and classes available in the entire app.
+ *
+ * This is especially useful to style translated text.
+ */
+const globalStyles: GlobalStylesProps["styles"] = {
+  ".text-em": {
+    color: `${theme.palette.secondary.main} !important`,
+  },
+};
 
 export const getStyledProps = (...props: string[]) => ({
   shouldForwardProp: (prop: any) => !props.includes(prop as any),
@@ -100,6 +122,12 @@ declare module "@mui/material/styles" {
     components: {
       button: {
         disabled: {
+          backgroundColor: string;
+          color: string;
+        };
+      };
+      tag: {
+        secondary: {
           backgroundColor: string;
           color: string;
         };
@@ -134,6 +162,7 @@ declare module "@mui/material/Button" {
 }
 
 interface EnergyPalette {
+  direct: string;
   grey: string;
   fossil: string;
   mixte: string;

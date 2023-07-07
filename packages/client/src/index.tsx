@@ -9,8 +9,8 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
-import { ThemeProvider } from "@mui/material";
-import { theme } from "./utils/theme";
+import { GlobalStyles, ThemeProvider } from "@mui/material";
+import { globalStyles, theme } from "./utils/theme";
 import { AuthProvider } from "./modules/auth/authProvider";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { LayoutProvider } from "./modules/Layout/context";
@@ -27,6 +27,7 @@ ReactDOM.render(
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
+          <GlobalStyles styles={globalStyles} />
           <AlertProvider>
             <AuthProvider>
               <LayoutProvider>
