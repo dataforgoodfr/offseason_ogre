@@ -10,7 +10,7 @@ import {
   Teachers,
 } from "../../../administration";
 import {
-  GameConsoleView,
+  GameConsolePage,
   MyGames,
   PlayerPersona,
   PlayLayout,
@@ -69,8 +69,8 @@ function AuthenticatedApp() {
           path="games/:id/console"
           element={<RouteGuard guard={gameConsoleGuard} />}
         >
-          <Route path="" element={<GameConsoleView />} />
-          <Route path="*" element={<GameConsoleView />} />
+          <Route path="" element={<GameConsolePage />} />
+          <Route path="*" element={<GameConsolePage />} />
         </Route>
         <Route path="" element={<Navigate to="my-games" />} />
         <Route path="*" element={<Navigate to="my-games" />} />

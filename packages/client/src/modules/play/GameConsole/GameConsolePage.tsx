@@ -13,10 +13,9 @@ import { STEPS } from "../constants";
 import { Dialog } from "../../common/components/Dialog";
 import { useTranslation } from "../../translations/useTranslation";
 
-export { GameConsoleView };
+export { GameConsolePage };
 
-// TODO: protect page using user role.
-function GameConsoleView() {
+function GameConsolePage() {
   const [selectedScreen, setSelectedScreen] = useState<string>("Teams");
   return (
     <>
