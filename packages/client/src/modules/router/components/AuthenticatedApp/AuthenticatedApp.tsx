@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { useAuth } from "./modules/auth/authProvider";
+import { useAuth } from "../../../auth/authProvider";
 import {
   Admins,
   Players,
@@ -8,7 +8,7 @@ import {
   Layout as AdministrationLayout,
   Settings,
   Teachers,
-} from "./modules/administration";
+} from "../../../administration";
 import {
   GameConsoleView,
   MyGames,
@@ -16,14 +16,16 @@ import {
   PlayLayout,
   PlayerActionsPage,
   Stats,
-} from "./modules/play";
+} from "../../../play";
 import {
   PersonalizationLayout,
   PersonalizationChoice,
-} from "./modules/play/Personalization";
-import { PersonalizationForm } from "./modules/play/Personalization/PersonalizationForm";
-import { PersonalizationPredefinedPersona } from "./modules/play/Personalization/PersonalizationPredefinedPersona";
-import { FormVerification } from "./modules/administration/Games/Game/FormVerification";
+} from "../../../play/Personalization";
+import { PersonalizationForm } from "../../../play/Personalization/PersonalizationForm";
+import { PersonalizationPredefinedPersona } from "../../../play/Personalization/PersonalizationPredefinedPersona";
+import { FormVerification } from "../../../administration/Games/Game/FormVerification";
+import { RouteGuard } from "../RouteGuard";
+import { gameConsoleGuard } from "../../guards/gameConsoleGuard";
 
 export { AuthenticatedApp };
 
@@ -63,7 +65,13 @@ function AuthenticatedApp() {
           path="games/:id/persona/actions"
           element={<PlayerActionsPage />}
         />
-        <Route path="games/:id/console" element={<GameConsoleView />} />
+        <Route
+          path="games/:id/console"
+          element={<RouteGuard guard={gameConsoleGuard} />}
+        >
+          <Route path="" element={<GameConsoleView />} />
+          <Route path="*" element={<GameConsoleView />} />
+        </Route>
         <Route path="" element={<Navigate to="my-games" />} />
         <Route path="*" element={<Navigate to="my-games" />} />
       </Route>

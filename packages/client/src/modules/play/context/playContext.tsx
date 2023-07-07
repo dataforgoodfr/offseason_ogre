@@ -122,6 +122,7 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
   } = usePlayStore();
   const { socket } = useGameSocket({
     gameId,
+    isUserPlayer: user?.role.name === "player",
     token,
     setConsumptionActions,
     setGame,
@@ -144,17 +145,16 @@ function PlayProvider({ children }: { children: React.ReactNode }) {
     [setPlayers]
   );
 
+  const updateGame = useCallback(
+    (update: Partial<IGame>) => {
+      socket?.emit("game:update", { update });
+    },
+    [socket]
+  );
+
   if (!isInitialised || !game || !socket) {
     return <CircularProgress color="secondary" sx={{ margin: "auto" }} />;
   }
-
-  const updateGame = (update: Partial<IGame>) => {
-    setGame((previous) => {
-      if (previous === null) return null;
-      return { ...previous, ...update };
-    });
-    socket.emit("game:update", { update });
-  };
 
   const updatePlayerActions = (
     playerActions: {
@@ -369,6 +369,7 @@ function useCurrentStep(): GameStep | null {
 
 function useGameSocket({
   gameId,
+  isUserPlayer,
   token,
   setConsumptionActions,
   setGame,
@@ -378,6 +379,7 @@ function useGameSocket({
   setTeams,
 }: {
   gameId: number;
+  isUserPlayer: boolean;
   token: string | null;
   setConsumptionActions: React.Dispatch<React.SetStateAction<Action[]>>;
   setGame: React.Dispatch<React.SetStateAction<IGame | null>>;
@@ -417,16 +419,20 @@ function useGameSocket({
         if (previous === null) {
           return null;
         }
-        if (previous.status !== "finished" && update.status === "finished") {
-          navigate("/play");
+
+        if (isUserPlayer) {
+          if (previous.status !== "finished" && update.status === "finished") {
+            navigate("/play");
+          }
+
+          if (
+            update.lastFinishedStep &&
+            update.lastFinishedStep !== previous.lastFinishedStep
+          ) {
+            navigate(`/play/games/${previous.id}/persona/stats`);
+          }
         }
 
-        if (
-          update.lastFinishedStep &&
-          update.lastFinishedStep !== previous.lastFinishedStep
-        ) {
-          navigate(`/play/games/${previous.id}/persona/stats`);
-        }
         return { ...previous, ...update };
       });
     });
@@ -482,6 +488,7 @@ function useGameSocket({
     };
   }, [
     gameId,
+    isUserPlayer,
     token,
     /**
      * Don't include `navigate` in dependencies since it changes on every route change,

@@ -1,6 +1,6 @@
-import { AuthenticatedApp } from "./AuthenticatedApp";
+import { AuthenticatedApp } from "./modules/router/components/AuthenticatedApp";
+import { UnauthenticatedApp } from "./modules/router/components/UnauthenticatedApp";
 import { useAuth } from "./modules/auth/authProvider";
-import { UnauthenticatedApp } from "./UnauthenticatedApp";
 import { hotjar } from "react-hotjar";
 import { useEffect } from "react";
 import { ErrorBoundary } from "./modules/error-handling/ErrorBoundary";

@@ -7,6 +7,7 @@ import {
   Players,
   ProductionAction,
   Profile,
+  Role,
   Team,
   TeamActions,
 } from "@prisma/client";
@@ -65,6 +66,7 @@ type ServerSideEvents = any;
 type SocketData = {
   gameId: number;
   user: User;
+  role: Role;
 };
 
 type Server = ServerLib<ListenEvents, EmitEvents, ServerSideEvents, SocketData>;

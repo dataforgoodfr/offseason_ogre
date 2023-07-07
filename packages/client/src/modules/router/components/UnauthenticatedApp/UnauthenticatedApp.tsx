@@ -1,9 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import OgreHeader from "./modules/common/components/OgreHeader";
-import MagicLink from "./modules/magic-link";
-import Signup from "./modules/signup";
-import { theme } from "./utils/theme";
-import SignIn from "./modules/sign-in/SignIn";
+import OgreHeader from "../../../common/components/OgreHeader";
+import MagicLink from "../../../magic-link";
+import Signup from "../../../signup";
+import { theme } from "../../../../utils/theme";
+import SignIn from "../../../sign-in/SignIn";
 
 export { UnauthenticatedApp };
 
