@@ -126,7 +126,7 @@ function TeamActionOptionHeader({
   };
 
   return (
-    <Box display="flex" gap={1}>
+    <Box display="flex" alignItems="center" gap={1}>
       <Icon name="information" onClick={handleOnOpenHelpCard} />
       <Typography>
         {t(

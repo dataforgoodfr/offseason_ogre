@@ -7,7 +7,7 @@ import { useCurrentStep, usePlay } from "../../context/playContext";
 import { Icon } from "../../../common/components/Icon";
 import { computeTeamActionStats } from "../../utils/production";
 import { TeamAction } from "../../../../utils/types";
-import { t } from "../../../translations";
+import { useTranslation } from "../../../translations";
 import { HelpIconWrapper } from "./TeamActionsRecap.styles";
 import { formatBudget, formatProductionGw } from "../../../../lib/formatter";
 import { GameStepId } from "../../constants";
@@ -19,11 +19,13 @@ function TeamActionsRecap({
   teamActions = [],
   helper,
   showCredibility,
+  showProductionValue,
 }: {
   title?: string;
   teamActions: TeamAction[];
   helper?: React.ReactNode;
   showCredibility?: boolean;
+  showProductionValue?: boolean;
 }) {
   const currentStep = useCurrentStep();
   const { productionActionById } = usePlay();
@@ -56,6 +58,13 @@ function TeamActionsRecap({
       </Box>
 
       <Box style={{ gap: "4px" }} display="flex" flexDirection="column">
+        <Box display="flex" alignItems="center">
+          <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
+            <Icon name="power" />
+            <Typography>Puissance installée :</Typography>
+          </Box>
+          <Typography>{formatProductionGw(powerInstalledInGw)} GW</Typography>
+        </Box>
         {currentStep?.budgetAdvised && (
           <Box display="flex" alignItems="center">
             <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
@@ -67,21 +76,15 @@ function TeamActionsRecap({
             <Typography>{formatBudget(budgetRemaining)} €/j</Typography>
           </Box>
         )}
-        <Box display="flex" alignItems="center">
-          <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
-            <Icon name="power" />
-            <Typography>Puissance installée :</Typography>
-          </Box>
-          <Typography>{formatProductionGw(powerInstalledInGw)} GW</Typography>
-        </Box>
       </Box>
 
-      <Box style={{ gap: "4px" }} display="flex" flexDirection="column">
+      <Box display="flex" flexDirection="column" gap={1}>
         {teamActions.map((teamAction) => (
           <EnergyListItem
             key={productionActionById[teamAction.actionId].name}
             teamAction={teamAction}
             showCredibility={showCredibility}
+            showProductionValue={showProductionValue}
           />
         ))}
       </Box>
@@ -92,23 +95,27 @@ function TeamActionsRecap({
 function EnergyListItem({
   teamAction,
   showCredibility,
+  showProductionValue,
 }: {
   teamAction?: TeamAction;
   showCredibility?: boolean;
+  showProductionValue?: boolean;
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { productionActionById } = usePlay();
 
   if (!teamAction) {
     return null;
   }
 
+  const productionAction = productionActionById[teamAction.actionId];
   const stats = computeTeamActionStats(teamAction, productionActionById);
   const color = teamAction.isTouched ? theme.palette.secondary.main : "white";
 
   return (
-    <Box display="flex" alignItems="center" color={color}>
-      <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
+    <Box display="flex" alignItems="start" gap={1} color={color}>
+      <Box display="flex" gap={1}>
         <Icon name="team" />
         {showCredibility && (
           <div
@@ -122,20 +129,38 @@ function EnergyListItem({
             {!stats.isCredible && <Icon name="warning" sx={{ fontSize: 22 }} />}
           </div>
         )}
-        <Typography>
-          {t(
-            `production.energy.${
-              productionActionById[teamAction.actionId].name
-            }.name`
-          )}
-          :
-        </Typography>
       </Box>
 
-      <Typography>
-        {formatProductionGw(stats.powerNeedGw)} GW &amp;{" "}
-        {formatBudget(stats.cost)} €/j
-      </Typography>
+      <Box display="flex" flexDirection="column" flexGrow={1}>
+        <Typography>
+          {t(`production.energy.${productionAction.name}.name`)}
+        </Typography>
+
+        {showProductionValue && (
+          <Typography>
+            {t(
+              `production.energy.${productionAction.name}.accordion.label-slider`
+            )}{" "}
+            :{" "}
+            {productionAction.unit === "percentage"
+              ? t("unit.percentage", { value: teamAction.value })
+              : t("unit.area.base", { value: teamAction.value })}
+          </Typography>
+        )}
+
+        <Box display="grid" gridTemplateColumns="1fr 1fr" maxWidth={300}>
+          <Box display="flex" alignItems="center" gap={1}>
+            <Icon name="power" />
+            <Typography as="span">
+              {formatProductionGw(stats.powerNeedGw)} GW
+            </Typography>
+          </Box>
+          <Box display="flex" alignItems="center" gap={1}>
+            <Icon name="budget" />
+            <Typography as="span">{formatBudget(stats.cost)} €/j</Typography>
+          </Box>
+        </Box>
+      </Box>
     </Box>
   );
 }

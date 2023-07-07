@@ -362,6 +362,7 @@
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
   "form.last-action.validated": "Validation",
 
+  "unit.area.base": "{{value}} m²",
   "unit.watthour-per-day.kilo": "{{value}} kWh/jour",
   "unit.watthour-per-day-bare.kilo": "kWh/jour",
   "unit.watthour-per-day-per-person.kilo": "{{value}} kWh/jour et par personne",

@@ -71,6 +71,7 @@ function TeamConsoleContent({ team }: { team: ITeam }) {
                 title="Actions Production"
                 teamActions={teamActionsAtCurrentStep}
                 showCredibility
+                showProductionValue
               />
             </PlayBox>
           )}
