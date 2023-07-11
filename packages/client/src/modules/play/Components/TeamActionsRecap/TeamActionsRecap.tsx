@@ -1,6 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 import sumBy from "lodash/sumBy";
-import React from "react";
+import React, { useMemo } from "react";
 
 import { Typography } from "../../../common/components/Typography";
 import { useCurrentStep, usePlay } from "../../context/playContext";
@@ -10,7 +10,6 @@ import { TeamAction } from "../../../../utils/types";
 import { useTranslation } from "../../../translations";
 import { HelpIconWrapper } from "./TeamActionsRecap.styles";
 import { formatBudget, formatProductionGw } from "../../../../lib/formatter";
-import { GameStepId } from "../../constants";
 
 export { TeamActionsRecap };
 
@@ -27,6 +26,7 @@ function TeamActionsRecap({
   showCredibility?: boolean;
   showProductionValue?: boolean;
 }) {
+  const { t } = useTranslation(["common", "countries"]);
   const currentStep = useCurrentStep();
   const { productionActionById } = usePlay();
 
@@ -37,12 +37,12 @@ function TeamActionsRecap({
     ])
   );
 
-  function budgetWording(stepId: GameStepId): string {
-    if (stepId === "production-3") {
-      return "Budget restant :";
+  const budgetI18n = useMemo(() => {
+    if (currentStep?.id === "production-3") {
+      return t("team-actions.recap.remaining-budget");
     }
-    return "Budget conseillé restant :";
-  }
+    return t("team-actions.recap.recommended-remaining-budget");
+  }, [currentStep, t]);
 
   const energyStats = Object.values(energyNameToEnergyStats);
   const budgetRemaining =
@@ -61,19 +61,26 @@ function TeamActionsRecap({
         <Box display="flex" alignItems="center">
           <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
             <Icon name="power" />
-            <Typography>Puissance installée :</Typography>
+            <Typography>{t("team-actions.recap.installed-power")} :</Typography>
           </Box>
-          <Typography>{formatProductionGw(powerInstalledInGw)} GW</Typography>
+          <Typography>
+            {t("unit.power.giga", {
+              value: formatProductionGw(powerInstalledInGw),
+            })}
+          </Typography>
         </Box>
         {currentStep?.budgetAdvised && (
           <Box display="flex" alignItems="center">
             <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
               <Icon name="budget" />
-              <Typography>
-                {budgetWording(currentStep?.id || "initial-situation")}
-              </Typography>
+              <Typography>{budgetI18n} :</Typography>
             </Box>
-            <Typography>{formatBudget(budgetRemaining)} €/j</Typography>
+            <Typography>
+              {t("unit.budget-per-day.base", {
+                value: formatBudget(budgetRemaining),
+                symbol: t("countries:country.fr.currency.symbol"),
+              })}
+            </Typography>
           </Box>
         )}
       </Box>
@@ -152,12 +159,18 @@ function EnergyListItem({
           <Box display="flex" alignItems="center" gap={1}>
             <Icon name="power" />
             <Typography as="span">
-              {formatProductionGw(stats.powerNeedGw)} GW
+              {t("unit.power.giga", {
+                value: formatProductionGw(stats.powerNeedGw),
+              })}
             </Typography>
           </Box>
           <Box display="flex" alignItems="center" gap={1}>
             <Icon name="budget" />
-            <Typography as="span">{formatBudget(stats.cost)} €/j</Typography>
+            <Typography as="span">
+              {t("unit.power.giga", {
+                value: formatBudget(stats.cost),
+              })}
+            </Typography>
           </Box>
         </Box>
       </Box>
