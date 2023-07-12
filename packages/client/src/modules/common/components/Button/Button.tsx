@@ -13,6 +13,7 @@ interface ButtonProps {
   loading?: boolean;
   to?: string;
   iconName?: IconName;
+  width?: number | string;
   onClick?: () => void | Promise<void>;
   children: React.ReactNode;
 }
@@ -24,6 +25,7 @@ function Button({
   loading = false,
   to,
   iconName,
+  width,
   onClick: onClickProp,
   children,
 }: ButtonProps) {
@@ -78,6 +80,7 @@ function Button({
         ...(buttonProps.sx || {}),
         display: "flex",
         gap: 1,
+        width,
       }}
     >
       {loading && <CircularProgress color={loaderColor} size={16} />}
