@@ -163,7 +163,7 @@ function EnergyListItem({
   showProductionValue?: boolean;
 }) {
   const theme = useTheme();
-  const { t } = useTranslation();
+  const { t } = useTranslation(["common", "countries"]);
   const { productionActionById } = usePlay();
 
   if (!teamAction) {
@@ -227,8 +227,9 @@ function EnergyListItem({
           <Box display="flex" alignItems="center" gap={1}>
             <Icon name="budget" />
             <Typography as="span">
-              {t("unit.power.giga", {
+              {t("unit.budget-per-day.base", {
                 value: formatBudget(stats.cost),
+                symbol: t("countries:country.fr.currency.symbol"),
               })}
             </Typography>
           </Box>
