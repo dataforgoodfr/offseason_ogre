@@ -1,6 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 import sumBy from "lodash/sumBy";
-import React, { useMemo } from "react";
+import React, { ReactNode, useMemo } from "react";
 
 import { Typography } from "../../../common/components/Typography";
 import { useCurrentStep, usePlay } from "../../context/playContext";
@@ -50,42 +50,71 @@ function TeamActionsRecap({
   const powerInstalledInGw = sumBy(energyStats, "powerNeedGw");
 
   return (
-    <Box display="flex" flexDirection="column" gap={3}>
+    <Box
+      className="team-actions-recap"
+      display="flex"
+      flexDirection="column"
+      gap={3}
+    >
       <Box display="flex" alignItems="center" gap={1}>
         <Icon name="production" />
         <Typography variant="h5">{title || currentStep?.title}</Typography>
         {helper && <HelpIconWrapper>{helper}</HelpIconWrapper>}
       </Box>
 
-      <Box style={{ gap: "4px" }} display="flex" flexDirection="column">
-        <Box display="flex" alignItems="center">
-          <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
-            <Icon name="power" />
-            <Typography>{t("team-actions.recap.installed-power")} :</Typography>
-          </Box>
-          <Typography>
-            {t("unit.power.giga", {
-              value: formatProductionGw(powerInstalledInGw),
-            })}
-          </Typography>
-        </Box>
+      <Box
+        className="team-actions-recap__overview"
+        style={{ gap: "4px" }}
+        display="flex"
+        flexDirection="column"
+      >
+        <OverviewItem
+          title={
+            <>
+              <Icon name="power" />
+              <Typography>
+                {t("team-actions.recap.installed-power")} :
+              </Typography>
+            </>
+          }
+          value={
+            <>
+              <Typography>
+                {t("unit.power.giga", {
+                  value: formatProductionGw(powerInstalledInGw),
+                })}
+              </Typography>
+            </>
+          }
+        />
         {currentStep?.budgetAdvised && (
-          <Box display="flex" alignItems="center">
-            <Box sx={{ width: 300 }} display="flex" alignItems="center" gap={1}>
-              <Icon name="budget" />
-              <Typography>{budgetI18n} :</Typography>
-            </Box>
-            <Typography>
-              {t("unit.budget-per-day.base", {
-                value: formatBudget(budgetRemaining),
-                symbol: t("countries:country.fr.currency.symbol"),
-              })}
-            </Typography>
-          </Box>
+          <OverviewItem
+            title={
+              <>
+                <Icon name="budget" />
+                <Typography>{budgetI18n} :</Typography>
+              </>
+            }
+            value={
+              <>
+                <Typography>
+                  {t("unit.budget-per-day.base", {
+                    value: formatBudget(budgetRemaining),
+                    symbol: t("countries:country.fr.currency.symbol"),
+                  })}
+                </Typography>
+              </>
+            }
+          />
         )}
       </Box>
 
-      <Box display="flex" flexDirection="column" gap={1}>
+      <Box
+        className="team-actions-recap__energy-list"
+        display="flex"
+        flexDirection="column"
+        gap={1}
+      >
         {teamActions.map((teamAction) => (
           <EnergyListItem
             key={productionActionById[teamAction.actionId].name}
@@ -94,6 +123,31 @@ function TeamActionsRecap({
             showProductionValue={showProductionValue}
           />
         ))}
+      </Box>
+    </Box>
+  );
+}
+
+function OverviewItem({
+  title,
+  value,
+}: {
+  title: ReactNode;
+  value: ReactNode;
+}) {
+  return (
+    <Box
+      className="overview-item"
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      sx={{ width: "100%", maxWidth: 325 }}
+    >
+      <Box display="flex" alignItems="center" gap={1}>
+        {title}
+      </Box>
+      <Box display="flex" alignItems="center" gap={1}>
+        {value}
       </Box>
     </Box>
   );
@@ -121,7 +175,13 @@ function EnergyListItem({
   const color = teamAction.isTouched ? theme.palette.secondary.main : "white";
 
   return (
-    <Box display="flex" alignItems="start" gap={1} color={color}>
+    <Box
+      className="energy-list-item"
+      display="flex"
+      alignItems="start"
+      gap={1}
+      color={color}
+    >
       <Box display="flex" gap={1}>
         <Icon name="team" />
         {showCredibility && (
