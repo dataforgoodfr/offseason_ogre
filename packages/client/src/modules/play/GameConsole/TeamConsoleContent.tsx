@@ -64,18 +64,22 @@ function TeamConsoleContent({ team }: { team: ITeam }) {
             <PlayerComponent key={player.user.id} player={player} />
           ))}
         </Box>
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" gap={2}>
           {isProductionStep && (
-            <PlayBox>
-              <TeamActionsRecap
-                title="Actions Production"
-                teamActions={teamActionsAtCurrentStep}
-                showCredibility
-                showProductionValue
-              />
-            </PlayBox>
+            <Box>
+              <PlayBox>
+                <TeamActionsRecap
+                  title="Actions Production"
+                  teamActions={teamActionsAtCurrentStep}
+                  showCredibility
+                  showProductionValue
+                />
+              </PlayBox>
+            </Box>
           )}
-          <PlayerChart team={team} />
+          <Box>
+            <PlayerChart team={team} />
+          </Box>
         </Box>
       </Box>
     </PlayBox>
@@ -215,12 +219,13 @@ function PlayerConsumption({ player }: { player: Player }) {
           {formatCarbonFootprint(currentPersona.carbonFootprint)} kgCO2/j
         </Typography>
       </Box>
-      <Box display="flex" alignItems="center">
+      <Box display="flex" alignItems="top">
         <Icon name="action-points" />
-        <Typography ml={1} width={150}>
+        <Typography ml={1} width={150} sx={{ flexShrink: 0 }}>
           Point d'actions :
         </Typography>
         <Rating
+          sx={{ flexWrap: "wrap" }}
           emptyIcon={
             <Icon
               name="star"
