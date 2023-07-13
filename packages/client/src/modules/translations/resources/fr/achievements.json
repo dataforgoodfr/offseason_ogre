@@ -29,7 +29,7 @@
 
   "achievement.choseToStopPlane.title": "Arrête moi si tu peux !",
   "achievement.choseToStopPlane.display-order": 10,
-  "achievement.choseToStopPlane.description": "Ça ne sera pas facile de vous arrêter dans un aéroport car vous ne prennez plus l’avion.",
+  "achievement.choseToStopPlane.description": "Ça ne sera pas facile de vous arrêter dans un aéroport car vous ne prenez plus l’avion.",
   "achievement.choseToStopPlane.iconSrc": "choseToStopPlane.svg",
   "achievement.choseToStopPlane.iconAlt": "",
   "achievement.choseToStopPlane.type": "default",

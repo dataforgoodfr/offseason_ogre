@@ -80,7 +80,7 @@ function getActionsDataForConsumptionStep1(): Action[] {
       financialCost: 0,
     },
     {
-      description: "Arrêter les boissons en cannette",
+      description: "Arrêter les boissons en canette",
       name: availableActions.STOP_CANS,
       helpCardLink:
         "https://drive.google.com/file/d/1a3osQzEObej0rXNgdLnLrq8jgeh1c_1h/view?usp=share_link",

@@ -789,7 +789,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       field: "eatingTinDrink",
       cellClassName: (params: GridCellParams<string>) =>
         getCellCredibility(params.field as keyof PersoForm, params.row),
-      headerName: "Nb cannettes",
+      headerName: "Nb canettes",
       flex: 1,
       minWidth: 120,
       headerAlign: "center",
