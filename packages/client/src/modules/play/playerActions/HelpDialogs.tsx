@@ -1,7 +1,6 @@
-import { Button } from "@mui/material";
-
+import { Button } from "../../common/components/Button";
 import { Dialog } from "../../common/components/Dialog";
-import { Icon } from "../../common/components/Icon";
+import { Typography } from "../../common/components/Typography";
 import { useTranslation } from "../../translations/useTranslation";
 
 export { StepHelpDialog, ActionHelpDialog };
@@ -23,18 +22,10 @@ function StepHelpDialog({
       aria-labelledby="help for action choices"
       aria-describedby="alert-dialog-description"
       actions={
-        <Button
-          color="primary"
-          variant="contained"
-          type="submit"
-          sx={{ border: 1, borderColor: "secondary" }}
-          onClick={handleClose}
-        >
-          {t("cta.thanks-for-help")}
-        </Button>
+        <Button onClick={handleClose}>{t("cta.thanks-for-help")}</Button>
       }
     >
-      {message}
+      <Typography>{message}</Typography>
     </Dialog>
   );
 }
@@ -60,30 +51,16 @@ function ActionHelpDialog({
       aria-describedby="alert-dialog-description"
       actions={
         <>
-          <Button
-            color="secondary"
-            variant="contained"
-            sx={{ border: 1, borderColor: "secondary" }}
-            component="a"
-            target="_blank"
-            href={helpCardLink}
-            startIcon={<Icon name="open-in-new-tab" />}
-          >
-            {t("cta.open-info-card")}
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            type="submit"
-            sx={{ border: 1, borderColor: "secondary", mt: 1 }}
-            onClick={handleClose}
-          >
+          <Button type="secondary" onClick={handleClose}>
             {t("cta.thanks-for-help")}
+          </Button>
+          <Button iconName="open-in-new-tab" to={helpCardLink}>
+            {t("cta.open-info-card")}
           </Button>
         </>
       }
     >
-      {message}
+      <Typography>{message}</Typography>
     </Dialog>
   );
 }

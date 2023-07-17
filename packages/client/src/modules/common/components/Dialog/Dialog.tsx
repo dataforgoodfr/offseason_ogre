@@ -1,7 +1,8 @@
-import Button from "@mui/material/Button";
 import { Grid, Dialog as DialogMui, DialogContent } from "@mui/material";
 
 import { CustomDialogActions, CustomGrid } from "./Dialog.styles";
+import { useTranslation } from "../../../translations";
+import { Button } from "../Button";
 
 export { Dialog };
 
@@ -22,6 +23,8 @@ function Dialog({
   ariaLabelledBy?: string;
   ariaDescribedBy?: string;
 }) {
+  const { t } = useTranslation();
+
   return (
     <DialogMui
       open={open}
@@ -31,7 +34,7 @@ function Dialog({
     >
       <DialogContent>
         <CustomGrid>
-          <Grid item md={2}>
+          <Grid item md={2} flexShrink={0}>
             <img
               style={{ border: "2px solid white", borderRadius: "5px" }}
               src="/sage.png"
@@ -44,20 +47,9 @@ function Dialog({
         </CustomGrid>
       </DialogContent>
 
-      {
-        <CustomDialogActions>
-          {actions || (
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={handleClose}
-              type="button"
-            >
-              Fermer
-            </Button>
-          )}
-        </CustomDialogActions>
-      }
+      <CustomDialogActions>
+        {actions || <Button onClick={handleClose}>{t("cta.close")}</Button>}
+      </CustomDialogActions>
     </DialogMui>
   );
 }

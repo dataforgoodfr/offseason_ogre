@@ -1,5 +1,4 @@
 import { Box, IconButton } from "@mui/material";
-import HelpIcon from "@mui/icons-material/Help";
 import { useState } from "react";
 import { Typography } from "../../common/components/Typography";
 import { useCurrentStep } from "../context/playContext";
@@ -13,12 +12,13 @@ import {
   Spacer,
   MediaQuery,
 } from "./PlayerActionsHeader.styles";
-import { t } from "../../translations";
+import { useTranslation } from "../../translations";
 import { usePersona, useCurrentPlayer } from "../context/hooks/player";
 
 export { PlayerActionsHeader };
 
 function PlayerActionsHeader() {
+  const { t } = useTranslation(["common", "countries"]);
   const { latestPersona, currentPersona } = usePersona();
   const currentStep = useCurrentStep();
 
@@ -27,9 +27,6 @@ function PlayerActionsHeader() {
   const handleClickOpenHelp = () => setOpenHelp(true);
 
   const handleCloseHelp = () => setOpenHelp(false);
-
-  const helpMessage =
-    "Tu peux utiliser tes points d’action pour réduire ta consommation. Tu en as un nombre limité, alors utilise-les à bon escient. Tu ne peux les utiliser que pour ce tour. Fais attention car certaines actions coûtent de l’argent en plus des points d’action.";
 
   return (
     <>
@@ -45,7 +42,7 @@ function PlayerActionsHeader() {
               aria-label="help with current step"
               onClick={handleClickOpenHelp}
             >
-              <HelpIcon sx={{ color: "white" }} />
+              <Icon name="helper" sx={{ color: "white" }} />
             </IconButton>
           </HelpIconWrapper>
         </Box>
@@ -54,23 +51,36 @@ function PlayerActionsHeader() {
           <DashboardItem>
             <Box display="flex" gap={1}>
               <Icon name="budget" />
-              <Typography>Budget restant :</Typography>
+              <Typography>
+                {t("page.player.player-actions.remaining-budget")}
+              </Typography>
             </Box>
-            <Typography>{formatBudget(latestPersona.budget)} €/j</Typography>
+            <Typography>
+              {t("unit.budget-per-day.base", {
+                value: formatBudget(latestPersona.budget),
+                symbol: t("countries:country.fr.currency.symbol"),
+              })}
+            </Typography>
           </DashboardItem>
           <DashboardItem>
             <Box display="flex" gap={1}>
               <Icon name="carbon-footprint" />
-              <Typography>Bilan carbone :</Typography>
+              <Typography>
+                {t("page.player.player-actions.carbon-footprint")}
+              </Typography>
             </Box>
             <Typography>
-              {formatCarbonFootprint(currentPersona.carbonFootprint)} kgCO2/j
+              {t("unit.carbon-per-day.kilo", {
+                value: formatCarbonFootprint(currentPersona.carbonFootprint),
+              })}
             </Typography>
           </DashboardItem>
           <DashboardItem>
             <Box display="flex" gap={1}>
               <Icon name="action-points" />
-              <Typography>Points d'action utilisés :</Typography>
+              <Typography>
+                {t("page.player.player-actions.used-action-points")}
+              </Typography>
             </Box>
             <ActionPoints />
           </DashboardItem>
@@ -80,13 +90,14 @@ function PlayerActionsHeader() {
       <StepHelpDialog
         open={openHelp}
         handleClose={handleCloseHelp}
-        message={helpMessage}
+        message={t("page.player.player-actions.action.help")}
       />
     </>
   );
 }
 
 function ActionPoints() {
+  const { t } = useTranslation();
   const { actionPointsUsedAtCurrentStep } = useCurrentPlayer();
   const currentStep = useCurrentStep();
 
@@ -103,7 +114,10 @@ function ActionPoints() {
         value={actionPointsUsedAtCurrentStep}
       />
       <Typography className="down-sm">
-        {actionPointsUsedAtCurrentStep}/{availableActionPoints}{" "}
+        {t("unit.action-point.base", {
+          usedCount: actionPointsUsedAtCurrentStep,
+          availableCount: availableActionPoints,
+        })}
       </Typography>
     </MediaQuery>
   );

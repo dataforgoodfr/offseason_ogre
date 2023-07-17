@@ -23,7 +23,7 @@ function Button({
   htmlType = "button",
   disabled = false,
   loading = false,
-  to,
+  to = "",
   iconName,
   width,
   onClick: onClickProp,
@@ -64,7 +64,9 @@ function Button({
   );
 
   const onClick = useMemo(() => {
-    if (to) {
+    if (to.startsWith("http")) {
+      return () => window.open(to, "_blank");
+    } else if (to) {
       return () => navigate(to);
     }
     return onClickProp;
