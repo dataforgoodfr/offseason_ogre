@@ -115,6 +115,7 @@
   "page.player.statistics.tabs.energy-balance.graphs.details.title": "Décomposition de la pile {{stackName}}",
   "page.player.statistics.tabs.materials.label": "Matériaux",
   "page.player.statistics.tabs.metals.label": "Métaux",
+  "page.player.team-actions.help.step": "En équipe, vous devez décider des moyens de production d’électricité à installer en France d’ici 2050 pour répondre aux besoins énergétiques de chacun.e.<br/><br/>Pour chaque moyen de production, choisissez puis validez la puissance à installer. Attention, une seule personne doit valider la valeur pour toute l’équipe.<br/><br/>Chaque moyen de production a un coût nominal. Vous avez un budget conseillé qui n’est là qu’à titre indicatif. Faites attention à votre budget global.",
   "page.signup.title": "Création de compte",
   "page.signup.login-section.title": "Si vous avez déjà un compte :",
   "page.signup.login-section.cta": "Se connecter",
