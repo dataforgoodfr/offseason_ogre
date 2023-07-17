@@ -1,9 +1,10 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import { useState } from "react";
 import { Dialog } from "../../common/components/Dialog";
 import { useTranslation } from "../../translations/useTranslation";
 import { usePlay } from "../context/playContext";
 import { useCurrentPlayer } from "../context/hooks/player";
+import { Button } from "../../common/components/Button";
 
 export { ValidateActions };
 
@@ -24,11 +25,7 @@ function ValidateActions() {
   return (
     <Box mt={2}>
       <Button
-        variant="contained"
-        color="actionValidation"
-        sx={{
-          width: "200px",
-        }}
+        width={200}
         disabled={player.hasFinishedStep}
         onClick={handleClickOpen}
       >
@@ -41,10 +38,10 @@ function ValidateActions() {
         content={t(`modal.validate-consumption-choices.title`)}
         actions={
           <>
-            <Button onClick={handleClose}>{t(`cta.no`)}</Button>
-            <Button onClick={handleFinishStep} autoFocus>
-              {t(`cta.yes`)}
+            <Button type="secondary" onClick={handleClose}>
+              {t(`cta.no`)}
             </Button>
+            <Button onClick={handleFinishStep}>{t(`cta.yes`)}</Button>
           </>
         }
         aria-labelledby="alert-dialog-title"
