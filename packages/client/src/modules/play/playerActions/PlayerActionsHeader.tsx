@@ -90,7 +90,7 @@ function PlayerActionsHeader() {
       <StepHelpDialog
         open={openHelp}
         handleClose={handleCloseHelp}
-        message={t("page.player.player-actions.action.help")}
+        message={t("page.player.player-actions.help.step")}
       />
     </>
   );
