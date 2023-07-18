@@ -1,4 +1,4 @@
-import { GameConsoleView } from "./GameConsole";
+import { GameConsolePage } from "./GameConsole";
 import { MyGames } from "./MyGames";
 import { PlayerPersona } from "./PlayerPersona";
 import { PlayLayout } from "./PlayLayout";
@@ -7,7 +7,7 @@ import { Stats } from "./Stats";
 
 export * from "./constants";
 export {
-  GameConsoleView,
+  GameConsolePage,
   MyGames,
   PlayerPersona,
   PlayLayout,
