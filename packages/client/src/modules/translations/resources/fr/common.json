@@ -305,6 +305,10 @@
   "synthesis.player.most-impactful-actions-section.description": "Voici les 5 actions qui avaient le plus d’impact en considérant votre situation initiale.",
   "synthesis.player.most-impactful-actions-section.title": "Actions à fort impact",
 
+  "team-actions.recap.installed-power": "Puissance installée",
+  "team-actions.recap.remaining-budget": "Budget restant",
+  "team-actions.recap.recommended-remaining-budget": "Budget conseillé restant",
+
   "game.status.draft": "Brouillon",
   "game.status.finished": "Terminé",
   "game.status.not-started": "Pas démarré",
@@ -362,6 +366,7 @@
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",
   "form.last-action.validated": "Validation",
 
+  "unit.area.base": "{{value}} m²",
   "unit.watthour-per-day.kilo": "{{value}} kWh/jour",
   "unit.watthour-per-day-bare.kilo": "kWh/jour",
   "unit.watthour-per-day-per-person.kilo": "{{value}} kWh/jour et par personne",
@@ -376,10 +381,12 @@
   "unit.budget-per-year-per-person.base": "{{value}}{{symbol}}/an et par personne",
   "unit.budget-per-year-per-inhabitant.base": "{{value}}{{symbol}}/an et par {{countryInhabitantName}}",
   "unit.carbon.year": "T/an",
+  "unit.budget-per-day.base": "{{value}} {{symbol}}/j",
   "unit.carbon.day": "kg/j",
   "unit.carbon-per-year-per-person.mega_zero": "{{value}} tonne/an et par personne",
   "unit.carbon-per-year-per-person.mega_one": "{{value}} tonne/an et par personne",
   "unit.carbon-per-year-per-person.mega_other": "{{value}} tonnes/an et par personne",
+  "unit.power.giga": "{{value}} GW",
   "unit.percentage": "{{value}}%",
   "value.evolution": "{{initialValue}} → {{finalValue}}"
 }

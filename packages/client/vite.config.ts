@@ -43,7 +43,6 @@ export default defineConfig(({ mode }) => {
       sentryVitePlugin({
         org: "ogre",
         project: "ogre-client",
-        include: "./build",
         authToken: env.VITE_SENTRY_AUTH_TOKEN,
       }),
     ],
