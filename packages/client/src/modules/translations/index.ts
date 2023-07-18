@@ -46,7 +46,9 @@ function translateConsumptionName(value: string): string {
 }
 
 function translateProductionName(value: string): string {
-  return t(`production.energy.${value}.graph.name` as any);
+  return t(
+    `production-actions:production-action.fr.${value}.graph.name` as any
+  );
 }
 
 i18n.use(initReactI18next).init({

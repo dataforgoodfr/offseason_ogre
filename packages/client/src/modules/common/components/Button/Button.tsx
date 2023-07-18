@@ -64,12 +64,14 @@ function Button({
   );
 
   const onClick = useMemo(() => {
-    if (to.startsWith("http")) {
-      return () => window.open(to, "_blank");
-    } else if (to) {
-      return () => navigate(to);
-    }
-    return onClickProp;
+    return () => {
+      if (to.startsWith("http")) {
+        window.open(to, "_blank");
+      } else if (to && !to.startsWith("http")) {
+        navigate(to);
+      }
+      onClickProp?.();
+    };
   }, [to, navigate, onClickProp]);
 
   return (

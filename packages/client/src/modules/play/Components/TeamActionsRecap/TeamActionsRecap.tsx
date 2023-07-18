@@ -163,7 +163,7 @@ function EnergyListItem({
   showProductionValue?: boolean;
 }) {
   const theme = useTheme();
-  const { t } = useTranslation(["common", "countries"]);
+  const { t } = useTranslation(["common", "countries", "production-actions"]);
   const { productionActionById } = usePlay();
 
   if (!teamAction) {
@@ -200,13 +200,15 @@ function EnergyListItem({
 
       <Box display="flex" flexDirection="column" flexGrow={1}>
         <Typography>
-          {t(`production.energy.${productionAction.name}.name`)}
+          {t(
+            `production-actions:production-action.fr.${productionAction.name}.name`
+          )}
         </Typography>
 
         {showProductionValue && (
           <Typography>
             {t(
-              `production.energy.${productionAction.name}.accordion.label-slider`
+              `production-actions:production-action.fr.${productionAction.name}.accordion.label-slider`
             )}{" "}
             :{" "}
             {productionAction.unit === "percentage"

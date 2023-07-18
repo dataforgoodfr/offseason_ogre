@@ -69,8 +69,8 @@ let theme = createTheme({
     components: {
       button: {
         disabled: {
-          backgroundColor: "#efefef",
-          color: "#adadad",
+          backgroundColor: "#b8933a",
+          color: blue,
         },
       },
       tag: {
