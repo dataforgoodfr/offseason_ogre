@@ -1,8 +1,10 @@
 {
   "cta.assign-team-to-players": "Répartir les joueurs",
+  "cta.back": "Retour",
   "cta.cancel": "Annuler",
   "cta.check-forms": "Vérifier les formulaires",
   "cta.close": "Fermer",
+  "cta.create-profile": "Créer mon profil conso",
   "cta.delete": "Supprimer",
   "cta.retrieve-emails": "Récupérer les emails",
   "cta.create-game": "Nouveau jeu",
@@ -22,6 +24,7 @@
   "cta.open-info-card": "Ouvrir la carte",
   "cta.play-game": "Jouer",
   "cta.prepare-game": "Préparer l'atelier",
+  "cta.read-profile-oilgre": "Voir le persona Oil'gre",
   "cta.read-synthesis": "Voir la synthèse",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
   "cta.send-magic-link": "Envoyez moi un lien de connexion",
@@ -106,6 +109,11 @@
   "page.games-list.finished-list.title": "Ateliers terminés",
   "page.games-list.ongoing-list.title": "Ateliers en cours",
   "page.games-list.upcoming-list.title": "Prochains ateliers",
+  "page.player.personalization.title": "Préparer l'atelier",
+  "page.player.personalization.description": [
+    "Pour une expérience personnalisée, je te propose de remplir un formulaire afin de bâtir ton profil de consommation personnalisé. Cela ne te prendra que quelques minutes.",
+    "Si le formulaire n'est pas complété et transmis à l'animateur, tu joueras avec le persona Oil'gre."
+  ],
   "page.player.player-actions.help.action": "Voici le lien vers une carte qui te permettra de mieux comprendre les implications de ce choix.",
   "page.player.player-actions.help.step": "Tu peux utiliser tes points d’action pour réduire ta consommation. Tu en as un nombre limité, alors utilise-les à bon escient. Tu ne peux les utiliser que pour ce tour. Fais attention car certaines actions coûtent de l’argent en plus des points d’action.",
   "page.player.player-actions.carbon-footprint": "Empreinte carbone",
