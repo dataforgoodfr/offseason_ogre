@@ -1,31 +1,27 @@
+import { Grid, styled } from "@mui/material";
 import { useCallback } from "react";
-import { Grid, Typography, useTheme } from "@mui/material";
 import { FormStatus } from "../models/form";
 import { useTranslation } from "../../../translations/useTranslation";
 import { useCurrentPlayer } from "../../context/hooks/player";
+import { formatDate } from "../../../../lib/time";
+import { Typography } from "../../../common/components/Typography";
 
 export { FormStatusBanner };
 
 function FormStatusBanner() {
-  const theme = useTheme();
   const { t } = useTranslation();
   const { profile } = useCurrentPlayer();
 
-  const formatLastUpdateDate = useCallback((date: string) => {
-    if (!date) {
-      return "Aucune action enregistrée";
-    }
+  const formatLastUpdateDate = useCallback(
+    (date: string) => {
+      if (!date) {
+        return t("page.player.personalization-form.update-status.no-update");
+      }
 
-    const dateObj = new Date(date);
-    const day = dateObj.toLocaleDateString([], {
-      dateStyle: "short",
-    });
-    const time = new Date(date).toLocaleTimeString([], {
-      timeStyle: "short",
-    });
-
-    return `le ${day} à ${time}`;
-  }, []);
+      return formatDate(date, "date-at-time");
+    },
+    [t]
+  );
 
   if (!profile || !profile.status) {
     return null;
@@ -37,34 +33,33 @@ function FormStatusBanner() {
       direction="column"
       justifyContent="space-between"
       sx={{
-        border: `3px solid ${theme.palette.primary.contrastText}`,
+        border: `3px solid white`,
         borderRadius: 2,
         p: 3,
-        width: "fit-content",
       }}
     >
-      <Typography
-        sx={{
-          color: theme.palette.primary.contrastText,
-          fontSize: "20px",
-        }}
-      >
-        <Typography component="span" sx={{ textDecoration: "underline" }}>
-          État du formulaire:
-        </Typography>{" "}
-        {t(`form.status.${profile.status as FormStatus}`)}
-      </Typography>
-      <Typography
-        sx={{
-          color: theme.palette.primary.contrastText,
-          fontSize: "20px",
-        }}
-      >
-        <Typography component="span" sx={{ textDecoration: "underline" }}>
-          {t(`form.last-action.${profile.status as FormStatus}`)}:
-        </Typography>{" "}
-        {formatLastUpdateDate(profile.lastStatusUpdate)}
-      </Typography>
+      <ItemText>
+        <ItemTitle as="span">
+          {t("page.player.personalization-form.form-status")}
+        </ItemTitle>{" "}
+        : {t(`form.status.${profile.status as FormStatus}`)}
+      </ItemText>
+      <ItemText>
+        <ItemTitle as="span">
+          {t(`form.last-action.${profile.status as FormStatus}`)}
+        </ItemTitle>{" "}
+        : {formatLastUpdateDate(profile.lastStatusUpdate)}
+      </ItemText>
     </Grid>
   );
 }
+
+const Text = styled(Typography)(() => ({
+  color: "white",
+}));
+
+const ItemTitle = styled(Text)(() => ({
+  textDecoration: "underline",
+}));
+
+const ItemText = styled(Text)(() => ({}));

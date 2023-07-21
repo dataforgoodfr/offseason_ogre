@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button, Grid, Tooltip, Typography } from "@mui/material";
-import { CustomContainer } from "./styles/personalization";
+import { Box, Grid, Tooltip } from "@mui/material";
+import { CustomContainer, Title } from "./styles/personalization";
 import { BackArrow, BackArrowWithValidation } from "./common/BackArrow";
 import { QuestionLine, QuestionText } from "./styles/form";
 import { useForm } from "../../common/hooks/useForm";
@@ -13,9 +13,8 @@ import {
   persoFormInputs,
   Question,
 } from "./models/form";
-import { Icon, IconName } from "../../common/components/Icon";
+import { Icon } from "../../common/components/Icon";
 import {
-  formBlockText,
   fulfillsConditionsForm,
   getOrigin,
   isFormValid,
@@ -34,12 +33,14 @@ import { FormStatusBanner } from "./common/FormStatusBanner";
 import { useTranslation } from "../../translations/useTranslation";
 import { http } from "../../../utils/request";
 import { useCurrentPlayer } from "../context/hooks/player";
+import { Typography } from "../../common/components/Typography";
+import { Button } from "../../common/components/Button";
 
 export { PersonalizationForm };
 
 function PersonalizationForm() {
   const gameId = useGameId();
-  const { t } = useTranslation();
+  const { t } = useTranslation(["common", "consumption-profiles"]);
   const { updateProfile } = usePlay();
   const { profile } = useCurrentPlayer();
   const [formSaveStatus, setFormSaveStatus] = useState<
@@ -57,7 +58,7 @@ function PersonalizationForm() {
   const [rgpdCheckbox, setRgpdCheckbox] = useState(false);
   const [backArrowDialogOpen, setBackArrowDialogOpen] = useState(false);
   const backArrowDialogContent = {
-    warningMessage: `Il semble que vous n’ayez pas sauvegardé votre formulaire. Etes-vous sur de vouloir revenir en arrière ? Vous perdrez l’ensemble de vos réponses aux questions du formulaire si vous validez le retour`,
+    warningMessage: t("page.player.personalization.messsage.draft-unsaved"),
   };
 
   const shouldShowSaveSuccessAlert = useMemo(() => {
@@ -130,10 +131,8 @@ function PersonalizationForm() {
       <QuestionLine key={key} sx={{ display: display ? "grid" : "none" }}>
         <div className="question-line__text-wrapper">
           <QuestionText>
-            {question.icon && (
-              <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
-            )}
-            {question.description}
+            {question.icon && <Icon name={question.icon} sx={{ mr: 1 }} />}
+            {t(`consumption-profiles:form.question.${question.name}.title`)}
           </QuestionText>
         </div>
         <div className="question-line__input-wrapper">
@@ -164,10 +163,10 @@ function PersonalizationForm() {
 
   const formatValidateTitle = (game: IGame) => {
     if (!canSave(game)) {
-      return formBlockText;
+      return t("page.player.personalization.messsage.form-locked");
     }
     if (!isFormValid(watch)) {
-      return "Le formulaire doit être complet pour pouvoir être validé.";
+      return t("page.player.personalization.messsage.form-incomplete");
     }
     return "";
   };
@@ -209,107 +208,101 @@ function PersonalizationForm() {
   return (
     <CustomContainer maxWidth="lg">
       {game?.status && game.status !== "draft" && (
-        <ErrorAlert alertPosition="top" message={formBlockText} />
+        <ErrorAlert
+          alertPosition="top"
+          message={t("page.player.personalization.messsage.form-locked")}
+        />
       )}
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-        <FormStatusBanner />
-        <Grid container direction="row" justifyContent="space-between">
-          {!isDirty && (
-            <BackArrow path={`/play/games/${gameId}/personalize/choice`} />
-          )}
-          {isDirty && (
-            <>
-              <BackArrowWithValidation
-                handleClickOpen={() => setBackArrowDialogOpen(true)}
-              />
-              <BackArrowDialog
-                backArrowDialogOpen={backArrowDialogOpen}
-                setBackArrowDialogOpen={setBackArrowDialogOpen}
-                backArrowDialogContent={backArrowDialogContent}
-                gameId={gameId}
-              />
-            </>
-          )}
+        <Box display="flex" flexDirection="column" gap={3}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            gap={1}
+          >
+            {!isDirty && (
+              <BackArrow path={`/play/games/${gameId}/personalize/choice`} />
+            )}
+            {isDirty && (
+              <>
+                <BackArrowWithValidation
+                  handleClickOpen={() => setBackArrowDialogOpen(true)}
+                />
+                <BackArrowDialog
+                  backArrowDialogOpen={backArrowDialogOpen}
+                  setBackArrowDialogOpen={setBackArrowDialogOpen}
+                  backArrowDialogContent={backArrowDialogContent}
+                  gameId={gameId}
+                />
+              </>
+            )}
 
-          <Grid item display="flex">
-            <Button
-              color="secondary"
-              variant="contained"
-              disabled={!canSave(game)}
-              onClick={() => saveDraft()}
-              sx={{
-                mr: "auto",
-                margin: "15px 0 35px 0",
-                padding: "10px 20px 10px 20px",
-              }}
-            >
-              <Icon name="settings" sx={{ mr: 1 }} />
-              Sauvegarder le brouillon
-            </Button>
+            <Grid item display="flex">
+              <Button disabled={!canSave(game)} onClick={() => saveDraft()}>
+                <Icon name="settings" sx={{ mr: 1 }} />
+                {t("cta.save-draft")}
+              </Button>
+            </Grid>
+            <Grid item display="flex">
+              <Tooltip placement="left-start" title={formatValidateTitle(game)}>
+                <span>
+                  <Button
+                    onClick={() => setValidateDialogOpen(true)}
+                    disabled={!canSave(game) || !isFormValid(watch)}
+                  >
+                    <Icon name="check-doubled" sx={{ mr: 1 }} />
+                    {t("cta.validate-form")}
+                  </Button>
+                </span>
+              </Tooltip>
+              <ValidationDialog
+                validateDialogOpen={validateDialogOpen}
+                setValidateDialogOpen={setValidateDialogOpen}
+                rgpdCheckbox={rgpdCheckbox}
+                setRgpdCheckbox={setRgpdCheckbox}
+                onSubmit={onSubmit}
+              />
+            </Grid>
           </Grid>
-          <Grid item display="flex">
-            <Tooltip placement="left-start" title={formatValidateTitle(game)}>
-              <span>
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  onClick={() => setValidateDialogOpen(true)}
-                  disabled={!canSave(game) || !isFormValid(watch)}
-                  sx={{
-                    mr: "auto",
-                    margin: "15px 0 35px 0",
-                    padding: "10px 20px 10px 20px",
-                  }}
-                >
-                  <Icon name="check-doubled" sx={{ mr: 1 }} />
-                  Valider le formulaire
-                </Button>
-              </span>
-            </Tooltip>
-            <ValidationDialog
-              validateDialogOpen={validateDialogOpen}
-              setValidateDialogOpen={setValidateDialogOpen}
-              rgpdCheckbox={rgpdCheckbox}
-              setRgpdCheckbox={setRgpdCheckbox}
-              onSubmit={onSubmit}
+
+          <Title variant="h3">
+            {t("page.player.personalization-form.title")}
+          </Title>
+
+          <FormStatusBanner />
+
+          <Box>
+            <Accordion
+              options={Object.entries(formSections).map(([_, section]) => {
+                const valid = isSectionValid(formValues, watch, section.name);
+                return {
+                  key: section.name,
+                  header: (
+                    <Typography alignItems="center" display="flex" variant="h6">
+                      {valid && (
+                        <Icon
+                          className="validIcon"
+                          name="check-circle"
+                          sx={{ mr: 2 }}
+                        />
+                      )}
+                      {section.titleIcon && (
+                        <Icon name={section.titleIcon} sx={{ mr: 1 }} />
+                      )}
+                      {t(
+                        `consumption-profiles:form.section.${section.name}.title`
+                      )}
+                    </Typography>
+                  ),
+                  content: buildFormSection(section.name),
+                  valid,
+                  themeVariation: valid ? "accent-large" : "default-large",
+                };
+              })}
             />
-          </Grid>
-        </Grid>
-        <Typography
-          variant="h5"
-          color="secondary"
-          sx={{ textAlign: "center", mb: 4 }}
-        >
-          Personnaliser mon profil
-        </Typography>
-        <Accordion
-          options={Object.entries(formSections).map(
-            ([_, section]: [string, any]) => {
-              const valid = isSectionValid(formValues, watch, section.name);
-              return {
-                key: section.name,
-                header: (
-                  <Typography alignItems="center" display="flex" variant="h6">
-                    {valid && (
-                      <Icon
-                        className="validIcon"
-                        name="check-circle"
-                        sx={{ mr: 2 }}
-                      />
-                    )}
-                    {section.titleIcon && (
-                      <Icon name={section.titleIcon} sx={{ mr: 1 }} />
-                    )}
-                    {section.title}
-                  </Typography>
-                ),
-                content: buildFormSection(section.name),
-                valid,
-                themeVariation: valid ? "accent-large" : "default-large",
-              };
-            }
-          )}
-        />
+          </Box>
+        </Box>
       </form>
 
       {shouldShowSaveSuccessAlert && (

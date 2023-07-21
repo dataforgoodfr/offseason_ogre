@@ -12,7 +12,6 @@ import { useGameId } from "./hooks/useGameId";
 import { BackArrow } from "./common/BackArrow";
 import { useQuery } from "react-query";
 import { ErrorAlert } from "../../alert";
-import { formBlockText } from "./utils/formValidation";
 import { http } from "../../../utils/request";
 import { Typography } from "../../common/components/Typography";
 import { useTranslation } from "../../translations";
@@ -33,7 +32,10 @@ function PersonalizationChoice() {
   return (
     <CustomContainer maxWidth="lg">
       {game?.status && game.status !== "draft" && (
-        <ErrorAlert alertPosition="top" message={formBlockText} />
+        <ErrorAlert
+          alertPosition="top"
+          message={t("page.player.personalization.messsage.form-locked")}
+        />
       )}
       <Box display="flex" flexDirection="column" gap={3}>
         <Box>
