@@ -9,10 +9,10 @@ import { computeIntermediateValues } from "../../persona/consumption/computing";
 import {
   carAges,
   carEnergies,
-  cleaning,
+  hygieneCleaning,
   houseEnergies,
   IntermediateValues,
-  lighting,
+  houseLighting,
   PersoForm,
   showerTimes,
 } from "../Personalization/models/form";
@@ -276,7 +276,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "lightingSystem",
-        update: (value: number) => lighting.AMPOULES_LED,
+        update: (value: number) => houseLighting.AMPOULES_LED,
       }),
     ],
   },
@@ -286,7 +286,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "showerBath",
-        update: (value: number) => cleaning.DOUCHES,
+        update: (value: number) => hygieneCleaning.DOUCHES,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -350,7 +350,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "carEnergy",
-        update: (value: number) => carEnergies.ELECTRICITE,
+        update: (value: number) => carEnergies.ELECTRICITE.value,
       }),
     ],
   },

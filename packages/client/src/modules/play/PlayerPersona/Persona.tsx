@@ -13,10 +13,13 @@ import { QuestionLine, QuestionText } from "../Personalization/styles/form";
 import { DescriptionValue } from "./Persona.styles";
 import { formatBooleanValue } from "../../../utils/format";
 import { useCurrentPlayer } from "../context/hooks/player";
+import { useTranslation } from "../../translations";
 
 export { Persona };
 
 function Persona() {
+  const { t } = useTranslation(["common", "consumption-profiles"]);
+
   const formatValue = (value: any) => {
     if (typeof value === "boolean") {
       return formatBooleanValue(value);
@@ -40,7 +43,7 @@ function Persona() {
           {question.icon && (
             <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
           )}
-          {question.description}
+          {t(`consumption-profiles:form.question.${question.name}.title`)}
         </QuestionText>
         <DescriptionValue>{formatValue(value)}</DescriptionValue>
       </QuestionLine>
