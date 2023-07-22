@@ -4,7 +4,14 @@ import ReactDOM from "react-dom";
 import { AlertProvider } from "./AlertProvider";
 import { Alerts } from "./Alerts";
 
-export { AlertProvider, Alerts, ErrorAlert, SuccessAlert, AlertSnackbar };
+export {
+  AlertProvider,
+  Alerts,
+  ErrorAlert,
+  InfoAlert,
+  SuccessAlert,
+  AlertSnackbar,
+};
 export type { ErrorAlertProps, SuccessAlertProps };
 
 interface ErrorAlertProps {
@@ -42,6 +49,30 @@ function SuccessAlert({
       onClose={onClose}
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="success" variant="filled">
+          {message}
+        </Alert>
+      )}
+    ></AlertSnackbar>
+  );
+}
+
+interface InfoAlertProps {
+  alertPosition?: "top" | "default";
+  message?: string;
+  onClose?: () => void;
+}
+
+function InfoAlert({
+  alertPosition = "default",
+  message = "Succès",
+  onClose,
+}: InfoAlertProps) {
+  return (
+    <AlertSnackbar
+      alertPosition={alertPosition}
+      onClose={onClose}
+      renderAlert={(onClose) => (
+        <Alert onClose={onClose} severity="info" variant="filled">
           {message}
         </Alert>
       )}

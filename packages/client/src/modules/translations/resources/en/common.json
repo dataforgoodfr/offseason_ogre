@@ -1,10 +1,10 @@
 {
   "cta.assign-team-to-players": "Répartir les joueurs",
-  "cta.back": "Retour",
+  "cta.back": "Back",
   "cta.cancel": "Annuler",
   "cta.check-forms": "Vérifier les formulaires",
   "cta.close": "Fermer",
-  "cta.create-profile": "Créer mon profil conso",
+  "cta.create-profile": "Create my profile",
   "cta.delete": "Supprimer",
   "cta.retrieve-emails": "Récupérer les emails",
   "cta.create-game": "Nouveau jeu",
@@ -27,7 +27,7 @@
   "cta.open-info-card": "Ouvrir la carte",
   "cta.play-game": "Play",
   "cta.prepare-game": "Prepare game",
-  "cta.read-profile-oilgre": "Voir le persona Oil'gre",
+  "cta.read-profile-oilgre": "View Oil'gre persona",
   "cta.read-synthesis": "Access synthesis",
   "cta.read-terms-of-use": "Lire les conditions d'utilisation",
   "cta.send-magic-link": "Envoyez moi un lien de connexion",
@@ -117,13 +117,13 @@
   "page.games-list.ongoing-list.title": "Ongoing games",
   "page.games-list.upcoming-list.title": "Upcoming games",
   "page.player.characteristics.title": "Mon profil",
-  "page.player.personalization.title": "Préparer l'atelier",
+  "page.player.personalization.title": "Game preparation",
   "page.player.personalization.description": [
-    "Pour une expérience personnalisée, je te propose de remplir un formulaire afin de bâtir ton profil de consommation personnalisé. Cela ne te prendra que quelques minutes.",
-    "Si le formulaire n'est pas complété et transmis à l'animateur, tu joueras avec le persona Oil'gre."
+    "For a personalized experience, you can fill in the consumption form to play with your own consumption profile. It only takes few minutes.",
+    "You will play with the Oil'gre persona otherwise."
   ],
   "page.player.personalization.messsage.draft-unsaved": "Il semble que vous n’ayez pas sauvegardé votre formulaire. Êtes-vous sûr.e de vouloir revenir en arrière ? Vous perdrez l’ensemble de vos réponses aux questions du formulaire si vous validez le retour.",
-  "page.player.personalization.messsage.form-locked": "Le formulaire n’est plus modifiable car l'atelier est sur le point de commencer.",
+  "page.player.personalization.messsage.form-locked": "The form can not be edited because the game is about to start.",
   "page.player.personalization.messsage.form-incomplete": "Le formulaire doit être complet pour pouvoir être validé.",
   "page.player.personalization.persona.description": [
     "Les onglets ci-dessous résument les différents aspects de mon mode de vie. N'hésite pas à m'incarner si tu n'as pas le temps de créer ton profil !"
