@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import {
   StackedEnergyBars,
@@ -19,6 +20,7 @@ import { IGame } from "../../../utils/types";
 import { Tabs } from "../../common/components/Tabs";
 import { useTranslation } from "../../translations/useTranslation";
 import { usePersona } from "../context/hooks/player";
+import { Typography } from "../../common/components/Typography";
 
 export { StatsGraphs };
 
@@ -48,7 +50,14 @@ function StatsGraphs() {
 
   return (
     <PlayBox>
-      <Tabs tabs={tabs} />
+      <Box display="flex" flexDirection="column" gap={3} paddingTop={2}>
+        <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
+          {t("page.player.statistics.title")}
+        </Typography>
+        <Box>
+          <Tabs tabs={tabs} />
+        </Box>
+      </Box>
     </PlayBox>
   );
 }

@@ -136,6 +136,7 @@
   "page.player.player-actions.remaining-budget": "Budget restant",
   "page.player.player-actions.used-action-points": "Points d'action utilisés",
   "page.player.player-actions.action-points-limit-exceeded": "Tu ne peux pas effectuer cette action car tu as dépassé le nombre maximum de {{actionPointsAvailableCount}} points d’action autorisé à ce tour.<br/><br/>Si tu n'es pas encore satisfait.e de tes choix, tu peux les modifier jusqu’à la fin du tour.",
+  "page.player.statistics.title": "Statistiques",
   "page.player.statistics.tabs.energy-balance.label": "Équilibre énergétique",
   "page.player.statistics.tabs.energy-balance.graphs.details.title": "Décomposition de la pile {{stackName}}",
   "page.player.statistics.tabs.materials.label": "Matériaux",
