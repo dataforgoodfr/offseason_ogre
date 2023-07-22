@@ -27,7 +27,9 @@ import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 import { SvgIconProps } from "@mui/material";
 import PersonPinRounded from "@mui/icons-material/PersonPinRounded";
 import {
+  AccountCircle,
   Add,
+  AdminPanelSettings,
   Badge,
   Bolt,
   Close,
@@ -44,10 +46,12 @@ import {
   LocalMovies,
   Lock,
   LockOpen,
+  Logout,
   LunchDining,
   Microwave,
   North,
   PieChart,
+  PlayArrow,
   RocketLaunch,
   Shield,
   South,
@@ -62,6 +66,7 @@ export type IconName = keyof typeof ICONS;
 const ICONS = {
   "action-points": DirectionsBike,
   "access-time": AccessTimeIcon,
+  "admin-panel": AdminPanelSettings,
   "admin-user": Shield,
   "arrow-back": ArrowBackIosIcon,
   "arrow-forward": ArrowForwardIosIcon,
@@ -96,6 +101,7 @@ const ICONS = {
   launch: RocketLaunch,
   lock: Lock,
   "lock-open": LockOpen,
+  logout: Logout,
   "mark-circle": Cancel,
   microwave: Microwave,
   missed: DoNotDisturb,
@@ -103,6 +109,7 @@ const ICONS = {
   "number-decrease": South,
   "open-in-new-tab": OpenInNew,
   plane: ConnectingAirports,
+  play: PlayArrow,
   "player-finished": HowToReg,
   player: Person,
   "player-add": PersonAddIcon,
@@ -120,6 +127,7 @@ const ICONS = {
   team: Groups,
   train: Train,
   trophy: EmojiEvents,
+  "user-account": AccountCircle,
   "videogame-controller": VideogameAssetRoundedIcon,
   warning: Warning,
 } as const;
