@@ -82,43 +82,43 @@
   "form.section.numeric.title": "Digital",
   "form.section.transport.title": "Transportation",
   "persona.oilgre.food": [
-    "Je <span class='text-em'>mange</span> un peu de <span class='text-em'>tout</span>.",
-    "Je ne <span class='text-em'>bois pas de canettes</span>, je n'aime pas les sodas.",
-    "Je fais mes <span class='text-em'>courses à l'hypermarché</span> le plus proche.",
-    "Je ne me <span class='text-em'>soucie pas</span> de mes <span class='text-em'>emballages</span>.",
-    "Je n'aime <span class='text-em'>pas trier mes déchets</span>."
+    "I <span class='text-em'>eat</span> a bit of <span class='text-em'>everything</span>.",
+    "I <span class='text-em'>don't drink cans</span>, I don't like sodas.",
+    "I shop at the nearest <span class='text-em'>hypermarket</span>.",
+    "I don't care about reducing my <span class='text-em'>packaging waste</span>.",
+    "I <span class='text-em'>don't like sorting my waste</span>."
   ],
   "persona.oilgre.general": [
-    "Je suis un.e agent territorial.le un peu spécial.e.",
-    "Je vis en <span class='text-em'>couple</span>, et j'ai <span class='text-em'>2 petits ogres</span>.",
-    "Je suis installé.e dans <span class='text-em'>le nord de la France</span> à la <span class='text-em'>campagne</span>."
+    "I'm a special kind of territorial agent.",
+    "I live in a <span class='text-em'>couple</span>, and I have <span class='text-em'>2 little ogres</span>.",
+    "I'm based in the <span class='text-em'>north of France</span> in the <span class='text-em'>countryside</span>."
   ],
   "persona.oilgre.habits": [
-    "J'aime être bien sapé.e et à la mode, et pour ça :",
-    "• Je <span class='text-em'>change</span> ma garde robe <span class='text-em'>tous les ans</span>.",
-    "• Je <span class='text-em'>dépense</span> plus de <span class='text-em'>600 euros par an</span> en vêtements neufs."
+    "I like to be well-dressed and fashionable, and for that:",
+    "• I <span class='text-em'>change my wardrobe every year</span>.",
+    "• I spend <span class='text-em'>over €600 a year</span> on new clothes."
   ],
   "persona.oilgre.housing": [
-    "Je vis dans une <span class='text-em'>maison individuelle de 100m²</span>.",
-    "Mon logement est <span class='text-em'>chauffé au gaz</span>, avec une température de confort de <span class='text-em'>21°C</span>.",
-    "Ma maison a été <span class='text-em'>construite en 2002</span>.",
-    "<span class='text-em'>Aucun travaux de rénovation</span> n'ont été effectués depuis.",
-    "Je change mes <span class='text-em'>équipements électroménagers</span> tous les <span class='text-em'>10 ans</span>.",
-    "Je me douche <span class='text-em'>10 minutes par jour</span>."
+    "I live in a <span class='text-em'>100m² detached house</span>.",
+    "My home is <span class='text-em'>heated by gas</span>, with a comfort temperature of <span class='text-em'>21°C</span>.",
+    "My house was <span class='text-em'>built in 2002</span>.",
+    "<span class='text-em'>No renovation work</span> has been carried out since.",
+    "I <span class='text-em'>change my household appliances every 10 years</span>.",
+    "I <span class='text-em'>shower 10 minutes a day</span>."
   ],
   "persona.oilgre.numeric": [
-    "<span class='text-em'>Chaque membre de la famille</span> a au moins <span class='text-em'>un ordinateur ou une tablette</span>, ainsi qu'<span class='text-em'>un smartphone</span> pour jouer à Warcraft ou COD en famille.",
-    "J'aime <span class='text-em'>regarder des vidéos</span> sur les différentes plateformes de <span class='text-em'>streaming</span>.",
-    "Je laisse la <span class='text-em'>télé allumée en bruit de fond</span> pour animer les soirées en famille."
+    "<span class='text-em'>Every member of the family</span> has at least <span class='text-em'>one computer or tablet</span>, as well as <span class='text-em'>a smartphone</span> to play Warcraft or COD as a family.",
+    "I like to watch videos on the various <span class='text-em'>streaming</span> platforms.",
+    "I leave the <span class='text-em'>TV on in the background</span> to liven up family evenings."
   ],
   "persona.oilgre.transport": [
-    "Je travaille à <span class='text-em'>25km</span> de chez moi et je fais le trajet <span class='text-em'>5 jours sur 7</span>.",
-    "Mon véhicule consomme <span class='text-em'>7L/100km</span>.",
-    "J'effectue aussi des trajets en <span class='text-em'>train</span> de nuit <span class='text-em'>2000km par an</span>.",
-    "Nous partons en famille :",
-    "• <span class='text-em'>1 semaine</span> par an à la <span class='text-em'>montagne</span>.",
-    "• <span class='text-em'>2 semaines</span> par an de vacances à <span class='text-em'>Nice</span>.",
-    "• Pour voir de la famille dans un baraquement à <span class='text-em'>Toulouse</span>.",
-    "• <span class='text-em'>1 semaine</span> par an à <span class='text-em'>Marrakech</span> pour passer les mauvais jours d'hiver."
+    "I work <span class='text-em'>25km</span> from home and commute <span class='text-em'>5 days out of 7</span>.",
+    "My vehicle consumes <span class='text-em'>7L/100km</span>.",
+    "I also travel by night <span class='text-em'>train 2000km</span> a year.",
+    "We're going as a family:",
+    "• <span class='text-em'>1 week</span> a year <span class='text-em'>in the mountains</span>.",
+    "• <span class='text-em'>2 weeks</span> vacation per year in <span class='text-em'>Nice</span>.",
+    "• To see family in a barrack in <span class='text-em'>Toulouse</span>.",
+    "• <span class='text-em'>1 week</span> a year in <span class='text-em'>Marrakech</span> to get through the bad winter days."
   ]
 }
