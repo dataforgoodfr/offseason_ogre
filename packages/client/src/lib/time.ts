@@ -4,12 +4,18 @@ import { userLocale } from "../modules/translations";
 
 export { formatDate, getDaysTo2050, getDaysToEnergyShiftTargetYear };
 
-type DateFormat = "date-at-time";
+type DateFormat = "date-at-time" | "full-date-at-time";
 
 function getDateFormatOptions(format: DateFormat): Intl.DateTimeFormatOptions {
   if (format === "date-at-time") {
     return {
       dateStyle: "long",
+      timeStyle: "short",
+    };
+  }
+  if (format === "full-date-at-time") {
+    return {
+      dateStyle: "full",
       timeStyle: "short",
     };
   }
