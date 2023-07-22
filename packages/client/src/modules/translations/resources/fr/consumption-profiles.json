@@ -80,5 +80,45 @@
   "form.section.habits.title": "Habitudes de consommation",
   "form.section.housing.title": "Logement",
   "form.section.numeric.title": "Numérique",
-  "form.section.transport.title": "Déplacement"
+  "form.section.transport.title": "Déplacement",
+  "persona.oilgre.food": [
+    "Je <span class='text-em'>mange</span> un peu de <span class='text-em'>tout</span>.",
+    "Je ne <span class='text-em'>bois pas de canettes</span>, je n'aime pas les sodas.",
+    "Je fais mes <span class='text-em'>courses à l'hypermarché</span> le plus proche.",
+    "Je ne me <span class='text-em'>soucie pas</span> de mes <span class='text-em'>emballages</span>.",
+    "Je n'aime <span class='text-em'>pas trier mes déchets</span>."
+  ],
+  "persona.oilgre.general": [
+    "Je suis un.e agent territorial.le un peu spécial.e.",
+    "Je vis en <span class='text-em'>couple</span>, et j'ai <span class='text-em'>2 petits ogres</span>.",
+    "Je suis installé.e dans <span class='text-em'>le nord de la France</span> à la <span class='text-em'>campagne</span>."
+  ],
+  "persona.oilgre.habits": [
+    "J'aime être bien sapé.e et à la mode, et pour ça :",
+    "• Je <span class='text-em'>change</span> ma garde robe <span class='text-em'>tous les ans</span>.",
+    "• Je <span class='text-em'>dépense</span> plus de <span class='text-em'>600 euros par an</span> en vêtements neufs."
+  ],
+  "persona.oilgre.housing": [
+    "Je vis dans une <span class='text-em'>maison individuelle de 100m²</span>.",
+    "Mon logement est <span class='text-em'>chauffé au gaz</span>, avec une température de confort de <span class='text-em'>21°C</span>.",
+    "Ma maison a été <span class='text-em'>construite en 2002</span>.",
+    "<span class='text-em'>Aucun travaux de rénovation</span> n'ont été effectués depuis.",
+    "Je change mes <span class='text-em'>équipements électroménagers</span> tous les <span class='text-em'>10 ans</span>.",
+    "Je me douche <span class='text-em'>10 minutes par jour</span>."
+  ],
+  "persona.oilgre.numeric": [
+    "<span class='text-em'>Chaque membre de la famille</span> a au moins <span class='text-em'>un ordinateur ou une tablette</span>, ainsi qu'<span class='text-em'>un smartphone</span> pour jouer à Warcraft ou COD en famille.",
+    "J'aime <span class='text-em'>regarder des vidéos</span> sur les différentes plateformes de <span class='text-em'>streaming</span>.",
+    "Je laisse la <span class='text-em'>télé allumée en bruit de fond</span> pour animer les soirées en famille."
+  ],
+  "persona.oilgre.transport": [
+    "Je travaille à <span class='text-em'>25km</span> de chez moi et je fais le trajet <span class='text-em'>5 jours sur 7</span>.",
+    "Mon véhicule consomme <span class='text-em'>7L/100km</span>.",
+    "J'effectue aussi des trajets en <span class='text-em'>train</span> de nuit <span class='text-em'>2000km par an</span>.",
+    "Nous partons en famille :",
+    "• <span class='text-em'>1 semaine</span> par an à la <span class='text-em'>montagne</span>.",
+    "• <span class='text-em'>2 semaines</span> par an de vacances à <span class='text-em'>Nice</span>.",
+    "• Pour voir de la famille dans un baraquement à <span class='text-em'>Toulouse</span>.",
+    "• <span class='text-em'>1 semaine</span> par an à <span class='text-em'>Marrakech</span> pour passer les mauvais jours d'hiver."
+  ]
 }

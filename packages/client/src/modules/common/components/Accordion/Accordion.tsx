@@ -4,6 +4,7 @@ import {
   AccordionItemStyled,
   AccordionSummaryStyled,
 } from "./Accordion.styles";
+import { Box } from "@mui/material";
 
 export { Accordion };
 
@@ -17,7 +18,11 @@ interface AccordionProps {
   }[];
   canOpenMultiplePanels?: boolean;
 }
-export type ThemeVariation = "accent-large" | "default" | "default-large";
+export type ThemeVariation =
+  | "accent"
+  | "accent-large"
+  | "default"
+  | "default-large";
 
 function Accordion({ canOpenMultiplePanels, options }: AccordionProps) {
   const [expanded, setExpanded] = React.useState<
@@ -36,7 +41,7 @@ function Accordion({ canOpenMultiplePanels, options }: AccordionProps) {
   const getPanelName = (idx: number): string => `panel-${idx}`;
 
   return (
-    <div>
+    <Box className="accordion" display="flex" flexDirection="column" gap={1}>
       {options.map((option, idx) => (
         <AccordionItemStyled
           className={`accordion__item-${getPanelName(idx)}`}
@@ -60,6 +65,6 @@ function Accordion({ canOpenMultiplePanels, options }: AccordionProps) {
           </AccordionDetailsStyled>
         </AccordionItemStyled>
       ))}
-    </div>
+    </Box>
   );
 }

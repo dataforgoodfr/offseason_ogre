@@ -312,16 +312,12 @@ export const booleanChoices = [
 ];
 
 export const formSections = {
-  GENERAL: { name: "general", title: "Général", titleIcon: "player-pin" },
-  TRANSPORT: { name: "transport", title: "Déplacement", titleIcon: "car" },
-  HOUSING: { name: "housing", title: "Logement", titleIcon: "house" },
-  HABITS: {
-    name: "habits",
-    title: "Habitudes de consommation",
-    titleIcon: "microwave",
-  },
-  FOOD: { name: "food", title: "Alimentation", titleIcon: "food" },
-  NUMERIC: { name: "numeric", title: "Numérique", titleIcon: "computer" },
+  GENERAL: { name: "general", titleIcon: "player-pin" },
+  TRANSPORT: { name: "transport", titleIcon: "car" },
+  HOUSING: { name: "housing", titleIcon: "house" },
+  HABITS: { name: "habits", titleIcon: "microwave" },
+  FOOD: { name: "food", titleIcon: "food" },
+  NUMERIC: { name: "numeric", titleIcon: "computer" },
 } as const;
 
 const getGeneralQuestions = () => {

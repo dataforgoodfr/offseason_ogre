@@ -297,7 +297,7 @@ function PersonalizationForm() {
                   ),
                   content: buildFormSection(section.name),
                   valid,
-                  themeVariation: valid ? "accent-large" : "default-large",
+                  themeVariation: valid ? "accent" : "default",
                 };
               })}
             />
