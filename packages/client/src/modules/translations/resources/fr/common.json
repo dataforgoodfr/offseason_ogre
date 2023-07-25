@@ -285,7 +285,7 @@
   "unit.budget-per-year-per-inhabitant.base": "{{value}}{{symbol}}/an et par {{countryInhabitantName}}",
   "unit.carbon.year": "T/an",
   "unit.carbon.day": "kg/j",
-  "unit.carbon-per-day.kilo": "{{value}} kgCO₂/j",
+  "unit.carbon-per-day.kilo": "{{value}} kgCO₂e/j",
   "unit.carbon-per-year-per-person.mega_zero": "{{value}} tonne/an et par personne",
   "unit.carbon-per-year-per-person.mega_one": "{{value}} tonne/an et par personne",
   "unit.carbon-per-year-per-person.mega_other": "{{value}} tonnes/an et par personne",
