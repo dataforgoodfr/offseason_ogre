@@ -11,7 +11,6 @@ import {
 import { fulfillsConditions } from "../Personalization/utils/formValidation";
 import { QuestionLine, QuestionText } from "../Personalization/styles/form";
 import { DescriptionValue } from "./Persona.styles";
-import { formatBooleanValue } from "../../../utils/format";
 import { useCurrentPlayer } from "../context/hooks/player";
 import { useTranslation } from "../../translations";
 import { Typography } from "../../common/components/Typography";
@@ -23,7 +22,11 @@ function Persona() {
 
   const formatValue = (value: any) => {
     if (typeof value === "boolean") {
-      return formatBooleanValue(value);
+      if (value === true) {
+        return t("consumption-profiles:form.choice.boolean.yes");
+      } else if (value === false) {
+        return t("consumption-profiles:form.choice.boolean.no");
+      }
     }
     return value;
   };
