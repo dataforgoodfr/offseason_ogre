@@ -3,7 +3,7 @@ import { MyGames } from "./MyGames";
 import { PlayerPersonaPage } from "./PlayerPersona";
 import { PlayLayout } from "./PlayLayout";
 import { PlayerActionsPage } from "./playerActions";
-import { Stats } from "./Stats";
+import { PlayerStatisticsPage } from "./Stats";
 
 export * from "./constants";
 export {
@@ -12,5 +12,5 @@ export {
   PlayerPersonaPage,
   PlayLayout,
   PlayerActionsPage,
-  Stats,
+  PlayerStatisticsPage,
 };

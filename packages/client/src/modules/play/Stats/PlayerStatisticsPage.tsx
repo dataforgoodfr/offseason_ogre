@@ -2,9 +2,9 @@ import { PlayerHeaderGrid } from "../PlayerPersona";
 import { StatsGraphs } from "./StatsGraphs";
 import { PlayerPageLayout } from "../PlayLayout";
 
-export { Stats };
+export { PlayerStatisticsPage };
 
-function Stats() {
+function PlayerStatisticsPage() {
   return (
     <PlayerPageLayout header={<PlayerHeaderGrid />} body={<StatsGraphs />} />
   );
