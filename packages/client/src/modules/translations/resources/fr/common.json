@@ -256,12 +256,16 @@
   "graph.materials.photovoltaic": "PV",
   "graph.materials.biomass": "Biomasse",
   "graph.materials.water": "Aquatique",
-  "graph.materials.geology": "Geologique",
+  "graph.materials.geology": "Géologique",
   "graph.materials.nuclear": "Nucléaire",
   "graph.materials.quantity-per-step-graph.title": "Quantité de matériaux nécessaires à la transition d’ici {{year}}",
   "graph.materials.quantity-per-production-type-graph.title": "Répartition des matériaux par moyen de production",
   "graph.metals.quantity-per-step-graph.title": "Quantité de métaux nécessaires à la transition d’ici {{year}}",
   "graph.metals.quantity-per-production-type-graph.title": "Répartition des métaux par moyen de production",
+
+  "graph.step.first.consumption.name": "Conso init",
+  "graph.step.first.production.name": "Prod init",
+  "graph.step.other.name": "Étape {{stepNumber}}",
 
   "form.last-action.draft": "Dernière sauvegarde",
   "form.last-action.pendingValidation": "Dernier envoi à l'animateur",

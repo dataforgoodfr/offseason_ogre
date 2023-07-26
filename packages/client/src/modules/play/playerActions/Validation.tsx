@@ -25,7 +25,7 @@ function ValidateActions() {
   return (
     <Box mt={2}>
       <Button
-        width={200}
+        width={250}
         disabled={player.hasFinishedStep}
         onClick={handleClickOpen}
       >

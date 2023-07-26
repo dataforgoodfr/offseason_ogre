@@ -13,7 +13,7 @@
     "Cependant, vous pouvez quand même la valider.",
     "Lors de la combustion, la biomasse génère des particules fines (aérosols) qui peuvent être dangereuses pour la santé. Pour le biogaz, les sites de production peuvent générer des odeurs peu appréciés des citoyens vivant à proximité."
   ],
-  "production-action.fr.biomass.graph.name": "Biomasse solaire",
+  "production-action.fr.biomass.graph.name": "Solar biomass",
 
   "production-action.fr.geothermal.name": "Géothermie",
   "production-action.fr.geothermal.accordion.title": "Géothermie (électricité)",
@@ -28,7 +28,7 @@
     "Cependant, vous pouvez quand même la valider.",
     "Certaines contraintes géologiques (ex: tremblement de terre) peuvent limiter l'usage de ces installations."
   ],
-  "production-action.fr.geothermal.graph.name": "Géothermie",
+  "production-action.fr.geothermal.graph.name": "Geothermal",
 
   "production-action.fr.hydraulic.name": "Hydraulique",
   "production-action.fr.hydraulic.accordion.title": "Hydraulique (électricité)",
@@ -37,7 +37,7 @@
   "production-action.fr.hydraulic.year-of-last-data-update": 2022,
   "production-action.fr.hydraulic.value.credible": [""],
   "production-action.fr.hydraulic.value.not-credible": [""],
-  "production-action.fr.hydraulic.graph.name": "Hydroélectricité",
+  "production-action.fr.hydraulic.graph.name": "Hydropower",
 
   "production-action.fr.offshoreWindTurbine.name": "Éolien offshore",
   "production-action.fr.offshoreWindTurbine.accordion.title": "Éolien offshore (électricité)",
@@ -53,7 +53,7 @@
     "Cependant, vous pouvez quand même la valider.",
     "Pensez au cuivre et à l'acier nécessaires pour produire les éoliennes hautes parfois de 250m et récupérer l'énergie produite en pleine mer."
   ],
-  "production-action.fr.offshoreWindTurbine.graph.name": "Éolien offshore",
+  "production-action.fr.offshoreWindTurbine.graph.name": "Offshore wind turbines",
 
   "production-action.fr.onshoreWindTurbine.name": "Éolien terrestre",
   "production-action.fr.onshoreWindTurbine.accordion.title": "Éolien terrestre (électricité)",
@@ -69,7 +69,7 @@
     "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
     "Pensez également aux besoins en béton et acier pour les produire, ainsi qu'à l'acceptabilité pour les habitants."
   ],
-  "production-action.fr.onshoreWindTurbine.graph.name": "Éolien terrestre",
+  "production-action.fr.onshoreWindTurbine.graph.name": "Onshore wind turbines",
 
   "production-action.fr.photovoltaicFarm.name": "Ferme photovoltaïque",
   "production-action.fr.photovoltaicFarm.accordion.title": "Ferme photovoltaïque (électricité)",
@@ -85,7 +85,7 @@
     "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
     "Pensez également aux besoins en silicium pour les produire et à la disponibilité (du soleil) qui est variable."
   ],
-  "production-action.fr.photovoltaicFarm.graph.name": "Ferme solaire",
+  "production-action.fr.photovoltaicFarm.graph.name": "Solar farm",
 
   "production-action.fr.photovoltaicRoof.name": "Photovoltaïque sur toiture",
   "production-action.fr.photovoltaicRoof.accordion.title": "Photovoltaïque sur toiture (électricité)",
@@ -101,7 +101,7 @@
     "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
     "Pensez également aux besoins en silicium pour les produire et à la disponibilité (du soleil) qui est variable."
   ],
-  "production-action.fr.photovoltaicRoof.graph.name": "Photovoltaïque toiture",
+  "production-action.fr.photovoltaicRoof.graph.name": "Rooftop solar panels",
 
   "production-action.fr.thermalSolar.name": "Solaire thermique",
   "production-action.fr.thermalSolar.accordion.title": "Solaire thermique (eau chaude)",
@@ -116,7 +116,7 @@
     "Il sera difficile d'équiper tous les logements avec plus de 5 m² de panneaux solaire thermique à cause des problèmes de surchauffe que cela peut provoquer au niveau de l'installation, et de la surface disponible sur les toitures.",
     "Cependant, vous pouvez quand même la valider."
   ],
-  "production-action.fr.thermalSolar.graph.name": "Solaire thermique",
+  "production-action.fr.thermalSolar.graph.name": "Solar thermal panels",
 
   "production-action.fr.tidal.name": "Marées",
   "production-action.fr.tidal.accordion.title": "Marées (électricité)",
@@ -130,7 +130,7 @@
     "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'énergie marémotrice (3 GW) selon le rapport 100% EnR de l'ADEME mais reste possible selon le syndicat des EnR (15 GW).",
     "Difficile de produire plus sans \"construire\" de nouveaux estuaires."
   ],
-  "production-action.fr.tidal.graph.name": "Marées",
+  "production-action.fr.tidal.graph.name": "Tidal power",
 
   "production-action.fr.wave.name": "Vagues",
   "production-action.fr.wave.accordion.title": "Vagues (électricité)",
@@ -146,7 +146,7 @@
     "Cependant, vous pouvez quand même la valider.",
     "Pour info, cette technologie est encore loin d'être industrialisée à l'heure actuelle."
   ],
-  "production-action.fr.wave.graph.name": "Vagues",
+  "production-action.fr.wave.graph.name": "Wave power",
 
   "production-action.fr.nuclear.name": "Nucléaire",
   "production-action.fr.nuclear.accordion.title": "Nucléaire",
@@ -160,5 +160,5 @@
     "Votre hypothèse dépasse largement les scénarios RTE en matière de capacité installée en {{year}}.",
     "Pensez aux conditions d'acceptabilité par les populations, ainsi qu'aux difficultés de refroidissement en cas de grandes sécheresses."
   ],
-  "production-action.fr.nuclear.graph.name": "Nucléaire"
+  "production-action.fr.nuclear.graph.name": "Nuclear power"
 }

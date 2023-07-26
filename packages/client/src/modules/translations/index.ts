@@ -4,6 +4,8 @@ import { resources, defaultNS } from "./resources";
 import { TFunction } from "i18next";
 import { getUserLocale } from "get-user-locale";
 import { useTranslation } from "./useTranslation";
+import { ProductionActionNames } from "../../utils/types";
+import { ConsumptionName } from "../persona/consumption";
 
 export { userLocale, translateName, useTranslation };
 export const { t } = i18n;
@@ -15,37 +17,20 @@ const userLocale = getUserLocale() || "fr";
 
 function translateName(type: string, value: string) {
   if (type === "consumption") {
-    return translateConsumptionName(value);
+    return translateConsumptionName(value as ConsumptionName);
   } else if (type === "production") {
-    return translateProductionName(value);
+    return translateProductionName(value as ProductionActionNames);
   }
   return value;
 }
 
-function translateConsumptionName(value: string): string {
-  const translationByValue = {
-    airConditionning: "Climatisation",
-    cleanCook: "Lavage, Cuisson, Nettoyage, Refroidissement",
-    brownGoods: "Usage des outils numériques",
-    electricCar: "Voiture électrique",
-    light: "Éclairage",
-    fossilCar: "Voiture thermique",
-    fossilHeating: "Chauffage fossile",
-    greyCar: "Fabrication de la voiture (énergie grise)",
-    greyHouse: "Fabrication des bâtiments et des routes (énergie grise)",
-    greyNumeric: "Numérique (énergie grise)",
-    greyOther: "Autres (énergie grise)",
-    greyTransport: "Fret (énergie grise)",
-    food: "Se nourrir",
-    noCarbonHeating: "Chauffage décarboné",
-    plane: "Avion",
-    servicePublic: "Service public",
-    train: "Train",
-  };
-  return translationByValue[value as keyof typeof translationByValue] ?? value;
+function translateConsumptionName(value: ConsumptionName): string {
+  return t(
+    `consumption-actions:consumption-action.consumption-category.${value}.graph.name`
+  );
 }
 
-function translateProductionName(value: string): string {
+function translateProductionName(value: ProductionActionNames): string {
   return t(
     `production-actions:production-action.fr.${value}.graph.name` as any
   );

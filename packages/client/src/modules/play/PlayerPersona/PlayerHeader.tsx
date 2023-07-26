@@ -173,7 +173,7 @@ function PlayerHeader() {
           >
             <Button
               iconName="badge"
-              width={200}
+              width={250}
               to={`/play/games/${game.id}/persona`}
             >
               {t("cta.go-to-player-characteristics")}
@@ -258,14 +258,14 @@ function Actions({ className }: { className?: string }) {
     >
       <Button
         iconName="bar-chart"
-        width={200}
+        width={250}
         to={`/play/games/${game.id}/persona/stats`}
       >
         {t("cta.go-to-player-statistics")}
       </Button>
       <Button
         iconName={iconName}
-        width={200}
+        width={250}
         to={`/play/games/${game.id}/persona/actions`}
         disabled={
           !game.isGameFinished && (game.step === 0 || game.isStepFinished)

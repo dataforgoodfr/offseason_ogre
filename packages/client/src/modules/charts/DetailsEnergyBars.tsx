@@ -15,7 +15,7 @@ import { Persona } from "../persona/persona";
 import { ProductionDatum } from "../persona/production";
 import { productionConstants } from "../play";
 import { usePlay } from "../play/context/playContext";
-import { translateName } from "../translations";
+import { translateName, useTranslation } from "../translations";
 import { Typography } from "../common/components/Typography";
 
 export { DetailsEnergyConsumptionBars, DetailsEnergyProductionBars };
@@ -69,6 +69,8 @@ function DetailsEnergyBars(
   color: EnergyPalette | ProductionPalette,
   title?: string
 ) {
+  const { t } = useTranslation();
+
   return (
     <Card
       sx={{
@@ -104,7 +106,11 @@ function DetailsEnergyBars(
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis type="number" domain={[0, 50]} unit="kWh/jour" />
+        <XAxis
+          type="number"
+          domain={[0, 50]}
+          unit={t("unit.watthour-per-day-bare.kilo")}
+        />
         <YAxis
           type="category"
           width={160}
@@ -113,7 +119,7 @@ function DetailsEnergyBars(
           {...{ angle: -45 }}
         />
         <Tooltip />
-        <Bar dataKey="value" unit="kWh/jour">
+        <Bar dataKey="value" unit={t("unit.watthour-per-day-bare.kilo")}>
           {personaValues.map(({ name, type }) => {
             return (
               <Cell
