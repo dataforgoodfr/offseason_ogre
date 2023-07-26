@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
-import { useState } from "react";
 import { Dialog } from "../../common/components/Dialog";
 import { useTranslation } from "../../translations/useTranslation";
 import { usePlay } from "../context/playContext";
 import { useCurrentPlayer } from "../context/hooks/player";
 import { Button } from "../../common/components/Button";
+import { useDialog } from "../../common/hooks/useDialog";
 
 export { ValidateActions };
 
@@ -12,14 +12,11 @@ function ValidateActions() {
   const { t } = useTranslation();
   const { updatePlayer } = usePlay();
   const { player } = useCurrentPlayer();
-
-  const [open, setOpen] = useState<boolean>(false);
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const { isOpen, closeDialog, openDialog } = useDialog();
 
   const handleFinishStep = () => {
     updatePlayer({ hasFinishedStep: true });
-    handleClose();
+    closeDialog();
   };
 
   return (
@@ -27,18 +24,18 @@ function ValidateActions() {
       <Button
         width={250}
         disabled={player.hasFinishedStep}
-        onClick={handleClickOpen}
+        onClick={openDialog}
       >
         {t(`cta.end-turn`)}
       </Button>
 
       <Dialog
-        open={open}
-        handleClose={handleClose}
+        open={isOpen}
+        handleClose={closeDialog}
         content={t(`modal.validate-consumption-choices.title`)}
         actions={
           <>
-            <Button type="secondary" onClick={handleClose}>
+            <Button type="secondary" onClick={closeDialog}>
               {t(`cta.no`)}
             </Button>
             <Button onClick={handleFinishStep}>{t(`cta.yes`)}</Button>

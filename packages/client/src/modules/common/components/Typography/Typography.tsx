@@ -20,6 +20,10 @@ const Typography = styled(TypographyMui)(({ theme }) => ({
   "&:is(h5)": {
     fontSize: 18,
   },
+  "&:is(h6)": {
+    fontSize: 18,
+    fontWeight: 400,
+  },
   [theme.breakpoints.down("sm")]: {
     "&:is(h5)": {
       fontSize: 18,
