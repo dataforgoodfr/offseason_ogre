@@ -1,164 +1,162 @@
 {
-  "production-action.fr.biomass.name": "Biomasse",
-  "production-action.fr.biomass.accordion.title": "Biomasse (électricité)",
-  "production-action.fr.biomass.accordion.label-slider": "Surface occupée (en %) du territoire forestier et agricole",
-  "production-action.fr.biomass.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de la surface du territoire forestier et agricole)",
+  "production-action.fr.biomass.name": "Biomass",
+  "production-action.fr.biomass.accordion.title": "Biomass (electricity)",
+  "production-action.fr.biomass.accordion.label-slider": "Occupied surface area (in %) of forest and agricultural land",
+  "production-action.fr.biomass.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of the surface area of forest and agricultural land)",
   "production-action.fr.biomass.year-of-last-data-update": 2022,
   "production-action.fr.biomass.value.credible": [
-    "Votre hypothèse est crédible.",
-    "C'est le plus ancien moyen pour se chauffer et cuire des aliments. Si la ressource est correctement gérée, l'impact sur le climat est nul."
+    "Your hypothesis is credible.",
+    "It's the oldest means of heating and cooking food. If the resource is properly managed, it has no impact on the climate."
   ],
   "production-action.fr.biomass.value.not-credible": [
-    "Votre hypothèse dépasse la production (418 TWh) du scénario Negawatt (en plus de détruire nos forêts et réduire nos capacités agricoles).",
-    "Cependant, vous pouvez quand même la valider.",
-    "Lors de la combustion, la biomasse génère des particules fines (aérosols) qui peuvent être dangereuses pour la santé. Pour le biogaz, les sites de production peuvent générer des odeurs peu appréciés des citoyens vivant à proximité."
+    "Your hypothesis exceeds the production (418 TWh) of the Negawatt scenario (in addition to destroying our forests and reducing our agricultural capacity).",
+    "However, you can still validate it.",
+    "During combustion, biomass generates fine particles (aerosols) that can be hazardous to health. In the case of biogas, production sites can generate odors that are unpopular with local residents."
   ],
   "production-action.fr.biomass.graph.name": "Solar biomass",
 
-  "production-action.fr.geothermal.name": "Géothermie",
-  "production-action.fr.geothermal.accordion.title": "Géothermie (électricité)",
-  "production-action.fr.geothermal.accordion.label-slider": "Surface occupée (en %) du territoire adapté pour ces installations",
-  "production-action.fr.geothermal.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de la surface du territoire)",
+  "production-action.fr.geothermal.name": "Geothermal",
+  "production-action.fr.geothermal.accordion.title": "Geothermal (electricity)",
+  "production-action.fr.geothermal.accordion.label-slider": "Occupied surface area (in %) of territory suitable for these installations",
+  "production-action.fr.geothermal.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of the territory's surface area)",
   "production-action.fr.geothermal.year-of-last-data-update": 2022,
   "production-action.fr.geothermal.value.credible": [
-    "Votre hypothèse est crédible."
+    "Your hypothesis is credible."
   ],
   "production-action.fr.geothermal.value.not-credible": [
-    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour la géothermie (0,14 GW) selon le rapport 100% EnR de l'ADEME.",
-    "Cependant, vous pouvez quand même la valider.",
-    "Certaines contraintes géologiques (ex: tremblement de terre) peuvent limiter l'usage de ces installations."
+    "Your assumption exceeds the national potential (i.e. maximum installable capacity) for geothermal energy (0.14 GW) according to ADEME's 100% renewable energies report.",
+    "However, you can still validate it.",
+    "Certain geological constraints (e.g. earthquakes) may limit the use of these facilities."
   ],
   "production-action.fr.geothermal.graph.name": "Geothermal",
 
-  "production-action.fr.hydraulic.name": "Hydraulique",
-  "production-action.fr.hydraulic.accordion.title": "Hydraulique (électricité)",
-  "production-action.fr.hydraulic.accordion.label-slider": "Surface occupée (en %) du territoire",
-  "production-action.fr.hydraulic.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de la surface du territoire)",
+  "production-action.fr.hydraulic.name": "Hydropower",
+  "production-action.fr.hydraulic.accordion.title": "Hydropower (electricity)",
+  "production-action.fr.hydraulic.accordion.label-slider": "Occupied surface area (in %)",
+  "production-action.fr.hydraulic.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of the territory's surface area)",
   "production-action.fr.hydraulic.year-of-last-data-update": 2022,
   "production-action.fr.hydraulic.value.credible": [""],
   "production-action.fr.hydraulic.value.not-credible": [""],
   "production-action.fr.hydraulic.graph.name": "Hydropower",
 
-  "production-action.fr.offshoreWindTurbine.name": "Éolien offshore",
-  "production-action.fr.offshoreWindTurbine.accordion.title": "Éolien offshore (électricité)",
-  "production-action.fr.offshoreWindTurbine.accordion.label-slider": "Surface occupée (en %) de l'espace maritime",
-  "production-action.fr.offshoreWindTurbine.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de l'espace maritime)",
+  "production-action.fr.offshoreWindTurbine.name": "Offshore wind turbines",
+  "production-action.fr.offshoreWindTurbine.accordion.title": "Offshore wind turbines (electricity)",
+  "production-action.fr.offshoreWindTurbine.accordion.label-slider": "Occupied surface area (%) of maritime area",
+  "production-action.fr.offshoreWindTurbine.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of maritime area)",
   "production-action.fr.offshoreWindTurbine.year-of-last-data-update": 2022,
   "production-action.fr.offshoreWindTurbine.value.credible": [
-    "Votre hypothèse est crédible.",
-    "Si vous choisissez 100%, il va être probablement difficile de naviguer pour les bateaux qui circulent au large des côtes (sans parler des difficultés techniques pour les implanter, ni de l'impact sur la biodiversité marine)."
+    "Your hypothesis is credible.",
+    "If you choose 100%, it will probably be difficult for offshore boats to navigate (not to mention the technical difficulties of installing them, and the impact on marine biodiversity)."
   ],
   "production-action.fr.offshoreWindTurbine.value.not-credible": [
-    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'éolien offshore en eaux peu profondes (66 GW) selon le rapport 100% EnR de l'ADEME.",
-    "Cependant, vous pouvez quand même la valider.",
-    "Pensez au cuivre et à l'acier nécessaires pour produire les éoliennes hautes parfois de 250m et récupérer l'énergie produite en pleine mer."
+    "Your assumption exceeds the national potential (i.e. the maximum installable capacity) for shallow offshore wind turbines (66 GW) according to ADEME's 100% renewable energies report.",
+    "However, you can still validate it.",
+    "Think of the copper and steel needed to produce the wind turbines, some of which are 250m high, and to recover the energy generated in the open sea."
   ],
   "production-action.fr.offshoreWindTurbine.graph.name": "Offshore wind turbines",
 
-  "production-action.fr.onshoreWindTurbine.name": "Éolien terrestre",
-  "production-action.fr.onshoreWindTurbine.accordion.title": "Éolien terrestre (électricité)",
-  "production-action.fr.onshoreWindTurbine.accordion.label-slider": "Surface occupée (en %) du territoire",
-  "production-action.fr.onshoreWindTurbine.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} du territoire)",
+  "production-action.fr.onshoreWindTurbine.name": "Onshore wind turbines",
+  "production-action.fr.onshoreWindTurbine.accordion.title": "Onshore wind turbines (electricity)",
+  "production-action.fr.onshoreWindTurbine.accordion.label-slider": "Occupied surface area (in %)",
+  "production-action.fr.onshoreWindTurbine.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of the territory)",
   "production-action.fr.onshoreWindTurbine.year-of-last-data-update": 2022,
   "production-action.fr.onshoreWindTurbine.value.credible": [
-    "Votre hypothèse est crédible.",
-    "Si vous choisissez 100%, cela revient à imaginer une France couverte d'éoliennes. Recouvrir 5% correspondrait à la surface de la région Bretagne."
+    "Your hypothesis is credible.",
+    "If you choose 100%, it's like covering France with wind turbines. Covering 5% would correspond to the surface area of the Brittany region."
   ],
   "production-action.fr.onshoreWindTurbine.value.not-credible": [
-    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'éolien terrestre (174 GW) selon le rapport 100% EnR de l'ADEME.",
-    "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
-    "Pensez également aux besoins en béton et acier pour les produire, ainsi qu'à l'acceptabilité pour les habitants."
+    "Your assumption exceeds the national potential (i.e. the maximum installable capacity) for onshore wind turbines (174 GW) according to ADEME's 100% renewable energies report.",
+    "However, you can still validate it even if it will be difficult to cover all available surfaces by {{year}}.",
+    "Also consider the concrete and steel required to produce them, as well as their acceptability to local residents."
   ],
   "production-action.fr.onshoreWindTurbine.graph.name": "Onshore wind turbines",
 
-  "production-action.fr.photovoltaicFarm.name": "Ferme photovoltaïque",
-  "production-action.fr.photovoltaicFarm.accordion.title": "Ferme photovoltaïque (électricité)",
-  "production-action.fr.photovoltaicFarm.accordion.label-slider": "Surface en m² installée au sol",
-  "production-action.fr.photovoltaicFarm.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de surface installée au sol)",
+  "production-action.fr.photovoltaicFarm.name": "Solar farm",
+  "production-action.fr.photovoltaicFarm.accordion.title": "Solar farm (electricity)",
+  "production-action.fr.photovoltaicFarm.accordion.label-slider": "Floor area in m² installed",
+  "production-action.fr.photovoltaicFarm.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} floor area)",
   "production-action.fr.photovoltaicFarm.year-of-last-data-update": 2022,
   "production-action.fr.photovoltaicFarm.value.credible": [
-    "Votre hypothèse est crédible.",
-    "Ce type d'équipement est généralement installé au sol même si on parle de plus en plus d'agrivoltaïsme. Plus sa surface sera importante, et moins vous aurez d'espaces agricoles (ou partiellement ombragés)."
+    "Your hypothesis is credible.",
+    "This type of equipment is generally installed on the ground, although the term \"agrivoltaics\" is gaining currency. The larger the surface area, the less agricultural (or partially shaded) space you'll have."
   ],
   "production-action.fr.photovoltaicFarm.value.not-credible": [
-    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour les fermes solaires (47 GW) selon le rapport 100% EnR de l'ADEME.",
-    "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
-    "Pensez également aux besoins en silicium pour les produire et à la disponibilité (du soleil) qui est variable."
+    "Your assumption exceeds the national potential (i.e. the maximum installable capacity) for solar farms (47 GW) according to ADEME's 100% renewable energies report.",
+    "However, you can still validate it even if it will be difficult to cover all available surfaces by {{year}}.",
+    "Also bear in mind the silicon required to produce them and the variable availability of sunlight."
   ],
   "production-action.fr.photovoltaicFarm.graph.name": "Solar farm",
 
-  "production-action.fr.photovoltaicRoof.name": "Photovoltaïque sur toiture",
-  "production-action.fr.photovoltaicRoof.accordion.title": "Photovoltaïque sur toiture (électricité)",
-  "production-action.fr.photovoltaicRoof.accordion.label-slider": "Surface en m² installée sur la toiture",
-  "production-action.fr.photovoltaicRoof.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de surface installée sur la toiture)",
+  "production-action.fr.photovoltaicRoof.name": "Rooftop photovoltaic panels",
+  "production-action.fr.photovoltaicRoof.accordion.title": "Rooftop photovoltaic panels (electricity)",
+  "production-action.fr.photovoltaicRoof.accordion.label-slider": "Surface area in m² installed on the roof",
+  "production-action.fr.photovoltaicRoof.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of installed roof area)",
   "production-action.fr.photovoltaicRoof.year-of-last-data-update": 2022,
   "production-action.fr.photovoltaicRoof.value.credible": [
-    "Votre hypothèse est crédible.",
-    "Pour info, une installation moyenne pour une maison individuelle se situe entre 10 et 30 m2."
+    "Your hypothesis is credible.",
+    "For your information, the average installation for a single-family home is between 10 and 30 m²."
   ],
   "production-action.fr.photovoltaicRoof.value.not-credible": [
-    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour les panneaux photovoltaïques sur toiture (364 GW) selon le rapport 100% EnR de l'ADEME.",
-    "Cependant, vous pouvez quand même la valider même s'il sera difficile d'avoir équipé toutes les surfaces disponibles d'ici {{year}}.",
-    "Pensez également aux besoins en silicium pour les produire et à la disponibilité (du soleil) qui est variable."
+    "Your assumption exceeds the national potential (i.e. the maximum installable capacity) for rooftop photovoltaic panels (364 GW) according to ADEME's 100% renewable energies report.",
+    "However, you can still validate it even if it will be difficult to cover all available surfaces by {{year}}.",
+    "Also bear in mind the silicon required to produce them and the variable availability of sunlight."
   ],
-  "production-action.fr.photovoltaicRoof.graph.name": "Rooftop solar panels",
+  "production-action.fr.photovoltaicRoof.graph.name": "Rooftop photovoltaic panels",
 
-  "production-action.fr.thermalSolar.name": "Solaire thermique",
-  "production-action.fr.thermalSolar.accordion.title": "Solaire thermique (eau chaude)",
-  "production-action.fr.thermalSolar.accordion.label-slider": "Surface en m² installée sur la toiture",
-  "production-action.fr.thermalSolar.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de surface installée sur la toiture)",
+  "production-action.fr.thermalSolar.name": "Solar thermal panels",
+  "production-action.fr.thermalSolar.accordion.title": "Solar thermal panels (hot water)",
+  "production-action.fr.thermalSolar.accordion.label-slider": "Surface area in m² installed on the roof",
+  "production-action.fr.thermalSolar.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of installed roof area)",
   "production-action.fr.thermalSolar.year-of-last-data-update": 2022,
   "production-action.fr.thermalSolar.value.credible": [
-    "Votre hypothèse est crédible.",
-    "Pour info, une installation moyenne pour une maison individuelle se situe entre 3 et 5 m2."
+    "Your hypothesis is credible.",
+    "For information, the average installation for a single-family home is between 3 and 5 m²."
   ],
   "production-action.fr.thermalSolar.value.not-credible": [
-    "Il sera difficile d'équiper tous les logements avec plus de 5 m² de panneaux solaire thermique à cause des problèmes de surchauffe que cela peut provoquer au niveau de l'installation, et de la surface disponible sur les toitures.",
-    "Cependant, vous pouvez quand même la valider."
+    "It will be difficult to equip all homes with more than 5 m² of solar thermal panels, because of the problems of overheating that this can cause in the installation, and the surface area available on roofs.",
+    "However, you can still validate it."
   ],
   "production-action.fr.thermalSolar.graph.name": "Solar thermal panels",
 
-  "production-action.fr.tidal.name": "Marées",
-  "production-action.fr.tidal.accordion.title": "Marées (électricité)",
-  "production-action.fr.tidal.accordion.label-slider": "Périmètre occupé (en %) de la côte atlantique",
-  "production-action.fr.tidal.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} du périmètre occupé de la côte atlantique)",
+  "production-action.fr.tidal.name": "Tidal",
+  "production-action.fr.tidal.accordion.title": "Tidal (electricity)",
+  "production-action.fr.tidal.accordion.label-slider": "Occupied perimeter (%) of Atlantic coastline",
+  "production-action.fr.tidal.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of the perimeter of the Atlantic coast)",
   "production-action.fr.tidal.year-of-last-data-update": 2022,
-  "production-action.fr.tidal.value.credible": [
-    "Votre hypothèse est crédible."
-  ],
+  "production-action.fr.tidal.value.credible": ["Your hypothesis is credible."],
   "production-action.fr.tidal.value.not-credible": [
-    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'énergie marémotrice (3 GW) selon le rapport 100% EnR de l'ADEME mais reste possible selon le syndicat des EnR (15 GW).",
-    "Difficile de produire plus sans \"construire\" de nouveaux estuaires."
+    "Your hypothesis exceeds the national potential (i.e. the maximum installable capacity) for tidal power (3 GW) according to ADEME's 100% renewable energies report, but remains possible according to the Renewable Energy Union (15 GW).",
+    "It will be difficult to produce more without \"building\" new estuaries."
   ],
   "production-action.fr.tidal.graph.name": "Tidal power",
 
-  "production-action.fr.wave.name": "Vagues",
-  "production-action.fr.wave.accordion.title": "Vagues (électricité)",
-  "production-action.fr.wave.accordion.label-slider": "Surface occupée (en %) de l'espace maritime atlantique",
-  "production-action.fr.wave.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}} (soit {{productionValue}} de la surface de l'espace maritime atlantique)",
+  "production-action.fr.wave.name": "Wave",
+  "production-action.fr.wave.accordion.title": "Wave (electricity)",
+  "production-action.fr.wave.accordion.label-slider": "Occupied surface area (%) of Atlantic maritime area",
+  "production-action.fr.wave.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}} (i.e. {{productionValue}} of the Atlantic maritime area)",
   "production-action.fr.wave.year-of-last-data-update": 2022,
   "production-action.fr.wave.value.credible": [
-    "Votre hypothèse est crédible.",
-    "La puissance de la houle atlantique a été mesurée: elle est de 40 kW par mètre de littoral exposé. Une puissance énorme! Avec 100% de surface équipée, et une absorbtion pleine, le rivage atlantique serait plat comme une limande..."
+    "Your hypothesis is credible.",
+    "The power of the Atlantic swell has been measured at 40 kW per metre of exposed coastline. An enormous power! With 100% of the surface equipped, and full absorption, the Atlantic shoreline would be as flat as a flounder..."
   ],
   "production-action.fr.wave.value.not-credible": [
-    "Votre hypothèse dépasse le gisement national (soit la capacité maximum installable) pour l'énergie houlomotrice (10 GW) selon le rapport 100% EnR de l'ADEME.",
-    "Cependant, vous pouvez quand même la valider.",
-    "Pour info, cette technologie est encore loin d'être industrialisée à l'heure actuelle."
+    "Your assumption exceeds the national deposit (i.e. the maximum installable capacity) for wave power (10 GW) according to ADEME's 100% renewable energies report.",
+    "However, you can still validate it.",
+    "For the record, this technology is still far from industrialized."
   ],
   "production-action.fr.wave.graph.name": "Wave power",
 
-  "production-action.fr.nuclear.name": "Nucléaire",
-  "production-action.fr.nuclear.accordion.title": "Nucléaire",
-  "production-action.fr.nuclear.accordion.label-slider": "Comparaison par rapport à l'existant (installation actuelle = 100%)",
-  "production-action.fr.nuclear.installed-power-in-country": "Puissance installée en France en {{year}} : {{installedPower}}",
+  "production-action.fr.nuclear.name": "Nuclear power",
+  "production-action.fr.nuclear.accordion.title": "Nuclear power",
+  "production-action.fr.nuclear.accordion.label-slider": "Comparison with existing installation (current installation = 100%)",
+  "production-action.fr.nuclear.installed-power-in-country": "Installed capacity in France in {{year}}: {{installedPower}}",
   "production-action.fr.nuclear.year-of-last-data-update": 2022,
   "production-action.fr.nuclear.value.credible": [
-    "Votre hypothèse est \"peut-être\" crédible. Votre France en {{year}}, est-elle avec ou sans nucléaire ?"
+    "Your hypothesis is \"perhaps\" credible. Your France in {{year}}, is it with or without nuclear power?"
   ],
   "production-action.fr.nuclear.value.not-credible": [
-    "Votre hypothèse dépasse largement les scénarios RTE en matière de capacité installée en {{year}}.",
-    "Pensez aux conditions d'acceptabilité par les populations, ainsi qu'aux difficultés de refroidissement en cas de grandes sécheresses."
+    "Your assumption far exceeds the RTE scenarios for installed capacity in {{year}}.",
+    "Think about the conditions of acceptability to local populations, as well as the difficulties of cooling in the event of severe drought."
   ],
   "production-action.fr.nuclear.graph.name": "Nuclear power"
 }

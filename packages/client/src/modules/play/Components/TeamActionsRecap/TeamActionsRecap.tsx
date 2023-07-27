@@ -44,6 +44,16 @@ function TeamActionsRecap({
     return t("team-actions.recap.recommended-remaining-budget");
   }, [currentStep, t]);
 
+  const titleI18n = useMemo(() => {
+    if (title) {
+      return title;
+    }
+    if (currentStep) {
+      return t(`step.${currentStep?.id}.title.long`);
+    }
+    return "";
+  }, [currentStep, title, t]);
+
   const energyStats = Object.values(energyNameToEnergyStats);
   const budgetRemaining =
     (currentStep?.budgetAdvised || 0) - sumBy(energyStats, "cost");
@@ -58,7 +68,7 @@ function TeamActionsRecap({
     >
       <Box display="flex" alignItems="center" gap={1}>
         <Icon name="production" />
-        <Typography variant="h5">{title || currentStep?.title}</Typography>
+        <Typography variant="h5">{titleI18n}</Typography>
         {helper && <HelpIconWrapper>{helper}</HelpIconWrapper>}
       </Box>
 
@@ -72,9 +82,7 @@ function TeamActionsRecap({
           title={
             <>
               <Icon name="power" />
-              <Typography>
-                {t("team-actions.recap.installed-power")} :
-              </Typography>
+              <Typography>{t("team-actions.recap.installed-power")}</Typography>
             </>
           }
           value={
@@ -92,7 +100,7 @@ function TeamActionsRecap({
             title={
               <>
                 <Icon name="budget" />
-                <Typography>{budgetI18n} :</Typography>
+                <Typography>{budgetI18n}</Typography>
               </>
             }
             value={
@@ -141,7 +149,7 @@ function OverviewItem({
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      sx={{ width: "100%", maxWidth: 325 }}
+      sx={{ width: "100%", maxWidth: 375 }}
     >
       <Box display="flex" alignItems="center" gap={1}>
         {title}
