@@ -70,6 +70,7 @@
   "message.success.form-validated": "Formulaire validé",
   "message.success.game-joined": "Vous avez rejoint l'atelier avec succès",
   "message.success.sign-in.user-authenticated": "Connexion réussie",
+  "message.success.default": "Succès",
 
   "modal.remove-game.title": "Voulez-vous supprimer le jeu {{game}} ?",
   "modal.remove-player.title": "Voulez-vous supprimer le joueur ?",
@@ -112,6 +113,11 @@
   "page.login.description": "Si vous avez déjà un compte :",
   "page.login.signup-section.title": "Si vous n’avez pas encore de compte :",
   "page.login.signup-section.cta": "Créer un compte",
+  "page.login.magic-link-sent": [
+    "Un mail contenant un lien de connexion a été envoyé à l'adresse <span class='text-underline'>{{userEmail}}</span>.",
+    "Cliquez sur le lien fourni pour accéder à l'application.",
+    "Vérifiez que le mail n'est pas arrivé dans votre boîte de spams."
+  ],
   "page.games-list.title": "Mes ateliers",
   "page.games-list.finished-list.title": "Ateliers terminés",
   "page.games-list.ongoing-list.title": "Ateliers en cours",
@@ -151,6 +157,12 @@
   "page.signup.title": "Création de compte",
   "page.signup.login-section.title": "Si vous avez déjà un compte :",
   "page.signup.login-section.cta": "Se connecter",
+  "page.signup.accept-terms-of-use": "En cochant cette case, je certifie avoir lu et accepté sans réserve les <a href='{{termsOfUseUrl}}' target='_blank' rel='noreferrer'><span class='text-underline'>conditions générales d'utilisation</span></a>",
+  "page.signup.account-created": [
+    "Votre compte a été créé, un mail contenant un lien de connexion a été envoyé à l'adresse <span class='text-underline'>{{userEmail}}</span>.",
+    "Cliquez sur le lien de connexion pour accéder à l'application.",
+    "Vérifiez que le mail n'est pas arrivé dans votre boîte de spams."
+  ],
   "page.teacher.statistics.tabs.energy-balance.label": "Équilibre énergétique",
   "page.teacher.statistics.tabs.materials.label": "Matériaux",
   "page.teacher.statistics.tabs.metals.label": "Métaux",

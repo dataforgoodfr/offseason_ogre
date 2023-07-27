@@ -99,6 +99,9 @@ const globalStyles: GlobalStylesProps["styles"] = {
   ".text-em": {
     color: `${theme.palette.secondary.main} !important`,
   },
+  ".text-underline": {
+    textDecoration: "underline",
+  },
 };
 
 export const getStyledProps = (...props: string[]) => ({
