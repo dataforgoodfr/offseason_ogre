@@ -48,7 +48,7 @@
   "achievement.choseToSwitchToTinyHome.iconAlt": "",
   "achievement.choseToSwitchToTinyHome.type": "default",
 
-  "achievement.directEnergyConsumptionLessThanHalfCountryMean.title": "Maître de la sobriété",
+  "achievement.directEnergyConsumptionLessThanHalfCountryMean.title": "Maître.sse de la sobriété",
   "achievement.directEnergyConsumptionLessThanHalfCountryMean.display-order": 100,
   "achievement.directEnergyConsumptionLessThanHalfCountryMean.description": "Votre consommation d’énergie directe est inférieure à 25 kWh soit moins de la moitié de la moyenne française.",
   "achievement.directEnergyConsumptionLessThanHalfCountryMean.iconSrc": "directEnergyConsumptionLessThanHalfCountryMean.svg",

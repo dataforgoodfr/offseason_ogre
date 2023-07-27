@@ -206,10 +206,12 @@
   "synthesis.player.general-section.production.final-renewable-production-increased": "À la fin de l’atelier, les choix fait en équipe permettent de produire <span class='text-em'>{{finalProduction}}</span> d’énergie décarbonée, soit une <span class='text-em'>augmentation de {{productionChange}}</span> par rapport à la production initiale.",
   "synthesis.player.general-section.production.final-renewable-production-decreased": "À la fin de l’atelier, les choix fait en équipe permettent de produire <span class='text-em'>{{finalProduction}}</span> d’énergie décarbonée, soit une <span class='text-em'>baisse de {{productionChange}}</span> par rapport à la production initiale.",
   "synthesis.player.scenario-section.title": "Scénario",
-  "synthesis.player.scenario-section.edit-help.description-1": "Donnez un nom à votre scénario pour le futur énergétique de la France.",
-  "synthesis.player.scenario-section.edit-help.description-2": "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe.",
-  "synthesis.player.most-impactful-actions-section.action-performed": "Action effectuée",
-  "synthesis.player.most-impactful-actions-section.action-missed": "Action ratée",
+  "synthesis.player.scenario-section.edit-help.description": [
+    "Donnez un nom à votre scénario pour le futur énergétique de la France.",
+    "Veuillez choisir une personne qui éditera le nom pour l’ensemble de l'équipe."
+  ],
+  "synthesis.player.most-impactful-actions-section.action-taken": "Action effectuée",
+  "synthesis.player.most-impactful-actions-section.action-not-taken": "Action non effectuée",
   "synthesis.player.most-impactful-actions-section.description": "Voici les 5 actions qui avaient le plus d’impact en considérant votre situation initiale.",
   "synthesis.player.most-impactful-actions-section.title": "Actions à fort impact",
 
