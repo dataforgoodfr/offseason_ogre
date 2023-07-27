@@ -59,7 +59,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "eatingLocal",
-        update: (value: number) => true,
+        update: (value: boolean) => true,
       }),
     ],
   },
@@ -69,7 +69,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "clothingQuantity",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
     ],
   },
@@ -79,7 +79,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "numericEquipment",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
     ],
   },
@@ -89,7 +89,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "eatingDairies",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
     ],
   },
@@ -99,7 +99,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "eatingEggs",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
     ],
   },
@@ -109,7 +109,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "eatingMeat",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
     ],
   },
@@ -119,7 +119,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "eatingZeroWaste",
-        update: (value: number) => true,
+        update: (value: boolean) => true,
       }),
     ],
   },
@@ -139,12 +139,12 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "numericWebTimeDay",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "numericVideoTimeDay",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
     ],
   },
@@ -154,7 +154,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "heatingConsumptionInvoiceCoeff",
-        update: (value: number) => value * 0.4,
+        update: (value) => value * 0.4,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -164,7 +164,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "heatingEnergy",
-        update: (value: number) => houseEnergies.ELECTRICITE,
+        update: (value: string) => houseEnergies.ELECTRICITE.value,
       }),
     ],
   },
@@ -174,7 +174,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "heatingConsumptionInvoiceCoeff",
-        update: (value: number) => value * 0.75,
+        update: (value) => value * 0.75,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -189,7 +189,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "heatingConsumptionInvoiceCoeff",
-        update: (value: number) => value * 0.75,
+        update: (value) => value * 0.75,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -204,7 +204,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "heatingConsumptionInvoiceCoeff",
-        update: (value: number) => value * 0.9,
+        update: (value) => value * 0.9,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -219,7 +219,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "heatingConsumptionInvoiceCoeff",
-        update: (value: number) => value * 0.8,
+        update: (value) => value * 0.8,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -234,7 +234,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "heatingConsumptionInvoiceCoeff",
-        update: (value: number) =>
+        update: (value) =>
           inputMatrix.personalization.heatingTemperature ? value * 0.86 : value,
       }),
       (inputMatrix: ImpactMatrix) => ({
@@ -251,7 +251,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "heatingConsumptionInvoiceCoeff",
-        update: (value: number) => value * 0.5,
+        update: (value) => value * 0.5,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -266,7 +266,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "airConditionning",
-        update: (value: number) => false,
+        update: (value: boolean) => false,
       }),
     ],
   },
@@ -276,7 +276,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "lightingSystem",
-        update: (value: number) => houseLighting.AMPOULES_LED,
+        update: (value: string) => houseLighting.AMPOULES_LED.value,
       }),
     ],
   },
@@ -286,7 +286,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "showerBath",
-        update: (value: number) => hygieneCleaning.DOUCHES,
+        update: (value: string) => hygieneCleaning.DOUCHES.value,
       }),
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
@@ -296,7 +296,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "showerTime",
-        update: (value: number) => showerTimes.MOINS_5,
+        update: (value: string) => showerTimes.MOINS_5.value,
       }),
     ],
   },
@@ -306,7 +306,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "whiteProductsCoeff",
-        update: (value: number) => value * 0.75,
+        update: (value) => value * 0.75,
       }),
     ],
   },
@@ -316,7 +316,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "brownGoodsCoeff",
-        update: (value: number) => value + 0.6,
+        update: (value) => value + 0.6,
       }),
     ],
   },
@@ -326,7 +326,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "calculatedValues",
         name: "brownGoodsCoeff",
-        update: (value: number) => value + 0.01,
+        update: (value) => value + 0.01,
       }),
     ],
   },
@@ -350,7 +350,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "carEnergy",
-        update: (value: number) => carEnergies.ELECTRICITE.value,
+        update: (value: string) => carEnergies.ELECTRICITE.value,
       }),
     ],
   },
@@ -400,7 +400,7 @@ const consumptionConfig: {
       (inputMatrix: ImpactMatrix) => ({
         type: "personalization",
         name: "carAge",
-        update: (value: number) => carAges.PLUS_15,
+        update: (value: string) => carAges.PLUS_15.value,
       }),
     ],
   },
@@ -411,11 +411,24 @@ type ConsumptionConfig = {
   profileImpacts: ConsumptionUpdate[];
 };
 
-type ConsumptionUpdate = (inputMatrix: ImpactMatrix) => {
-  type: keyof ImpactMatrix;
-  name: keyof PersoForm | keyof IntermediateValues;
-  update: (value: any) => any;
-};
+type ConsumptionUpdate<
+  TType extends "calculatedValues" | "personalization" =
+    | "calculatedValues"
+    | "personalization"
+> = (inputMatrix: ImpactMatrix) => TType extends "calculatedValues"
+  ? {
+      type: "calculatedValues";
+      name: keyof IntermediateValues;
+      update: (value: number) => number;
+    }
+  : {
+      type: "personalization";
+      name: keyof PersoForm;
+      update:
+        | ((value: boolean) => boolean)
+        | ((value: number) => number)
+        | ((value: string) => string);
+    };
 
 function computeNewConsumptionData(
   performedActionsNames: ActionNames[],
@@ -476,26 +489,22 @@ function applyPersonalizationImpact(
 ) {
   const { type, name, update } = getImpact(inputMatrix);
   if (type === "calculatedValues" && inputMatrix.calculatedValues) {
-    if (
-      inputMatrix.calculatedValues[name as keyof IntermediateValues] == null
-    ) {
+    if (inputMatrix.calculatedValues[name] == null) {
       return;
     }
 
     Object.assign(inputMatrix.calculatedValues, {
-      [name]: update(
-        inputMatrix.calculatedValues[name as keyof IntermediateValues]
-      ),
+      [name]: update(inputMatrix.calculatedValues[name]),
     });
   }
 
   if (type === "personalization") {
-    if (inputMatrix.personalization[name as keyof PersoForm] == null) {
+    if (inputMatrix.personalization[name] == null) {
       return;
     }
 
     Object.assign(inputMatrix.personalization, {
-      [name]: update(inputMatrix.personalization[name as keyof PersoForm]),
+      [name]: (update as any)(inputMatrix.personalization[name]),
     });
   }
 }
