@@ -19,6 +19,7 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIconTypeMap,
+  ThemeProvider,
   useTheme,
 } from "@mui/material";
 import React, { Fragment, useMemo } from "react";
@@ -28,6 +29,7 @@ import { useAuth } from "../../auth/authProvider";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import { useTranslation } from "../../translations/useTranslation";
 import { Icon } from "../../common/components/Icon";
+import { adminTheme } from "../../../utils/theme";
 
 const drawerWidth: number = 240;
 
@@ -49,71 +51,73 @@ function Layout() {
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <LayoutAppBar>
-        <Toolbar
+    <ThemeProvider theme={adminTheme}>
+      <Box sx={{ display: "flex" }}>
+        <LayoutAppBar>
+          <Toolbar
+            sx={{
+              pr: "24px", // keep right padding when drawer closed
+            }}
+          >
+            {isNestedRoute ? (
+              <BackButton to={buildPathToPreviousPage(routeMatch)} />
+            ) : null}
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              Administration
+            </Typography>
+            <LoggedUser />
+          </Toolbar>
+        </LayoutAppBar>
+        <LayoutDrawer>
+          <>
+            <Link to="/">
+              <Toolbar
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <InvertColorsIcon
+                  color="primary"
+                  style={{
+                    fontSize: theme.spacing(5),
+                  }}
+                />
+                <Typography color="primary" variant="h4">
+                  Ogre
+                </Typography>
+              </Toolbar>
+            </Link>
+            <Divider />
+            <Navigation />
+          </>
+        </LayoutDrawer>
+        <Box
+          component="main"
           sx={{
-            pr: "24px", // keep right padding when drawer closed
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: "100vh",
+            overflow: "auto",
           }}
         >
-          {isNestedRoute ? (
-            <BackButton to={buildPathToPreviousPage(routeMatch)} />
-          ) : null}
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
-          >
-            Administration
-          </Typography>
-          <LoggedUser />
-        </Toolbar>
-      </LayoutAppBar>
-      <LayoutDrawer>
-        <>
-          <Link to="/">
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <InvertColorsIcon
-                color="primary"
-                style={{
-                  fontSize: theme.spacing(5),
-                }}
-              />
-              <Typography color="primary" variant="h4">
-                Ogre
-              </Typography>
-            </Toolbar>
-          </Link>
-          <Divider />
-          <Navigation />
-        </>
-      </LayoutDrawer>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-        }}
-      >
-        <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
-          <Outlet />
-        </Container>
+          <Toolbar />
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
+            <Outlet />
+          </Container>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 }
 

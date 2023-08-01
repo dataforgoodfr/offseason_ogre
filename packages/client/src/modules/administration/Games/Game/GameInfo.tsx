@@ -1,7 +1,6 @@
-import { Box, TextField, Grid, Button, Typography } from "@mui/material";
+import { Box, TextField, Grid } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import SaveIcon from "@mui/icons-material/Save";
 import { SuccessAlert, ErrorAlert } from "../../../alert";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -9,6 +8,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { IGame } from "../../../../utils/types";
 import { http } from "../../../../utils/request";
 import { useForm } from "../../../common/hooks/useForm";
+import { Button } from "../../../common/components/Button";
 
 export { GameInfo };
 
@@ -64,7 +64,7 @@ function GameInfo(props: IInfoProps) {
   };
 
   return (
-    <Box sx={{ mt: 2 }}>
+    <Box>
       {mutation.isSuccess && <SuccessAlert />}
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
       <form onSubmit={handleSubmit(onValid)}>
@@ -134,9 +134,9 @@ function GameInfo(props: IInfoProps) {
             </Grid>
           </Grid>
         </Grid>
-        <Grid sx={{ float: "right", pb: 4, pr: 4 }}>
-          <Button type="submit" variant="contained" color="primary">
-            <SaveIcon /> <Typography sx={{ ml: 1 }}>Enregistrer</Typography>
+        <Grid display="flex" justifyContent="end">
+          <Button htmlType="submit" iconName="save">
+            Enregistrer
           </Button>
         </Grid>
       </form>
