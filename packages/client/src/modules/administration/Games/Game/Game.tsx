@@ -39,6 +39,7 @@ function Game() {
                     <GameInfo game={game} />
                   </TabWrapper>
                 ) : null,
+                path: "information",
               },
               {
                 label: "Joueurs",
@@ -47,6 +48,7 @@ function Game() {
                     <GamePlayers game={game} />
                   </TabWrapper>
                 ) : null,
+                path: "players",
               },
               {
                 label: "Équipes",
@@ -55,6 +57,7 @@ function Game() {
                     <GameTeams game={game} />
                   </TabWrapper>
                 ) : null,
+                path: "teams",
               },
             ]}
           ></Tabs>

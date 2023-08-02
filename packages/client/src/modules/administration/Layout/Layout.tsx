@@ -12,6 +12,7 @@ import GamesIcon from "@mui/icons-material/Games";
 import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
   Button,
@@ -22,8 +23,8 @@ import {
   ThemeProvider,
   useTheme,
 } from "@mui/material";
+import { isNaN } from "lodash";
 import React, { Fragment, useMemo } from "react";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../../auth";
 import { useAuth } from "../../auth/authProvider";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
@@ -122,7 +123,27 @@ function Layout() {
 }
 
 function buildPathToPreviousPage(match: PathMatch | null) {
-  return match?.pathname.split("/").slice(0, -1).join("/") || "";
+  const pathChunks = match?.pathname.split("/") || [];
+
+  /**
+   * Ignore path chunks that are integers because they are considered to be ids.
+   */
+  let endIdx = Math.max(pathChunks.length - 2, 0);
+  while (endIdx > 0) {
+    const isChunkInteger = !isNaN(parseInt(pathChunks[endIdx], 10));
+    if (!isChunkInteger) {
+      break;
+    }
+    endIdx -= 1;
+  }
+
+  const newPath =
+    match?.pathname
+      .split("/")
+      .slice(0, endIdx + 1)
+      .join("/") || "";
+
+  return newPath;
 }
 
 function BackButton({ to }: { to: string }): JSX.Element {

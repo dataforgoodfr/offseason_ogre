@@ -1,9 +1,8 @@
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { IGame, ITeamWithPlayers } from "../../../../../../utils/types";
 import { SuccessAlert } from "../../../../../alert";
-import { useNavigate } from "react-router-dom";
 import { hasGameStarted } from "../../../utils";
 import { Button } from "../../../../../common/components/Button";
 import { Dialog } from "../../../../../common/components/Dialog";
@@ -99,10 +98,10 @@ export function Launch({ game }: { game: IGameWithTeams }) {
     <div>
       {launchGameMutation.isSuccess && <SuccessAlert />}
       <Button
+        iconName="launch"
         loading={playersQuery.isLoading || launchGameMutation.isLoading}
         onClick={handleLaunchGame}
       >
-        <RocketLaunchIcon sx={{ height: "1rem" }} />
         {!hasGameStarted(game.status) ? "Animer" : "Rejoindre"}
       </Button>
       <Dialog

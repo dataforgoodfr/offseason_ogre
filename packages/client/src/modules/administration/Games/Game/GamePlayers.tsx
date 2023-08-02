@@ -122,7 +122,9 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
               </Button>
               <Button
                 onClick={() =>
-                  navigate(`/administration/games/${gameId}/form-verification`)
+                  navigate(
+                    `/administration/games/${gameId}/players/form-verification`
+                  )
                 }
               >
                 {t("cta.check-forms")}
