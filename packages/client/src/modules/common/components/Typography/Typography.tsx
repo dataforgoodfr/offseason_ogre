@@ -1,9 +1,13 @@
 import { Typography as TypographyMui } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { getStyledProps } from "../../../../utils/theme";
 
 export { Typography };
 
-const Typography = styled(TypographyMui)(({ theme }) => ({
+const Typography = styled(
+  TypographyMui,
+  getStyledProps("bold")
+)<{ bold?: boolean }>(({ theme, bold = false }) => ({
   "&:is(h1)": {
     letterSpacing: "-0.5px",
   },
@@ -32,4 +36,5 @@ const Typography = styled(TypographyMui)(({ theme }) => ({
       fontSize: 14,
     },
   },
+  ...(bold ? { fontWeight: 500 } : {}),
 }));

@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { GameInfo } from "./GameInfo";
 import { GamePlayers } from "./GamePlayers";
-import { Animation } from "./Animation";
 import { GameTeams } from "./GameTeams";
 import { http } from "../../../../utils/request";
 import { Tabs } from "../../../common/components/Tabs";
@@ -27,7 +26,7 @@ function Game() {
     <>
       <Box display="flex" flexDirection="column" gap={2} sx={{ mt: 2 }}>
         <Typography variant="h3" sx={{ mb: 2 }}>
-          Atelier {game?.name}
+          Gestion d'Atelier
         </Typography>
 
         <Box display="flex" flexDirection="column">
@@ -57,27 +56,11 @@ function Game() {
                   </TabWrapper>
                 ) : null,
               },
-              {
-                label: "Animation",
-                component: game ? (
-                  <TabWrapper>
-                    <Animation game={game} />
-                  </TabWrapper>
-                ) : null,
-              },
             ]}
           ></Tabs>
         </Box>
       </Box>
     </>
-  );
-}
-
-function GeneralInfo({ game }: { game: IGame }) {
-  return (
-    <AccordionLayout title="Informations générales">
-      {game && <GameInfo game={game} />}
-    </AccordionLayout>
   );
 }
 

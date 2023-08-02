@@ -9,6 +9,7 @@ import mergeDeep from "deepmerge";
 import { pipe } from "../lib/fp";
 
 export type {
+  Theme,
   ThemeVariant,
   EnergyPalette,
   ProductionPalette,
@@ -110,7 +111,7 @@ const adminThemeOptions: ThemeOptions = mergeDeep(baseThemeOptions, {
           color: yellow,
         },
         secondary: {
-          backgroundColor: yellow,
+          backgroundColor: "white",
           color: blue,
         },
       },
