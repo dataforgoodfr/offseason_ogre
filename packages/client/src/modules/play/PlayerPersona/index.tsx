@@ -1,3 +1,3 @@
-import { PlayerPersona, PlayerHeaderGrid } from "./PlayerPersona";
+import { PlayerPersonaPage, PlayerHeaderGrid } from "./PlayerPersonaPage";
 
-export { PlayerPersona, PlayerHeaderGrid };
+export { PlayerPersonaPage, PlayerHeaderGrid };

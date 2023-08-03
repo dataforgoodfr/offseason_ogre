@@ -2,7 +2,7 @@ import {
   houseEnergies,
   showerTimes,
   carAges,
-  cleaning,
+  hygieneCleaning,
   PersoForm,
 } from "../../play/Personalization/models/form";
 import {
@@ -38,24 +38,24 @@ export const getHeatingConsumptionInvoiceCoeff = (
 };
 
 const heatingEnergyToCoeff = {
-  [houseEnergies.GAZ]: heatingEnergyCoeffs.GAZ,
-  [houseEnergies.FIOUL]: heatingEnergyCoeffs.FIOUL,
-  [houseEnergies.BOIS]: heatingEnergyCoeffs.BOIS,
-  [houseEnergies.ELECTRICITE]: heatingEnergyCoeffs.ELECTRICITE,
+  [houseEnergies.GAZ.value]: heatingEnergyCoeffs.GAZ,
+  [houseEnergies.FIOUL.value]: heatingEnergyCoeffs.FIOUL,
+  [houseEnergies.BOIS.value]: heatingEnergyCoeffs.BOIS,
+  [houseEnergies.ELECTRICITE.value]: heatingEnergyCoeffs.ELECTRICITE,
 };
 
 const carAgeToCoeff = {
-  [carAges.MOINS_5]: 3,
-  [carAges.CINQ_DIX]: 2,
-  [carAges.DIX_QUINZE]: 1,
-  [carAges.PLUS_15]: 1,
+  [carAges.MOINS_5.value]: 3,
+  [carAges.CINQ_DIX.value]: 2,
+  [carAges.DIX_QUINZE.value]: 1,
+  [carAges.PLUS_15.value]: 1,
 };
 
 const showerTimesToCoeff = {
-  [showerTimes.MOINS_5]: 0.5,
-  [showerTimes.CINQ_DIX]: 0.75,
-  [showerTimes.DIX_QUINZE]: 1.25,
-  [showerTimes.PLUS_15]: 2,
+  [showerTimes.MOINS_5.value]: 0.5,
+  [showerTimes.CINQ_DIX.value]: 0.75,
+  [showerTimes.DIX_QUINZE.value]: 1.25,
+  [showerTimes.PLUS_15.value]: 2,
 };
 
 const getCoeff = (configName: string, mapping: any) => (key: string) => {
@@ -106,7 +106,7 @@ export const getWhiteProductsCoeff = (personalization: PersoForm) => {
 
 export const getShowerBathCoeff = (personalization: PersoForm) => {
   const { showerBath, showerNumber, showerTime } = personalization;
-  if (showerBath === cleaning.BAINS) {
+  if (showerBath === hygieneCleaning.BAINS.value) {
     return 5;
   }
   return showerNumber * getShowerTimeCoeff(showerTime) * 2.8;

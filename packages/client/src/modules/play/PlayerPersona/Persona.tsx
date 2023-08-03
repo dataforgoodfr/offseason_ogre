@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { PlayBox } from "../Components";
 import { Accordion } from "../../common/components/Accordion";
 import { Icon, IconName } from "../../common/components/Icon";
@@ -11,15 +11,22 @@ import {
 import { fulfillsConditions } from "../Personalization/utils/formValidation";
 import { QuestionLine, QuestionText } from "../Personalization/styles/form";
 import { DescriptionValue } from "./Persona.styles";
-import { formatBooleanValue } from "../../../utils/format";
 import { useCurrentPlayer } from "../context/hooks/player";
+import { useTranslation } from "../../translations";
+import { Typography } from "../../common/components/Typography";
 
 export { Persona };
 
 function Persona() {
+  const { t } = useTranslation(["common", "consumption-profiles"]);
+
   const formatValue = (value: any) => {
     if (typeof value === "boolean") {
-      return formatBooleanValue(value);
+      if (value === true) {
+        return t("consumption-profiles:form.choice.boolean.yes");
+      } else if (value === false) {
+        return t("consumption-profiles:form.choice.boolean.no");
+      }
     }
     return value;
   };
@@ -40,7 +47,7 @@ function Persona() {
           {question.icon && (
             <Icon name={question.icon as IconName} sx={{ mr: 1 }} />
           )}
-          {question.description}
+          {t(`consumption-profiles:form.question.${question.name}.title`)}
         </QuestionText>
         <DescriptionValue>{formatValue(value)}</DescriptionValue>
       </QuestionLine>
@@ -74,12 +81,12 @@ function Persona() {
 
   return (
     <PlayBox>
-      <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
-        Mon Profil
-      </Typography>
-      <Accordion
-        options={Object.entries(formSections).map(
-          ([_, value]: [string, any]) => {
+      <Box display="flex" flexDirection="column" gap={3} paddingTop={2}>
+        <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
+          {t("page.player.characteristics.title")}
+        </Typography>
+        <Accordion
+          options={Object.entries(formSections).map(([_, value]) => {
             return {
               key: value.name,
               header: (
@@ -87,7 +94,7 @@ function Persona() {
                   {value.titleIcon && (
                     <Icon name={value.titleIcon} sx={{ mr: 1 }} />
                   )}
-                  {value.title}
+                  {t(`consumption-profiles:form.section.${value.name}.title`)}
                 </Typography>
               ),
               content: buildDescriptionSection(
@@ -95,9 +102,9 @@ function Persona() {
                 value.name
               ),
             };
-          }
-        )}
-      />
+          })}
+        />
+      </Box>
     </PlayBox>
   );
 }

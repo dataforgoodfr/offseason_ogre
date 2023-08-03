@@ -38,15 +38,16 @@ function MagicLink() {
     return (
       <>
         <SuccessAlert />
-        <div className="flex justify-center items-center w-120">
-          <p className="text-white text-center">
-            Un mail contenant un lien de connexion a été envoyé à l'adresse{" "}
-            <span className="underline">{getValues("email")}</span>.
-            <br />
-            Cliquez sur le lien fourni pour accéder à l'application.
-            <br />
-            Vérifiez que le mail n'est pas arrivé dans votre boîte de Spam.
-          </p>
+        <div className="flex flex-col justify-center items-center w-120 text-white text-center">
+          {t("page.login.magic-link-sent", {
+            userEmail: getValues("email"),
+            returnObjects: true,
+          }).map((html) => (
+            <Typography
+              key={html}
+              dangerouslySetInnerHTML={{ __html: html }}
+            ></Typography>
+          ))}
         </div>
       </>
     );

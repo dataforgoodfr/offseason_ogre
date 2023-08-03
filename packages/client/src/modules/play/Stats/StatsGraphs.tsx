@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import {
   StackedEnergyBars,
@@ -17,8 +18,9 @@ import { usePlay } from "../context/playContext";
 import { sumAllValues, sumForAndFormat } from "../../persona";
 import { IGame } from "../../../utils/types";
 import { Tabs } from "../../common/components/Tabs";
-import { useTranslation } from "../../translations/useTranslation";
+import { useTranslation } from "../../translations";
 import { usePersona } from "../context/hooks/player";
+import { Typography } from "../../common/components/Typography";
 
 export { StatsGraphs };
 
@@ -48,21 +50,29 @@ function StatsGraphs() {
 
   return (
     <PlayBox>
-      <Tabs tabs={tabs} />
+      <Box display="flex" flexDirection="column" gap={3} paddingTop={2}>
+        <Typography sx={{ textAlign: "center", mb: 2 }} variant="h3">
+          {t("page.player.statistics.title")}
+        </Typography>
+        <Box>
+          <Tabs tabs={tabs} />
+        </Box>
+      </Box>
     </PlayBox>
   );
 }
 
 function ConsumptionAndProductionGraph() {
-  const [selectedBarIdx, setSelectedBarIdx] = useState<number>();
+  const { t } = useTranslation();
   const { game } = usePlay();
   const { personaBySteps, getPersonaAtStep } = usePersona();
+  const [selectedBarIdx, setSelectedBarIdx] = useState<number>();
 
   const bars = useMemo(() => {
     const initialPersona = getPersonaAtStep(0);
     const initialValues = [
       {
-        name: "Conso init",
+        name: t("graph.step.first.consumption.name"),
         total: sumAllValues(initialPersona.consumption) || 0,
         grey: sumForAndFormat(initialPersona.consumption, "grey"),
         mixte: sumForAndFormat(initialPersona.consumption, "mixte"),
@@ -70,7 +80,7 @@ function ConsumptionAndProductionGraph() {
         renewable: sumForAndFormat(initialPersona.consumption, "renewable"),
       },
       {
-        name: "Prod init",
+        name: t("graph.step.first.production.name"),
         total: sumAllValues(initialPersona.production) || 0,
         offshore: sumForAndFormat(initialPersona.production, "offshore"),
         nuclear: sumForAndFormat(initialPersona.production, "nuclear"),
@@ -83,7 +93,7 @@ function ConsumptionAndProductionGraph() {
         const persona = personaBySteps[step];
         if (STEPS[step]?.type === "consumption") {
           return {
-            name: step ? `Étape ${step}` : "Initial",
+            name: t("graph.step.other.name", { stepNumber: step }),
             total: sumAllValues(persona.consumption) || 0,
             grey: sumForAndFormat(persona.consumption, "grey"),
             mixte: sumForAndFormat(persona.consumption, "mixte"),
@@ -92,7 +102,7 @@ function ConsumptionAndProductionGraph() {
           };
         } else {
           return {
-            name: step ? `Étape ${step}` : "Initial",
+            name: t("graph.step.other.name", { stepNumber: step }),
             total: sumAllValues(persona.production) || 0,
             offshore: sumForAndFormat(persona.production, "offshore"),
             nuclear: sumForAndFormat(persona.production, "nuclear"),
@@ -103,7 +113,7 @@ function ConsumptionAndProductionGraph() {
     );
 
     return [...initialValues, ...stepsDetails];
-  }, [game.lastFinishedStep, personaBySteps, getPersonaAtStep]);
+  }, [game.lastFinishedStep, personaBySteps, getPersonaAtStep, t]);
 
   return (
     <>

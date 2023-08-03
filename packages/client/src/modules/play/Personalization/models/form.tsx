@@ -1,6 +1,7 @@
 import { range } from "lodash";
 import { IconName } from "../../../common/components/Icon";
 import { buildChoices } from "../utils/choices";
+import { t } from "../../../translations";
 
 export type FormStatus = "draft" | "pendingValidation" | "validated";
 
@@ -120,7 +121,6 @@ export interface Condition {
 export interface Question {
   type: string;
   icon?: IconName;
-  description: string;
   name: keyof PersoForm;
   conditions?: Condition[];
   inputType: string;
@@ -137,89 +137,192 @@ export interface IntermediateValues {
   heatingConsumptionInvoiceCoeff: number;
 }
 
-export const carEnergies = {
-  DIESEL: "Diesel",
-  ELECTRICITE: "Electricité",
-  ESSENCE: "Essence",
-  GPL: "GPL",
-  HYBRIDE: "Hybride",
+type Choices = Record<
+  string,
+  { value: string; description: string; order?: number }
+>;
+
+export const carEnergies: Choices = {
+  DIESEL: {
+    value: "Diesel",
+    description: t("consumption-profiles:form.choice.car-energy.diesel"),
+  },
+  ELECTRICITE: {
+    value: "Electricité",
+    description: t("consumption-profiles:form.choice.car-energy.electricity"),
+  },
+  ESSENCE: {
+    value: "Essence",
+    description: t("consumption-profiles:form.choice.car-energy.gasoline"),
+  },
+  GPL: {
+    value: "GPL",
+    description: t(
+      "consumption-profiles:form.choice.car-energy.liquified-petroleum-gas"
+    ),
+  },
+  HYBRIDE: {
+    value: "Hybride",
+    description: t("consumption-profiles:form.choice.car-energy.hybrid"),
+  },
 };
 
-export const carAges = {
-  MOINS_5: "Moins de 5 ans",
-  CINQ_DIX: "Entre 5 et 10 ans",
-  DIX_QUINZE: "Entre 10 et 15 ans",
-  PLUS_15: "Plus de 15 ans",
+export const carAges: Choices = {
+  MOINS_5: {
+    value: "Moins de 5 ans",
+    description: t("consumption-profiles:form.choice.car-age.lt-5-years"),
+    order: 1,
+  },
+  CINQ_DIX: {
+    value: "Entre 5 et 10 ans",
+    description: t("consumption-profiles:form.choice.car-age.gt-5-lt-10-years"),
+    order: 2,
+  },
+  DIX_QUINZE: {
+    value: "Entre 10 et 15 ans",
+    description: t(
+      "consumption-profiles:form.choice.car-age.gt-10-lt-15-years"
+    ),
+    order: 3,
+  },
+  PLUS_15: {
+    value: "Plus de 15 ans",
+    description: t("consumption-profiles:form.choice.car-age.gt-15-years"),
+    order: 4,
+  },
 };
 
-export const houseTypes = {
-  APPARTMENT: "Appartement",
-  INDIVIDUAL: "Maison individuelle",
-  MITOYENNE: "Maison mitoyenne",
-  STUDIO: "Studio (1 pièce)",
+export const houseTypes: Choices = {
+  APPARTMENT: {
+    value: "Appartement",
+    description: t("consumption-profiles:form.choice.house-type.apartment"),
+  },
+  INDIVIDUAL: {
+    value: "Maison individuelle",
+    description: t("consumption-profiles:form.choice.house-type.detached"),
+  },
+  MITOYENNE: {
+    value: "Maison mitoyenne",
+    description: t("consumption-profiles:form.choice.house-type.attached"),
+  },
+  STUDIO: {
+    value: "Studio (1 pièce)",
+    description: t("consumption-profiles:form.choice.house-type.studio"),
+  },
 };
 
-export const houseEnergies = {
-  BOIS: "Bois",
-  ELECTRICITE: "Electricité",
-  FIOUL: "Fioul",
-  GAZ: "Gaz",
+export const houseEnergies: Choices = {
+  BOIS: {
+    value: "Bois",
+    description: t(
+      "consumption-profiles:form.choice.house-heating-energy.wood"
+    ),
+  },
+  ELECTRICITE: {
+    value: "Electricité",
+    description: t(
+      "consumption-profiles:form.choice.house-heating-energy.electricity"
+    ),
+  },
+  FIOUL: {
+    value: "Fioul",
+    description: t(
+      "consumption-profiles:form.choice.house-heating-energy.fuel"
+    ),
+  },
+  GAZ: {
+    value: "Gaz",
+    description: t("consumption-profiles:form.choice.house-heating-energy.gas"),
+  },
 };
 
-export const cleaning = {
-  BAINS: "Bains",
-  DOUCHES: "Douches",
+export const hygieneCleaning: Choices = {
+  BAINS: {
+    value: "Bains",
+    description: t("consumption-profiles:form.choice.hygiene-cleaning.bath"),
+  },
+  DOUCHES: {
+    value: "Douches",
+    description: t("consumption-profiles:form.choice.hygiene-cleaning.shower"),
+  },
 };
 
-export const lighting = {
-  AMPOULES_BASSE_CONSOMMATION: "Ampoules basse consommation",
-  AMPOULES_CLASSIQUES: "Ampoules classiques et halogènes",
-  AMPOULES_LED: "Ampoules LED",
+export const houseLighting: Choices = {
+  AMPOULES_CLASSIQUES: {
+    value: "Ampoules classiques et halogènes",
+    description: t(
+      "consumption-profiles:form.choice.house-lighting.classic-bulb"
+    ),
+    order: 1,
+  },
+  AMPOULES_BASSE_CONSOMMATION: {
+    value: "Ampoules basse consommation",
+    description: t(
+      "consumption-profiles:form.choice.house-lighting.low-energy-bulb"
+    ),
+    order: 2,
+  },
+  AMPOULES_LED: {
+    value: "Ampoules LED",
+    description: t("consumption-profiles:form.choice.house-lighting.led"),
+    order: 3,
+  },
 };
 
-export const showerTimes = {
-  MOINS_5: "Moins de 5 minutes",
-  CINQ_DIX: "5 à 10 minutes",
-  DIX_QUINZE: "10 à 15 minutes",
-  PLUS_15: "Plus de 15 minutes",
+export const showerTimes: Choices = {
+  MOINS_5: {
+    value: "Moins de 5 minutes",
+    description: t(
+      "consumption-profiles:form.choice.hygiene-cleaning-shower-time.lt-5-minutes"
+    ),
+    order: 1,
+  },
+  CINQ_DIX: {
+    value: "5 à 10 minutes",
+    description: t(
+      "consumption-profiles:form.choice.hygiene-cleaning-shower-time.gt-5-lt-10-minutes"
+    ),
+    order: 2,
+  },
+  DIX_QUINZE: {
+    value: "10 à 15 minutes",
+    description: t(
+      "consumption-profiles:form.choice.hygiene-cleaning-shower-time.gt-10-lt-15-minutes"
+    ),
+    order: 3,
+  },
+  PLUS_15: {
+    value: "Plus de 15 minutes",
+    description: t(
+      "consumption-profiles:form.choice.hygiene-cleaning-shower-time.gt-15-minutes"
+    ),
+    order: 4,
+  },
 };
 
-export const carEnergyChoice = buildChoices(Object.values(carEnergies));
-
-export const carAgeChoice = buildChoices(Object.values(carAges));
-
-export const houseTypeChoices = buildChoices(Object.values(houseTypes));
-
-export const houseEnergyChoices = buildChoices(Object.values(houseEnergies));
-
-export const showerBathChoices = buildChoices(Object.values(cleaning));
-
-export const lightingSystemChoices = buildChoices(Object.values(lighting));
-
-export const showerTimesChoices = buildChoices(Object.values(showerTimes));
-
-export const booleanChoice = [
-  { value: true, description: "Oui" },
-  { value: false, description: "Non" },
+export const booleanChoices = [
+  {
+    value: true,
+    description: t("consumption-profiles:form.choice.boolean.yes"),
+  },
+  {
+    value: false,
+    description: t("consumption-profiles:form.choice.boolean.no"),
+  },
 ];
 
 export const formSections = {
-  GENERAL: { name: "general", title: "Général", titleIcon: "player-pin" },
-  TRANSPORT: { name: "transport", title: "Déplacement", titleIcon: "car" },
-  HOUSING: { name: "housing", title: "Logement", titleIcon: "house" },
-  HABITS: {
-    name: "habits",
-    title: "Habitudes de consommation",
-    titleIcon: "microwave",
-  },
-  FOOD: { name: "food", title: "Alimentation", titleIcon: "food" },
-  NUMERIC: { name: "numeric", title: "Numérique", titleIcon: "computer" },
-};
+  GENERAL: { name: "general", titleIcon: "player-pin" },
+  TRANSPORT: { name: "transport", titleIcon: "car" },
+  HOUSING: { name: "housing", titleIcon: "house" },
+  HABITS: { name: "habits", titleIcon: "microwave" },
+  FOOD: { name: "food", titleIcon: "food" },
+  NUMERIC: { name: "numeric", titleIcon: "computer" },
+} as const;
 
 const getGeneralQuestions = () => {
   const generalQuestions: Omit<Question, "type">[] = [
     {
-      description: "Combien d'adultes habitent au sein de votre logement ?",
       name: "numberAdults" as keyof PersoForm,
       inputType: "list",
       valueType: "number",
@@ -230,8 +333,6 @@ const getGeneralQuestions = () => {
       ],
     },
     {
-      description:
-        "Combien d'enfants de moins de 18 ans habitent au sein de votre logement ?",
       name: "numberKids" as keyof PersoForm,
       inputType: "list",
       valueType: "number",
@@ -252,42 +353,38 @@ const getTransportQuestions = () => {
   const transportQuestions: Omit<Question, "type">[] = [
     {
       icon: "car",
-      description: "Avez-vous une voiture ?",
       name: "car" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
       credibilityConditions: [{ question: "car", operator: "=", value: false }],
     },
     {
       icon: "car",
-      description: "Quelle énergie utilise votre voiture ?",
       name: "carEnergy" as keyof PersoForm,
       conditions: [{ question: "car", operator: "=", value: true }],
       inputType: "list",
       valueType: "string",
-      options: carEnergyChoice,
-      defaultValue: carEnergies.ESSENCE,
+      options: buildChoices(carEnergies),
+      defaultValue: carEnergies.ESSENCE.value,
       credibilityConditions: [
         {
           question: "carEnergy",
           operator: "=",
-          value: carEnergies.ELECTRICITE,
+          value: carEnergies.ELECTRICITE.value,
         },
       ],
     },
     {
       icon: "car",
-      description:
-        "Quelle est la consommation moyenne, en litres pour 100km, de ce véhicule ?",
       name: "carConsumption" as keyof PersoForm,
       conditions: [
         { question: "car", operator: "=", value: true },
         {
           question: "carEnergy",
           operator: "!=",
-          value: carEnergies.ELECTRICITE,
+          value: carEnergies.ELECTRICITE.value,
         },
       ],
       inputType: "free",
@@ -299,8 +396,6 @@ const getTransportQuestions = () => {
     },
     {
       icon: "car",
-      description:
-        "En moyenne, combien de km par an parcourez-vous seul en voiture ?",
       name: "carDistanceAlone" as keyof PersoForm,
       conditions: [{ question: "car", operator: "=", value: true }],
       inputType: "free",
@@ -312,8 +407,6 @@ const getTransportQuestions = () => {
     },
     {
       icon: "car",
-      description:
-        "En moyenne, combien de km parcourez-vous par an avec les personnes composant le ménage ?",
       name: "carDistanceHoushold" as keyof PersoForm,
       conditions: [
         { question: "car", operator: "=", value: true },
@@ -328,22 +421,18 @@ const getTransportQuestions = () => {
     },
     {
       icon: "car",
-      description:
-        "En moyenne, quelle est votre fréquence de remplacement de votre véhicule ?",
       name: "carAge" as keyof PersoForm,
       conditions: [{ question: "car", operator: "=", value: true }],
       inputType: "list",
       valueType: "string",
-      options: carAgeChoice,
-      defaultValue: carAges.DIX_QUINZE,
+      options: buildChoices(carAges),
+      defaultValue: carAges.DIX_QUINZE.value,
       credibilityConditions: [
-        { question: "carAge", operator: "=", value: carAges.PLUS_15 },
+        { question: "carAge", operator: "=", value: carAges.PLUS_15.value },
       ],
     },
     {
       icon: "car",
-      description:
-        "Même si vous ne possédez pas de voiture, combien de kilomètres par an effectuez-vous en moyenne (avec d'autres personnes) ?",
       name: "carDistanceCarsharing" as keyof PersoForm,
       conditions: [{ question: "car", operator: "=", value: false }],
       inputType: "free",
@@ -355,8 +444,6 @@ const getTransportQuestions = () => {
     },
     {
       icon: "plane",
-      description:
-        "Avion - En moyenne, combien de kilomètres par an parcourez-vous ? (Faites une moyenne sur les 5 dernières années)",
       name: "planeDistance" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -367,8 +454,6 @@ const getTransportQuestions = () => {
     },
     {
       icon: "train",
-      description:
-        "Train - En moyenne, combien de kilomètres par an parcourez-vous ? (Faites une moyenne sur les 5 dernières années)",
       name: "trainDistance" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -387,15 +472,13 @@ const getTransportQuestions = () => {
 const getHousingQuestions = () => {
   const housingQuestions: Omit<Question, "type">[] = [
     {
-      description: "Quel est le type de votre logement ?",
       name: "houseType" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: houseTypeChoices,
-      defaultValue: houseTypes.APPARTMENT,
+      options: buildChoices(houseTypes),
+      defaultValue: houseTypes.APPARTMENT.value,
     },
     {
-      description: `Quelle est la surface de votre logement (en m${"\u00b2"}) ?`,
       name: "houseSurface" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -405,27 +488,26 @@ const getHousingQuestions = () => {
       ],
     },
     {
-      description: "Quelle est l'énergie principale de chauffage ?",
       name: "heatingEnergy" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: houseEnergyChoices,
-      defaultValue: houseEnergies.FIOUL,
+      options: buildChoices(houseEnergies),
+      defaultValue: houseEnergies.FIOUL.value,
       credibilityConditions: [
-        { question: "heatingEnergy", operator: "=", value: houseEnergies.BOIS },
+        {
+          question: "heatingEnergy",
+          operator: "=",
+          value: houseEnergies.BOIS.value,
+        },
       ],
     },
     {
-      description:
-        "Quel est le nombre de kWh (kilowatt-heure) consommé PAR AN ? Cette valeur est disponible sur la facture transmise par votre fournisseur d'énergie. Si jamais vous ne savez pas, vous pouvez passer à la question suivante où cette valeur vous est demandée en € ou CHF. (Laissez 0 si vous ne savez pas)",
       name: "heatingConsumption" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
       defaultValue: 0,
     },
     {
-      description:
-        "Quel est le montant de votre facture d'énergie ANNUELLE pour le chauffage (fioul, gaz, bois) ? Si vous avez un chauffage électrique, indiquez le montant ANNUEL de votre facture. (Laissez 0 si vous ne savez pas)",
       name: "heatingInvoice" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -436,40 +518,34 @@ const getHousingQuestions = () => {
       ],
     },
     {
-      description:
-        "Est-ce que vous avez installé une pompe à chaleur de type air/eau ou eau/eau ?",
       name: "heatPump" as keyof PersoForm,
       conditions: [
         {
           question: "heatingEnergy",
           operator: "=",
-          value: houseEnergies.ELECTRICITE,
+          value: houseEnergies.ELECTRICITE.value,
         },
       ],
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description: "Votre température de confort est-elle supérieure à 19°C ?",
       name: "heatingTemperature" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description: "Utilisez-vous un système de climatisation ?",
       name: "airConditionning" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description:
-        "Combien de pièces de votre logement sont équipées d'un système de climatisation?",
       name: "aCRoomNb" as keyof PersoForm,
       conditions: [
         { question: "airConditionning", operator: "=", value: true },
@@ -483,8 +559,6 @@ const getHousingQuestions = () => {
       ],
     },
     {
-      description:
-        "En moyenne, combien de jours par an votre système de climatisation fonctionne-t-il?",
       name: "aCDaysNb" as keyof PersoForm,
       conditions: [
         { question: "airConditionning", operator: "=", value: true },
@@ -506,22 +580,27 @@ const getHousingQuestions = () => {
 const getHabitsQuestions = () => {
   const habitsQuestions: Omit<Question, "type">[] = [
     {
-      description: "Prenez-vous des bains ou des douches ?",
       name: "showerBath" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: showerBathChoices,
-      defaultValue: cleaning.DOUCHES,
+      options: buildChoices(hygieneCleaning),
+      defaultValue: hygieneCleaning.DOUCHES.value,
       credibilityConditions: [
-        { question: "showerBath", operator: "=", value: cleaning.BAINS },
+        {
+          question: "showerBath",
+          operator: "=",
+          value: hygieneCleaning.BAINS.value,
+        },
       ],
     },
     {
-      description:
-        "En moyenne, combien de fois par jour prenez-vous une douche ?",
       name: "showerNumber" as keyof PersoForm,
       conditions: [
-        { question: "showerBath", operator: "=", value: cleaning.DOUCHES },
+        {
+          question: "showerBath",
+          operator: "=",
+          value: hygieneCleaning.DOUCHES.value,
+        },
       ],
       inputType: "list",
       valueType: "number",
@@ -532,27 +611,27 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description: "En moyenne, combien de temps dure une douche ?",
       name: "showerTime" as keyof PersoForm,
       conditions: [
-        { question: "showerBath", operator: "=", value: cleaning.DOUCHES },
+        {
+          question: "showerBath",
+          operator: "=",
+          value: hygieneCleaning.DOUCHES.value,
+        },
       ],
       inputType: "list",
       valueType: "string",
-      options: showerTimesChoices,
-      defaultValue: showerTimes.CINQ_DIX,
+      options: buildChoices(showerTimes),
+      defaultValue: showerTimes.CINQ_DIX.value,
     },
     {
-      description: "Utilisez-vous une bouilloire pour chauffer l'eau ?",
       name: "cookingKettle" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description:
-        "En moyenne, combien de temps par jour utilisez-vous vos plaques de cuisson ? (indiquer 0,5 pour 30 minutes)",
       name: "cookingPlateTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -562,8 +641,6 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description:
-        "En moyenne, combien de temps par jour utilisez-vous votre four ? (indiquer 0,5 pour 30 minutes, 1 pour une heure, ...)",
       name: "cookingOvenTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -573,8 +650,6 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description:
-        "En moyenne, combien de temps par jour utilisez-vous votre lave-linge? (indiquer 0,5 pour 30 minutes, 1 pour une heure, ...)",
       name: "cleaningWashingTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -584,8 +659,6 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description:
-        "En moyenne, combien de temps par jour utilisez-vous votre sèche-linge ? (indiquer 0,5 pour 30 minutes ou 0 si vous n'en avez pas)",
       name: "cleaningDryerTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -595,8 +668,6 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description:
-        "En moyenne, combien de temps par jour utilisez-vous votre lave-vaisselle ? (indiquer 0,5 pour 30 minutes ou 0 si vous n'en avez pas)",
       name: "cleaningDishwasherTime" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -606,7 +677,6 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description: "Combien de réfrigérateurs possédez-vous ?",
       name: "refrigeratorNumber" as keyof PersoForm,
       inputType: "list",
       valueType: "number",
@@ -617,7 +687,6 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description: "Combien de congélateurs possédez-vous ?",
       name: "freezerNumber" as keyof PersoForm,
       inputType: "list",
       valueType: "number",
@@ -628,12 +697,11 @@ const getHabitsQuestions = () => {
       ],
     },
     {
-      description: "Quel est votre système d'éclairage ?",
       name: "lightingSystem" as keyof PersoForm,
       inputType: "list",
       valueType: "string",
-      options: lightingSystemChoices,
-      defaultValue: lighting.AMPOULES_CLASSIQUES,
+      options: buildChoices(houseLighting),
+      defaultValue: houseLighting.AMPOULES_CLASSIQUES.value,
     },
   ];
   return habitsQuestions.map((question: Omit<Question, "type">) => ({
@@ -645,55 +713,48 @@ const getHabitsQuestions = () => {
 const getFoodQuestions = () => {
   const foodQuestions: Omit<Question, "type">[] = [
     {
-      description: "Êtes-vous végétalien (vegan) ?",
       name: "eatingVegan" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description: "Consommez-vous des fruits et des légumes ?",
       name: "eatingVegetables" as keyof PersoForm,
       conditions: [{ question: "eatingVegan", operator: "=", value: false }],
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
       credibilityConditions: [
         { question: "eatingVegetables", operator: "=", value: false },
       ],
     },
     {
-      description: "Consommez-vous des produits laitiers ?",
       name: "eatingDairies" as keyof PersoForm,
       conditions: [{ question: "eatingVegan", operator: "=", value: false }],
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description: "Consommez-vous des oeufs ?",
       name: "eatingEggs" as keyof PersoForm,
       conditions: [{ question: "eatingVegan", operator: "=", value: false }],
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description: "Consommez-vous de la viande ?",
       name: "eatingMeat" as keyof PersoForm,
       conditions: [{ question: "eatingVegan", operator: "=", value: false }],
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description:
-        "En moyenne, combien de boissons en canette consommez-vous par jour ?",
       name: "eatingTinDrink" as keyof PersoForm,
       inputType: "free",
       valueType: "number",
@@ -703,24 +764,20 @@ const getFoodQuestions = () => {
       ],
     },
     {
-      description: "Achetez-vous uniquement des produits sans emballage ?",
       name: "eatingZeroWaste" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description:
-        "Consommez-vous uniquement des produits locaux et de saison ?",
       name: "eatingLocal" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description: "Combien avez-vous de chats ?",
       name: "eatingCatNumber" as keyof PersoForm,
       inputType: "list",
       valueType: "number",
@@ -731,7 +788,6 @@ const getFoodQuestions = () => {
       ],
     },
     {
-      description: "Combien avez-vous de chiens ?",
       name: "eatingDogNumber" as keyof PersoForm,
       inputType: "list",
       valueType: "number",
@@ -742,11 +798,10 @@ const getFoodQuestions = () => {
       ],
     },
     {
-      description: "Avez-vous un cheval ?",
       name: "eatingHorse" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
       credibilityConditions: [
         { question: "eatingHorse", operator: "=", value: true },
@@ -762,38 +817,31 @@ const getFoodQuestions = () => {
 const getNumericQuestions = () => {
   const numericQuestions: Omit<Question, "type">[] = [
     {
-      description:
-        "Avez-vous au moins un équipement numérique par personne dans le foyer ?",
       name: "numericEquipment" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description: "En moyenne, passez-vous plus de 2h par jour sur Internet ?",
       name: "numericWebTimeDay" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description:
-        "En moyenne, regardez-vous plus d'une heure de vidéos par jour ?",
       name: "numericVideoTimeDay" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
     {
-      description:
-        "En moyenne, achetez-vous plus de 600€ de vêtements et chaussures par an ?",
       name: "clothingQuantity" as keyof PersoForm,
       inputType: "list",
       valueType: "boolean",
-      options: booleanChoice,
+      options: booleanChoices,
       defaultValue: false,
     },
   ];

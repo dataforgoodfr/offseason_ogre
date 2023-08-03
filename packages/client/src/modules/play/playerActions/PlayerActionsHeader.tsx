@@ -113,12 +113,15 @@ function ActionPoints() {
         readOnly
         value={actionPointsUsedAtCurrentStep}
       />
-      <Typography className="down-sm">
-        {t("unit.action-point.base", {
-          usedCount: actionPointsUsedAtCurrentStep,
-          availableCount: availableActionPoints,
-        })}
-      </Typography>
+      <Box className="down-sm" display="flex" alignItems="center" gap="4px">
+        <Typography>
+          {t("unit.action-point.base", {
+            usedCount: actionPointsUsedAtCurrentStep,
+            availableCount: availableActionPoints,
+          })}
+        </Typography>
+        <Icon name="star" />
+      </Box>
     </MediaQuery>
   );
 }
