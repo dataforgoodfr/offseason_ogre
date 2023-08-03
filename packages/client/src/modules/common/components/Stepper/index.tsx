@@ -7,31 +7,24 @@ import {
   useTheme,
 } from "@mui/material";
 import { MAX_NUMBER_STEPS, STEPS } from "../../../play";
+import { useTranslation } from "../../../translations";
 
 const GameStepper = ({
   step,
   typographyProps = {},
   ...props
 }: { step: number; typographyProps?: TypographyProps } & BoxProps) => {
+  const { t } = useTranslation();
+
   return (
     <Box {...props}>
       <Typography textAlign="center" {...typographyProps}>
-        {computeStepperTitle(step)}
+        {t(`step.${STEPS[step].id}.name`)}
       </Typography>
       <StyledStepper step={step} />
     </Box>
   );
 };
-
-function computeStepperTitle(step: number) {
-  if (step === 0) {
-    return "Situation initiale";
-  }
-  if (step === STEPS.length - 1) {
-    return "Synthèse";
-  }
-  return `Étape nº${step}`;
-}
 
 function StyledStepper({ step }: { step: number }) {
   const theme = useTheme();

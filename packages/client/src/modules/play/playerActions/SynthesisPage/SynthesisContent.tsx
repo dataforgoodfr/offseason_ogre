@@ -9,6 +9,7 @@ import { ScenarioNameTextField } from "./SynthesisContent.styles";
 import { useTranslation } from "../../../translations/useTranslation";
 import { FlexRow } from "../../../common/components/Flex";
 import { useCurrentPlayer } from "../../context/hooks/player";
+import { useDialog } from "../../../common/hooks/useDialog";
 
 export { SynthesisScenarioName };
 
@@ -33,27 +34,24 @@ function SynthesisScenarioName() {
 
 function ScenarioNameEditionHelp() {
   const { t } = useTranslation();
-
-  const [openHelp, setOpenHelp] = useState(false);
+  const { isOpen, closeDialog, openDialog } = useDialog();
 
   return (
     <>
-      <IconButton
-        aria-label="help with current step"
-        onClick={() => setOpenHelp(true)}
-      >
+      <IconButton aria-label="help with current step" onClick={openDialog}>
         <Icon name="helper" sx={{ color: "white" }} />
       </IconButton>
-      <Dialog open={openHelp} handleClose={() => setOpenHelp(false)}>
-        <>
-          <Typography>
-            {t("synthesis.player.scenario-section.edit-help.description-1")}
-          </Typography>
-          <br />
-          <Typography>
-            {t("synthesis.player.scenario-section.edit-help.description-2")}
-          </Typography>
-        </>
+      <Dialog open={isOpen} handleClose={closeDialog}>
+        <Box display="flex" flexDirection="column" gap={1}>
+          {t("synthesis.player.scenario-section.edit-help.description", {
+            returnObjects: true,
+          }).map((html) => (
+            <Typography
+              key={html}
+              dangerouslySetInnerHTML={{ __html: html }}
+            ></Typography>
+          ))}
+        </Box>
       </Dialog>
     </>
   );

@@ -1,10 +1,18 @@
 import { Alert, Snackbar } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ReactDOM from "react-dom";
 import { AlertProvider } from "./AlertProvider";
 import { Alerts } from "./Alerts";
+import { useTranslation } from "../translations";
 
-export { AlertProvider, Alerts, ErrorAlert, SuccessAlert, AlertSnackbar };
+export {
+  AlertProvider,
+  Alerts,
+  ErrorAlert,
+  InfoAlert,
+  SuccessAlert,
+  AlertSnackbar,
+};
 export type { ErrorAlertProps, SuccessAlertProps };
 
 interface ErrorAlertProps {
@@ -33,15 +41,53 @@ interface SuccessAlertProps {
 
 function SuccessAlert({
   alertPosition = "default",
-  message = "Succès",
+  message: messageProp,
   onClose,
 }: SuccessAlertProps) {
+  const { t } = useTranslation();
+
+  const message = useMemo(
+    () => (messageProp ? messageProp : t("message.success.default")),
+    [messageProp, t]
+  );
+
   return (
     <AlertSnackbar
       alertPosition={alertPosition}
       onClose={onClose}
       renderAlert={(onClose) => (
         <Alert onClose={onClose} severity="success" variant="filled">
+          {message}
+        </Alert>
+      )}
+    ></AlertSnackbar>
+  );
+}
+
+interface InfoAlertProps {
+  alertPosition?: "top" | "default";
+  message?: string;
+  onClose?: () => void;
+}
+
+function InfoAlert({
+  alertPosition = "default",
+  message: messageProp,
+  onClose,
+}: InfoAlertProps) {
+  const { t } = useTranslation();
+
+  const message = useMemo(
+    () => (messageProp ? messageProp : t("message.success.default")),
+    [messageProp, t]
+  );
+
+  return (
+    <AlertSnackbar
+      alertPosition={alertPosition}
+      onClose={onClose}
+      renderAlert={(onClose) => (
+        <Alert onClose={onClose} severity="info" variant="filled">
           {message}
         </Alert>
       )}

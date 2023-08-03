@@ -1,3 +1,4 @@
+import { IconButton } from "@mui/material";
 import React, { useCallback, useMemo, useState } from "react";
 import {
   StackedBars,
@@ -19,9 +20,9 @@ import {
 import { usePlay } from "../play/context/playContext";
 import { useTranslation } from "../translations/useTranslation";
 import { buildLabel } from "./utils/labels";
-import { Button, IconButton } from "@mui/material";
 import { Dialog } from "../common/components/Dialog";
 import { Icon } from "../common/components/Icon";
+import { Button } from "../common/components/Button";
 
 export { ResourcesPerStepChart };
 
@@ -142,26 +143,15 @@ function ResourcesPerStepChart({
         content={t("graph.common.information")}
         actions={
           <>
-            <Button
-              color="secondary"
-              variant="contained"
-              sx={{ border: 1, borderColor: "secondary" }}
-              component="a"
-              target="_blank"
-              href={MATERIALS_AND_METALS_INFO_CARD_URL}
-              onClick={() => setOpenHelpDialog(false)}
-              startIcon={<Icon name="open-in-new-tab" />}
-            >
-              {t("cta.open-info-card")}
+            <Button type="secondary" onClick={() => setOpenHelpDialog(false)}>
+              {t("cta.thanks-for-help")}
             </Button>
             <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-              sx={{ border: 1, borderColor: "secondary", mt: 1 }}
+              iconName="open-in-new-tab"
+              to={MATERIALS_AND_METALS_INFO_CARD_URL}
               onClick={() => setOpenHelpDialog(false)}
             >
-              {t("cta.thanks-for-help")}
+              {t("cta.open-info-card")}
             </Button>
           </>
         }

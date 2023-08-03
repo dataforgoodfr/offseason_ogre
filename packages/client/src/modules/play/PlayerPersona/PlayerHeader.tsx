@@ -6,17 +6,19 @@ import {
   CardContent,
   useTheme,
 } from "@mui/material";
+import sumBy from "lodash/sumBy";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
 import { useCurrentStep, usePlay, useTeamValues } from "../context/playContext";
-import { sumAllValues } from "../../persona";
 import { Icon } from "../../common/components/Icon";
 import {
   formatPoints,
   formatBudget,
   formatCarbonFootprint,
+  formatProduction,
+  formatConsumption,
 } from "../../../lib/formatter";
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
@@ -95,7 +97,9 @@ function PlayerHeader() {
               right={
                 <Typography sx={{ fontSize: "12px" }}>
                   {t("unit.watthour-per-day.kilo", {
-                    value: sumAllValues(currentPersona.production) || 0,
+                    value: formatProduction(
+                      sumBy(currentPersona.production, "value") || 0
+                    ),
                   })}
                 </Typography>
               }
@@ -113,7 +117,9 @@ function PlayerHeader() {
               right={
                 <Typography sx={{ fontSize: "12px" }}>
                   {t("unit.watthour-per-day.kilo", {
-                    value: sumAllValues(currentPersona.consumption) || 0,
+                    value: formatConsumption(
+                      sumBy(currentPersona.consumption, "value") || 0
+                    ),
                   })}
                 </Typography>
               }
@@ -167,7 +173,7 @@ function PlayerHeader() {
           >
             <Button
               iconName="badge"
-              width={200}
+              width={250}
               to={`/play/games/${game.id}/persona`}
             >
               {t("cta.go-to-player-characteristics")}
@@ -252,14 +258,14 @@ function Actions({ className }: { className?: string }) {
     >
       <Button
         iconName="bar-chart"
-        width={200}
+        width={250}
         to={`/play/games/${game.id}/persona/stats`}
       >
         {t("cta.go-to-player-statistics")}
       </Button>
       <Button
         iconName={iconName}
-        width={200}
+        width={250}
         to={`/play/games/${game.id}/persona/actions`}
         disabled={
           !game.isGameFinished && (game.step === 0 || game.isStepFinished)

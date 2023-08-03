@@ -121,16 +121,19 @@ function Form() {
 }
 
 function SuccessMessage({ email }: { email: string }) {
+  const { t } = useTranslation();
+
   return (
-    <div className="flex justify-center items-center w-120">
-      <p className="text-white text-center">
-        Votre compte a été créé, un mail contenant un lien de connexion a été
-        envoyé sur l'adresse <span className="underline">{email}</span>.
-        <br />
-        Cliquez sur le lien de connexion pour accéder à l'application.
-        <br />
-        Vérifiez que le mail n'est pas arrivé dans votre boîte de Spam.
-      </p>
+    <div className="flex flex-col justify-center items-center w-120 text-white text-center">
+      {t("page.signup.account-created", {
+        userEmail: email,
+        returnObjects: true,
+      }).map((html) => (
+        <Typography
+          key={html}
+          dangerouslySetInnerHTML={{ __html: html }}
+        ></Typography>
+      ))}
     </div>
   );
 }
