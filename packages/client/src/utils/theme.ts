@@ -96,6 +96,13 @@ theme = responsiveFontSizes(theme);
  * This is especially useful to style translated text.
  */
 const globalStyles: GlobalStylesProps["styles"] = {
+  /**
+   * Prevent pull-to-refresh on mobile.
+   * Pull-to-refresh conlicts with scroll areas in-game and in the personalization form.
+   */
+  html: {
+    overscrollBehavior: "none",
+  },
   ".text-em": {
     color: `${theme.palette.secondary.main} !important`,
   },
