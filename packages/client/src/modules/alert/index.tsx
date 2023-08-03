@@ -1,8 +1,9 @@
 import { Alert, Snackbar } from "@mui/material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import ReactDOM from "react-dom";
 import { AlertProvider } from "./AlertProvider";
 import { Alerts } from "./Alerts";
+import { useTranslation } from "../translations";
 
 export {
   AlertProvider,
@@ -40,9 +41,16 @@ interface SuccessAlertProps {
 
 function SuccessAlert({
   alertPosition = "default",
-  message = "Succès",
+  message: messageProp,
   onClose,
 }: SuccessAlertProps) {
+  const { t } = useTranslation();
+
+  const message = useMemo(
+    () => (messageProp ? messageProp : t("message.success.default")),
+    [messageProp, t]
+  );
+
   return (
     <AlertSnackbar
       alertPosition={alertPosition}
@@ -64,9 +72,16 @@ interface InfoAlertProps {
 
 function InfoAlert({
   alertPosition = "default",
-  message = "Succès",
+  message: messageProp,
   onClose,
 }: InfoAlertProps) {
+  const { t } = useTranslation();
+
+  const message = useMemo(
+    () => (messageProp ? messageProp : t("message.success.default")),
+    [messageProp, t]
+  );
+
   return (
     <AlertSnackbar
       alertPosition={alertPosition}
