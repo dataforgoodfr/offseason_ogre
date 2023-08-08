@@ -1,12 +1,11 @@
-import { AccountCircle } from "@mui/icons-material";
-import { IconButton, Menu, MenuItem, Typography } from "@mui/material";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import LogoutIcon from "@mui/icons-material/Logout";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import React from "react";
 import { useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../authProvider";
+import { useTranslation } from "../../translations";
+import { Typography } from "../../common/components/Typography";
+import { Icon } from "../../common/components/Icon";
 
 export { LoggedUser };
 
@@ -24,6 +23,7 @@ type muiColor =
 function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { setToken } = useAuth();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -46,7 +46,7 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
         onClick={handleMenu}
         color={color}
       >
-        <AccountCircle />
+        <Icon name="user-account" />
       </IconButton>
       <Menu
         id="menu-appbar"
@@ -70,8 +70,8 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
             navigate("/play");
           }}
         >
-          <PlayArrowIcon />
-          <Typography sx={{ ml: 2 }}>Jouer</Typography>
+          <Icon name="play" />
+          <Typography sx={{ ml: 2 }}>{t("cta.go-to-games-list")}</Typography>
         </MenuItem>
         <AdministrationMenuItem handleClose={handleClose} />
         <MenuItem
@@ -81,8 +81,8 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
             handleClose();
           }}
         >
-          <LogoutIcon />
-          <Typography sx={{ ml: 2 }}>Déconnexion</Typography>
+          <Icon name="logout" />
+          <Typography sx={{ ml: 2 }}>{t("cta.logout")}</Typography>
         </MenuItem>
       </Menu>
     </div>
@@ -91,6 +91,7 @@ function LoggedUser({ color = "inherit" }: { color?: muiColor }) {
 
 function AdministrationMenuItem({ handleClose }: { handleClose: () => void }) {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { permissions } = useAuth();
 
   if (!permissions.canAccessAdminPanel) {
@@ -103,8 +104,8 @@ function AdministrationMenuItem({ handleClose }: { handleClose: () => void }) {
         navigate("/administration");
       }}
     >
-      <AdminPanelSettingsIcon />
-      <Typography sx={{ ml: 2 }}>Administration</Typography>
+      <Icon name="admin-panel" />
+      <Typography sx={{ ml: 2 }}>{t("cta.go-to-admin-home")}</Typography>
     </MenuItem>
   );
 }

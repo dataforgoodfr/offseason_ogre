@@ -24,6 +24,10 @@ const Typography = styled(
   "&:is(h5)": {
     fontSize: 18,
   },
+  "&:is(h6)": {
+    fontSize: 18,
+    fontWeight: 400,
+  },
   [theme.breakpoints.down("sm")]: {
     "&:is(h5)": {
       fontSize: 18,

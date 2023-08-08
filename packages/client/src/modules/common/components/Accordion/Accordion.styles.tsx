@@ -28,24 +28,17 @@ const AccordionItemStyled = styled(
   };
 
   const largeVariationCss = {
-    marginBottom: theme.spacing(2),
     borderWidth: "3px",
   };
 
   let themeCss = {};
-  if (themeVariation === "accent-large") {
+  if (themeVariation?.includes("accent")) {
     themeCss = {
       borderColor: "#F9C74F",
     };
   } else if (themeVariation === "default-large") {
     themeCss = {
       borderColor: "#ffffff",
-    };
-  } else {
-    themeCss = {
-      "&:not(:last-child)": {
-        marginBottom: theme.spacing(1),
-      },
     };
   }
 

@@ -1,6 +1,7 @@
 import { Typography, FormControlLabel, Checkbox, Button } from "@mui/material";
-import { Dialog } from "../../../common/components/Dialog";
 import { useNavigate } from "react-router-dom";
+import { Dialog } from "../../../common/components/Dialog";
+import { useTranslation } from "../../../translations";
 
 const ValidateDialogContent = ({
   rgpdCheckbox,
@@ -9,19 +10,19 @@ const ValidateDialogContent = ({
   rgpdCheckbox: boolean;
   setRgpdCheckbox: (value: boolean) => void;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       <Typography variant="h5" sx={{ mb: 2 }}>
-        Êtes-vous sûr de vouloir valider votre formulaire?
+        {t(
+          "page.player.personalization-form.validation-confirmation-dialog.title"
+        )}
       </Typography>
       <Typography sx={{ textAlign: "justify", fontStyle: "italic" }}>
-        Afin de pouvoir mener l’atelier dans les meilleures conditions,
-        l’animateur OGRE aura accès à vos données de consommation. Il ne les
-        utilisera pas en dehors de l’atelier et n’en partagera pas le contenu,
-        la seule finalité est de personnaliser votre expérience durant
-        l’atelier. Vous pouvez à tout moment revenir en arrière et choisir les
-        données de consommation des personas OGRE si vous préférez ne pas
-        communiquer vos données.
+        {t(
+          "page.player.personalization-form.validation-confirmation-dialog.description"
+        )}
       </Typography>
       <FormControlLabel
         control={
@@ -31,7 +32,7 @@ const ValidateDialogContent = ({
             color="primary"
           />
         }
-        label="J’accepte de partager mes données avec l’animateur"
+        label={t("cta.share-data-with-teacher")}
       />
     </>
   );
@@ -49,6 +50,7 @@ export const BackArrowDialog = ({
   gameId: number;
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -64,7 +66,7 @@ export const BackArrowDialog = ({
             sx={{ border: 1, borderColor: "secondary", mt: 1 }}
             onClick={() => setBackArrowDialogOpen(false)}
           >
-            Non
+            {t("cta.no")}
           </Button>
           <Button
             color="primary"
@@ -72,7 +74,7 @@ export const BackArrowDialog = ({
             sx={{ border: 1, borderColor: "secondary" }}
             onClick={() => navigate(`/play/games/${gameId}/personalize/choice`)}
           >
-            Oui
+            {t("cta.yes")}
           </Button>
         </>
       }
@@ -93,6 +95,8 @@ export const ValidationDialog = ({
   setRgpdCheckbox: (value: boolean) => void;
   onSubmit: () => void;
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Dialog
       open={validateDialogOpen}
@@ -111,7 +115,7 @@ export const ValidationDialog = ({
             sx={{ border: 1, borderColor: "secondary", mt: 1 }}
             onClick={() => setValidateDialogOpen(false)}
           >
-            Annuler
+            {t("cta.cancel")}
           </Button>
           <Button
             color="primary"
@@ -124,7 +128,7 @@ export const ValidationDialog = ({
               setValidateDialogOpen(false);
             }}
           >
-            Valider
+            {t("cta.validate")}
           </Button>
         </>
       }

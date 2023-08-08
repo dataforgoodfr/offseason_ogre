@@ -1,4 +1,8 @@
-export { fromEntries, ObjectBuilder };
+export { fromEntries, isObj, ObjectBuilder };
+
+const isObj = (val: any): boolean => {
+  return val != null && typeof val === "object" && !Array.isArray(val);
+};
 
 const fromEntries = <TKey extends string | number | symbol, TValue>(
   arr: [TKey, TValue][]

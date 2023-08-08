@@ -82,8 +82,8 @@ const baseThemeOptions: ThemeOptions = {
           color: yellow,
         },
         disabled: {
-          backgroundColor: "#efefef",
-          color: "#adadad",
+          backgroundColor: "#b8933a",
+          color: blue,
         },
       },
       tag: {
@@ -134,6 +134,9 @@ function createCustomTheme(options: ThemeOptions): Theme {
 const globalStyles: GlobalStylesProps["styles"] = {
   ".text-em": {
     color: `${theme.palette.secondary.main} !important`,
+  },
+  ".text-underline": {
+    textDecoration: "underline",
   },
 };
 

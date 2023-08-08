@@ -9,10 +9,10 @@ import { computeIntermediateValues } from "../../../persona/consumption/computin
 import {
   carAges,
   carEnergies,
-  cleaning,
+  hygieneCleaning,
   houseEnergies,
   houseTypes,
-  lighting,
+  houseLighting,
   PersoForm,
   showerTimes,
 } from "../../../play/Personalization/models/form";
@@ -308,7 +308,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       type: "singleSelect",
       valueFormatter: ({ value, field, api }) =>
         formatValueOptions({ value, field, api }),
-      valueOptions: getDropdownOptions(Object.values(carEnergies)),
+      valueOptions: getDropdownOptions(carEnergies),
     },
     {
       field: "carConsumption",
@@ -359,7 +359,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       type: "singleSelect",
       valueFormatter: ({ value, field, api }) =>
         formatValueOptions({ value, field, api }),
-      valueOptions: getDropdownOptions(Object.values(carAges)),
+      valueOptions: getDropdownOptions(carAges),
     },
     {
       field: "carDistanceCarsharing",
@@ -411,7 +411,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       type: "singleSelect",
       valueFormatter: ({ value, field, api }) =>
         formatValueOptions({ value, field, api }),
-      valueOptions: getDropdownOptions(Object.values(houseTypes)),
+      valueOptions: getDropdownOptions(houseTypes),
     },
     {
       field: "houseSurface",
@@ -438,7 +438,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       type: "singleSelect",
       valueFormatter: ({ value, field, api }) =>
         formatValueOptions({ value, field, api }),
-      valueOptions: getDropdownOptions(Object.values(houseEnergies)),
+      valueOptions: getDropdownOptions(houseEnergies),
     },
     {
       field: "heatingConsumption",
@@ -561,7 +561,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       type: "singleSelect",
       valueFormatter: ({ value, field, api }) =>
         formatValueOptions({ value, field, api }),
-      valueOptions: getDropdownOptions(Object.values(cleaning)),
+      valueOptions: getDropdownOptions(hygieneCleaning),
     },
     {
       field: "showerNumber",
@@ -588,7 +588,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       type: "singleSelect",
       valueFormatter: ({ value, field, api }) =>
         formatValueOptions({ value, field, api }),
-      valueOptions: getDropdownOptions(Object.values(showerTimes)),
+      valueOptions: getDropdownOptions(showerTimes),
     },
     {
       field: "cookingKettle",
@@ -703,7 +703,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       type: "singleSelect",
       valueFormatter: ({ value, field, api }) =>
         formatValueOptions({ value, field, api }),
-      valueOptions: getDropdownOptions(Object.values(lighting)),
+      valueOptions: getDropdownOptions(houseLighting),
     },
     {
       field: "eatingVegan",
@@ -789,7 +789,7 @@ function buildColumns(): GridColumns<FormattedRow> {
       field: "eatingTinDrink",
       cellClassName: (params: GridCellParams<string>) =>
         getCellCredibility(params.field as keyof PersoForm, params.row),
-      headerName: "Nb cannettes",
+      headerName: "Nb canettes",
       flex: 1,
       minWidth: 120,
       headerAlign: "center",

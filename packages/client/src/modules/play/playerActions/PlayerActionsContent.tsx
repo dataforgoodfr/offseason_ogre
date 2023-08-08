@@ -1,25 +1,22 @@
-import React from "react";
-import Button from "@mui/material/Button";
-import InfoIcon from "@mui/icons-material/Info";
+import React, { useMemo, useState } from "react";
 import { Box, Rating, IconButton } from "@mui/material";
-import PaidIcon from "@mui/icons-material/Paid";
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
-
 import { Spacer } from "../../common/components/Spacer";
 import { Typography } from "../../common/components/Typography";
-
-import { useState } from "react";
 import { PlayerActions } from "../../../utils/types";
 import { usePlay } from "../context/playContext";
 import { ActionHelpDialog } from "./HelpDialogs";
 import { Dialog } from "../../common/components/Dialog";
 import { Icon } from "../../common/components/Icon";
 import { useCurrentPlayer } from "../context/hooks/player";
+import { useTranslation } from "../../translations";
+import { Button } from "../../common/components/Button";
 
 export { PlayerActionsContent };
 
 function PlayerActionsContent() {
+  const { t } = useTranslation();
   const {
     consumptionActionById,
     updatePlayerActions,
@@ -63,26 +60,22 @@ function PlayerActionsContent() {
         handleClose={() => setActionPointsLimitExceeded(false)}
         actions={
           <>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => setActionPointsLimitExceeded(false)}
-            >
-              Fermer
+            <Button onClick={() => setActionPointsLimitExceeded(false)}>
+              {t("cta.close")}
             </Button>
           </>
         }
       >
-        <Typography>
-          Tu ne peux pas effectuer cette action car tu as dépassé le nombre
-          maximum de {actionPointsAvailableAtCurrentStep} points d'action
-          autorisé à ce tour.
-        </Typography>
-        <br />
-        <Typography>
-          Si tu n'es pas encore satisfait(e) de tes choix, tu peux les modifier
-          jusqu'à la fin du tour.
-        </Typography>
+        <Typography
+          dangerouslySetInnerHTML={{
+            __html: t(
+              "page.player.player-actions.action-points-limit-exceeded",
+              {
+                actionPointsAvailableCount: actionPointsAvailableAtCurrentStep,
+              }
+            ),
+          }}
+        ></Typography>
       </Dialog>
     </Box>
   );
@@ -104,6 +97,7 @@ function ActionLayout({
   onPlayerActionChanged: (isPerformed: boolean) => void;
   helpCardLink: string;
 }) {
+  const { t } = useTranslation(["common", "consumption-actions", "countries"]);
   const { consumptionActionById } = usePlay();
   const [openHelp, setOpenHelp] = useState(false);
 
@@ -114,8 +108,10 @@ function ActionLayout({
     onPlayerActionChanged(event.target.checked);
   };
 
-  const helpMessage =
-    "Voici le lien vers une carte qui te permettra de mieux comprendre les implications de ce choix";
+  const consumptionAction = useMemo(
+    () => consumptionActionById[playerAction.actionId],
+    [consumptionActionById, playerAction]
+  );
 
   return (
     <Box
@@ -134,15 +130,17 @@ function ActionLayout({
             sx={{ paddingLeft: 0 }}
             onClick={handleClickOpenHelp}
           >
-            <InfoIcon sx={{ marginRight: 1, color: "white" }} />
+            <Icon name="information" sx={{ marginRight: 1, color: "white" }} />
           </IconButton>
           <ActionHelpDialog
             open={openHelp}
             handleClose={handleCloseHelp}
-            message={helpMessage}
+            message={t("page.player.player-actions.help.action")}
             helpCardLink={helpCardLink}
           />
-          {consumptionActionById[playerAction.actionId].description}
+          {t(
+            `consumption-actions:consumption-action.${consumptionAction.name}.title`
+          )}
         </Typography>
         <Box sx={{ gap: 2 }} display="flex" alignItems="center" mt={1}>
           <Box sx={{ gap: 1 }} display="flex" alignItems="center">
@@ -151,14 +149,15 @@ function ActionLayout({
               name="action-points-cost"
               readOnly
               max={3}
-              value={
-                consumptionActionById[playerAction.actionId].actionPointCost
-              }
+              value={consumptionAction.actionPointCost}
             />
           </Box>
           <Box sx={{ gap: 1 }} display="flex" alignItems="center">
-            <PaidIcon />
-            {`${consumptionActionById[playerAction.actionId].financialCost}€/j`}
+            <Icon name="budget" />
+            {t("unit.budget-per-day.base", {
+              value: consumptionAction.financialCost,
+              symbol: t("countries:country.fr.currency.symbol"),
+            })}
           </Box>
         </Box>
       </Box>

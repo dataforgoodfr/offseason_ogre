@@ -43,7 +43,7 @@ function ActionCard({
   impactfulAction: ImpactfulAction;
   rank: number;
 }) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(["common", "consumption-actions"]);
   const theme = useTheme();
 
   return (
@@ -60,7 +60,7 @@ function ActionCard({
             <Tooltip
               placement="top"
               title={t(
-                "synthesis.player.most-impactful-actions-section.action-performed"
+                "synthesis.player.most-impactful-actions-section.action-taken"
               )}
             >
               <Typography
@@ -78,7 +78,7 @@ function ActionCard({
             <Tooltip
               placement="top"
               title={t(
-                "synthesis.player.most-impactful-actions-section.action-missed"
+                "synthesis.player.most-impactful-actions-section.action-not-taken"
               )}
             >
               <Typography
@@ -94,9 +94,10 @@ function ActionCard({
         </ActionCardSideBarLayout>
         <Box display="flex " flexDirection="column" gap={3} px={1} py={2}>
           <Box display="flex">
-            {/* TODO: translate using action name. */}
             <Typography variant="h4">
-              {impactfulAction.action.description}
+              {t(
+                `consumption-actions:consumption-action.${impactfulAction.action.name}.title`
+              )}
             </Typography>
           </Box>
           <Box display="flex">

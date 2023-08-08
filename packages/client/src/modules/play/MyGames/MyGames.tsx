@@ -18,6 +18,8 @@ import { Typography } from "../../common/components/Typography";
 import { useAlerts } from "../../alert/AlertProvider";
 import { Button } from "../../common/components/Button";
 import { useForm } from "../../common/hooks/useForm";
+import { formatDate } from "../../../lib/time";
+import { Icon } from "../../common/components/Icon";
 
 export { MyGames };
 
@@ -47,12 +49,15 @@ function GameItem({ game }: { game: IGame }) {
   return (
     <PlayBox sx={{ mt: 2 }}>
       <GameItemHost>
-        <Grid item xs={10}>
+        <Box display="flex" flexDirection="column" gap={1}>
           <Typography variant="h6">{game.name}</Typography>
-          <Typography>
-            {"Date: " + new Date(game.date).toLocaleString()}
-          </Typography>
-        </Grid>
+          <Box display="flex" alignItems="center" gap={1}>
+            <Icon name="date"></Icon>
+            <Typography>
+              {formatDate(game.date, "full-date-at-time")}
+            </Typography>
+          </Box>
+        </Box>
         {game.status === "draft" && (
           <Grid item display="flex" xs={2}>
             <Button

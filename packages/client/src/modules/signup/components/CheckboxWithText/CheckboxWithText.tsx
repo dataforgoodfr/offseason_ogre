@@ -1,9 +1,12 @@
 import Checkbox from "@mui/material/Checkbox";
 import { styled } from "@mui/material/styles";
 import { Controller } from "react-hook-form";
-import TermsOfUse from "../../../common/components/TermsOfUse";
+import { useTranslation } from "../../../translations";
+import { TERMS_OF_USE_URL } from "../../../common/constants";
 
 const CheckboxWithText = ({ control }: { control: any }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center">
       <Controller
@@ -13,10 +16,14 @@ const CheckboxWithText = ({ control }: { control: any }) => {
           <CustomCheckbox {...field} {...label} required />
         )}
       />
-      <p className="w-60 mb-4 mt-4">
-        En cochant cette case, je certifie avoir lu et accepté sans réserve les{" "}
-        <TermsOfUse text="conditions générales d'utilisation" />
-      </p>
+      <p
+        className="w-60 mb-4 mt-4"
+        dangerouslySetInnerHTML={{
+          __html: t("page.signup.accept-terms-of-use", {
+            termsOfUseUrl: TERMS_OF_USE_URL,
+          }),
+        }}
+      ></p>
     </div>
   );
 };

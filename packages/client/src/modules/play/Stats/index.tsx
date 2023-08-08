@@ -1,4 +1,4 @@
-import { Stats } from "./Stats";
+import { PlayerStatisticsPage } from "./PlayerStatisticsPage";
 import { StatsGraphs } from "./StatsGraphs";
 
-export { Stats, StatsGraphs };
+export { PlayerStatisticsPage, StatsGraphs };

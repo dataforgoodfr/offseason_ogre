@@ -13,6 +13,7 @@ interface ButtonProps {
   loading?: boolean;
   to?: string;
   iconName?: IconName;
+  width?: number | string;
   onClick?: () => void | Promise<void>;
   children: React.ReactNode;
 }
@@ -22,8 +23,9 @@ function Button({
   htmlType = "button",
   disabled = false,
   loading = false,
-  to,
+  to = "",
   iconName,
+  width,
   onClick: onClickProp,
   children,
 }: ButtonProps) {
@@ -69,10 +71,14 @@ function Button({
   );
 
   const onClick = useMemo(() => {
-    if (to) {
-      return () => navigate(to);
-    }
-    return onClickProp;
+    return () => {
+      if (to.startsWith("http")) {
+        window.open(to, "_blank");
+      } else if (to && !to.startsWith("http")) {
+        navigate(to);
+      }
+      onClickProp?.();
+    };
   }, [to, navigate, onClickProp]);
 
   return (
@@ -85,6 +91,7 @@ function Button({
         ...(buttonProps.sx || {}),
         display: "flex",
         gap: 1,
+        width,
       }}
     >
       {loading && <CircularProgress sx={{ color: loaderColor }} size={16} />}
