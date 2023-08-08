@@ -1,6 +1,7 @@
 import isNaN from "lodash/isNaN";
 import { useParams } from "react-router-dom";
 import {
+  booleanChoices,
   Condition,
   formValues,
   PersoForm,
@@ -9,6 +10,7 @@ import {
 import { compare } from "../../../play/Personalization/utils/formValidation";
 import { Row } from "./FormVerification";
 import { pipe } from "../../../../lib/fp";
+import { buildChoices } from "../../../play/Personalization/utils/choices";
 
 export const useGameId = () => {
   const { id } = useParams();
@@ -18,22 +20,18 @@ export const useGameId = () => {
 };
 
 export const getBooleanOptions = () => {
-  return [
-    {
-      value: true,
-      label: "Oui",
-    },
-    {
-      value: false,
-      label: "Non",
-    },
-  ];
+  return booleanChoices.map((choice) => ({
+    value: choice.value,
+    label: choice.description,
+  }));
 };
 
-export const getDropdownOptions = (values: string[]) => {
-  return values.map((option: string) => ({
-    value: option,
-    label: option,
+export const getDropdownOptions = (
+  values: Record<string, { value: string; description: string; order?: number }>
+) => {
+  return buildChoices(values).map((choice) => ({
+    value: choice.value,
+    label: choice.description,
   }));
 };
 

@@ -1,21 +1,20 @@
-import React, { useMemo } from "react";
-import Button from "@mui/material/Button";
+import React, { useCallback, useMemo, useState } from "react";
 import { Box } from "@mui/material";
-import { useState } from "react";
 
 import { Typography } from "../../common/components/Typography";
 import { ProductionAction, TeamAction } from "../../../utils/types";
 import { usePlay } from "../context/playContext";
 import { Accordion } from "../../common/components/Accordion";
-import { t } from "../../translations";
+import { useTranslation } from "../../translations";
 import { Icon } from "../../common/components/Icon";
 import { Slider } from "../../common/components/Slider";
 import { computeTeamActionStats } from "../utils/production";
 import { Dialog } from "../../common/components/Dialog";
 import { formatBudget, formatProductionGw } from "../../../lib/formatter";
-import { useTranslation } from "../../translations/useTranslation";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../../common/constants";
 import { useCurrentPlayer } from "../context/hooks/player";
+import { Button } from "../../common/components/Button";
+import { useDialog } from "../../common/hooks/useDialog";
 
 export { TeamActionsContent };
 
@@ -23,8 +22,8 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
   const { teamActionsAtCurrentStep } = useCurrentPlayer();
   const { t } = useTranslation();
   const { productionActionById } = usePlay();
+  const { isOpen, closeDialog, openDialog } = useDialog();
 
-  const [openHelpDialog, setOpenHelpDialog] = useState(false);
   const [helpCardLink, setHelpCardLink] = useState("");
 
   return (
@@ -40,7 +39,7 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
                   setHelpCardLink(
                     productionActionById[teamAction.actionId].helpCardLink
                   );
-                  setOpenHelpDialog(true);
+                  openDialog();
                 },
               })
             )
@@ -52,31 +51,20 @@ function TeamActionsContent({ style }: { style?: React.CSSProperties }) {
       </Box>
 
       <Dialog
-        open={openHelpDialog}
-        handleClose={() => setOpenHelpDialog(false)}
-        content="Voici le lien vers une carte qui te donnera des informations sur le moyen de production pour t’aider dans l’arbitrage :"
+        open={isOpen}
+        handleClose={closeDialog}
+        content={t("page.player.team-actions.help.action")}
         actions={
           <>
-            <Button
-              color="secondary"
-              variant="contained"
-              sx={{ border: 1, borderColor: "secondary" }}
-              component="a"
-              target="_blank"
-              href={helpCardLink}
-              onClick={() => setOpenHelpDialog(false)}
-              startIcon={<Icon name="open-in-new-tab" />}
-            >
-              {t("cta.open-info-card")}
+            <Button type="secondary" onClick={closeDialog}>
+              {t("cta.thanks-for-help")}
             </Button>
             <Button
-              color="primary"
-              variant="contained"
-              type="submit"
-              sx={{ border: 1, borderColor: "secondary", mt: 1 }}
-              onClick={() => setOpenHelpDialog(false)}
+              iconName="open-in-new-tab"
+              to={helpCardLink}
+              onClick={closeDialog}
             >
-              {t("cta.thanks-for-help")}
+              {t("cta.open-info-card")}
             </Button>
           </>
         }
@@ -120,19 +108,27 @@ function TeamActionOptionHeader({
   productionActionById: Record<number, ProductionAction>;
   onOpenHelpCard: () => void;
 }) {
-  const handleOnOpenHelpCard = (e: React.MouseEvent<SVGSVGElement>) => {
-    e.stopPropagation();
-    onOpenHelpCard();
-  };
+  const { t } = useTranslation(["common", "production-actions"]);
+
+  const handleOnOpenHelpCard = useCallback(
+    (e: React.MouseEvent<SVGSVGElement>) => {
+      e.stopPropagation();
+      onOpenHelpCard();
+    },
+    [onOpenHelpCard]
+  );
+
+  const productionAction = useMemo(
+    () => productionActionById[teamAction.actionId],
+    [productionActionById, teamAction]
+  );
 
   return (
     <Box display="flex" alignItems="center" gap={1}>
       <Icon name="information" onClick={handleOnOpenHelpCard} />
       <Typography>
         {t(
-          `production.energy.${
-            productionActionById[teamAction.actionId].name
-          }.accordion.title`
+          `production-actions:production-action.fr.${productionAction.name}.accordion.title`
         )}
       </Typography>
     </Box>
@@ -140,9 +136,37 @@ function TeamActionOptionHeader({
 }
 
 function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
+  const { t } = useTranslation(["common", "countries", "production-actions"]);
   const { productionActionById, updateTeam } = usePlay();
 
   const [value, setValue] = useState(teamAction.value);
+
+  const productionAction = useMemo(
+    () => productionActionById[teamAction.actionId],
+    [productionActionById, teamAction]
+  );
+
+  const productionValueI18n = useCallback(
+    (productionValue: number) =>
+      productionAction.unit === "percentage"
+        ? t("unit.percentage", { value: productionValue })
+        : t("unit.area.base", { value: productionValue }),
+    [productionAction, t]
+  );
+
+  const teamStats = useMemo(
+    () => computeTeamActionStats(teamAction, productionActionById),
+    [productionActionById, teamAction]
+  );
+
+  const localTeamAction = useMemo(
+    () => ({ ...teamAction, value }),
+    [teamAction, value]
+  );
+  const localStats = useMemo(
+    () => computeTeamActionStats(localTeamAction, productionActionById),
+    [localTeamAction, productionActionById]
+  );
 
   const handleValidateTeamChoice = () => {
     updateTeam({
@@ -159,87 +183,131 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
     setValue(value);
   };
 
-  const actionUnit =
-    productionActionById[teamAction.actionId].unit === "percentage"
-      ? "%"
-      : " m²";
-  const labelFormatter = (value: number) => `${value}${actionUnit}`;
-
-  const localTeamAction = { ...teamAction, value };
-  const localStats = computeTeamActionStats(
-    localTeamAction,
-    productionActionById
-  );
-
   return (
     <Box display="flex" flexDirection="column" gap={3}>
       <Typography>
-        Puissance installée en France en 2022 :{" "}
-        {formatProductionGw(
-          productionActionById[teamAction.actionId].currentYearPowerNeedGw
-        )}{" "}
-        GW soit {productionActionById[teamAction.actionId].defaultTeamValue}
-        {actionUnit}
+        {t(
+          `production-actions:production-action.fr.${productionAction.name}.installed-power-in-country`,
+          {
+            year: t(
+              `production-actions:production-action.fr.${productionAction.name}.year-of-last-data-update`
+            ),
+            installedPower: t("unit.power.giga", {
+              value: formatProductionGw(
+                productionAction.currentYearPowerNeedGw
+              ),
+            }),
+            productionValue: productionValueI18n(
+              productionAction.defaultTeamValue
+            ),
+          }
+        )}
       </Typography>
 
-      <Box
-        display="flex"
-        flexDirection="column"
-        gap={1}
-        maxWidth={400}
-        paddingX={2}
-      >
-        <Slider
-          value={value}
-          min={productionActionById[teamAction.actionId].min}
-          max={productionActionById[teamAction.actionId].max}
-          marks={[
-            {
-              label: `Équipe : ${labelFormatter(teamAction.value)}`,
-              value: teamAction.value,
-            },
-          ]}
-          labelFormatter={labelFormatter}
-          onChange={handleChange}
-          ariaLabel={t(
-            `production.energy.${
-              productionActionById[teamAction.actionId].name
-            }.accordion.label-slider`
-          )}
-        />
+      <Box display="flex" flexDirection="column" gap={1} paddingX={2}>
+        <Box display="flex" flexDirection="column" maxWidth={400}>
+          <Slider
+            value={value}
+            min={productionAction.min}
+            max={productionAction.max}
+            marks={[
+              {
+                label: t("form.field.slide.team-value.label", {
+                  value: productionValueI18n(teamAction.value),
+                }),
+                value: teamAction.value,
+              },
+            ]}
+            labelFormatter={productionValueI18n}
+            onChange={handleChange}
+            ariaLabel={t(
+              `production-actions:production-action.fr.${productionAction.name}.accordion.label-slider`
+            )}
+          />
+        </Box>
         <Typography>
           {t(
-            `production.energy.${
-              productionActionById[teamAction.actionId].name
-            }.accordion.label-slider`
+            `production-actions:production-action.fr.${productionAction.name}.accordion.label-slider`
           )}
         </Typography>
       </Box>
 
       <Box display="flex" gap={1}>
-        <Icon name="player" />
-        <Typography>
-          Mon hypothèse pour 2050 :{" "}
-          <strong>{formatProductionGw(localStats.powerNeedGw)}</strong> GW &amp;
-          Coût : {formatBudget(localStats.cost)} €/j
-        </Typography>
+        <Icon name="team" />
+        <Box display="flex" flexDirection="column" flexGrow={1}>
+          <Box display="flex" gap={1}>
+            <Typography>
+              {t("page.player.team-actions.team-hypothesis", {
+                year: ENERGY_SHIFT_TARGET_YEAR,
+              })}
+            </Typography>
+          </Box>
+
+          <Box display="grid" gridTemplateColumns="1fr 1fr" maxWidth={300}>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Icon name="power" />
+              <Typography as="span">
+                {t("unit.power.giga", {
+                  value: formatProductionGw(teamStats.powerNeedGw),
+                })}
+              </Typography>
+            </Box>
+            <Box display="flex" alignItems="center" gap={1}>
+              <Icon name="budget" />
+              <Typography as="span">
+                {t("unit.budget-per-day.base", {
+                  value: formatBudget(teamStats.cost),
+                  symbol: t("countries:country.fr.currency.symbol"),
+                })}
+              </Typography>
+            </Box>
+          </Box>
+        </Box>
       </Box>
 
-      <TeamActionCredibility teamAction={localTeamAction} />
+      <Box display="flex" flexDirection="column" gap={1}>
+        <Box display="flex" gap={1}>
+          <Icon name="player" />
+          <Box display="flex" flexDirection="column" flexGrow={1}>
+            <Box display="flex" gap={1}>
+              <Typography>
+                {t("page.player.team-actions.player-hypothesis", {
+                  year: ENERGY_SHIFT_TARGET_YEAR,
+                })}
+              </Typography>
+            </Box>
+
+            <Box display="grid" gridTemplateColumns="1fr 1fr" maxWidth={300}>
+              <Box display="flex" alignItems="center" gap={1}>
+                <Icon name="power" />
+                <Typography as="span">
+                  {t("unit.power.giga", {
+                    value: formatProductionGw(localStats.powerNeedGw),
+                  })}
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="center" gap={1}>
+                <Icon name="budget" />
+                <Typography as="span">
+                  {t("unit.budget-per-day.base", {
+                    value: formatBudget(localStats.cost),
+                    symbol: t("countries:country.fr.currency.symbol"),
+                  })}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+        <TeamActionCredibility teamAction={localTeamAction} />
+      </Box>
 
       <Box
         className="team-action-option-content__actions"
         display="flex"
         justifyContent="end"
       >
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={handleValidateTeamChoice}
-          type="button"
-        >
-          <Icon name="check-doubled" sx={{ mr: 1 }} />
-          Valider pour l'équipe
+        <Button iconName="check-doubled" onClick={handleValidateTeamChoice}>
+          {t("cta.validate-team-choice")}
         </Button>
       </Box>
     </Box>
@@ -247,8 +315,13 @@ function TeamActionOptionContent({ teamAction }: { teamAction: TeamAction }) {
 }
 
 function TeamActionCredibility({ teamAction }: { teamAction: TeamAction }) {
-  const { ready, t } = useTranslation();
+  const { ready, t } = useTranslation(["common", "production-actions"]);
   const { productionActionById } = usePlay();
+
+  const productionAction = useMemo(
+    () => productionActionById[teamAction.actionId],
+    [productionActionById, teamAction]
+  );
 
   const { isCredible } = computeTeamActionStats(
     teamAction,
@@ -261,9 +334,7 @@ function TeamActionCredibility({ teamAction }: { teamAction: TeamAction }) {
     }
     if (isCredible) {
       return t(
-        `production.energy.${
-          productionActionById[teamAction.actionId].name
-        }.value.credible`,
+        `production-actions:production-action.fr.${productionAction.name}.value.credible`,
         {
           year: ENERGY_SHIFT_TARGET_YEAR,
           returnObjects: true,
@@ -271,15 +342,13 @@ function TeamActionCredibility({ teamAction }: { teamAction: TeamAction }) {
       );
     }
     return t(
-      `production.energy.${
-        productionActionById[teamAction.actionId].name
-      }.value.not-credible`,
+      `production-actions:production-action.fr.${productionAction.name}.value.not-credible`,
       {
         year: ENERGY_SHIFT_TARGET_YEAR,
         returnObjects: true,
       }
     );
-  }, [isCredible, ready, productionActionById, t, teamAction]);
+  }, [isCredible, productionAction, ready, t]);
 
   return (
     <Box

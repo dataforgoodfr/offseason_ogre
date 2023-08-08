@@ -12,10 +12,10 @@ import {
 import {
   GameConsolePage,
   MyGames,
-  PlayerPersona,
+  PlayerPersonaPage,
   PlayLayout,
   PlayerActionsPage,
-  Stats,
+  PlayerStatisticsPage,
 } from "../../../play";
 import {
   PersonalizationLayout,
@@ -52,9 +52,12 @@ function AuthenticatedApp() {
       </Route>
       <Route path="play" element={<PlayLayout />}>
         <Route path="my-games" element={<MyGames />} />
-        <Route path="games/:id" element={<PlayerPersona />} />
-        <Route path="games/:id/persona" element={<PlayerPersona />} />
-        <Route path="games/:id/persona/stats" element={<Stats />} />
+        <Route path="games/:id" element={<PlayerPersonaPage />} />
+        <Route path="games/:id/persona" element={<PlayerPersonaPage />} />
+        <Route
+          path="games/:id/persona/stats"
+          element={<PlayerStatisticsPage />}
+        />
         <Route path="games/:id/personalize" element={<PersonalizationLayout />}>
           <Route path="choice" element={<PersonalizationChoice />} />
           <Route path="form" element={<PersonalizationForm />} />

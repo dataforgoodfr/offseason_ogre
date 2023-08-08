@@ -2,7 +2,7 @@ import {
   carEnergies,
   houseEnergies,
   IntermediateValues,
-  lighting,
+  houseLighting,
   PersoForm,
 } from "../../play/Personalization/models/form";
 import {
@@ -57,10 +57,10 @@ export const getFossilCarConsumption = (personalization: PersoForm) => {
 
   if (
     ![
-      carEnergies.DIESEL,
-      carEnergies.GPL,
-      carEnergies.HYBRIDE,
-      carEnergies.ESSENCE,
+      carEnergies.DIESEL.value,
+      carEnergies.GPL.value,
+      carEnergies.HYBRIDE.value,
+      carEnergies.ESSENCE.value,
     ].includes(carEnergy)
   ) {
     return 0;
@@ -83,7 +83,11 @@ export const getFossilHeatingConsumption = (
   intermediateValues: IntermediateValues
 ) => {
   const { heatingEnergy } = personalization;
-  if (![houseEnergies.FIOUL, houseEnergies.GAZ].includes(heatingEnergy)) {
+  if (
+    ![houseEnergies.FIOUL.value, houseEnergies.GAZ.value].includes(
+      heatingEnergy
+    )
+  ) {
     return 0;
   }
   return getHeatingConsumption(
@@ -134,7 +138,7 @@ export const getElectricCarConsumption = (personalization: PersoForm) => {
     numberAdults,
     numberKids,
   } = personalization;
-  if (carEnergy !== carEnergies.ELECTRICITE) {
+  if (carEnergy !== carEnergies.ELECTRICITE.value) {
     return 0;
   }
 
@@ -148,7 +152,7 @@ export const getElectricCarConsumption = (personalization: PersoForm) => {
 
 export const getLightConsumption = (personalization: PersoForm) => {
   const { lightingSystem } = personalization;
-  if (lightingSystem === lighting.AMPOULES_LED) {
+  if (lightingSystem === houseLighting.AMPOULES_LED.value) {
     return lightingConstants.LED;
   }
   return lightingConstants.OTHER;
@@ -161,7 +165,9 @@ export const getNoCarbonHeatingConsumption = (
   const { heatingEnergy } = personalization;
 
   if (
-    ![houseEnergies.BOIS, houseEnergies.ELECTRICITE].includes(heatingEnergy)
+    ![houseEnergies.BOIS.value, houseEnergies.ELECTRICITE.value].includes(
+      heatingEnergy
+    )
   ) {
     return 0;
   }
@@ -230,7 +236,7 @@ export const getGreyCarConsumption = (personalization: PersoForm) => {
 
   return (
     consumptionGrey.CAR *
-    (carEnergy === carEnergies.ELECTRICITE ? 1.2 : 1) *
+    (carEnergy === carEnergies.ELECTRICITE.value ? 1.2 : 1) *
     getCarAgeCoeff(carAge)
   );
 };

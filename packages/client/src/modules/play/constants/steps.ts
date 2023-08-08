@@ -26,7 +26,6 @@ type GameStepId =
 
 type GameStep = {
   id: GameStepId;
-  title: string;
   type: GameStepType;
   availableActionPoints?: number;
   budgetAdvised?: number;
@@ -36,45 +35,38 @@ type GameStep = {
 const STEPS: readonly GameStep[] = [
   {
     id: "initial-situation",
-    title: "Situation initiale",
     availableActionPoints: 0,
     type: "consumption",
   },
   {
     id: "consumption-1",
-    title: "Choix de consommation 1",
     availableActionPoints: 12,
     type: "consumption",
   },
   {
     id: "production-1",
-    title: "Choix de production 1 - Production terrestre",
     type: "production",
     energyType: "terrestrial",
     budgetAdvised: 4,
   },
   {
     id: "consumption-2",
-    title: "Choix de consommation 2",
     availableActionPoints: 12,
     type: "consumption",
   },
   {
     id: "production-2",
-    title: "Choix de production 2 - Production aquatique",
     type: "production",
     energyType: "offshore",
     budgetAdvised: 2,
   },
   {
     id: "production-3",
-    title: "Choix de production 3",
     type: "production",
     energyType: "nuclear",
   },
   {
     id: "final-situation",
-    title: "Situation finale",
     availableActionPoints: 0,
     type: "consumption",
   },

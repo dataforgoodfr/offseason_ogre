@@ -14,7 +14,7 @@ import { EnergyPalette, ProductionPalette } from "../../utils/theme";
 import { hasNuclear, filterOutDuplicates } from "../common/utils";
 import { usePlay } from "../play/context/playContext";
 import { productionConstants } from "../play";
-import { t } from "../translations";
+import { t, useTranslation } from "../translations";
 import { ConsumptionType } from "../persona/consumption";
 import { ProductionActionType } from "../../utils/types";
 import { Typography } from "../common/components/Typography";
@@ -33,6 +33,7 @@ function StackedEnergyBars({
   onClick?: CategoricalChartFunc;
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const { game } = usePlay();
 
   const maximumTotal = Math.max(
@@ -82,7 +83,10 @@ function StackedEnergyBars({
                     "black",
                 }}
               >
-                {translateLabel(key)}: {value}kWh/jour
+                {translateLabel(key)}:{" "}
+                {t("unit.watthour-per-day.kilo", {
+                  value,
+                })}
               </Typography>
             ))}
         </Grid>
@@ -125,7 +129,7 @@ function StackedEnergyBars({
         <BarChart data={data} onClick={onClick}>
           <XAxis dataKey="name" tick={tick} />
           <YAxis
-            name="kWh/jour"
+            name={t("unit.watthour-per-day-bare.kilo")}
             domain={[0, Math.ceil(maximumTotal / 100) * 100]}
             {...{ angle: -45 }}
           />
@@ -143,7 +147,7 @@ function StackedEnergyBars({
               }
               barSize={25}
               name={translateLabel(key)}
-              unit="kWh/jour"
+              unit={t("unit.watthour-per-day-bare.kilo")}
             />
           ))}
         </BarChart>

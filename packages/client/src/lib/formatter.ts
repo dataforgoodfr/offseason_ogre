@@ -33,11 +33,20 @@ function formatCarbonFootprint(
 }
 
 function formatPoints(value?: number) {
-  return value?.toFixed(0) || "";
+  return formatNumber(value, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
 }
 
-function formatProductionGw(value?: number) {
-  return value?.toFixed(1) || "";
+function formatProductionGw(
+  value?: number,
+  { fractionDigits = 1 }: { fractionDigits?: number } = {}
+) {
+  return formatNumber(value, {
+    minimumFractionDigits: fractionDigits,
+    maximumFractionDigits: fractionDigits,
+  });
 }
 
 function formatConsumption(

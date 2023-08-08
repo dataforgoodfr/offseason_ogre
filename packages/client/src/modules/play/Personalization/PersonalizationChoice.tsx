@@ -1,22 +1,25 @@
-import { Link } from "react-router-dom";
-import { Grid, Typography } from "@mui/material";
+import { Box, Grid } from "@mui/material";
+import { useMemo } from "react";
 import {
   CustomContainer,
   CentralContainer,
   ChoiceText,
   ChoiceButton,
+  Title,
 } from "./styles/personalization";
 import { Icon } from "../../common/components/Icon";
 import { useGameId } from "./hooks/useGameId";
 import { BackArrow } from "./common/BackArrow";
 import { useQuery } from "react-query";
-import { ErrorAlert } from "../../alert";
-import { formBlockText } from "./utils/formValidation";
+import { InfoAlert } from "../../alert";
 import { http } from "../../../utils/request";
+import { Typography } from "../../common/components/Typography";
+import { useTranslation } from "../../translations";
 
 export { PersonalizationChoice };
 
 function PersonalizationChoice() {
+  const { t } = useTranslation();
   const gameId = useGameId();
 
   const query = useQuery(`/api/games/${gameId}`, () => {
@@ -24,17 +27,22 @@ function PersonalizationChoice() {
       `/api/games/${gameId}`
     );
   });
-  const game = query?.data?.data?.document ?? [];
+  const game = useMemo(() => query?.data?.data?.document || null, [query]);
 
   return (
     <CustomContainer maxWidth="lg">
       {game?.status && game.status !== "draft" && (
-        <ErrorAlert alertPosition="top" message={formBlockText} />
+        <InfoAlert
+          alertPosition="top"
+          message={t("page.player.personalization.messsage.form-locked")}
+        />
       )}
-      <BackArrow path={`/play/games/`} />
-      <Typography variant="h5" color="secondary" sx={{ textAlign: "center" }}>
-        Préparer l'atelier
-      </Typography>
+      <Box display="flex" flexDirection="column" gap={3}>
+        <Box>
+          <BackArrow path={`/play/games/`} />
+        </Box>
+        <Title variant="h3">{t("page.player.personalization.title")}</Title>
+      </Box>
       <CentralContainer>
         <Grid container direction="row">
           <Grid item xs={12} sm={2}>
@@ -44,14 +52,19 @@ function PersonalizationChoice() {
               alt="sage"
             />
           </Grid>
-          <Grid item xs={12} sm={10}>
-            <ChoiceText>
-              Pour une expérience personnalisée, je te propose de remplir un
-              formulaire afin de bâtir ton profil de consommation personnalisé.
-              Cela ne te prendra que quelques minutes. Si le formulaire n'est
-              pas complété et transmis à l'animateur, tu joueras avec le persona
-              Oil'gre.
-            </ChoiceText>
+          <Grid
+            item
+            xs={12}
+            sm={10}
+            display="flex"
+            flexDirection="column"
+            gap={1}
+          >
+            {t("page.player.personalization.description", {
+              returnObjects: true,
+            }).map((text) => (
+              <ChoiceText key={text}>{text}</ChoiceText>
+            ))}
           </Grid>
         </Grid>
         <Grid
@@ -75,15 +88,19 @@ function PersonalizationChoice() {
             sm={6}
           >
             <ChoiceButton
-              component={Link}
-              color="secondary"
-              variant="contained"
               disabled={query.isLoading || (game && game?.status !== "draft")}
               to={`/play/games/${gameId}/personalize/form`}
             >
-              <Icon name="player-add" sx={{ mr: 1 }} />
-              <br />
-              <Typography>Créer mon profil conso</Typography>
+              <Box
+                component="span"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                gap={1}
+              >
+                <Icon name="player-add" sx={{ mr: 1 }} />
+                <Typography>{t("cta.create-profile")}</Typography>
+              </Box>
             </ChoiceButton>
           </Grid>
           <Grid
@@ -100,23 +117,26 @@ function PersonalizationChoice() {
             xs={12}
             sm={6}
           >
-            <ChoiceButton
-              component={Link}
-              color="secondary"
-              variant="contained"
-              to={`/play/games/${gameId}/personalize/oilgre`}
-            >
-              <img
-                style={{
-                  height: "32px",
-                  marginLeft: "10px",
-                  marginRight: "10px",
-                  borderRadius: "5px",
-                }}
-                src="/avatar.png"
-                alt="avatar"
-              />
-              <Typography>Voir le persona Oil'gre</Typography>
+            <ChoiceButton to={`/play/games/${gameId}/personalize/oilgre`}>
+              <Box
+                component="span"
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                gap={1}
+              >
+                <img
+                  style={{
+                    height: "32px",
+                    marginLeft: "10px",
+                    marginRight: "10px",
+                    borderRadius: "5px",
+                  }}
+                  src="/avatar.png"
+                  alt="avatar"
+                />
+                <Typography>{t("cta.read-profile-oilgre")}</Typography>
+              </Box>
             </ChoiceButton>
           </Grid>
         </Grid>

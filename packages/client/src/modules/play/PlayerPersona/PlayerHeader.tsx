@@ -1,58 +1,59 @@
 import {
   Box,
   Grid,
-  Button,
   Card,
   CardActionArea,
   CardContent,
   useTheme,
 } from "@mui/material";
+import sumBy from "lodash/sumBy";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
-import { IGame, ITeam, IUser } from "../../../utils/types";
 import { PlayBox } from "../Components";
 import { useCurrentStep, usePlay, useTeamValues } from "../context/playContext";
-import { sumAllValues } from "../../persona";
 import { Icon } from "../../common/components/Icon";
 import {
   formatPoints,
   formatBudget,
   formatCarbonFootprint,
+  formatProduction,
+  formatConsumption,
 } from "../../../lib/formatter";
 import { Typography } from "../../common/components/Typography";
 import { RowItem } from "../../common/components/RowItem";
 import { useTranslation } from "../../translations/useTranslation";
 import { useCurrentPlayer, usePersona } from "../context/hooks/player";
+import { Button } from "../../common/components/Button";
+import { useMemo } from "react";
 
-export { PlayerHeader, Header, Actions };
+export { PlayerHeader };
 
 function PlayerHeader() {
-  const { t } = useTranslation();
-  const { user } = useAuth();
+  const { t } = useTranslation(["common", "countries"]);
   const { game } = usePlay();
   const { currentPersona, latestPersona } = usePersona();
   const { teamValues } = useTeamValues();
-  const teamIdToTeamValues = Object.fromEntries(
-    teamValues.map((value) => [value.id, value])
+  const { team } = useCurrentPlayer();
+
+  const teamIdToTeamValues = useMemo(() => {
+    return Object.fromEntries(teamValues.map((value) => [value.id, value]));
+  }, [teamValues]);
+
+  const playerPoints = useMemo(
+    () => (team ? teamIdToTeamValues[team.id]?.points || 0 : 0),
+    [team, teamIdToTeamValues]
   );
 
-  const { team: myTeam } = useCurrentPlayer();
-  if (user === null) {
-    throw new Error("User must be authentified");
-  }
-
-  const playerPoints = myTeam ? teamIdToTeamValues[myTeam.id]?.points || 0 : 0;
-
   return (
-    <Box className="player-header">
+    <Box
+      className="player-header"
+      display="flex"
+      flexDirection="column"
+      gap={2}
+    >
       <PlayBox className="player-header__profile">
-        <Header
-          className="player-header__profile__header"
-          game={game}
-          team={myTeam || undefined}
-          user={user}
-        />
+        <Header className="player-header__profile__header" />
         <Grid
           item
           xs={12}
@@ -66,6 +67,9 @@ function PlayerHeader() {
           <GameStepper step={game.step} />
         </Grid>
         <Grid
+          display="flex"
+          flexDirection="column"
+          gap={2}
           item
           xs={12}
           sx={{
@@ -79,85 +83,102 @@ function PlayerHeader() {
             {formatPoints(playerPoints)} <Icon name="trophy" />
           </Typography>
 
-          <RowItem
-            sx={{ mt: 1 }}
-            left={
-              <>
-                <Icon name="production" sx={{ mr: 1 }} />
+          <Box>
+            <RowItem
+              sx={{ mt: 1 }}
+              left={
+                <>
+                  <Icon name="production" sx={{ mr: 1 }} />
+                  <Typography sx={{ fontSize: "12px" }}>
+                    {t("player.profile.summary.production")}
+                  </Typography>
+                </>
+              }
+              right={
                 <Typography sx={{ fontSize: "12px" }}>
-                  {t("player.profile.summary.production")}
+                  {t("unit.watthour-per-day.kilo", {
+                    value: formatProduction(
+                      sumBy(currentPersona.production, "value") || 0
+                    ),
+                  })}
                 </Typography>
-              </>
-            }
-            right={
-              <Typography sx={{ fontSize: "12px" }}>
-                {sumAllValues(currentPersona.production) || 0} kWh/jour
-              </Typography>
-            }
-          />
-          <RowItem
-            sx={{ mt: 1 }}
-            left={
-              <>
-                <Icon name="consumption" sx={{ mr: 1 }} />
+              }
+            />
+            <RowItem
+              sx={{ mt: 1 }}
+              left={
+                <>
+                  <Icon name="consumption" sx={{ mr: 1 }} />
+                  <Typography sx={{ fontSize: "12px" }}>
+                    {t("player.profile.summary.consumption")}
+                  </Typography>
+                </>
+              }
+              right={
                 <Typography sx={{ fontSize: "12px" }}>
-                  {t("player.profile.summary.consumption")}
+                  {t("unit.watthour-per-day.kilo", {
+                    value: formatConsumption(
+                      sumBy(currentPersona.consumption, "value") || 0
+                    ),
+                  })}
                 </Typography>
-              </>
-            }
-            right={
-              <Typography sx={{ fontSize: "12px" }}>
-                {sumAllValues(currentPersona.consumption) || 0} kWh/jour
-              </Typography>
-            }
-          />
-          <RowItem
-            sx={{ mt: 1 }}
-            left={
-              <>
-                <Icon name="budget" sx={{ mr: 1 }} />
+              }
+            />
+            <RowItem
+              sx={{ mt: 1 }}
+              left={
+                <>
+                  <Icon name="budget" sx={{ mr: 1 }} />
+                  <Typography sx={{ fontSize: "12px" }}>
+                    {t("player.profile.summary.remaining-budget")}
+                  </Typography>
+                </>
+              }
+              right={
                 <Typography sx={{ fontSize: "12px" }}>
-                  {t("player.profile.summary.remaining-budget")}
+                  {t("unit.budget-per-day.base", {
+                    value: formatBudget(latestPersona.budget || 0),
+                    symbol: t("countries:country.fr.currency.symbol"),
+                  })}
                 </Typography>
-              </>
-            }
-            right={
-              <Typography sx={{ fontSize: "12px" }}>
-                {formatBudget(latestPersona.budget || 0)} €/j
-              </Typography>
-            }
-          />
-          <RowItem
-            sx={{ mt: 1 }}
-            left={
-              <>
-                <Icon name="carbon-footprint" sx={{ mr: 1 }} />
+              }
+            />
+            <RowItem
+              sx={{ mt: 1 }}
+              left={
+                <>
+                  <Icon name="carbon-footprint" sx={{ mr: 1 }} />
+                  <Typography sx={{ fontSize: "12px" }}>
+                    {t("player.profile.summary.carbon-footprint")}
+                  </Typography>
+                </>
+              }
+              right={
                 <Typography sx={{ fontSize: "12px" }}>
-                  {t("player.profile.summary.carbon-footprint")}
+                  {t("unit.carbon-per-day.kilo", {
+                    value: formatCarbonFootprint(
+                      currentPersona.carbonFootprint || 0
+                    ),
+                  })}
                 </Typography>
-              </>
-            }
-            right={
-              <Typography sx={{ fontSize: "12px" }}>
-                {formatCarbonFootprint(currentPersona.carbonFootprint || 0)}{" "}
-                kg/j
-              </Typography>
-            }
-          />
-          <Button
-            sx={{
-              mt: 2,
-              mb: 1,
-              width: "200px",
-            }}
-            component={Link}
-            to={`/play/games/${game.id}/persona`}
-            variant="contained"
-            color="secondary"
+              }
+            />
+          </Box>
+
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={1}
           >
-            <Icon name="badge" sx={{ mr: 1 }} />{" "}
-            {t("cta.go-to-player-characteristics")}
-          </Button>
+            <Button
+              iconName="badge"
+              width={250}
+              to={`/play/games/${game.id}/persona`}
+            >
+              {t("cta.go-to-player-characteristics")}
+            </Button>
+          </Box>
         </Grid>
       </PlayBox>
       <Actions className="player-header__actions" />
@@ -165,18 +186,12 @@ function PlayerHeader() {
   );
 }
 
-function Header({
-  game,
-  team,
-  user,
-  className,
-}: {
-  game?: IGame;
-  team?: ITeam;
-  user?: IUser;
-  className?: string;
-}) {
+function Header({ className }: { className?: string }) {
   const theme = useTheme();
+  const { user } = useAuth();
+  const { game } = usePlay();
+  const { team } = useCurrentPlayer();
+
   return (
     <Grid className={className} display="grid" gridTemplateColumns="1fr 3fr">
       <Grid maxWidth={150}>
@@ -224,10 +239,11 @@ function Actions({ className }: { className?: string }) {
   const { game } = usePlay();
   const currentStep = useCurrentStep();
 
-  const iconName =
-    currentStep?.id !== "final-situation"
+  const iconName = useMemo(() => {
+    return currentStep?.id !== "final-situation"
       ? "videogame-controller"
       : "synthesis";
+  }, [currentStep]);
 
   return (
     <Box
@@ -237,35 +253,24 @@ function Actions({ className }: { className?: string }) {
         alignItems: "center",
         flexDirection: "column",
         justifyContent: "center",
-        mt: 4,
+        gap: 2,
       }}
     >
       <Button
-        component={Link}
+        iconName="bar-chart"
+        width={250}
         to={`/play/games/${game.id}/persona/stats`}
-        variant="contained"
-        color="secondary"
-        sx={{
-          width: "200px",
-        }}
       >
-        <Icon name="bar-chart" sx={{ mr: 1 }} />{" "}
         {t("cta.go-to-player-statistics")}
       </Button>
       <Button
-        component={Link}
+        iconName={iconName}
+        width={250}
         to={`/play/games/${game.id}/persona/actions`}
-        variant="contained"
-        color="secondary"
-        sx={{
-          mt: 2,
-          width: "200px",
-        }}
         disabled={
           !game.isGameFinished && (game.step === 0 || game.isStepFinished)
         }
       >
-        <Icon name={iconName} sx={{ mr: 1 }} />
         {t(`cta.go-to-step.${currentStep?.id}` as any)}
       </Button>
     </Box>

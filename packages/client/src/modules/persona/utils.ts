@@ -19,8 +19,12 @@ export function sumForAndFormat<T extends { type: string; value: number }>(
 
 export function sumFor<T extends { type: string; value: number }>(
   array: readonly T[],
-  type: string
+  type?: string
 ) {
+  if (!type) {
+    return _.sumBy(array, "value");
+  }
+
   return _.sumBy(
     array.filter(({ type: _type }) => _type === type),
     "value"
