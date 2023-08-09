@@ -6,7 +6,7 @@ import {
 } from "../../../../../lib/formatter";
 import { useTranslation } from "../../../../translations";
 import { Icon } from "../../../../common/components/Icon";
-import { usePlay, useTeamValues } from "../../../context/playContext";
+import { usePlay } from "../../../context/playContext";
 import { ITeam } from "../../../../../utils/types";
 import { Typography } from "../../../../common/components/Typography";
 import { TagNumber } from "../../../../common/components/TagNumber";
@@ -15,14 +15,14 @@ import { ProductionDatum } from "../../../../persona/production";
 import { isDecarbonatedEnergyProduction } from "../../../utils/production";
 import { TagEnergy } from "../../../../common/components/TagEnergy";
 import { CardStyled } from "../Synthesis.common.styles";
+import { useTeamValuesForTeam } from "../../../context/hooks/shared";
 
 export default SynthesisProduction;
 
 function SynthesisProduction({ team }: { team: ITeam | null }) {
   const { t } = useTranslation();
   const { productionOfCountryToday } = usePlay();
-  const { getTeamById } = useTeamValues();
-  const teamValues = getTeamById(team?.id);
+  const { teamValues } = useTeamValuesForTeam({ teamId: team?.id });
 
   const computeRenewableEnergyProduction = useCallback(
     (production: ProductionDatum[] = []) =>

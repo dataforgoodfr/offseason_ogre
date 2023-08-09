@@ -31,7 +31,7 @@ export {
   usePersonaByUserId,
 };
 
-export type { TeamIdToValues };
+export type { TeamIdToValues, TeamValues };
 
 interface TeamIdToValues {
   [k: string]: TeamValues;
