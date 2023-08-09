@@ -1,4 +1,5 @@
 import { Box, Rating, useTheme } from "@mui/material";
+import { ReactNode, useMemo } from "react";
 import { PlayerChart } from "./PlayerChart";
 import { PlayBox } from "../Components";
 import { Icon } from "../../common/components/Icon";
@@ -17,29 +18,142 @@ import {
 import { TeamActionsRecap } from "../Components/TeamActionsRecap";
 import { getTeamActionsAtCurrentStep } from "../utils/teamActions";
 import { sumAllValues } from "../../persona";
-import { useMemo } from "react";
 import SynthesisRecapForTeacher from "../Components/Synthesis/SynthesisRecapForTeacher";
 
 export { TeamConsoleContent };
 
 function TeamConsoleContent({ team }: { team: ITeam }) {
-  const { game, players, productionActionById } = usePlay();
   const currentStep = useCurrentStep();
+
+  const isProductionStep = currentStep?.type === "production";
+  const isSynthesisStep = currentStep?.id === "final-situation";
+
+  if (isSynthesisStep) {
+    return <TeamConsoleContentSynthesis team={team} />;
+  } else if (isProductionStep) {
+    return <TeamConsoleContentProduction team={team} />;
+  } else {
+    return <TeamConsoleContentConsumption team={team} />;
+  }
+}
+
+function TeamConsoleContentConsumption({ team }: { team: ITeam }) {
+  const { players } = usePlay();
   const playersInTeam = useMemo(
     () => players.filter((p) => p.teamId === team.id),
     [players, team]
   );
 
-  const isProductionStep = currentStep?.type === "production";
-  const isSynthesisStep = currentStep?.id === "final-situation";
+  return (
+    <TeamConsoleContentLayout
+      team={team}
+      content={
+        <>
+          <Box display="grid" gap={2} gridTemplateColumns="1fr 2fr">
+            <Box display="flex" flexDirection="column" gap={2}>
+              {playersInTeam.map((player) => (
+                <PlayerConsumption key={player.user.id} player={player} />
+              ))}
+            </Box>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <Box>
+                <PlayerChart team={team} />
+              </Box>
+            </Box>
+          </Box>
+        </>
+      }
+    />
+  );
+}
+
+function TeamConsoleContentProduction({ team }: { team: ITeam }) {
+  const { game, players, productionActionById } = usePlay();
+  const playersInTeam = useMemo(
+    () => players.filter((p) => p.teamId === team.id),
+    [players, team]
+  );
 
   const teamActionsAtCurrentStep = getTeamActionsAtCurrentStep(
     game.step,
     team.actions,
     productionActionById
   );
-  const PlayerComponent = getPlayerComponent(isProductionStep, isSynthesisStep);
 
+  return (
+    <TeamConsoleContentLayout
+      team={team}
+      content={
+        <>
+          <Box display="grid" gap={2} gridTemplateColumns="1fr 2fr">
+            <Box display="flex" flexDirection="column" gap={2}>
+              {playersInTeam.map((player) => (
+                <PlayerProduction key={player.user.id} player={player} />
+              ))}
+            </Box>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <Box>
+                <PlayBox>
+                  <TeamActionsRecap
+                    title="Actions Production"
+                    teamActions={teamActionsAtCurrentStep}
+                    showCredibility
+                    showProductionValue
+                  />
+                </PlayBox>
+              </Box>
+              <Box>
+                <PlayerChart team={team} />
+              </Box>
+            </Box>
+          </Box>
+        </>
+      }
+    />
+  );
+}
+
+function TeamConsoleContentSynthesis({ team }: { team: ITeam }) {
+  const { players } = usePlay();
+  const playersInTeam = useMemo(
+    () => players.filter((p) => p.teamId === team.id),
+    [players, team]
+  );
+
+  return (
+    <TeamConsoleContentLayout
+      team={team}
+      content={
+        <>
+          <PlayBox>
+            <SynthesisRecapForTeacher team={team} />
+          </PlayBox>
+
+          <Box display="grid" gap={2} gridTemplateColumns="1fr 2fr">
+            <Box display="flex" flexDirection="column" gap={2}>
+              {playersInTeam.map((player) => (
+                <PlayerSynthesis key={player.user.id} player={player} />
+              ))}
+            </Box>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <Box>
+                <PlayerChart team={team} />
+              </Box>
+            </Box>
+          </Box>
+        </>
+      }
+    />
+  );
+}
+
+function TeamConsoleContentLayout({
+  team,
+  content,
+}: {
+  team: ITeam;
+  content: ReactNode;
+}) {
   return (
     <PlayBox display="flex" flexDirection="column" gap={3} mt={2} pt={3}>
       <Typography
@@ -52,50 +166,11 @@ function TeamConsoleContent({ team }: { team: ITeam }) {
         {team.scenarioName ? ` - ${team.scenarioName}` : ""}
       </Typography>
 
-      {isSynthesisStep && (
-        <PlayBox>
-          <SynthesisRecapForTeacher team={team} />
-        </PlayBox>
-      )}
-
-      <Box display="grid" gap={2} gridTemplateColumns="1fr 2fr">
-        <Box display="flex" flexDirection="column" gap={2}>
-          {playersInTeam.map((player) => (
-            <PlayerComponent key={player.user.id} player={player} />
-          ))}
-        </Box>
-        <Box display="flex" flexDirection="column" gap={2}>
-          {isProductionStep && (
-            <Box>
-              <PlayBox>
-                <TeamActionsRecap
-                  title="Actions Production"
-                  teamActions={teamActionsAtCurrentStep}
-                  showCredibility
-                  showProductionValue
-                />
-              </PlayBox>
-            </Box>
-          )}
-          <Box>
-            <PlayerChart team={team} />
-          </Box>
-        </Box>
+      <Box display="flex" flexDirection="column" gap={3}>
+        {content}
       </Box>
     </PlayBox>
   );
-}
-
-function getPlayerComponent(
-  isProductionStep: boolean,
-  isSynthesisStep: boolean
-) {
-  if (isSynthesisStep) {
-    return PlayerSynthesis;
-  } else if (isProductionStep) {
-    return PlayerProduction;
-  }
-  return PlayerConsumption;
 }
 
 function PlayerSynthesis({ player }: { player: Player }) {
