@@ -12,11 +12,8 @@ import {
   ProductionAction,
 } from "../../../utils/types";
 import { useAuth } from "../../auth/authProvider";
-import { GameStep, GameStepType, isStepOfType, STEPS } from "../constants";
+import { GameStep, STEPS } from "../constants";
 import { buildPersona } from "../utils/persona";
-import { mean } from "../../../lib/math";
-import { range } from "lodash";
-import { sumAllValues } from "../../persona";
 import { buildInitialPersona } from "../../persona/persona";
 import { WEB_SOCKET_URL } from "../../common/constants";
 import { usePlayStore } from "./usePlayStore";
@@ -26,7 +23,6 @@ import { ProductionDatum } from "../../persona/production";
 export {
   RootPlayProvider,
   useCurrentStep,
-  useTeamValues,
   useLoadedPlay as usePlay,
   usePersonaByUserId,
 };
@@ -237,125 +233,6 @@ function useLoadedPlay(): IPlayContext {
     throw new Error("play context should have been loaded");
   }
   return playValue;
-}
-
-function useTeamValues(): {
-  teamValues: TeamValues[];
-  getTeamById: (id: number | undefined) => TeamValues | undefined;
-} {
-  const { game, players, teams } = useLoadedPlay();
-
-  const userIds: number[] = useMemo(
-    () => players.map((p) => p.userId),
-    [players]
-  );
-  const personaByUserId = usePersonaByUserId(userIds);
-
-  const teamValues = useMemo(() => {
-    return teams.map((team) => {
-      const playersInTeam = players.filter((p) => p.teamId === team.id);
-      const playerRepresentingTeam = playersInTeam[0] || null;
-      const personaRepresentingTeam =
-        personaByUserId[playerRepresentingTeam?.userId || -1] || null;
-      const currentPersonaRepresentingTeam =
-        personaRepresentingTeam?.getPersonaAtStep?.(game.step) || null;
-
-      return {
-        id: team.id,
-        playerCount: playersInTeam.length,
-        points: mean(
-          playersInTeam.map(
-            ({ userId }) => personaByUserId[userId].currentPersona.points
-          )
-        ),
-        budget: mean(
-          playersInTeam.map(
-            ({ userId }) => personaByUserId[userId].currentPersona.budget
-          )
-        ),
-        budgetSpent: mean(
-          playersInTeam
-            .map(({ userId }) => personaByUserId[userId])
-            .map(
-              (persona) =>
-                persona.getPersonaAtStep(0).budget -
-                persona.currentPersona.budget
-            )
-        ),
-        carbonFootprint: mean(
-          playersInTeam.map(
-            ({ userId }) =>
-              personaByUserId[userId].currentPersona.carbonFootprint
-          )
-        ),
-        carbonFootprintReduction: mean(
-          playersInTeam
-            .map(({ userId }) => personaByUserId[userId])
-            .map(
-              (persona) =>
-                (1 -
-                  persona.currentPersona.carbonFootprint /
-                    persona.getPersonaAtStep(0).carbonFootprint) *
-                100
-            )
-        ),
-        stepToConsumption: buildStepToData(
-          "consumption",
-          game,
-          playersInTeam,
-          personaByUserId
-        ),
-        stepToProduction: buildStepToData(
-          "production",
-          game,
-          playersInTeam,
-          personaByUserId
-        ),
-        productionCurrent: currentPersonaRepresentingTeam?.production || [],
-      };
-    });
-    // TODO: check `personaByUserId` in deps doesn't trigger infinite renders.
-  }, [game, personaByUserId, players, teams]);
-
-  const getTeamById = (id: number | undefined) => {
-    return teamValues.find((t) => t.id === id);
-  };
-
-  return {
-    teamValues,
-    getTeamById,
-  };
-}
-
-function buildStepToData(
-  dataType: GameStepType,
-  game: IGame,
-  players: Player[],
-  personaByUserId: ReturnType<typeof usePersonaByUserId>
-) {
-  return Object.fromEntries(
-    range(0, game.lastFinishedStep + 1)
-      .filter((step) => isStepOfType(step, dataType))
-      .map((step: number) => [
-        step,
-        buildStepData(dataType, step, players, personaByUserId),
-      ])
-  );
-}
-
-function buildStepData(
-  dataType: GameStepType,
-  step: number,
-  players: Player[],
-  personaByUserId: ReturnType<typeof usePersonaByUserId>
-) {
-  return mean(
-    players
-      .map((p) => personaByUserId[p.userId].getPersonaAtStep(step)[dataType])
-      .map((data) =>
-        parseInt(sumAllValues(data as { type: string; value: number }[]))
-      )
-  );
 }
 
 function useCurrentStep(): GameStep | null {
