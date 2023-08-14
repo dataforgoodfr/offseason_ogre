@@ -1,5 +1,18 @@
 {
   "scripts": {
     "postdeploy": "chmod +x ./heroku-postdeploy.sh && ./heroku-postdeploy.sh"
-  }
+  },
+  "addons": [
+    {
+      "plan": "heroku-postgresql:mini",
+      "as": "DATABASE"
+    },
+    {
+      "plan": "rediscloud:30",
+      "as": "REDIS"
+    },
+    {
+      "plan": "coralogix:free-30mbday"
+    }
+  ]
 }
