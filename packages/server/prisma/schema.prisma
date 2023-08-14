@@ -20,6 +20,7 @@ model Game {
   status           Status    @default(draft)
   step             Int       @default(0)
   lastFinishedStep Int       @default(0)
+  isTest           Boolean   @default(false)
 }
 
 enum Status {
