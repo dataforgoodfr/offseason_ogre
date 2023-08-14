@@ -6,30 +6,44 @@ const { http } = require("../utils");
 registerUsersToGame();
 
 async function registerUsersToGame() {
-  console.log(`Registering users to game ${config.GAME_CODE}`);
+  console.log(`Registering users respectively to their game`);
 
-  const fileContent = fs.readFileSync(
-    path.join(__dirname, "../credentials.csv"),
-    { encoding: "utf8", flag: "r" }
-  );
-
-  const tokens = fileContent.split("\n").map((line) => line.split(",")[1]);
+  const usersData = loadUserData();
 
   const BATCH_SIZE = 10;
   let i = 0;
-  while (i < tokens.length) {
-    let tokenBatch = tokens.slice(i, i + BATCH_SIZE);
-    await Promise.all(tokenBatch.map(registerUser));
+  while (i < usersData.length) {
+    let usersDataBatch = usersData.slice(i, i + BATCH_SIZE);
+    await Promise.all(usersDataBatch.map(registerUser));
     i += BATCH_SIZE;
   }
 
   console.log(`Users registered successfully`);
 }
 
-async function registerUser(token) {
+async function registerUser(userData) {
   await http.post(
     `${config.API_URL}/api/games/register`,
-    { gameCode: config.GAME_CODE },
-    { Authorization: `Bearer ${token}` }
+    { gameCode: userData.gameCode },
+    { Authorization: `Bearer ${userData.token}` }
   );
+}
+
+function loadUserData() {
+  const fileContent = fs.readFileSync(
+    path.join(__dirname, "../credentials.csv"),
+    { encoding: "utf8", flag: "r" }
+  );
+
+  const usersData = fileContent.split("\n").map((line) => {
+    const dataChunks = line.split(",");
+    return {
+      email: dataChunks[0],
+      token: dataChunks[1],
+      gameId: dataChunks[2],
+      gameCode: dataChunks[3],
+    };
+  });
+
+  return usersData;
 }

@@ -48,10 +48,22 @@ This will create a `credentials.csv` file next to the tests.
 node ./packages/load-testing/scripts/register-users-to-game.js
 ```
 
+6. In the admin dashboard, assign players to teams and launch the game. Make sure to have the first step of the game active so the test players can select consumption actions.
+
+The test is now all set. 🚀
+
 ### Run
+
+On Fargate:
 
 ```bash
 npx artillery run:fargate --region us-east-1 --count 35 --output ./packages/load-testing/websocket-load-testing-report.json ./packages/load-testing/websocket-load-testing.yml
+```
+
+Or locally:
+
+```bash
+npx artillery run --output ./packages/load-testing/websocket-load-testing-report.json ./packages/load-testing/websocket-load-testing.yml
 ```
 
 Once completed, generate the `html` report using:
