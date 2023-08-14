@@ -5,11 +5,11 @@
   "addons": [
     {
       "plan": "heroku-postgresql:mini",
-      "as": "DATABASE_URL"
+      "as": "DATABASE"
     },
     {
       "plan": "rediscloud:30",
-      "as": "REDIS_URL"
+      "as": "REDIS"
     },
     {
       "plan": "coralogix:free-30mbday"
