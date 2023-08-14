@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { z } from "zod";
 import invariant from "tiny-invariant";
+import { Game } from "@prisma/client";
 import { services as usersServices } from "../../users/services";
 import { GameInitEmitted, Server, Socket } from "../types";
 import { rooms } from "../constants";
@@ -14,7 +15,6 @@ import {
   teamServices,
 } from "../services";
 import { BusinessError } from "../../utils/businessError";
-import { Game } from "../../games/types";
 import { User } from "../../users/types";
 
 export { handleJoinGame };

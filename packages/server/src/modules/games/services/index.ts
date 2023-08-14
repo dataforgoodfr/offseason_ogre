@@ -1,9 +1,8 @@
-import { Prisma } from "@prisma/client";
+import { Game, Prisma } from "@prisma/client";
 import { database } from "../../../database";
 import { NO_TEAM } from "../../teams/constants/teams";
 import { services as teamServices } from "../../teams/services";
 import { services as playerServices } from "../../players/services";
-import { Game } from "../types";
 import { register } from "./register";
 import { createBusinessError } from "../../utils/businessError";
 import { batchItems } from "../../../lib/array";

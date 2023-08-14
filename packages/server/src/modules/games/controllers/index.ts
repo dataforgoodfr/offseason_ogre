@@ -55,6 +55,7 @@ async function createController(request: Request, response: Response) {
     status: "draft",
     step: 0,
     lastFinishedStep: 0,
+    isTest: false,
     ...documentToCreate,
   });
   response.status(201).json({ data: newDocument });
