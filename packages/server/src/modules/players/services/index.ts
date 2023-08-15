@@ -1,10 +1,9 @@
-import { Personalization, Players as PlayersPrisma } from "@prisma/client";
+import { Personalization, Players } from "@prisma/client";
 import { database } from "../../../database";
-import { Players } from "../types";
 import * as playerActionsServices from "../../actions/services/playerActions";
 
 const model = database.players;
-type Model = PlayersPrisma;
+type Model = Players;
 
 export { services };
 
@@ -12,37 +11,11 @@ const crudServices = {
   queries: model,
   remove,
   setDefaultProfiles,
-  update,
   updateMany,
   validateProfiles,
 };
 
 const services = { ...crudServices };
-
-async function update(
-  gameId: number,
-  userId: number,
-  document: Partial<Omit<Model, "id">>
-): Promise<Players> {
-  // TODO: find a way to link Prisma typing with attributes included in `include` section.
-  return model.update({
-    where: {
-      userId_gameId: {
-        gameId,
-        userId,
-      },
-    },
-    data: document,
-    include: {
-      actions: {
-        include: {
-          action: true,
-        },
-      },
-      team: true,
-    },
-  }) as unknown as Players;
-}
 
 async function setDefaultProfiles(
   gameId: number,
@@ -107,7 +80,7 @@ async function validateProfiles(gameId: number): Promise<void> {
     },
   });
 
-  return playersToValidate.forEach(async (player: PlayersPrisma) => {
+  return playersToValidate.forEach(async (player: Players) => {
     if (player.profileId) {
       await database.profile.update({
         where: {
