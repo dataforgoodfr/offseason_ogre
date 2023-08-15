@@ -65,5 +65,5 @@ function canRegisterToTestGame({
   game: Game;
   userId: number;
 }) {
-  return game.teacherId !== userId;
+  return game.teacherId === userId;
 }
