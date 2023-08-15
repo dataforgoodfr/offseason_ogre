@@ -1,3 +1,4 @@
+import { Game } from "@prisma/client";
 import { database } from "../../../database";
 import { logger } from "../../../logger";
 import { NO_TEAM } from "../../teams/constants/teams";
@@ -21,6 +22,14 @@ async function register({
       value: gameCode,
     });
   }
+
+  if (game.isTest && !canRegisterToTestGame({ game, userId })) {
+    throw createBusinessError("GAME_NOT_FOUND", {
+      prop: "code",
+      value: gameCode,
+    });
+  }
+
   if (game.status === "playing" || game.status === "finished") {
     throw createBusinessError("GAME_ALREADY_STARTED");
   }
@@ -47,4 +56,14 @@ async function register({
       gameId: game.id,
     });
   }
+}
+
+function canRegisterToTestGame({
+  game,
+  userId,
+}: {
+  game: Game;
+  userId: number;
+}) {
+  return game.teacherId !== userId;
 }

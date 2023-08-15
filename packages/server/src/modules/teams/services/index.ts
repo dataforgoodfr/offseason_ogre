@@ -3,6 +3,7 @@ import { database } from "../../../database";
 import { createBusinessError } from "../../utils/businessError";
 import { NO_TEAM } from "../constants/teams";
 import * as teamActionServices from "../../teamActions/services";
+import { batchItems } from "../../../lib/array";
 
 const model = database.team;
 type Model = Team;
@@ -12,8 +13,9 @@ export { services };
 const crudServices = {
   queries: model,
   create,
-  getMany,
   get,
+  getMany,
+  getPlayableTeams,
   update,
   createMany,
   remove,
@@ -66,6 +68,15 @@ async function get<
   return model.findUnique({ where: { id }, ...options }) as any;
 }
 
+async function getPlayableTeams(
+  partial: NonNullable<Parameters<typeof model.findMany>[0]>["where"]
+) {
+  return getMany({
+    ...partial,
+    name: { not: NO_TEAM },
+  });
+}
+
 async function update(
   teamId: number,
   document: Partial<Omit<Model, "id">>
@@ -104,7 +115,12 @@ async function remove({ id: teamId }: { id: number }) {
 }
 
 async function removeMany(teams: { id: number }[]) {
-  return Promise.all(teams.map((team) => remove(team)));
+  const REMOVE_BATCH_SIZE = 25;
+
+  await batchItems(teams || [], REMOVE_BATCH_SIZE, async (teamBatch) => {
+    const processingTeams = teamBatch.map((t) => remove(t));
+    await Promise.all(processingTeams);
+  });
 }
 
 async function resetTeamsName(gameId: number) {

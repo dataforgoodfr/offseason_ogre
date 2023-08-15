@@ -1,7 +1,9 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
+import { Game } from "@prisma/client";
 import { services } from "../services";
 import { services as playersServices } from "../../players/services";
+import { services as teamsServices } from "../../teams/services";
 import { dateSchema } from "./types";
 import { getDefault } from "../services/personalization";
 import * as playerActionsServices from "../../actions/services/playerActions";
@@ -11,26 +13,41 @@ import { createBusinessError } from "../../utils/businessError";
 
 export { updateGameController };
 
-async function updateGameController(request: Request, response: Response) {
-  const paramsSchema = z.object({
-    id: z.string().regex(/^\d+$/).transform(Number),
-  });
-  const bodySchema = z.object({
+type GameUpdate = ReturnType<ReturnType<typeof getBodySchemaParser>["parse"]>;
+
+function getBodySchemaParser() {
+  return z.object({
     description: z.string().optional(),
     date: dateSchema.optional(),
     name: z.string().optional(),
     status: z.enum(["draft", "ready", "playing", "finished"]).optional(),
+    isTest: z.boolean().optional(),
   });
+}
+
+async function updateGameController(request: Request, response: Response) {
+  const paramsSchema = z.object({
+    id: z.string().regex(/^\d+$/).transform(Number),
+  });
+  const bodySchema = getBodySchemaParser();
 
   const { id } = paramsSchema.parse(request.params);
   const update = bodySchema.parse(request.body);
 
-  const game = await services.findOne({ id });
-  if (!game) {
+  const currentGame = await services.findOne({ id });
+  if (!currentGame) {
     throw createBusinessError("GAME_NOT_FOUND", {
       prop: "id",
       value: id,
     });
+  }
+
+  if (shouldSwitchToTestGame({ game: currentGame, update })) {
+    await prepareTestGame({ game: currentGame });
+  }
+
+  if (shouldSwitchToRegularGame({ game: currentGame, update })) {
+    await prepareRegularGame({ game: currentGame });
   }
 
   if (update?.status === "playing") {
@@ -38,6 +55,27 @@ async function updateGameController(request: Request, response: Response) {
   }
   const document = await services.update(id, update);
   response.status(200).json({ document });
+}
+
+async function prepareTestGame({ game }: { game: Game }) {
+  const teams = await teamsServices.getPlayableTeams({ gameId: game.id });
+  await teamsServices.removeMany(teams);
+
+  const players = await playersServices.getMany({ gameId: game.id });
+  await playersServices.removeMany(players);
+
+  await services.register({
+    gameCode: game.code,
+    userId: game.teacherId,
+  });
+}
+
+async function prepareRegularGame({ game }: { game: Game }) {
+  const teams = await teamsServices.getPlayableTeams({ gameId: game.id });
+  await teamsServices.removeMany(teams);
+
+  const players = await playersServices.getMany({ gameId: game.id });
+  await playersServices.removeMany(players);
 }
 
 async function prepareGameForLaunch(gameId: number) {
@@ -69,4 +107,24 @@ async function prepareGameForLaunch(gameId: number) {
     );
     await Promise.all(processingTeamActions);
   });
+}
+
+function shouldSwitchToTestGame({
+  game,
+  update,
+}: {
+  game: Game;
+  update: GameUpdate;
+}) {
+  return update.isTest != null && !game.isTest && update.isTest;
+}
+
+function shouldSwitchToRegularGame({
+  game,
+  update,
+}: {
+  game: Game;
+  update: GameUpdate;
+}) {
+  return update.isTest != null && game.isTest && !update.isTest;
 }
