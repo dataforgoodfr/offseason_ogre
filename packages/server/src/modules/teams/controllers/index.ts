@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { range } from "lodash";
 import { z } from "zod";
 import { getAddOrRemoveCount } from "../../../lib/array";
-import { NO_TEAM } from "../constants/teams";
 import { services } from "../services";
 
 export { getTeamsController, getTeamController, createTeamsController };
@@ -32,10 +31,7 @@ async function createTeamsController(request: Request, response: Response) {
   });
   const { gameId, quantity } = bodySchema.parse(request.body);
 
-  const existingTeams = await services.getMany({
-    gameId,
-    name: { not: NO_TEAM },
-  });
+  const existingTeams = await services.getPlayableTeams({ gameId });
   const { addCount, removeCount } = getAddOrRemoveCount(
     existingTeams,
     quantity
