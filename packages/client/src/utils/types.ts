@@ -180,6 +180,7 @@ interface ProductionActionCommon {
   type: ProductionActionType;
   order: number;
   step: number;
+  revealOnStep?: number;
   helpCardLink: string;
   min: number;
   max: number;
@@ -191,6 +192,7 @@ interface ProductionActionCommon {
   pointsIntervals: PointsInterval[];
   defaultTeamValue: number;
   isPlayable: boolean;
+  carbonType: ProductionCarbonType;
 }
 
 interface ProductionActionArea extends ProductionActionCommon {

@@ -1,8 +1,7 @@
-import { indexArrayBy } from "../../../lib/array";
 import { fromEntries } from "../../../lib/object";
 import { ProductionAction, TeamAction } from "../../../utils/types";
 import { Persona } from "../../persona/persona";
-import { PRODUCTION, ProductionDatum } from "../../persona/production";
+import { ProductionDatum } from "../../persona/production";
 
 export {
   computeNewProductionData,
@@ -75,15 +74,16 @@ function computeNewProductionData(
   productionActionById: Record<number, ProductionAction>,
   persona: Persona
 ) {
-  const productionByName = indexArrayBy(PRODUCTION, "name");
   const productionNameToNewProduction = fromEntries(
     performedTeamActions
       .map((teamAction) => {
         const productionAction = productionActionById[teamAction.actionId];
-        const baseProduction = productionByName[productionAction.name];
 
         return {
-          ...baseProduction,
+          name: productionAction.name,
+          type: productionAction.type,
+          carbonType: productionAction.carbonType,
+          revealOnStep: productionAction.revealOnStep,
           value: computeEnergyProduction(productionAction, teamAction.value),
         };
       })

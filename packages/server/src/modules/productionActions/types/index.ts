@@ -21,6 +21,7 @@ interface ProductionActionCommon {
   type: ProductionActionType;
   order: number;
   step: number;
+  revealOnStep?: number;
   helpCardLink: string;
   min: number;
   max: number;
@@ -31,6 +32,7 @@ interface ProductionActionCommon {
   currentYearPowerNeedGw: number;
   defaultTeamValue: number;
   isPlayable: boolean;
+  carbonType: "carbonated" | "decarbonated";
 }
 
 interface PointsInterval {

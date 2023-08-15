@@ -9,7 +9,7 @@ import {
 } from "../../../utils/types";
 import { LARGE_GAME_TEAMS, STEPS } from "../constants";
 import { indexArrayBy } from "../../../lib/array";
-import { PRODUCTION, ProductionDatum } from "../../persona/production";
+import { ProductionDatum } from "../../persona/production";
 import { computeEnergyProduction } from "../utils/production";
 
 export { usePlayStore };
@@ -49,11 +49,12 @@ function usePlayStore() {
   );
 
   const productionOfCountryToday: ProductionDatum[] = useMemo(() => {
-    const productionByName = indexArrayBy(PRODUCTION, "name");
-
     return productionActions.map((productionAction) => {
       return {
-        ...(productionByName[productionAction.name] || {}),
+        name: productionAction.name,
+        type: productionAction.type,
+        carbonType: productionAction.carbonType,
+        revealOnStep: productionAction.revealOnStep,
         value: computeEnergyProduction(
           productionAction,
           productionAction.defaultTeamValue
