@@ -44,10 +44,10 @@ async function updateGameController(request: Request, response: Response) {
 
   if (shouldSwitchToTestGame({ game: currentGame, update })) {
     await prepareTestGame({ game: currentGame });
-  }
-
-  if (shouldSwitchToRegularGame({ game: currentGame, update })) {
+  } else if (shouldSwitchToRegularGame({ game: currentGame, update })) {
     await prepareRegularGame({ game: currentGame });
+  } else {
+    delete update.isTest;
   }
 
   if (update?.status === "playing") {
