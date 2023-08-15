@@ -116,7 +116,12 @@ function shouldSwitchToTestGame({
   game: Game;
   update: GameUpdate;
 }) {
-  return update.isTest != null && !game.isTest && update.isTest;
+  return (
+    game.status === "draft" &&
+    update.isTest != null &&
+    !game.isTest &&
+    update.isTest
+  );
 }
 
 function shouldSwitchToRegularGame({
@@ -126,5 +131,10 @@ function shouldSwitchToRegularGame({
   game: Game;
   update: GameUpdate;
 }) {
-  return update.isTest != null && game.isTest && !update.isTest;
+  return (
+    game.status === "draft" &&
+    update.isTest != null &&
+    game.isTest &&
+    !update.isTest
+  );
 }
