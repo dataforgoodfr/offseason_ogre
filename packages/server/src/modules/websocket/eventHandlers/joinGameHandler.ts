@@ -37,7 +37,11 @@ function handleJoinGame(io: Server, socket: Socket) {
       socket.data.user = user;
       socket.data.role = userRole;
 
-      await joinGame({ socket, game, user });
+      if (game.isTest) {
+        await joinTestGame({ socket, game, user });
+      } else {
+        await joinGame({ socket, game, user });
+      }
     })
   );
 }
@@ -144,6 +148,70 @@ async function joinGame({
   socket.emit("game:init", gameInitData);
 }
 
+async function joinTestGame({
+  socket,
+  game,
+  user,
+}: {
+  socket: Socket;
+  game: Game;
+  user: User;
+}) {
+  let gameInitData: GameInitEmitted;
+  if (await hasTestGameAccess(user, game)) {
+    const [players, teams, consumptionActions, productionActions] =
+      await Promise.all([
+        playerServices.findMany(game.id, {
+          include: {
+            user: true,
+            actions: true,
+            profile: {
+              include: {
+                personalization: true,
+              },
+            },
+          },
+        }),
+        teamServices.findMany(game.id, {
+          include: {
+            actions: true,
+          },
+        }),
+        actionServices.findAll(),
+        productionActionServices.findAll(),
+      ]);
+
+    const fakePlayer = players[0];
+    if (!fakePlayer) {
+      socket.emit("game:leave");
+      throw new BusinessError(
+        `User ${user.id} has no associated fake player for game ${game.id}`
+      );
+    }
+
+    socket.join(`${game.id}`);
+    socket.join(rooms.user(game.id, user.id));
+    socket.join(rooms.teachers(game.id));
+    socket.join(rooms.players(game.id));
+    socket.join(rooms.team(game.id, fakePlayer.teamId));
+
+    gameInitData = {
+      game,
+      consumptionActions,
+      productionActions,
+      players,
+      teams,
+    };
+  } else {
+    socket.emit("game:leave");
+    throw new BusinessError(
+      `User ${user.id} is not authorized to join game ${game.id}`
+    );
+  }
+
+  socket.emit("game:init", gameInitData);
+}
+
 async function hasTeacherAccess(user: User, game: Game) {
   if (game.teacherId === user.id) {
     return true;
@@ -161,6 +229,14 @@ async function hasTeacherAccess(user: User, game: Game) {
 async function hasPlayerAccess(user: User, game: Game) {
   const player = await playerServices.findOne(game.id, user.id);
   if (player) {
+    return true;
+  }
+
+  return false;
+}
+
+async function hasTestGameAccess(user: User, game: Game) {
+  if (game.teacherId === user.id) {
     return true;
   }
 
