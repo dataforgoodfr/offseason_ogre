@@ -20,6 +20,7 @@ import { Button } from "../../common/components/Button";
 import { useForm } from "../../common/hooks/useForm";
 import { formatDate } from "../../../lib/time";
 import { Icon } from "../../common/components/Icon";
+import { Tag } from "../../common/components/Tag";
 
 export { MyGames };
 
@@ -50,7 +51,10 @@ function GameItem({ game }: { game: IGame }) {
     <PlayBox sx={{ mt: 2 }}>
       <GameItemHost>
         <Box display="flex" flexDirection="column" gap={1}>
-          <Typography variant="h6">{game.name}</Typography>
+          <Box display="flex" alignItems="center" gap={1}>
+            <Tag type="secondary">{t("game.mode.test").toUpperCase()}</Tag>
+            <Typography variant="h6">{game.name}</Typography>
+          </Box>
           <Box display="flex" alignItems="center" gap={1}>
             <Icon name="date"></Icon>
             <Typography>

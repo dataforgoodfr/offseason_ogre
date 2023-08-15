@@ -21,6 +21,7 @@ import { Dialog } from "../../common/components/Dialog";
 import { Button } from "../../common/components/Button";
 import { Typography } from "../../common/components/Typography";
 import { useDialog } from "../../common/hooks/useDialog";
+import { Tag } from "../../common/components/Tag";
 
 export { Games };
 
@@ -65,6 +66,16 @@ const buildColumns = ({
     headerName: t("table.column.game-name.label"),
     flex: 1,
     minWidth: 150,
+    renderCell: (params: GridRenderCellParams<string>) => {
+      return (
+        <Box display="flex" alignItems="center" gap={1}>
+          {params.row.isTest && (
+            <Tag type="secondary">{t("game.mode.test").toUpperCase()}</Tag>
+          )}
+          {params.value}
+        </Box>
+      );
+    },
   },
   {
     field: "teacher",

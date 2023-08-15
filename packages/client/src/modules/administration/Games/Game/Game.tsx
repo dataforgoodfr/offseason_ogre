@@ -15,12 +15,15 @@ import { GamePlayers } from "./GamePlayers";
 import { Animation } from "./Animation";
 import { GameTeams } from "./GameTeams";
 import { http } from "../../../../utils/request";
+import { Tag } from "../../../common/components/Tag";
+import { useTranslation } from "../../../translations";
 
 export { Game };
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
 function Game() {
+  const { t } = useTranslation();
   const params = useParams();
 
   const { data: result } = useQuery(`/api/games/${params.id}`, () => {
@@ -34,9 +37,12 @@ function Game() {
   return (
     <>
       <Box sx={{ mt: 2 }}>
-        <Typography variant="h3" sx={{ mb: 2 }}>
-          Atelier {game?.code}
-        </Typography>
+        <Box display="flex" alignItems="center" gap={2} sx={{ mb: 2 }}>
+          {game?.isTest && (
+            <Tag type="secondary">{t("game.mode.test").toUpperCase()}</Tag>
+          )}
+          <Typography variant="h3">Atelier {game?.code}</Typography>
+        </Box>
         <GeneralInfo game={game} />
         <Players game={game} />
         <Preparation game={game} />
