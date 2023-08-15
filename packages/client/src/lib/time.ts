@@ -2,7 +2,7 @@ import { differenceInDays } from "date-fns";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../modules/common/constants";
 import { userLocale } from "../modules/translations";
 
-export { formatDate, getDaysTo2050, getDaysToEnergyShiftTargetYear };
+export { formatDate, getDaysToEnergyShiftTargetYear };
 
 type DateFormat = "date-at-time" | "full-date-at-time";
 
@@ -35,14 +35,6 @@ function formatDate(
     userLocale,
     getDateFormatOptions(format)
   ).format(new Date(date));
-}
-
-// TODO: Replace use with getDaysToEnergyShiftTargetYear.
-/**
- * @deprecated Use getDaysToEnergyShiftTargetYear instead.
- */
-function getDaysTo2050() {
-  return Math.round(differenceInDays(new Date("01/01/2050"), new Date()));
 }
 
 function getDaysToEnergyShiftTargetYear(refDate: Date = new Date()) {
