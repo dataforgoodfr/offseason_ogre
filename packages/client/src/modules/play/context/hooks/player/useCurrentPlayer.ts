@@ -17,18 +17,20 @@ function useCurrentPlayer() {
     [players, user]
   );
   const team = useMemo(
-    () => teams.find((t) => t.id === player.teamId)!,
+    () => teams.find((t) => t.id === player.teamId) || null,
     [player, teams]
   );
-  const teamActionsAtCurrentStep = useMemo(
-    () =>
-      getTeamActionsAtCurrentStep(
-        game.step,
-        team.actions,
-        productionActionById
-      ),
-    [game.step, team.actions, productionActionById]
-  );
+  const teamActionsAtCurrentStep = useMemo(() => {
+    if (!team?.actions) {
+      return [];
+    }
+
+    return getTeamActionsAtCurrentStep(
+      game.step,
+      team.actions,
+      productionActionById
+    );
+  }, [game.step, team?.actions, productionActionById]);
   const personalization = useMemo(
     () => player?.profile?.personalization || {},
     [player?.profile?.personalization]
@@ -41,7 +43,7 @@ function useCurrentPlayer() {
     playerActions: player.actions,
     actionPointsAvailableAtCurrentStep: STEPS[game.step].availableActionPoints,
     team,
-    teamActions: team.actions,
+    teamActions: team?.actions || [],
     teamActionsAtCurrentStep,
     ...computePlayerActionsStats(
       game.step,
