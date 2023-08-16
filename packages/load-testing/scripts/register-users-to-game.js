@@ -35,7 +35,7 @@ function loadUserData() {
     { encoding: "utf8", flag: "r" }
   );
 
-  const usersData = fileContent.split("\n").map((line) => {
+  return fileContent.split("\n").map((line) => {
     const dataChunks = line.split(",");
     return {
       email: dataChunks[0],
@@ -44,6 +44,4 @@ function loadUserData() {
       gameCode: dataChunks[3],
     };
   });
-
-  return usersData;
 }
