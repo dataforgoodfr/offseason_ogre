@@ -1,4 +1,3 @@
-import { StackedEnergyBars } from "./StackedEnergyBars";
 import { LineEvolution } from "./LineEvolution";
 import {
   DetailsEnergyConsumptionBars,
@@ -12,7 +11,6 @@ import { ResourcesPerProductionTypeChart } from "./ResourcesPerProductionTypeCha
 import { ResourcesPerStepChart } from "./ResourcesPerStepChart";
 
 export {
-  StackedEnergyBars,
   LineEvolution,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
