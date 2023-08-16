@@ -96,6 +96,9 @@ theme = responsiveFontSizes(theme);
  * This is especially useful to style translated text.
  */
 const globalStyles: GlobalStylesProps["styles"] = {
+  ".clickable": {
+    cursor: "pointer",
+  },
   ".text-em": {
     color: `${theme.palette.secondary.main} !important`,
   },
