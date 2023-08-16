@@ -52,7 +52,7 @@ function computeProductionBarsForPersona({
   const bars: StackedBarsBar[] = productionTypes.map((type) => ({
     key: type,
     label: t(`graph.energy.${type}`),
-    total: persona.production
+    total: persona.productionDisplayed
       .filter((datum) => datum.type === type)
       .map((datum) => datum.value)
       .reduce(sumReducer, 0),

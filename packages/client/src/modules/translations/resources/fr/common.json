@@ -263,7 +263,9 @@
   "graph.energy.terrestrial": "Production terrestre",
   "graph.energy.nuclear": "Nucléaire",
 
-  "graph.energy-balance-graph.title": "Évolution de l'équilibre énergétique",
+  "graph.energy-balance-for-player-graph.title": "Évolution de l'équilibre énergétique",
+
+  "graph.energy-balance-for-team-graph.title": "Équilibre énergétique de l'équipe",
 
   "graph.materials.steel": "Acier",
   "graph.materials.cement": "Ciment",

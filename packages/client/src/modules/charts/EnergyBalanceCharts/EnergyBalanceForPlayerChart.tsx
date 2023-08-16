@@ -77,7 +77,7 @@ function EnergyBalanceForPlayerChart({
 
     return (
       <StackedBars
-        title={t("graph.energy-balance-graph.title")}
+        title={t("graph.energy-balance-for-player-graph.title")}
         stacks={stacks}
         onClick={(chartState) => {
           if (chartState?.activeTooltipIndex != null) {
