@@ -3,7 +3,6 @@ import _ from "lodash";
 import React, { useMemo, useState } from "react";
 import {
   StackedBars,
-  StackedBarsBar,
   StackedBarsStackData,
   StackedBarsStacks,
 } from "../StackedBars";
@@ -19,6 +18,7 @@ import {
   getStackName,
 } from "./utils";
 import { EnergyBalanceDetailsForPlayerGraph } from "./EnergyBalanceDetailsForPlayerGraph";
+import { buildStack } from "../utils";
 
 export { EnergyBalanceForPlayerChart };
 
@@ -51,18 +51,14 @@ function EnergyBalanceForPlayerChart({
         stepDatum.type === "consumption"
           ? computeConsumptionBarsForPersona
           : computeProductionBarsForPersona;
-      const bars: StackedBarsBar[] = computeBars({
-        persona: getPersonaAtStep(stepDatum.step),
-        t,
-      });
-      const total = _.sumBy(bars, "total");
-      const label = getStackName({ stepDatum, t });
 
-      return {
-        label,
-        total,
-        bars,
-      };
+      return buildStack({
+        bars: computeBars({
+          persona: getPersonaAtStep(stepDatum.step),
+          t,
+        }),
+        label: getStackName({ stepDatum, t }),
+      });
     });
 
     const stacks: StackedBarsStacks = {
