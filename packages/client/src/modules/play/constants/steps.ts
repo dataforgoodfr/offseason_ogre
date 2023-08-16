@@ -6,6 +6,7 @@ export {
   STEPS,
   getStepId,
   getStepIndexById,
+  getStepTypes,
   isStepOfType,
 };
 export type { GameStepType, GameStepId, GameStep };
@@ -82,4 +83,10 @@ function getStepIndexById(id: GameStepId): number {
 
 function isStepOfType(step: number, type: GameStepType) {
   return step === 0 || step === STEPS.length - 1 || STEPS[step]?.type === type;
+}
+
+function getStepTypes(step: number): GameStepType[] {
+  return (["consumption", "production"] as const).filter((type) =>
+    isStepOfType(step, type)
+  );
 }

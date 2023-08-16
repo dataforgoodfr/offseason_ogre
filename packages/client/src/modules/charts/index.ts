@@ -4,6 +4,7 @@ import {
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
 } from "./DetailsEnergyBars";
+import { EnergyBalanceForPlayerChart } from "./EnergyBalanceForPlayerChart";
 import { ResourcesPerProductionTypeChart } from "./ResourcesPerProductionTypeChart";
 import { ResourcesPerStepChart } from "./ResourcesPerStepChart";
 
@@ -12,6 +13,7 @@ export {
   LineEvolution,
   DetailsEnergyConsumptionBars,
   DetailsEnergyProductionBars,
+  EnergyBalanceForPlayerChart,
   ResourcesPerProductionTypeChart,
   ResourcesPerStepChart,
 };

@@ -263,6 +263,8 @@
   "graph.energy.terrestrial": "Production terrestre",
   "graph.energy.nuclear": "Nucléaire",
 
+  "graph.energy-balance-graph.title": "Évolution de l'équilibre énergétique",
+
   "graph.materials.steel": "Acier",
   "graph.materials.cement": "Ciment",
   "graph.materials.glass": "Verre",

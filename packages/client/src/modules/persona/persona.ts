@@ -25,8 +25,11 @@ interface Persona {
   points: number;
   consumption: readonly ConsumptionDatum[];
   production: ProductionDatum[];
+  productionDisplayed: ProductionDatum[];
   materials: PhysicalResourceNeedDatum[];
+  materialsDisplayed: PhysicalResourceNeedDatum[];
   metals: PhysicalResourceNeedDatum[];
+  metalsDisplayed: PhysicalResourceNeedDatum[];
 }
 
 const buildInitialPersona = (
@@ -58,6 +61,8 @@ const buildInitialPersona = (
     }
   );
 
+  const productionDisplayed = production.filter((p) => !p.revealOnStep);
+
   const carbonProductionElectricMix =
     computeCarbonProductionElectricMix(production);
   const carbonFootprint = computeCarbonFootprint(
@@ -70,7 +75,17 @@ const buildInitialPersona = (
     teamActions,
     productionActionById
   );
+  const materialsDisplayed = computeMaterials(
+    productionDisplayed,
+    teamActions,
+    productionActionById
+  );
   const metals = computeMetals(production, teamActions, productionActionById);
+  const metalsDisplayed = computeMetals(
+    productionDisplayed,
+    teamActions,
+    productionActionById
+  );
 
   const persona: Persona = {
     budget: 13.7,
@@ -79,8 +94,11 @@ const buildInitialPersona = (
     carbonFootprint,
     consumption,
     production,
+    productionDisplayed,
     materials,
+    materialsDisplayed,
     metals,
+    metalsDisplayed,
   };
 
   return persona;

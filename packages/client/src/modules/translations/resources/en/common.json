@@ -263,6 +263,8 @@
   "graph.energy.terrestrial": "Onshore production",
   "graph.energy.nuclear": "Nuclear energy",
 
+  "graph.energy-balance-graph.title": "Evolution of energy balance",
+
   "graph.materials.steel": "Steel",
   "graph.materials.cement": "Cement",
   "graph.materials.glass": "Glass",
