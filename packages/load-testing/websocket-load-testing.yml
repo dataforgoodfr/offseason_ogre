@@ -11,6 +11,8 @@ config:
     fields:
       - "email"
       - "token"
+      - "gameId"
+      - "gameCode"
   processor: "./websocket-load-testing-flow.js"
   phases:
     - name: "Players connecting to app"
