@@ -48,7 +48,7 @@ function ResourcesPerStepChart({
   const computeBarsForPersona = useCallback(
     (persona: Persona): StackedBarsBar[] => {
       const indexBarByResourceName = (persona: Persona) =>
-        persona[resourceType].reduce(
+        persona[`${resourceType}Displayed`].reduce(
           (barIndexedByResourceName, resourceDatum) => {
             if (
               !barIndexedByResourceName[
