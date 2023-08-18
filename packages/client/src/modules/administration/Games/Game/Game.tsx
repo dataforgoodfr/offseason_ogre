@@ -1,24 +1,15 @@
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { GameInfo } from "./GameInfo";
-import { IGame } from "../../../../utils/types";
-import { ITeamWithPlayers } from "../../../../utils/types";
 import { GamePlayers } from "./GamePlayers";
-import { Animation } from "./Animation";
 import { GameTeams } from "./GameTeams";
 import { http } from "../../../../utils/request";
+import { Tabs } from "../../../common/components/Tabs";
+import { Typography } from "../../../common/components/Typography";
+import { ReactNode } from "react";
 
 export { Game };
-
-type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
 function Game() {
   const params = useParams();
@@ -33,84 +24,53 @@ function Game() {
 
   return (
     <>
-      <Box sx={{ mt: 2 }}>
+      <Box display="flex" flexDirection="column" gap={2} sx={{ mt: 2 }}>
         <Typography variant="h3" sx={{ mb: 2 }}>
-          Atelier {game?.code}
+          Gestion d'Atelier
         </Typography>
-        <GeneralInfo game={game} />
-        <Players game={game} />
-        <Preparation game={game} />
-        <AnimationAccordion game={game} />
+
+        <Box display="flex" flexDirection="column">
+          <Tabs
+            tabs={[
+              {
+                label: "Informations",
+                component: game ? (
+                  <TabWrapper>
+                    <GameInfo game={game} />
+                  </TabWrapper>
+                ) : null,
+                path: "information",
+              },
+              {
+                label: "Joueurs",
+                component: game ? (
+                  <TabWrapper>
+                    <GamePlayers game={game} />
+                  </TabWrapper>
+                ) : null,
+                path: "players",
+              },
+              {
+                label: "Équipes",
+                component: game ? (
+                  <TabWrapper>
+                    <GameTeams game={game} />
+                  </TabWrapper>
+                ) : null,
+                path: "teams",
+              },
+            ]}
+          ></Tabs>
+        </Box>
       </Box>
     </>
   );
 }
 
-function GeneralInfo({ game }: { game: IGame }) {
+function TabWrapper({ children }: { children: ReactNode }) {
   return (
-    <AccordionLayout title="Informations générales">
-      {game && <GameInfo game={game} />}
-    </AccordionLayout>
-  );
-}
-
-function Players({ game }: { game: IGame }) {
-  return (
-    <AccordionLayout title="Joueurs">
-      {game && <GamePlayers game={game} />}
-    </AccordionLayout>
-  );
-}
-
-function Preparation({ game }: { game: IGame }) {
-  return (
-    <AccordionLayout title="Préparation">
-      {game && <GameTeams game={game} />}
-    </AccordionLayout>
-  );
-}
-
-function AnimationAccordion({ game }: { game: IGameWithTeams }) {
-  return (
-    <AccordionLayout title="Animation">
-      {game && <Animation game={game} />}
-    </AccordionLayout>
-  );
-}
-
-function AccordionLayout({
-  children,
-  title,
-}: {
-  children: JSX.Element;
-  title: string;
-}) {
-  return (
-    <Accordion
-      sx={{
-        mb: 2,
-      }}
-    >
-      <AccordionSummary
-        expandIcon={<ArrowForwardIosIcon />}
-        aria-controls="infobh-content"
-        id="infobh-header"
-        sx={{
-          backgroundColor: (theme) => theme.palette.primary.main,
-          "& .MuiAccordionSummary-expandIconWrapper": {
-            color: "white",
-          },
-          "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
-            transform: "rotate(90deg)",
-          },
-          "& .MuiAccordionSummary-content": {
-            color: (theme) => theme.palette.secondary.main,
-          },
-        }}
-      >
-        <Typography sx={{ width: "33%", flexShrink: 0 }}>{title}</Typography>
-      </AccordionSummary>
-      <AccordionDetails sx={{ pt: 2 }}>{children}</AccordionDetails>
-    </Accordion>
+    <Box p={2} sx={{ backgroundColor: "white", borderRadius: "0 8px 8px 8px" }}>
+      {children}
+    </Box>
   );
 }

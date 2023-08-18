@@ -48,19 +48,26 @@ function Button({
       return {
         props: {
           variant: "contained",
-          color: "secondary",
+        },
+        sx: {
+          backgroundColor: `${theme.palette.components.button.primary.backgroundColor} !important`,
+          color: `${theme.palette.components.button.primary.color} !important`,
         },
       };
     }
     return {
       props: {
-        color: "primary",
+        variant: "contained",
+      },
+      sx: {
+        backgroundColor: `${theme.palette.components.button.secondary.backgroundColor} !important`,
+        color: `${theme.palette.components.button.secondary.color} !important`,
       },
     };
   }, [disabled, theme, type]);
   const loaderColor = useMemo(
-    () => (type === "primary" ? "primary" : "secondary"),
-    [type]
+    () => buttonProps.sx?.color || "black",
+    [buttonProps]
   );
 
   const onClick = useMemo(() => {
@@ -87,7 +94,7 @@ function Button({
         width,
       }}
     >
-      {loading && <CircularProgress color={loaderColor} size={16} />}
+      {loading && <CircularProgress sx={{ color: loaderColor }} size={16} />}
       {iconName && !loading && (
         <Icon
           name={iconName}

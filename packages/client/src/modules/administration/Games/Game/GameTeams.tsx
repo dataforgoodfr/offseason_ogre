@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -26,6 +25,7 @@ import { ErrorAlert, SuccessAlert } from "../../../alert";
 import { useTranslation } from "../../../translations/useTranslation";
 import { I18nTranslateFunction } from "../../../translations";
 import { http } from "../../../../utils/request";
+import { Button } from "../../../common/components/Button";
 
 export { GameTeams };
 
@@ -167,18 +167,12 @@ function GameTeams({ game }: { game: IGame }): JSX.Element {
               onClick={() =>
                 createTeamsMutation.mutate({ quantity: Number(teamsQuantity) })
               }
-              variant="contained"
-              sx={{ marginRight: "auto", ml: 2, height: "80%" }}
             >
               {t("cta.set-team-count")}
             </Button>
           </Grid>
           <Grid container alignItems="center" sx={{ pb: 2, pt: 2 }}>
-            <Button
-              onClick={() => orderPlayersMutation.mutate()}
-              variant="contained"
-              sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
-            >
+            <Button onClick={() => orderPlayersMutation.mutate()}>
               {t("cta.assign-team-to-players")}
             </Button>
           </Grid>
@@ -291,9 +285,7 @@ function DeleteActionCellItem({
           {t("modal.remove-team.title")}
         </DialogTitle>
         <DialogActions>
-          <Button autoFocus onClick={() => setIsDialogOpen(false)}>
-            {t("cta.no")}
-          </Button>
+          <Button onClick={() => setIsDialogOpen(false)}>{t("cta.no")}</Button>
           <Button
             onClick={() => {
               removeTeam(teamId);

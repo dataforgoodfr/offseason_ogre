@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
 import { useAuth } from "../../../auth/authProvider";
 import {
   Admins,
@@ -38,11 +38,17 @@ function AuthenticatedApp() {
     <Routes>
       <Route path="administration" element={<AdministrationLayout />}>
         <Route path="games" element={<Games />} />
-        <Route path="games/:id" element={<Game />} />
-        <Route
-          path="games/:id/form-verification"
-          element={<FormVerification />}
-        />
+        <Route path="games/:id" element={<Outlet />}>
+          <Route path="information" element={<Game />} />
+          <Route path="players" element={<Game />} />
+          <Route
+            path="players/form-verification"
+            element={<FormVerification />}
+          />
+          <Route path="teams" element={<Game />} />
+          <Route path="" element={<Navigate to="information" />} />
+          <Route path="*" element={<Navigate to="information" />} />
+        </Route>
         <Route path="admins" element={<Admins />} />
         <Route path="players" element={<Players />} />
         <Route path="teachers" element={<Teachers />} />

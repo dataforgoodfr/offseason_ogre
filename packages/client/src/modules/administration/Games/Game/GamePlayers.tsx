@@ -1,5 +1,4 @@
 import {
-  Button,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -36,6 +35,7 @@ import { includes, kebabCase } from "lodash";
 import { pipe } from "../../../../lib/fp";
 import { FormStatus } from "../../../play/Personalization/models/form";
 import { http } from "../../../../utils/request";
+import { Button } from "../../../common/components/Button";
 
 export { GamePlayers };
 
@@ -106,45 +106,32 @@ function GamePlayers({ game }: { game: IGame }): JSX.Element {
 
   return (
     <>
-      <Grid container>
-        <Grid
-          container
-          alignItems="center"
-          sx={{ float: "right", pb: 2, pt: 2, height: "100%" }}
-        >
+      <Grid container gap={2}>
+        <Grid container alignItems="center" justifyContent="space-between">
           {!hasGameStarted(game.status) && (
             <>
               <Button
+                iconName={game?.status !== "ready" ? "lock" : "lock-open"}
                 onClick={() =>
                   blockForms.mutate(game && game.status !== "ready")
                 }
-                variant="contained"
-                sx={{ marginRight: "auto", marginLeft: "auto", height: "100%" }}
               >
-                <Icon
-                  name={game?.status !== "ready" ? "lock" : "lock-open"}
-                  sx={{ mr: 2 }}
-                />{" "}
                 {game && game.status !== "ready"
                   ? t("cta.lock-forms")
                   : t("cta.unlock-forms")}
               </Button>
               <Button
                 onClick={() =>
-                  navigate(`/administration/games/${gameId}/form-verification`)
+                  navigate(
+                    `/administration/games/${gameId}/players/form-verification`
+                  )
                 }
-                variant="contained"
-                sx={{ mr: "auto", ml: "auto", height: "80%" }}
               >
                 {t("cta.check-forms")}
               </Button>
             </>
           )}
-          <Button
-            onClick={() => retrieveEmails()}
-            variant="contained"
-            sx={{ marginRight: "auto", ml: "auto", height: "80%" }}
-          >
+          <Button onClick={() => retrieveEmails()}>
             {t("cta.retrieve-emails")}
           </Button>
         </Grid>
@@ -365,9 +352,7 @@ function DeleteActionCellItem({
           {t("modal.remove-player.title")}
         </DialogTitle>
         <DialogActions>
-          <Button autoFocus onClick={() => setIsDialogOpen(false)}>
-            {t("cta.no")}
-          </Button>
+          <Button onClick={() => setIsDialogOpen(false)}>{t("cta.no")}</Button>
           <Button
             onClick={() => {
               removePlayer(userId);
