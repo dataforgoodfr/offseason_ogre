@@ -86,6 +86,9 @@ const baseThemeOptions: ThemeOptions = {
           color: blue,
         },
       },
+      checkbox: {
+        fillColor: "#C4C4C4",
+      },
       tag: {
         secondary: {
           backgroundColor: "#efefef",
@@ -114,6 +117,9 @@ const adminThemeOptions: ThemeOptions = mergeDeep(baseThemeOptions, {
           backgroundColor: "white",
           color: blue,
         },
+      },
+      checkbox: {
+        fillColor: blue,
       },
     },
   },
@@ -172,6 +178,9 @@ declare module "@mui/material/styles" {
           backgroundColor: string;
           color: string;
         };
+      };
+      checkbox: {
+        fillColor: string;
       };
       tag: {
         secondary: {

@@ -26,12 +26,11 @@ const CheckboxController = <T extends FieldValues>({
   );
 };
 
-const CustomCheckbox = styled(CheckboxLib)(() => ({
-  // TODO: adapt color once style PR #312 merged.
-  // path: {
-  //   color: "#C4C4C4",
-  //   fill: "#C4C4C4",
-  // },
+const CustomCheckbox = styled(CheckboxLib)(({ theme }) => ({
+  path: {
+    color: theme.palette.components.checkbox.fillColor,
+    fill: theme.palette.components.checkbox.fillColor,
+  },
 }));
 
 export default CheckboxController;
