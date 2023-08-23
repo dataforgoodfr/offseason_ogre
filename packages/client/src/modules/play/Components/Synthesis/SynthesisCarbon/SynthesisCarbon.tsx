@@ -6,12 +6,12 @@ import {
 import { useTranslation } from "../../../../translations";
 import { synthesisConstants } from "../../../playerActions/constants/synthesis";
 import { Icon } from "../../../../common/components/Icon";
-import { useTeamValues } from "../../../context/playContext";
 import { ITeam } from "../../../../../utils/types";
 import { Typography } from "../../../../common/components/Typography";
 import { TagNumber } from "../../../../common/components/TagNumber";
 import { Tag } from "../../../../common/components/Tag";
 import { CardStyled } from "../Synthesis.common.styles";
+import { useTeamValuesForTeam } from "../../../context/hooks/shared";
 
 const CARBON_FOOTPRINT_TONS_THRESHOLD = 2;
 
@@ -19,8 +19,7 @@ export default SynthesisCarbon;
 
 function SynthesisCarbon({ team }: { team: ITeam | null }) {
   const { t } = useTranslation();
-  const { getTeamById } = useTeamValues();
-  const teamValues = getTeamById(team?.id);
+  const { teamValues } = useTeamValuesForTeam({ teamId: team?.id });
   const teamCarbonFootprintInKgPerDay = teamValues?.carbonFootprint || 0;
   const carbonFootprintReduction = teamValues?.carbonFootprintReduction || 0;
 
