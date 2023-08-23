@@ -20,6 +20,7 @@ import { Icon } from "../../../common/components/Icon";
 import { CopyToClipboard } from "../../../common/components/CopyToClipboard";
 import { Launch } from "./components/Launch";
 import { useAlerts } from "../../../alert/AlertProvider";
+import { Tag } from "../../../common/components/Tag";
 
 export { GameInfo };
 
@@ -74,6 +75,8 @@ function GameInfo({ game }: GameInfoProps) {
 }
 
 function GameInfoRead({ additionalActions, game }: GameInfoStateProps) {
+  const { t } = useTranslation();
+
   const query = useQuery(`/api/users/${game.teacherId}`, () => {
     return http.get<undefined, { data: { data: any } }>(
       `/api/users/${game.teacherId}`
@@ -88,26 +91,37 @@ function GameInfoRead({ additionalActions, game }: GameInfoStateProps) {
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Box display="flex" flexDirection="column" gap={1}>
-        <Typography bold>{game?.name}</Typography>
-        {game?.date && (
-          <Box display="flex" alignItems="center" gap={1}>
-            <Icon name="date" />
-            <Typography>
-              Date : Le {new Date(game?.date).toLocaleDateString()} à{" "}
-              {new Date(game?.date).toLocaleTimeString()}
-            </Typography>
-          </Box>
-        )}
-        <Box display="flex" alignItems="center" gap={1} width="fit-content">
-          <Icon name="code" />
-          <Typography>Code :</Typography>
-          <CopyToClipboard value={game?.code}></CopyToClipboard>
+        <Box display="flex" alignItems="center" gap={1}>
+          {game?.isTest && (
+            <Tag type="secondary">{t("game.mode.test").toUpperCase()}</Tag>
+          )}
+          <Typography>{game?.name}</Typography>
         </Box>
-        {game?.description && <Typography>{game?.description}</Typography>}
-      </Box>
 
-      <Box display="flex" flexDirection="column" gap={1}>
-        <Typography>Animateur.ice : {teacherName}</Typography>
+        {game.isTest ? (
+          <>
+            <Typography>Cet atelier est un atelier test</Typography>
+          </>
+        ) : (
+          <>
+            {game?.date && (
+              <Box display="flex" alignItems="center" gap={1}>
+                <Icon name="date" />
+                <Typography>
+                  Date : Le {new Date(game?.date).toLocaleDateString()} à{" "}
+                  {new Date(game?.date).toLocaleTimeString()}
+                </Typography>
+              </Box>
+            )}
+            <Box display="flex" alignItems="center" gap={1} width="fit-content">
+              <Icon name="code" />
+              <Typography>Code :</Typography>
+              <CopyToClipboard value={game?.code}></CopyToClipboard>
+            </Box>
+            {game?.description && <Typography>{game?.description}</Typography>}
+            <Typography>Animateur.ice : {teacherName}</Typography>
+          </>
+        )}
       </Box>
 
       {game && (
