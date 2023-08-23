@@ -1,6 +1,7 @@
 import { Personalization, Players } from "@prisma/client";
 import { database } from "../../../database";
 import * as playerActionsServices from "../../actions/services/playerActions";
+import { batchItems } from "../../../lib/array";
 
 const model = database.players;
 type Model = Players;
@@ -9,13 +10,23 @@ export { services };
 
 const crudServices = {
   queries: model,
+  getMany,
   remove,
+  removeMany,
   setDefaultProfiles,
   updateMany,
   validateProfiles,
 };
 
 const services = { ...crudServices };
+
+async function getMany(
+  partial: NonNullable<Parameters<typeof model.findMany>[0]>["where"] = {}
+): Promise<Model[]> {
+  return model.findMany({
+    where: { ...partial },
+  });
+}
 
 async function setDefaultProfiles(
   gameId: number,
@@ -111,5 +122,14 @@ async function remove({ gameId, userId }: { gameId: number; userId: number }) {
   await playerActionsServices.removeForPlayer({ gameId, userId });
   await database.players.delete({
     where: { userId_gameId: { gameId, userId } },
+  });
+}
+
+async function removeMany(players: { gameId: number; userId: number }[]) {
+  const REMOVE_BATCH_SIZE = 25;
+
+  await batchItems(players || [], REMOVE_BATCH_SIZE, async (playerBatch) => {
+    const processingPlayers = playerBatch.map(remove);
+    await Promise.all(processingPlayers);
   });
 }

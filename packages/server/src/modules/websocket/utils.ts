@@ -1,10 +1,9 @@
 /* eslint-disable no-param-reassign */
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
-import { RoleName } from "@prisma/client";
+import { Game, RoleName } from "@prisma/client";
 import { safe } from "../../lib/fp";
 import { setSessionItem, startSession } from "../../lib/session";
-import { Game } from "../games/types";
 import { Socket, SocketData } from "./types";
 
 export { getSocketData, wrapHandler, hasFinishedStep, isGameFinished };

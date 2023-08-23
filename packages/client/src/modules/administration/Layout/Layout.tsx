@@ -12,6 +12,7 @@ import GamesIcon from "@mui/icons-material/Games";
 import PersonIcon from "@mui/icons-material/Person";
 import SchoolIcon from "@mui/icons-material/School";
 import SettingsIcon from "@mui/icons-material/Settings";
+import { OverridableComponent } from "@mui/material/OverridableComponent";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
   Button,
@@ -19,15 +20,17 @@ import {
   ListItemIcon,
   ListItemText,
   SvgIconTypeMap,
+  ThemeProvider,
   useTheme,
 } from "@mui/material";
+import { isNaN } from "lodash";
 import React, { Fragment, useMemo } from "react";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
 import { LoggedUser } from "../../auth";
 import { useAuth } from "../../auth/authProvider";
 import InvertColorsIcon from "@mui/icons-material/InvertColors";
 import { useTranslation } from "../../translations/useTranslation";
 import { Icon } from "../../common/components/Icon";
+import { adminTheme } from "../../../utils/theme";
 
 const drawerWidth: number = 240;
 
@@ -49,76 +52,98 @@ function Layout() {
   }
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <LayoutAppBar>
-        <Toolbar
+    <ThemeProvider theme={adminTheme}>
+      <Box sx={{ display: "flex" }}>
+        <LayoutAppBar>
+          <Toolbar
+            sx={{
+              pr: "24px", // keep right padding when drawer closed
+            }}
+          >
+            {isNestedRoute ? (
+              <BackButton to={buildPathToPreviousPage(routeMatch)} />
+            ) : null}
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              noWrap
+              sx={{ flexGrow: 1 }}
+            >
+              Administration
+            </Typography>
+            <LoggedUser />
+          </Toolbar>
+        </LayoutAppBar>
+        <LayoutDrawer>
+          <>
+            <Link to="/">
+              <Toolbar
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <InvertColorsIcon
+                  color="primary"
+                  style={{
+                    fontSize: theme.spacing(5),
+                  }}
+                />
+                <Typography color="primary" variant="h4">
+                  Ogre
+                </Typography>
+              </Toolbar>
+            </Link>
+            <Divider />
+            <Navigation />
+          </>
+        </LayoutDrawer>
+        <Box
+          component="main"
           sx={{
-            pr: "24px", // keep right padding when drawer closed
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: "100vh",
+            overflow: "auto",
           }}
         >
-          {isNestedRoute ? (
-            <BackButton to={buildPathToPreviousPage(routeMatch)} />
-          ) : null}
-          <Typography
-            component="h1"
-            variant="h6"
-            color="inherit"
-            noWrap
-            sx={{ flexGrow: 1 }}
-          >
-            Administration
-          </Typography>
-          <LoggedUser />
-        </Toolbar>
-      </LayoutAppBar>
-      <LayoutDrawer>
-        <>
-          <Link to="/">
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <InvertColorsIcon
-                color="primary"
-                style={{
-                  fontSize: theme.spacing(5),
-                }}
-              />
-              <Typography color="primary" variant="h4">
-                Ogre
-              </Typography>
-            </Toolbar>
-          </Link>
-          <Divider />
-          <Navigation />
-        </>
-      </LayoutDrawer>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: "100vh",
-          overflow: "auto",
-        }}
-      >
-        <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
-          <Outlet />
-        </Container>
+          <Toolbar />
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4, ml: "auto" }}>
+            <Outlet />
+          </Container>
+        </Box>
       </Box>
-    </Box>
+    </ThemeProvider>
   );
 }
 
 function buildPathToPreviousPage(match: PathMatch | null) {
-  return match?.pathname.split("/").slice(0, -1).join("/") || "";
+  const pathChunks = match?.pathname.split("/") || [];
+
+  /**
+   * Ignore path chunks that are integers because they are considered to be ids.
+   */
+  let endIdx = Math.max(pathChunks.length - 2, 0);
+  while (endIdx > 0) {
+    const isChunkInteger = !isNaN(parseInt(pathChunks[endIdx], 10));
+    if (!isChunkInteger) {
+      break;
+    }
+    endIdx -= 1;
+  }
+
+  const newPath =
+    match?.pathname
+      .split("/")
+      .slice(0, endIdx + 1)
+      .join("/") || "";
+
+  return newPath;
 }
 
 function BackButton({ to }: { to: string }): JSX.Element {

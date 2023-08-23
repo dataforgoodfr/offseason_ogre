@@ -1,6 +1,6 @@
 import { Box, Grid, useTheme } from "@mui/material";
 import { PlayBox } from "../Components";
-import { TeamIdToValues, usePlay, useTeamValues } from "../context/playContext";
+import { TeamIdToValues, usePlay } from "../context/playContext";
 import { ConsumptionStats, ProductionStats } from "./ProdStats";
 import { Typography } from "../../common/components/Typography";
 import { Icon } from "../../common/components/Icon";
@@ -13,6 +13,7 @@ import {
 import { useTranslation } from "../../translations/useTranslation";
 import { I18nTranslateFunction } from "../../translations";
 import { IEnrichedGame, ITeam } from "../../../utils/types";
+import { useTeamValues } from "../context/hooks/shared";
 
 export { StatsConsole };
 

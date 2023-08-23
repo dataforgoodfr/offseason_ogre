@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/authProvider";
 import GameStepper from "../../common/components/Stepper";
 import { PlayBox } from "../Components";
-import { useCurrentStep, usePlay, useTeamValues } from "../context/playContext";
+import { useCurrentStep, usePlay } from "../context/playContext";
 import { Icon } from "../../common/components/Icon";
 import {
   formatPoints,
@@ -26,6 +26,7 @@ import { useTranslation } from "../../translations/useTranslation";
 import { useCurrentPlayer, usePersona } from "../context/hooks/player";
 import { Button } from "../../common/components/Button";
 import { useMemo } from "react";
+import { useTeamValues } from "../context/hooks/shared";
 
 export { PlayerHeader };
 

@@ -1,17 +1,16 @@
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { IGame, ITeamWithPlayers } from "../../../../../utils/types";
-import { SuccessAlert } from "../../../../alert";
 import { useNavigate } from "react-router-dom";
-import { hasGameStarted } from "../../utils";
-import { Button } from "../../../../common/components/Button";
-import { Dialog } from "../../../../common/components/Dialog";
-import { Typography } from "../../../../common/components/Typography";
-import { NO_TEAM } from "../../../../common/constants/teams";
-import { usePlayers } from "../services/queries";
-import { t } from "../../../../translations";
-import { http } from "../../../../../utils/request";
+import { IGame, ITeamWithPlayers } from "../../../../../../utils/types";
+import { SuccessAlert } from "../../../../../alert";
+import { hasGameStarted } from "../../../utils";
+import { Button } from "../../../../../common/components/Button";
+import { Dialog } from "../../../../../common/components/Dialog";
+import { Typography } from "../../../../../common/components/Typography";
+import { NO_TEAM } from "../../../../../common/constants/teams";
+import { usePlayers } from "../../services/queries";
+import { t } from "../../../../../translations";
+import { http } from "../../../../../../utils/request";
 
 type IGameWithTeams = IGame & { teams: ITeamWithPlayers[] };
 
@@ -42,7 +41,7 @@ const getPlayersWithUnvalidatedFormCount = (players: any[], gameId: number) => {
     .filter(Boolean).length;
 };
 
-export default function Launch({ game }: { game: IGameWithTeams }) {
+export function Launch({ game }: { game: IGameWithTeams }) {
   const queryClient = useQueryClient();
   const [errorDialogOpen, setErrorDialogOpen] = useState(false);
   const [successDialogOpen, setSuccessDialogOpen] = useState(false);
@@ -99,10 +98,10 @@ export default function Launch({ game }: { game: IGameWithTeams }) {
     <div>
       {launchGameMutation.isSuccess && <SuccessAlert />}
       <Button
+        iconName="launch"
         loading={playersQuery.isLoading || launchGameMutation.isLoading}
         onClick={handleLaunchGame}
       >
-        <RocketLaunchIcon sx={{ height: "1rem" }} />
         {!hasGameStarted(game.status) ? "Animer" : "Rejoindre"}
       </Button>
       <Dialog

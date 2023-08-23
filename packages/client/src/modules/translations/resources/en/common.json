@@ -4,6 +4,7 @@
   "cta.cancel": "Cancel",
   "cta.check-forms": "Vérifier les formulaires",
   "cta.close": "Close",
+  "cta.confirm": "Confirm",
   "cta.create-profile": "Create my profile",
   "cta.delete": "Supprimer",
   "cta.retrieve-emails": "Récupérer les emails",
@@ -31,6 +32,7 @@
   "cta.read-synthesis": "Access synthesis",
   "cta.send-magic-link": "Send magic link",
   "cta.set-team-count": "Définir le nombre d'équipes",
+  "cta.save": "Save",
   "cta.save-draft": "Save draft",
   "cta.share-data-with-teacher": "I agree to share my data with my teacher",
   "cta.signup": "Sign up",
@@ -235,6 +237,7 @@
   "game.status.not-started": "Game not started yet",
   "game.status.playing": "En cours",
   "game.status.ready": "Prêt",
+  "game.mode.test": "Test",
 
   "admin.form.status.draft": "Brouillon",
   "admin.form.status.pending-validation": "En attente de validation",

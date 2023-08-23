@@ -3,13 +3,14 @@ import { formatBudget } from "../../../../../lib/formatter";
 import { useTranslation } from "../../../../translations";
 import { synthesisConstants } from "../../../playerActions/constants/synthesis";
 import { Icon } from "../../../../common/components/Icon";
-import { usePlay, useTeamValues } from "../../../context/playContext";
+import { usePlay } from "../../../context/playContext";
 import { ITeam } from "../../../../../utils/types";
 import { getDaysToEnergyShiftTargetYear } from "../../../../../lib/time";
 import { Typography } from "../../../../common/components/Typography";
 import { Tag } from "../../../../common/components/Tag";
 import { ENERGY_SHIFT_TARGET_YEAR } from "../../../../common/constants";
 import { CardStyled } from "../Synthesis.common.styles";
+import { useTeamValuesForTeam } from "../../../context/hooks/shared";
 
 export default SynthesisBudget;
 
@@ -17,8 +18,7 @@ function SynthesisBudget({ team }: { team: ITeam | null }) {
   const { t } = useTranslation(["common", "countries"]);
   const { game } = usePlay();
   const daysTo2050 = getDaysToEnergyShiftTargetYear(new Date(game.date));
-  const { getTeamById } = useTeamValues();
-  const teamValues = getTeamById(team?.id);
+  const { teamValues } = useTeamValuesForTeam({ teamId: team?.id });
 
   const budget = teamValues?.budgetSpent || 0;
 

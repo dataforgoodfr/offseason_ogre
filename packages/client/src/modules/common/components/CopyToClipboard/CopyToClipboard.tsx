@@ -8,10 +8,10 @@ import { Host } from "./CopyToClipboard.styles";
 export { CopyToClipboard };
 
 function CopyToClipboard({
-  value,
+  value = "",
   className,
 }: {
-  value: string;
+  value?: string;
   className?: string;
 }) {
   const { t } = useTranslation();

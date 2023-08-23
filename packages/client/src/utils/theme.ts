@@ -1,16 +1,21 @@
 import {
   GlobalStylesProps,
+  Theme,
+  ThemeOptions,
   createTheme,
   responsiveFontSizes,
 } from "@mui/material";
+import mergeDeep from "deepmerge";
+import { pipe } from "../lib/fp";
 
 export type {
+  Theme,
   ThemeVariant,
   EnergyPalette,
   ProductionPalette,
   MaterialsPalette,
 };
-export { globalStyles, theme };
+export { adminTheme, globalStyles, theme };
 
 type ThemeVariant = "light" | "dark" | "system";
 
@@ -19,7 +24,7 @@ const yellow = "#f9c74f";
 const lightBlue = "#014EA6";
 const white = "#FFFFFF";
 
-let theme = createTheme({
+const baseThemeOptions: ThemeOptions = {
   palette: {
     primary: {
       main: blue,
@@ -68,10 +73,21 @@ let theme = createTheme({
     },
     components: {
       button: {
+        primary: {
+          backgroundColor: yellow,
+          color: blue,
+        },
+        secondary: {
+          backgroundColor: blue,
+          color: yellow,
+        },
         disabled: {
           backgroundColor: "#b8933a",
           color: blue,
         },
+      },
+      checkbox: {
+        fillColor: "#C4C4C4",
       },
       tag: {
         secondary: {
@@ -87,8 +103,34 @@ let theme = createTheme({
       default: 64,
     },
   },
+};
+
+const adminThemeOptions: ThemeOptions = mergeDeep(baseThemeOptions, {
+  palette: {
+    components: {
+      button: {
+        primary: {
+          backgroundColor: blue,
+          color: yellow,
+        },
+        secondary: {
+          backgroundColor: "white",
+          color: blue,
+        },
+      },
+      checkbox: {
+        fillColor: blue,
+      },
+    },
+  },
 });
-theme = responsiveFontSizes(theme);
+
+const theme = createCustomTheme(baseThemeOptions);
+const adminTheme = createCustomTheme(adminThemeOptions);
+
+function createCustomTheme(options: ThemeOptions): Theme {
+  return pipe(options, createTheme, responsiveFontSizes);
+}
 
 /**
  * Define styles and classes available in the entire app.
@@ -127,10 +169,21 @@ declare module "@mui/material/styles" {
     };
     components: {
       button: {
+        primary: {
+          backgroundColor: string;
+          color: string;
+        };
+        secondary: {
+          backgroundColor: string;
+          color: string;
+        };
         disabled: {
           backgroundColor: string;
           color: string;
         };
+      };
+      checkbox: {
+        fillColor: string;
       };
       tag: {
         secondary: {

@@ -1,5 +1,7 @@
 const config = require("./config");
 
+const USER_ACTION_COUNT = 600;
+
 module.exports = {
   testConsumptionActionsLoad,
 };
@@ -8,6 +10,8 @@ async function testConsumptionActionsLoad(page, context) {
   const userData = {
     email: context.vars.email,
     token: context.vars.token,
+    gameId: context.vars.gameId,
+    gameCode: context.vars.gameCode,
   };
 
   const localStorage = new LocalStorage(page);
@@ -19,10 +23,10 @@ async function testConsumptionActionsLoad(page, context) {
 
   await page.waitForURL(`${config.WEBSITE_URL}/play/my-games`);
 
-  await navigator.goToPlayerActionPage();
+  await navigator.goToPlayerActionPage(userData.gameId);
   const checkboxes = page.getByRole("checkbox");
 
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < USER_ACTION_COUNT; i++) {
     await checkboxes.nth(i % 5).click();
     await pause(1000);
   }
@@ -37,9 +41,9 @@ class Navigator {
     this.page = page;
   }
 
-  async goToPlayerActionPage() {
+  async goToPlayerActionPage(gameId) {
     await this.page.goto(
-      `${config.WEBSITE_URL}/play/games/${config.GAME_ID}/persona/actions`
+      `${config.WEBSITE_URL}/play/games/${gameId}/persona/actions`
     );
   }
 
