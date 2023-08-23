@@ -1,12 +1,10 @@
-import { Prisma } from "@prisma/client";
+import { Game, Prisma } from "@prisma/client";
 import { database } from "../../../database";
 import { NO_TEAM } from "../../teams/constants/teams";
 import { services as teamServices } from "../../teams/services";
 import { services as playerServices } from "../../players/services";
-import { Game } from "../types";
 import { register } from "./register";
 import { createBusinessError } from "../../utils/businessError";
-import { batchItems } from "../../../lib/array";
 
 const model = database.game;
 type Model = Game;
@@ -62,8 +60,6 @@ async function update(id: number, document: Partial<Omit<Model, "id">>) {
 async function remove(
   where: Parameters<typeof model.delete>[0]["where"]
 ): Promise<void> {
-  const BATCH_SIZE = 25;
-
   const game = await findOne(where, {
     include: {
       teams: {
@@ -94,15 +90,8 @@ async function remove(
     );
   }
 
-  await batchItems(game?.players || [], BATCH_SIZE, async (playerBatch) => {
-    const processingPlayers = playerBatch.map(playerServices.remove);
-    await Promise.all(processingPlayers);
-  });
-
-  await batchItems(game?.teams || [], BATCH_SIZE, async (teamBatch) => {
-    const processingTeams = teamBatch.map(teamServices.remove);
-    await Promise.all(processingTeams);
-  });
+  await playerServices.removeMany(game?.players || []);
+  await teamServices.removeMany(game?.teams || []);
 
   await model.delete({
     where,

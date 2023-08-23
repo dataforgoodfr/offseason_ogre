@@ -89,7 +89,7 @@ router.put(
       };
     },
   }),
-  asyncErrorHandler(controllers.updateGame)
+  asyncErrorHandler(controllers.updateGameController)
 );
 router.delete(
   "/:id",

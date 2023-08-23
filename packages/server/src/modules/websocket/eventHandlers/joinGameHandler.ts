@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { z } from "zod";
 import invariant from "tiny-invariant";
+import { Game } from "@prisma/client";
 import { services as usersServices } from "../../users/services";
 import { GameInitEmitted, Server, Socket } from "../types";
 import { rooms } from "../constants";
@@ -14,7 +15,6 @@ import {
   teamServices,
 } from "../services";
 import { BusinessError } from "../../utils/businessError";
-import { Game } from "../../games/types";
 import { User } from "../../users/types";
 
 export { handleJoinGame };
@@ -37,101 +37,179 @@ function handleJoinGame(io: Server, socket: Socket) {
       socket.data.user = user;
       socket.data.role = userRole;
 
-      let gameInitData: GameInitEmitted;
-      if (await hasPlayerAccess(user, game)) {
-        const player = await playerServices.findOne(gameId, user.id, {
+      if (game.isTest) {
+        await joinTestGame({ socket, game, user });
+      } else {
+        await joinGame({ socket, game, user });
+      }
+    })
+  );
+}
+
+async function joinGame({
+  socket,
+  game,
+  user,
+}: {
+  socket: Socket;
+  game: Game;
+  user: User;
+}) {
+  let gameInitData: GameInitEmitted;
+  if (await hasPlayerAccess(user, game)) {
+    const player = await playerServices.findOne(game.id, user.id, {
+      include: {
+        user: true,
+        actions: {
+          orderBy: {
+            actionId: "asc",
+          },
+        },
+        profile: {
+          include: {
+            personalization: true,
+          },
+        },
+      },
+    });
+    invariant(
+      player,
+      `Could not find player for game ${game.id} and user ${user.id}`
+    );
+
+    const [team, consumptionActions, productionActions] = await Promise.all([
+      teamServices.findOne(player.teamId, {
+        include: {
+          actions: {
+            orderBy: {
+              actionId: "asc",
+            },
+          },
+        },
+      }),
+      actionServices.findAll(),
+      productionActionServices.findAll(),
+    ]);
+    invariant(team, `Could not find team ${player.teamId}`);
+
+    socket.join(`${game.id}`);
+    socket.join(rooms.user(game.id, user.id));
+    socket.join(rooms.players(game.id));
+    socket.join(rooms.team(game.id, player.teamId));
+
+    gameInitData = {
+      game,
+      consumptionActions,
+      productionActions,
+      players: [player],
+      teams: [team],
+    };
+  } else if (await hasTeacherAccess(user, game)) {
+    const [players, teams, consumptionActions, productionActions] =
+      await Promise.all([
+        playerServices.findMany(game.id, {
           include: {
             user: true,
-            actions: {
-              orderBy: {
-                actionId: "asc",
-              },
-            },
+            actions: true,
             profile: {
               include: {
                 personalization: true,
               },
             },
           },
-        });
-        invariant(
-          player,
-          `Could not find player for game ${gameId} and user ${user.id}`
-        );
+        }),
+        teamServices.findMany(game.id, {
+          include: {
+            actions: true,
+          },
+        }),
+        actionServices.findAll(),
+        productionActionServices.findAll(),
+      ]);
 
-        const [team, consumptionActions, productionActions] = await Promise.all(
-          [
-            teamServices.findOne(player.teamId, {
+    socket.join(`${game.id}`);
+    socket.join(rooms.user(game.id, user.id));
+    socket.join(rooms.teachers(game.id));
+
+    gameInitData = {
+      game,
+      consumptionActions,
+      productionActions,
+      players,
+      teams,
+    };
+  } else {
+    socket.emit("game:leave");
+    throw new BusinessError(
+      `User ${user.id} is not authorized to join game ${game.id}`
+    );
+  }
+
+  socket.emit("game:init", gameInitData);
+}
+
+async function joinTestGame({
+  socket,
+  game,
+  user,
+}: {
+  socket: Socket;
+  game: Game;
+  user: User;
+}) {
+  let gameInitData: GameInitEmitted;
+  if (await hasTestGameAccess(user, game)) {
+    const [players, teams, consumptionActions, productionActions] =
+      await Promise.all([
+        playerServices.findMany(game.id, {
+          include: {
+            user: true,
+            actions: true,
+            profile: {
               include: {
-                actions: {
-                  orderBy: {
-                    actionId: "asc",
-                  },
-                },
+                personalization: true,
               },
-            }),
-            actionServices.findAll(),
-            productionActionServices.findAll(),
-          ]
-        );
-        invariant(team, `Could not find team ${player.teamId}`);
+            },
+          },
+        }),
+        teamServices.findMany(game.id, {
+          include: {
+            actions: true,
+          },
+        }),
+        actionServices.findAll(),
+        productionActionServices.findAll(),
+      ]);
 
-        socket.join(`${gameId}`);
-        socket.join(rooms.user(gameId, user.id));
-        socket.join(rooms.players(gameId));
-        socket.join(rooms.team(gameId, player.teamId));
+    const fakePlayer = players[0];
+    if (!fakePlayer) {
+      socket.emit("game:leave");
+      throw new BusinessError(
+        `User ${user.id} has no associated fake player for game ${game.id}`
+      );
+    }
 
-        gameInitData = {
-          game,
-          consumptionActions,
-          productionActions,
-          players: [player],
-          teams: [team],
-        };
-      } else if (await hasTeacherAccess(user, game)) {
-        const [players, teams, consumptionActions, productionActions] =
-          await Promise.all([
-            playerServices.findMany(gameId, {
-              include: {
-                user: true,
-                actions: true,
-                profile: {
-                  include: {
-                    personalization: true,
-                  },
-                },
-              },
-            }),
-            teamServices.findMany(gameId, {
-              include: {
-                actions: true,
-              },
-            }),
-            actionServices.findAll(),
-            productionActionServices.findAll(),
-          ]);
+    socket.join(`${game.id}`);
+    socket.join(rooms.user(game.id, user.id));
+    socket.join(rooms.teachers(game.id));
+    socket.join(rooms.players(game.id));
+    socket.join(rooms.team(game.id, fakePlayer.teamId));
 
-        socket.join(`${gameId}`);
-        socket.join(rooms.user(gameId, user.id));
-        socket.join(rooms.teachers(gameId));
+    gameInitData = {
+      game,
+      consumptionActions,
+      productionActions,
+      players,
+      teams,
+    };
+  } else {
+    socket.emit("game:leave");
+    throw new BusinessError(
+      `User ${user.id} is not authorized to join game ${game.id}`
+    );
+  }
 
-        gameInitData = {
-          game,
-          consumptionActions,
-          productionActions,
-          players,
-          teams,
-        };
-      } else {
-        socket.emit("game:leave");
-        throw new BusinessError(
-          `User ${user.id} is not authorized to join game ${game.id}`
-        );
-      }
-
-      socket.emit("game:init", gameInitData);
-    })
-  );
+  socket.emit("game:init", gameInitData);
 }
 
 async function hasTeacherAccess(user: User, game: Game) {
@@ -151,6 +229,14 @@ async function hasTeacherAccess(user: User, game: Game) {
 async function hasPlayerAccess(user: User, game: Game) {
   const player = await playerServices.findOne(game.id, user.id);
   if (player) {
+    return true;
+  }
+
+  return false;
+}
+
+async function hasTestGameAccess(user: User, game: Game) {
+  if (game.teacherId === user.id) {
     return true;
   }
 

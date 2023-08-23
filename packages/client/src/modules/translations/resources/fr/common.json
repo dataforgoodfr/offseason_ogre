@@ -4,6 +4,7 @@
   "cta.cancel": "Annuler",
   "cta.check-forms": "Vérifier les formulaires",
   "cta.close": "Fermer",
+  "cta.confirm": "Confirmer",
   "cta.create-profile": "Créer mon profil conso",
   "cta.delete": "Supprimer",
   "cta.retrieve-emails": "Récupérer les emails",
@@ -31,6 +32,7 @@
   "cta.read-synthesis": "Voir la synthèse",
   "cta.send-magic-link": "Envoyez moi un lien de connexion",
   "cta.set-team-count": "Définir le nombre d'équipes",
+  "cta.save": "Sauvegarder",
   "cta.save-draft": "Sauvegarder le brouillon",
   "cta.share-data-with-teacher": "J’accepte de partager mes données avec l’animateur.ice",
   "cta.signup": "Créer le compte",
@@ -235,6 +237,7 @@
   "game.status.not-started": "Pas démarré",
   "game.status.playing": "En cours",
   "game.status.ready": "Prêt",
+  "game.mode.test": "Test",
 
   "admin.form.status.draft": "Brouillon",
   "admin.form.status.pending-validation": "En attente de validation",

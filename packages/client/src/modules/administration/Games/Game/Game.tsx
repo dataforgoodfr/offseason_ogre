@@ -8,10 +8,13 @@ import { http } from "../../../../utils/request";
 import { Tabs } from "../../../common/components/Tabs";
 import { Typography } from "../../../common/components/Typography";
 import { ReactNode } from "react";
+import { Tag } from "../../../common/components/Tag";
+import { useTranslation } from "../../../translations";
 
 export { Game };
 
 function Game() {
+  const { t } = useTranslation();
   const params = useParams();
 
   const { data: result } = useQuery(`/api/games/${params.id}`, () => {
@@ -25,9 +28,12 @@ function Game() {
   return (
     <>
       <Box display="flex" flexDirection="column" gap={2} sx={{ mt: 2 }}>
-        <Typography variant="h3" sx={{ mb: 2 }}>
-          Gestion d'Atelier
-        </Typography>
+        <Box display="flex" alignItems="center" gap={2} sx={{ mb: 2 }}>
+          {game?.isTest && (
+            <Tag type="secondary">{t("game.mode.test").toUpperCase()}</Tag>
+          )}
+          <Typography variant="h3">Atelier {game?.code}</Typography>
+        </Box>
 
         <Box display="flex" flexDirection="column">
           <Tabs

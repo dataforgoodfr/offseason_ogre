@@ -1,7 +1,7 @@
 import { Box, TextField, Grid } from "@mui/material";
-import { ReactNode, useCallback, useState } from "react";
 import { Controller } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+import { ReactNode, useCallback, useState } from "react";
 import { ErrorAlert } from "../../../alert";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -9,12 +9,18 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { IGameWithTeams } from "../../../../utils/types";
 import { http } from "../../../../utils/request";
 import { useForm } from "../../../common/hooks/useForm";
+import CheckboxController from "../../../common/components/CheckboxController/CheckboxController";
+import { useDialog } from "../../../common/hooks/useDialog";
+import { Dialog } from "../../../common/components/Dialog";
+import { useTranslation } from "../../../translations";
 import { Button } from "../../../common/components/Button";
+import { getTeamQueryPath } from "./services/queries";
 import { Typography } from "../../../common/components/Typography";
 import { Icon } from "../../../common/components/Icon";
 import { CopyToClipboard } from "../../../common/components/CopyToClipboard";
 import { Launch } from "./components/Launch";
 import { useAlerts } from "../../../alert/AlertProvider";
+import { Tag } from "../../../common/components/Tag";
 
 export { GameInfo };
 
@@ -22,6 +28,7 @@ interface IGameFormProps {
   name: string;
   description?: string;
   date: string | Date;
+  isTest: boolean;
 }
 
 interface GameInfoProps {
@@ -68,6 +75,8 @@ function GameInfo({ game }: GameInfoProps) {
 }
 
 function GameInfoRead({ additionalActions, game }: GameInfoStateProps) {
+  const { t } = useTranslation();
+
   const query = useQuery(`/api/users/${game.teacherId}`, () => {
     return http.get<undefined, { data: { data: any } }>(
       `/api/users/${game.teacherId}`
@@ -82,26 +91,37 @@ function GameInfoRead({ additionalActions, game }: GameInfoStateProps) {
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Box display="flex" flexDirection="column" gap={1}>
-        <Typography bold>{game?.name}</Typography>
-        {game?.date && (
-          <Box display="flex" alignItems="center" gap={1}>
-            <Icon name="date" />
-            <Typography>
-              Date : Le {new Date(game?.date).toLocaleDateString()} à{" "}
-              {new Date(game?.date).toLocaleTimeString()}
-            </Typography>
-          </Box>
-        )}
-        <Box display="flex" alignItems="center" gap={1} width="fit-content">
-          <Icon name="code" />
-          <Typography>Code :</Typography>
-          <CopyToClipboard value={game?.code}></CopyToClipboard>
+        <Box display="flex" alignItems="center" gap={1}>
+          {game?.isTest && (
+            <Tag type="secondary">{t("game.mode.test").toUpperCase()}</Tag>
+          )}
+          <Typography>{game?.name}</Typography>
         </Box>
-        {game?.description && <Typography>{game?.description}</Typography>}
-      </Box>
 
-      <Box display="flex" flexDirection="column" gap={1}>
-        <Typography>Animateur.ice : {teacherName}</Typography>
+        {game.isTest ? (
+          <>
+            <Typography>Cet atelier est un atelier test</Typography>
+          </>
+        ) : (
+          <>
+            {game?.date && (
+              <Box display="flex" alignItems="center" gap={1}>
+                <Icon name="date" />
+                <Typography>
+                  Date : Le {new Date(game?.date).toLocaleDateString()} à{" "}
+                  {new Date(game?.date).toLocaleTimeString()}
+                </Typography>
+              </Box>
+            )}
+            <Box display="flex" alignItems="center" gap={1} width="fit-content">
+              <Icon name="code" />
+              <Typography>Code :</Typography>
+              <CopyToClipboard value={game?.code}></CopyToClipboard>
+            </Box>
+            {game?.description && <Typography>{game?.description}</Typography>}
+            <Typography>Animateur.ice : {teacherName}</Typography>
+          </>
+        )}
       </Box>
 
       {game && (
@@ -121,6 +141,13 @@ function GameInfoEdit(props: {
 }) {
   const queryClient = useQueryClient();
   const { enqueueAlert } = useAlerts();
+  const { t } = useTranslation();
+
+  const {
+    isOpen: isModeSwitchDialogOpen,
+    closeDialog: closeModeSwitchDialog,
+    openDialog: openModeSwitchDialog,
+  } = useDialog();
 
   const query = useQuery(`/api/users/${props.game.teacherId}`, () => {
     return http.get<undefined, { data: { data: any } }>(
@@ -133,11 +160,12 @@ function GameInfoEdit(props: {
       ? `${teacher?.firstName} ${teacher?.lastName}`
       : "";
 
-  const { handleSubmit, control } = useForm({
+  const { handleSubmit, control, getValues } = useForm({
     defaultValues: {
       name: props.game?.name || "",
       date: props.game?.date || new Date(),
       description: props.game?.description || "",
+      isTest: !!props.game?.isTest,
     },
   });
 
@@ -154,19 +182,30 @@ function GameInfoEdit(props: {
       onSuccess: () => {
         enqueueAlert({ severity: "success" });
         queryClient.invalidateQueries([`/api/games/${props.game.id}`]);
+        queryClient.invalidateQueries(`/api/games/${props.game.id}/players`);
+        queryClient.invalidateQueries(getTeamQueryPath(props.game.id));
         props.onSave();
       },
     }
   );
 
-  const onValid = (game: IGameFormProps) => {
+  const onFormValid = (game: IGameFormProps) => {
+    if (game.isTest !== props.game.isTest) {
+      openModeSwitchDialog();
+    } else {
+      updateGame();
+    }
+  };
+
+  const updateGame = () => {
+    const game = getValues();
     mutation.mutate(game);
   };
 
   return (
     <Box>
       {mutation.isError && <ErrorAlert message={mutation.error.message} />}
-      <form onSubmit={handleSubmit(onValid)}>
+      <form onSubmit={handleSubmit(onFormValid)}>
         <Grid container direction="column" gap={3} mb={2}>
           <Grid container direction="row" gap={2}>
             <Grid item flexGrow={1}>
@@ -235,16 +274,52 @@ function GameInfoEdit(props: {
                 )}
               />
             </Grid>
+            <Grid item xs={12}>
+              <CheckboxController
+                control={control}
+                name="isTest"
+                label="Atelier test"
+              />
+            </Grid>
           </Grid>
         </Grid>
 
         <Grid display="flex" gap={2}>
           <Button htmlType="submit" iconName="save">
-            Enregistrer
+            {t("cta.save")}
           </Button>
           {props.additionalActions}
         </Grid>
       </form>
+
+      <Dialog
+        open={isModeSwitchDialogOpen}
+        handleClose={closeModeSwitchDialog}
+        content={
+          <Box display="flex" flexDirection="column" gap={1}>
+            <Typography>
+              Changer le mode de jeu supprime tou.te.s les joueur.euse.s et les
+              équipes. L'opération est irréversible.
+            </Typography>
+            <Typography>Voulez-vous changer le mode de jeu ?</Typography>
+          </Box>
+        }
+        actions={
+          <>
+            <Button type="secondary" onClick={closeModeSwitchDialog}>
+              {t("cta.cancel")}
+            </Button>
+            <Button
+              onClick={() => {
+                closeModeSwitchDialog();
+                updateGame();
+              }}
+            >
+              {t("cta.confirm")}
+            </Button>
+          </>
+        }
+      />
     </Box>
   );
 }

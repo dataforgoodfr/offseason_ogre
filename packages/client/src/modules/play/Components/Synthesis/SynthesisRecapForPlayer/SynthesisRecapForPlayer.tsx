@@ -7,7 +7,7 @@ import SynthesisConsumption from "../SynthesisConsumption";
 
 export default SynthesisRecapForPlayer;
 
-function SynthesisRecapForPlayer({ team }: { team: ITeam }) {
+function SynthesisRecapForPlayer({ team }: { team: ITeam | null }) {
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <SynthesisConsumption />
