@@ -40,7 +40,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "yarn check-type && vite build",
     "serve": "vite preview",
     "check-type": "tsc --noEmit",
