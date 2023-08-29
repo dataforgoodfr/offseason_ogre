@@ -5,7 +5,7 @@ import {
   computeCarbonFootprint,
 } from "../play/utils/carbonFootprint";
 import { ConsumptionDatum, getConsumptionFromProfile } from "./consumption";
-import { PRODUCTION, ProductionDatum } from "./production";
+import { ProductionDatum } from "./production";
 import { computeIntermediateValues } from "./consumption/computing";
 import {
   computeMaterials,
@@ -13,6 +13,7 @@ import {
   PhysicalResourceNeedDatum,
 } from "../play/gameEngines/resourcesEngine";
 import { ProductionAction, TeamAction } from "../../utils/types";
+import { computeEnergyProduction } from "../play/utils/production";
 
 export { buildInitialPersona };
 export type { Persona };
@@ -24,8 +25,11 @@ interface Persona {
   points: number;
   consumption: readonly ConsumptionDatum[];
   production: ProductionDatum[];
+  productionDisplayed: ProductionDatum[];
   materials: PhysicalResourceNeedDatum[];
+  materialsDisplayed: PhysicalResourceNeedDatum[];
   metals: PhysicalResourceNeedDatum[];
+  metalsDisplayed: PhysicalResourceNeedDatum[];
 }
 
 const buildInitialPersona = (
@@ -42,19 +46,46 @@ const buildInitialPersona = (
     intermediateValues
   );
 
+  const production: ProductionDatum[] = Object.values(productionActionById).map(
+    (productionAction) => {
+      return {
+        name: productionAction.name,
+        type: productionAction.type,
+        carbonType: productionAction.carbonType,
+        revealOnStep: productionAction.revealOnStep,
+        value: computeEnergyProduction(
+          productionAction,
+          productionAction.defaultTeamValue
+        ),
+      };
+    }
+  );
+
+  const productionDisplayed = production.filter((p) => !p.revealOnStep);
+
   const carbonProductionElectricMix =
-    computeCarbonProductionElectricMix(PRODUCTION);
+    computeCarbonProductionElectricMix(production);
   const carbonFootprint = computeCarbonFootprint(
     carbonProductionElectricMix,
     consumption as ConsumptionDatum[]
   );
 
   const materials = computeMaterials(
-    PRODUCTION,
+    production,
     teamActions,
     productionActionById
   );
-  const metals = computeMetals(PRODUCTION, teamActions, productionActionById);
+  const materialsDisplayed = computeMaterials(
+    productionDisplayed,
+    teamActions,
+    productionActionById
+  );
+  const metals = computeMetals(production, teamActions, productionActionById);
+  const metalsDisplayed = computeMetals(
+    productionDisplayed,
+    teamActions,
+    productionActionById
+  );
 
   const persona: Persona = {
     budget: 13.7,
@@ -62,9 +93,12 @@ const buildInitialPersona = (
     points: 0,
     carbonFootprint,
     consumption,
-    production: PRODUCTION,
+    production,
+    productionDisplayed,
     materials,
+    materialsDisplayed,
     metals,
+    metalsDisplayed,
   };
 
   return persona;

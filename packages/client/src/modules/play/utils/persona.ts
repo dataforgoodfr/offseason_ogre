@@ -168,13 +168,27 @@ function computeResultsByStep(
     basePersona
   );
 
+  const newProductionDisplayed = newProduction.filter(
+    (p) => (p.revealOnStep || 0) <= step
+  );
+
   const newMaterials = computeMaterials(
     newProduction,
     teamActions,
     productionActionById
   );
+  const newMaterialsDisplayed = computeMaterials(
+    newProductionDisplayed,
+    teamActions,
+    productionActionById
+  );
   const newMetals = computeMetals(
     newProduction,
+    teamActions,
+    productionActionById
+  );
+  const newMetalsDisplayed = computeMetals(
+    newProductionDisplayed,
     teamActions,
     productionActionById
   );
@@ -199,7 +213,10 @@ function computeResultsByStep(
     actionPoints: actionPointsUsedAtCurrentStep,
     consumption: newConsumption,
     production: newProduction,
+    productionDisplayed: newProductionDisplayed,
     materials: newMaterials,
+    materialsDisplayed: newMaterialsDisplayed,
     metals: newMetals,
+    metalsDisplayed: newMetalsDisplayed,
   };
 }

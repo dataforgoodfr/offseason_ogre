@@ -1,90 +1,132 @@
 import { Box, Button, useTheme, Tooltip } from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import { useMemo } from "react";
 import { Persona } from "../../../persona/persona";
-import {
-  I18nTranslateFunction,
-  translateName,
-  useTranslation,
-} from "../../../translations";
-import { hasNuclear, roundValue } from "../../utils";
-import { usePlay } from "../../../play/context/playContext";
+import { translateName, useTranslation } from "../../../translations";
+import { roundValue } from "../../utils";
+import { Icon } from "../Icon";
 
 export { EnergyConsumptionButtons, EnergyProductionButtons };
-
-interface EnergyType {
-  color: string;
-  name: string;
-  type: string;
-}
 
 function EnergyConsumptionButtons({ persona }: { persona: Persona }) {
   const theme = useTheme();
   const { t } = useTranslation();
 
-  const energies: EnergyType[] = [
-    {
-      color: theme.palette.energy.grey,
-      name: t("energy.grey"),
-      type: "grey",
-    },
-    {
-      color: theme.palette.energy.fossil,
-      name: t("energy.fossil"),
-      type: "fossil",
-    },
-    {
-      color: theme.palette.energy.renewable,
-      name: t("energy.renewable"),
-      type: "renewable",
-    },
-    {
-      color: theme.palette.energy.mixte,
-      name: t("energy.mixte"),
-      type: "mixte",
-    },
-  ];
+  const items: EnergyItem[] = useMemo((): EnergyItem[] => {
+    const energyTypesDisplayed = new Set(
+      persona.consumption.map((datum) => datum.type)
+    );
 
-  return buildEnergyButtons("consumption", energies, persona, t);
+    const energies = [
+      {
+        color: theme.palette.energy.grey,
+        name: t("energy.grey"),
+        type: "grey",
+      },
+      {
+        color: theme.palette.energy.fossil,
+        name: t("energy.fossil"),
+        type: "fossil",
+      },
+      {
+        color: theme.palette.energy.renewable,
+        name: t("energy.renewable"),
+        type: "renewable",
+      },
+      {
+        color: theme.palette.energy.mixte,
+        name: t("energy.mixte"),
+        type: "mixte",
+      },
+    ] as const;
+
+    return energies
+      .filter((energy) => energyTypesDisplayed.has(energy.type))
+      .map((energy) => {
+        const details = persona.consumption
+          .filter(({ type }) => type === energy.type)
+          .map(
+            ({ name, value }) =>
+              `${translateName("consumption", name)} : ${t(
+                "unit.watthour-per-day.kilo",
+                {
+                  value: roundValue(value),
+                }
+              )}`
+          )
+          .join("\n");
+
+        return {
+          name: energy.name,
+          color: energy.color,
+          details,
+        };
+      });
+  }, [persona.consumption, theme, t]);
+
+  return <EnergyButtons items={items} />;
 }
 
 function EnergyProductionButtons({ persona }: { persona: Persona }) {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { game } = usePlay();
 
-  const energies: EnergyType[] = [
-    {
-      color: theme.palette.production.offshore,
-      name: t("graph.energy.offshore"),
-      type: "offshore",
-    },
-    {
-      color: theme.palette.production.terrestrial,
-      name: t("graph.energy.terrestrial"),
-      type: "terrestrial",
-    },
-  ];
+  const items: EnergyItem[] = useMemo((): EnergyItem[] => {
+    const energyTypesDisplayed = new Set(
+      persona.productionDisplayed.map((datum) => datum.type)
+    );
 
-  if (hasNuclear(game)) {
-    energies.push({
-      color: theme.palette.production.nuclear,
-      name: t("graph.energy.nuclear"),
-      type: "nuclear",
-    });
-  }
+    const energies = [
+      {
+        color: theme.palette.production.offshore,
+        name: t("graph.energy.offshore"),
+        type: "offshore",
+      },
+      {
+        color: theme.palette.production.terrestrial,
+        name: t("graph.energy.terrestrial"),
+        type: "terrestrial",
+      },
+      {
+        color: theme.palette.production.nuclear,
+        name: t("graph.energy.nuclear"),
+        type: "nuclear",
+      },
+    ] as const;
 
-  return buildEnergyButtons("production", energies, persona, t);
+    return energies
+      .filter((energy) => energyTypesDisplayed.has(energy.type))
+      .map((energy) => {
+        const details = persona.productionDisplayed
+          .filter(({ type }) => type === energy.type)
+          .map(
+            ({ name, value }) =>
+              `${translateName("production", name)} : ${t(
+                "unit.watthour-per-day.kilo",
+                {
+                  value: roundValue(value),
+                }
+              )}`
+          )
+          .join("\n");
+
+        return {
+          name: energy.name,
+          color: energy.color,
+          details,
+        };
+      });
+  }, [persona.productionDisplayed, theme, t]);
+
+  return <EnergyButtons items={items} />;
 }
 
-function buildEnergyButtons(
-  stepType: string,
-  energies: EnergyType[],
-  persona: Persona,
-  t: I18nTranslateFunction
-) {
-  const personaValues: any =
-    stepType === "consumption" ? persona.consumption : persona.production;
+interface EnergyItem {
+  name: string;
+  details: string;
+  color: string;
+}
 
+function EnergyButtons({ items }: { items: EnergyItem[] }) {
   return (
     <Box
       sx={{
@@ -95,35 +137,19 @@ function buildEnergyButtons(
         mt: 2,
       }}
     >
-      {energies.map((energyTypes) => (
+      {items.map((item) => (
         <Tooltip
-          key={energyTypes.type}
-          title={
-            <div style={{ whiteSpace: "pre-line" }}>
-              {personaValues
-                .filter(
-                  ({ type }: { type: string }) => type === energyTypes.type
-                )
-                .map(({ name, value }: { name: string; value: number }) => {
-                  return `${translateName(stepType, name)} : ${t(
-                    "unit.watthour-per-day.kilo",
-                    {
-                      value: roundValue(value),
-                    }
-                  )}`;
-                })
-                .join("\n")}
-            </div>
-          }
+          key={item.name}
+          title={<div style={{ whiteSpace: "pre-line" }}>{item.details}</div>}
           arrow
         >
           <Button
-            key={energyTypes.name}
+            key={item.name}
             variant="contained"
             sx={{
-              bgcolor: energyTypes.color,
+              bgcolor: item.color,
               "&:hover": {
-                backgroundColor: energyTypes.color,
+                backgroundColor: item.color,
                 filter: "brightness(85%)",
               },
               color: "white",
@@ -133,7 +159,7 @@ function buildEnergyButtons(
               justifyContent: "space-between",
             }}
           >
-            {energyTypes.name} <ArrowForwardIosIcon />
+            {item.name} <Icon name="arrow-forward" />
           </Button>
         </Tooltip>
       ))}

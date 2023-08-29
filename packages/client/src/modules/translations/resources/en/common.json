@@ -266,6 +266,10 @@
   "graph.energy.terrestrial": "Onshore production",
   "graph.energy.nuclear": "Nuclear energy",
 
+  "graph.energy-balance-for-player-graph.title": "Evolution of energy balance",
+
+  "graph.energy-balance-for-team-graph.title": "Energy balance of the team",
+
   "graph.materials.steel": "Steel",
   "graph.materials.cement": "Cement",
   "graph.materials.glass": "Glass",

@@ -96,6 +96,7 @@ function getProductionActionsDataForProductionStep1(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
     {
       name: productionActionNames.ON_SHORE_WIND_TURBINE,
@@ -126,6 +127,7 @@ function getProductionActionsDataForProductionStep1(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
     {
       name: productionActionNames.PHOTOVOLTAIC_FARM,
@@ -156,6 +158,7 @@ function getProductionActionsDataForProductionStep1(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
     {
       name: productionActionNames.PHOTOVOLTAIC_ROOF,
@@ -186,6 +189,7 @@ function getProductionActionsDataForProductionStep1(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
     {
       name: productionActionNames.THERMAL_SOLAR,
@@ -216,6 +220,7 @@ function getProductionActionsDataForProductionStep1(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
   ] as ProductionActionWithPointInterval[];
 
@@ -275,6 +280,7 @@ function getProductionActionsDataForProductionStep2(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
     {
       name: productionActionNames.OFF_SHORE_WIND_TURBINE,
@@ -305,6 +311,7 @@ function getProductionActionsDataForProductionStep2(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
     {
       name: productionActionNames.TIDAL,
@@ -335,6 +342,7 @@ function getProductionActionsDataForProductionStep2(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
     {
       name: productionActionNames.WAVE,
@@ -365,6 +373,7 @@ function getProductionActionsDataForProductionStep2(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
   ] as ProductionActionWithPointInterval[];
 
@@ -394,6 +403,7 @@ function getProductionActionsDataForProductionStep3(): {
       powerNeededKWh: 3.82,
       lcoe: 0.095,
       order: 1,
+      revealOnStep: getStepIndexById("production-3"),
       helpCardLink:
         "https://drive.google.com/file/d/1g2lYTDT0x0kdcqlohWzfMK_VVItQQtCO/view?usp=share_link",
       currentYearPowerNeedGw: 61.4,
@@ -411,6 +421,7 @@ function getProductionActionsDataForProductionStep3(): {
         },
       ],
       isPlayable: true,
+      carbonType: "decarbonated",
     },
   ] as ProductionActionWithPointInterval[];
 

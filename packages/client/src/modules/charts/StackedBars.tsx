@@ -511,7 +511,11 @@ function StackedBars({
           <Tooltip content={<CustomTooltip />} />
           <Legend />
           {chartConfig.barsProps.map((props, idx) => (
-            <Bar key={`${props.dataKey}-${idx}`} {...(props as any)} />
+            <Bar
+              className={onClick ? "clickable" : ""}
+              key={`${props.dataKey}-${idx}`}
+              {...(props as any)}
+            />
           ))}
           {chartConfig.linesProps.map((props, idx) => (
             <Line key={`${props.dataKey}-${idx}`} {...(props as any)} />

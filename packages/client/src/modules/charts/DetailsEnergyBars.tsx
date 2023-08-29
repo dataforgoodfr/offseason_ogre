@@ -9,12 +9,10 @@ import {
   Cell,
 } from "recharts";
 import { EnergyPalette, ProductionPalette } from "../../utils/theme";
-import { hasNuclear, roundValue } from "../common/utils";
+import { roundValue } from "../common/utils";
 import { ConsumptionDatum } from "../persona/consumption";
 import { Persona } from "../persona/persona";
 import { ProductionDatum } from "../persona/production";
-import { productionConstants } from "../play";
-import { usePlay } from "../play/context/playContext";
 import { translateName, useTranslation } from "../translations";
 import { Typography } from "../common/components/Typography";
 
@@ -44,20 +42,10 @@ function DetailsEnergyProductionBars({
   persona: Persona;
 }) {
   const theme = useTheme();
-  const { game } = usePlay();
-
-  const personaValues = persona.production.filter(
-    ({ type }: ProductionDatum) => {
-      if (!hasNuclear(game) && type === productionConstants.NUCLEAR.name) {
-        return false;
-      }
-      return true;
-    }
-  );
 
   return DetailsEnergyBars(
     "production",
-    personaValues,
+    persona.productionDisplayed,
     theme.palette.production,
     title
   );

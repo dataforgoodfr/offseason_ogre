@@ -1,15 +1,13 @@
 import { ITeam } from "../../../utils/types";
-import { StackedEnergyBars } from "../../charts/StackedEnergyBars";
-import { sumAllValues, sumForAndFormat } from "../../persona";
 import { usePersonaByUserId, usePlay } from "../context/playContext";
 import { Tabs } from "../../common/components/Tabs";
 import { useMemo } from "react";
 import {
+  EnergyBalanceForTeamChart,
   ResourcesPerProductionTypeChart,
   ResourcesPerStepChart,
 } from "../../charts";
 import { useTranslation } from "../../translations/useTranslation";
-import { formatUserName } from "../../../lib/formatter";
 
 export { PlayerChart };
 
@@ -24,16 +22,11 @@ function PlayerChart({ team }: { team: ITeam }) {
   const personaByUserId = usePersonaByUserId(userIds);
   const [firstPersona] = Object.values(personaByUserId);
 
-  const data = useBuildData({ team });
-  const consProdData = data.filter((data) =>
-    ["consumption", "production"].includes(data.type)
-  );
-
   const tabs = useMemo(() => {
     return [
       {
         label: t("page.teacher.statistics.tabs.energy-balance.label"),
-        component: <StackedEnergyBars data={consProdData} tick={false} />,
+        component: <EnergyBalanceForTeamChart team={team} />,
       },
       {
         label: t("page.teacher.statistics.tabs.materials.label"),
@@ -66,67 +59,7 @@ function PlayerChart({ team }: { team: ITeam }) {
         ),
       },
     ];
-  }, [consProdData, firstPersona, t]);
+  }, [firstPersona, team, t]);
 
   return <Tabs tabs={tabs} />;
-}
-
-function useBuildData({ team }: { team: ITeam }) {
-  const { game, players } = usePlay();
-
-  const playersInTeam = useMemo(
-    () => players.filter((p) => p.teamId === team.id),
-    [players, team]
-  );
-  const userIds = useMemo(
-    () => playersInTeam.map((p) => p.userId),
-    [playersInTeam]
-  );
-  const personaByUserId = usePersonaByUserId(userIds);
-  const [firstPersona] = Object.values(personaByUserId);
-
-  return [
-    ...playersInTeam.map((player) => {
-      const userId = player.userId;
-      const personaBySteps = personaByUserId[userId]!.personaBySteps;
-      const playerConsumption =
-        personaBySteps[game.lastFinishedStep].consumption;
-
-      return {
-        name: formatUserName(player.user),
-        type: "consumption",
-        total: sumAllValues(playerConsumption) || 0,
-        grey: sumForAndFormat(playerConsumption, "grey"),
-        mixte: sumForAndFormat(playerConsumption, "mixte"),
-        fossil: sumForAndFormat(playerConsumption, "fossil"),
-        renewable: sumForAndFormat(playerConsumption, "renewable"),
-      };
-    }),
-    firstPersona
-      ? {
-          name: "Production",
-          type: "production",
-          total: sumAllValues(firstPersona.currentPersona.production) || 0,
-          offshore: sumForAndFormat(
-            firstPersona.currentPersona.production,
-            "offshore"
-          ),
-          nuclear: sumForAndFormat(
-            firstPersona.currentPersona.production,
-            "nuclear"
-          ),
-          terrestrial: sumForAndFormat(
-            firstPersona.currentPersona.production,
-            "terrestrial"
-          ),
-        }
-      : {
-          name: "Production",
-          type: "production",
-          total: 0,
-          offshore: 0,
-          nuclear: 0,
-          terrestrial: 0,
-        },
-  ];
 }

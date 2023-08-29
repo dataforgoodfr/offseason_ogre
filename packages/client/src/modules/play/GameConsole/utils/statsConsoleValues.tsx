@@ -4,7 +4,7 @@ import {
   formatCarbonFootprint,
   formatPoints,
 } from "../../../../lib/formatter";
-import { getDaysTo2050 } from "../../../../lib/time";
+import { getDaysToEnergyShiftTargetYear } from "../../../../lib/time";
 import { IEnrichedGame, ITeam } from "../../../../utils/types";
 import { MAX_TEAMS_POINTS } from "../../constants";
 import { synthesisConstants } from "../../playerActions/constants/synthesis";
@@ -20,7 +20,9 @@ function computeBudget(
 ) {
   if (isSynthesisStep) {
     const budgetSpentTotalFrance =
-      (budgetSpent * getDaysTo2050() * synthesisConstants.FRANCE_POPULATION) /
+      (budgetSpent *
+        getDaysToEnergyShiftTargetYear() *
+        synthesisConstants.FRANCE_POPULATION) /
       synthesisConstants.MILLIARD;
 
     return formatBudget(budgetSpentTotalFrance);

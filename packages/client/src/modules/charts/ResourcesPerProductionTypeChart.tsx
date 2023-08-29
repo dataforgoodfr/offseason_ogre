@@ -26,7 +26,7 @@ function ResourcesPerProductionTypeChart({
 
   const graphStacks: StackedBarsStacks = useMemo(() => {
     const data: StackedBarsStackData[] = pipe(
-      persona[resourceType],
+      persona[`${resourceType}Displayed`],
       (resources: PhysicalResourceNeedDatum[]) =>
         resources.reduce(
           (

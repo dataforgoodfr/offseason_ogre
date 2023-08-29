@@ -27,7 +27,7 @@ export {
   usePersonaByUserId,
 };
 
-export type { TeamIdToValues, TeamValues };
+export type { PersonaUsed, TeamIdToValues, TeamValues };
 
 interface TeamIdToValues {
   [k: string]: TeamValues;
@@ -390,10 +390,10 @@ function usePlay() {
   return React.useContext<IPlayContext | null>(PlayContext);
 }
 
-function usePersonaByUserId(userIds: number): ReturnType<typeof buildPersona>;
-function usePersonaByUserId(
-  userIds: number[]
-): Record<number, ReturnType<typeof buildPersona>>;
+type PersonaUsed = ReturnType<typeof buildPersona>;
+
+function usePersonaByUserId(userIds: number): PersonaUsed;
+function usePersonaByUserId(userIds: number[]): Record<number, PersonaUsed>;
 function usePersonaByUserId(userIds: number | number[]) {
   const { consumptionActionById, game, players, productionActionById, teams } =
     useLoadedPlay();

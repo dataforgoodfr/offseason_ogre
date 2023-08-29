@@ -188,11 +188,12 @@ model PlayerActions {
 }
 
 model ProductionAction {
-  id                     Int                  @id @default(autoincrement())
-  name                   ProductionActionName @unique
+  id                     Int                        @id @default(autoincrement())
+  name                   ProductionActionName       @unique
   type                   ProductionActionType
   order                  Int
   step                   Int
+  revealOnStep           Int?
   helpCardLink           String
   unit                   ProductionActionUnit
   min                    Float
@@ -206,7 +207,8 @@ model ProductionAction {
   pointsIntervals        PointsInterval[]
   teamActions            TeamActions[]
   defaultTeamValue       Float
-  isPlayable             Boolean              @default(false)
+  isPlayable             Boolean                    @default(false)
+  carbonType             ProductionActionCarbonType @default(decarbonated)
 }
 
 enum ProductionActionName {
@@ -232,6 +234,11 @@ enum ProductionActionType {
 enum ProductionActionUnit {
   area
   percentage
+}
+
+enum ProductionActionCarbonType {
+  carbonated
+  decarbonated
 }
 
 model PointsInterval {

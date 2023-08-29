@@ -145,6 +145,9 @@ const globalStyles: GlobalStylesProps["styles"] = {
   html: {
     overscrollBehavior: "none",
   },
+  ".clickable": {
+    cursor: "pointer",
+  },
   ".text-em": {
     color: `${theme.palette.secondary.main} !important`,
   },
